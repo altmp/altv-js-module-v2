@@ -94,6 +94,7 @@ target("server")
     add_includedirs("server/src", "server/deps", "server/deps/nodejs/include", "server/deps/nodejs/deps/v8/include", "shared/src", "deps/cpp-sdk", "deps/v8pp")
     add_deps("shared")
     add_rules("generate-bindings", "update-deps")
+    add_defines("ALT_SERVER_API", "NODE_WANT_INTERNALS=1", "HAVE_OPENSSL=1", "HAVE_INSPECTOR=1")
 
     if is_os("linux") then
         add_links("server/deps/nodejs/lib/libnode.108")
@@ -115,6 +116,7 @@ target("client")
     add_includedirs("client/src", "client/deps", "client/deps/v8/include", "shared/src", "deps/cpp-sdk", "deps/v8pp")
     add_deps("shared")
     add_rules("generate-bindings", "update-deps")
+    add_defines("ALT_CLIENT_API", "V8_COMPRESS_POINTERS=1", "V8_31BIT_SMIS_ON_64BIT_ARCH=1", "V8_IMMINENT_DEPRECATION_WARNINGS=1")
 
     if is_mode("debug") then
         add_linkdirs("client/deps/v8/lib/Debug")
