@@ -70,10 +70,10 @@ target("shared")
 
 target("server")
     set_basename("altv-js-module")
-    set_kind("shared")
+    set_kind("binary")
     add_files("server/src/**.cpp")
     add_headerfiles("server/src/**.h")
-    add_includedirs("server/src", "server/deps")
+    add_includedirs("server/src", "server/deps", "shared/src", "deps", "tools/out")
     add_deps("shared")
     add_rules("generate-bindings", "update-deps")
 
@@ -94,7 +94,7 @@ target("client")
     end
     add_files("client/src/**.cpp")
     add_headerfiles("client/src/**.h")
-    add_includedirs("client/src", "client/deps")
+    add_includedirs("client/src", "client/deps", "shared/src", "deps", "tools/out")
     add_deps("shared")
     add_rules("generate-bindings", "update-deps")
 
