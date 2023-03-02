@@ -33,7 +33,7 @@ option("auto-update-deps")
 rule("generate-bindings")
     before_build(function(target)
         local out = os.iorun("node tools/generate-bindings.js .. " .. target:name())
-        if(out ~= "" and is_mode("debug")) then
+        if out ~= "" and is_mode("debug") then
             print(out)
         end
     end)
@@ -52,7 +52,7 @@ target("cpp-sdk")
     before_build(function(target)
         local oldDir = os.cd("$(sdk-path)")
         local out, err = os.iorun("git rev-parse --short HEAD")
-        if(err ~= "") then
+        if err ~= "" then
             raise("Failed to get cpp-sdk git commit hash: " .. err)
             return
         end
@@ -77,9 +77,17 @@ target("server")
     add_deps("shared")
     add_rules("generate-bindings", "update-deps")
 
+    if is_os("linux") then
+        add_links("server/deps/nodejs/lib/libnode.108")
+    elseif is_mode("debug") then
+        add_links("server/deps/nodejs/lib/Debug/libnode")
+    else
+        add_links("server/deps/nodejs/lib/Release/libnode")
+    end
+
 target("client")
     set_basename("altv-js-client")
-    if(has_config("static-client")) then
+    if has_config("static-client") then
         set_kind("static")
     else
         set_kind("shared")
@@ -89,3 +97,10 @@ target("client")
     add_includedirs("client/src", "client/deps")
     add_deps("shared")
     add_rules("generate-bindings", "update-deps")
+
+    if is_mode("debug") then
+        add_linkdirs("client/deps/v8/lib/Debug")
+    else
+        add_linkdirs("client/deps/v8/lib/Release")
+    end
+    add_links("v8_monolith")
