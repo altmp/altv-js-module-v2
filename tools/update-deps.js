@@ -8,7 +8,7 @@ const crypto = require("crypto");
 const childProcess = require("child_process");
 const https = require("https");
 
-const CDN_URL = "https://cdn.alt-mp.com";
+// Script arguments
 const SCOPE = process.argv[2] ?? "all";
 if(SCOPE !== "client" && SCOPE !== "server" && SCOPE !== "all") {
     console.error("Invalid scope");
@@ -16,6 +16,8 @@ if(SCOPE !== "client" && SCOPE !== "server" && SCOPE !== "all") {
 }
 const DEBUG = process.argv[3] === "debug";
 
+// Constants
+const CDN_URL = "https://cdn.alt-mp.com";
 const CLIENT_FILES = [
     { name: "v8_monolith.lib", path: "client/deps/v8/lib/Release", urlPath: "deps/v8/{BRANCH}/x64_win32/Release", os: "x64_win32" },
     { name: "v8_monolith.lib", path: "client/deps/v8/lib/Debug",   urlPath: "deps/v8/{BRANCH}/x64_win32/Debug",   os: "x64_win32", debugOnly: true },
