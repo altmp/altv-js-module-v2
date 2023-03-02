@@ -1,7 +1,6 @@
 .xmake
 .vscode
 build
-tools/out
 server/deps/nodejs/lib/Release/*.dll
 server/deps/nodejs/lib/Release/*.lib
 server/deps/nodejs/lib/Debug/*.dll
@@ -10,4 +9,5 @@ server/deps/nodejs/lib/*.so
 client/deps/v8/lib/Release/*.lib
 client/deps/v8/lib/Debug/*.lib
 deps/v8pp/v8pp/config.hpp
-shared/version.h
+shared/Version.h
+shared/JSBindings.h

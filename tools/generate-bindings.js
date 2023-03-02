@@ -65,7 +65,7 @@ namespace JSBindings {
 const bindingTemplate = `{ "{BINDING_NAME}", Binding{ "{BINDING_NAME}", Binding::Scope::{BINDING_SCOPE}, "{BINDING_SRC}" } }`;
 
 // Result bindings output path
-const outputPath = "tools/out/JSBindings.h";
+const outputPath = "shared/JSBindings.h";
 
 (async() => {
     showLog("Generating bindings...");
