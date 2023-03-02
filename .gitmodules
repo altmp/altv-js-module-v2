@@ -1,3 +1,6 @@
 [submodule "deps/cpp-sdk"]
 	path = deps/cpp-sdk
 	url = git@github.com:altmp/cpp-sdk.git
+[submodule "deps/v8pp"]
+	path = deps/v8pp
+	url = git@github.com:pmed/v8pp.git
