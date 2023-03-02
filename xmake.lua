@@ -87,8 +87,8 @@ target("shared")
     add_configfiles("shared/version.h.in")
 
 target("server")
-    set_basename("altv-js-module")
-    set_kind("binary")
+    set_basename("altv-js-module-v2")
+    set_kind("shared")
     add_files("server/src/**.cpp")
     add_headerfiles("server/src/**.h")
     add_includedirs("server/src", "server/deps", "server/deps/nodejs/include", "server/deps/nodejs/deps/v8/include", "shared/src", "deps/cpp-sdk", "deps/v8pp")
@@ -105,7 +105,7 @@ target("server")
     end
 
 target("client")
-    set_basename("altv-js-client")
+    set_basename("altv-js-client-v2")
     if has_config("static-client") then
         set_kind("static")
     else
