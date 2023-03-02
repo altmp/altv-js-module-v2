@@ -54,7 +54,8 @@ namespace JSBindings {
 
     static const Binding& Get(const std::string& name)
     {
-        if(!__bindings.contains(name)) return Binding{};
+        static Binding invalidBinding;
+        if(!__bindings.contains(name)) return invalidBinding;
         return __bindings.at(name);
     }
 }
