@@ -55,7 +55,8 @@ function downloadFile(url, path) {
             const stream = createWriteStream(path, { flags: "w" });
             res.pipe(stream);
             stream.on("finish", resolve);
-        });
+            stream.on("error", reject);
+        }).on("error", reject);
     });
 }
 
