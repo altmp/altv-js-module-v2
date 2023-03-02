@@ -1,4 +1,6 @@
-// clang-format off
+// Generates the JSBindings.h file, which contains all the JS bindings for the server and client
+// Usage: node tools/generate-bindings.js [basePath] [scope=shared|client|server]
+
 const fs = require("fs").promises;
 const pathUtil = require("path");
 
@@ -15,17 +17,17 @@ if(process.argv.length < 4) {
     process.exit(1);
 }
 const scope = process.argv[3];
-if(scope !== "SHARED" && scope !== "CLIENT" && scope !== "SERVER") {
-    showError("Invalid value for 'scope' argument, allowed values: ['SHARED', 'CLIENT', 'SERVER']");
+if(scope !== "shared" && scope !== "client" && scope !== "server") {
+    showError("Invalid value for 'scope' argument, allowed values: ['shared', 'client', 'server']");
     showUsage();
     process.exit(1);
 }
 
 // Paths to search for JS bindings
 const paths = [
-    { path: "shared/src/", scope: "SHARED" },
-    { path: "client/src/", scope: "CLIENT" },
-    { path: "server/src/", scope: "SERVER" }
+    { path: "shared/js/", scope: "shared" },
+    { path: "client/js/", scope: "client" },
+    { path: "server/js/", scope: "server" }
 ];
 
 // Full output file
@@ -68,7 +70,7 @@ const outputPath = "tools/out/JSBindings.h";
     showLog("Generating bindings...");
     const bindings = [];
     for (const { path, scope: pathScope } of paths) {
-        if(pathScope !== "SHARED" && pathScope !== scope) continue;
+        if(pathScope !== "shared" && pathScope !== scope) continue;
         const bindingsPath = pathUtil.resolve(__dirname, basePath, path);
         for await(const file of getBindingFiles(bindingsPath)) {
             const name = pathUtil.relative(bindingsPath, file).replace(/\\/g, "/").toLowerCase();
@@ -80,7 +82,7 @@ const outputPath = "tools/out/JSBindings.h";
                 existingBinding.src += cleanBindingSource(src);
                 if(pathScope === "SHARED") existingBinding.scope = "SHARED";
             }
-            else bindings.push({ name: name, src: cleanBindingSource(src), scope: pathScope });
+            else bindings.push({ name: name, src: cleanBindingSource(src), scope: pathScope.toUpperCase() });
             showLog(`Generated bindings for: ${pathUtil.relative(`${__dirname}/..`, file).replace(/\\/g, "/")}`);
         }
     }

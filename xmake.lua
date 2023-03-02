@@ -2,46 +2,66 @@
 set_project("altv-js-module")
 
 set_languages("cxx20")
-add_cxxflags("cl::/MP")
 
-if is_mode("debug") then
-    set_symbols("debug")
-    set_optimize("none")
-elseif is_mode("release") then
-    set_symbols("hidden")
-    set_optimize("faster")
+add_rules("mode.debug")
+add_rules("mode.release")
+
+if is_os("windows") then
+    add_toolchains("msvc")
+    add_cxxflags("/MP")
+elseif is_os("linux") then
+    add_toolchains("gcc")
 end
+
+-- Options
+option("static-client")
+    set_description("Build client as static library")
+    set_default(false)
+    set_showmenu(true)
+
+option("sdk-path")
+    set_description("Path to the C++ SDK to use")
+    set_default("deps/cpp-sdk")
+    set_showmenu(true)
+
+option("auto-update-deps")
+    set_description("Automatically update dependencies")
+    set_default(true)
+    set_showmenu(true)
 
 -- Rules
 rule("generate-bindings")
     before_build(function(target)
-        local scope = target:values("bindings.scope")
-        if(scope == nil) then
-            raise("Bindings scope not set for target " .. target:name())
-            return
+        local out = os.iorun("node tools/generate-bindings.js .. " .. target:name())
+        if(out ~= "" and is_mode("debug")) then
+            print(out)
         end
-        local stdout = os.iorun("node tools/generate-bindings.js .. " .. scope)
-        if(stdout ~= "" and is_mode("debug")) then
-            print(stdout)
-        end
+    end)
+
+rule("update-deps")
+    before_build(function(target)
+        if not has_config("auto-update-deps") then return end
+        import("core.project.config")
+        os.iorun("node tools/update-deps.js " .. target:name() .. " " .. tostring(config.get("mode")))
     end)
 
 -- Targets
 target("cpp-sdk")
     set_kind("headeronly")
-    add_headerfiles("deps/cpp-sdk/**.h")
+    add_headerfiles("$(sdk-path)/**.h")
     before_build(function(target)
-        local oldDir = os.cd("deps/cpp-sdk")
+        local oldDir = os.cd("$(sdk-path)")
         local out, err = os.iorun("git rev-parse --short HEAD")
         if(err ~= "") then
             raise("Failed to get cpp-sdk git commit hash: " .. err)
             return
         end
+        io.writefile("version/version.h", "#define ALT_SDK_VERSION \"" .. string.trim(out) .. "\"")
         os.cd(oldDir)
-        io.writefile("deps/cpp-sdk/version/version.h", "#define ALT_SDK_VERSION \"" .. string.trim(out) .. "\"")
     end)
 
 target("shared")
+    set_basename("altv-js-shared")
     set_kind("static")
     add_files("shared/src/**.cpp")
     add_headerfiles("shared/src/**.h")
@@ -55,15 +75,17 @@ target("server")
     add_headerfiles("server/src/**.h")
     add_includedirs("server/src", "server/deps")
     add_deps("shared")
-    set_values("bindings.scope", "SERVER")
-    add_rules("generate-bindings")
+    add_rules("generate-bindings", "update-deps")
 
 target("client")
     set_basename("altv-js-client")
-    set_kind("shared")
+    if(has_config("static-client")) then
+        set_kind("static")
+    else
+        set_kind("shared")
+    end
     add_files("client/src/**.cpp")
     add_headerfiles("client/src/**.h")
     add_includedirs("client/src", "client/deps")
     add_deps("shared")
-    set_values("bindings.scope", "CLIENT")
-    add_rules("generate-bindings")
+    add_rules("generate-bindings", "update-deps")
