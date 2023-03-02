@@ -1,5 +1,5 @@
 // Updates the dependencies of the client and server
-// Usage: node tools/update-deps.js [client|server|all] [debug|release]
+// Usage: node tools/update-deps.js [scope=client|server|all] [mode=debug|release]
 
 const fs = require("fs/promises");
 const { createWriteStream } = require("fs");
