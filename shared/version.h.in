@@ -1,0 +1,3 @@
+#pragma once
+
+#define JS_MODULE_GIT_COMMIT "${GIT_COMMIT}"
