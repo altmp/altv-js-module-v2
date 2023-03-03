@@ -77,7 +77,7 @@ target("v8pp")
     add_defines("V8_COMPRESS_POINTERS=1", "V8_31BIT_SMIS_ON_64BIT_ARCH=1")
 
 target("shared")
-    set_basename("altv-js-shared")
+    set_basename("js-shared")
     set_kind("static")
     add_files("shared/src/**.cpp")
     add_headerfiles("shared/src/**.h")
@@ -87,11 +87,15 @@ target("shared")
     add_configfiles("shared/Version.h.in")
 
 target("server")
-    set_basename("altv-js-module-v2")
+    set_basename("js-module-v2")
     set_kind("shared")
     add_files("server/src/**.cpp")
     add_headerfiles("server/src/**.h")
-    add_includedirs("server/src", "server/deps", "server/deps/nodejs/include", "server/deps/nodejs/deps/v8/include", "shared/src", "deps", "deps/cpp-sdk", "deps/v8pp")
+    add_includedirs(
+        "server/src", "server/deps", "server/deps/nodejs/include", "server/deps/nodejs/deps/uv/include", "server/deps/nodejs/deps/v8/include",
+        "shared/src",
+        "deps", "deps/cpp-sdk", "deps/v8pp"
+    )
     add_deps("shared")
     add_rules("generate-bindings", "update-deps")
     add_defines("ALT_SERVER_API", "NODE_WANT_INTERNALS=1", "HAVE_OPENSSL=1", "HAVE_INSPECTOR=1")
@@ -105,7 +109,7 @@ target("server")
     end
 
 target("client")
-    set_basename("altv-js-client-v2")
+    set_basename("js-client-v2")
     if has_config("static-client") then
         set_kind("static")
     else
@@ -113,7 +117,11 @@ target("client")
     end
     add_files("client/src/**.cpp")
     add_headerfiles("client/src/**.h")
-    add_includedirs("client/src", "client/deps", "client/deps/v8/include", "shared/src", "deps", "deps/cpp-sdk", "deps/v8pp")
+    add_includedirs(
+        "client/src", "client/deps", "client/deps/v8/include",
+        "shared/src",
+        "deps", "deps/cpp-sdk", "deps/v8pp"
+    )
     add_deps("shared")
     add_rules("generate-bindings", "update-deps")
     add_defines("ALT_CLIENT_API", "V8_COMPRESS_POINTERS=1", "V8_31BIT_SMIS_ON_64BIT_ARCH=1", "V8_IMMINENT_DEPRECATION_WARNINGS=1")
