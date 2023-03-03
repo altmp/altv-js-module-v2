@@ -3,14 +3,11 @@
 #include "IRuntime.h"
 #include "CNodeResource.h"
 
-namespace js
+class CNodeRuntime : public js::IRuntime<CNodeRuntime, CNodeResource>
 {
-    class CNodeRuntime : public IRuntime<CNodeRuntime, CNodeResource>
+public:
+    bool Initialize() override
     {
-    public:
-        bool Initialize() override
-        {
-            return true;
-        }
-    };
-}  // namespace js
+        return true;
+    }
+};

@@ -2,11 +2,8 @@
 
 #include "IResource.h"
 
-namespace js
+class CNodeResource : public js::IResource
 {
-    class CNodeResource : public IResource
-    {
-    public:
-        CNodeResource(alt::IResource* resource) : IResource(resource) {}
-    };
-}  // namespace js
+public:
+    CNodeResource(alt::IResource* resource) : IResource(resource) {}
+};

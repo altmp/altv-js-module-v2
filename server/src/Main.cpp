@@ -6,7 +6,7 @@ EXPORT bool altMain(alt::ICore* core)
 {
     alt::ICore::SetInstance(core);
 
-    js::CNodeRuntime& runtime = js::CNodeRuntime::Instance();
+    CNodeRuntime& runtime = CNodeRuntime::Instance();
     core->RegisterScriptRuntime("js", &runtime);
     if(!runtime.Initialize()) return false;
 
