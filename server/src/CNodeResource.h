@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IResource.h"
+#include "module/IResource.h"
 
 class CNodeResource : public js::IResource
 {

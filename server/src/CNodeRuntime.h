@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IRuntime.h"
+#include "module/IRuntime.h"
 #include "CNodeResource.h"
 
 class CNodeRuntime : public js::IRuntime<CNodeRuntime, CNodeResource>
