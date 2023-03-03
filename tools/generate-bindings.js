@@ -36,7 +36,7 @@ const resultTemplate = `// !!! THIS FILE WAS AUTOMATICALLY GENERATED (ON {DATE})
 #include <string>
 #include <unordered_map>
 
-namespace JSBindings {
+namespace js {
     struct Binding
     {
         bool valid = false;
@@ -52,7 +52,7 @@ namespace JSBindings {
         {BINDINGS_LIST}
     };
 
-    static const Binding& Get(const std::string& name)
+    static const Binding& GetBinding(const std::string& name)
     {
         static Binding invalidBinding;
         if(!__bindings.contains(name)) return invalidBinding;
