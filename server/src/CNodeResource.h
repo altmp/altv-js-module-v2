@@ -11,7 +11,6 @@ class CNodeResource : public js::IResource
     uv_loop_t* uvLoop = nullptr;
     v8::Global<v8::Object> asyncResource;
     node::async_context asyncContext;
-    v8::Global<v8::Context> context;
 
 public:
     CNodeResource(alt::IResource* resource, v8::Isolate* isolate) : IResource(resource, isolate) {}
@@ -21,9 +20,4 @@ public:
 
     void OnEvent(const alt::CEvent* ev) override;
     void OnTick() override;
-
-    v8::Local<v8::Context> GetContext() const
-    {
-        return context.Get(isolate);
-    }
 };

@@ -11,7 +11,7 @@ bool CNodeResource::Start()
     v8::Local<v8::ObjectTemplate> global = v8::ObjectTemplate::New(isolate);
     v8::Local<v8::Context> _context = node::NewContext(isolate, global);
     v8::Context::Scope scope(_context);
-    _context->SetAlignedPointerInEmbedderData(1, resource);
+    _context->SetAlignedPointerInEmbedderData(ContextInternalFieldIdx, this);
     context.Reset(isolate, _context);
 
     uvLoop = new uv_loop_t;
@@ -59,6 +59,8 @@ bool CNodeResource::Stop()
 
     uv_loop_close(uvLoop);
     delete uvLoop;
+
+    IResource::Reset();
 
     return true;
 }
