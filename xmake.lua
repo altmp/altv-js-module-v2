@@ -84,7 +84,7 @@ target("shared")
     add_includedirs("shared", "shared/src", "deps")
     add_deps("cpp-sdk", "v8pp")
     set_configdir("shared")
-    add_configfiles("shared/version.h.in")
+    add_configfiles("shared/Version.h.in")
 
 target("server")
     set_basename("altv-js-module-v2")
