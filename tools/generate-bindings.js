@@ -1,3 +1,4 @@
+// clang-format off
 // Generates the JSBindings.h file, which contains all the JS bindings for the server and client
 // Usage: node tools/generate-bindings.js [basePath] [scope=shared|client|server]
 
