@@ -1,0 +1,68 @@
+#include "CNodeResource.h"
+#include "CNodeRuntime.h"
+#include "../JSBindings.h"
+
+bool CNodeResource::Start()
+{
+    v8::Locker locker(isolate);
+    v8::Isolate::Scope isolateScope(isolate);
+    v8::HandleScope handleScope(isolate);
+
+    v8::Local<v8::ObjectTemplate> global = v8::ObjectTemplate::New(isolate);
+    v8::Local<v8::Context> _context = node::NewContext(isolate, global);
+    v8::Context::Scope scope(_context);
+    _context->SetAlignedPointerInEmbedderData(1, resource);
+    context.Reset(isolate, _context);
+
+    uvLoop = new uv_loop_t;
+    uv_loop_init(uvLoop);
+
+    nodeData = node::CreateIsolateData(isolate, uvLoop, CNodeRuntime::Instance().GetPlatform());
+    if(!nodeData) return false;
+    std::vector<std::string> argv = { "altv-resource" };
+    node::EnvironmentFlags::Flags flags = (node::EnvironmentFlags::Flags)(node::EnvironmentFlags::kOwnsProcessState & node::EnvironmentFlags::kNoCreateInspector);
+    env = node::CreateEnvironment(nodeData, _context, argv, argv, flags);
+
+    const js::Binding& bootstrapper = js::GetBinding("bootstrap.js");
+    if(!bootstrapper.valid) return false;
+    node::LoadEnvironment(env, bootstrapper.src.c_str());
+
+    asyncResource.Reset(isolate, v8::Object::New(isolate));
+    asyncContext = node::EmitAsyncInit(isolate, asyncResource.Get(isolate), "CNodeResource");
+
+    // DispatchStartEvent();
+
+    return true;
+}
+
+bool CNodeResource::Stop()
+{
+    v8::Locker locker(isolate);
+    v8::Isolate::Scope isolateScope(isolate);
+    v8::HandleScope handleScope(isolate);
+
+    {
+        v8::Context::Scope scope(GetContext());
+        // DispatchStopEvent();
+
+        node::EmitAsyncDestroy(isolate, asyncContext);
+        asyncResource.Reset();
+    }
+
+    node::EmitProcessBeforeExit(env);
+    node::EmitProcessExit(env);
+
+    node::Stop(env);
+
+    node::FreeEnvironment(env);
+    node::FreeIsolateData(nodeData);
+
+    uv_loop_close(uvLoop);
+    delete uvLoop;
+
+    return true;
+}
+
+void CNodeResource::OnEvent(const alt::CEvent* ev) {}
+
+void CNodeResource::OnTick() {}

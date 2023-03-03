@@ -22,7 +22,7 @@ namespace js
 
         alt::IResource::Impl* CreateImpl(alt::IResource* resource) override
         {
-            return new Resource{ resource };
+            return new Resource{ resource, isolate };
         }
         void DestroyImpl(alt::IResource::Impl* impl) override
         {

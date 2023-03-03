@@ -9,14 +9,19 @@ namespace js
     {
     protected:
         alt::IResource* resource;
+        v8::Isolate* isolate;
 
     public:
-        IResource(alt::IResource* resource) : resource(resource) {}
+        IResource(alt::IResource* _resource, v8::Isolate* _isolate) : resource(_resource), isolate(_isolate) {}
         virtual ~IResource() = default;
 
         alt::IResource* GetResource() const
         {
             return resource;
+        }
+        v8::Isolate* GetIsolate() const
+        {
+            return isolate;
         }
     };
 }  // namespace js
