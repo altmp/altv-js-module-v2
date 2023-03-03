@@ -1,5 +1,5 @@
-#include "version/version.h"
-#include "SDK.h"
+#include "cpp-sdk/SDK.h"
+#include "cpp-sdk/version/version.h"
 #include "CNodeRuntime.h"
 
 EXPORT bool altMain(alt::ICore* core)

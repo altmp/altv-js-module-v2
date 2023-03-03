@@ -1,7 +1,7 @@
 #pragma once
 
 #include "v8.h"
-#include "SDK.h"
+#include "cpp-sdk/SDK.h"
 
 namespace js
 {
