@@ -28,7 +28,7 @@ static void InitializeShared(v8::Local<v8::Object> exports, v8::Local<v8::Value>
     js::Module& mod = js::Module::Get("alt-shared");
     exports->SetPrototype(context, mod.GetNamespace(context));
 }
-NODE_MODULE_LINKED(alt, InitializeShared)
+NODE_MODULE_LINKED(altShared, InitializeShared)
 
 EXPORT bool altMain(alt::ICore* core)
 {
