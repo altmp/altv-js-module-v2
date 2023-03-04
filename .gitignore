@@ -10,4 +10,4 @@ client/deps/v8/lib/Release/*.lib
 client/deps/v8/lib/Debug/*.lib
 deps/v8pp/v8pp/config.hpp
 shared/src/Version.h
-shared/src/JSBindings.h
+shared/src/BindingsMap.cpp

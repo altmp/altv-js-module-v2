@@ -33,32 +33,13 @@ const paths = [
 
 // Full output file
 const resultTemplate = `// !!! THIS FILE WAS AUTOMATICALLY GENERATED (ON {DATE}), DO NOT EDIT MANUALLY !!!
-#pragma once
-#include <string>
-#include <unordered_map>
+#include "Bindings.h"
 
 namespace js {
-    struct Binding
-    {
-        bool valid = false;
-        std::string name;
-        enum class Scope { SHARED, SERVER, CLIENT } scope;
-        std::string src;
-
-        Binding() = default;
-        Binding(const std::string& _name, Scope _scope, const std::string& _src) : valid(true), name(_name), scope(_scope), src(_src) {}
-    };
-    static std::unordered_map<std::string, Binding> __bindings =
+    std::unordered_map<std::string, Binding> Binding::__bindings =
     {
         {BINDINGS_LIST}
     };
-
-    static const Binding& GetBinding(const std::string& name)
-    {
-        static Binding invalidBinding;
-        if(!__bindings.contains(name)) return invalidBinding;
-        return __bindings.at(name);
-    }
 }
 `;
 
@@ -66,7 +47,7 @@ namespace js {
 const bindingTemplate = `{ "{BINDING_NAME}", Binding{ "{BINDING_NAME}", Binding::Scope::{BINDING_SCOPE}, "{BINDING_SRC}" } }`;
 
 // Result bindings output path
-const outputPath = "shared/src/JSBindings.h";
+const outputPath = "shared/src/BindingsMap.cpp";
 
 (async() => {
     showLog("Generating bindings...");

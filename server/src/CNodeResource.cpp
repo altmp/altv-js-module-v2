@@ -1,6 +1,6 @@
 #include "CNodeResource.h"
 #include "CNodeRuntime.h"
-#include "JSBindings.h"
+#include "Bindings.h"
 
 bool CNodeResource::Start()
 {
@@ -23,9 +23,9 @@ bool CNodeResource::Start()
     node::EnvironmentFlags::Flags flags = (node::EnvironmentFlags::Flags)(node::EnvironmentFlags::kOwnsProcessState & node::EnvironmentFlags::kNoCreateInspector);
     env = node::CreateEnvironment(nodeData, _context, argv, argv, flags);
 
-    const js::Binding& bootstrapper = js::GetBinding("bootstrap.js");
-    if(!bootstrapper.valid) return false;
-    node::LoadEnvironment(env, bootstrapper.src.c_str());
+    const js::Binding& bootstrapper = js::Binding::Get("bootstrap.js");
+    if(!bootstrapper.IsValid()) return false;
+    node::LoadEnvironment(env, bootstrapper.GetSource().c_str());
 
     asyncResource.Reset(isolate, v8::Object::New(isolate));
     asyncContext = node::EmitAsyncInit(isolate, asyncResource.Get(isolate), "CNodeResource");
