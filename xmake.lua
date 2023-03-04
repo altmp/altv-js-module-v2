@@ -32,7 +32,7 @@ option("auto-update-deps")
 -- Rules
 rule("generate-bindings")
     before_build(function(target)
-        local out = os.iorun("node tools/generate-bindings.js .. " .. target:name())
+        local out = os.iorun("node tools/generate-bindings.js ..")
         if out ~= "" and is_mode("debug") then
             print(out)
         end
@@ -82,6 +82,7 @@ target("shared")
     add_deps("cpp-sdk", "v8pp")
     set_configdir("shared/src")
     add_configfiles("shared/src/Version.h.in")
+    add_rules("generate-bindings")
 
 target("server")
     set_basename("js-module-v2")
@@ -95,7 +96,7 @@ target("server")
         "build"
     )
     add_deps("shared")
-    add_rules("generate-bindings", "update-deps")
+    add_rules("update-deps")
     add_defines("ALT_SERVER_API", "NODE_WANT_INTERNALS=1", "HAVE_OPENSSL=1", "HAVE_INSPECTOR=1")
 
     if is_os("linux") then
@@ -123,7 +124,7 @@ target("client")
         "build"
     )
     add_deps("shared")
-    add_rules("generate-bindings", "update-deps")
+    add_rules("update-deps")
     add_defines("ALT_CLIENT_API", "V8_COMPRESS_POINTERS=1", "V8_31BIT_SMIS_ON_64BIT_ARCH=1", "V8_IMMINENT_DEPRECATION_WARNINGS=1")
 
     if is_mode("debug") then

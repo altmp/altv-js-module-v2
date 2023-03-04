@@ -12,17 +12,6 @@ if(process.argv.length < 3) {
     process.exit(1);
 }
 const basePath = process.argv[2];
-if(process.argv.length < 4) {
-    showError("Missing 'scope' argument");
-    showUsage();
-    process.exit(1);
-}
-const scope = process.argv[3];
-if(scope !== "shared" && scope !== "client" && scope !== "server") {
-    showError("Invalid value for 'scope' argument, allowed values: ['shared', 'client', 'server']");
-    showUsage();
-    process.exit(1);
-}
 
 // Paths to search for JS bindings
 const paths = [
@@ -53,7 +42,6 @@ const outputPath = "shared/src/BindingsMap.cpp";
     showLog("Generating bindings...");
     const bindings = [];
     for (const { path, scope: pathScope } of paths) {
-        if(pathScope !== "shared" && pathScope !== scope) continue;
         const bindingsPath = pathUtil.resolve(__dirname, basePath, path);
         for await(const file of getBindingFiles(bindingsPath)) {
             const name = pathUtil.relative(bindingsPath, file).replace(/\\/g, "/").toLowerCase();
@@ -65,7 +53,7 @@ const outputPath = "shared/src/BindingsMap.cpp";
                 existingBinding.src += cleanBindingSource(src);
                 if(pathScope === "shared") existingBinding.scope = "SHARED";
             }
-            else bindings.push({ name: name, src: cleanBindingSource(src), scope: pathScope.toUpperCase() });
+            else bindings.push({ name: `${pathScope}/${name}`, src: cleanBindingSource(src), scope: pathScope.toUpperCase() });
             showLog(`Generated bindings for: ${pathUtil.relative(`${__dirname}/..`, file).replace(/\\/g, "/")}`);
         }
     }
@@ -100,7 +88,7 @@ async function* getBindingFiles(dir) {
 }
 
 function cleanBindingSource(src) {
-    let str = src.trim().replace(/\"/g, "\\\"");
+    let str = src.trim().replace(/\"/g, "\\\"").replace(/\r\n/g, "\\n");
     return str;
 }
 
