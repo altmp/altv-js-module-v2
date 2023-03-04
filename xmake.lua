@@ -77,13 +77,8 @@ target("v8pp")
     add_defines("V8_COMPRESS_POINTERS=1", "V8_31BIT_SMIS_ON_64BIT_ARCH=1")
 
 target("shared")
-    set_basename("js-shared")
-    set_kind("static")
-    add_files("shared/src/**.cpp")
+    set_kind("headeronly")
     add_headerfiles("shared/src/**.h")
-    add_includedirs("shared", "shared/src", "deps", "deps/cpp-sdk", "deps/v8pp")
-    -- Workaround for now
-    add_includedirs("client/deps/v8/include")
     add_deps("cpp-sdk", "v8pp")
     set_configdir("shared/src")
     add_configfiles("shared/src/Version.h.in")
@@ -91,12 +86,13 @@ target("shared")
 target("server")
     set_basename("js-module-v2")
     set_kind("shared")
-    add_files("server/src/**.cpp")
+    add_files("server/src/**.cpp", "shared/src/**.cpp")
     add_headerfiles("server/src/**.h")
     add_includedirs(
         "server/src", "server/deps", "server/deps/nodejs/include", "server/deps/nodejs/deps/uv/include", "server/deps/nodejs/deps/v8/include",
         "shared/src",
-        "deps", "deps/cpp-sdk", "deps/v8pp"
+        "deps", "deps/cpp-sdk", "deps/v8pp",
+        "build"
     )
     add_deps("shared")
     add_rules("generate-bindings", "update-deps")
@@ -104,11 +100,12 @@ target("server")
 
     if is_os("linux") then
         add_links("server/deps/nodejs/lib/libnode.108")
-    elseif is_mode("debug") then
-        add_links("server/deps/nodejs/lib/Debug/libnode")
     else
-        add_links("server/deps/nodejs/lib/Release/libnode")
+        if is_mode("debug") then add_links("server/deps/nodejs/lib/Debug/libnode")
+        else add_links("server/deps/nodejs/lib/Release/libnode") end
+        add_links("dbghelp", "winmm", "shlwapi", "advapi32")
     end
+    set_runtimes("MD")
 
 target("client")
     set_basename("js-client-v2")
@@ -117,12 +114,13 @@ target("client")
     else
         set_kind("shared")
     end
-    add_files("client/src/**.cpp")
+    add_files("client/src/**.cpp", "shared/src/**.cpp")
     add_headerfiles("client/src/**.h")
     add_includedirs(
         "client/src", "client/deps", "client/deps/v8/include",
         "shared/src",
-        "deps", "deps/cpp-sdk", "deps/v8pp"
+        "deps", "deps/cpp-sdk", "deps/v8pp",
+        "build"
     )
     add_deps("shared")
     add_rules("generate-bindings", "update-deps")
@@ -133,4 +131,6 @@ target("client")
     else
         add_linkdirs("client/deps/v8/lib/Release")
     end
+    add_links("dbghelp", "winmm", "shlwapi", "advapi32")
     add_links("v8_monolith")
+    set_runtimes("MD")
