@@ -20,7 +20,7 @@ v8::Local<v8::Module> js::Binding::Compile(IResource* resource)
         isolate, v8::String::NewFromUtf8(isolate, moduleName.c_str()).ToLocalChecked(), 0, 0, false, -1, v8::Local<v8::Value>(), false, false, true, v8::Local<v8::PrimitiveArray>()
     };
     v8::ScriptCompiler::Source source{ v8::String::NewFromUtf8(isolate, src.c_str()).ToLocalChecked(), origin };
-    v8::MaybeLocal<v8::Module> maybeModule = v8::ScriptCompiler::CompileModule(isolate, &source, v8::ScriptCompiler::kConsumeCodeCache);
+    v8::MaybeLocal<v8::Module> maybeModule = v8::ScriptCompiler::CompileModule(isolate, &source);
     if(maybeModule.IsEmpty())
     {
         // todo: Log an internal error
