@@ -1,6 +1,6 @@
 #include "CNodeResource.h"
 #include "CNodeRuntime.h"
-#include "../JSBindings.h"
+#include "JSBindings.h"
 
 bool CNodeResource::Start()
 {

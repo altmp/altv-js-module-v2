@@ -9,5 +9,5 @@ server/deps/nodejs/lib/*.so
 client/deps/v8/lib/Release/*.lib
 client/deps/v8/lib/Debug/*.lib
 deps/v8pp/v8pp/config.hpp
-shared/Version.h
-shared/JSBindings.h
+shared/src/Version.h
+shared/src/JSBindings.h
