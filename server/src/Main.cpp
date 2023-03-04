@@ -1,6 +1,21 @@
 #include "cpp-sdk/SDK.h"
 #include "cpp-sdk/version/version.h"
 #include "CNodeRuntime.h"
+#include "Module.h"
+#include <iostream>
+
+static void Initialize(v8::Local<v8::Object> exports, v8::Local<v8::Value>, v8::Local<v8::Context> context, void*)
+{
+    if(!js::Module::Exists("alt"))
+    {
+        // todo: log error
+        return;
+    }
+
+    js::Module& mod = js::Module::Get("alt");
+    exports->SetPrototype(context, mod.GetNamespace(context));
+}
+NODE_MODULE_LINKED(alt, Initialize)
 
 EXPORT bool altMain(alt::ICore* core)
 {

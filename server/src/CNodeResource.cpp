@@ -23,7 +23,7 @@ bool CNodeResource::Start()
     node::EnvironmentFlags::Flags flags = (node::EnvironmentFlags::Flags)(node::EnvironmentFlags::kOwnsProcessState & node::EnvironmentFlags::kNoCreateInspector);
     env = node::CreateEnvironment(nodeData, _context, argv, argv, flags);
 
-    const js::Binding& bootstrapper = js::Binding::Get("bootstrap.js");
+    const js::Binding& bootstrapper = js::Binding::Get("server/bootstrap.js");
     if(!bootstrapper.IsValid()) return false;
     node::LoadEnvironment(env, bootstrapper.GetSource().c_str());
 

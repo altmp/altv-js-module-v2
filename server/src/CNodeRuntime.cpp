@@ -27,7 +27,7 @@ bool CNodeRuntime::Initialize()
         v8::Isolate::Scope isolateScope(isolate);
         v8::HandleScope handleScope(isolate);
 
-        // V8Class::LoadAll(isolate);
+        IRuntime::Initialize();
     }
 
     return true;

@@ -3,6 +3,8 @@
 #include "v8.h"
 #include "cpp-sdk/SDK.h"
 
+#include "Module.h"
+
 namespace js
 {
     template<class Runtime, class Resource>
@@ -18,7 +20,11 @@ namespace js
         IRuntime(const IRuntime&) = delete;
         virtual ~IRuntime() = default;
 
-        virtual bool Initialize() = 0;
+        virtual bool Initialize()
+        {
+            Module::Initialize(isolate);
+            return true;
+        }
 
         alt::IResource::Impl* CreateImpl(alt::IResource* resource) override
         {
