@@ -7,11 +7,10 @@
 #include "v8.h"
 #include "v8pp/module.hpp"
 
+#include "helpers/JS.h"
+
 namespace js
 {
-    template<typename T>
-    using Persistent = v8::Persistent<T, v8::CopyablePersistentTraits<T>>;
-
     class Module
     {
         static std::unordered_map<std::string, Module>& GetAll()

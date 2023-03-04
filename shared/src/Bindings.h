@@ -5,12 +5,11 @@
 
 #include <v8.h>
 
+#include "helpers/JS.h"
+
 namespace js
 {
     class IResource;
-
-    template<typename T>
-    using Persistent = v8::Persistent<T, v8::CopyablePersistentTraits<T>>;
 
     class Binding
     {

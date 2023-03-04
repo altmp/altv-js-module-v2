@@ -23,15 +23,14 @@ v8::Local<v8::Module> js::Binding::Compile(IResource* resource)
     v8::MaybeLocal<v8::Module> maybeModule = v8::ScriptCompiler::CompileModule(isolate, &source);
     if(maybeModule.IsEmpty())
     {
-        // todo: Log an internal error
+        alt::ICore::Instance().LogError("INTERNAL ERROR: Failed to compile bindings module " + name);
         return v8::Local<v8::Module>();
     }
     v8::Local<v8::Module> mod = maybeModule.ToLocalChecked();
-    // todo: add global alt
     v8::Maybe<bool> result = mod->InstantiateModule(context, &ResolveModuleCallback);
     if(result.IsNothing() || !result.ToChecked())
     {
-        // todo: Log an internal error
+        alt::ICore::Instance().LogError("INTERNAL ERROR: Failed to instantiate bindings module " + name);
         return v8::Local<v8::Module>();
     }
     compiledModuleMap.insert({ resource, Persistent<v8::Module>(isolate, mod) });

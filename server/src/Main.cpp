@@ -8,7 +8,7 @@ static void Initialize(v8::Local<v8::Object> exports, v8::Local<v8::Value>, v8::
 {
     if(!js::Module::Exists("alt"))
     {
-        // todo: log error
+        alt::ICore::Instance().LogError("INTERNAL ERROR: alt module not found");
         return;
     }
 
@@ -16,6 +16,19 @@ static void Initialize(v8::Local<v8::Object> exports, v8::Local<v8::Value>, v8::
     exports->SetPrototype(context, mod.GetNamespace(context));
 }
 NODE_MODULE_LINKED(alt, Initialize)
+
+static void InitializeShared(v8::Local<v8::Object> exports, v8::Local<v8::Value>, v8::Local<v8::Context> context, void*)
+{
+    if(!js::Module::Exists("alt-shared"))
+    {
+        alt::ICore::Instance().LogError("INTERNAL ERROR: alt-shared module not found");
+        return;
+    }
+
+    js::Module& mod = js::Module::Get("alt-shared");
+    exports->SetPrototype(context, mod.GetNamespace(context));
+}
+NODE_MODULE_LINKED(alt, InitializeShared)
 
 EXPORT bool altMain(alt::ICore* core)
 {
