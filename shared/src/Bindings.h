@@ -3,10 +3,19 @@
 #include <string>
 #include <unordered_map>
 
+#include <v8.h>
+
 namespace js
 {
+    class IResource;
+
+    template<typename T>
+    using Persistent = v8::Persistent<T, v8::CopyablePersistentTraits<T>>;
+
     class Binding
     {
+        static std::unordered_map<std::string, Binding> __bindings;
+
     public:
         enum class Scope : uint8_t
         {
@@ -20,8 +29,9 @@ namespace js
         std::string name;
         Scope scope;
         std::string src;
+        std::unordered_map<IResource*, Persistent<v8::Module>> compiledModuleMap;
 
-        static std::unordered_map<std::string, Binding> __bindings;
+        v8::Local<v8::Module> Compile(IResource* resource);
 
     public:
         Binding() = default;
@@ -43,12 +53,14 @@ namespace js
         {
             return src;
         }
+        v8::Local<v8::Module> GetCompiledModule(IResource* resource);
 
-        static const Binding& Get(const std::string& name)
+        static Binding& Get(const std::string& name)
         {
             static Binding invalidBinding;
             if(!__bindings.contains(name)) return invalidBinding;
             return __bindings.at(name);
         }
+        static void CleanupForResource(IResource* resource);
     };
 }  // namespace js

@@ -26,9 +26,9 @@ if(scope !== "shared" && scope !== "client" && scope !== "server") {
 
 // Paths to search for JS bindings
 const paths = [
-    { path: "shared/js/", scope: "shared" },
     { path: "client/js/", scope: "client" },
-    { path: "server/js/", scope: "server" }
+    { path: "server/js/", scope: "server" },
+    { path: "shared/js/", scope: "shared" }
 ];
 
 // Full output file
@@ -63,7 +63,7 @@ const outputPath = "shared/src/BindingsMap.cpp";
             const existingBinding = bindings.find(binding => binding.name === name);
             if(existingBinding) {
                 existingBinding.src += cleanBindingSource(src);
-                if(pathScope === "SHARED") existingBinding.scope = "SHARED";
+                if(pathScope === "shared") existingBinding.scope = "SHARED";
             }
             else bindings.push({ name: name, src: cleanBindingSource(src), scope: pathScope.toUpperCase() });
             showLog(`Generated bindings for: ${pathUtil.relative(`${__dirname}/..`, file).replace(/\\/g, "/")}`);

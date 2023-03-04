@@ -3,6 +3,8 @@
 #include "v8.h"
 #include "cpp-sdk/SDK.h"
 
+#include "Bindings.h"
+
 namespace js
 {
     class IResource : public alt::IResource::Impl
@@ -16,6 +18,7 @@ namespace js
 
         void Reset()
         {
+            Binding::CleanupForResource(this);
             context.Reset();
         }
 

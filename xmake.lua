@@ -82,6 +82,8 @@ target("shared")
     add_files("shared/src/**.cpp")
     add_headerfiles("shared/src/**.h")
     add_includedirs("shared", "shared/src", "deps", "deps/cpp-sdk", "deps/v8pp")
+    -- Workaround for now
+    add_includedirs("client/deps/v8/include")
     add_deps("cpp-sdk", "v8pp")
     set_configdir("shared/src")
     add_configfiles("shared/src/Version.h.in")
