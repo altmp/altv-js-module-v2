@@ -10,7 +10,7 @@
 #include "helpers/JS.h"
 #include "helpers/Template.h"
 #include "helpers/FunctionContext.h"
-#include "module/IScriptObjectHandler.h"
+#include "interfaces/IScriptObjectHandler.h"
 
 namespace js
 {

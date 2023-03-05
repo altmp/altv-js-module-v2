@@ -1,5 +1,5 @@
 #include "Class.h"
-#include "module/IResource.h"
+#include "interfaces/IResource.h"
 
 void js::Class::ConstructorWrap(const v8::FunctionCallbackInfo<v8::Value>& info)
 {

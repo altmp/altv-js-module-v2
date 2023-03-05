@@ -1,5 +1,5 @@
 #include "Bindings.h"
-#include "module/IResource.h"
+#include "interfaces/IResource.h"
 
 static v8::MaybeLocal<v8::Module> ResolveModuleCallback(v8::Local<v8::Context> context, v8::Local<v8::String> specifier, v8::Local<v8::FixedArray> assertions, v8::Local<v8::Module> referrer)
 {

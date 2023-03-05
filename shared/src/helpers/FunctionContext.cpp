@@ -1,5 +1,5 @@
 #include "FunctionContext.h"
-#include "module/IResource.h"
+#include "interfaces/IResource.h"
 
 js::IResource* js::FunctionContext::GetResource()
 {

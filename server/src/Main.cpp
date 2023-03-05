@@ -2,7 +2,7 @@
 #include "cpp-sdk/version/version.h"
 #include "CNodeRuntime.h"
 #include "Module.h"
-#include "module/IResource.h"
+#include "interfaces/IResource.h"
 
 #include <iostream>
 

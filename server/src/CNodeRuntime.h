@@ -1,6 +1,6 @@
 #pragma once
 
-#include "module/IRuntime.h"
+#include "interfaces/IRuntime.h"
 #include "CNodeResource.h"
 #include "node.h"
 #include "uv.h"

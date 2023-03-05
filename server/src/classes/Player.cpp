@@ -1,5 +1,5 @@
 #include "Class.h"
-#include "module/IResource.h"
+#include "interfaces/IResource.h"
 #include "cpp-sdk/ICore.h"
 
 static void Ctor(js::FunctionContext& ctx)

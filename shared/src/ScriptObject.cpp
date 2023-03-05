@@ -1,5 +1,5 @@
 #include "ScriptObject.h"
-#include "module/IResource.h"
+#include "interfaces/IResource.h"
 #include "Class.h"
 
 js::ScriptObject* js::ScriptObject::Create(v8::Local<v8::Context> context, alt::IBaseObject* object, js::Class* class_)

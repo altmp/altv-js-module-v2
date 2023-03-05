@@ -1,6 +1,6 @@
 #pragma once
 
-#include "module/IResource.h"
+#include "interfaces/IResource.h"
 #include "node.h"
 #include "uv.h"
 
