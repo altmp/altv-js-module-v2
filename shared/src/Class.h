@@ -10,6 +10,7 @@
 #include "helpers/JS.h"
 #include "helpers/Template.h"
 #include "helpers/FunctionContext.h"
+#include "module/IScriptObjectHandler.h"
 
 namespace js
 {
@@ -33,6 +34,7 @@ namespace js
         ClassConstructor ctor;
         ClassInitializationCallback initCb;
         std::unordered_map<v8::Isolate*, ClassTemplate> templateMap;
+        int internalFieldCount = 0;
 
         void Register(v8::Isolate* isolate, ClassTemplate& templ);
 
@@ -57,6 +59,11 @@ namespace js
         v8::Local<v8::ObjectTemplate> GetPrototypeTemplate(v8::Isolate* isolate)
         {
             return templateMap.at(isolate).Get()->PrototypeTemplate();
+        }
+
+        void SetInternalFieldCount(int count)
+        {
+            internalFieldCount = count;
         }
 
         static void Initialize(v8::Isolate* isolate);

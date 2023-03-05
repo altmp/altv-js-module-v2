@@ -1,0 +1,15 @@
+#include "FunctionContext.h"
+#include "module/IResource.h"
+
+js::IResource* js::FunctionContext::GetResource()
+{
+    if(!resource) resource = IResource::GetFromContext(info.GetIsolate()->GetCurrentContext());
+    return resource;
+}
+
+void js::FunctionContext::SetThisObject(alt::IBaseObject* object)
+{
+    if(!object) return;
+    IResource* resource = GetResource();
+    resource->BindScriptObject(info.This(), object);
+}

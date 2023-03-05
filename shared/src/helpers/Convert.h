@@ -219,5 +219,34 @@ namespace js
         }
         return result;
     }
+    template<typename T>
+    std::optional<T> CppValue(v8::Local<v8::Value> val)
+    {
+        if constexpr(std::is_same_v<T, v8::Local<v8::Value>>) return val;
+        else if constexpr(std::is_integral_v<T> || std::is_floating_point_v<T>)
+        {
+            return (T)val->ToNumber(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()).ToLocalChecked()->Value();
+        }
+        else if constexpr(std::is_same_v<T, std::string>)
+        {
+            return *v8::String::Utf8Value(v8::Isolate::GetCurrent(), val->ToString(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()).ToLocalChecked());
+        }
+        else if constexpr(std::is_same_v<T, bool>)
+        {
+            return val->ToBoolean(v8::Isolate::GetCurrent())->Value();
+        }
+        else if constexpr(std::is_same_v<T, std::vector<typename T::value_type>>)
+        {
+            if(!val->IsArray()) return std::nullopt;
+            return CppValue<typename T::value_type>(val.As<v8::Array>());
+        }
+        else if constexpr(std::is_same_v<T, std::unordered_map<typename T::value_type::first_type, typename T::value_type::second_type>>)
+        {
+            if(!val->IsObject()) return std::nullopt;
+            return CppValue<typename T::value_type>(val.As<v8::Object>());
+        }
+        else
+            static_assert("Invalid type specified to CppValue<v8::Value>");
+    }
 
 }  // namespace js

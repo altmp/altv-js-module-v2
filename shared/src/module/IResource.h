@@ -6,10 +6,11 @@
 #include "Bindings.h"
 #include "Class.h"
 #include "Module.h"
+#include "IScriptObjectHandler.h"
 
 namespace js
 {
-    class IResource : public alt::IResource::Impl
+    class IResource : public alt::IResource::Impl, public IScriptObjectHandler
     {
     protected:
         static constexpr int ContextInternalFieldIdx = 1;
@@ -18,7 +19,10 @@ namespace js
         v8::Isolate* isolate;
         v8::Global<v8::Context> context;
 
-        void Initialize() {}
+        void Initialize()
+        {
+            context.Get(isolate)->SetAlignedPointerInEmbedderData(ContextInternalFieldIdx, this);
+        }
 
         void Reset()
         {
@@ -41,6 +45,16 @@ namespace js
         v8::Local<v8::Context> GetContext() const
         {
             return context.Get(isolate);
+        }
+
+        void OnCreateBaseObject(alt::IBaseObject* object) override
+        {
+            IScriptObjectHandler::CreateScriptObject(GetContext(), object);
+        }
+
+        void OnRemoveBaseObject(alt::IBaseObject* object) override
+        {
+            IScriptObjectHandler::DestroyScriptObject(object);
         }
 
         static IResource* GetFromContext(v8::Local<v8::Context> context)

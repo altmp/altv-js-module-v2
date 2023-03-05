@@ -16,6 +16,7 @@ void js::Class::Register(v8::Isolate* isolate, ClassTemplate& templ)
     }
     initCb(templ);
     templ.Get()->SetClassName(js::JSValue(name));
+    templ.Get()->InstanceTemplate()->SetInternalFieldCount(internalFieldCount);
 }
 
 void js::Class::Initialize(v8::Isolate* isolate)
