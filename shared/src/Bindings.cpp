@@ -33,7 +33,7 @@ v8::Local<v8::Module> js::Binding::Compile(IResource* resource)
         alt::ICore::Instance().LogError("INTERNAL ERROR: Failed to instantiate bindings module " + name);
         return v8::Local<v8::Module>();
     }
-    compiledModuleMap.insert({ resource, Persistent<v8::Module>(isolate, mod) });
+    compiledModuleMap.insert({ resource, std::move(Persistent<v8::Module>(isolate, mod)) });
     return mod;
 }
 

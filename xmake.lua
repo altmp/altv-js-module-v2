@@ -107,6 +107,7 @@ target("server")
         add_links("dbghelp", "winmm", "shlwapi", "advapi32")
     end
     set_runtimes("MD")
+    set_symbols("debug")
 
 target("client")
     set_basename("js-client-v2")

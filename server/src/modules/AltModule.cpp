@@ -1,3 +1,8 @@
 #include "Module.h"
 
-static js::Module altModule("alt", "alt-shared", [](v8pp::module& module) { module.const_("test2", 66); });
+// clang-format off
+extern js::Class playerClass;
+static js::Module altModule("alt", "alt-shared", { &playerClass }, [](js::ModuleTemplate& module)
+{
+    module.StaticProperty("test2", 66);
+});

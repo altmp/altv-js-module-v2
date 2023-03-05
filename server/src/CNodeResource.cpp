@@ -14,6 +14,8 @@ bool CNodeResource::Start()
     _context->SetAlignedPointerInEmbedderData(ContextInternalFieldIdx, this);
     context.Reset(isolate, _context);
 
+    IResource::Initialize();
+
     uvLoop = new uv_loop_t;
     uv_loop_init(uvLoop);
 

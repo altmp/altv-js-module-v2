@@ -2,33 +2,41 @@
 #include "cpp-sdk/version/version.h"
 #include "CNodeRuntime.h"
 #include "Module.h"
+#include "module/IResource.h"
+
 #include <iostream>
 
-static void Initialize(v8::Local<v8::Object> exports, v8::Local<v8::Value>, v8::Local<v8::Context> context, void*)
+namespace server
 {
-    if(!js::Module::Exists("alt"))
+    static void Initialize(v8::Local<v8::Object> exports, v8::Local<v8::Value>, v8::Local<v8::Context> context, void*)
     {
-        alt::ICore::Instance().LogError("INTERNAL ERROR: alt module not found");
-        return;
+        if(!js::Module::Exists("alt"))
+        {
+            alt::ICore::Instance().LogError("INTERNAL ERROR: alt module not found");
+            return;
+        }
+
+        js::Module& mod = js::Module::Get("alt");
+        exports->SetPrototype(context, mod.GetNamespace(context));
     }
+    NODE_MODULE_LINKED(alt, Initialize)
+}  // namespace server
 
-    js::Module& mod = js::Module::Get("alt");
-    exports->SetPrototype(context, mod.GetNamespace(context));
-}
-NODE_MODULE_LINKED(alt, Initialize)
-
-static void InitializeShared(v8::Local<v8::Object> exports, v8::Local<v8::Value>, v8::Local<v8::Context> context, void*)
+namespace shared
 {
-    if(!js::Module::Exists("alt-shared"))
+    static void InitializeShared(v8::Local<v8::Object> exports, v8::Local<v8::Value>, v8::Local<v8::Context> context, void*)
     {
-        alt::ICore::Instance().LogError("INTERNAL ERROR: alt-shared module not found");
-        return;
-    }
+        if(!js::Module::Exists("alt-shared"))
+        {
+            alt::ICore::Instance().LogError("INTERNAL ERROR: alt-shared module not found");
+            return;
+        }
 
-    js::Module& mod = js::Module::Get("alt-shared");
-    exports->SetPrototype(context, mod.GetNamespace(context));
-}
-NODE_MODULE_LINKED(altShared, InitializeShared)
+        js::Module& mod = js::Module::Get("alt-shared");
+        exports->SetPrototype(context, mod.GetNamespace(context));
+    }
+    NODE_MODULE_LINKED(altShared, InitializeShared)
+}  // namespace shared
 
 EXPORT bool altMain(alt::ICore* core)
 {

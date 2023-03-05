@@ -3,41 +3,54 @@
 #include <unordered_map>
 #include <functional>
 #include <iostream>
+#include <vector>
 
 #include "v8.h"
-#include "v8pp/module.hpp"
 
 #include "helpers/JS.h"
+#include "helpers/Template.h"
 
 namespace js
 {
+    class Class;
+
     class Module
     {
-        static std::unordered_map<std::string, Module>& GetAll()
+        static std::unordered_map<std::string, Module*>& GetAll()
         {
-            static std::unordered_map<std::string, Module> modules;
+            static std::unordered_map<std::string, Module*> modules;
             return modules;
         }
 
     public:
-        using ModuleInitializationCallback = std::function<void(v8pp::module&)>;
+        using ModuleInitializationCallback = std::function<void(ModuleTemplate&)>;
 
     private:
         std::string name;
         std::string parentModule;
         ModuleInitializationCallback initCb;
-        std::unordered_map<v8::Isolate*, Persistent<v8::ObjectTemplate>> templateMap;
+        std::unordered_map<v8::Isolate*, ModuleTemplate> templateMap;
+        std::vector<Class*> classes;
 
-        void Register(v8pp::module& mod);
+        void Register(ModuleTemplate& templ);
 
     public:
         Module(const std::string& _name, ModuleInitializationCallback _cb) : name(_name), initCb(_cb)
         {
-            GetAll().insert({ name, *this });
+            GetAll().insert({ name, this });
+        }
+        Module(const std::string& _name, const std::vector<Class*>& _classes, ModuleInitializationCallback _cb) : name(_name), classes(_classes), initCb(_cb)
+        {
+            GetAll().insert({ name, this });
         }
         Module(const std::string& _name, const std::string& _parent, ModuleInitializationCallback _cb) : name(_name), parentModule(_parent), initCb(_cb)
         {
-            GetAll().insert({ name, *this });
+            GetAll().insert({ name, this });
+        }
+        Module(const std::string& _name, const std::string& _parent, const std::vector<Class*>& _classes, ModuleInitializationCallback _cb)
+            : name(_name), parentModule(_parent), classes(_classes), initCb(_cb)
+        {
+            GetAll().insert({ name, this });
         }
 
         const std::string& GetName() const
@@ -46,11 +59,11 @@ namespace js
         }
         v8::Local<v8::ObjectTemplate> GetTemplate(v8::Isolate* isolate)
         {
-            return templateMap.at(isolate).Get(isolate);
+            return templateMap.at(isolate).Get();
         }
         v8::Local<v8::Object> GetNamespace(v8::Local<v8::Context> context)
         {
-            return GetTemplate(context->GetIsolate())->NewInstance(context).ToLocalChecked();
+            return templateMap.at(context->GetIsolate()).Get()->NewInstance(context).ToLocalChecked();
         }
 
         static bool Exists(const std::string& name)
@@ -59,7 +72,7 @@ namespace js
         }
         static Module& Get(const std::string& name)
         {
-            return GetAll().at(name);
+            return *GetAll().at(name);
         }
 
         static void Initialize(v8::Isolate* isolate);

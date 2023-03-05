@@ -4,6 +4,8 @@
 #include "cpp-sdk/SDK.h"
 
 #include "Bindings.h"
+#include "Class.h"
+#include "Module.h"
 
 namespace js
 {
@@ -15,6 +17,8 @@ namespace js
         alt::IResource* resource;
         v8::Isolate* isolate;
         v8::Global<v8::Context> context;
+
+        void Initialize() {}
 
         void Reset()
         {

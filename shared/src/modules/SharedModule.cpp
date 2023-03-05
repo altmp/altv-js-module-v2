@@ -1,4 +1,8 @@
 #include "Module.h"
 
-int test = 23;
-static js::Module sharedModule("alt-shared", [](v8pp::module& module) { module.var("test", test); });
+// clang-format off
+extern js::Class sharedPlayerClass;
+static js::Module sharedModule("alt-shared", { &sharedPlayerClass }, [](js::ModuleTemplate& module)
+{
+    module.StaticProperty("test", 42);
+});

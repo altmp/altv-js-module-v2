@@ -1,6 +1,6 @@
 #pragma once
 
-#include "v8.h"
+#include "v8-persistent-handle.h"
 
 namespace js
 {

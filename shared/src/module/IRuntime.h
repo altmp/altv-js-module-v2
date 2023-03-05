@@ -4,6 +4,7 @@
 #include "cpp-sdk/SDK.h"
 
 #include "Module.h"
+#include "Class.h"
 
 namespace js
 {
@@ -22,6 +23,7 @@ namespace js
 
         virtual bool Initialize()
         {
+            Class::Initialize(isolate);
             Module::Initialize(isolate);
             return true;
         }
