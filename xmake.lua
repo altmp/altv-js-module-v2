@@ -60,26 +60,10 @@ target("cpp-sdk")
         os.cd(oldDir)
     end)
 
-target("v8pp")
-    set_kind("headeronly")
-    add_headerfiles("deps/v8pp/v8pp/**.hpp", "deps/v8pp/v8pp/**.ipp")
-    set_configvar("V8PP_HEADER_ONLY", 1)
-    set_configvar("V8PP_ISOLATE_DATA_SLOT", 0)
-    set_configvar("V8PP_PLUGIN_INIT_PROC_NAME", "DONTUSE")
-    set_configvar("V8PP_PLUGIN_SUFFIX", "")
-    set_configvar("V8_COMPRESS_POINTERS", 1)
-    set_configvar("PROJECT_VERSION", "2.1.0")
-    set_configvar("PROJECT_VERSION_MAJOR", 2)
-    set_configvar("PROJECT_VERSION_MINOR", 1)
-    set_configvar("PROJECT_VERSION_PATCH", 0)
-    set_configdir("build/v8pp")
-    add_configfiles("deps/v8pp/v8pp/config.hpp.in", { pattern = "@(.-)@" })
-    add_defines("V8_COMPRESS_POINTERS=1", "V8_31BIT_SMIS_ON_64BIT_ARCH=1")
-
 target("shared")
     set_kind("headeronly")
     add_headerfiles("shared/src/**.h")
-    add_deps("cpp-sdk", "v8pp")
+    add_deps("cpp-sdk")
     set_configdir("shared/src")
     add_configfiles("shared/src/Version.h.in")
     add_rules("generate-bindings")
@@ -92,7 +76,7 @@ target("server")
     add_includedirs(
         "server/src", "server/deps", "server/deps/nodejs/include", "server/deps/nodejs/deps/uv/include", "server/deps/nodejs/deps/v8/include",
         "shared/src",
-        "deps", "deps/cpp-sdk", "deps/v8pp",
+        "deps", "deps/cpp-sdk",
         "build"
     )
     add_deps("shared")
@@ -121,7 +105,7 @@ target("client")
     add_includedirs(
         "client/src", "client/deps", "client/deps/v8/include",
         "shared/src",
-        "deps", "deps/cpp-sdk", "deps/v8pp",
+        "deps", "deps/cpp-sdk",
         "build"
     )
     add_deps("shared")
