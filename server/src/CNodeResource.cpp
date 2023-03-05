@@ -74,7 +74,6 @@ void CNodeResource::OnTick()
     v8::Locker locker(isolate);
     v8::Isolate::Scope isolateScope(isolate);
     v8::HandleScope handleScope(isolate);
-
     v8::Context::Scope scope(GetContext());
     node::CallbackScope callbackScope(isolate, asyncResource.Get(isolate), asyncContext);
 
