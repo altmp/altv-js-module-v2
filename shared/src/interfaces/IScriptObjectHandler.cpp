@@ -3,6 +3,9 @@
 
 js::ScriptObject* js::IScriptObjectHandler::CreateScriptObject(v8::Local<v8::Context> context, alt::IBaseObject* object)
 {
+    js::ScriptObject* existingObject = GetScriptObject(object);
+    if(existingObject) return existingObject;
+
     Class* class_ = GetClassForType(object->GetType());
     if(!class_)
     {

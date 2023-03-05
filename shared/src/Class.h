@@ -22,16 +22,13 @@ namespace js
             return classes;
         }
 
-        static void ConstructorWrap(const v8::FunctionCallbackInfo<v8::Value>& info);
-
     public:
-        using ClassConstructor = std::function<void(FunctionContext&)>;
         using ClassInitializationCallback = std::function<void(ClassTemplate&)>;
 
     private:
         std::string name;
         Class* parentClass = nullptr;
-        ClassConstructor ctor;
+        FunctionCallback ctor;
         ClassInitializationCallback initCb;
         std::unordered_map<v8::Isolate*, ClassTemplate> templateMap;
         int internalFieldCount = 0;
@@ -39,11 +36,11 @@ namespace js
         void Register(v8::Isolate* isolate, ClassTemplate& templ);
 
     public:
-        Class(const std::string& _name, ClassConstructor _ctor, ClassInitializationCallback _cb) : name(_name), ctor(_ctor), initCb(_cb)
+        Class(const std::string& _name, FunctionCallback _ctor, ClassInitializationCallback _cb) : name(_name), ctor(_ctor), initCb(_cb)
         {
             GetAll().push_back(this);
         }
-        Class(const std::string& _name, Class* _parent, ClassConstructor _ctor, ClassInitializationCallback _cb) : name(_name), parentClass(_parent), ctor(_ctor), initCb(_cb)
+        Class(const std::string& _name, Class* _parent, FunctionCallback _ctor, ClassInitializationCallback _cb) : name(_name), parentClass(_parent), ctor(_ctor), initCb(_cb)
         {
             GetAll().push_back(this);
         }

@@ -49,7 +49,7 @@ namespace js
 
         void OnCreateBaseObject(alt::IBaseObject* object) override
         {
-            IScriptObjectHandler::CreateScriptObject(GetContext(), object);
+            // IScriptObjectHandler::CreateScriptObject(GetContext(), object);
         }
 
         void OnRemoveBaseObject(alt::IBaseObject* object) override

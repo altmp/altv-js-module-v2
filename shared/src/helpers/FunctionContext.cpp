@@ -1,6 +1,12 @@
 #include "FunctionContext.h"
 #include "interfaces/IResource.h"
 
+alt::IBaseObject* js::FunctionContext::GetThisObjectUntyped()
+{
+    if(errored) return nullptr;
+    return GetResource()->GetScriptObject(info.This())->GetObject();
+}
+
 js::IResource* js::FunctionContext::GetResource()
 {
     if(!resource) resource = IResource::GetFromContext(info.GetIsolate()->GetCurrentContext());

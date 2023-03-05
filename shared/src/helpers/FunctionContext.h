@@ -15,10 +15,16 @@ namespace js
         v8::FunctionCallbackInfo<v8::Value> info;
         bool errored = false;
         IResource* resource = nullptr;
+        std::vector<Type> argTypes;  // Cache argument types
+
+        alt::IBaseObject* GetThisObjectUntyped();
 
     public:
         FunctionContext() = delete;
-        FunctionContext(const v8::FunctionCallbackInfo<v8::Value>& _info) : info(_info) {}
+        FunctionContext(const v8::FunctionCallbackInfo<v8::Value>& _info) : info(_info)
+        {
+            argTypes.resize(info.Length());
+        }
 
         v8::Isolate* GetIsolate() const
         {
@@ -35,51 +41,49 @@ namespace js
             errored = true;
         }
 
-        bool CheckArgCount(int count)
+        bool Check(bool condition, const std::string& message)
         {
-            if(info.Length() != count)
+            if(!condition)
             {
-                Throw("Not enough arguments, expected " + std::to_string(count) + " arguments");
+                Throw(message);
                 return false;
             }
             return true;
+        }
+        bool CheckArgCount(int count)
+        {
+            return Check(info.Length() == count, "Invalid number of arguments, expected " + std::to_string(count) + " arguments");
         }
         bool CheckArgCount(int min, int max)
         {
-            if(info.Length() > max || info.Length() < min)
-            {
-                Throw("Invalid number of arguments, expected minimum " + std::to_string(min) + " and maximum " + std::to_string(max) + " arguments");
-                return false;
-            }
-            return true;
+            return Check(info.Length() >= min && info.Length() <= max,
+                         "Invalid number of arguments, expected minimum " + std::to_string(min) + " and maximum " + std::to_string(max) + " arguments");
         }
         bool CheckArgType(int index, Type type)
         {
-            Type argType = GetType(info[index]);
-            if(argType != type)
-            {
-                Throw("Invalid argument type at index " + std::to_string(index) + ", expected " + TypeToString(type) + " but got " + TypeToString(argType));
-                return false;
-            }
-            return true;
+            return Check(GetArgType(index) == type,
+                         "Invalid argument type at index " + std::to_string(index) + ", expected " + TypeToString(type) + " but got " + TypeToString(GetArgType(index)));
         }
         bool CheckCtor()
         {
-            if(!info.IsConstructCall())
-            {
-                Throw("Constructor called as function");
-                return false;
-            }
-            return true;
+            return Check(info.IsConstructCall(), "Constructor called as function");
+        }
+
+        Type GetArgType(int index)
+        {
+            if(argTypes[index] != Type::Invalid) return argTypes[index];
+            Type argType = GetType(info[index]);
+            argTypes[index] = argType;
+            return argType;
         }
 
         IResource* GetResource();
 
         template<class T>
-        T* GetThis()
+        T* GetThisObject()
         {
             if(errored) return nullptr;
-            return static_cast<T*>(GetResource()->GetScriptObject(info.This()));
+            return dynamic_cast<T*>(GetThisObjectUntyped());
         }
         void SetThisObject(alt::IBaseObject* object);
 
@@ -94,6 +98,24 @@ namespace js
             if(result.has_value())
             {
                 outValue = result.value();
+                return true;
+            }
+            return false;
+        }
+
+        bool GetArgAsHash(int index, uint32_t& outValue)
+        {
+            if(errored) return false;
+            Type argType = GetArgType(index);
+            if(argType == Type::String)
+            {
+                std::string str = CppValue(info[index].As<v8::String>());
+                outValue = alt::ICore::Instance().Hash(str.c_str());
+                return true;
+            }
+            else if(argType == Type::Number)
+            {
+                outValue = (uint32_t)CppValue(info[index].As<v8::Number>());
                 return true;
             }
             return false;

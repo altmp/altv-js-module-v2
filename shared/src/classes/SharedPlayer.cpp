@@ -1,5 +1,4 @@
 #include "Class.h"
-#include "interfaces/IResource.h"
 #include "cpp-sdk/ICore.h"
 
 // clang-format off
