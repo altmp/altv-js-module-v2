@@ -57,6 +57,8 @@ namespace js
             IScriptObjectHandler::DestroyScriptObject(object);
         }
 
+        void OnTick() override {}
+
         static IResource* GetFromContext(v8::Local<v8::Context> context)
         {
             return static_cast<IResource*>(context->GetAlignedPointerFromEmbedderData(ContextInternalFieldIdx));
