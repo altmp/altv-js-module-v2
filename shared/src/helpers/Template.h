@@ -39,22 +39,22 @@ namespace js
     static v8::Local<v8::FunctionTemplate> WrapFunction(FunctionCallback cb)
     {
         v8::Isolate* isolate = v8::Isolate::GetCurrent();
-        v8::Local<v8::FunctionTemplate> templ = v8::FunctionTemplate::New(isolate, Wrapper::FunctionHandler, v8::External::New(isolate, cb));
-        return templ;
+        v8::Local<v8::FunctionTemplate> tpl = v8::FunctionTemplate::New(isolate, Wrapper::FunctionHandler, v8::External::New(isolate, cb));
+        return tpl;
     }
 
     template<typename TemplateType>
     class Template
     {
         v8::Isolate* isolate;
-        Persistent<TemplateType> templ;
+        Persistent<TemplateType> tpl;
 
     public:
-        Template(v8::Isolate* _isolate, v8::Local<TemplateType> _templ) : isolate(_isolate), templ(_isolate, _templ) {}
+        Template(v8::Isolate* _isolate, v8::Local<TemplateType> _templ) : isolate(_isolate), tpl(_isolate, _templ) {}
 
         v8::Local<TemplateType> Get() const
         {
-            return templ.Get(isolate);
+            return tpl.Get(isolate);
         }
         v8::Isolate* GetIsolate() const
         {
@@ -76,13 +76,13 @@ namespace js
     class ModuleTemplate : public Template<v8::ObjectTemplate>
     {
     public:
-        ModuleTemplate(v8::Isolate* isolate, v8::Local<v8::ObjectTemplate> templ) : Template(isolate, templ) {}
+        ModuleTemplate(v8::Isolate* isolate, v8::Local<v8::ObjectTemplate> tpl) : Template(isolate, tpl) {}
     };
 
     class ClassTemplate : public Template<v8::FunctionTemplate>
     {
     public:
-        ClassTemplate(v8::Isolate* isolate, v8::Local<v8::FunctionTemplate> templ) : Template(isolate, templ) {}
+        ClassTemplate(v8::Isolate* isolate, v8::Local<v8::FunctionTemplate> tpl) : Template(isolate, tpl) {}
 
         void Method(const std::string& name, FunctionCallback callback)
         {

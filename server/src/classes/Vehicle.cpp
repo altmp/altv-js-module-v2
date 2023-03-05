@@ -29,11 +29,11 @@ static void GetModel(js::FunctionContext& ctx)
 
 // clang-format off
 extern js::Class sharedVehicleClass;
-extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, Ctor, [](js::ClassTemplate& templ)
+extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, Ctor, [](js::ClassTemplate& tpl)
 {
     js::IScriptObjectHandler::BindClassToType(alt::IBaseObject::Type::VEHICLE, &vehicleClass);
 
-    templ.Method("getID", GetID);
-    templ.Method("getModel", GetModel);
-    templ.Property<alt::IEntity, &alt::IEntity::GetModel>("model");
+    tpl.Method("getID", GetID);
+    tpl.Method("getModel", GetModel);
+    tpl.Property<alt::IEntity, &alt::IEntity::GetModel>("model");
 });

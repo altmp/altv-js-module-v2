@@ -2,7 +2,7 @@
 #include "cpp-sdk/ICore.h"
 
 // clang-format off
-extern js::Class sharedPlayerClass("Player", nullptr, [](js::ClassTemplate& templ)
+extern js::Class sharedPlayerClass("Player", nullptr, [](js::ClassTemplate& tpl)
 {
-    templ.StaticProperty("shared", 23);
+    tpl.StaticProperty("shared", 23);
 });

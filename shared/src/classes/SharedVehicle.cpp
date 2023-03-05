@@ -2,6 +2,6 @@
 #include "cpp-sdk/ICore.h"
 
 // clang-format off
-extern js::Class sharedVehicleClass("Vehicle", nullptr, [](js::ClassTemplate& templ)
+extern js::Class sharedVehicleClass("Vehicle", nullptr, [](js::ClassTemplate& tpl)
 {
 });

@@ -32,7 +32,7 @@ namespace js
         std::unordered_map<v8::Isolate*, ModuleTemplate> templateMap;
         std::vector<Class*> classes;
 
-        void Register(ModuleTemplate& templ);
+        void Register(ModuleTemplate& tpl);
 
     public:
         Module(const std::string& _name, ModuleInitializationCallback _cb) : name(_name), initCb(_cb)

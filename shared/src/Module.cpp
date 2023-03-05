@@ -1,19 +1,19 @@
 #include "Module.h"
 #include "Class.h"
 
-void js::Module::Register(ModuleTemplate& templ)
+void js::Module::Register(ModuleTemplate& tpl)
 {
-    v8::Isolate* isolate = templ.GetIsolate();
+    v8::Isolate* isolate = tpl.GetIsolate();
     if(!parentModule.empty())
     {
         Module& parentMod = Get(parentModule);
-        parentMod.Register(templ);
+        parentMod.Register(tpl);
     }
     for(js::Class* class_ : classes)
     {
-        templ.StaticProperty(class_->GetName(), class_->GetTemplate(isolate).Get());
+        tpl.StaticProperty(class_->GetName(), class_->GetTemplate(isolate).Get());
     }
-    initCb(templ);
+    initCb(tpl);
 }
 
 void js::Module::Initialize(v8::Isolate* isolate)

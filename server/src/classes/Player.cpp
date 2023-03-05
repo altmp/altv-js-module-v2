@@ -19,9 +19,9 @@ static void Ctor(js::FunctionContext& ctx)
 
 // clang-format off
 extern js::Class sharedPlayerClass;
-extern js::Class playerClass("Player", &sharedPlayerClass, Ctor, [](js::ClassTemplate& templ)
+extern js::Class playerClass("Player", &sharedPlayerClass, Ctor, [](js::ClassTemplate& tpl)
 {
     js::IScriptObjectHandler::BindClassToType(alt::IBaseObject::Type::PLAYER, &playerClass);
 
-    templ.StaticProperty("server", 45);
+    tpl.StaticProperty("server", 45);
 });

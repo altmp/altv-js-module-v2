@@ -33,7 +33,7 @@ namespace js
         std::unordered_map<v8::Isolate*, ClassTemplate> templateMap;
         int internalFieldCount = 0;
 
-        void Register(v8::Isolate* isolate, ClassTemplate& templ);
+        void Register(v8::Isolate* isolate, ClassTemplate& tpl);
 
     public:
         Class(const std::string& _name, FunctionCallback _ctor, ClassInitializationCallback _cb) : name(_name), ctor(_ctor), initCb(_cb)
