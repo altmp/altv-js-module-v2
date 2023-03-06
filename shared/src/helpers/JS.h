@@ -35,6 +35,12 @@ namespace js
         {
             object->Set(context, js::JSValue(key), js::JSValue(val));
         }
+
+        template<typename T>
+        T Get(const std::string& key) const
+        {
+            return js::CppValue<T>(object->Get(context, js::JSValue(key)).ToLocalChecked()).value();
+        }
     };
 
     class Array

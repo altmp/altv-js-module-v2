@@ -88,26 +88,55 @@ alt::MValue js::JSToMValue(v8::Local<v8::Value> val, bool allowFunction)
         }
         else
         {
-            // todo: support vector3 etc.
+            js::IResource* resource = js::IResource::GetFromContext(ctx);
             v8::Local<v8::Object> v8Obj = val.As<v8::Object>();
-            alt::MValueDict dict = core.CreateMValueDict();
-            v8::Local<v8::Array> keys;
-
-            if(!v8Obj->GetOwnPropertyNames(ctx).ToLocal(&keys)) return core.CreateMValueNone();
-
-            for(uint32_t i = 0; i < keys->Length(); ++i)
+            js::Object obj{ val.As<v8::Object>() };
+            if(resource->IsVector3(v8Obj))
             {
-                v8::Local<v8::Value> v8Key;
-                if(!keys->Get(ctx, i).ToLocal(&v8Key)) return core.CreateMValueNone();
-                v8::Local<v8::Value> value;
-                if(!v8Obj->Get(ctx, v8Key).ToLocal(&value)) return core.CreateMValueNone();
-                if(value->IsUndefined()) continue;
-
-                std::string key = *v8::String::Utf8Value(isolate, v8Key);
-                dict->Set(key, JSToMValue(value, allowFunction));
+                alt::Vector3f vec;
+                vec[0] = obj.Get<float>("x");
+                vec[1] = obj.Get<float>("y");
+                vec[2] = obj.Get<float>("z");
+                return core.CreateMValueVector3(vec);
             }
+            else if(resource->IsVector2(v8Obj))
+            {
+                alt::Vector2f vec;
+                vec[0] = obj.Get<float>("x");
+                vec[1] = obj.Get<float>("y");
+                return core.CreateMValueVector2(vec);
+            }
+            else if(resource->IsRGBA(v8Obj))
+            {
+                alt::RGBA rgba;
+                rgba.r = obj.Get<uint8_t>("r");
+                rgba.g = obj.Get<uint8_t>("g");
+                rgba.b = obj.Get<uint8_t>("b");
+                rgba.a = obj.Get<uint8_t>("a");
+                return core.CreateMValueRGBA(rgba);
+            }
+            // todo: base objects
+            else
+            {
+                alt::MValueDict dict = core.CreateMValueDict();
+                v8::Local<v8::Array> keys;
 
-            return dict;
+                if(!v8Obj->GetOwnPropertyNames(ctx).ToLocal(&keys)) return core.CreateMValueNone();
+
+                for(uint32_t i = 0; i < keys->Length(); ++i)
+                {
+                    v8::Local<v8::Value> v8Key;
+                    if(!keys->Get(ctx, i).ToLocal(&v8Key)) return core.CreateMValueNone();
+                    v8::Local<v8::Value> value;
+                    if(!v8Obj->Get(ctx, v8Key).ToLocal(&value)) return core.CreateMValueNone();
+                    if(value->IsUndefined()) continue;
+
+                    std::string key = *v8::String::Utf8Value(isolate, v8Key);
+                    dict->Set(key, JSToMValue(value, allowFunction));
+                }
+
+                return dict;
+            }
         }
     }
 
@@ -179,16 +208,15 @@ v8::Local<v8::Value> js::MValueToJS(alt::MValueConst val)
         }
         case alt::IMValue::Type::VECTOR3:
         {
-            // todo: support vector3 etc
-            return v8::Undefined(isolate);
+            return resource->CreateVector3(val.As<alt::IMValueVector3>()->Value());
         }
         case alt::IMValue::Type::VECTOR2:
         {
-            return v8::Undefined(isolate);
+            return resource->CreateVector2(val.As<alt::IMValueVector2>()->Value());
         }
         case alt::IMValue::Type::RGBA:
         {
-            return v8::Undefined(isolate);
+            return resource->CreateRGBA(val.As<alt::IMValueRGBA>()->Value());
         }
         case alt::IMValue::Type::BYTE_ARRAY:
         {

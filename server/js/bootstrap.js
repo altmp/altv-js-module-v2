@@ -15,6 +15,9 @@ alt.Events.on("test", (arg) => {
     alt.log("got test: " + arg);
 });
 
+let vector = new Vector3(8, 5, 3);
+alt.log(vector.x);
+
 /*
 console.log(alt.test);
 alt.test = 45;

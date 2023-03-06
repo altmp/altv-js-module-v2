@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include "v8.h"
 #include "cpp-sdk/SDK.h"
 
@@ -113,11 +115,67 @@ namespace js
             RegisterBindingExport("timers:tick", "shared/timers.js", "tick");
             RegisterBindingExport("events:setEvents", "shared/events.js", "setEvents");
             RegisterBindingExport("events:onEvent", "shared/events.js", "onEvent");
+
+            RegisterBindingExport("classes:vector3", "shared/classes/vector.js", "Vector3");
+            RegisterBindingExport("classes:vector2", "shared/classes/vector.js", "Vector2");
+            RegisterBindingExport("classes:rgba", "shared/classes/rgba.js", "RGBA");
         }
         v8::Local<v8::Value> GetBindingExport(const std::string& name)
         {
             if(!bindingExports.contains(name)) return v8::Local<v8::Value>();
             return bindingExports.at(name).Get(isolate);
+        }
+
+        v8::Local<v8::Object> CreateVector3(alt::Vector3f vec)
+        {
+            v8::Local<v8::Value> vector3 = GetBindingExport("classes:vector3");
+            if(vector3.IsEmpty()) return v8::Local<v8::Object>();
+
+            v8::Local<v8::Function> vector3Func = vector3.As<v8::Function>();
+            std::array<v8::Local<v8::Value>, 3> args = { js::JSValue(vec[0]), js::JSValue(vec[1]), js::JSValue(vec[2]) };
+            return vector3Func->NewInstance(GetContext(), args.size(), args.data()).ToLocalChecked();
+        }
+        v8::Local<v8::Object> CreateVector2(alt::Vector2f vec)
+        {
+            v8::Local<v8::Value> vector2 = GetBindingExport("classes:vector2");
+            if(vector2.IsEmpty()) return v8::Local<v8::Object>();
+
+            v8::Local<v8::Function> vector2Func = vector2.As<v8::Function>();
+            std::array<v8::Local<v8::Value>, 2> args = { js::JSValue(vec[0]), js::JSValue(vec[1]) };
+            return vector2Func->NewInstance(GetContext(), args.size(), args.data()).ToLocalChecked();
+        }
+        v8::Local<v8::Object> CreateRGBA(alt::RGBA rgba)
+        {
+            v8::Local<v8::Value> rgbaClass = GetBindingExport("classes:rgba");
+            if(rgbaClass.IsEmpty()) return v8::Local<v8::Object>();
+
+            v8::Local<v8::Function> rgbaFunc = rgbaClass.As<v8::Function>();
+            std::array<v8::Local<v8::Value>, 4> args = { js::JSValue(rgba.r), js::JSValue(rgba.g), js::JSValue(rgba.b), js::JSValue(rgba.a) };
+            return rgbaFunc->NewInstance(GetContext(), args.size(), args.data()).ToLocalChecked();
+        }
+        bool IsVector3(v8::Local<v8::Value> val)
+        {
+            v8::Local<v8::Value> vector3 = GetBindingExport("classes:vector3");
+            if(vector3.IsEmpty()) return false;
+
+            v8::Local<v8::Function> vector3Func = vector3.As<v8::Function>();
+            return val->IsObject() && val.As<v8::Object>()->InstanceOf(GetContext(), vector3Func).ToChecked();
+        }
+        bool IsVector2(v8::Local<v8::Value> val)
+        {
+            v8::Local<v8::Value> vector2 = GetBindingExport("classes:vector2");
+            if(vector2.IsEmpty()) return false;
+
+            v8::Local<v8::Function> vector2Func = vector2.As<v8::Function>();
+            return val->IsObject() && val.As<v8::Object>()->InstanceOf(GetContext(), vector2Func).ToChecked();
+        }
+        bool IsRGBA(v8::Local<v8::Value> val)
+        {
+            v8::Local<v8::Value> rgbaClass = GetBindingExport("classes:rgba");
+            if(rgbaClass.IsEmpty()) return false;
+
+            v8::Local<v8::Function> rgbaFunc = rgbaClass.As<v8::Function>();
+            return val->IsObject() && val.As<v8::Object>()->InstanceOf(GetContext(), rgbaFunc).ToChecked();
         }
 
         static IResource* GetFromContext(v8::Local<v8::Context> context)
