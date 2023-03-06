@@ -84,11 +84,21 @@ namespace js
 
         void OnEvent(const alt::CEvent* ev) override
         {
+            v8::Locker locker(isolate);
+            v8::Isolate::Scope isolateScope(isolate);
+            v8::HandleScope handleScope(isolate);
+            v8::Context::Scope contextScope(GetContext());
+
             Event::SendEvent(ev, this);
         }
 
         void OnTick() override
         {
+            v8::Locker locker(isolate);
+            v8::Isolate::Scope isolateScope(isolate);
+            v8::HandleScope handleScope(isolate);
+            v8::Context::Scope contextScope(GetContext());
+
             v8::Local<v8::Value> onTick = GetBindingExport("timers:tick");
             if(!onTick.IsEmpty())
             {
