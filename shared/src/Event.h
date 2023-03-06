@@ -36,11 +36,6 @@ namespace js
             static std::unordered_map<alt::CEvent::Type, Event*> eventHandlerMap;
             return eventHandlerMap;
         }
-        static std::unordered_map<IResource*, Persistent<v8::Function>>& GetResourceBindingMap()
-        {
-            static std::unordered_map<IResource*, Persistent<v8::Function>> resourceBindingMap;
-            return resourceBindingMap;
-        }
         static Event* GetEventHandler(alt::CEvent::Type type)
         {
             auto& eventHandlerMap = GetEventHandlerMap();
@@ -48,7 +43,6 @@ namespace js
             if(it == eventHandlerMap.end()) return nullptr;
             return it->second;
         }
-        static v8::Local<v8::Function> GetResourceBinding(IResource* resource);
         static void CallEventBinding(bool custom, int type, EventArgs& args, IResource* resource);
 
     public:
@@ -60,6 +54,5 @@ namespace js
         static void SendEvent(const alt::CEvent* ev, IResource* resource);
         static void SendEvent(EventType type, EventArgs& args, IResource* resource);
         static void RegisterEvents(IResource* resource);
-        static void UnregisterEvents(IResource* resource);
     };
 }  // namespace js

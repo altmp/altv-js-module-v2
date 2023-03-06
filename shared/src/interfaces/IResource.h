@@ -32,7 +32,6 @@ namespace js
         void Reset()
         {
             Binding::CleanupForResource(this);
-            Event::UnregisterEvents(this);
             context.Reset();
         }
 
