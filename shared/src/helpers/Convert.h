@@ -11,6 +11,10 @@ namespace js
 {
     class Array;
 
+    alt::MValue JSToMValue(v8::Local<v8::Value> val, bool allowFunction = true);
+    v8::Local<v8::Value> MValueToJS(alt::MValueConst val);
+    void MValueArgsToJS(alt::MValueArgs args, Array& argsArray);
+
     inline v8::Local<v8::String> JSValue(const char* val)
     {
         return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), val).ToLocalChecked();
@@ -75,6 +79,10 @@ namespace js
     inline v8::Local<T> JSValue(v8::Local<T> val)
     {
         return val;
+    }
+    inline v8::Local<v8::Value> JSValue(alt::MValueConst mvalue)
+    {
+        return MValueToJS(mvalue);
     }
 
     // Converts a JS value to a C++ value
@@ -251,9 +259,4 @@ namespace js
         else
             static_assert("Invalid type specified to CppValue<v8::Value>");
     }
-
-    alt::MValue JSToMValue(v8::Local<v8::Value> val, bool allowFunction = true);
-    v8::Local<v8::Value> MValueToJS(alt::MValueConst val);
-    void MValueArgsToJS(alt::MValueArgs args, Array& argsArray);
-
 }  // namespace js

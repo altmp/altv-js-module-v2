@@ -121,6 +121,13 @@ namespace js
             return false;
         }
 
+        bool GetArgRaw(int index, v8::Local<v8::Value>& outValue)
+        {
+            if(errored) return false;
+            outValue = info[index];
+            return true;
+        }
+
         template<class T>
         void Return(const T& value)
         {

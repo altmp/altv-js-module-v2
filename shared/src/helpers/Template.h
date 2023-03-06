@@ -16,6 +16,7 @@ namespace js
     namespace Wrapper
     {
         alt::IBaseObject* GetThisObjectFromInfo(const v8::PropertyCallbackInfo<v8::Value>& info);
+        alt::IBaseObject* GetThisObjectFromInfo(const v8::FunctionCallbackInfo<v8::Value>& info);
 
         static void FunctionHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
@@ -28,6 +29,7 @@ namespace js
         static void PropertyGetterHandler(v8::Local<v8::String>, const v8::PropertyCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
+            if(obj == nullptr) return;
             constexpr bool isEnum = std::is_enum_v<decltype((obj->*Getter)())>;
             if constexpr(isEnum) info.GetReturnValue().Set(JSValue((int)(obj->*Getter)()));
             else
@@ -37,11 +39,120 @@ namespace js
         static void PropertySetterHandler(v8::Local<v8::String>, v8::Local<v8::Value> value, const v8::PropertyCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
+            if(obj == nullptr) return;
             constexpr bool isEnum = std::is_enum_v<Type>;
             if constexpr(isEnum) (obj->*Setter)(static_cast<Type>(value->Int32Value().ToChecked()));
             else
-                (obj->*Setter)(CppValue<typename std::remove_cv<typename std::remove_reference<Type>::type>::type>(value));
+                (obj->*Setter)(CppValue<typename std::remove_cv_t<typename std::remove_reference_t<Type>>>(value));
         }
+
+        template<class Class, typename Ret, Ret (Class::*Method)()>
+        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
+        {
+            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
+            if(obj == nullptr) return;
+            if constexpr(std::is_same_v<void, Ret>)
+            {
+                (obj->*Method)();
+            }
+            else
+            {
+                info.GetReturnValue().Set(JSValue((obj->*Method)()));
+            }
+        }
+        template<class Class, typename Ret, Ret (Class::*Method)() const>
+        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
+        {
+            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
+            if(obj == nullptr) return;
+            if constexpr(std::is_same_v<void, Ret>)
+            {
+                (obj->*Method)();
+            }
+            else
+            {
+                info.GetReturnValue().Set(JSValue((obj->*Method)()));
+            }
+        }
+
+        template<class Class, typename Ret, typename Arg, Ret (Class::*Method)(Arg)>
+        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
+        {
+            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
+            if(obj == nullptr) return;
+            using CleanArg = typename std::remove_cv_t<typename std::remove_reference_t<Arg>>;
+            if constexpr(std::is_same_v<void, Ret>)
+            {
+                (obj->*Method)(CppValue<CleanArg>(info[0]).value());
+            }
+            else
+            {
+                info.GetReturnValue().Set(JSValue((obj->*Method)(CppValue<CleanArg>(info[0]).value())));
+            }
+        }
+        template<class Class, typename Ret, typename Arg, Ret (Class::*Method)(Arg) const>
+        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
+        {
+            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
+            if(obj == nullptr) return;
+            using CleanArg = typename std::remove_cv_t<typename std::remove_reference_t<Arg>>;
+            if constexpr(std::is_same_v<void, Ret>)
+            {
+                (obj->*Method)(CppValue<CleanArg>(info[0]).value());
+            }
+            else
+            {
+                info.GetReturnValue().Set(JSValue((obj->*Method)(CppValue<CleanArg>(info[0]).value())));
+            }
+        }
+
+        /*
+        static int index = 0;
+        template<class T>
+        T GetArg(const v8::FunctionCallbackInfo<v8::Value>& info)
+        {
+            if(info.Length() <= index) return T();
+            return CppValue<T>(info[index++]).value();
+        }
+        template<class Class, typename... Args, auto(Class::*Method)(Args...) const>
+        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
+        {
+            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
+            if(obj == nullptr) return;
+            if(std::is_same_v<void, decltype((obj->*Method)(std::declval<Args>()...))>)
+            {
+                (obj->*Method)(GetArg<typename std::remove_cv_t<typename std::remove_reference_t<Args>>>()...);
+            }
+            else
+            {
+                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<typename std::remove_cv_t<typename std::remove_reference_t<Args>>>()...)));
+            }
+            index = 0;
+        }
+
+        template<typename Type, typename Enable = void>
+        struct MethodWrap;
+
+        template<typename ReturnType, class ClassType, typename... Args>
+        struct MethodWrap<ReturnType (ClassType::*)(Args...)>
+        {
+            static void Call(const v8::FunctionCallbackInfo<v8::Value>& info)
+            {
+                ClassType* obj = dynamic_cast<ClassType*>(GetThisObjectFromInfo(info));
+                if(obj == nullptr) return;
+                if(std::is_same_v<void, ReturnType>)
+                {
+                    (obj->*Method)(GetArg<typename std::remove_cv_t<typename std::remove_reference_t<Args>>>()...);
+                    return;
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<typename std::remove_cv_t<typename std::remove_reference_t<Args>>>()...)));
+                }
+                index = 0;
+            }
+        };
+        */
     }  // namespace Wrapper
 
     static v8::Local<v8::FunctionTemplate> WrapFunction(FunctionCallback cb)
@@ -109,13 +220,41 @@ namespace js
         {
             Get()->PrototypeTemplate()->Set(js::JSValue(name), WrapFunction(callback));
         }
+        template<class Class, typename Ret, Ret (Class::*Method)()>
+        void Method(const std::string& name)
+        {
+            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Method>));
+        }
+        template<class Class, typename Ret, Ret (Class::*Method)() const>
+        void Method(const std::string& name)
+        {
+            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Method>));
+        }
+        template<class Class, typename Ret, typename Arg, Ret (Class::*Method)(Arg) const>
+        void Method(const std::string& name)
+        {
+            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg, Method>));
+        }
+        template<class Class, typename Ret, typename Arg, Ret (Class::*Method)(Arg)>
+        void Method(const std::string& name)
+        {
+            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg, Method>));
+        }
+
+        /*
+        template<typename T>
+        void Method(const std::string& name)
+        {
+            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(isolate, Wrapper::MethodWrap<T>::Call));
+        }
+        */
 
         template<class Class, auto(Class::*Getter)() const>
         void Property(const std::string& name)
         {
             Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Class, Getter>);
         }
-        template<class Class, typename Type, auto(Class::*Getter)() const, void (Class::*Setter)(Type)>
+        template<class Class, typename Type, Type (Class::*Getter)() const, void (Class::*Setter)(Type)>
         void Property(const std::string& name)
         {
             Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Class, Getter>, Wrapper::PropertySetterHandler<Class, Type, Setter>);

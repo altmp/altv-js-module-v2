@@ -18,6 +18,11 @@ alt.Events.on("test", (arg) => {
 let vector = new Vector3(8, 5, 3);
 alt.log(vector.x);
 
+const vehicle = new alt.Vehicle("t20");
+alt.log("meta: " + vehicle.getMeta("test"));
+vehicle.setMeta("test", "test");
+alt.log("meta: " + vehicle.getMeta("test"));
+
 /*
 console.log(alt.test);
 alt.test = 45;
