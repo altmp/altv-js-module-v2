@@ -10,10 +10,13 @@ console.log(alt.Player.shared);
 
 let player = new alt.Player("testabc", 23);
 let player2 = new alt.Player(23, "testabc");
-*/
 
 let vehicle = new alt.Vehicle("t20");
 console.log("vehicle 1:", vehicle.getID(), vehicle.getModel(), vehicle.model);
 
 let vehicle2 = new alt.Vehicle(0x6322B39A);
 console.log("vehicle 2:", vehicle.getID(), vehicle.getModel(), vehicle.model);
+*/
+
+const interval = new alt.Timers.Interval(1000, () => {console.log("yep cock")});
+console.log(alt.Timers.Interval);

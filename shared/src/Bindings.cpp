@@ -50,6 +50,16 @@ v8::Local<v8::Module> js::Binding::GetCompiledModule(IResource* resource)
     return mod;
 }
 
+std::vector<js::Binding*> js::Binding::GetBindingsForScope(Scope scope)
+{
+    std::vector<Binding*> bindings;
+    for(auto& [_, binding] : __bindings)
+    {
+        if(binding.scope == scope || binding.scope == Scope::SHARED) bindings.push_back(&binding);
+    }
+    return bindings;
+}
+
 void js::Binding::CleanupForResource(IResource* resource)
 {
     for(auto& [_, binding] : __bindings)

@@ -15,6 +15,8 @@ bool CNodeResource::Start()
     context.Reset(isolate, _context);
 
     IResource::Initialize();
+    IResource::InitializeBindings(js::Binding::Scope::SERVER, js::Module::Get("alt"));
+    IResource::RegisterBindingExports();
 
     uvLoop = new uv_loop_t;
     uv_loop_init(uvLoop);

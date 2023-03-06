@@ -13,6 +13,7 @@
 namespace js
 {
     class Class;
+    class IResource;
 
     class Module
     {
@@ -30,6 +31,7 @@ namespace js
         std::string parentModule;
         ModuleInitializationCallback initCb;
         std::unordered_map<v8::Isolate*, ModuleTemplate> templateMap;
+        std::unordered_map<IResource*, Persistent<v8::Object>> instanceMap;
         std::vector<Class*> classes;
 
         void Register(ModuleTemplate& tpl);
@@ -61,10 +63,7 @@ namespace js
         {
             return templateMap.at(isolate).Get();
         }
-        v8::Local<v8::Object> GetNamespace(v8::Local<v8::Context> context)
-        {
-            return templateMap.at(context->GetIsolate()).Get()->NewInstance(context).ToLocalChecked();
-        }
+        v8::Local<v8::Object> GetNamespace(IResource* resource);
 
         static bool Exists(const std::string& name)
         {

@@ -9,6 +9,8 @@
 
 namespace js
 {
+    class Namespace;
+
     using FunctionCallback = void (*)(FunctionContext&);
 
     namespace Wrapper
@@ -73,10 +75,23 @@ namespace js
         }
     };
 
+    class NamespaceTemplate : public Template<v8::ObjectTemplate>
+    {
+    public:
+        NamespaceTemplate(v8::Isolate* isolate, v8::Local<v8::ObjectTemplate> tpl) : Template(isolate, tpl) {}
+    };
+
     class ModuleTemplate : public Template<v8::ObjectTemplate>
     {
     public:
         ModuleTemplate(v8::Isolate* isolate, v8::Local<v8::ObjectTemplate> tpl) : Template(isolate, tpl) {}
+
+        void Namespace(const std::string& name, Namespace& namespace_);
+        // Creates an empty namespace that can be extended by JS bindings
+        void Namespace(const std::string& name)
+        {
+            Get()->Set(js::JSValue(name), v8::ObjectTemplate::New(GetIsolate()));
+        }
     };
 
     class ClassTemplate : public Template<v8::FunctionTemplate>

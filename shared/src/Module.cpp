@@ -1,5 +1,6 @@
 #include "Module.h"
 #include "Class.h"
+#include "interfaces/IResource.h"
 
 void js::Module::Register(ModuleTemplate& tpl)
 {
@@ -14,6 +15,17 @@ void js::Module::Register(ModuleTemplate& tpl)
         tpl.StaticProperty(class_->GetName(), class_->GetTemplate(isolate).Get());
     }
     initCb(tpl);
+}
+
+v8::Local<v8::Object> js::Module::GetNamespace(IResource* resource)
+{
+    if(!instanceMap.contains(resource))
+    {
+        v8::Local<v8::Object> obj = templateMap.at(resource->GetIsolate()).Get()->NewInstance(resource->GetContext()).ToLocalChecked();
+        instanceMap.insert({ resource, Persistent<v8::Object>(resource->GetIsolate(), obj) });
+        return obj;
+    }
+    return instanceMap.at(resource).Get(resource->GetIsolate());
 }
 
 void js::Module::Initialize(v8::Isolate* isolate)

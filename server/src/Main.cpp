@@ -17,7 +17,7 @@ namespace server
         }
 
         js::Module& mod = js::Module::Get("alt");
-        exports->SetPrototype(context, mod.GetNamespace(context));
+        exports->SetPrototype(context, mod.GetNamespace(js::IResource::GetFromContext(context)));
     }
     NODE_MODULE_LINKED(alt, Initialize)
 }  // namespace server
@@ -33,7 +33,7 @@ namespace shared
         }
 
         js::Module& mod = js::Module::Get("alt-shared");
-        exports->SetPrototype(context, mod.GetNamespace(context));
+        exports->SetPrototype(context, mod.GetNamespace(js::IResource::GetFromContext(context)));
     }
     NODE_MODULE_LINKED(altShared, InitializeShared)
 }  // namespace shared

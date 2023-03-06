@@ -54,6 +54,7 @@ namespace js
         }
         v8::Local<v8::Module> GetCompiledModule(IResource* resource);
 
+        static std::vector<Binding*> GetBindingsForScope(Scope scope);
         static Binding& Get(const std::string& name)
         {
             static Binding invalidBinding;
