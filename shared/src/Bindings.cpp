@@ -52,12 +52,17 @@ v8::Local<v8::Module> js::Binding::GetCompiledModule(IResource* resource)
 
 std::vector<js::Binding*> js::Binding::GetBindingsForScope(Scope scope)
 {
+    std::vector<Binding*> sharedBindings;
     std::vector<Binding*> bindings;
     for(auto& [_, binding] : __bindings)
     {
-        if(binding.scope == scope || binding.scope == Scope::SHARED) bindings.push_back(&binding);
+        if(binding.scope == Scope::SHARED) sharedBindings.push_back(&binding);
+        else if(binding.scope == scope)
+            bindings.push_back(&binding);
     }
-    return bindings;
+    // Insert shared bindings at the beginning
+    sharedBindings.insert(sharedBindings.end(), bindings.begin(), bindings.end());
+    return sharedBindings;
 }
 
 void js::Binding::CleanupForResource(IResource* resource)
