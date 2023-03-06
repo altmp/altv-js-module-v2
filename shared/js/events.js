@@ -1,5 +1,7 @@
 // clang-format off
 const alt = __alt;
+const serverScriptEventType = __serverScriptEventType;
+const clientScriptEventType = __clientScriptEventType;
 
 const cppEventsMap = new Map();
 const customEventsMap = new Map();
@@ -46,8 +48,8 @@ export class Event {
     }
 
     static invoke(eventType, ctx, custom) {
-        if(eventType === __serverScriptEventType) return Event.#handleScriptEvent(ctx, !alt.isClient);
-        if(eventType === __clientScriptEventType) return Event.#handleScriptEvent(ctx, alt.isClient);
+        if(eventType === serverScriptEventType) return Event.#handleScriptEvent(ctx, !alt.isClient);
+        if(eventType === clientScriptEventType) return Event.#handleScriptEvent(ctx, alt.isClient);
 
         const map = custom ? Event.#customHandlers : Event.#handlers;
         const handlers = map.get(eventType);
