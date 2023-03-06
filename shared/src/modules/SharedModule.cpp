@@ -15,4 +15,5 @@ static js::Module sharedModule("alt-shared", { &sharedPlayerClass }, [](js::Modu
 {
     module.StaticFunction("log", Log);
     module.Namespace("Timers");
+    module.Namespace("Events");
 });

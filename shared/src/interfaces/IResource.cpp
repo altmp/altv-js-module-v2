@@ -13,12 +13,12 @@ void js::IResource::GetBindingNamespaceWrapper(js::FunctionContext& ctx)
     if(!resource) return;
 
     v8::Local<v8::Module> bindingModule = binding.GetCompiledModule(resource);
+    if(bindingModule->GetStatus() != v8::Module::Status::kEvaluated) resource->InitializeBinding(&binding);
     ctx.Return(bindingModule->GetModuleNamespace());
 }
 
 void js::IResource::InitializeBinding(js::Binding* binding)
 {
-    std::cout << "Initializing binding " << binding->GetName() << std::endl;
     if(binding->GetName().ends_with("bootstrap.js")) return;  // Skip bootstrap bindings, those are handled separately
 
     v8::Local<v8::Module> module = binding->GetCompiledModule(this);
@@ -27,8 +27,9 @@ void js::IResource::InitializeBinding(js::Binding* binding)
         alt::ICore::Instance().LogError("INTERNAL ERROR: Failed to compile binding module " + binding->GetName());
         return;
     }
+    if(module->GetStatus() == v8::Module::Status::kEvaluated) return;
+
     module->Evaluate(GetContext());
-    std::cout << "Evaluated binding " << binding->GetName() << std::endl;
     if(module->GetStatus() != v8::Module::Status::kEvaluated)
     {
         alt::ICore::Instance().LogError("INTERNAL ERROR: Failed to evaluate binding module " + binding->GetName());
@@ -63,9 +64,13 @@ void js::IResource::InitializeBindings(Binding::Scope scope, Module& altModule)
     std::vector<Binding*> bindings = Binding::GetBindingsForScope(scope);
     v8::Local<v8::Context> ctx = GetContext();
 
-    ctx->Global()->Set(ctx, js::JSValue("alt"), altModule.GetNamespace(this));
+    ctx->Global()->Set(ctx, js::JSValue("__alt"), altModule.GetNamespace(this));
     ctx->Global()->Set(ctx, js::JSValue("getBinding"), WrapFunction(GetBindingNamespaceWrapper)->GetFunction(ctx).ToLocalChecked());
+
     for(auto binding : bindings) InitializeBinding(binding);
-    ctx->Global()->Set(ctx, js::JSValue("alt"), v8::Undefined(isolate));
-    ctx->Global()->Set(ctx, js::JSValue("getBinding"), v8::Undefined(isolate));
+    RegisterBindingExports();
+    InitializeEvents();
+
+    ctx->Global()->Delete(ctx, js::JSValue("__alt"));
+    ctx->Global()->Delete(ctx, js::JSValue("getBinding"));
 }

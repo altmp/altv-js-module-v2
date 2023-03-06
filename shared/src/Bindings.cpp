@@ -3,12 +3,7 @@
 
 static v8::MaybeLocal<v8::Module> ResolveModuleCallback(v8::Local<v8::Context> context, v8::Local<v8::String> specifier, v8::Local<v8::FixedArray> assertions, v8::Local<v8::Module> referrer)
 {
-    js::IResource* resource = js::IResource::GetFromContext(context);
-    if(!resource) return v8::MaybeLocal<v8::Module>();
-    std::string name = *v8::String::Utf8Value(context->GetIsolate(), specifier);
-    js::Binding& binding = js::Binding::Get(name);
-    if(!binding.IsValid()) return v8::MaybeLocal<v8::Module>();
-    return v8::MaybeLocal<v8::Module>(binding.GetCompiledModule(resource));
+    return v8::MaybeLocal<v8::Module>();
 }
 
 v8::Local<v8::Module> js::Binding::Compile(IResource* resource)

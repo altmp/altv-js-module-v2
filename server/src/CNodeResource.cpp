@@ -1,6 +1,7 @@
 #include "CNodeResource.h"
 #include "CNodeRuntime.h"
 #include "Bindings.h"
+#include "Event.h"
 
 bool CNodeResource::Start()
 {
@@ -16,7 +17,6 @@ bool CNodeResource::Start()
 
     IResource::Initialize();
     IResource::InitializeBindings(js::Binding::Scope::SERVER, js::Module::Get("alt"));
-    IResource::RegisterBindingExports();
 
     uvLoop = new uv_loop_t;
     uv_loop_init(uvLoop);
@@ -34,7 +34,7 @@ bool CNodeResource::Start()
     asyncResource.Reset(isolate, v8::Object::New(isolate));
     asyncContext = node::EmitAsyncInit(isolate, asyncResource.Get(isolate), "CNodeResource");
 
-    // DispatchStartEvent();
+    IResource::Started();
 
     return true;
 }
@@ -47,7 +47,7 @@ bool CNodeResource::Stop()
 
     {
         v8::Context::Scope scope(GetContext());
-        // DispatchStopEvent();
+        IResource::Stopped();
 
         node::EmitAsyncDestroy(isolate, asyncContext);
         asyncResource.Reset();

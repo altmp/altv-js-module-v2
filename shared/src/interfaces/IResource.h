@@ -7,6 +7,7 @@
 #include "Class.h"
 #include "Module.h"
 #include "IScriptObjectHandler.h"
+#include "Event.h"
 
 namespace js
 {
@@ -31,15 +32,27 @@ namespace js
         void Reset()
         {
             Binding::CleanupForResource(this);
+            Event::UnregisterEvents(this);
             context.Reset();
         }
 
         void InitializeBinding(Binding* binding);
         void RegisterBindingExport(const std::string& name, const std::string& bindingName, const std::string& exportName);
-        v8::Local<v8::Value> GetBindingExport(const std::string& name)
+
+        void InitializeEvents()
         {
-            if(!bindingExports.contains(name)) return v8::Local<v8::Value>();
-            return bindingExports.at(name).Get(isolate);
+            Event::RegisterEvents(this);
+        }
+
+        void Started()
+        {
+            js::Event::EventArgsList args = { { "resourceName", js::JSValue(resource->GetName()) } };
+            js::Event::SendEvent(js::EventType::RESOURCE_START, args, this);
+        }
+        void Stopped()
+        {
+            js::Event::EventArgsList args = { { "resourceName", js::JSValue(resource->GetName()) } };
+            js::Event::SendEvent(js::EventType::RESOURCE_STOP, args, this);
         }
 
     public:
@@ -69,6 +82,11 @@ namespace js
             IScriptObjectHandler::DestroyScriptObject(object);
         }
 
+        void OnEvent(const alt::CEvent* ev) override
+        {
+            Event::SendEvent(ev, this);
+        }
+
         void OnTick() override
         {
             v8::Local<v8::Value> onTick = GetBindingExport("timers:tick");
@@ -84,6 +102,13 @@ namespace js
         {
             // Register the needed exports of our bindings
             RegisterBindingExport("timers:tick", "shared/timers.js", "tick");
+            RegisterBindingExport("events:setEvents", "shared/events.js", "setEvents");
+            RegisterBindingExport("events:onEvent", "shared/events.js", "onEvent");
+        }
+        v8::Local<v8::Value> GetBindingExport(const std::string& name)
+        {
+            if(!bindingExports.contains(name)) return v8::Local<v8::Value>();
+            return bindingExports.at(name).Get(isolate);
         }
 
         static IResource* GetFromContext(v8::Local<v8::Context> context)

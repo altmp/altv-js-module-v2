@@ -1,4 +1,6 @@
 // clang-format off
+const alt = __alt;
+
 const timers = new Set();
 
 class Timer {

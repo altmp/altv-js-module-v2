@@ -3,6 +3,14 @@ const alt = process._linkedBinding("alt");
 
 alt.log("Bootstrapper loaded");
 
+alt.Events.onResourceStart(({ resourceName }) => {
+    alt.log(`Resource ${resourceName} started`);
+});
+
+alt.Events.onResourceStop(({ resourceName }) => {
+    alt.log(`Resource ${resourceName} stopped`);
+});
+
 /*
 console.log(alt.test);
 alt.test = 45;
