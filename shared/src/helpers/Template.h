@@ -28,13 +28,19 @@ namespace js
         static void PropertyGetterHandler(v8::Local<v8::String>, const v8::PropertyCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            info.GetReturnValue().Set(JSValue((obj->*Getter)()));
+            constexpr bool isEnum = std::is_enum_v<decltype((obj->*Getter)())>;
+            if constexpr(isEnum) info.GetReturnValue().Set(JSValue((int)(obj->*Getter)()));
+            else
+                info.GetReturnValue().Set(JSValue((obj->*Getter)()));
         }
         template<class Class, typename Type, void (Class::*Setter)(Type)>
         static void PropertySetterHandler(v8::Local<v8::String>, v8::Local<v8::Value> value, const v8::PropertyCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            (obj->*Setter)(CppValue<typename std::remove_cv<typename std::remove_reference<Type>::type>::type>(value));
+            constexpr bool isEnum = std::is_enum_v<Type>;
+            if constexpr(isEnum) (obj->*Setter)(static_cast<Type>(value->Int32Value().ToChecked()));
+            else
+                (obj->*Setter)(CppValue<typename std::remove_cv<typename std::remove_reference<Type>::type>::type>(value));
         }
     }  // namespace Wrapper
 
