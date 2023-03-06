@@ -230,6 +230,67 @@ namespace js
         }
         return result;
     }
+    static std::optional<alt::Vector3f> ToVector3(v8::Local<v8::Value> val)
+    {
+        if(!val->IsObject()) return std::nullopt;
+
+        v8::Local<v8::Object> obj = val.As<v8::Object>();
+        v8::Local<v8::Context> ctx = obj->CreationContext();
+        v8::Isolate* isolate = ctx->GetIsolate();
+
+        v8::Local<v8::Value> xVal;
+        v8::Local<v8::Value> yVal;
+        v8::Local<v8::Value> zVal;
+
+        if(!obj->Get(ctx, js::JSValue("x")).ToLocal(&xVal)) return std::nullopt;
+        if(!obj->Get(ctx, js::JSValue("y")).ToLocal(&yVal)) return std::nullopt;
+        if(!obj->Get(ctx, js::JSValue("z")).ToLocal(&zVal)) return std::nullopt;
+
+        if(!xVal->IsNumber() || !yVal->IsNumber() || !zVal->IsNumber()) return std::nullopt;
+
+        return alt::Vector3f(xVal->NumberValue(ctx).ToChecked(), yVal->NumberValue(ctx).ToChecked(), zVal->NumberValue(ctx).ToChecked());
+    }
+    static std::optional<alt::Vector2f> ToVector2(v8::Local<v8::Value> val)
+    {
+        if(!val->IsObject()) return std::nullopt;
+
+        v8::Local<v8::Object> obj = val.As<v8::Object>();
+        v8::Local<v8::Context> ctx = obj->CreationContext();
+        v8::Isolate* isolate = ctx->GetIsolate();
+
+        v8::Local<v8::Value> xVal;
+        v8::Local<v8::Value> yVal;
+
+        if(!obj->Get(ctx, js::JSValue("x")).ToLocal(&xVal)) return std::nullopt;
+        if(!obj->Get(ctx, js::JSValue("y")).ToLocal(&yVal)) return std::nullopt;
+
+        if(!xVal->IsNumber() || !yVal->IsNumber()) return std::nullopt;
+
+        return alt::Vector2f(xVal->NumberValue(ctx).ToChecked(), yVal->NumberValue(ctx).ToChecked());
+    }
+    static std::optional<alt::RGBA> ToRGBA(v8::Local<v8::Value> val)
+    {
+        if(!val->IsObject()) return std::nullopt;
+
+        v8::Local<v8::Object> obj = val.As<v8::Object>();
+        v8::Local<v8::Context> ctx = obj->CreationContext();
+        v8::Isolate* isolate = ctx->GetIsolate();
+
+        v8::Local<v8::Value> rVal;
+        v8::Local<v8::Value> gVal;
+        v8::Local<v8::Value> bVal;
+        v8::Local<v8::Value> aVal;
+
+        if(!obj->Get(ctx, js::JSValue("r")).ToLocal(&rVal)) return std::nullopt;
+        if(!obj->Get(ctx, js::JSValue("g")).ToLocal(&gVal)) return std::nullopt;
+        if(!obj->Get(ctx, js::JSValue("b")).ToLocal(&bVal)) return std::nullopt;
+        if(!obj->Get(ctx, js::JSValue("a")).ToLocal(&aVal)) return std::nullopt;
+
+        if(!rVal->IsNumber() || !gVal->IsNumber() || !bVal->IsNumber() || !aVal->IsNumber()) return std::nullopt;
+
+        return alt::RGBA(rVal->NumberValue(ctx).ToChecked(), gVal->NumberValue(ctx).ToChecked(), bVal->NumberValue(ctx).ToChecked(), aVal->NumberValue(ctx).ToChecked());
+    }
+    static std::optional<alt::IBaseObject*> ToBaseObject(v8::Local<v8::Value> val);
     template<typename T>
     std::optional<T> CppValue(v8::Local<v8::Value> val)
     {
@@ -252,6 +313,22 @@ namespace js
             alt::MValue mvalue = js::JSToMValue(val);
             if(!mvalue) return std::nullopt;
             return mvalue;
+        }
+        else if constexpr(std::is_same_v<T, alt::Vector3f>)
+        {
+            return ToVector3(val);
+        }
+        else if constexpr(std::is_same_v<T, alt::Vector2f>)
+        {
+            return ToVector2(val);
+        }
+        else if constexpr(std::is_same_v<T, alt::RGBA>)
+        {
+            return ToRGBA(val);
+        }
+        else if constexpr(std::is_same_v<T, alt::IBaseObject*> || std::is_base_of_v<alt::IBaseObject, T>)
+        {
+            return dynamic_cast<T*>(ToBaseObject(val));
         }
         else if constexpr(std::is_same_v<T, std::vector<typename T::value_type>>)
         {

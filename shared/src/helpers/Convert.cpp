@@ -115,7 +115,12 @@ alt::MValue js::JSToMValue(v8::Local<v8::Value> val, bool allowFunction)
                 rgba.a = obj.Get<uint8_t>("a");
                 return core.CreateMValueRGBA(rgba);
             }
-            // todo: base objects
+            else if(resource->IsBaseObject(v8Obj))
+            {
+                ScriptObject* scriptObject = resource->GetScriptObject(obj.Get());
+                if(scriptObject == nullptr) return core.CreateMValueNone();
+                return core.CreateMValueBaseObject(scriptObject->GetObject());
+            }
             else
             {
                 alt::MValueDict dict = core.CreateMValueDict();
@@ -239,4 +244,12 @@ v8::Local<v8::Value> js::MValueToJS(alt::MValueConst val)
 void js::MValueArgsToJS(alt::MValueArgs args, Array& argsArray)
 {
     for(size_t i = 0; i < args.GetSize(); ++i) argsArray.Push(MValueToJS(args[i]));
+}
+
+std::optional<alt::IBaseObject*> js::ToBaseObject(v8::Local<v8::Value> val)
+{
+    IResource* resource = IResource::GetFromContext(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext());
+    ScriptObject* scriptObject = resource->GetScriptObject(val);
+    if(scriptObject == nullptr) return std::nullopt;
+    return scriptObject->GetObject();
 }

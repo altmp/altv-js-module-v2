@@ -177,6 +177,11 @@ namespace js
             v8::Local<v8::Function> rgbaFunc = rgbaClass.As<v8::Function>();
             return val->IsObject() && val.As<v8::Object>()->InstanceOf(GetContext(), rgbaFunc).ToChecked();
         }
+        bool IsBaseObject(v8::Local<v8::Value> val)
+        {
+            extern js::Class baseObjectClass;
+            return val->IsObject() && val.As<v8::Object>()->InstanceOf(GetContext(), baseObjectClass.GetTemplate(isolate).Get()->GetFunction(GetContext()).ToLocalChecked()).ToChecked();
+        }
 
         static IResource* GetFromContext(v8::Local<v8::Context> context)
         {

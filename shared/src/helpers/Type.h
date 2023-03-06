@@ -4,6 +4,8 @@
 
 namespace js
 {
+    class IResource;
+
     enum class Type : uint8_t
     {
         Invalid,
@@ -25,10 +27,21 @@ namespace js
         Map,
         Set,
         BigInt,
+
+        // Custom types
+        Vector3,
+        Vector2,
+        RGBA,
+        BaseObject,
     };
 
+    bool IsVector3(v8::Local<v8::Value> value, IResource* resource);
+    bool IsVector2(v8::Local<v8::Value> value, IResource* resource);
+    bool IsRGBA(v8::Local<v8::Value> value, IResource* resource);
+    bool IsBaseObject(v8::Local<v8::Value> value, IResource* resource);
+
     template<typename T>
-    static Type GetType(v8::Local<T> value)
+    static Type GetType(v8::Local<T> value, js::IResource* resource)
     {
         if(value->IsUndefined()) return Type::Undefined;
         if(value->IsNull()) return Type::Null;
@@ -49,6 +62,10 @@ namespace js
             if(value->IsMap()) return Type::Map;
             if(value->IsSet()) return Type::Set;
             if(value->IsBigInt()) return Type::BigInt;
+            if(IsVector3(value, resource)) return Type::Vector3;
+            if(IsVector2(value, resource)) return Type::Vector2;
+            if(IsRGBA(value, resource)) return Type::RGBA;
+            if(IsBaseObject(value, resource)) return Type::BaseObject;
             return Type::Object;
         }
         return Type::Invalid;
