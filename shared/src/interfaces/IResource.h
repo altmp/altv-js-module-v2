@@ -46,12 +46,12 @@ namespace js
 
         void Started()
         {
-            js::Event::EventArgsList args = { { "resourceName", js::JSValue(resource->GetName()) } };
+            js::Event::EventArgs args{ { "resourceName", js::JSValue(resource->GetName()) } };
             js::Event::SendEvent(js::EventType::RESOURCE_START, args, this);
         }
         void Stopped()
         {
-            js::Event::EventArgsList args = { { "resourceName", js::JSValue(resource->GetName()) } };
+            js::Event::EventArgs args{ { "resourceName", js::JSValue(resource->GetName()) } };
             js::Event::SendEvent(js::EventType::RESOURCE_STOP, args, this);
         }
 

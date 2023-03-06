@@ -24,8 +24,8 @@ namespace js
     class Event
     {
     public:
-        using EventArgsList = std::vector<std::pair<std::string, v8::Local<v8::Value>>>;
-        using EventArgsCallback = std::function<void(const alt::CEvent*, EventArgsList&)>;
+        using EventArgs = Object;
+        using EventArgsCallback = std::function<void(const alt::CEvent*, EventArgs&)>;
 
     private:
         alt::CEvent::Type type;
@@ -49,13 +49,13 @@ namespace js
             return it->second;
         }
         static v8::Local<v8::Function> GetResourceBinding(IResource* resource);
-        static void CallEventBinding(bool custom, int type, EventArgsList& args, IResource* resource);
+        static void CallEventBinding(bool custom, int type, EventArgs& args, IResource* resource);
 
     public:
         Event(alt::CEvent::Type _type, EventArgsCallback _argsCb) : type(_type), argsCb(_argsCb) {}
 
         static void SendEvent(const alt::CEvent* ev, IResource* resource);
-        static void SendEvent(EventType type, EventArgsList& args, IResource* resource);
+        static void SendEvent(EventType type, EventArgs& args, IResource* resource);
         static void RegisterEvents(IResource* resource);
         static void UnregisterEvents(IResource* resource);
     };

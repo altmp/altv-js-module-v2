@@ -10,19 +10,13 @@ v8::Local<v8::Function> js::Event::GetResourceBinding(IResource* resource)
     return it->second.Get(resource->GetIsolate());
 }
 
-void js::Event::CallEventBinding(bool custom, int type, EventArgsList& args, IResource* resource)
+void js::Event::CallEventBinding(bool custom, int type, EventArgs& args, IResource* resource)
 {
     v8::Isolate* isolate = resource->GetIsolate();
     v8::Local<v8::Context> context = resource->GetContext();
     v8::Local<v8::Function> func = GetResourceBinding(resource);
 
-    v8::Local<v8::Object> eventObj = v8::Object::New(isolate);
-    for(auto& arg : args)
-    {
-        eventObj->Set(context, js::JSValue(arg.first), arg.second);
-    }
-
-    std::array<v8::Local<v8::Value>, 3> funcArgs = { js::JSValue(custom), js::JSValue(type), eventObj };
+    std::array<v8::Local<v8::Value>, 3> funcArgs = { js::JSValue(custom), js::JSValue(type), args.Get() };
     func->Call(context, v8::Undefined(isolate), funcArgs.size(), funcArgs.data());
 }
 
@@ -30,13 +24,13 @@ void js::Event::SendEvent(const alt::CEvent* ev, IResource* resource)
 {
     Event* eventHandler = GetEventHandler(ev->GetType());
 
-    EventArgsList eventArgs;
+    EventArgs eventArgs;
     eventHandler->argsCb(ev, eventArgs);
 
     CallEventBinding(false, (int)ev->GetType(), eventArgs, resource);
 }
 
-void js::Event::SendEvent(EventType type, EventArgsList& args, IResource* resource)
+void js::Event::SendEvent(EventType type, EventArgs& args, IResource* resource)
 {
     CallEventBinding(true, (int)type, args, resource);
 }
