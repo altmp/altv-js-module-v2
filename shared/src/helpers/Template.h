@@ -46,6 +46,8 @@ namespace js
                 (obj->*Setter)(CppValue<typename std::remove_cv_t<typename std::remove_reference_t<Type>>>(value));
         }
 
+        // I suggest closing this region
+#pragma region "Template method handlers"
         template<class Class, typename Ret, Ret (Class::*Method)()>
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
@@ -75,84 +77,66 @@ namespace js
             }
         }
 
+        template<class T>
+        using CleanArg = typename std::remove_cv_t<typename std::remove_reference_t<T>>;
+
+        template<class T>
+        inline T GetArg(const v8::FunctionCallbackInfo<v8::Value>& info, int i)
+        {
+            if(info.Length() <= i) return T();
+            std::optional<T> val = CppValue<T>(info[i]);
+            return val.has_value() ? val.value() : T();
+        }
+
         template<class Class, typename Ret, typename Arg, Ret (Class::*Method)(Arg)>
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
             if(obj == nullptr) return;
-            using CleanArg = typename std::remove_cv_t<typename std::remove_reference_t<Arg>>;
             if constexpr(std::is_same_v<void, Ret>)
             {
-                (obj->*Method)(CppValue<CleanArg>(info[0]).value());
+                (obj->*Method)(GetArg<CleanArg<Arg>>(info, 0));
             }
             else
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(CppValue<CleanArg>(info[0]).value())));
+                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg>>(info, 0))));
             }
         }
+
         template<class Class, typename Ret, typename Arg, Ret (Class::*Method)(Arg) const>
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
             if(obj == nullptr) return;
-            using CleanArg = typename std::remove_cv_t<typename std::remove_reference_t<Arg>>;
             if constexpr(std::is_same_v<void, Ret>)
             {
-                (obj->*Method)(CppValue<CleanArg>(info[0]).value());
+                (obj->*Method)(GetArg<CleanArg<Arg>>(info, 0));
             }
             else
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(CppValue<CleanArg>(info[0]).value())));
+                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg>>(info, 0))));
             }
         }
 
         /*
-        static int index = 0;
-        template<class T>
-        T GetArg(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            if(info.Length() <= index) return T();
-            return CppValue<T>(info[index++]).value();
-        }
-        template<class Class, typename... Args, auto(Class::*Method)(Args...) const>
+        template<class Class, typename Ret, typename Arg1, typename Arg2, Ret (Class::*Method)(Arg1, Arg2)>
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
             if(obj == nullptr) return;
-            if(std::is_same_v<void, decltype((obj->*Method)(std::declval<Args>()...))>)
+            if constexpr(std::is_same_v<void, Ret>)
             {
-                (obj->*Method)(GetArg<typename std::remove_cv_t<typename std::remove_reference_t<Args>>>()...);
+                (obj->*Method)(GetArg<typename CleanArg<Arg>>()...);
             }
             else
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<typename std::remove_cv_t<typename std::remove_reference_t<Args>>>()...)));
+                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<typename CleanArg<Args>>()...)));
             }
             index = 0;
         }
-
-        template<typename Type, typename Enable = void>
-        struct MethodWrap;
-
-        template<typename ReturnType, class ClassType, typename... Args>
-        struct MethodWrap<ReturnType (ClassType::*)(Args...)>
-        {
-            static void Call(const v8::FunctionCallbackInfo<v8::Value>& info)
-            {
-                ClassType* obj = dynamic_cast<ClassType*>(GetThisObjectFromInfo(info));
-                if(obj == nullptr) return;
-                if(std::is_same_v<void, ReturnType>)
-                {
-                    (obj->*Method)(GetArg<typename std::remove_cv_t<typename std::remove_reference_t<Args>>>()...);
-                    return;
-                }
-                else
-                {
-                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<typename std::remove_cv_t<typename std::remove_reference_t<Args>>>()...)));
-                }
-                index = 0;
-            }
-        };
         */
+
+#pragma endregion
     }  // namespace Wrapper
 
     static v8::Local<v8::FunctionTemplate> WrapFunction(FunctionCallback cb)
@@ -242,10 +226,15 @@ namespace js
         }
 
         /*
-        template<typename T>
+        template<class Class, typename Ret, typename... Args, Ret (Class::*Method)(Args...)>
         void Method(const std::string& name)
         {
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(isolate, Wrapper::MethodWrap<T>::Call));
+            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(isolate, Wrapper::MethodHandler<Class, Ret, Args..., Method>));
+        }
+        template<class Class, typename Ret, typename... Args, Ret (Class::*Method)(Args...) const>
+        void Method(const std::string& name)
+        {
+            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(isolate, Wrapper::MethodHandler<Class, Ret, Args..., Method>));
         }
         */
 
