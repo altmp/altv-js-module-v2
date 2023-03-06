@@ -64,7 +64,7 @@ struct TemporaryGlobalExtension
     std::string name;
     v8::Local<v8::Context> ctx;
 
-    TemporaryGlobalExtension(v8::Local<v8::Context> _ctx, const std::string& _name, v8::Local<v8::Value> value) : ctx(ctx), name(_name)
+    TemporaryGlobalExtension(v8::Local<v8::Context> _ctx, const std::string& _name, v8::Local<v8::Value> value) : ctx(_ctx), name(_name)
     {
         ctx->Global()->Set(ctx, js::JSValue(_name), value);
     }
