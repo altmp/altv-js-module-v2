@@ -246,6 +246,13 @@ namespace js
         {
             return val->ToBoolean(v8::Isolate::GetCurrent())->Value();
         }
+        else if constexpr(std::is_same_v<T, alt::MValue> || std::is_same_v<T, alt::MValueConst>)
+        {
+            auto& core = alt::ICore::Instance();
+            alt::MValue mvalue = js::JSToMValue(val);
+            if(!mvalue) return std::nullopt;
+            return mvalue;
+        }
         else if constexpr(std::is_same_v<T, std::vector<typename T::value_type>>)
         {
             if(!val->IsArray()) return std::nullopt;
