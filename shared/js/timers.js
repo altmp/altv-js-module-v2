@@ -37,9 +37,14 @@ class EveryTick extends Timer {
     constructor(callback) { super(0, callback, false); }
 }
 
+class NextTick extends Timer {
+    constructor(callback) { super(0, callback, true); }
+}
+
 alt.Timers.Interval = Interval;
 alt.Timers.Timeout = Timeout;
 alt.Timers.EveryTick = EveryTick;
+alt.Timers.NextTick = NextTick;
 
 export function tick() {
     for (const timer of timers) timer.tick();

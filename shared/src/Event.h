@@ -52,7 +52,10 @@ namespace js
         static void CallEventBinding(bool custom, int type, EventArgs& args, IResource* resource);
 
     public:
-        Event(alt::CEvent::Type _type, EventArgsCallback _argsCb) : type(_type), argsCb(_argsCb) {}
+        Event(alt::CEvent::Type _type, EventArgsCallback _argsCb) : type(_type), argsCb(_argsCb)
+        {
+            GetEventHandlerMap().insert({ type, this });
+        }
 
         static void SendEvent(const alt::CEvent* ev, IResource* resource);
         static void SendEvent(EventType type, EventArgs& args, IResource* resource);

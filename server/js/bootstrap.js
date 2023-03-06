@@ -11,6 +11,10 @@ alt.Events.onResourceStop(({ resourceName }) => {
     alt.log(`Resource ${resourceName} stopped`);
 });
 
+alt.Events.on("test", (arg) => {
+    alt.log("got test: " + arg);
+});
+
 /*
 console.log(alt.test);
 alt.test = 45;

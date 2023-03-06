@@ -5,9 +5,12 @@
 #include <unordered_map>
 
 #include "v8.h"
+#include "cpp-sdk/SDK.h"
 
 namespace js
 {
+    class Array;
+
     inline v8::Local<v8::String> JSValue(const char* val)
     {
         return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), val).ToLocalChecked();
@@ -248,5 +251,9 @@ namespace js
         else
             static_assert("Invalid type specified to CppValue<v8::Value>");
     }
+
+    alt::MValue JSToMValue(v8::Local<v8::Value> val, bool allowFunction = true);
+    v8::Local<v8::Value> MValueToJS(alt::MValueConst val);
+    void MValueArgsToJS(alt::MValueArgs args, Array& argsArray);
 
 }  // namespace js

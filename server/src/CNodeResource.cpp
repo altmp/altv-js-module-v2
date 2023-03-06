@@ -69,7 +69,10 @@ bool CNodeResource::Stop()
     return true;
 }
 
-void CNodeResource::OnEvent(const alt::CEvent* ev) {}
+void CNodeResource::OnEvent(const alt::CEvent* ev)
+{
+    IResource::OnEvent(ev);
+}
 
 void CNodeResource::OnTick()
 {

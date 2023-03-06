@@ -23,6 +23,7 @@ void js::Event::CallEventBinding(bool custom, int type, EventArgs& args, IResour
 void js::Event::SendEvent(const alt::CEvent* ev, IResource* resource)
 {
     Event* eventHandler = GetEventHandler(ev->GetType());
+    if(!eventHandler) return;
 
     EventArgs eventArgs;
     eventHandler->argsCb(ev, eventArgs);
