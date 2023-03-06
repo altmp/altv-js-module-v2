@@ -1,6 +1,8 @@
+// clang-format off
 const alt = process._linkedBinding("alt");
 
-console.log("Bootstrapper loaded");
+alt.log("Bootstrapper loaded");
+
 /*
 console.log(alt.test);
 alt.test = 45;
@@ -16,7 +18,7 @@ console.log("vehicle 1:", vehicle.getID(), vehicle.getModel(), vehicle.model);
 
 let vehicle2 = new alt.Vehicle(0x6322B39A);
 console.log("vehicle 2:", vehicle.getID(), vehicle.getModel(), vehicle.model);
-*/
 
 const interval = new alt.Timers.Interval(1000, () => {console.log("yep cock")});
-console.log(alt.Timers.Interval);
+alt.log(alt.Timers.Interval);
+*/
