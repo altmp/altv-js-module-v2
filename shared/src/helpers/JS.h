@@ -31,9 +31,44 @@ namespace js
         }
 
         template<typename T>
-        void Set(const std::string& key, T& val)
+        void Set(const std::string& key, const T& val)
         {
             object->Set(context, js::JSValue(key), js::JSValue(val));
+        }
+    };
+
+    class Array
+    {
+        v8::Local<v8::Context> context;
+        v8::Local<v8::Array> array;
+        int currentIdx = 0;
+
+    public:
+        Array() : array(v8::Array::New(v8::Isolate::GetCurrent())), context(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()) {}
+        Array(int size) : array(v8::Array::New(v8::Isolate::GetCurrent(), size)), context(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()) {}
+        Array(v8::Local<v8::Array> _array) : array(_array), context(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()) {}
+        Array(const std::initializer_list<v8::Local<v8::Value>>& list) : context(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext())
+        {
+            array = v8::Array::New(v8::Isolate::GetCurrent(), list.size());
+            int i = 0;
+            for(auto& val : list) Push(val);
+        }
+
+        v8::Local<v8::Array> Get() const
+        {
+            return array;
+        }
+
+        template<typename T>
+        void Push(const T& val)
+        {
+            array->Set(context, currentIdx++, js::JSValue(val));
+        }
+
+        template<typename T>
+        void Set(int index, const T& val)
+        {
+            array->Set(context, index, js::JSValue(val));
         }
     };
 }  // namespace js
