@@ -10,21 +10,23 @@ namespace js
 {
     class IResource;
 
-    class FunctionContext
+    template<class CallbackInfo>
+    class CallContext
     {
-        v8::FunctionCallbackInfo<v8::Value> info;
+    protected:
+        CallbackInfo info;
         bool errored = false;
         IResource* resource = nullptr;
-        std::vector<Type> argTypes;  // Cache argument types
 
-        alt::IBaseObject* GetThisObjectUntyped();
+        alt::IBaseObject* GetThisObjectUntyped()
+        {
+            if(errored) return nullptr;
+            std::optional<alt::IBaseObject*> object = CppValue<alt::IBaseObject*>(info.This().As<v8::Value>());
+            return object.has_value() ? object.value() : nullptr;
+        }
 
     public:
-        FunctionContext() = delete;
-        FunctionContext(const v8::FunctionCallbackInfo<v8::Value>& _info) : info(_info)
-        {
-            argTypes.resize(info.Length());
-        }
+        CallContext(const CallbackInfo& _info) : info(_info) {}
 
         v8::Isolate* GetIsolate() const
         {
@@ -50,6 +52,37 @@ namespace js
             }
             return true;
         }
+
+        IResource* GetResource()
+        {
+            return GetCurrentResource(info.GetIsolate());
+        }
+
+        template<class T>
+        T* GetThisObject()
+        {
+            if(errored) return nullptr;
+            return dynamic_cast<T*>(GetThisObjectUntyped());
+        }
+
+        template<class T>
+        void Return(const T& value)
+        {
+            if(errored) return;
+            info.GetReturnValue().Set(JSValue(value));
+        }
+    };
+
+    class FunctionContext : public CallContext<v8::FunctionCallbackInfo<v8::Value>>
+    {
+        std::vector<Type> argTypes;  // Cache argument types
+
+    public:
+        FunctionContext(const v8::FunctionCallbackInfo<v8::Value>& _info) : CallContext(_info)
+        {
+            argTypes.resize(info.Length());
+        }
+
         bool CheckArgCount(int count)
         {
             return Check(info.Length() == count, "Invalid number of arguments, expected " + std::to_string(count) + " arguments");
@@ -77,14 +110,6 @@ namespace js
             return argType;
         }
 
-        IResource* GetResource();
-
-        template<class T>
-        T* GetThisObject()
-        {
-            if(errored) return nullptr;
-            return dynamic_cast<T*>(GetThisObjectUntyped());
-        }
         void SetThisObject(alt::IBaseObject* object);
 
         // If no type to check is specified, it will try to convert the value to the specified type
@@ -127,12 +152,61 @@ namespace js
             outValue = info[index];
             return true;
         }
+    };
+
+    template<class T>
+    class PropertyContext : public CallContext<v8::PropertyCallbackInfo<T>>
+    {
+        v8::Local<v8::Value> value;
+        Type valueType = Type::Invalid;
+        std::string property;
+
+        Type GetValueType()
+        {
+            if(valueType != Type::Invalid) return valueType;
+            valueType = GetType(value, CallContext<CallContext<v8::PropertyCallbackInfo<T>>>::GetResource());
+            return valueType;
+        }
+
+    public:
+        template<class T>
+        PropertyContext(const v8::PropertyCallbackInfo<T>& _info) : CallContext<v8::PropertyCallbackInfo<T>>(_info)
+        {
+        }
+        template<class T>
+        PropertyContext(const v8::PropertyCallbackInfo<T>& _info, v8::Local<v8::Name> _property)
+            : CallContext<v8::PropertyCallbackInfo<T>>(_info), property(js::CppValue<std::string>(_property.As<v8::Value>()).value())
+        {
+        }
+        template<class T>
+        PropertyContext(const v8::PropertyCallbackInfo<T>& _info, v8::Local<v8::Name> _property, v8::Local<v8::Value> _value)
+            : CallContext<v8::PropertyCallbackInfo<T>>(_info), property(js::CppValue<std::string>(_property.As<v8::Value>()).value()), value(_value)
+        {
+        }
+
+        bool CheckValueType(Type type)
+        {
+            return Check(GetValueType() == type, "Invalid value, expected " + TypeToString(type) + " but got " + TypeToString(GetValueType()));
+        }
+
+        const std::string& GetProperty()
+        {
+            return property;
+        }
 
         template<class T>
-        void Return(const T& value)
+        bool GetValue(int index, T& outValue, Type typeToCheck = Type::Invalid)
         {
-            if(errored) return;
-            info.GetReturnValue().Set(JSValue(value));
+            if(CallContext<CallContext<v8::PropertyCallbackInfo<T>>>::errored) return false;
+            if(typeToCheck != Type::Invalid && !CheckValueType(typeToCheck)) return false;
+
+            std::optional<T> result = CppValue<T>(value);
+            if(result.has_value())
+            {
+                outValue = result.value();
+                return true;
+            }
+            return false;
         }
     };
 }  // namespace js
