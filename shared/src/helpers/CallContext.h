@@ -36,6 +36,17 @@ namespace js
         {
             return info.GetIsolate();
         }
+
+        IResource* GetResource() const
+        {
+            return GetCurrentResource(info.GetIsolate());
+        }
+
+        v8::Local<v8::Context> GetContext() const
+        {
+            return GetIsolate()->GetCurrentContext();
+        }
+
         bool Errored() const
         {
             return errored;
@@ -55,11 +66,6 @@ namespace js
                 return false;
             }
             return true;
-        }
-
-        IResource* GetResource()
-        {
-            return GetCurrentResource(info.GetIsolate());
         }
 
         template<class T>
