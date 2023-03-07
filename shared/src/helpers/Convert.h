@@ -10,6 +10,7 @@
 namespace js
 {
     class Array;
+    class IResource;
 
     alt::MValue JSToMValue(v8::Local<v8::Value> val, bool allowFunction = true);
     v8::Local<v8::Value> MValueToJS(alt::MValueConst val);
@@ -54,20 +55,24 @@ namespace js
     template<class T>
     inline v8::Local<v8::Array> JSValue(const std::vector<T>& arr)
     {
-        auto jsArr = v8::Array::New(v8::Isolate::GetCurrent(), arr.size());
+        v8::Isolate* isolate = v8::Isolate::GetCurrent();
+        v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
+        auto jsArr = v8::Array::New(isolate, arr.size());
         for(int i = 0; i < arr.size(); i++)
         {
-            jsArr->Set(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext(), i, JSValue(arr[i]));
+            jsArr->Set(ctx, i, JSValue(arr[i]));
         }
         return jsArr;
     }
     template<class T>
     inline v8::Local<v8::Array> JSValue(const std::unordered_map<std::string, T>& map)
     {
-        auto jsObj = v8::Object::New(v8::Isolate::GetCurrent());
+        v8::Isolate* isolate = v8::Isolate::GetCurrent();
+        v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
+        auto jsObj = v8::Object::New(isolate);
         for(auto& [key, val] : map)
         {
-            jsObj->Set(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext(), JSValue(key), JSValue(val));
+            jsObj->Set(ctx, JSValue(key), JSValue(val));
         }
         return jsObj;
     }
@@ -290,7 +295,7 @@ namespace js
 
         return alt::RGBA(rVal->NumberValue(ctx).ToChecked(), gVal->NumberValue(ctx).ToChecked(), bVal->NumberValue(ctx).ToChecked(), aVal->NumberValue(ctx).ToChecked());
     }
-    static std::optional<alt::IBaseObject*> ToBaseObject(v8::Local<v8::Value> val);
+    std::optional<alt::IBaseObject*> ToBaseObject(v8::Local<v8::Value> val);
     template<typename T>
     std::optional<T> CppValue(v8::Local<v8::Value> val)
     {
@@ -309,7 +314,6 @@ namespace js
         }
         else if constexpr(std::is_same_v<T, alt::MValue> || std::is_same_v<T, alt::MValueConst>)
         {
-            auto& core = alt::ICore::Instance();
             alt::MValue mvalue = js::JSToMValue(val);
             if(!mvalue) return std::nullopt;
             return mvalue;
@@ -328,7 +332,9 @@ namespace js
         }
         else if constexpr(std::is_same_v<T, alt::IBaseObject*> || std::is_base_of_v<alt::IBaseObject, T>)
         {
-            return dynamic_cast<T*>(ToBaseObject(val));
+            std::optional<alt::IBaseObject*> obj = ToBaseObject(val);
+            if(!obj.has_value()) return std::nullopt;
+            return std::optional<T>(dynamic_cast<T>(obj.value()));
         }
         else if constexpr(std::is_same_v<T, std::vector<typename T::value_type>>)
         {
@@ -343,4 +349,6 @@ namespace js
         else
             static_assert("Invalid type specified to CppValue<v8::Value>");
     }
+
+    IResource* GetCurrentResource(v8::Isolate* isolate = nullptr);
 }  // namespace js
