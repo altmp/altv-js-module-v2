@@ -19,9 +19,23 @@ let vector = new Vector3(8, 5, 3);
 alt.log(vector.x);
 
 const vehicle = new alt.Vehicle("t20");
-alt.log("meta: " + vehicle.getMeta("test"));
-vehicle.setMeta("test", "test");
-alt.log("meta: " + vehicle.getMeta("test"));
+alt.log("meta before: " + vehicle.meta.test);
+vehicle.meta.test = "abc";
+alt.log("meta after: " + vehicle.meta.test);
+delete vehicle.meta.test;
+alt.log("meta after delete: " + vehicle.meta.test);
+
+vehicle.meta.otherTest = 23;
+alt.log("metas:");
+for (let key in vehicle.meta) {
+    alt.log(key + ": " + vehicle.meta[key]);
+}
+
+vehicle.meta.test = "test";
+alt.log("metas2:");
+for (let key in vehicle.meta) {
+    alt.log(key + ": " + vehicle.meta[key]);
+}
 
 /*
 console.log(alt.test);

@@ -5,13 +5,19 @@
 #include "v8.h"
 #include "JS.h"
 #include "Convert.h"
-#include "FunctionContext.h"
+#include "CallContext.h"
 
 namespace js
 {
     class Namespace;
+    class Class;
 
     using FunctionCallback = void (*)(FunctionContext&);
+
+    using DynamicPropertyGetter = void (*)(PropertyContext<v8::Value>&);
+    using DynamicPropertySetter = void (*)(PropertyContext<v8::Value>&);
+    using DynamicPropertyDeleter = void (*)(PropertyContext<v8::Boolean>&);
+    using DynamicPropertyEnumerator = void (*)(PropertyContext<v8::Array>&);
 
     namespace Wrapper
     {
@@ -1270,6 +1276,13 @@ namespace js
 
 #pragma endregion
 
+        void DynamicPropertyLazyHandler(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info);
+
+        void DynamicPropertyGetterHandler(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info);
+        void DynamicPropertySetterHandler(v8::Local<v8::Name> property, v8::Local<v8::Value> value, const v8::PropertyCallbackInfo<v8::Value>& info);
+        void DynamicPropertyDeleterHandler(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Boolean>& info);
+        void DynamicPropertyEnumeratorHandler(const v8::PropertyCallbackInfo<v8::Array>& info);
+
     }  // namespace Wrapper
 
     static v8::Local<v8::FunctionTemplate> WrapFunction(FunctionCallback cb)
@@ -1331,7 +1344,56 @@ namespace js
     class ClassTemplate : public Template<v8::FunctionTemplate>
     {
     public:
-        ClassTemplate(v8::Isolate* isolate, v8::Local<v8::FunctionTemplate> tpl) : Template(isolate, tpl) {}
+        struct DynamicPropertyData
+        {
+            DynamicPropertyGetter getter;
+            DynamicPropertySetter setter;
+            DynamicPropertyDeleter deleter;
+            DynamicPropertyEnumerator enumerator;
+
+            DynamicPropertyData(DynamicPropertyGetter _getter, DynamicPropertySetter _setter, DynamicPropertyDeleter _deleter, DynamicPropertyEnumerator _enumerator)
+                : getter(_getter), setter(_setter), deleter(_deleter), enumerator(_enumerator)
+            {
+            }
+        };
+
+    private:
+        friend class Class;
+
+        Class* class_;
+
+        static std::unordered_map<v8::Isolate*, std::unordered_map<Class*, std::unordered_map<std::string, DynamicPropertyData*>>>& GetDynamicPropertyDataMap()
+        {
+            static std::unordered_map<v8::Isolate*, std::unordered_map<Class*, std::unordered_map<std::string, DynamicPropertyData*>>> dynamicPropertyDataMap;
+            return dynamicPropertyDataMap;
+        }
+        static void InsertDynamicPropertyData(v8::Isolate* isolate, Class* cls, const std::string& name, DynamicPropertyData* data)
+        {
+            auto& dynamicPropertyDataMap = GetDynamicPropertyDataMap();
+            auto& clsMap = dynamicPropertyDataMap[isolate];
+            auto& nameMap = clsMap[cls];
+            nameMap.insert({ name, data });
+        }
+        static void CleanupDynamicPropertyData(v8::Isolate* isolate)
+        {
+            auto& dynamicPropertyDataMap = GetDynamicPropertyDataMap();
+            {
+                auto it = dynamicPropertyDataMap.find(isolate);
+                if(it == dynamicPropertyDataMap.end()) return;
+                auto& clsMap = it->second;
+                for(auto& [_, nameMap] : clsMap)
+                {
+                    for(auto& [__, data] : nameMap)
+                    {
+                        delete data;
+                    }
+                }
+            }
+            dynamicPropertyDataMap.erase(isolate);
+        }
+
+    public:
+        ClassTemplate(v8::Isolate* isolate, Class* _class, v8::Local<v8::FunctionTemplate> tpl) : Template(isolate, tpl), class_(_class) {}
 
         void Method(const std::string& name, FunctionCallback callback)
         {
@@ -1838,6 +1900,24 @@ namespace js
         void Property(const std::string& name)
         {
             Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Class, Getter>, Wrapper::PropertySetterHandler<Class, Type, Setter>);
+        }
+
+        // Property returns an object that will call the specified handlers
+        void DynamicProperty(const std::string& name,
+                             DynamicPropertyGetter getter,
+                             DynamicPropertySetter setter = nullptr,
+                             DynamicPropertyDeleter deleter = nullptr,
+                             DynamicPropertyEnumerator enumerator = nullptr)
+        {
+            DynamicPropertyData* data = new DynamicPropertyData(getter, setter, deleter, enumerator);
+            InsertDynamicPropertyData(GetIsolate(), class_, name, data);
+            Get()->PrototypeTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::DynamicPropertyLazyHandler, v8::External::New(GetIsolate(), data));
+        }
+
+        // Allows instances of this class to be called as a function
+        void CallHandler(FunctionCallback cb)
+        {
+            Get()->PrototypeTemplate()->SetCallAsFunctionHandler(Wrapper::FunctionHandler, v8::External::New(GetIsolate(), cb));
         }
     };
 }  // namespace js

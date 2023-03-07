@@ -52,8 +52,7 @@ namespace js
         {
             if(!value->IsObject()) return nullptr;
             v8::Local<v8::Object> object = value.As<v8::Object>();
-            if(object->InternalFieldCount() == 0) return nullptr;
-            return static_cast<ScriptObject*>(object->GetAlignedPointerFromInternalField(0));
+            return ScriptObject::Get(object);
         }
 
         static void BindClassToType(alt::IBaseObject::Type type, Class* class_);

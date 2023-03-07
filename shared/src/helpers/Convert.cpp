@@ -248,8 +248,14 @@ void js::MValueArgsToJS(alt::MValueArgs args, Array& argsArray)
 
 std::optional<alt::IBaseObject*> js::ToBaseObject(v8::Local<v8::Value> val)
 {
-    IResource* resource = IResource::GetFromContext(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext());
+    IResource* resource = GetCurrentResource();
     ScriptObject* scriptObject = resource->GetScriptObject(val);
     if(scriptObject == nullptr) return std::nullopt;
     return scriptObject->GetObject();
+}
+
+js::IResource* js::GetCurrentResource(v8::Isolate* isolate)
+{
+    v8::Isolate* currentIsolate = isolate == nullptr ? v8::Isolate::GetCurrent() : isolate;
+    return IResource::GetFromContext(currentIsolate->GetEnteredOrMicrotaskContext());
 }

@@ -160,11 +160,12 @@ namespace js
         v8::Local<v8::Value> value;
         Type valueType = Type::Invalid;
         std::string property;
+        v8::Local<v8::Object> parent;  // Used for dynamic properties
 
         Type GetValueType()
         {
             if(valueType != Type::Invalid) return valueType;
-            valueType = GetType(value, CallContext<CallContext<v8::PropertyCallbackInfo<T>>>::GetResource());
+            valueType = GetType(value, this->GetResource());
             return valueType;
         }
 
@@ -184,9 +185,22 @@ namespace js
         {
         }
 
+        void SetParent(v8::Local<v8::Object> _parent)
+        {
+            parent = _parent;
+        }
+
+        template<class T>
+        T* GetParent()
+        {
+            if(this->errored) return nullptr;
+            std::optional<alt::IBaseObject*> object = CppValue<alt::IBaseObject*>(parent.As<v8::Value>());
+            return object.has_value() ? dynamic_cast<T*>(object.value()) : nullptr;
+        }
+
         bool CheckValueType(Type type)
         {
-            return Check(GetValueType() == type, "Invalid value, expected " + TypeToString(type) + " but got " + TypeToString(GetValueType()));
+            return this->Check(GetValueType() == type, "Invalid value, expected " + TypeToString(type) + " but got " + TypeToString(GetValueType()));
         }
 
         const std::string& GetProperty()
@@ -197,7 +211,7 @@ namespace js
         template<class T>
         bool GetValue(int index, T& outValue, Type typeToCheck = Type::Invalid)
         {
-            if(CallContext<CallContext<v8::PropertyCallbackInfo<T>>>::errored) return false;
+            if(this->errored) return false;
             if(typeToCheck != Type::Invalid && !CheckValueType(typeToCheck)) return false;
 
             std::optional<T> result = CppValue<T>(value);

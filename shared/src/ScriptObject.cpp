@@ -18,6 +18,12 @@ js::ScriptObject* js::ScriptObject::Create(v8::Local<v8::Object> jsObject, alt::
     return scriptObject;
 }
 
+js::ScriptObject* js::ScriptObject::Get(v8::Local<v8::Object> obj)
+{
+    if(obj->InternalFieldCount() != 1) return nullptr;
+    return static_cast<ScriptObject*>(obj->GetAlignedPointerFromInternalField(0));
+}
+
 void js::ScriptObject::Destroy(ScriptObject* scriptObject)
 {
     scriptObject->Get()->SetAlignedPointerInInternalField(0, nullptr);
