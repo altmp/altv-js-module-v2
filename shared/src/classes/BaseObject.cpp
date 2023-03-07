@@ -3,22 +3,22 @@
 
 static void MetaGetter(js::PropertyContext<v8::Value>& ctx)
 {
+    if(!ctx.CheckParent()) return;
     alt::IBaseObject* obj = ctx.GetParent<alt::IBaseObject>();
-    ctx.Check(obj != nullptr, "Invalid base object");
     ctx.Return(obj->GetMetaData(ctx.GetProperty()));
 }
 static void MetaSetter(js::PropertyContext<v8::Value>& ctx)
 {
+    if(!ctx.CheckParent()) return;
     alt::IBaseObject* obj = ctx.GetParent<alt::IBaseObject>();
-    ctx.Check(obj != nullptr, "Invalid base object");
     alt::MValue value;
     if(!ctx.GetValue(0, value)) return;
     obj->SetMetaData(ctx.GetProperty(), value);
 }
 static void MetaDeleter(js::PropertyContext<v8::Boolean>& ctx)
 {
+    if(!ctx.CheckParent()) return;
     alt::IBaseObject* obj = ctx.GetParent<alt::IBaseObject>();
-    ctx.Check(obj != nullptr, "Invalid base object");
     if(!obj->HasMetaData(ctx.GetProperty()))
     {
         ctx.Return(false);
@@ -29,8 +29,8 @@ static void MetaDeleter(js::PropertyContext<v8::Boolean>& ctx)
 }
 static void MetaEnumerator(js::PropertyContext<v8::Array>& ctx)
 {
+    if(!ctx.CheckParent()) return;
     alt::IBaseObject* obj = ctx.GetParent<alt::IBaseObject>();
-    ctx.Check(obj != nullptr, "Invalid base object");
     std::vector<std::string> keys = obj->GetMetaDataKeys();
     ctx.Return(keys);
 }
