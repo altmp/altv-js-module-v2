@@ -1459,12 +1459,12 @@ namespace js
         template<typename T>
         void StaticProperty(const std::string& name, T value)
         {
-            Get()->Set(js::JSValue(name), js::JSValue(value));
+            Get()->Set(js::JSValue(name), js::JSValue(value), (v8::PropertyAttribute)(v8::PropertyAttribute::ReadOnly | v8::PropertyAttribute::DontDelete));
         }
 
         void StaticFunction(const std::string& name, FunctionCallback callback)
         {
-            Get()->Set(js::JSValue(name), WrapFunction(callback));
+            Get()->Set(js::JSValue(name), WrapFunction(callback), (v8::PropertyAttribute)(v8::PropertyAttribute::ReadOnly | v8::PropertyAttribute::DontDelete));
         }
     };
 
