@@ -87,38 +87,6 @@ namespace js
             return val.has_value() ? val.value() : T();
         }
 
-        /*
-        template<class Class, typename Ret, typename Arg, Ret (Class::*Method)(Arg)>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg>>(info, 0));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg>>(info, 0))));
-            }
-        }
-
-        template<class Class, typename Ret, typename Arg, Ret (Class::*Method)(Arg) const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg>>(info, 0));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg>>(info, 0))));
-            }
-        }
-        */
-
         template<class Class, typename Ret, typename Arg0, Ret (Class::*Method)(Arg0)>
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
@@ -1380,19 +1348,6 @@ namespace js
         {
             Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Method>));
         }
-        /*
-        template<class Class, typename Ret, typename Arg, Ret (Class::*Method)(Arg) const>
-        void Method(const std::string& name)
-        {
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg, Method>));
-        }
-        template<class Class, typename Ret, typename Arg, Ret (Class::*Method)(Arg)>
-        void Method(const std::string& name)
-        {
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg, Method>));
-        }
-        */
-
         template<class Class, typename Ret, typename Arg0, Ret (Class::*Method)(Arg0)>
         void Method(const std::string& name)
         {
