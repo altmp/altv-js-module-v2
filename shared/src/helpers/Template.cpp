@@ -26,17 +26,18 @@ void js::Wrapper::DynamicPropertyLazyHandler(v8::Local<v8::Name> property, const
 
     v8::Local<v8::Context> context = ctx.GetIsolate()->GetCurrentContext();
     v8::Local<v8::ObjectTemplate> tpl = v8::ObjectTemplate::New(ctx.GetIsolate());
+    tpl->SetInternalFieldCount(2);
     tpl->SetHandler(config);
-    Object obj{ tpl->NewInstance(context).ToLocalChecked() };
-    obj.AddProperty("__internalParent", info.This(), false, false, false);
-    ctx.Return(obj.Get());
+    v8::Local<v8::Object> obj = tpl->NewInstance(context).ToLocalChecked();
+    obj->SetInternalField(0, info.This());
+    ctx.Return(obj);
 }
 
 void js::Wrapper::DynamicPropertyGetterHandler(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
 {
-    Object thisObj{ info.This() };
     PropertyContext<v8::Value> ctx{ info, property };
-    ctx.SetParent(thisObj.Get<alt::IBaseObject*>("__internalParent"));
+    v8::Local<v8::Object> parent = info.This()->GetInternalField(0).As<v8::Object>();
+    ctx.SetParent(parent);
 
     auto data = static_cast<ClassTemplate::DynamicPropertyData*>(info.Data().As<v8::External>()->Value());
     data->getter(ctx);
@@ -44,9 +45,9 @@ void js::Wrapper::DynamicPropertyGetterHandler(v8::Local<v8::Name> property, con
 
 void js::Wrapper::DynamicPropertySetterHandler(v8::Local<v8::Name> property, v8::Local<v8::Value> value, const v8::PropertyCallbackInfo<v8::Value>& info)
 {
-    Object thisObj{ info.This() };
     PropertyContext<v8::Value> ctx{ info, property, value };
-    ctx.SetParent(thisObj.Get<alt::IBaseObject*>("__internalParent"));
+    v8::Local<v8::Object> parent = info.This()->GetInternalField(0).As<v8::Object>();
+    ctx.SetParent(parent);
 
     auto data = static_cast<ClassTemplate::DynamicPropertyData*>(info.Data().As<v8::External>()->Value());
     data->setter(ctx);
@@ -55,9 +56,9 @@ void js::Wrapper::DynamicPropertySetterHandler(v8::Local<v8::Name> property, v8:
 
 void js::Wrapper::DynamicPropertyDeleterHandler(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Boolean>& info)
 {
-    Object thisObj{ info.This() };
     PropertyContext<v8::Boolean> ctx{ info, property };
-    ctx.SetParent(thisObj.Get<alt::IBaseObject*>("__internalParent"));
+    v8::Local<v8::Object> parent = info.This()->GetInternalField(0).As<v8::Object>();
+    ctx.SetParent(parent);
 
     auto data = static_cast<ClassTemplate::DynamicPropertyData*>(info.Data().As<v8::External>()->Value());
     data->deleter(ctx);
@@ -65,9 +66,9 @@ void js::Wrapper::DynamicPropertyDeleterHandler(v8::Local<v8::Name> property, co
 
 void js::Wrapper::DynamicPropertyEnumeratorHandler(const v8::PropertyCallbackInfo<v8::Array>& info)
 {
-    Object thisObj{ info.This() };
     PropertyContext<v8::Array> ctx{ info };
-    ctx.SetParent(thisObj.Get<alt::IBaseObject*>("__internalParent"));
+    v8::Local<v8::Object> parent = info.This()->GetInternalField(0).As<v8::Object>();
+    ctx.SetParent(parent);
 
     auto data = static_cast<ClassTemplate::DynamicPropertyData*>(info.Data().As<v8::External>()->Value());
     data->enumerator(ctx);

@@ -160,7 +160,7 @@ namespace js
         v8::Local<v8::Value> value;
         Type valueType = Type::Invalid;
         std::string property;
-        alt::IBaseObject* parent;  // Used for dynamic properties
+        v8::Local<v8::Object> parent;  // Used for dynamic properties
 
         Type GetValueType()
         {
@@ -185,7 +185,7 @@ namespace js
         {
         }
 
-        void SetParent(alt::IBaseObject* _parent)
+        void SetParent(v8::Local<v8::Object> _parent)
         {
             parent = _parent;
         }
@@ -194,7 +194,8 @@ namespace js
         T* GetParent()
         {
             if(this->errored) return nullptr;
-            return dynamic_cast<T*>(parent);
+            std::optional<alt::IBaseObject*> object = CppValue<alt::IBaseObject*>(parent.As<v8::Value>());
+            return object.has_value() ? dynamic_cast<T*>(object.value()) : nullptr;
         }
 
         bool CheckValueType(Type type)
