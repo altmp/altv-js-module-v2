@@ -33,7 +33,7 @@ namespace js {
 `;
 
 // Template for each binding item in the bindings map
-const bindingTemplate = `{ "{BINDING_NAME}", Binding{ "{BINDING_NAME}", Binding::Scope::{BINDING_SCOPE}, "{BINDING_SRC}" } }`;
+const bindingTemplate = `{ "{BINDING_NAME}", Binding{ "{BINDING_NAME}", Binding::Scope::{BINDING_SCOPE}, { {BINDING_SRC} } } }`;
 
 // Result bindings output path
 const outputPath = "shared/src/BindingsMap.cpp";
@@ -50,10 +50,10 @@ const outputPath = "shared/src/BindingsMap.cpp";
             // Concat with existing binding, to allow for shared bindings to be added on by client/server bindings
             const existingBinding = bindings.find(binding => binding.name === name);
             if(existingBinding) {
-                existingBinding.src += cleanBindingSource(src);
+                existingBinding.src += "," + getBindingCodeChars(src);
                 if(pathScope === "shared") existingBinding.scope = "SHARED";
             }
-            else bindings.push({ name: `${pathScope}/${name}`, src: cleanBindingSource(src), scope: pathScope.toUpperCase() });
+            else bindings.push({ name: `${pathScope}/${name}`, src: getBindingCodeChars(src), scope: pathScope.toUpperCase() });
             showLog(`Generated bindings for: ${pathUtil.relative(`${__dirname}/..`, file).replace(/\\/g, "/")}`);
         }
     }
@@ -87,9 +87,9 @@ async function* getBindingFiles(dir) {
     }
 }
 
-function cleanBindingSource(src) {
-    let str = src.trim().replace(/\"/g, "\\\"").replace(/\r\n/g, "\\n").replace(/\n/g, "\\n");
-    return str;
+function getBindingCodeChars(src) {
+    const chars = src.split("").map((char) => char.charCodeAt(0));
+    return chars.toString();
 }
 
 function getDate() {
