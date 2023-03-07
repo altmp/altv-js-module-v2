@@ -118,6 +118,11 @@ namespace js
             return argType;
         }
 
+        int GetArgCount()
+        {
+            return info.Length();
+        }
+
         void SetThisObject(alt::IBaseObject* object);
 
         // If no type to check is specified, it will try to convert the value to the specified type
