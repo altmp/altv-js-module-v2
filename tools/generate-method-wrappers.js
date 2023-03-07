@@ -8,7 +8,11 @@ template<class Class, typename Ret, typename Arg1, typename Arg2, Ret (Class::*M
 static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
 {
     Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-    if(obj == nullptr) return;
+    if(obj == nullptr)
+    {
+        info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+        return;
+    }
     if constexpr(std::is_same_v<void, Ret>)
     {
         (obj->*Method)(GetArg<CleanArg<Arg1>>(info, 0), GetArg<CleanArg<Arg2>>(info, 1));
