@@ -24,7 +24,11 @@ template<class Class, typename Ret, {TEMPLATE_TYPES}, Ret (Class::*Method)({METH
 static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
 {
     Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-    if(obj == nullptr) return;
+    if(obj == nullptr)
+    {
+        info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+        return;
+    }
     if constexpr(std::is_same_v<void, Ret>)
     {
         (obj->*Method)({METHOD_ARGS});

@@ -3,6 +3,7 @@
 #include <type_traits>
 
 #include "v8.h"
+
 #include "JS.h"
 #include "Convert.h"
 #include "CallContext.h"
@@ -35,7 +36,11 @@ namespace js
         static void PropertyGetterHandler(v8::Local<v8::String>, const v8::PropertyCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             constexpr bool isEnum = std::is_enum_v<decltype((obj->*Getter)())>;
             if constexpr(isEnum) info.GetReturnValue().Set(JSValue((int)(obj->*Getter)()));
             else
@@ -45,19 +50,26 @@ namespace js
         static void PropertySetterHandler(v8::Local<v8::String>, v8::Local<v8::Value> value, const v8::PropertyCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             constexpr bool isEnum = std::is_enum_v<Type>;
             if constexpr(isEnum) (obj->*Setter)(static_cast<Type>(value->Int32Value().ToChecked()));
             else
                 (obj->*Setter)(CppValue<typename std::remove_cv_t<typename std::remove_reference_t<Type>>>(value));
         }
 
-#pragma region "Template method handlers"
         template<class Class, typename Ret, Ret (Class::*Method)()>
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)();
@@ -71,7 +83,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)();
@@ -93,11 +109,17 @@ namespace js
             return val.has_value() ? val.value() : T();
         }
 
+#pragma region "Template method handlers"
+
         template<class Class, typename Ret, typename Arg0, Ret (Class::*Method)(Arg0)>
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0));
@@ -111,7 +133,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0));
@@ -125,7 +151,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1));
@@ -139,7 +169,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1));
@@ -153,7 +187,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2));
@@ -167,7 +205,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2));
@@ -181,7 +223,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3));
@@ -196,7 +242,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3));
@@ -211,7 +261,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(
@@ -227,7 +281,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(
@@ -251,7 +309,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -283,7 +345,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -316,7 +382,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -351,7 +421,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -387,7 +461,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -425,7 +503,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -464,7 +546,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -505,7 +591,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -547,7 +637,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -591,7 +685,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -636,7 +734,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -683,7 +785,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -731,7 +837,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -781,7 +891,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -832,7 +946,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -885,7 +1003,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -939,7 +1061,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -995,7 +1121,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -1052,7 +1182,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -1111,7 +1245,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -1171,7 +1309,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
@@ -1233,7 +1375,11 @@ namespace js
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr) return;
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
             if constexpr(std::is_same_v<void, Ret>)
             {
                 (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
