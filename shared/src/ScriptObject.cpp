@@ -17,3 +17,9 @@ js::ScriptObject* js::ScriptObject::Create(v8::Local<v8::Object> jsObject, alt::
     jsObject->SetAlignedPointerInInternalField(0, scriptObject);
     return scriptObject;
 }
+
+void js::ScriptObject::Destroy(ScriptObject* scriptObject)
+{
+    scriptObject->Get()->SetAlignedPointerInInternalField(0, nullptr);
+    delete scriptObject;
+}

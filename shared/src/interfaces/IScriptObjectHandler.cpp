@@ -25,7 +25,7 @@ void js::IScriptObjectHandler::DestroyScriptObject(alt::IBaseObject* object)
         if(it->second->GetObject() == object)
         {
             GetObjectMap().erase(it);
-            delete it->second;
+            ScriptObject::Destroy(it->second);
             break;
         }
     }

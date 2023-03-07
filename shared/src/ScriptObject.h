@@ -23,6 +23,7 @@ namespace js
         ScriptObject(v8::Isolate* _isolate, v8::Local<v8::Object> _jsObject, alt::IBaseObject* _object) : isolate(_isolate), jsObject(_isolate, _jsObject), object(_object) {}
         static ScriptObject* Create(v8::Local<v8::Context> context, alt::IBaseObject* object, Class* class_);
         static ScriptObject* Create(v8::Local<v8::Object> jsObject, alt::IBaseObject* object);
+        static void Destroy(ScriptObject* scriptObject);
 
     public:
         v8::Local<v8::Object> Get() const
