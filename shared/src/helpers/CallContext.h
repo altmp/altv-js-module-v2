@@ -17,12 +17,16 @@ namespace js
         CallbackInfo info;
         bool errored = false;
         IResource* resource = nullptr;
+        alt::IBaseObject* thisObject = nullptr;
 
         alt::IBaseObject* GetThisObjectUntyped()
         {
             if(errored) return nullptr;
+            if(thisObject) return thisObject;
             std::optional<alt::IBaseObject*> object = CppValue<alt::IBaseObject*>(info.This().As<v8::Value>());
-            return object.has_value() ? object.value() : nullptr;
+            if(!object.has_value()) return nullptr;
+            thisObject = object.value();
+            return thisObject;
         }
 
     public:
@@ -100,6 +104,10 @@ namespace js
         bool CheckCtor()
         {
             return Check(info.IsConstructCall(), "Constructor called as function");
+        }
+        bool CheckThis()
+        {
+            return Check(GetThisObjectUntyped() != nullptr, "Invalid base object");
         }
 
         Type GetArgType(int index)
