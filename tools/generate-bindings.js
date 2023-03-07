@@ -88,7 +88,7 @@ async function* getBindingFiles(dir) {
 }
 
 function cleanBindingSource(src) {
-    let str = src.trim().replace(/\"/g, "\\\"").replace(/\r\n/g, "\\n");
+    let str = src.trim().replace(/\"/g, "\\\"").replace(/\r\n/g, "\\n").replace(/\n/g, "\\n");
     return str;
 }
 
