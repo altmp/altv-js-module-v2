@@ -45,6 +45,19 @@ namespace js
             std::optional<T> result = js::CppValue<T>(val);
             return result.has_value() ? result.value() : T();
         }
+
+        template<typename T>
+        void AddProperty(const std::string& key, const T& val, bool configurable = true, bool writable = true, bool enumerable = true)
+        {
+            if(configurable && writable && enumerable) object->CreateDataProperty(context, js::JSValue(key), js::JSValue(val));
+            else
+            {
+                v8::PropertyDescriptor desc(js::JSValue(val), writable);
+                desc.set_configurable(configurable);
+                desc.set_enumerable(enumerable);
+                object->DefineProperty(context, js::JSValue(key), desc);
+            }
+        }
     };
 
     class Array
