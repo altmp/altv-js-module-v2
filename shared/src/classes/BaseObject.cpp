@@ -35,21 +35,6 @@ static void MetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
     ctx.Return(keys);
 }
 
-static std::string testVal;
-static void Get(js::PropertyContext& ctx)
-{
-    std::cout << "Get " << testVal << std::endl;
-    ctx.Return(testVal);
-}
-
-static void Set(js::PropertyContext& ctx)
-{
-    std::cout << "Set " << testVal << std::endl;
-    std::string val;
-    if(!ctx.GetValue(val)) return;
-    testVal = val;
-}
-
 // clang-format off
 extern js::Class baseObjectClass("BaseObject", nullptr, [](js::ClassTemplate& tpl)
 {
@@ -57,6 +42,4 @@ extern js::Class baseObjectClass("BaseObject", nullptr, [](js::ClassTemplate& tp
     tpl.Method<alt::IBaseObject, void, const std::string&, alt::MValue, &alt::IBaseObject::SetMetaData>("setMeta");
     tpl.Property<alt::IBaseObject, &alt::IBaseObject::GetType>("type");
     tpl.DynamicProperty("meta", MetaGetter, MetaSetter, MetaDeleter, MetaEnumerator);
-
-    tpl.Property("testProp", Get, Set);
 });

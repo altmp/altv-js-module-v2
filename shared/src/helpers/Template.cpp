@@ -78,3 +78,21 @@ void js::ModuleTemplate::Namespace(const std::string& name, js::Namespace& names
 {
     Get()->Set(JSValue(name), namespace_.Initialize(GetIsolate()));
 }
+
+v8::Local<v8::FunctionTemplate> js::ClassTemplate::GetPropertyGetter(v8::Isolate* isolate, Class* cls, const std::string& name)
+{
+    auto& propertyGetterMap = GetPropertyGetterMap();
+    auto& clsMap = propertyGetterMap[isolate];
+    v8::Local<v8::FunctionTemplate> tpl;
+    Class* currentClass = cls;
+    while(tpl.IsEmpty() && currentClass)
+    {
+        if(!clsMap.contains(currentClass) || !clsMap.at(currentClass).contains(name))
+        {
+            currentClass = currentClass->GetParentClass();
+            continue;
+        }
+        tpl = clsMap.at(currentClass).at(name).Get(isolate);
+    }
+    return tpl;
+}

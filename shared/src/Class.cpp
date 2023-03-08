@@ -20,6 +20,7 @@ void js::Class::Initialize(v8::Isolate* isolate)
         class_->Register(isolate, tpl);
         class_->templateMap.insert({ isolate, tpl });
     }
+    ClassTemplate::CleanupPropertyGetterMap(isolate);  // Only needed while setting up the templates, so we can free the data here
 }
 
 void js::Class::Cleanup(v8::Isolate* isolate)

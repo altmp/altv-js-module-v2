@@ -1528,7 +1528,7 @@ namespace js
 
         static ClassMap<std::unordered_map<std::string, DynamicPropertyData*>>& GetDynamicPropertyDataMap()
         {
-            static std::unordered_map<v8::Isolate*, std::unordered_map<Class*, std::unordered_map<std::string, DynamicPropertyData*>>> dynamicPropertyDataMap;
+            static ClassMap<std::unordered_map<std::string, DynamicPropertyData*>> dynamicPropertyDataMap;
             return dynamicPropertyDataMap;
         }
         static void InsertDynamicPropertyData(v8::Isolate* isolate, Class* cls, const std::string& name, DynamicPropertyData* data)
@@ -1556,7 +1556,23 @@ namespace js
             dynamicPropertyDataMap.erase(isolate);
         }
 
-        // static ClassMap<std::unordered_map<std::string, v8::Persistent<v8::FunctionTemplate>>>& GetPropertyGetterMap() {}
+        static ClassMap<std::unordered_map<std::string, Persistent<v8::FunctionTemplate>>>& GetPropertyGetterMap()
+        {
+            static ClassMap<std::unordered_map<std::string, Persistent<v8::FunctionTemplate>>> propertyGetterMap;
+            return propertyGetterMap;
+        }
+        static void InsertPropertyGetter(v8::Isolate* isolate, Class* cls, const std::string& name, v8::Local<v8::FunctionTemplate> getter)
+        {
+            auto& propertyGetterMap = GetPropertyGetterMap();
+            auto& clsMap = propertyGetterMap[isolate];
+            auto& nameMap = clsMap[cls];
+            nameMap.insert({ name, Persistent<v8::FunctionTemplate>(isolate, getter) });
+        }
+        static v8::Local<v8::FunctionTemplate> GetPropertyGetter(v8::Isolate* isolate, Class* cls, const std::string& name);
+        static void CleanupPropertyGetterMap(v8::Isolate* isolate)
+        {
+            GetPropertyGetterMap().erase(isolate);
+        }
 
     public:
         ClassTemplate(v8::Isolate* isolate, Class* _class, v8::Local<v8::FunctionTemplate> tpl) : Template(isolate, tpl), class_(_class) {}
@@ -2068,12 +2084,26 @@ namespace js
             Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Class, Getter>, Wrapper::PropertySetterHandler<Class, Type, Setter>);
         }
 
+        // If getter is nullptr, tries to get the getter defined by a base class
         void Property(const std::string& name, PropertyCallback getter = nullptr, PropertyCallback setter = nullptr)
         {
-            if(getter && !setter) Get()->PrototypeTemplate()->SetAccessorProperty(js::JSValue(name), WrapProperty(getter));
+            if(getter && !setter)
+            {
+                v8::Local<v8::FunctionTemplate> getterTemplate = WrapProperty(getter);
+                InsertPropertyGetter(GetIsolate(), class_, name, getterTemplate);
+                Get()->PrototypeTemplate()->SetAccessorProperty(js::JSValue(name), getterTemplate);
+            }
             else
             {
-                Get()->PrototypeTemplate()->SetAccessorProperty(js::JSValue(name), WrapProperty(getter), WrapProperty(setter));
+                v8::Local<v8::FunctionTemplate> getterTemplate;
+                if(!getter)
+                {
+                    getterTemplate = GetPropertyGetter(GetIsolate(), class_, name);
+                    if(getterTemplate.IsEmpty()) return;
+                }
+                else
+                    getterTemplate = WrapProperty(getter);
+                Get()->PrototypeTemplate()->SetAccessorProperty(js::JSValue(name), getterTemplate, WrapProperty(setter));
             }
         }
 
