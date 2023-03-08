@@ -2135,11 +2135,11 @@ namespace js
         template<class Class, auto(Class::*Getter)() const>
         void LazyProperty(const std::string& name)
         {
-            Get()->PrototypeTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler<Class, Getter>);
+            Get()->InstanceTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler<Class, Getter>);
         }
         void LazyProperty(const std::string& name, LazyPropertyCallback callback)
         {
-            Get()->PrototypeTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler, v8::External::New(GetIsolate(), callback));
+            Get()->InstanceTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler, v8::External::New(GetIsolate(), callback));
         }
 
         // Property returns an object that will call the specified handlers
