@@ -5,4 +5,6 @@
 extern js::Class playerClass, vehicleClass;
 static js::Module altModule("alt", "alt-shared", { &playerClass, &vehicleClass }, [](js::ModuleTemplate& module)
 {
+    module.StaticProperty("isClient", false);
+    module.StaticProperty("isServer", true);
 });

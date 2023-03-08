@@ -47,14 +47,6 @@ static js::Module sharedModule("alt-shared", { &sharedPlayerClass }, [](js::Modu
     module.StaticFunction("logError", Log<LogType::ERR>);
     // todo: maybe a function to set logger settings like depth, numeric seperator etc.
 
-    #ifdef ALT_CLIENT_API
-    bool isClient = true;
-    #else
-    bool isClient = false;
-    #endif
-    module.StaticProperty("isClient", isClient);
-    module.StaticProperty("isServer", !isClient);
-
     module.Namespace("Timers");
     module.Namespace("Events");
     module.Namespace("Utils");
