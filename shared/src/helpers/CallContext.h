@@ -68,6 +68,11 @@ namespace js
             return true;
         }
 
+        bool CheckThis()
+        {
+            return Check(GetThisObjectUntyped() != nullptr, "Invalid base object");
+        }
+
         template<class T>
         T* GetThisObject()
         {
@@ -110,10 +115,6 @@ namespace js
         bool CheckCtor()
         {
             return Check(info.IsConstructCall(), "Constructor called as function");
-        }
-        bool CheckThis()
-        {
-            return Check(GetThisObjectUntyped() != nullptr, "Invalid base object");
         }
 
         Type GetArgType(int index)
@@ -261,4 +262,5 @@ namespace js
     };
 
     using PropertyContext = PropertyContextBase<v8::FunctionCallbackInfo<v8::Value>>;
+    using LazyPropertyContext = PropertyContextBase<v8::PropertyCallbackInfo<v8::Value>>;
 }  // namespace js

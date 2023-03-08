@@ -15,6 +15,7 @@ namespace js
 
     using FunctionCallback = void (*)(FunctionContext&);
     using PropertyCallback = void (*)(PropertyContext&);
+    using LazyPropertyCallback = void (*)(LazyPropertyContext&);
 
     using DynamicPropertyGetter = void (*)(DynamicPropertyContext<v8::Value>&);
     using DynamicPropertySetter = void (*)(DynamicPropertyContext<v8::Value>&);
@@ -38,6 +39,27 @@ namespace js
             PropertyContext ctx{ info, info[0] };
             auto callback = static_cast<PropertyCallback>(info.Data().As<v8::External>()->Value());
             callback(ctx);
+        }
+
+        static void LazyPropertyHandler(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+        {
+            LazyPropertyContext ctx{ info };
+            auto callback = static_cast<LazyPropertyCallback>(info.Data().As<v8::External>()->Value());
+            callback(ctx);
+        }
+        template<class Class, auto(Class::*Getter)() const>
+        static void LazyPropertyHandler(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+        {
+            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
+            constexpr bool isEnum = std::is_enum_v<decltype((obj->*Getter)())>;
+            if constexpr(isEnum) info.GetReturnValue().Set(JSValue((int)(obj->*Getter)()));
+            else
+                info.GetReturnValue().Set(JSValue((obj->*Getter)()));
         }
 
         template<class Class, auto(Class::*Getter)() const>
@@ -2074,7 +2096,7 @@ namespace js
 #pragma endregion
 
         template<class Class, auto(Class::*Getter)() const>
-        void Property(const std::string& name, bool allowOverwrite = false)
+        void Property(const std::string& name)
         {
             Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Class, Getter>);
         }
@@ -2083,7 +2105,6 @@ namespace js
         {
             Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Class, Getter>, Wrapper::PropertySetterHandler<Class, Type, Setter>);
         }
-
         // If getter is nullptr, tries to get the getter defined by a base class
         void Property(const std::string& name, PropertyCallback getter = nullptr, PropertyCallback setter = nullptr)
         {
@@ -2105,6 +2126,16 @@ namespace js
                     getterTemplate = WrapProperty(getter);
                 Get()->PrototypeTemplate()->SetAccessorProperty(js::JSValue(name), getterTemplate, WrapProperty(setter));
             }
+        }
+
+        template<class Class, auto(Class::*Getter)() const>
+        void LazyProperty(const std::string& name)
+        {
+            Get()->PrototypeTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler<Class, Getter>);
+        }
+        void LazyProperty(const std::string& name, LazyPropertyCallback callback)
+        {
+            Get()->PrototypeTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler, v8::External::New(GetIsolate(), callback));
         }
 
         // Property returns an object that will call the specified handlers

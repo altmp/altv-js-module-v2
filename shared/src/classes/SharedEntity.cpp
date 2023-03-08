@@ -5,4 +5,5 @@
 extern js::Class sharedWorldEntityClass;
 extern js::Class sharedEntityClass("Entity", &sharedWorldEntityClass, nullptr, [](js::ClassTemplate& tpl)
 {
+    tpl.LazyProperty<alt::IEntity, &alt::IEntity::GetID>("id");
 });

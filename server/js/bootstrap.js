@@ -16,8 +16,6 @@ alt.Events.on("test", (arg) => {
 });
 
 const vehicle = new alt.Vehicle("t20");
-vehicle.testProp = "abc";
-alt.log("testProp: " + vehicle.testProp);
 
 /*
 alt.log("meta before: " + vehicle.meta.test);
