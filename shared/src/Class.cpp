@@ -1,24 +1,25 @@
 #include "Class.h"
 #include "interfaces/IResource.h"
 
-void js::Class::Register(v8::Isolate* isolate, ClassTemplate& tpl)
+void js::Class::Register(v8::Isolate* isolate)
 {
+    ClassTemplate tpl{ isolate, this, ctor ? WrapFunction(ctor) : v8::FunctionTemplate::New(isolate) };
     if(parentClass)
     {
-        if(!parentClass->templateMap.contains(isolate)) parentClass->Register(isolate, tpl);
+        if(!parentClass->templateMap.contains(isolate)) parentClass->Register(isolate);
+        tpl.Get()->Inherit(parentClass->templateMap.at(isolate).Get());
     }
     initCb(tpl);
     tpl.Get()->SetClassName(js::JSValue(name));
     tpl.Get()->InstanceTemplate()->SetInternalFieldCount(internalFieldCount);
+    templateMap.insert({ isolate, tpl });
 }
 
 void js::Class::Initialize(v8::Isolate* isolate)
 {
     for(auto class_ : GetAll())
     {
-        ClassTemplate tpl{ isolate, class_, class_->ctor ? WrapFunction(class_->ctor) : v8::FunctionTemplate::New(isolate) };
-        class_->Register(isolate, tpl);
-        class_->templateMap.insert({ isolate, tpl });
+        class_->Register(isolate);
     }
     ClassTemplate::CleanupPropertyGetterMap(isolate);  // Only needed while setting up the templates, so we can free the data here
 }
