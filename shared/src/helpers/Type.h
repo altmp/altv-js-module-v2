@@ -43,6 +43,7 @@ namespace js
     template<typename T>
     static Type GetType(v8::Local<T> value, js::IResource* resource)
     {
+        if(value.IsEmpty()) return Type::Invalid;
         if(value->IsUndefined()) return Type::Undefined;
         if(value->IsNull()) return Type::Null;
         if(value->IsBoolean()) return Type::Boolean;

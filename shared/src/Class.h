@@ -49,6 +49,10 @@ namespace js
         {
             return name;
         }
+        Class* GetParentClass() const
+        {
+            return parentClass;
+        }
         ClassTemplate& GetTemplate(v8::Isolate* isolate)
         {
             return templateMap.at(isolate);

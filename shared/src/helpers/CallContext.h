@@ -173,14 +173,11 @@ namespace js
         }
     };
 
-    template<class T>
-    class PropertyContext : public CallContext<v8::PropertyCallbackInfo<T>>
+    template<class T = v8::Value>
+    class PropertyContextBase : public CallContext<T>
     {
         v8::Local<v8::Value> value;
         Type valueType = Type::Invalid;
-        std::string property;
-        v8::Local<v8::Object> parent;           // Used for dynamic properties
-        alt::IBaseObject* parentObj = nullptr;  //
 
         Type GetValueType()
         {
@@ -190,18 +187,50 @@ namespace js
         }
 
     public:
+        PropertyContextBase(const T& _info) : CallContext<T>(_info) {}
+        PropertyContextBase(const T& _info, v8::Local<v8::Value> _value) : CallContext<T>(_info), value(_value) {}
+
+        bool CheckValueType(Type type)
+        {
+            return this->Check(GetValueType() == type, "Invalid value, expected " + TypeToString(type) + " but got " + TypeToString(GetValueType()));
+        }
+
         template<class T>
-        PropertyContext(const v8::PropertyCallbackInfo<T>& _info) : CallContext<v8::PropertyCallbackInfo<T>>(_info)
+        bool GetValue(T& outValue, Type typeToCheck = Type::Invalid)
+        {
+            if(this->errored) return false;
+            if(typeToCheck != Type::Invalid && !CheckValueType(typeToCheck)) return false;
+
+            std::optional<T> result = CppValue<T>(value);
+            if(result.has_value())
+            {
+                outValue = result.value();
+                return true;
+            }
+            return false;
+        }
+    };
+
+    template<class T>
+    class DynamicPropertyContext : public PropertyContextBase<v8::PropertyCallbackInfo<T>>
+    {
+        std::string property;
+        v8::Local<v8::Object> parent;           // Used for dynamic properties
+        alt::IBaseObject* parentObj = nullptr;  //
+
+    public:
+        template<class T>
+        DynamicPropertyContext(const v8::PropertyCallbackInfo<T>& _info) : PropertyContextBase<v8::PropertyCallbackInfo<T>>(_info)
         {
         }
         template<class T>
-        PropertyContext(const v8::PropertyCallbackInfo<T>& _info, v8::Local<v8::Name> _property)
-            : CallContext<v8::PropertyCallbackInfo<T>>(_info), property(js::CppValue<std::string>(_property.As<v8::Value>()).value())
+        DynamicPropertyContext(const v8::PropertyCallbackInfo<T>& _info, v8::Local<v8::Name> _property)
+            : PropertyContextBase<v8::PropertyCallbackInfo<T>>(_info), property(js::CppValue<std::string>(_property.As<v8::Value>()).value())
         {
         }
         template<class T>
-        PropertyContext(const v8::PropertyCallbackInfo<T>& _info, v8::Local<v8::Name> _property, v8::Local<v8::Value> _value)
-            : CallContext<v8::PropertyCallbackInfo<T>>(_info), property(js::CppValue<std::string>(_property.As<v8::Value>()).value()), value(_value)
+        DynamicPropertyContext(const v8::PropertyCallbackInfo<T>& _info, v8::Local<v8::Name> _property, v8::Local<v8::Value> _value)
+            : PropertyContextBase<v8::PropertyCallbackInfo<T>>(_info, _value), property(js::CppValue<std::string>(_property.As<v8::Value>()).value())
         {
         }
 
@@ -225,29 +254,11 @@ namespace js
             return parentObj;
         }
 
-        bool CheckValueType(Type type)
-        {
-            return this->Check(GetValueType() == type, "Invalid value, expected " + TypeToString(type) + " but got " + TypeToString(GetValueType()));
-        }
-
         const std::string& GetProperty()
         {
             return property;
         }
-
-        template<class T>
-        bool GetValue(int index, T& outValue, Type typeToCheck = Type::Invalid)
-        {
-            if(this->errored) return false;
-            if(typeToCheck != Type::Invalid && !CheckValueType(typeToCheck)) return false;
-
-            std::optional<T> result = CppValue<T>(value);
-            if(result.has_value())
-            {
-                outValue = result.value();
-                return true;
-            }
-            return false;
-        }
     };
+
+    using PropertyContext = PropertyContextBase<v8::FunctionCallbackInfo<v8::Value>>;
 }  // namespace js
