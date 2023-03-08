@@ -2,8 +2,8 @@
 #include "Namespace.h"
 
 // clang-format off
-extern js::Class playerClass, vehicleClass, baseObjectClass;
-static js::Module altModule("alt", "alt-shared", { &playerClass, &vehicleClass, &baseObjectClass }, [](js::ModuleTemplate& module)
+extern js::Class playerClass, vehicleClass;
+static js::Module altModule("alt", "alt-shared", { &playerClass, &vehicleClass }, [](js::ModuleTemplate& module)
 {
     module.StaticProperty("isClient", false);
     module.StaticProperty("isServer", true);
