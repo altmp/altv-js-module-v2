@@ -1498,6 +1498,10 @@ namespace js
         {
             Get()->Set(js::JSValue(name), js::JSValue(value), (v8::PropertyAttribute)(v8::PropertyAttribute::ReadOnly | v8::PropertyAttribute::DontDelete));
         }
+        void StaticProperty(const std::string& name, PropertyCallback getter, PropertyCallback setter = nullptr)
+        {
+            Get()->SetAccessorProperty(js::JSValue(name), WrapProperty(getter), setter ? WrapProperty(setter) : v8::Local<v8::FunctionTemplate>());
+        }
 
         void StaticFunction(const std::string& name, FunctionCallback callback)
         {
