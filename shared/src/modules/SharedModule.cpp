@@ -40,6 +40,7 @@ static void Log(js::FunctionContext& ctx)
 
 // clang-format off
 extern js::Class baseObjectClass;
+extern js::Namespace enumsNamespace;
 static js::Module sharedModule("alt-shared", { &baseObjectClass }, [](js::ModuleTemplate& module)
 {
     module.StaticFunction("log", Log<LogType::INFO>);
@@ -50,4 +51,5 @@ static js::Module sharedModule("alt-shared", { &baseObjectClass }, [](js::Module
     module.Namespace("Timers");
     module.Namespace("Events");
     module.Namespace("Utils");
+    module.Namespace("Enums", enumsNamespace);
 });
