@@ -3192,11 +3192,8 @@ const inspectMultiple = (options, ...args) => {
     let str = "";
     let argsLength = args.length;
     for(let i = 0; i < argsLength; i++) {
-        if(typeof args[i] === "string") {
-            str += args[i];
-            continue;
-        }
-        str += inspect(args[i], options);
+        if(typeof args[i] === "string") str += args[i];
+        else str += inspect(args[i], options);
         if(i < argsLength - 1) {
             str += " ";
         }
