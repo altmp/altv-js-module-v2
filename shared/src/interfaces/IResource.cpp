@@ -59,21 +59,6 @@ void js::IResource::RegisterBindingExport(const std::string& name, const std::st
     bindingExports.insert({ name, Persistent<v8::Value>(isolate, exportedValue) });
 }
 
-struct TemporaryGlobalExtension
-{
-    std::string name;
-    v8::Local<v8::Context> ctx;
-
-    TemporaryGlobalExtension(v8::Local<v8::Context> _ctx, const std::string& _name, v8::Local<v8::Value> value) : ctx(_ctx), name(_name)
-    {
-        ctx->Global()->Set(ctx, js::JSValue(_name), value);
-    }
-    ~TemporaryGlobalExtension()
-    {
-        ctx->Global()->Delete(ctx, js::JSValue(name));
-    }
-};
-
 void js::IResource::InitializeBindings(Binding::Scope scope, Module& altModule)
 {
     std::vector<Binding*> bindings = Binding::GetBindingsForScope(scope);
