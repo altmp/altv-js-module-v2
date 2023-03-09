@@ -33,7 +33,9 @@ void js::IScriptObjectHandler::DestroyScriptObject(alt::IBaseObject* object)
 
 void js::IScriptObjectHandler::BindScriptObject(v8::Local<v8::Object> thisObject, alt::IBaseObject* object)
 {
-    ScriptObject* scriptObject = ScriptObject::Create(thisObject, object);
+    Class* objectClass = GetClassForType(object->GetType());
+    if(!objectClass) return;
+    ScriptObject* scriptObject = ScriptObject::Create(thisObject, object, objectClass);
     GetObjectMap().insert({ object->GetType(), scriptObject });
 }
 

@@ -19,10 +19,14 @@ namespace js
         v8::Isolate* isolate;
         Persistent<v8::Object> jsObject;
         alt::IBaseObject* object = nullptr;
+        Class* class_ = nullptr;
 
-        ScriptObject(v8::Isolate* _isolate, v8::Local<v8::Object> _jsObject, alt::IBaseObject* _object) : isolate(_isolate), jsObject(_isolate, _jsObject), object(_object) {}
+        ScriptObject(v8::Isolate* _isolate, v8::Local<v8::Object> _jsObject, alt::IBaseObject* _object, Class* _class)
+            : isolate(_isolate), jsObject(_isolate, _jsObject), object(_object), class_(_class)
+        {
+        }
         static ScriptObject* Create(v8::Local<v8::Context> context, alt::IBaseObject* object, Class* class_);
-        static ScriptObject* Create(v8::Local<v8::Object> jsObject, alt::IBaseObject* object);
+        static ScriptObject* Create(v8::Local<v8::Object> jsObject, alt::IBaseObject* object, Class* class_);
         static ScriptObject* Get(v8::Local<v8::Object> obj);
         static void Destroy(ScriptObject* scriptObject);
 
@@ -31,6 +35,7 @@ namespace js
         {
             return jsObject.Get(isolate);
         }
+
         alt::IBaseObject* GetObject() const
         {
             return object;
@@ -39,6 +44,11 @@ namespace js
         v8::Isolate* GetIsolate() const
         {
             return isolate;
+        }
+
+        Class* GetClass() const
+        {
+            return class_;
         }
     };
 }  // namespace js
