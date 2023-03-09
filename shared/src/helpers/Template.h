@@ -1503,6 +1503,11 @@ namespace js
             Get()->SetAccessorProperty(js::JSValue(name), WrapProperty(getter), setter ? WrapProperty(setter) : v8::Local<v8::FunctionTemplate>());
         }
 
+        void StaticLazyProperty(const std::string& name, LazyPropertyCallback callback)
+        {
+            Get()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler, v8::External::New(GetIsolate(), callback));
+        }
+
         void StaticFunction(const std::string& name, FunctionCallback callback)
         {
             Get()->Set(js::JSValue(name), WrapFunction(callback), (v8::PropertyAttribute)(v8::PropertyAttribute::ReadOnly | v8::PropertyAttribute::DontDelete));
