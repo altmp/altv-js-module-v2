@@ -1,8 +1,6 @@
 // clang-format off
-const alt = __alt;
 const serverScriptEventType = __serverScriptEventType;
 const clientScriptEventType = __clientScriptEventType;
-
 const cppEventsMap = new Map();
 const customEventsMap = new Map();
 

@@ -1,5 +1,4 @@
 // clang-format off
-const alt = __alt;
 const primordials = {};
 
 const colorRegExp = /\u001b\[\d\d?m/g;

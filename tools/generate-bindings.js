@@ -87,8 +87,16 @@ async function* getBindingFiles(dir) {
     }
 }
 
+/**
+ * @param {string} src
+ */
 function getBindingCodeChars(src) {
-    const chars = src.split("").map((char) => char.charCodeAt(0));
+    // This const has to be added so the bindings work at runtime,
+    // as the global __alt is removed after loading the bindings
+    let code;
+    if(!src.includes("const alt =")) code = `const alt = __alt;\n${src}`;
+    else code = src;
+    const chars = code.split("").map((char) => char.charCodeAt(0));
     return chars.toString();
 }
 
