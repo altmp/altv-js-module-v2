@@ -11,9 +11,13 @@ class CNodeResource : public js::IResource
     uv_loop_t* uvLoop = nullptr;
     v8::Global<v8::Object> asyncResource;
     node::async_context asyncContext;
+    bool envStarted = false;
+    bool startError = false;
 
 public:
     CNodeResource(alt::IResource* resource, v8::Isolate* isolate) : IResource(resource, isolate) {}
+
+    void EnvStarted(v8::Local<v8::Value> exports);
 
     bool Start() override;
     bool Stop() override;

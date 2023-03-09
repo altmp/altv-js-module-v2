@@ -3,6 +3,26 @@
 #include "Bindings.h"
 #include "Event.h"
 
+static void ResourceStarted(js::FunctionContext& ctx)
+{
+    v8::Local<v8::Value> exports;
+    if(!ctx.GetArgRaw(0, exports)) return;
+    if(!exports->IsObject()) return;
+    static_cast<CNodeResource*>(ctx.GetResource())->EnvStarted(exports);
+}
+
+void CNodeResource::EnvStarted(v8::Local<v8::Value> exports)
+{
+    if(exports->IsNullOrUndefined())
+    {
+        startError = true;
+        return;
+    }
+    envStarted = true;
+    alt::MValueDict exportsDict = js::JSToMValue(exports).As<alt::IMValueDict>();
+    GetResource()->SetExports(exportsDict);
+}
+
 bool CNodeResource::Start()
 {
     v8::Locker locker(isolate);
@@ -29,10 +49,20 @@ bool CNodeResource::Start()
 
     const js::Binding& bootstrapper = js::Binding::Get("server/bootstrap.js");
     if(!bootstrapper.IsValid()) return false;
+
+    js::TemporaryGlobalExtension altModuleExtension(_context, "__altModule", js::Module::Get("alt").GetNamespace(this));
+    js::TemporaryGlobalExtension altSharedModuleExtension(_context, "__altSharedModule", js::Module::Get("alt-shared").GetNamespace(this));
+    js::TemporaryGlobalExtension altServerModuleExtension(_context, "__resourceStarted", js::WrapFunction(ResourceStarted)->GetFunction(_context).ToLocalChecked());
     node::LoadEnvironment(env, bootstrapper.GetSource().c_str());
 
     asyncResource.Reset(isolate, v8::Object::New(isolate));
     asyncContext = node::EmitAsyncInit(isolate, asyncResource.Get(isolate), "CNodeResource");
+
+    while(!envStarted && !startError)
+    {
+        CNodeRuntime::Instance().OnTick();
+        OnTick();
+    }
 
     IResource::Started();
 

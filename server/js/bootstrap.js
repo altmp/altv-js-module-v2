@@ -1,56 +1,131 @@
 // clang-format off
+// clang-format off
+const { esmLoader } = require("internal/process/esm_loader");
+const { translators } = require("internal/modules/esm/translators");
+const { ModuleWrap } = internalRequire("internal/test/binding").internalBinding("module_wrap");
+const path = require("path");
 const alt = process._linkedBinding("alt");
+const dns = require('dns');
+const url = require("url");
 
-alt.log("Bootstrapper loaded");
+(async () => {
+  const resource = alt.Resource.current;
+  let _exports = null;
 
-alt.Events.onResourceStart(({ resourceName }) => {
-    alt.log(`Resource ${resourceName} started`);
-});
+  // We need this handler so that NodeJS doesn't
+  // crash the process on oncaught exceptions
+  process.on("uncaughtException", (err) => {
+    alt.logError(`Uncaught exception: ${err.stack ? `${err.stack}` : `${err.message}`}`);
+  });
 
-alt.Events.onResourceStop(({ resourceName }) => {
-    alt.log(`Resource ${resourceName} stopped`);
-});
+  // Allows users to use "localhost" address instead of 127.0.0.1 for tcp connections (e.g. database)
+  // https://github.com/nodejs/node/issues/40702#issuecomment-958157082
+  dns.setDefaultResultOrder('ipv4first');
 
-alt.Events.on("test", (arg) => {
-    alt.log("got test: " + arg);
-});
+  try {
+    setupImports();
 
-const vehicle = new alt.Vehicle("t20");
+    // Get the path to the main file for this resource, and load it
+    const _path = path.resolve(resource.path, resource.main);
+    _exports = await esmLoader.import(url.pathToFileURL(_path).toString(), "", {});
+  } catch (e) {
+    alt.logError(e);
+  }
 
-/*
-alt.log("meta before: " + vehicle.meta.test);
-vehicle.meta.test = "abc";
-alt.log("meta after: " + vehicle.meta.test);
-delete vehicle.meta.test;
-alt.log("meta after delete: " + vehicle.meta.test);
+  __resourceStarted(_exports);
+})();
 
-vehicle.meta.otherTest = 23;
-alt.log("metas:");
-for (let key in vehicle.meta) {
-    alt.log(key + ": " + vehicle.meta[key]);
+// Sets up our custom way of importing alt:V resources
+function setupImports() {
+  const altModuleImportPrefix = "@altv";
+  const altResourceImportPrefix = "@resource";
+  const altModuleInternalPrefix = "altmodule";
+  const altResourceInternalPrefix = "altresource";
+
+  translators.set("altresource", async function(url) {
+    const name = url.slice(altResourceImportPrefix.length + 1); // Remove prefix
+    const exports = alt.Resource.get(name).exports;
+    return new ModuleWrap(url, undefined, Object.keys(exports), function() {
+      for (const exportName in exports) {
+        let value;
+        try {
+          value = exports[exportName];
+        } catch {}
+        this.setExport(exportName, value);
+      }
+    });
+  });
+  translators.set("altmodule", async function(url) {
+    const name = url.slice(altModuleImportPrefix.length + 1); // Remove prefix
+    const exports = name === "server" ? __altModule : __altSharedModule;
+    const exportKeys = Object.keys(exports);
+    return new ModuleWrap(url, undefined, exportKeys, function() {
+      for (const exportName in exports) {
+        let value;
+        try {
+          value = exports[exportName];
+        } catch {}
+        this.setExport(exportName, value);
+      }
+    });
+  });
+
+  const _warningPackages = {
+    "node-fetch": "Console hangs"
+  };
+  const customLoaders = [{
+    exports: {
+      resolve(specifier, context, defaultResolve) {
+        if(specifier.startsWith(`${altResourceImportPrefix}/`))
+          return {
+            url: `${altResourceInternalPrefix}:${specifier.slice(altResourceImportPrefix.length + 1)}`,
+            shortCircuit: true
+          };
+
+        if(specifier.startsWith(`${altModuleImportPrefix}/`))
+          return {
+            url: `${altModuleInternalPrefix}:${specifier.slice(altModuleImportPrefix.length + 1)}`,
+            shortCircuit: true
+          };
+
+        if(_warningPackages.hasOwnProperty(specifier)) alt.logWarning(`Using the module "${specifier}" can cause problems. Reason: ${_warningPackages[specifier]}`);
+        return defaultResolve(specifier, context, defaultResolve);
+      },
+      load(url, context, defaultLoad) {
+        if(url.startsWith(`${altResourceInternalPrefix}:`))
+          return {
+            format: "altresource",
+            source: null,
+            shortCircuit: true
+          };
+
+        if(url.startsWith(`${altModuleInternalPrefix}:`)) {
+          const name = url.slice(altModuleInternalPrefix.length + 1); // Remove prefix
+          if(name !== "server" && name !== "shared") {
+            alt.logError("Invalid alt:V module import:", name);
+            return defaultLoad(url, context, defaultLoad);
+          }
+          return {
+              format: "altmodule",
+              source: null,
+              shortCircuit: true
+          };
+        }
+        return defaultLoad(url, context, defaultLoad);
+      },
+    }
+  }];
+  esmLoader.addCustomLoaders(customLoaders);
 }
 
-vehicle.meta.test = "test";
-alt.log("metas2:");
-for (let key in vehicle.meta) {
-    alt.log(key + ": " + vehicle.meta[key]);
+// ***** Utils
+
+// Supresses the warning from NodeJS when importing "super-internal" modules,
+// that the embedder isn't supposed to use
+function internalRequire(id) {
+  const __emitWarning = process.emitWarning;
+  process.emitWarning = () => {};
+  const result = require(id);
+  process.emitWarning = __emitWarning;
+  return result;
 }
-
-console.log(alt.test);
-alt.test = 45;
-console.log(alt.test);
-console.log(alt.test2);
-console.log(alt.Player.shared);
-
-let player = new alt.Player("testabc", 23);
-let player2 = new alt.Player(23, "testabc");
-
-let vehicle = new alt.Vehicle("t20");
-console.log("vehicle 1:", vehicle.getID(), vehicle.getModel(), vehicle.model);
-
-let vehicle2 = new alt.Vehicle(0x6322B39A);
-console.log("vehicle 2:", vehicle.getID(), vehicle.getModel(), vehicle.model);
-
-const interval = new alt.Timers.Interval(1000, () => {console.log("yep cock")});
-alt.log(alt.Timers.Interval);
-*/
