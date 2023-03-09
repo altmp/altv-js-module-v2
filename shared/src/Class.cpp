@@ -3,7 +3,9 @@
 
 void js::Class::Register(v8::Isolate* isolate)
 {
-    ClassTemplate tpl{ isolate, this, ctor ? WrapFunction(ctor) : v8::FunctionTemplate::New(isolate) };
+    ClassTemplate tpl{ isolate,
+                       this,
+                       ctor ? WrapFunction(ctor) : v8::FunctionTemplate::New(isolate, nullptr, v8::Local<v8::Value>(), v8::Local<v8::Signature>(), 0, v8::ConstructorBehavior::kThrow) };
     if(parentClass)
     {
         if(!parentClass->templateMap.contains(isolate)) parentClass->Register(isolate);
