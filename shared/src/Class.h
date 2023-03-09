@@ -36,11 +36,13 @@ namespace js
         void Register(v8::Isolate* isolate);
 
     public:
-        Class(const std::string& _name, FunctionCallback _ctor, ClassInitializationCallback _cb) : name(_name), ctor(_ctor), initCb(_cb)
+        Class(const std::string& _name, FunctionCallback _ctor, ClassInitializationCallback _cb, bool hasExtraExternalField = false)
+            : name(_name), ctor(_ctor), initCb(_cb), internalFieldCount(hasExtraExternalField ? 2 : 0)
         {
             GetAll().push_back(this);
         }
-        Class(const std::string& _name, Class* _parent, FunctionCallback _ctor, ClassInitializationCallback _cb) : name(_name), parentClass(_parent), ctor(_ctor), initCb(_cb)
+        Class(const std::string& _name, Class* _parent, FunctionCallback _ctor, ClassInitializationCallback _cb, bool hasExtraExternalField = false)
+            : name(_name), parentClass(_parent), ctor(_ctor), initCb(_cb), internalFieldCount(hasExtraExternalField ? 2 : 0)
         {
             GetAll().push_back(this);
         }
@@ -65,6 +67,11 @@ namespace js
         void SetInternalFieldCount(int count)
         {
             internalFieldCount = count;
+        }
+
+        v8::Local<v8::Object> Create(v8::Local<v8::Context> context)
+        {
+            return templateMap.at(context->GetIsolate()).Get()->GetFunction(context).ToLocalChecked()->NewInstance(context).ToLocalChecked();
         }
 
         static void Initialize(v8::Isolate* isolate);
