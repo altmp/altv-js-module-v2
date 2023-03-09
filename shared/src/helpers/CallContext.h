@@ -81,6 +81,14 @@ namespace js
         }
 
         template<class T>
+        T* GetExtraInternalFieldValue()
+        {
+            if(errored) return nullptr;
+            if(info.This()->InternalFieldCount() != 2) return nullptr;
+            return static_cast<T*>(info.This()->GetAlignedPointerFromInternalField(1));
+        }
+
+        template<class T>
         void Return(const T& value)
         {
             if(errored) return;

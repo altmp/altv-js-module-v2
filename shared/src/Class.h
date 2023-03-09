@@ -69,9 +69,11 @@ namespace js
             internalFieldCount = count;
         }
 
-        v8::Local<v8::Object> Create(v8::Local<v8::Context> context)
+        v8::Local<v8::Object> Create(v8::Local<v8::Context> context, void* extraInternalFieldValue = nullptr)
         {
-            return templateMap.at(context->GetIsolate()).Get()->GetFunction(context).ToLocalChecked()->NewInstance(context).ToLocalChecked();
+            v8::Local<v8::Object> obj = templateMap.at(context->GetIsolate()).Get()->GetFunction(context).ToLocalChecked()->NewInstance(context).ToLocalChecked();
+            if(extraInternalFieldValue) obj->SetAlignedPointerInInternalField(1, extraInternalFieldValue);
+            return obj;
         }
 
         static void Initialize(v8::Isolate* isolate);
