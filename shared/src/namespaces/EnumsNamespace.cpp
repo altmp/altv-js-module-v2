@@ -20,7 +20,6 @@ extern js::Namespace enumsNamespace("Enums", [](js::NamespaceTemplate& tpl) {
     tpl.StaticLazyProperty("Permission", GetEnumObject<alt::Permission>);
     tpl.StaticLazyProperty("PermissionState", GetEnumObject<alt::PermissionState>);
     tpl.StaticLazyProperty("ExplosionType", GetEnumObject<alt::CExplosionEvent::ExplosionType>);
-    tpl.StaticLazyProperty("KeyState", GetEnumObject<alt::KeyState>);
     tpl.StaticLazyProperty("BlipType", GetEnumObject<alt::IBlip::BlipType>);
     tpl.StaticLazyProperty("ColShapeType", GetEnumObject<alt::IColShape::ColShapeType>);
     tpl.StaticLazyProperty("VehicleModelType", GetEnumObject<alt::VehicleModelInfo::Type>);
