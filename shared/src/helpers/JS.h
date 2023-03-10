@@ -63,10 +63,11 @@ namespace js
             if(configurable && writable && enumerable) object->CreateDataProperty(context, js::JSValue(key), js::JSValue(val));
             else
             {
-                v8::PropertyDescriptor desc(js::JSValue(val), writable);
-                desc.set_configurable(configurable);
-                desc.set_enumerable(enumerable);
-                object->DefineProperty(context, js::JSValue(key), desc);
+                v8::PropertyAttribute attr = v8::None;
+                if(!configurable) attr |= v8::PropertyAttribute::DontDelete;
+                if(!writable) attr |= v8::PropertyAttribute::ReadOnly;
+                if(!enumerable) attr |= v8::PropertyAttribute::DontEnum;
+                object->DefineOwnProperty(context, js::JSValue(key), attr);
             }
         }
     };
