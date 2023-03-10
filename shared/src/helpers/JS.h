@@ -46,8 +46,19 @@ namespace js
             return result.has_value() ? result.value() : T();
         }
 
+        void SetAccessor(const std::string& key, v8::AccessorNameGetterCallback getter, v8::AccessorNameSetterCallback setter = nullptr, void* data = nullptr)
+        {
+            object->SetAccessor(context,
+                                js::JSValue(key),
+                                getter,
+                                setter,
+                                data ? v8::External::New(context->GetIsolate(), data) : v8::MaybeLocal<v8::Value>(),
+                                v8::DEFAULT,
+                                setter != nullptr ? v8::PropertyAttribute::None : v8::PropertyAttribute::ReadOnly);
+        }
+
         template<typename T>
-        void AddProperty(const std::string& key, const T& val, bool configurable = true, bool writable = true, bool enumerable = true)
+        void SetProperty(const std::string& key, const T& val, bool configurable = true, bool writable = true, bool enumerable = true)
         {
             if(configurable && writable && enumerable) object->CreateDataProperty(context, js::JSValue(key), js::JSValue(val));
             else
