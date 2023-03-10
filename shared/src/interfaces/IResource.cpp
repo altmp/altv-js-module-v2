@@ -92,6 +92,19 @@ void js::IResource::RegisterBindingExport(const std::string& name, const std::st
     bindingExports.insert({ name, Persistent<v8::Value>(isolate, exportedValue) });
 }
 
+static void DebugLog(js::FunctionContext& ctx)
+{
+    std::string logMsg;
+    for(int i = 0; i < ctx.GetArgCount(); i++)
+    {
+        std::string arg;
+        if(!ctx.GetArg(i, arg)) return;
+        logMsg += arg;
+        if(i != ctx.GetArgCount() - 1) logMsg += " ";
+    }
+    alt::ICore::Instance().LogInfo(logMsg);
+}
+
 void js::IResource::InitializeBindings(Binding::Scope scope, Module& altModule)
 {
     std::vector<Binding*> bindings = Binding::GetBindingsForScope(scope);
@@ -102,6 +115,7 @@ void js::IResource::InitializeBindings(Binding::Scope scope, Module& altModule)
         TemporaryGlobalExtension clientScriptEventExtension(ctx, "__clientScriptEventType", js::JSValue((int)alt::CEvent::Type::CLIENT_SCRIPT_EVENT));
         TemporaryGlobalExtension serverScriptEventExtension(ctx, "__serverScriptEventType", js::JSValue((int)alt::CEvent::Type::SERVER_SCRIPT_EVENT));
         TemporaryGlobalExtension getBindingExtension(ctx, "getBinding", WrapFunction(GetBindingNamespaceWrapper)->GetFunction(ctx).ToLocalChecked());
+        TemporaryGlobalExtension debugLogExtension(ctx, "debugLog", WrapFunction(DebugLog)->GetFunction(ctx).ToLocalChecked());
 
         for(auto binding : bindings) InitializeBinding(binding);
         RegisterBindingExports();
