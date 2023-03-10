@@ -92,7 +92,19 @@ namespace js
         void Return(const T& value)
         {
             if(errored) return;
-            info.GetReturnValue().Set(JSValue(value));
+            // Use fast primitive setters if possible
+            if constexpr(std::is_same_v<T, bool> || std::is_same_v<T, double> || std::is_same_v<T, float> || std::is_same_v<T, int32_t> || std::is_same_v<T, uint32_t>)
+                info.GetReturnValue().Set(value);
+            else if constexpr(std::is_same_v<T, std::nullptr_t>)
+                info.GetReturnValue().SetNull();
+            else if constexpr(std::is_same_v<T, std::string>)
+            {
+                if(value.length() == 0) info.GetReturnValue().SetEmptyString();
+                else
+                    info.GetReturnValue().Set(JSValue(value));
+            }
+            else
+                info.GetReturnValue().Set(JSValue(value));
         }
     };
 
