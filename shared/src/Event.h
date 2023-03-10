@@ -45,6 +45,8 @@ namespace js
         }
         static void CallEventBinding(bool custom, int type, EventArgs& args, IResource* resource);
 
+        static void CancelEventCallback(const v8::FunctionCallbackInfo<v8::Value>& info);
+
     public:
         Event(alt::CEvent::Type _type, EventArgsCallback _argsCb) : type(_type), argsCb(_argsCb)
         {

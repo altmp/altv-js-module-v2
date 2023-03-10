@@ -1500,6 +1500,7 @@ namespace js
         }
         void StaticProperty(const std::string& name, PropertyCallback getter, PropertyCallback setter = nullptr)
         {
+            // todo: use native data property
             Get()->SetAccessorProperty(js::JSValue(name), WrapProperty(getter), setter ? WrapProperty(setter) : v8::Local<v8::FunctionTemplate>());
         }
 

@@ -14,6 +14,15 @@ void js::Event::CallEventBinding(bool custom, int type, EventArgs& args, IResour
     onEventFunc->Call(context, v8::Undefined(isolate), funcArgs.size(), funcArgs.data());
 }
 
+void js::Event::CancelEventCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    alt::CEvent* ev = static_cast<alt::CEvent*>(info.Data().As<v8::External>()->Value());
+    if(ev->WasCancelled()) return;
+    ev->Cancel();
+    js::Object thisObj{ info.This() };
+    thisObj.Set("cancelled", true);
+}
+
 void js::Event::SendEvent(const alt::CEvent* ev, IResource* resource)
 {
     Event* eventHandler = GetEventHandler(ev->GetType());
@@ -21,6 +30,8 @@ void js::Event::SendEvent(const alt::CEvent* ev, IResource* resource)
 
     EventArgs eventArgs;
     eventHandler->argsCb(ev, eventArgs);
+    eventArgs.Set("cancel", v8::Function::New(resource->GetContext(), CancelEventCallback, v8::External::New(resource->GetIsolate(), (void*)ev)).ToLocalChecked());
+    eventArgs.Set("cancelled", ev->WasCancelled());
 
     CallEventBinding(false, (int)ev->GetType(), eventArgs, resource);
 }
