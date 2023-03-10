@@ -1,5 +1,38 @@
 #include "IResource.h"
 
+alt::MValue js::IResource::Function::Call(alt::MValueArgs args) const
+{
+    auto& core = alt::ICore::Instance();
+    if(!resource->GetResource()->IsStarted()) return core.CreateMValueNone();
+
+    v8::Isolate* isolate = resource->GetIsolate();
+    v8::Local<v8::Context> context = resource->GetContext();
+    v8::Locker locker(isolate);
+    v8::Isolate::Scope isolateScope(isolate);
+    v8::HandleScope handleScope(isolate);
+    v8::Context::Scope contextScope(context);
+
+    v8::Local<v8::Function> func = function.Get(isolate);
+    std::vector<v8::Local<v8::Value>> jsArgs;
+    jsArgs.reserve(args.GetSize());
+    for(size_t i = 0; i < args.GetSize(); ++i) jsArgs.push_back(MValueToJS(args[i]));
+
+    // todo: function helper
+    v8::MaybeLocal<v8::Value> maybeResult = func->Call(context, v8::Undefined(isolate), jsArgs.size(), jsArgs.data());
+    if(maybeResult.IsEmpty()) return core.CreateMValueNone();
+    return JSToMValue(maybeResult.ToLocalChecked());
+}
+
+void js::IResource::Function::ExternalFunctionCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    alt::MValueFunctionConst* func = static_cast<alt::MValueFunctionConst*>(info.Data().As<v8::External>()->Value());
+    alt::MValueArgs args;
+    args.Reserve(info.Length());
+    for(size_t i = 0; i < info.Length(); ++i) args.Push(JSToMValue(info[i], false));
+    alt::MValue retValue = (*func)->Call(args);
+    info.GetReturnValue().Set(MValueToJS(retValue));
+}
+
 void js::IResource::GetBindingNamespaceWrapper(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;

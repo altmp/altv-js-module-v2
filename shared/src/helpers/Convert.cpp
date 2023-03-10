@@ -45,12 +45,12 @@ alt::MValue js::JSToMValue(v8::Local<v8::Value> val, bool allowFunction)
         {
             if(!allowFunction)
             {
-                // todo: error
+                alt::ICore::Instance().LogError("Cannot convert function to MValue");
                 return core.CreateMValueNone();
             }
-            // todo: support functions
-            v8::Local<v8::Function> v8Func = val.As<v8::Function>();
-            return core.CreateMValueNone();
+            v8::Local<v8::Function> jsFunc = val.As<v8::Function>();
+            IResource::Function* func = new IResource::Function(ctx, jsFunc);
+            return core.CreateMValueFunction(func);
         }
         else if(val->IsArrayBuffer())
         {
@@ -204,12 +204,9 @@ v8::Local<v8::Value> js::MValueToJS(alt::MValueConst val)
         }
         case alt::IMValue::Type::FUNCTION:
         {
-            // todo: support functions
             alt::MValueFunctionConst fn = val.As<alt::IMValueFunction>();
             v8::Local<v8::External> extFn = v8::External::New(isolate, new alt::MValueFunctionConst(fn));
-
-            v8::Local<v8::Function> func;
-            return func;
+            return v8::Function::New(ctx, IResource::Function::ExternalFunctionCallback, extFn).ToLocalChecked();
         }
         case alt::IMValue::Type::VECTOR3:
         {

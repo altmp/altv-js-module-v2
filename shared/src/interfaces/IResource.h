@@ -15,6 +15,20 @@ namespace js
 {
     class IResource : public alt::IResource::Impl, public IScriptObjectHandler
     {
+    public:
+        class Function : public alt::IMValueFunction::Impl
+        {
+            IResource* resource;
+            Persistent<v8::Function> function;
+
+        public:
+            Function(v8::Local<v8::Context> context, v8::Local<v8::Function> _function) : resource(GetFromContext(context)), function(resource->GetIsolate(), _function) {}
+
+            alt::MValue Call(alt::MValueArgs args) const override;
+
+            static void ExternalFunctionCallback(const v8::FunctionCallbackInfo<v8::Value>& info);
+        };
+
     protected:
         static constexpr int ContextInternalFieldIdx = 1;
 
