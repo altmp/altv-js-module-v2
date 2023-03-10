@@ -93,6 +93,7 @@ namespace js
     {
         return MValueToJS(mvalue);
     }
+    v8::Local<v8::Value> JSValue(alt::IBaseObject* object);
 
     // Converts a JS value to a C++ value
     inline std::string CppValue(v8::Local<v8::Name> val)
