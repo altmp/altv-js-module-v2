@@ -43,7 +43,7 @@ function setupImports() {
   const altResourceInternalPrefix = "altresource";
 
   translators.set("altresource", async function(url) {
-    const name = url.slice(altResourceImportPrefix.length + 1); // Remove prefix
+    const name = url.slice(altResourceInternalPrefix.length + 1); // Remove prefix
     const exports = alt.Resource.get(name).exports;
     return new ModuleWrap(url, undefined, Object.keys(exports), function() {
       for (const exportName in exports) {
@@ -56,7 +56,7 @@ function setupImports() {
     });
   });
   translators.set("altmodule", async function(url) {
-    const name = url.slice(altModuleImportPrefix.length + 1); // Remove prefix
+    const name = url.slice(altModuleInternalPrefix.length + 1); // Remove prefix
     const exports = name === "server" ? __altModule : __altSharedModule;
     const exportKeys = Object.keys(exports);
     return new ModuleWrap(url, undefined, exportKeys, function() {
