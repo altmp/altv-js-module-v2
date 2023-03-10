@@ -32,7 +32,7 @@ namespace js
     public:
         IScriptObjectHandler() = default;
 
-        ScriptObject* CreateScriptObject(v8::Local<v8::Context> context, alt::IBaseObject* object);
+        ScriptObject* GetOrCreateScriptObject(v8::Local<v8::Context> context, alt::IBaseObject* object);
         void DestroyScriptObject(alt::IBaseObject* object);
         void BindScriptObject(v8::Local<v8::Object> thisObject, alt::IBaseObject* object);
 

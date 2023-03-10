@@ -71,7 +71,7 @@ namespace js
 
         v8::Local<v8::Object> Create(v8::Local<v8::Context> context, void* extraInternalFieldValue = nullptr)
         {
-            v8::Local<v8::Object> obj = templateMap.at(context->GetIsolate()).Get()->GetFunction(context).ToLocalChecked()->NewInstance(context).ToLocalChecked();
+            v8::Local<v8::Object> obj = templateMap.at(context->GetIsolate()).Get()->InstanceTemplate()->NewInstance(context).ToLocalChecked();
             if(extraInternalFieldValue) obj->SetAlignedPointerInInternalField(1, extraInternalFieldValue);
             return obj;
         }

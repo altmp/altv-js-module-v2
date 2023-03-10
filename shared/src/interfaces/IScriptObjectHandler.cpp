@@ -1,7 +1,7 @@
 #include "IScriptObjectHandler.h"
 #include "Class.h"
 
-js::ScriptObject* js::IScriptObjectHandler::CreateScriptObject(v8::Local<v8::Context> context, alt::IBaseObject* object)
+js::ScriptObject* js::IScriptObjectHandler::GetOrCreateScriptObject(v8::Local<v8::Context> context, alt::IBaseObject* object)
 {
     js::ScriptObject* existingObject = GetScriptObject(object);
     if(existingObject) return existingObject;
