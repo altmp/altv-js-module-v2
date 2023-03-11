@@ -31,7 +31,7 @@ static void GetModel(js::FunctionContext& ctx)
 extern js::Class sharedVehicleClass;
 extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, Ctor, [](js::ClassTemplate& tpl)
 {
-    js::IScriptObjectHandler::BindClassToType(alt::IBaseObject::Type::VEHICLE, &vehicleClass);
+    tpl.BindToType(alt::IBaseObject::Type::VEHICLE);
 
     tpl.Method("getID", GetID);
     tpl.Method("getModel", GetModel);

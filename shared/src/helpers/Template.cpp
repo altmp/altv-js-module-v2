@@ -105,3 +105,8 @@ v8::Local<v8::FunctionTemplate> js::ClassTemplate::GetPropertyGetter(v8::Isolate
     }
     return tpl;
 }
+
+void js::ClassTemplate::BindToType(alt::IBaseObject::Type type)
+{
+    IScriptObjectHandler::BindClassToType(type, class_);
+}

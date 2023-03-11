@@ -2175,5 +2175,7 @@ namespace js
         {
             Get()->PrototypeTemplate()->SetCallAsFunctionHandler(Wrapper::FunctionHandler, v8::External::New(GetIsolate(), cb));
         }
+
+        void BindToType(alt::IBaseObject::Type type);
     };
 }  // namespace js
