@@ -30,6 +30,23 @@ export class Event {
         for(let handler of handlers) handler(...ctx.args);
     }
 
+    static #getEventHandlers(name, custom) {
+        const typeMap = custom ? customEventsMap : cppEventsMap;
+        const type = typeMap.get(name);
+        const map = custom ? Event.#customHandlers : Event.#handlers;
+        return map.get(type);
+    }
+
+    static #getEventFunc(name, eventName, custom) {
+        const func = Event.#registerCallback.bind(undefined, name, eventName, custom);
+        Object.defineProperties(func, {
+            "listeners": {
+                get: Event.#getEventHandlers.bind(undefined, eventName, custom)
+            }
+        });
+        return func;
+    }
+
     static subscribeScriptEvent(local, name, handler) {
         if(typeof name !== "string") throw new Error(`Event name is not a string`);
         if(typeof handler !== "function") throw new Error(`Handler for ${local ? "local" : "remote"} script event '${name}' is not a function`);
@@ -42,7 +59,7 @@ export class Event {
     // eventName = value of the enum in C++
     // name = event name (e.g. `PlayerConnect` is accessible via `alt.Events.onPlayerConnect`)
     static register(eventName, name, custom = false) {
-        alt.Events[`on${name}`] = Event.#registerCallback.bind(undefined, name, eventName, custom);
+        alt.Events[`on${name}`] = Event.#getEventFunc(name, eventName, custom);
     }
 
     static invoke(eventType, ctx, custom) {
