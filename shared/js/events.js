@@ -40,7 +40,10 @@ export class Event {
         const handlers = local ? Event.#localScriptEventHandlers.get(name) : Event.#remoteScriptEventHandlers.get(name);
         if(!handlers) return;
 
-        for(let handler of handlers) handler(...ctx.args);
+        for(let handler of handlers) {
+            if(alt.isServer && !local) handler(ctx.player, ...ctx.args);
+            else handler(...ctx.args);
+        }
     }
 
     static #getEventHandlers(name, custom) {
@@ -77,7 +80,7 @@ export class Event {
     }
 
     static invoke(eventType, ctx, custom) {
-        if(eventType === serverScriptEventType) Event.#handleScriptEvent(ctx, !alt.isClient);
+        if(eventType === serverScriptEventType) Event.#handleScriptEvent(ctx, alt.isServer);
         else if(eventType === clientScriptEventType) Event.#handleScriptEvent(ctx, alt.isClient);
 
         const map = custom ? Event.#customHandlers : Event.#handlers;
