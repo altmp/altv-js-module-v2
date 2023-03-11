@@ -94,6 +94,11 @@ namespace js
         return MValueToJS(mvalue);
     }
     v8::Local<v8::Value> JSValue(alt::IBaseObject* object);
+    v8::Local<v8::Value> JSValue(alt::Vector2f vec);
+    v8::Local<v8::Value> JSValue(alt::Vector3f vec);
+    v8::Local<v8::Value> JSValue(alt::Position pos);
+    v8::Local<v8::Value> JSValue(alt::Rotation rot);
+    v8::Local<v8::Value> JSValue(alt::RGBA rgba);
 
     // Converts a JS value to a C++ value
     inline std::string CppValue(v8::Local<v8::Name> val)
@@ -323,7 +328,7 @@ namespace js
             if(!mvalue) return std::nullopt;
             return mvalue;
         }
-        else if constexpr(std::is_same_v<T, alt::Vector3f>)
+        else if constexpr(std::is_same_v<T, alt::Vector3f> || std::is_same_v<T, alt::Position> || std::is_same_v<T, alt::Rotation>)
         {
             return ToVector3(val);
         }

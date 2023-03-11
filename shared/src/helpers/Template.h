@@ -89,7 +89,15 @@ namespace js
             constexpr bool isEnum = std::is_enum_v<Type>;
             if constexpr(isEnum) (obj->*Setter)(static_cast<Type>(value->Int32Value().ToChecked()));
             else
-                (obj->*Setter)(CppValue<typename std::remove_cv_t<typename std::remove_reference_t<Type>>>(value));
+            {
+                auto val = CppValue<typename std::remove_cv_t<typename std::remove_reference_t<Type>>>(value);
+                if(!val.has_value())
+                {
+                    info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid value")));
+                    return;
+                }
+                (obj->*Setter)(val.value());
+            }
         }
 
         template<class Class, typename Ret, Ret (Class::*Method)()>

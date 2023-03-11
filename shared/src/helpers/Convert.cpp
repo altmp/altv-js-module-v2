@@ -12,6 +12,42 @@ v8::Local<v8::Value> js::JSValue(alt::IBaseObject* object)
     return scriptObject->Get();
 }
 
+v8::Local<v8::Value> js::JSValue(alt::Vector2f vec)
+{
+    v8::Isolate* isolate = v8::Isolate::GetCurrent();
+    IResource* resource = GetCurrentResource(isolate);
+    if(!resource) return v8::Null(isolate);
+    return resource->CreateVector2(vec);
+}
+
+v8::Local<v8::Value> js::JSValue(alt::Vector3f vec)
+{
+    v8::Isolate* isolate = v8::Isolate::GetCurrent();
+    IResource* resource = GetCurrentResource(isolate);
+    if(!resource) return v8::Null(isolate);
+    return resource->CreateVector3(vec);
+}
+
+v8::Local<v8::Value> js::JSValue(alt::Position pos)
+{
+    alt::Vector3f vec = pos;
+    return JSValue(vec);
+}
+
+v8::Local<v8::Value> js::JSValue(alt::Rotation rot)
+{
+    alt::Vector3f vec = rot;
+    return JSValue(vec);
+}
+
+v8::Local<v8::Value> js::JSValue(alt::RGBA rgba)
+{
+    v8::Isolate* isolate = v8::Isolate::GetCurrent();
+    IResource* resource = GetCurrentResource(isolate);
+    if(!resource) return v8::Null(isolate);
+    return resource->CreateRGBA(rgba);
+}
+
 alt::MValue js::JSToMValue(v8::Local<v8::Value> val, bool allowFunction)
 {
     alt::ICore& core = alt::ICore::Instance();
