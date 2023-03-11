@@ -8,7 +8,7 @@ static void Ctor(js::FunctionContext& ctx)
     if(!ctx.CheckArgCount(2)) return;
 
     std::string name;
-    if(!ctx.GetArg(0, name, js::Type::String)) return;
+    if(!ctx.GetArg(0, name, js::Type::STRING)) return;
 
     std::string name2;
     if(!ctx.GetArg(1, name2)) return;

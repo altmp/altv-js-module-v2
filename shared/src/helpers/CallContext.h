@@ -139,7 +139,7 @@ namespace js
 
         Type GetArgType(int index)
         {
-            if(argTypes[index] != Type::Invalid) return argTypes[index];
+            if(argTypes[index] != Type::INVALID) return argTypes[index];
             Type argType = GetType(info[index], GetResource());
             argTypes[index] = argType;
             return argType;
@@ -154,10 +154,10 @@ namespace js
 
         // If no type to check is specified, it will try to convert the value to the specified type
         template<class T>
-        bool GetArg(int index, T& outValue, Type typeToCheck = Type::Invalid)
+        bool GetArg(int index, T& outValue, Type typeToCheck = Type::INVALID)
         {
             if(errored) return false;
-            if(typeToCheck != Type::Invalid && !CheckArgType(index, typeToCheck)) return false;
+            if(typeToCheck != Type::INVALID && !CheckArgType(index, typeToCheck)) return false;
 
             std::optional<T> result = CppValue<T>(info[index]);
             if(result.has_value())
@@ -172,13 +172,13 @@ namespace js
         {
             if(errored) return false;
             Type argType = GetArgType(index);
-            if(argType == Type::String)
+            if(argType == Type::STRING)
             {
                 std::string str = CppValue(info[index].As<v8::String>());
                 outValue = alt::ICore::Instance().Hash(str.c_str());
                 return true;
             }
-            else if(argType == Type::Number)
+            else if(argType == Type::NUMBER)
             {
                 outValue = (uint32_t)CppValue(info[index].As<v8::Number>());
                 return true;
@@ -198,11 +198,11 @@ namespace js
     class PropertyContextBase : public CallContext<T>
     {
         v8::Local<v8::Value> value;
-        Type valueType = Type::Invalid;
+        Type valueType = Type::INVALID;
 
         Type GetValueType()
         {
-            if(valueType != Type::Invalid) return valueType;
+            if(valueType != Type::INVALID) return valueType;
             valueType = GetType(value, this->GetResource());
             return valueType;
         }
@@ -217,10 +217,10 @@ namespace js
         }
 
         template<class T>
-        bool GetValue(T& outValue, Type typeToCheck = Type::Invalid)
+        bool GetValue(T& outValue, Type typeToCheck = Type::INVALID)
         {
             if(this->errored) return false;
-            if(typeToCheck != Type::Invalid && !CheckValueType(typeToCheck)) return false;
+            if(typeToCheck != Type::INVALID && !CheckValueType(typeToCheck)) return false;
 
             std::optional<T> result = CppValue<T>(value);
             if(result.has_value())
