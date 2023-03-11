@@ -54,5 +54,4 @@ static js::Module sharedModule("alt-shared", "", { &baseObjectClass, &resourceCl
     module.StaticBindingExport("Vector3", "classes:vector3");
     module.StaticBindingExport("Vector2", "classes:vector2");
     module.StaticBindingExport("RGBA", "classes:rgba");
-    //module.Namespace(sharedEventsNamespace);
 });
