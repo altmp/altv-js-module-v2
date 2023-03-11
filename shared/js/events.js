@@ -88,6 +88,7 @@ export class Event {
 }
 
 alt.Events.on = Event.subscribeScriptEvent.bind(undefined, true);
+alt.Events.onRemote = Event.subscribeScriptEvent.bind(undefined, false);
 if(alt.isClient) {
     alt.Events.onServer = Event.subscribeScriptEvent.bind(undefined, false);
 }
