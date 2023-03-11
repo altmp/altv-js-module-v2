@@ -77,8 +77,8 @@ export class Event {
     }
 
     static invoke(eventType, ctx, custom) {
-        if(eventType === serverScriptEventType) return Event.#handleScriptEvent(ctx, !alt.isClient);
-        if(eventType === clientScriptEventType) return Event.#handleScriptEvent(ctx, alt.isClient);
+        if(eventType === serverScriptEventType) Event.#handleScriptEvent(ctx, !alt.isClient);
+        else if(eventType === clientScriptEventType) Event.#handleScriptEvent(ctx, alt.isClient);
 
         const map = custom ? Event.#customHandlers : Event.#handlers;
         const handlers = map.get(eventType);
