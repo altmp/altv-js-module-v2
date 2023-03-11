@@ -1542,6 +1542,8 @@ namespace js
         {
             Get()->Set(js::JSValue(name), v8::ObjectTemplate::New(GetIsolate()));
         }
+
+        void StaticBindingExport(const std::string& name, const std::string& exportName);
     };
 
     class ClassTemplate : public Template<v8::FunctionTemplate>

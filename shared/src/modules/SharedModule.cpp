@@ -50,5 +50,9 @@ static js::Module sharedModule("alt-shared", "", { &baseObjectClass, &resourceCl
     module.Namespace("Timers");
     module.Namespace("Utils");
     module.Namespace(enumsNamespace);
+
+    module.StaticBindingExport("Vector3", "classes:vector3");
+    module.StaticBindingExport("Vector2", "classes:vector2");
+    module.StaticBindingExport("RGBA", "classes:rgba");
     //module.Namespace(sharedEventsNamespace);
 });

@@ -44,6 +44,3 @@ export class RGBA {
         return new RGBA(obj.r, obj.g, obj.b, obj.a);
     }
 }
-
-// Available globally
-globalThis.RGBA = RGBA;

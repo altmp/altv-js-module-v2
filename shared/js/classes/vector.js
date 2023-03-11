@@ -77,7 +77,3 @@ export class Vector2 {
         return new Vector2(obj.x, obj.y);
     }
 }
-
-// Available globally
-globalThis.Vector3 = Vector3;
-globalThis.Vector2 = Vector2;

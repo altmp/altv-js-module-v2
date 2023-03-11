@@ -88,6 +88,18 @@ void js::ModuleTemplate::Namespace(js::Namespace& namespace_)
     Get()->Set(JSValue(namespace_.GetName()), namespace_.Get(GetIsolate()));
 }
 
+static void StaticBindingExportGetter(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+{
+    js::LazyPropertyContext ctx{ info };
+    std::string exportName = js::CppValue(info.Data().As<v8::String>());
+    ctx.Return(ctx.GetResource()->GetBindingExport(exportName));
+}
+
+void js::ModuleTemplate::StaticBindingExport(const std::string& name, const std::string& exportName)
+{
+    Get()->SetLazyDataProperty(JSValue(name), StaticBindingExportGetter, JSValue(exportName));
+}
+
 v8::Local<v8::FunctionTemplate> js::ClassTemplate::GetPropertyGetter(v8::Isolate* isolate, Class* cls, const std::string& name)
 {
     auto& propertyGetterMap = GetPropertyGetterMap();
