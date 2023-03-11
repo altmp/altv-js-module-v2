@@ -25,6 +25,7 @@ namespace js
     namespace Wrapper
     {
         alt::IBaseObject* GetThisObjectFromInfo(const v8::PropertyCallbackInfo<v8::Value>& info);
+        alt::IBaseObject* GetThisObjectFromInfo(const v8::PropertyCallbackInfo<void>& info);
         alt::IBaseObject* GetThisObjectFromInfo(const v8::FunctionCallbackInfo<v8::Value>& info);
 
         static void FunctionHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
@@ -77,7 +78,7 @@ namespace js
                 info.GetReturnValue().Set(JSValue((obj->*Getter)()));
         }
         template<class Class, typename Type, void (Class::*Setter)(Type)>
-        static void PropertySetterHandler(v8::Local<v8::String>, v8::Local<v8::Value> value, const v8::PropertyCallbackInfo<v8::Value>& info)
+        static void PropertySetterHandler(v8::Local<v8::String>, v8::Local<v8::Value> value, const v8::PropertyCallbackInfo<void>& info)
         {
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
             if(obj == nullptr)
