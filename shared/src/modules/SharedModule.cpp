@@ -50,5 +50,5 @@ static js::Module sharedModule("alt-shared", "", { &baseObjectClass, &resourceCl
     module.Namespace("Timers");
     module.Namespace("Utils");
     module.Namespace(enumsNamespace);
-    module.Namespace(sharedEventsNamespace);
+    //module.Namespace(sharedEventsNamespace);
 });

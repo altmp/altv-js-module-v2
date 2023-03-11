@@ -16,6 +16,7 @@ namespace js
         std::string name;
         NamespaceInitializationCallback initCb;
         Namespace* parent = nullptr;
+        std::unordered_map<v8::Isolate*, NamespaceTemplate> templateMap;
 
     public:
         Namespace(const std::string& _name, NamespaceInitializationCallback _cb) : name(_name), initCb(_cb) {}
@@ -26,10 +27,12 @@ namespace js
             return name;
         }
 
-        v8::Local<v8::ObjectTemplate> Initialize(v8::Isolate* isolate)
+        v8::Local<v8::ObjectTemplate> Get(v8::Isolate* isolate)
         {
-            NamespaceTemplate tpl(isolate, parent ? parent->Initialize(isolate) : v8::ObjectTemplate::New(isolate));
+            if(templateMap.contains(isolate)) return templateMap.at(isolate).Get();
+            NamespaceTemplate tpl(isolate, parent ? parent->Get(isolate) : v8::ObjectTemplate::New(isolate));
             initCb(tpl);
+            templateMap.insert({ isolate, tpl });
             return tpl.Get();
         }
     };

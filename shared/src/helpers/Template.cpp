@@ -80,12 +80,12 @@ void js::Wrapper::DynamicPropertyEnumeratorHandler(const v8::PropertyCallbackInf
 
 void js::ModuleTemplate::Namespace(const std::string& name, js::Namespace& namespace_)
 {
-    Get()->Set(JSValue(name), namespace_.Initialize(GetIsolate()));
+    Get()->Set(JSValue(name), namespace_.Get(GetIsolate()));
 }
 
 void js::ModuleTemplate::Namespace(js::Namespace& namespace_)
 {
-    Get()->Set(JSValue(namespace_.GetName()), namespace_.Initialize(GetIsolate()));
+    Get()->Set(JSValue(namespace_.GetName()), namespace_.Get(GetIsolate()));
 }
 
 v8::Local<v8::FunctionTemplate> js::ClassTemplate::GetPropertyGetter(v8::Isolate* isolate, Class* cls, const std::string& name)
