@@ -39,7 +39,7 @@ static void Log(js::FunctionContext& ctx)
 
 // clang-format off
 extern js::Class baseObjectClass, resourceClass;
-extern js::Namespace enumsNamespace;
+extern js::Namespace enumsNamespace, sharedEventsNamespace;
 static js::Module sharedModule("alt-shared", "", { &baseObjectClass, &resourceClass }, [](js::ModuleTemplate& module)
 {
     module.StaticFunction("log", Log<LogType::INFO>);
@@ -48,7 +48,7 @@ static js::Module sharedModule("alt-shared", "", { &baseObjectClass, &resourceCl
     // todo: maybe a function to set logger settings like depth, numeric seperator etc.
 
     module.Namespace("Timers");
-    module.Namespace("Events");
     module.Namespace("Utils");
-    module.Namespace("Enums", enumsNamespace);
+    module.Namespace(enumsNamespace);
+    module.Namespace(sharedEventsNamespace);
 });
