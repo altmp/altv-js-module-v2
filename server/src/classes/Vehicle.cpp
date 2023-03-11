@@ -10,7 +10,7 @@ static void Ctor(js::FunctionContext& ctx)
     if(!ctx.GetArgAsHash(0, model)) return;
 
     alt::IVehicle* vehicle = alt::ICore::Instance().CreateVehicle(model, { 0, 0, 0 }, { 0, 0, 0 });
-    if(!ctx.Check(vehicle != nullptr, "Failed to create vehicle")) return;
+    if(ctx.Check(vehicle == nullptr, "Failed to create vehicle")) return;
 
     ctx.SetThisObject(vehicle);
 }

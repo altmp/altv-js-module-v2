@@ -2,8 +2,8 @@
 #include "cpp-sdk/ICore.h"
 
 // clang-format off
-extern js::Class sharedWorldEntityClass;
-extern js::Class sharedEntityClass("Entity", &sharedWorldEntityClass, nullptr, [](js::ClassTemplate& tpl)
+extern js::Class sharedWorldObjectClass;
+extern js::Class sharedEntityClass("Entity", &sharedWorldObjectClass, nullptr, [](js::ClassTemplate& tpl)
 {
     tpl.LazyProperty<alt::IEntity, &alt::IEntity::GetID>("id");
 });
