@@ -7,6 +7,7 @@ static void MetaGetter(js::DynamicPropertyContext<v8::Value>& ctx)
     alt::IBaseObject* obj = ctx.GetParent<alt::IBaseObject>();
     ctx.Return(obj->GetMetaData(ctx.GetProperty()));
 }
+
 static void MetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
 {
     if(!ctx.CheckParent()) return;
@@ -15,6 +16,7 @@ static void MetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
     if(!ctx.GetValue(value)) return;
     obj->SetMetaData(ctx.GetProperty(), value);
 }
+
 static void MetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
 {
     if(!ctx.CheckParent()) return;
@@ -27,6 +29,7 @@ static void MetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
     obj->DeleteMetaData(ctx.GetProperty());
     ctx.Return(true);
 }
+
 static void MetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
 {
     if(!ctx.CheckParent()) return;
