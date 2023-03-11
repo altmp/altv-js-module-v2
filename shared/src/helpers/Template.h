@@ -1535,7 +1535,8 @@ namespace js
     public:
         ModuleTemplate(v8::Isolate* isolate, v8::Local<v8::ObjectTemplate> tpl) : Template(isolate, tpl) {}
 
-        void Namespace(const std::string& name, Namespace& namespace_);
+        void Namespace(const std::string& name, js::Namespace& namespace_);
+        void Namespace(js::Namespace& namespace_);
         // Creates an empty namespace that can be extended by JS bindings
         void Namespace(const std::string& name)
         {

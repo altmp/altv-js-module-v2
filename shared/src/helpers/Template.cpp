@@ -83,6 +83,11 @@ void js::ModuleTemplate::Namespace(const std::string& name, js::Namespace& names
     Get()->Set(JSValue(name), namespace_.Initialize(GetIsolate()));
 }
 
+void js::ModuleTemplate::Namespace(js::Namespace& namespace_)
+{
+    Get()->Set(JSValue(namespace_.GetName()), namespace_.Initialize(GetIsolate()));
+}
+
 v8::Local<v8::FunctionTemplate> js::ClassTemplate::GetPropertyGetter(v8::Isolate* isolate, Class* cls, const std::string& name)
 {
     auto& propertyGetterMap = GetPropertyGetterMap();
