@@ -12,15 +12,15 @@ alt::MValue js::IResource::Function::Call(alt::MValueArgs args) const
     v8::HandleScope handleScope(isolate);
     v8::Context::Scope contextScope(context);
 
-    v8::Local<v8::Function> func = function.Get(isolate);
+    v8::Local<v8::Function> jsFunc = function.Get(isolate);
     std::vector<v8::Local<v8::Value>> jsArgs;
     jsArgs.reserve(args.GetSize());
     for(size_t i = 0; i < args.GetSize(); ++i) jsArgs.push_back(MValueToJS(args[i]));
 
-    // todo: function helper
-    v8::MaybeLocal<v8::Value> maybeResult = func->Call(context, v8::Undefined(isolate), jsArgs.size(), jsArgs.data());
-    if(maybeResult.IsEmpty()) return core.CreateMValueNone();
-    return JSToMValue(maybeResult.ToLocalChecked());
+    js::Function func(jsFunc);
+    auto result = func.Call<alt::MValue>(jsArgs);
+    if(!result) return core.CreateMValueNone();
+    return result.value();
 }
 
 void js::IResource::Function::ExternalFunctionCallback(const v8::FunctionCallbackInfo<v8::Value>& info)

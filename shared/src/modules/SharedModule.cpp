@@ -13,8 +13,7 @@ template<LogType Type>
 static void Log(js::FunctionContext& ctx)
 {
     js::IResource* resource = ctx.GetResource();
-    // todo: function helper
-    v8::Local<v8::Function> inspectFunc = resource->GetBindingExport("logging:inspectMultiple").As<v8::Function>();
+    js::Function inspectFunc(resource->GetBindingExport("logging:inspectMultiple").As<v8::Function>());
 
     std::vector<v8::Local<v8::Value>> args;
     args.reserve(ctx.GetArgCount() + 1);
@@ -29,13 +28,13 @@ static void Log(js::FunctionContext& ctx)
         args.push_back(val);
     }
 
-    v8::Local<v8::String> msg = inspectFunc->Call(ctx.GetContext(), v8::Undefined(ctx.GetIsolate()), args.size(), args.data()).ToLocalChecked().As<v8::String>();
-    std::string msgStr = js::CppValue(msg);
-    if constexpr(Type == LogType::INFO) alt::ICore::Instance().LogColored(msgStr);
+    auto msg = inspectFunc.Call<std::string>(args);
+    if(!msg) return;
+    if constexpr(Type == LogType::INFO) alt::ICore::Instance().LogColored(msg.value());
     else if constexpr(Type == LogType::WARN)
-        alt::ICore::Instance().LogWarning(msgStr);
+        alt::ICore::Instance().LogWarning(msg.value());
     else if constexpr(Type == LogType::ERR)
-        alt::ICore::Instance().LogError(msgStr);
+        alt::ICore::Instance().LogError(msg.value());
 }
 
 // clang-format off

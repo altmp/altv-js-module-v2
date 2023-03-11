@@ -107,6 +107,81 @@ namespace js
         }
     };
 
+    class Function
+    {
+        v8::Local<v8::Context> context;
+        v8::Local<v8::Function> function;
+
+        v8::MaybeLocal<v8::Value> CallNative(v8::Local<v8::Value> thisObj, v8::Local<v8::Value>* argv, int argc)
+        {
+            // todo: try/catch
+            return function->Call(context, thisObj, argc, argv);
+        }
+
+    public:
+        Function() : context(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()) {}
+        Function(v8::Local<v8::Function> _function) : function(_function), context(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()) {}
+
+        v8::Local<v8::Function> Get() const
+        {
+            return function;
+        }
+
+        template<typename Ret>
+        std::optional<Ret> Call(const std::vector<v8::Local<v8::Value>>& args)
+        {
+            v8::MaybeLocal<v8::Value> retValue = CallNative(v8::Undefined(context->GetIsolate()), (v8::Local<v8::Value>*)args.data(), args.size());
+            if constexpr(std::is_same_v<Ret, void>) return std::nullopt;
+            else
+            {
+                v8::Local<v8::Value> val;
+                if(!retValue.ToLocal(&val)) return std::nullopt;
+                return js::CppValue<Ret>(val);
+            }
+        }
+
+        template<typename Ret>
+        std::optional<Ret> Call(const Object& thisObj, const std::vector<v8::Local<v8::Value>>& args)
+        {
+            v8::MaybeLocal<v8::Value> retValue = CallNative(thisObj.Get(), (v8::Local<v8::Value>*)args.data(), args.size());
+            if constexpr(std::is_same_v<Ret, void>) return std::nullopt;
+            else
+            {
+                v8::Local<v8::Value> val;
+                if(!retValue.ToLocal(&val)) return std::nullopt;
+                return js::CppValue<Ret>(val);
+            }
+        }
+
+        template<typename Ret, typename... Args>
+        std::optional<Ret> Call(const Args&... args)
+        {
+            v8::Local<v8::Value> argv[] = { js::JSValue(args)... };
+            v8::MaybeLocal<v8::Value> retValue = CallNative(v8::Undefined(context->GetIsolate()), argv, sizeof...(args));
+            if constexpr(std::is_same_v<Ret, void>) return;
+            else
+            {
+                v8::Local<v8::Value> val;
+                if(!retValue.ToLocal(&val)) return std::nullopt;
+                return js::CppValue<Ret>(val);
+            }
+        }
+
+        template<typename Ret, typename... Args>
+        std::optional<Ret> Call(const Object& thisObj, const Args&... args)
+        {
+            v8::Local<v8::Value> argv[] = { js::JSValue(args)... };
+            v8::MaybeLocal<v8::Value> retValue = CallNative(thisObj.Get(), argv, sizeof...(args));
+            if constexpr(std::is_same_v<Ret, void>) return;
+            else
+            {
+                v8::Local<v8::Value> val;
+                if(!retValue.ToLocal(&val)) return std::nullopt;
+                return js::CppValue<Ret>(val);
+            }
+        }
+    };
+
     struct TemporaryGlobalExtension
     {
         std::string name;
