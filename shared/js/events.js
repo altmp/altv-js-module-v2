@@ -22,6 +22,19 @@ export class Event {
         else map.get(type).push(handler);
     }
 
+    static #unregisterCallback(name, eventName, custom, handler) {
+        if(typeof handler !== "function") throw new Error(`Handler for event '${name}' is not a function`);
+
+        const typeMap = custom ? customEventsMap : cppEventsMap;
+        const type = typeMap.get(eventName);
+        const map = custom ? Event.#customHandlers : Event.#handlers;
+        const handlers = map.get(type);
+        if(!handlers) return;
+        const idx = handlers.indexOf(handler);
+        if(idx === -1) return;
+        handlers.splice(idx, 1);
+    }
+
     static #handleScriptEvent(ctx, local) {
         const name = ctx.eventName;
         const handlers = local ? Event.#localScriptEventHandlers.get(name) : Event.#remoteScriptEventHandlers.get(name);
@@ -42,8 +55,9 @@ export class Event {
         Object.defineProperties(func, {
             "listeners": {
                 get: Event.#getEventHandlers.bind(undefined, eventName, custom)
-            }
+            },
         });
+        func.remove = Event.#unregisterCallback.bind(undefined, name, eventName, custom);
         return func;
     }
 
