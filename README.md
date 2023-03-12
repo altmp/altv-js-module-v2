@@ -7,3 +7,8 @@
 - [X] Function exports/imports
 - [ ] Event toggle
 - [X] Function helper
+
+## Docs
+
+- [ ] Naming guidelines
+- [ ] Adding the API
