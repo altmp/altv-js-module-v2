@@ -272,7 +272,7 @@ namespace js
             std::optional<alt::IBaseObject*> object = CppValue<alt::IBaseObject*>(parent.As<v8::Value>());
             if(!object.has_value()) return nullptr;
             parentObj = object.value();
-            return parentObj;
+            return dynamic_cast<T*>(parentObj);
         }
 
         const std::string& GetProperty()
