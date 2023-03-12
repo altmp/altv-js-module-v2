@@ -30,11 +30,11 @@ static void Log(js::FunctionContext& ctx)
 
     auto msg = inspectFunc.Call<std::string>(args);
     if(!msg) return;
-    if constexpr(Type == LogType::INFO) alt::ICore::Instance().LogColored(msg.value());
+    if constexpr(Type == LogType::INFO) alt::ICore::Instance().LogColored(msg.value(), resource->GetResource());
     else if constexpr(Type == LogType::WARN)
-        alt::ICore::Instance().LogWarning(msg.value());
+        alt::ICore::Instance().LogWarning(msg.value(), resource->GetResource());
     else if constexpr(Type == LogType::ERR)
-        alt::ICore::Instance().LogError(msg.value());
+        alt::ICore::Instance().LogError(msg.value(), resource->GetResource());
 }
 
 // clang-format off
