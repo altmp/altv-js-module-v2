@@ -53,6 +53,7 @@ To get a previously registered binding somewhere in the code, use `IResource::Ge
 This function also optionally has a template argument to get the export in the right type, which defaults to `v8::Value`.
 
 > NOTE: The type passed to the template argument has to inherit from `v8::Value`, e.g. `v8::Boolean` or `v8::String`.
+> Or alternatively from [`js::Value`](helpers.md), e.g. `js::Function`.
 
 Example:
 ```cpp
@@ -61,5 +62,11 @@ v8::Local<v8::Function> myExportedFunction = resource->GetBindingExport<v8::Func
 if(myExportedFunction.IsEmpty()) return; // Check if the binding exists, accessing an empty local otherwise crashes.
 // Do whatever the export is needed for
 ```
-
 > NOTE: Remember that classes have the `v8::Function` type as there is no `v8::Class`.
+
+Or if using the [value helpers](helpers.md) is desired instead:
+```cpp
+js::IResource* resource = GetCurrentResource();
+js::Function myExportedFunction = resource->GetBindingExport<js::Function>("funcs:myExport");
+if(!myExportedFunction.IsValid()) return;
+```

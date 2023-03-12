@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <type_traits>
 
 #include "v8.h"
 #include "cpp-sdk/SDK.h"
@@ -137,11 +138,21 @@ namespace js
             RegisterBindingExport("logging:inspectMultiple", "shared/logging.js", "inspectMultiple");
         }
         template<typename T = v8::Value>
-        v8::Local<T> GetBindingExport(const std::string& name)
+        auto GetBindingExport(const std::string& name)
         {
-            static_assert(std::is_base_of_v<v8::Value, T>, "T must inherit from v8::Value");
-            if(!bindingExports.contains(name)) return v8::Local<T>();
-            return bindingExports.at(name).Get(isolate).As<T>();
+            static_assert(std::is_base_of_v<v8::Value, T> || std::is_base_of_v<js::Value, T>, "T must inherit from v8::Value or js::Value");
+            constexpr bool isV8Value = std::is_base_of_v<v8::Value, T>;
+            constexpr bool isHelperValue = std::is_base_of_v<js::Value, T>;
+            if(!bindingExports.contains(name))
+            {
+                if constexpr(isHelperValue) return T();
+                else
+                    return v8::Local<T>();
+            }
+            v8::Local<v8::Value> val = bindingExports.at(name).Get(isolate);
+            if constexpr(isHelperValue) return T(val.As<T::V8Type>());
+            else
+                return val.As<T>();
         }
 
         v8::Local<v8::Object> CreateVector3(alt::Vector3f vec)

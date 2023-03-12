@@ -8,8 +8,25 @@ namespace js
     template<typename T>
     using Persistent = v8::Persistent<T, v8::CopyablePersistentTraits<T>>;
 
-    class Object
+    class Value
     {
+        bool valid = true;
+
+    public:
+        Value() : valid(false) {}
+
+        bool IsValid() const
+        {
+            return valid;
+        }
+    };
+
+    class Object : public Value
+    {
+    public:
+        using V8Type = v8::Object;
+
+    private:
         v8::Local<v8::Context> context;
         v8::Local<v8::Object> object;
 
@@ -72,8 +89,12 @@ namespace js
         }
     };
 
-    class Array
+    class Array : public Value
     {
+    public:
+        using V8Type = v8::Array;
+
+    private:
         v8::Local<v8::Context> context;
         v8::Local<v8::Array> array;
         int currentIdx = 0;
@@ -107,8 +128,12 @@ namespace js
         }
     };
 
-    class Function
+    class Function : public Value
     {
+    public:
+        using V8Type = v8::Function;
+
+    private:
         v8::Local<v8::Context> context;
         v8::Local<v8::Function> function;
 
