@@ -91,7 +91,7 @@ alt::MValue js::JSToMValue(v8::Local<v8::Value> val, bool allowFunction)
         {
             if(!allowFunction)
             {
-                alt::ICore::Instance().LogError("Cannot convert function to MValue");
+                Logger::Error("Cannot convert function to MValue");
                 return core.CreateMValueNone();
             }
             v8::Local<v8::Function> jsFunc = val.As<v8::Function>();
@@ -278,7 +278,7 @@ v8::Local<v8::Value> js::MValueToJS(alt::MValueConst val)
             std::memcpy(v8Buffer->GetBackingStore()->Data(), buffer->GetData(), buffer->GetSize());
             return v8Buffer;
         }
-        default: alt::ICore::Instance().LogWarning("js::MValueToJS Unknown MValue type " + std::to_string((int)val->GetType()));
+        default: Logger::Warn("js::MValueToJS Unknown MValue type", (int)val->GetType());
     }
 
     return v8::Undefined(isolate);

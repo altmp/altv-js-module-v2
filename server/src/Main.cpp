@@ -3,6 +3,7 @@
 #include "CNodeRuntime.h"
 #include "Module.h"
 #include "interfaces/IResource.h"
+#include "Logger.h"
 
 #include <iostream>
 
@@ -12,7 +13,7 @@ namespace server
     {
         if(!js::Module::Exists("alt"))
         {
-            alt::ICore::Instance().LogError("INTERNAL ERROR: alt module not found");
+            js::Logger::Error("INTERNAL ERROR: alt module not found");
             return;
         }
 
@@ -28,7 +29,7 @@ namespace shared
     {
         if(!js::Module::Exists("alt-shared"))
         {
-            alt::ICore::Instance().LogError("INTERNAL ERROR: alt-shared module not found");
+            js::Logger::Error("INTERNAL ERROR: alt-shared module not found");
             return;
         }
 
@@ -46,7 +47,7 @@ EXPORT bool altMain(alt::ICore* core)
     core->RegisterScriptRuntime("js", &runtime);
     if(!runtime.Initialize()) return false;
 
-    core->LogColored("Loaded ~g~JS module v2");
+    js::Logger::Colored("Loaded ~g~JS module v2");
 
     return true;
 }

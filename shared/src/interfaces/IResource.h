@@ -10,6 +10,7 @@
 #include "Module.h"
 #include "IScriptObjectHandler.h"
 #include "Event.h"
+#include "Logger.h"
 
 namespace js
 {

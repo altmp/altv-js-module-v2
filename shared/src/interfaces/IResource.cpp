@@ -57,7 +57,7 @@ void js::IResource::InitializeBinding(js::Binding* binding)
     v8::Local<v8::Module> module = binding->GetCompiledModule(this);
     if(module.IsEmpty())
     {
-        alt::ICore::Instance().LogError("INTERNAL ERROR: Failed to compile binding module " + binding->GetName());
+        Logger::Error("INTERNAL ERROR: Failed to compile binding module", binding->GetName());
         return;
     }
     if(module->GetStatus() == v8::Module::Status::kEvaluated) return;
@@ -65,9 +65,9 @@ void js::IResource::InitializeBinding(js::Binding* binding)
     module->Evaluate(GetContext());
     if(module->GetStatus() != v8::Module::Status::kEvaluated)
     {
-        alt::ICore::Instance().LogError("INTERNAL ERROR: Failed to evaluate binding module " + binding->GetName());
+        Logger::Error("INTERNAL ERROR: Failed to evaluate binding module", binding->GetName());
         v8::Local<v8::Value> exception = module->GetException();
-        if(!exception.IsEmpty()) alt::ICore::Instance().LogError("INTERNAL ERROR: " + std::string(*v8::String::Utf8Value(isolate, exception)));
+        if(!exception.IsEmpty()) Logger::Error("INTERNAL ERROR:", *v8::String::Utf8Value(isolate, exception));
     }
 }
 
@@ -76,7 +76,7 @@ void js::IResource::RegisterBindingExport(const std::string& name, const std::st
     Binding& binding = Binding::Get(bindingName);
     if(!binding.IsValid())
     {
-        alt::ICore::Instance().LogError("INTERNAL ERROR: Failed to get binding " + bindingName);
+        Logger::Error("INTERNAL ERROR: Failed to get binding", bindingName);
         return;
     }
     v8::Local<v8::Module> mod = binding.GetCompiledModule(this);
@@ -86,7 +86,7 @@ void js::IResource::RegisterBindingExport(const std::string& name, const std::st
     v8::Local<v8::Value> exportedValue;
     if(!maybeExportedValue.ToLocal(&exportedValue) || exportedValue->IsUndefined())
     {
-        alt::ICore::Instance().LogError("INTERNAL ERROR: Failed to get exported value " + exportName + " from binding " + bindingName);
+        Logger::Error("INTERNAL ERROR: Failed to get exported value", exportName, "from binding", bindingName);
         return;
     }
     bindingExports.insert({ name, Persistent<v8::Value>(isolate, exportedValue) });
@@ -102,7 +102,7 @@ static void DebugLog(js::FunctionContext& ctx)
         logMsg += arg;
         if(i != ctx.GetArgCount() - 1) logMsg += " ";
     }
-    alt::ICore::Instance().LogInfo(logMsg);
+    js::Logger::Info(logMsg);
 }
 
 void js::IResource::InitializeBindings(Binding::Scope scope, Module& altModule)
