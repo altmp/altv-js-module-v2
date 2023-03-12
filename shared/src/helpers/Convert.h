@@ -340,7 +340,7 @@ namespace js
         {
             return ToRGBA(val);
         }
-        else if constexpr(std::is_same_v<T, alt::IBaseObject*> || std::is_base_of_v<alt::IBaseObject, T>)
+        else if constexpr(std::is_same_v<T, alt::IBaseObject*> || std::is_base_of_v<alt::IBaseObject, std::remove_pointer_t<T>>)
         {
             std::optional<alt::IBaseObject*> obj = ToBaseObject(val);
             if(!obj.has_value()) return std::nullopt;
