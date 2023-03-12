@@ -6,4 +6,4 @@
 - [ ] Entity factories (`alt.Entity.setPlayerFactory`)
 - [X] Function exports/imports
 - [ ] Event toggle
-- [ ] Function helper
+- [X] Function helper
