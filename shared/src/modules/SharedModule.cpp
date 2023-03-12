@@ -13,7 +13,7 @@ template<LogType Type>
 static void Log(js::FunctionContext& ctx)
 {
     js::IResource* resource = ctx.GetResource();
-    js::Function inspectFunc(resource->GetBindingExport("logging:inspectMultiple").As<v8::Function>());
+    js::Function inspectFunc(resource->GetBindingExport<v8::Function>("logging:inspectMultiple"));
 
     std::vector<v8::Local<v8::Value>> args;
     args.reserve(ctx.GetArgCount() + 1);

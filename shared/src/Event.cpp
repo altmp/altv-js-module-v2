@@ -6,12 +6,11 @@ void js::Event::CallEventBinding(bool custom, int type, EventArgs& args, IResour
 {
     v8::Isolate* isolate = resource->GetIsolate();
     v8::Local<v8::Context> context = resource->GetContext();
-    v8::Local<v8::Value> onEventVal = resource->GetBindingExport("events:onEvent");
-    if(onEventVal.IsEmpty() || !onEventVal->IsFunction()) return;
-    v8::Local<v8::Function> onEventFunc = onEventVal.As<v8::Function>();
+    v8::Local<v8::Function> onEvent = resource->GetBindingExport<v8::Function>("events:onEvent");
+    if(onEvent.IsEmpty()) return;
 
     std::array<v8::Local<v8::Value>, 3> funcArgs = { js::JSValue(custom), js::JSValue(type), args.Get() };
-    onEventFunc->Call(context, v8::Undefined(isolate), funcArgs.size(), funcArgs.data());
+    onEvent->Call(context, v8::Undefined(isolate), funcArgs.size(), funcArgs.data());
 }
 
 void js::Event::CancelEventCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
@@ -50,9 +49,8 @@ void js::Event::SendEvent(EventType type, EventArgs& args, IResource* resource)
 
 void js::Event::RegisterEvents(js::IResource* resource)
 {
-    v8::Local<v8::Value> val = resource->GetBindingExport("events:setEvents");
-    if(val.IsEmpty() || !val->IsFunction()) return;
-    v8::Local<v8::Function> func = val.As<v8::Function>();
+    v8::Local<v8::Function> func = resource->GetBindingExport<v8::Function>("events:setEvents");
+    if(func.IsEmpty()) return;
 
     v8::Isolate* isolate = resource->GetIsolate();
     v8::Local<v8::Context> context = resource->GetContext();

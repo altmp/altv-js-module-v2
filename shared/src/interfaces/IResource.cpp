@@ -76,7 +76,7 @@ void js::IResource::RegisterBindingExport(const std::string& name, const std::st
     Binding& binding = Binding::Get(bindingName);
     if(!binding.IsValid())
     {
-        Logger::Error("INTERNAL ERROR: Failed to get binding", bindingName);
+        Logger::Error("INTERNAL ERROR: Failed to get binding", bindingName, "for export", name);
         return;
     }
     v8::Local<v8::Module> mod = binding.GetCompiledModule(this);
@@ -86,7 +86,7 @@ void js::IResource::RegisterBindingExport(const std::string& name, const std::st
     v8::Local<v8::Value> exportedValue;
     if(!maybeExportedValue.ToLocal(&exportedValue) || exportedValue->IsUndefined())
     {
-        Logger::Error("INTERNAL ERROR: Failed to get exported value", exportName, "from binding", bindingName);
+        Logger::Error("INTERNAL ERROR: Failed to get exported value", exportName, "from binding", bindingName, "for export", name);
         return;
     }
     bindingExports.insert({ name, Persistent<v8::Value>(isolate, exportedValue) });
