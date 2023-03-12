@@ -4,11 +4,11 @@ This project uses `Xmake` as the build system, as such it is very easy to build 
 
 To generate and configure the project without building use `xmake config`.
 
-To build a specific target use `xmake build <TARGET>`. E.g. `xmake build server`
+To build a specific target use `xmake build <TARGET>`. E.g. `xmake build server`.
 
-> NOTE: Building the `shared` target on its own is useless, as its only a dependency used by client and server.
+Available targets are `client` and `server`. (All other targets are useless on their own)
 
-The build output can be found in the `build` directory. On Windows e.g. `build/windows/x64/release`
+The build output can be found in the `build` directory. On Windows e.g. `build/windows/x64/release`.
 
 ## Build options
 
