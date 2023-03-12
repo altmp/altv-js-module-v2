@@ -23,14 +23,27 @@ namespace js
         Logger(Type type) : type(type) {}
 
         template<Type type>
-        struct Instance
+        class Instance
         {
+            constexpr Logger& Get() const
+            {
+                static Logger logger(type);
+                return logger;
+            }
+
+        public:
             template<typename T>
             Logger& operator<<(const T& value) const
             {
-                static Logger logger(type);
-                logger << value;
-                return logger;
+                Get() << value;
+                return Get();
+            }
+            template<typename... Types>
+            void operator()(Types... args) const
+            {
+                const char* sep = "";
+                (((Get() << sep << args), sep = " "), ...);
+                Get() << Endl;
             }
         };
 
