@@ -26,6 +26,7 @@ namespace js
 
         static Class* GetClassForType(alt::IBaseObject::Type type)
         {
+            if(!GetClassMap().contains(type)) return nullptr;
             return GetClassMap().at(type);
         }
 
