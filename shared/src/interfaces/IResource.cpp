@@ -33,7 +33,7 @@ void js::IResource::Function::ExternalFunctionCallback(const v8::FunctionCallbac
     info.GetReturnValue().Set(MValueToJS(retValue));
 }
 
-void js::IResource::GetBindingNamespaceWrapper(js::FunctionContext& ctx)
+void js::IResource::RequireBindingNamespaceWrapper(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
 
@@ -114,7 +114,7 @@ void js::IResource::InitializeBindings(Binding::Scope scope, Module& altModule)
         TemporaryGlobalExtension altExtension(ctx, "__alt", altModule.GetNamespace(this));
         TemporaryGlobalExtension clientScriptEventExtension(ctx, "__clientScriptEventType", js::JSValue((int)alt::CEvent::Type::CLIENT_SCRIPT_EVENT));
         TemporaryGlobalExtension serverScriptEventExtension(ctx, "__serverScriptEventType", js::JSValue((int)alt::CEvent::Type::SERVER_SCRIPT_EVENT));
-        TemporaryGlobalExtension getBindingExtension(ctx, "getBinding", WrapFunction(GetBindingNamespaceWrapper)->GetFunction(ctx).ToLocalChecked());
+        TemporaryGlobalExtension requireBindingExtension(ctx, "requireBinding", WrapFunction(RequireBindingNamespaceWrapper)->GetFunction(ctx).ToLocalChecked());
         TemporaryGlobalExtension debugLogExtension(ctx, "debugLog", WrapFunction(DebugLog)->GetFunction(ctx).ToLocalChecked());
 
         for(auto binding : bindings) InitializeBinding(binding);

@@ -1,5 +1,5 @@
 // clang-format off
-getBinding("shared/utils.js");
+requireBinding("shared/utils.js");
 
 const serverScriptEventType = __serverScriptEventType;
 const clientScriptEventType = __clientScriptEventType;

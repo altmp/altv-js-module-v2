@@ -25,7 +25,7 @@ Bindings are named via `<scope>/<filePath>` with the scope being either `shared`
 
 For example, if you have the file `shared/js/myTest/test.js` then you would get that binding via `Binding::Get("shared/myTest/test.js")`.
 
-> NOTE: Bindings can use the exports of other bindings via the global `getBinding` JS function. It only takes the path as an argument.
+> NOTE: Bindings can use the exports of other bindings via the global `requireBinding` JS function. It only takes the path as an argument.
 > The path for this works the same as in C++ and it returns an object of the exports of the specified binding.
 
 ## Binding exports

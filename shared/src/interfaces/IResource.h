@@ -34,7 +34,7 @@ namespace js
     protected:
         static constexpr int ContextInternalFieldIdx = 1;
 
-        static void GetBindingNamespaceWrapper(FunctionContext& ctx);
+        static void RequireBindingNamespaceWrapper(FunctionContext& ctx);
 
         alt::IResource* resource;
         v8::Isolate* isolate;
