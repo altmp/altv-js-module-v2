@@ -38,9 +38,9 @@ static void Log(js::FunctionContext& ctx)
 }
 
 // clang-format off
-extern js::Class baseObjectClass, resourceClass;
+extern js::Class baseObjectClass, worldObjectClass, entityClass, resourceClass;
 extern js::Namespace enumsNamespace, sharedEventsNamespace;
-static js::Module sharedModule("alt-shared", "", { &baseObjectClass, &resourceClass }, [](js::ModuleTemplate& module)
+static js::Module sharedModule("alt-shared", "", { &baseObjectClass, &worldObjectClass, &entityClass, &resourceClass }, [](js::ModuleTemplate& module)
 {
     module.StaticFunction("log", Log<LogType::INFO>);
     module.StaticFunction("logWarn", Log<LogType::WARN>);
