@@ -41,22 +41,25 @@ void Exists(js::FunctionContext& ctx)
 
 void PathGetter(js::PropertyContext& ctx)
 {
+    if(!ctx.CheckExtraInternalFieldValue()) return;
+
     alt::IResource* resource = ctx.GetExtraInternalFieldValue<alt::IResource>();
-    if(!ctx.Check(resource != nullptr, "Invalid resource")) return;
     ctx.Return(resource->GetPath());
 }
 
 void NameGetter(js::PropertyContext& ctx)
 {
+    if(!ctx.CheckExtraInternalFieldValue()) return;
+
     alt::IResource* resource = ctx.GetExtraInternalFieldValue<alt::IResource>();
-    if(!ctx.Check(resource != nullptr, "Invalid resource")) return;
     ctx.Return(resource->GetName());
 }
 
 void MainGetter(js::PropertyContext& ctx)
 {
+    if(!ctx.CheckExtraInternalFieldValue()) return;
+
     alt::IResource* resource = ctx.GetExtraInternalFieldValue<alt::IResource>();
-    if(!ctx.Check(resource != nullptr, "Invalid resource")) return;
     ctx.Return(resource->GetMain());
 }
 

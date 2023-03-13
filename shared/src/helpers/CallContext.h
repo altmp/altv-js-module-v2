@@ -73,6 +73,11 @@ namespace js
             return Check(GetThisObjectUntyped() != nullptr, "Invalid base object");
         }
 
+        bool CheckExtraInternalFieldValue()
+        {
+            return Check(GetExtraInternalFieldValue<void*>() != nullptr, "Invalid extra internal field value");
+        }
+
         template<class T>
         T* GetThisObject()
         {
