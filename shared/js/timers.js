@@ -24,11 +24,11 @@ class Timer {
 }
 
 class Interval extends Timer {
-    constructor(interval, callback) { super(interval, callback, false); }
+    constructor(callback, interval) { super(interval, callback, false); }
 }
 
 class Timeout extends Timer {
-    constructor(interval, callback) { super(interval, callback, true); }
+    constructor(callback, interval) { super(interval, callback, true); }
 }
 
 class EveryTick extends Timer {
