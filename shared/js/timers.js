@@ -44,6 +44,11 @@ alt.Timers.Timeout = Timeout;
 alt.Timers.EveryTick = EveryTick;
 alt.Timers.NextTick = NextTick;
 
+alt.Timers.setInterval = (interval, callback) => new Interval(interval, callback);
+alt.Timers.setTimeout = (interval, callback) => new Timeout(interval, callback);
+alt.Timers.everyTick = (callback) => new EveryTick(callback);
+alt.Timers.nextTick = (callback) => new NextTick(callback);
+
 export function tick() {
     for (const timer of timers) timer.tick();
 }
