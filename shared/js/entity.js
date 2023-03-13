@@ -14,7 +14,6 @@ function addAllGetter(class_, type) {
 }
 
 alt.Events.onBaseObjectCreate(({ object }) => {
-    alt.log("onBaseObjectCreate", object);
     if (object instanceof alt.Entity) {
         const all = entityAllMap.get(object.type);
         if (all) all.add(object);
@@ -23,7 +22,6 @@ alt.Events.onBaseObjectCreate(({ object }) => {
 });
 
 alt.Events.onBaseObjectRemove(({ object }) => {
-    alt.log("onBaseObjectRemove", object);
     if (object instanceof alt.Entity) {
         const all = entityAllMap.get(object.type);
         if (all) all.delete(object);
