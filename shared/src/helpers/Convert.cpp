@@ -5,6 +5,7 @@
 v8::Local<v8::Value> js::JSValue(alt::IBaseObject* object)
 {
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
+    if(!object) return v8::Null(isolate);
     IResource* resource = GetCurrentResource(isolate);
     if(!resource) return v8::Null(isolate);
     ScriptObject* scriptObject = resource->GetOrCreateScriptObject(resource->GetContext(), object);
