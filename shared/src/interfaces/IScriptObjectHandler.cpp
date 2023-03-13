@@ -1,5 +1,6 @@
 #include "IScriptObjectHandler.h"
 #include "Class.h"
+#include "Logger.h"
 
 js::ScriptObject* js::IScriptObjectHandler::GetOrCreateScriptObject(v8::Local<v8::Context> context, alt::IBaseObject* object)
 {
@@ -9,7 +10,7 @@ js::ScriptObject* js::IScriptObjectHandler::GetOrCreateScriptObject(v8::Local<v8
     Class* class_ = GetClassForType(object->GetType());
     if(!class_)
     {
-        std::cout << "Class not found for type " << (int)object->GetType() << std::endl;
+        Logger::Error("Class not found for type", (int)object->GetType());
         return nullptr;
     }
     ScriptObject* scriptObject = ScriptObject::Create(context, object, class_);
