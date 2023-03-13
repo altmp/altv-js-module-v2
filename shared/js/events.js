@@ -1,4 +1,6 @@
 // clang-format off
+getBinding("shared/utils.js");
+
 const serverScriptEventType = __serverScriptEventType;
 const clientScriptEventType = __clientScriptEventType;
 const cppEventsMap = new Map();
@@ -11,10 +13,12 @@ export class Event {
     static #localScriptEventHandlers = new Map();
     static #remoteScriptEventHandlers = new Map();
 
-    static #registerCallback(name, eventName, custom, handler) {
+    static async #registerCallback(name, eventName, custom, handler) {
         if(typeof handler !== "function") throw new Error(`Handler for event '${name}' is not a function`);
 
         const typeMap = custom ? customEventsMap : cppEventsMap;
+        if(typeMap.size === 0) await alt.Utils.waitForNextTick(); // Needed to ensure that the event types are registered
+
         const type = typeMap.get(eventName);
         const map = custom ? Event.#customHandlers : Event.#handlers;
 
