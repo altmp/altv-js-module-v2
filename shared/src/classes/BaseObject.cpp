@@ -1,6 +1,19 @@
 #include "Class.h"
 #include "cpp-sdk/ICore.h"
 
+static void ValidGetter(js::PropertyContext& ctx)
+{
+    ctx.Return(ctx.GetThisObject<alt::IBaseObject>() != nullptr);
+}
+
+static void Destroy(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+
+    alt::IBaseObject* obj = ctx.GetThisObject<alt::IBaseObject>();
+    alt::ICore::Instance().DestroyBaseObject(obj);
+}
+
 static void MetaGetter(js::DynamicPropertyContext<v8::Value>& ctx)
 {
     if(!ctx.CheckParent()) return;
@@ -41,8 +54,10 @@ static void MetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
 // clang-format off
 extern js::Class baseObjectClass("BaseObject", nullptr, [](js::ClassTemplate& tpl)
 {
-    tpl.Method<alt::IBaseObject, alt::MValueConst, const std::string&, &alt::IBaseObject::GetMetaData>("getMeta");
-    tpl.Method<alt::IBaseObject, void, const std::string&, alt::MValue, &alt::IBaseObject::SetMetaData>("setMeta");
     tpl.Property<alt::IBaseObject, &alt::IBaseObject::GetType>("type");
+    tpl.Property("valid", ValidGetter);
+
+    tpl.Method("destroy", Destroy);
+
     tpl.DynamicProperty("meta", MetaGetter, MetaSetter, MetaDeleter, MetaEnumerator);
 });
