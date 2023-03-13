@@ -2,26 +2,23 @@
 #include "interfaces/IResource.h"
 #include "cpp-sdk/ICore.h"
 
-static void Ctor(js::FunctionContext& ctx)
+static void GetByID(js::FunctionContext& ctx)
 {
-    if(!ctx.CheckCtor()) return;
-    if(!ctx.CheckArgCount(2)) return;
+    if(!ctx.CheckArgCount(1)) return;
 
-    std::string name;
-    if(!ctx.GetArg(0, name, js::Type::STRING)) return;
-
-    std::string name2;
-    if(!ctx.GetArg(1, name2)) return;
-
-    std::cout << "got name " << name << std::endl;
-    std::cout << "got name2 " << name2 << std::endl;
+    uint16_t id;
+    if(!ctx.GetArg(0, id)) return;
+    alt::IEntity* entity = alt::ICore::Instance().GetEntityByID(id);
+    if(!entity || entity->GetType() != alt::IBaseObject::Type::PLAYER) ctx.Return(nullptr);
+    else
+        ctx.Return((alt::IBaseObject*)entity);
 }
 
 // clang-format off
 extern js::Class sharedPlayerClass;
-extern js::Class playerClass("Player", &sharedPlayerClass, Ctor, [](js::ClassTemplate& tpl)
+extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::ClassTemplate& tpl)
 {
-    js::IScriptObjectHandler::BindClassToType(alt::IBaseObject::Type::PLAYER, &playerClass);
+    tpl.BindToType(alt::IBaseObject::Type::PLAYER);
 
-    tpl.StaticProperty("server", 45);
+    tpl.StaticFunction("getByID", &GetByID);
 });
