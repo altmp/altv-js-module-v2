@@ -4,7 +4,8 @@ const { esmLoader } = require("internal/process/esm_loader");
 const { translators } = require("internal/modules/esm/translators");
 const { ModuleWrap } = internalRequire("internal/test/binding").internalBinding("module_wrap");
 const path = require("path");
-const alt = process._linkedBinding("alt");
+const alt = __altModule;
+const altShared = __altSharedModule;
 const dns = require('dns');
 const url = require("url");
 
@@ -57,7 +58,7 @@ function setupImports() {
   });
   translators.set("altmodule", async function(url) {
     const name = url.slice(altModuleInternalPrefix.length + 1); // Remove prefix
-    const exports = name === "server" ? __altModule : __altSharedModule;
+    const exports = name === "server" ? alt : altShared;
     const exportKeys = Object.keys(exports);
     return new ModuleWrap(url, undefined, exportKeys, function() {
       for (const exportName in exports) {
