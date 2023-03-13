@@ -3201,8 +3201,7 @@ const inspectMultiple = (options, ...args) => {
     return str;
 };
 
-alt.Utils.inspect = inspect;
-
 export {
-    inspectMultiple
+    inspectMultiple,
+    inspect
 };
