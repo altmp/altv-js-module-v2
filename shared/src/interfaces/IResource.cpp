@@ -112,6 +112,7 @@ void js::IResource::InitializeBindings(Binding::Scope scope, Module& altModule)
 
     {
         TemporaryGlobalExtension altExtension(ctx, "__alt", altModule.GetNamespace(this));
+        TemporaryGlobalExtension cppBindingsExtension(ctx, "__cppBindings", Module::Get("cppBindings").GetNamespace(this));
         TemporaryGlobalExtension clientScriptEventExtension(ctx, "__clientScriptEventType", js::JSValue((int)alt::CEvent::Type::CLIENT_SCRIPT_EVENT));
         TemporaryGlobalExtension serverScriptEventExtension(ctx, "__serverScriptEventType", js::JSValue((int)alt::CEvent::Type::SERVER_SCRIPT_EVENT));
         TemporaryGlobalExtension requireBindingExtension(ctx, "requireBinding", WrapFunction(RequireBindingNamespaceWrapper)->GetFunction(ctx).ToLocalChecked());

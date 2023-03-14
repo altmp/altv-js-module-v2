@@ -47,13 +47,7 @@ const outputPath = "shared/src/BindingsMap.cpp";
             const name = pathUtil.relative(bindingsPath, file).replace(/\\/g, "/").toLowerCase();
             // Generate the binding data
             const src = await fs.readFile(file, "utf8");
-            // Concat with existing binding, to allow for shared bindings to be added on by client/server bindings
-            const existingBinding = bindings.find(binding => binding.name === name);
-            if(existingBinding) {
-                existingBinding.src += "," + getBindingCodeChars(src);
-                if(pathScope === "shared") existingBinding.scope = "SHARED";
-            }
-            else bindings.push({ name: `${pathScope}/${name}`, src: getBindingCodeChars(src), scope: pathScope.toUpperCase() });
+            bindings.push({ name: `${pathScope}/${name}`, src: getBindingCodeChars(src, name === "bootstrap.js"), scope: pathScope.toUpperCase() });
             showLog(`Generated bindings for: ${pathUtil.relative(`${__dirname}/..`, file).replace(/\\/g, "/")}`);
         }
     }
@@ -90,12 +84,11 @@ async function* getBindingFiles(dir) {
 /**
  * @param {string} src
  */
-function getBindingCodeChars(src) {
-    // This const has to be added so the bindings work at runtime,
-    // as the global __alt is removed after loading the bindings
-    let code;
-    if(!src.includes("const alt =")) code = `const alt = __alt;\n${src}`;
-    else code = src;
+function getBindingCodeChars(src, shouldSkipAddingConsts) {
+    // These consts have to be added so the bindings work at runtime, as the globals are removed after loading the bindings
+    let code = src;
+    if(!shouldSkipAddingConsts && !code.includes("const alt =")) code = `const alt = __alt;\n${code}`;
+    if(!shouldSkipAddingConsts && !code.includes("const cppBindings =")) code = `const cppBindings = __cppBindings;\n${code}`;
     const chars = code.split("").map((char) => char.charCodeAt(0));
     return chars.toString();
 }
