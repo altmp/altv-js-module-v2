@@ -6,7 +6,7 @@
 static void ResourceStarted(js::FunctionContext& ctx)
 {
     v8::Local<v8::Value> exports;
-    if(!ctx.GetArgRaw(0, exports)) return;
+    if(!ctx.GetArg(0, exports)) return;
     static_cast<CNodeResource*>(ctx.GetResource())->EnvStarted(exports);
 }
 

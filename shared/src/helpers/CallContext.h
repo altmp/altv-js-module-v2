@@ -168,7 +168,7 @@ namespace js
             std::optional<Type> result = CppValue<Type>(info[index]);
             if(result.has_value())
             {
-                outValue = result.value();
+                outValue = (T)result.value();
                 return true;
             }
             return false;
@@ -190,13 +190,6 @@ namespace js
                 return true;
             }
             return false;
-        }
-
-        bool GetArgRaw(int index, v8::Local<v8::Value>& outValue)
-        {
-            if(errored) return false;
-            outValue = info[index];
-            return true;
         }
     };
 

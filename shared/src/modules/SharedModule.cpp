@@ -24,7 +24,7 @@ static void Log(js::FunctionContext& ctx)
     for(int i = 0; i < ctx.GetArgCount(); i++)
     {
         v8::Local<v8::Value> val;
-        if(!ctx.GetArgRaw(i, val)) continue;
+        if(!ctx.GetArg(i, val)) continue;
         args.push_back(val);
     }
 
