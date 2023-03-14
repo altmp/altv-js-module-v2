@@ -164,7 +164,8 @@ namespace js
             if(errored) return false;
             if(typeToCheck != Type::INVALID && !CheckArgType(index, typeToCheck)) return false;
 
-            std::optional<T> result = CppValue<T>(info[index]);
+            using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
+            std::optional<Type> result = CppValue<Type>(info[index]);
             if(result.has_value())
             {
                 outValue = result.value();
