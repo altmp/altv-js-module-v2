@@ -7,10 +7,14 @@ const cppEventsMap = new Map();
 const customEventsMap = new Map();
 
 export class Event {
+    /** @type {Map<number, Function[]>} */
     static #handlers = new Map();
+    /** @type {Map<number, Function[]>} */
     static #customHandlers = new Map();
 
+    /** @type {Map<string, Function[]>} */
     static #localScriptEventHandlers = new Map();
+    /** @type {Map<string, Function[]>} */
     static #remoteScriptEventHandlers = new Map();
 
     static async #registerCallback(name, eventName, custom, handler) {
@@ -77,8 +81,11 @@ export class Event {
         else map.get(name).push(handler);
     }
 
-    // eventName = value of the enum in C++
-    // name = event name (e.g. `PlayerConnect` is accessible via `alt.Events.onPlayerConnect`)
+    /**
+     * @param {string} eventName Name of the event enum value in C++
+     * @param {string} name Event name (e.g. `PlayerConnect` is accessible via `alt.Events.onPlayerConnect`)
+     * @param {string} custom alt:V built-in event or a custom JS module event
+     */
     static register(eventName, name, custom = false) {
         alt.Events[`on${name}`] = Event.#getEventFunc(name, eventName, custom);
     }
@@ -90,7 +97,7 @@ export class Event {
         const map = custom ? Event.#customHandlers : Event.#handlers;
         const handlers = map.get(eventType);
         if(!handlers) return;
-        for(let handler of handlers) handler(ctx);
+        for(const handler of handlers) handler(ctx);
     }
 }
 
