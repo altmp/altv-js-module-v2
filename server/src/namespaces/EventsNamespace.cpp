@@ -1,6 +1,6 @@
 #include "Namespace.h"
 
-static void EmitAllClients(js::FunctionContext& ctx)
+static void EmitAllPlayers(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1, 32)) return;
 
@@ -21,5 +21,5 @@ static void EmitAllClients(js::FunctionContext& ctx)
 // clang-format off
 extern js::Namespace sharedEventsNamespace;
 extern js::Namespace eventsNamespace("Events", &sharedEventsNamespace, [](js::NamespaceTemplate& tpl) {
-    tpl.StaticFunction("emitAllClients", EmitAllClients);
+    tpl.StaticFunction("emitAllPlayers", EmitAllPlayers);
 });
