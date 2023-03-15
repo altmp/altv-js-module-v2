@@ -14,18 +14,18 @@ js::ScriptObject* js::IScriptObjectHandler::GetOrCreateScriptObject(v8::Local<v8
         return nullptr;
     }
     ScriptObject* scriptObject = ScriptObject::Create(context, object, class_);
-    GetObjectMap().insert({ object->GetType(), scriptObject });
+    objectMap.insert({ object->GetType(), scriptObject });
     return scriptObject;
 }
 
 void js::IScriptObjectHandler::DestroyScriptObject(alt::IBaseObject* object)
 {
-    auto range = GetObjectMap().equal_range(object->GetType());
+    auto range = objectMap.equal_range(object->GetType());
     for(auto it = range.first; it != range.second; ++it)
     {
         if(it->second->GetObject() == object)
         {
-            GetObjectMap().erase(it);
+            objectMap.erase(it);
             ScriptObject::Destroy(it->second);
             break;
         }
@@ -37,7 +37,7 @@ void js::IScriptObjectHandler::BindScriptObject(v8::Local<v8::Object> thisObject
     Class* objectClass = GetClassForType(object->GetType());
     if(!objectClass) return;
     ScriptObject* scriptObject = ScriptObject::Create(thisObject, object, objectClass);
-    GetObjectMap().insert({ object->GetType(), scriptObject });
+    objectMap.insert({ object->GetType(), scriptObject });
 }
 
 void js::IScriptObjectHandler::BindClassToType(alt::IBaseObject::Type type, Class* class_)

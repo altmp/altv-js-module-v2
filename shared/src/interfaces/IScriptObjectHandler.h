@@ -12,11 +12,7 @@ namespace js
 
     class IScriptObjectHandler
     {
-        std::unordered_multimap<alt::IBaseObject::Type, ScriptObject*>& GetObjectMap()
-        {
-            static std::unordered_multimap<alt::IBaseObject::Type, ScriptObject*> objectMap;
-            return objectMap;
-        }
+        std::unordered_multimap<alt::IBaseObject::Type, ScriptObject*> objectMap;
 
         static std::unordered_map<alt::IBaseObject::Type, Class*>& GetClassMap()
         {
@@ -39,7 +35,7 @@ namespace js
 
         ScriptObject* GetScriptObject(alt::IBaseObject* object)
         {
-            auto range = GetObjectMap().equal_range(object->GetType());
+            auto range = objectMap.equal_range(object->GetType());
             for(auto it = range.first; it != range.second; ++it)
             {
                 if(it->second->GetObject() == object)
