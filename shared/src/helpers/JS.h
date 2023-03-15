@@ -152,11 +152,11 @@ namespace js
             return function;
         }
 
-        template<typename Ret>
-        std::optional<Ret> Call(const std::vector<v8::Local<v8::Value>>& args)
+        template<typename Ret = void>
+        std::conditional_t<std::is_same_v<Ret, void>, void, std::optional<Ret>> Call(const std::vector<v8::Local<v8::Value>>& args)
         {
             v8::MaybeLocal<v8::Value> retValue = CallNative(v8::Undefined(context->GetIsolate()), (v8::Local<v8::Value>*)args.data(), args.size());
-            if constexpr(std::is_same_v<Ret, void>) return std::nullopt;
+            if constexpr(std::is_same_v<Ret, void>) return;
             else
             {
                 v8::Local<v8::Value> val;
@@ -165,11 +165,11 @@ namespace js
             }
         }
 
-        template<typename Ret>
-        std::optional<Ret> Call(const Object& thisObj, const std::vector<v8::Local<v8::Value>>& args)
+        template<typename Ret = void>
+        std::conditional_t<std::is_same_v<Ret, void>, void, std::optional<Ret>> Call(const Object& thisObj, const std::vector<v8::Local<v8::Value>>& args)
         {
             v8::MaybeLocal<v8::Value> retValue = CallNative(thisObj.Get(), (v8::Local<v8::Value>*)args.data(), args.size());
-            if constexpr(std::is_same_v<Ret, void>) return std::nullopt;
+            if constexpr(std::is_same_v<Ret, void>) return;
             else
             {
                 v8::Local<v8::Value> val;
@@ -178,8 +178,8 @@ namespace js
             }
         }
 
-        template<typename Ret, typename... Args>
-        std::optional<Ret> Call(const Args&... args)
+        template<typename Ret = void, typename... Args>
+        std::conditional_t<std::is_same_v<Ret, void>, void, std::optional<Ret>> Call(const Args&... args)
         {
             v8::Local<v8::Value> argv[] = { js::JSValue(args)... };
             v8::MaybeLocal<v8::Value> retValue = CallNative(v8::Undefined(context->GetIsolate()), argv, sizeof...(args));
@@ -192,8 +192,8 @@ namespace js
             }
         }
 
-        template<typename Ret, typename... Args>
-        std::optional<Ret> Call(const Object& thisObj, const Args&... args)
+        template<typename Ret = void, typename... Args>
+        std::conditional_t<std::is_same_v<Ret, void>, void, std::optional<Ret>> Call(const Object& thisObj, const Args&... args)
         {
             v8::Local<v8::Value> argv[] = { js::JSValue(args)... };
             v8::MaybeLocal<v8::Value> retValue = CallNative(thisObj.Get(), argv, sizeof...(args));
