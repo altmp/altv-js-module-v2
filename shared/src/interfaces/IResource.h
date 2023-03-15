@@ -136,6 +136,8 @@ namespace js
             RegisterBindingExport("classes:rgba", "shared/classes/rgba.js", "RGBA");
 
             RegisterBindingExport("logging:inspectMultiple", "shared/logging.js", "inspectMultiple");
+
+            RegisterBindingExport("entity:addEntityToAll", "shared/entity.js", "addEntityToAll");
         }
         template<typename T = v8::Value>
         auto GetBindingExport(const std::string& name)
@@ -150,7 +152,7 @@ namespace js
                     return v8::Local<T>();
             }
             v8::Local<v8::Value> val = bindingExports.at(name).Get(isolate);
-            if constexpr(isHelperValue) return T(val.As<T::V8Type>());
+            if constexpr(isHelperValue) return T(val.As<typename T::V8Type>());
             else
                 return val.As<T>();
         }

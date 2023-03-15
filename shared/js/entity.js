@@ -29,6 +29,13 @@ alt.Events.onBaseObjectRemove(({ object }) => {
     }
 });
 
+// Needed because base object events are called on next tick, and entities created from scripts
+// should be immediately accessible in .all
+export function addEntityToAll(entity) {
+    const all = entityAllMap.get(entity.type);
+    if (all) all.add(entity);
+}
+
 // Register all getters
 addAllGetter(alt.Player, alt.Enums.BaseObjectType.PLAYER);
 addAllGetter(alt.Vehicle, alt.Enums.BaseObjectType.VEHICLE);
