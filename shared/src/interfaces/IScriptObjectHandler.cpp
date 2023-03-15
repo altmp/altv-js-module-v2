@@ -7,13 +7,29 @@ js::ScriptObject* js::IScriptObjectHandler::GetOrCreateScriptObject(v8::Local<v8
     js::ScriptObject* existingObject = GetScriptObject(object);
     if(existingObject) return existingObject;
 
-    Class* class_ = GetClassForType(object->GetType());
-    if(!class_)
+    ScriptObject* scriptObject = nullptr;
+    if(HasCustomFactory(object->GetType()))
     {
-        Logger::Error("Class not found for type", (int)object->GetType());
+        v8::Local<v8::Function> factory = GetCustomFactory(object->GetType());
+        scriptObject = ScriptObject::Create(context, object, factory);
+    }
+    else
+    {
+        Class* class_ = GetClassForType(object->GetType());
+        if(!class_)
+        {
+            Logger::Error("Class not found for type", (int)object->GetType());
+            return nullptr;
+        }
+        scriptObject = ScriptObject::Create(context, object, class_);
+    }
+
+    if(!scriptObject)
+    {
+        Logger::Error("Failed to create script object for type", (int)object->GetType());
         return nullptr;
     }
-    ScriptObject* scriptObject = ScriptObject::Create(context, object, class_);
+
     objectMap.insert({ object->GetType(), scriptObject });
     return scriptObject;
 }
@@ -30,14 +46,6 @@ void js::IScriptObjectHandler::DestroyScriptObject(alt::IBaseObject* object)
             break;
         }
     }
-}
-
-void js::IScriptObjectHandler::BindScriptObject(v8::Local<v8::Object> thisObject, alt::IBaseObject* object)
-{
-    Class* objectClass = GetClassForType(object->GetType());
-    if(!objectClass) return;
-    ScriptObject* scriptObject = ScriptObject::Create(thisObject, object, objectClass);
-    objectMap.insert({ object->GetType(), scriptObject });
 }
 
 void js::IScriptObjectHandler::BindClassToType(alt::IBaseObject::Type type, Class* class_)

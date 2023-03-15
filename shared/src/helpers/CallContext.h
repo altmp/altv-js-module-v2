@@ -155,8 +155,6 @@ namespace js
             return info.Length();
         }
 
-        void SetThisObject(alt::IBaseObject* object);
-
         // If no type to check is specified, it will try to convert the value to the specified type
         template<class T>
         bool GetArg(int index, T& outValue, Type typeToCheck = Type::INVALID)

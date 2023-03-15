@@ -11,6 +11,17 @@ js::ScriptObject* js::ScriptObject::Create(v8::Local<v8::Context> context, alt::
     return scriptObject;
 }
 
+js::ScriptObject* js::ScriptObject::Create(v8::Local<v8::Context> context, alt::IBaseObject* object, v8::Local<v8::Function> factory)
+{
+    v8::Isolate* isolate = context->GetIsolate();
+    v8::MaybeLocal<v8::Object> maybeJsObject = factory->NewInstance(context);
+    v8::Local<v8::Object> jsObject;
+    if(!maybeJsObject.ToLocal(&jsObject)) return nullptr;
+    ScriptObject* scriptObject = new ScriptObject(isolate, jsObject, object, nullptr);
+    jsObject->SetAlignedPointerInInternalField(0, scriptObject);
+    return scriptObject;
+}
+
 js::ScriptObject* js::ScriptObject::Create(v8::Local<v8::Object> jsObject, alt::IBaseObject* object, js::Class* class_)
 {
     ScriptObject* scriptObject = new ScriptObject(jsObject->GetIsolate(), jsObject, object, class_);
