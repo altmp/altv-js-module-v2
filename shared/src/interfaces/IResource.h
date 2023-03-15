@@ -50,6 +50,7 @@ namespace js
         void Reset()
         {
             Binding::CleanupForResource(this);
+            IScriptObjectHandler::Reset();
             context.Reset();
         }
 

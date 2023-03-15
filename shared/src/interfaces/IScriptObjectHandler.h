@@ -27,6 +27,17 @@ namespace js
             return GetClassMap().at(type);
         }
 
+    protected:
+        void Reset()
+        {
+            for(auto& [type, scriptObject] : objectMap)
+            {
+                ScriptObject::Destroy(scriptObject);
+            }
+            objectMap.clear();
+            customFactoryMap.clear();
+        }
+
     public:
         IScriptObjectHandler() = default;
 
