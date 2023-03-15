@@ -37,6 +37,16 @@ static void Log(js::FunctionContext& ctx)
         alt::ICore::Instance().LogError(msg.value(), resource->GetResource());
 }
 
+static void Hash(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    std::string str;
+    if(!ctx.GetArg(0, str)) return;
+
+    ctx.Return(alt::ICore::Instance().Hash(str));
+}
+
 // clang-format off
 extern js::Class baseObjectClass, worldObjectClass, entityClass, resourceClass;
 extern js::Namespace enumsNamespace, sharedEventsNamespace;
@@ -47,8 +57,11 @@ static js::Module sharedModule("alt-shared", "", { &baseObjectClass, &worldObjec
     module.StaticFunction("logError", Log<LogType::ERR>);
     // todo: maybe a function to set logger settings like depth, numeric seperator etc.
 
+    module.StaticFunction("hash", &Hash);
+
     module.Namespace("Timers");
     module.Namespace("Utils");
+    module.Namespace("Factory");
     module.Namespace(enumsNamespace);
 
     module.StaticBindingExport("Vector3", "classes:vector3");
