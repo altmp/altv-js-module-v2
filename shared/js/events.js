@@ -28,6 +28,8 @@ export class Event {
 
         if(!map.has(type)) map.set(type, [ handler ]);
         else map.get(type).push(handler);
+
+        if(!custom) cppBindings.toggleEvent(type, true);
     }
 
     static #unregisterCallback(name, eventName, custom, handler) {
@@ -41,6 +43,8 @@ export class Event {
         const idx = handlers.indexOf(handler);
         if(idx === -1) return;
         handlers.splice(idx, 1);
+
+        if(!custom) cppBindings.toggleEvent(type, false);
     }
 
     static #handleScriptEvent(ctx, local) {

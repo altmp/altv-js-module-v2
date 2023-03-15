@@ -25,8 +25,6 @@ namespace js
         {
             Class::Initialize(isolate);
             Module::Initialize(isolate);
-            // todo: add event toggling
-            alt::ICore::Instance().ToggleEvent(alt::CEvent::Type::ALL, true);
             return true;
         }
 
