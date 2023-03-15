@@ -8,5 +8,6 @@ void js::FunctionContext::SetThisObject(alt::IBaseObject* object)
     resource->BindScriptObject(info.This(), object);
 
     js::Function func = resource->GetBindingExport<js::Function>("entity:addEntityToAll");
+    if(!func.IsValid()) return;
     func.Call(info.This());
 }
