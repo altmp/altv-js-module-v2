@@ -12,4 +12,4 @@
 
 - [ ] Naming guidelines
 - [ ] Adding the API
-- [ ] v8 Value helpers (`js::Function` etc.)
+- [X] v8 Value helpers (`js::Function` etc.)
