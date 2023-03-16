@@ -241,7 +241,6 @@ namespace js
         {
             static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
             Get()->Resolve(context, JSValue(value));
-            delete this;
         }
 
         template<typename T>
@@ -249,13 +248,15 @@ namespace js
         {
             static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
             Get()->Reject(context, JSValue(value));
-            delete this;
         }
 
-        static Promise* Create()
+        static std::shared_ptr<Promise> Create()
         {
-            Promise* promise = new Promise();
-            return promise;
+            // Needed to allow make_shared to access the private ctor
+            struct Wrap : public Promise
+            {
+            };
+            return std::make_shared<Wrap>();
         }
     };
 
