@@ -159,10 +159,11 @@ namespace js
         template<class T>
         bool GetArg(int index, T& outValue, Type typeToCheck = Type::INVALID)
         {
-            if(errored) return false;
-            if(typeToCheck != Type::INVALID && !CheckArgType(index, typeToCheck)) return false;
-
             using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
+            static_assert(IsJSValueConvertible<Type>, "Type is not convertible to JS value");
+            if(errored) return false;
+            if(typeToCheck != js::Type::INVALID && !CheckArgType(index, typeToCheck)) return false;
+
             std::optional<Type> result = CppValue<Type>(info[index]);
             if(result.has_value())
             {
@@ -216,6 +217,7 @@ namespace js
         template<class T>
         bool GetValue(T& outValue, Type typeToCheck = Type::INVALID)
         {
+            static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
             if(this->errored) return false;
             if(typeToCheck != Type::INVALID && !CheckValueType(typeToCheck)) return false;
 

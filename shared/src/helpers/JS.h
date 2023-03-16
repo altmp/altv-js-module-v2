@@ -50,6 +50,7 @@ namespace js
         template<typename T>
         void Set(const std::string& key, const T& val)
         {
+            static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
             object->Set(context, js::JSValue(key), js::JSValue(val));
         }
 
@@ -77,6 +78,7 @@ namespace js
         template<typename T>
         void SetProperty(const std::string& key, const T& val, bool configurable = true, bool writable = true, bool enumerable = true)
         {
+            static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
             if(configurable && writable && enumerable) object->CreateDataProperty(context, js::JSValue(key), js::JSValue(val));
             else
             {
@@ -118,12 +120,14 @@ namespace js
         template<typename T>
         void Push(const T& val)
         {
+            static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
             array->Set(context, currentIdx++, js::JSValue(val));
         }
 
         template<typename T>
         void Set(int index, const T& val)
         {
+            static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
             array->Set(context, index, js::JSValue(val));
         }
     };

@@ -1503,8 +1503,9 @@ namespace js
         }
 
         template<typename T>
-        void StaticProperty(const std::string& name, T value)
+        void StaticProperty(const std::string& name, const T& value)
         {
+            static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
             Get()->Set(js::JSValue(name), js::JSValue(value), (v8::PropertyAttribute)(v8::PropertyAttribute::ReadOnly | v8::PropertyAttribute::DontDelete));
         }
         void StaticProperty(const std::string& name, PropertyCallback getter, PropertyCallback setter = nullptr)
