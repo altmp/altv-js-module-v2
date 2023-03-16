@@ -210,6 +210,45 @@ namespace js
         }
     };
 
+    class Promise : public Value
+    {
+    public:
+        using V8Type = v8::Promise::Resolver;
+
+    private:
+        Persistent<v8::Promise::Resolver> resolver;
+
+        Promise() : Value(true), resolver(v8::Isolate::GetCurrent(), v8::Promise::Resolver::New(context).ToLocalChecked()) {}
+
+    public:
+        v8::Local<v8::Promise::Resolver> Get() const
+        {
+            return resolver.Get(v8::Isolate::GetCurrent());
+        }
+
+        template<typename T>
+        void Resolve(const T& value)
+        {
+            static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
+            Get()->Resolve(context, JSValue(value));
+            delete this;
+        }
+
+        template<typename T>
+        void Reject(const T& value)
+        {
+            static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
+            Get()->Reject(context, JSValue(value));
+            delete this;
+        }
+
+        static Promise* Create()
+        {
+            Promise* promise = new Promise();
+            return promise;
+        }
+    };
+
     struct TemporaryGlobalExtension
     {
         std::string name;
