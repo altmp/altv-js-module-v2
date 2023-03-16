@@ -119,6 +119,16 @@ namespace js
         }
 
         template<typename T>
+        T Get(uint32_t index)
+        {
+            v8::MaybeLocal<v8::Value> maybeVal = array->Get(context, index);
+            v8::Local<v8::Value> val;
+            if(!maybeVal.ToLocal(&val)) return T();
+            std::optional<T> result = js::CppValue<T>(val);
+            return result.has_value() ? result.value() : T();
+        }
+
+        template<typename T>
         void Push(const T& val)
         {
             static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
