@@ -2,8 +2,8 @@
 
 # JS module v2
 
-- [ ] `Enums` namespace
-- [ ] Entity factories (`alt.Entity.setPlayerFactory`)
+- [X] `Enums` namespace
+- [X] Entity factories (`alt.Entity.setPlayerFactory`)
 - [X] Function exports/imports
 - [X] Event toggle
 - [X] Function helper
