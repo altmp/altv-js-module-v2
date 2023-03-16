@@ -53,7 +53,6 @@ To get a previously registered binding somewhere in the code, use `IResource::Ge
 This function also optionally has a template argument to get the export in the right type, which defaults to `v8::Value`.
 
 > NOTE: The type passed to the template argument has to inherit from `v8::Value`, e.g. `v8::Boolean` or `v8::String`.
-> Or alternatively from [`js::Value`](helpers.md), e.g. `js::Function`.
 
 Example:
 ```cpp
