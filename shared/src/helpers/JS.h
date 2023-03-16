@@ -136,7 +136,7 @@ namespace js
         }
 
         template<typename T>
-        void Set(int index, const T& val)
+        void Set(uint32_t index, const T& val)
         {
             static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
             array->Set(context, index, js::JSValue(val));
