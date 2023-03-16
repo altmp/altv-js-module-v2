@@ -100,6 +100,11 @@ namespace js
     v8::Local<v8::Value> JSValue(alt::Rotation rot);
     v8::Local<v8::Value> JSValue(alt::RGBA rgba);
 
+    template<typename T, typename = void>
+    constexpr bool IsJSValueConvertible = false;
+    template<typename T>
+    constexpr bool IsJSValueConvertible<T, std::void_t<decltype(JSValue(std::declval<T>()))>> = true;
+
     // Converts a JS value to a C++ value
     inline std::string CppValue(v8::Local<v8::Name> val)
     {
