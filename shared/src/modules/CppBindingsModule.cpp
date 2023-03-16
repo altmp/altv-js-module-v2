@@ -80,8 +80,9 @@ static void CreateEntity(js::FunctionContext& ctx)
     }
 
     js::Function func = resource->GetBindingExport<v8::Function>("entity:addEntityToAll");
-    if(func.Get().IsEmpty())
+    if(!func.IsValid())
     {
+        js::Logger::Error("Failed to get entity:addEntityToAll binding export");
         ctx.Return(nullptr);
         return;
     }

@@ -12,9 +12,12 @@ namespace js
     {
         bool valid = true;
 
-    public:
-        Value() : valid(false) {}
+    protected:
+        v8::Local<v8::Context> context;
 
+        Value(bool _valid, v8::Local<v8::Context> _context = v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()) : valid(_valid), context(_context) {}
+
+    public:
         bool IsValid() const
         {
             return valid;
@@ -27,13 +30,12 @@ namespace js
         using V8Type = v8::Object;
 
     private:
-        v8::Local<v8::Context> context;
         v8::Local<v8::Object> object;
 
     public:
-        Object() : object(v8::Object::New(v8::Isolate::GetCurrent())), context(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()) {}
-        Object(v8::Local<v8::Object> _object) : object(_object), context(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()) {}
-        Object(const std::initializer_list<std::pair<std::string, v8::Local<v8::Value>>>& list) : context(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext())
+        Object() : Value(true), object(v8::Object::New(v8::Isolate::GetCurrent())) {}
+        Object(v8::Local<v8::Object> _object) : Value(!_object.IsEmpty()), object(_object) {}
+        Object(const std::initializer_list<std::pair<std::string, v8::Local<v8::Value>>>& list) : Value(true)
         {
             object = v8::Object::New(v8::Isolate::GetCurrent());
             for(auto& val : list)
@@ -97,15 +99,14 @@ namespace js
         using V8Type = v8::Array;
 
     private:
-        v8::Local<v8::Context> context;
         v8::Local<v8::Array> array;
         int currentIdx = 0;
 
     public:
-        Array() : array(v8::Array::New(v8::Isolate::GetCurrent())), context(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()) {}
-        Array(int size) : array(v8::Array::New(v8::Isolate::GetCurrent(), size)), context(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()) {}
-        Array(v8::Local<v8::Array> _array) : array(_array), context(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()) {}
-        Array(const std::initializer_list<v8::Local<v8::Value>>& list) : context(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext())
+        Array() : Value(true), array(v8::Array::New(v8::Isolate::GetCurrent())) {}
+        Array(int size) : Value(true), array(v8::Array::New(v8::Isolate::GetCurrent(), size)) {}
+        Array(v8::Local<v8::Array> _array) : Value(!_array.IsEmpty()), array(_array) {}
+        Array(const std::initializer_list<v8::Local<v8::Value>>& list) : Value(true)
         {
             array = v8::Array::New(v8::Isolate::GetCurrent(), list.size());
             int i = 0;
@@ -138,7 +139,6 @@ namespace js
         using V8Type = v8::Function;
 
     private:
-        v8::Local<v8::Context> context;
         v8::Local<v8::Function> function;
 
         v8::MaybeLocal<v8::Value> CallNative(v8::Local<v8::Value> thisObj, v8::Local<v8::Value>* argv, int argc)
@@ -148,8 +148,7 @@ namespace js
         }
 
     public:
-        Function() : context(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()) {}
-        Function(v8::Local<v8::Function> _function) : function(_function), context(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()) {}
+        Function(v8::Local<v8::Function> _function) : Value(!_function.IsEmpty()), function(_function) {}
 
         v8::Local<v8::Function> Get() const
         {
