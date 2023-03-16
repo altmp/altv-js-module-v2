@@ -67,6 +67,6 @@ if(myExportedFunction.IsEmpty()) return; // Check if the binding exists, accessi
 Or if using the [value helpers](helpers.md) is desired instead:
 ```cpp
 js::IResource* resource = GetCurrentResource();
-js::Function myExportedFunction = resource->GetBindingExport<js::Function>("funcs:myExport");
+js::Function myExportedFunction = resource->GetBindingExport<v8::Function>("funcs:myExport"); // Implicit conversion to helper type
 if(!myExportedFunction.IsValid()) return;
 ```
