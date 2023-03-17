@@ -1576,6 +1576,7 @@ namespace js
             static ClassMap<std::unordered_map<std::string, DynamicPropertyData*>> dynamicPropertyDataMap;
             return dynamicPropertyDataMap;
         }
+        static DynamicPropertyData* GetDynamicPropertyData(v8::Isolate* isolate, Class* class_, const std::string& name);
         static void InsertDynamicPropertyData(v8::Isolate* isolate, Class* cls, const std::string& name, DynamicPropertyData* data)
         {
             auto& dynamicPropertyDataMap = GetDynamicPropertyDataMap();
@@ -2168,8 +2169,19 @@ namespace js
                              DynamicPropertyDeleter deleter = nullptr,
                              DynamicPropertyEnumerator enumerator = nullptr)
         {
-            DynamicPropertyData* data = new DynamicPropertyData(getter, setter, deleter, enumerator);
-            InsertDynamicPropertyData(GetIsolate(), class_, name, data);
+            DynamicPropertyData* data = GetDynamicPropertyData(GetIsolate(), class_, name);
+            if(!data)
+            {
+                data = new DynamicPropertyData(getter, setter, deleter, enumerator);
+                InsertDynamicPropertyData(GetIsolate(), class_, name, data);
+            }
+            else
+            {
+                if(getter) data->getter = getter;
+                if(setter) data->setter = setter;
+                if(deleter) data->deleter = deleter;
+                if(enumerator) data->enumerator = enumerator;
+            }
             Get()->PrototypeTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::DynamicPropertyLazyHandler, v8::External::New(GetIsolate(), data));
         }
 

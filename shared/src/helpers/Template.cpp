@@ -100,6 +100,24 @@ void js::ModuleTemplate::StaticBindingExport(const std::string& name, const std:
     Get()->SetLazyDataProperty(JSValue(name), StaticBindingExportGetter, JSValue(exportName));
 }
 
+js::ClassTemplate::DynamicPropertyData* js::ClassTemplate::GetDynamicPropertyData(v8::Isolate* isolate, Class* class_, const std::string& name)
+{
+    auto& dynamicPropertyDataMap = GetDynamicPropertyDataMap();
+    auto& clsMap = dynamicPropertyDataMap[isolate];
+    Class* currentClass = class_;
+    DynamicPropertyData* data = nullptr;
+    while(!data && currentClass)
+    {
+        if(!clsMap.contains(currentClass) || !clsMap.at(currentClass).contains(name))
+        {
+            currentClass = currentClass->GetParentClass();
+            continue;
+        }
+        data = clsMap.at(currentClass).at(name);
+    }
+    return data;
+}
+
 v8::Local<v8::FunctionTemplate> js::ClassTemplate::GetPropertyGetter(v8::Isolate* isolate, Class* cls, const std::string& name)
 {
     auto& propertyGetterMap = GetPropertyGetterMap();
