@@ -7,6 +7,7 @@
 #include "JS.h"
 #include "Convert.h"
 #include "CallContext.h"
+#include "Logger.h"
 
 namespace js
 {
