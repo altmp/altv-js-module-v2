@@ -2144,7 +2144,11 @@ namespace js
                 if(!getter)
                 {
                     getterTemplate = GetPropertyGetter(GetIsolate(), class_, name);
-                    if(getterTemplate.IsEmpty()) return;
+                    if(getterTemplate.IsEmpty())
+                    {
+                        Logger::Error("Trying to register property setter for property", name, "without a previously registered getter");
+                        return;
+                    }
                 }
                 else
                     getterTemplate = WrapProperty(getter);
