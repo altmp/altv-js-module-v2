@@ -117,5 +117,5 @@ extern js::Class entityClass("Entity", &sharedEntityClass, nullptr, [](js::Class
     tpl.Property<alt::IEntity, bool, &alt::IEntity::GetVisible, &alt::IEntity::SetVisible>("visible");
     tpl.Property<alt::IEntity, bool, &alt::IEntity::GetStreamed, &alt::IEntity::SetStreamed>("streamed");
     tpl.Property<alt::IEntity, bool, &alt::IEntity::IsFrozen, &alt::IEntity::SetFrozen>("frozen");
-    tpl.Property<alt::IEntity, bool, &alt::IEntity::HasCollision, &alt::IEntity::SetCollision>("colision");
+    tpl.Property<alt::IEntity, bool, &alt::IEntity::HasCollision, &alt::IEntity::SetCollision>("collision");
 });
