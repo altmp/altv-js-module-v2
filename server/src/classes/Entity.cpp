@@ -10,13 +10,6 @@ static void GetByID(js::FunctionContext& ctx)
     ctx.Return((alt::IBaseObject*)alt::ICore::Instance().GetEntityByID(id));
 }
 
-static void SyncedMetaGetter(js::DynamicPropertyContext<v8::Value>& ctx)
-{
-    if(!ctx.CheckParent()) return;
-    alt::IEntity* obj = ctx.GetParent<alt::IEntity>();
-    ctx.Return(obj->GetSyncedMetaData(ctx.GetProperty()));
-}
-
 static void SyncedMetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
 {
     if(!ctx.CheckParent()) return;
@@ -39,20 +32,6 @@ static void SyncedMetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
 
     obj->DeleteSyncedMetaData(ctx.GetProperty());
     ctx.Return(true);
-}
-
-static void SyncedMetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
-{
-    if(!ctx.CheckParent()) return;
-    alt::IEntity* obj = ctx.GetParent<alt::IEntity>();
-    ctx.Return(obj->GetSyncedMetaDataKeys());
-}
-
-static void StreamSyncedMetaGetter(js::DynamicPropertyContext<v8::Value>& ctx)
-{
-    if(!ctx.CheckParent()) return;
-    alt::IEntity* obj = ctx.GetParent<alt::IEntity>();
-    ctx.Return(obj->GetStreamSyncedMetaData(ctx.GetProperty()));
 }
 
 static void StreamSyncedMetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
@@ -79,13 +58,6 @@ static void StreamSyncedMetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx
     ctx.Return(true);
 }
 
-static void StreamSyncedMetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
-{
-    if(!ctx.CheckParent()) return;
-    alt::IEntity* obj = ctx.GetParent<alt::IEntity>();
-    ctx.Return(obj->GetStreamSyncedMetaDataKeys());
-}
-
 static void ResetNetOwner(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
@@ -103,8 +75,8 @@ extern js::Class entityClass("Entity", &sharedEntityClass, nullptr, [](js::Class
 {
     tpl.StaticFunction("getByID", &GetByID);
 
-    tpl.DynamicProperty("syncedMeta", SyncedMetaGetter, SyncedMetaSetter, SyncedMetaDeleter, SyncedMetaEnumerator);
-    tpl.DynamicProperty("streamSyncedMeta", StreamSyncedMetaSetter, StreamSyncedMetaSetter, StreamSyncedMetaDeleter, StreamSyncedMetaEnumerator);
+    tpl.DynamicProperty("syncedMeta", nullptr, SyncedMetaSetter, SyncedMetaDeleter, nullptr);
+    tpl.DynamicProperty("streamSyncedMeta", nullptr, StreamSyncedMetaSetter, StreamSyncedMetaDeleter, nullptr);
 
     tpl.Method<alt::IEntity, void, alt::IPlayer*, bool, &alt::IEntity::SetNetworkOwner>("setNetOwner");
     tpl.Method("resetNetOwner", ResetNetOwner);
