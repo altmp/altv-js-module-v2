@@ -14,6 +14,24 @@ static void GetByID(js::FunctionContext& ctx)
         ctx.Return((alt::IBaseObject*)entity);
 }
 
+static void ModelGetter(js::PropertyContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+    ctx.Return(player->GetModel());
+}
+
+static void ModelSetter(js::PropertyContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+    uint32_t model;
+    if(!ctx.GetValueAsHash(model)) return;
+    player->SetModel(model);
+}
+
 static void Emit(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
@@ -41,7 +59,10 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
 {
     tpl.BindToType(alt::IBaseObject::Type::PLAYER);
 
+    tpl.Property("model", &ModelGetter, &ModelSetter);
+
     tpl.Method("emit", &Emit);
+    tpl.Method<alt::IPlayer, void, alt::Position, uint32_t, &alt::IPlayer::Spawn>("spawn");
 
     tpl.StaticFunction("getByID", &GetByID);
 });
