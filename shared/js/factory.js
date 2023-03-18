@@ -14,12 +14,19 @@ function getEntityFactory(type) {
 
 alt.Factory.setPlayerFactory = setEntityFactory(alt.Player, alt.Enums.BaseObjectType.PLAYER);
 alt.Factory.setVehicleFactory = setEntityFactory(alt.Vehicle, alt.Enums.BaseObjectType.VEHICLE);
+alt.Factory.setColShapeFactory = setEntityFactory(alt.Vehicle, alt.Enums.BaseObjectType.COLSHAPE);
 
 alt.Factory.getPlayerFactory = getEntityFactory(alt.Enums.BaseObjectType.PLAYER);
 alt.Factory.getVehicleFactory = getEntityFactory(alt.Enums.BaseObjectType.VEHICLE);
+alt.Factory.getColShapeFactory = getEntityFactory(alt.Enums.BaseObjectType.COLSHAPE);
 
 // Factory ctors
 alt.Vehicle.create = (ctx) => {
     if(typeof ctx !== "object") throw new Error("Invalid args");
     return cppBindings.createEntity(alt.Enums.BaseObjectType.VEHICLE, ctx);
+};
+
+alt.ColShape.create = (ctx) => {
+    if(typeof ctx !== "object") throw new Error("Invalid args");
+    return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
 };

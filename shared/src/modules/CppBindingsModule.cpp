@@ -72,6 +72,84 @@ static void CreateEntity(js::FunctionContext& ctx)
             object = alt::ICore::Instance().CreateVehicle(model, pos, rot);
             break;
         }
+
+        case alt::IBaseObject::Type::COLSHAPE:
+        {
+            switch(args.Get<uint8_t>("colShapeType"))
+            {
+                case(uint8_t)alt::IColShape::ColShapeType::SPHERE:
+                {
+                    alt::Vector3f pos = args.Get<alt::Vector3f>("pos");
+                    float radius = args.Get<float>("radius");
+
+                    object = alt::ICore::Instance().CreateColShapeSphere(pos, radius);
+                    break;
+                }
+
+                case(uint8_t)alt::IColShape::ColShapeType::CYLINDER:
+                {
+                    alt::Vector3f pos = args.Get<alt::Vector3f>("pos");
+                    float radius = args.Get<float>("radius");
+                    float height = args.Get<float>("height");
+
+                    object = alt::ICore::Instance().CreateColShapeCylinder(pos, radius, height);
+                    break;
+                }
+
+                case(uint8_t)alt::IColShape::ColShapeType::CIRCLE:
+                {
+                    alt::Vector3f pos = args.Get<alt::Vector3f>("pos");
+                    float radius = args.Get<float>("radius");
+
+                    object = alt::ICore::Instance().CreateColShapeCircle(pos, radius);
+                    break;
+                }
+
+                case(uint8_t)alt::IColShape::ColShapeType::CUBOID:
+                {
+                    alt::Vector3f pos1 = args.Get<alt::Vector3f>("pos1");
+                    alt::Vector3f pos2 = args.Get<alt::Vector3f>("pos2");
+
+                    object = alt::ICore::Instance().CreateColShapeCube(pos1, pos2);
+                    break;
+                }
+
+                case(uint8_t)alt::IColShape::ColShapeType::RECT:
+                {
+                    float x1 = args.Get<float>("x1");
+                    float y1 = args.Get<float>("y1");
+                    float x2 = args.Get<float>("x2");
+                    float y2 = args.Get<float>("y2");
+
+                    object = alt::ICore::Instance().CreateColShapeRectangle(x1, y1, x2, y2, 0);
+                    break;
+                }
+
+                case(uint8_t)alt::IColShape::ColShapeType::CHECKPOINT_CYLINDER:
+                {
+                    uint8_t type = args.Get<uint8_t>("type");
+                    alt::Vector3f pos = args.Get<alt::Vector3f>("pos");
+                    float radius = args.Get<float>("radius");
+                    float height = args.Get<float>("height");
+                    alt::RGBA color = args.Get<alt::RGBA>("color");
+
+                    object = alt::ICore::Instance().CreateCheckpoint(type, pos, radius, height, color);
+                    break;
+                }
+
+                case(uint8_t)alt::IColShape::ColShapeType::POLYGON:
+                {
+                    float minZ = args.Get<float>("minZ");
+                    float maxZ = args.Get<float>("maxZ");
+                    auto points = args.Get<std::vector<alt::Vector2f>>("points");
+
+                    object = alt::ICore::Instance().CreateColShapePolygon(minZ, maxZ, points);
+                    break;
+                }
+            }
+
+            break;
+        }
     }
 
     if(!object)
