@@ -98,6 +98,16 @@ static js::Event playerWeaponChangeEvent(alt::CEvent::Type::PLAYER_WEAPON_CHANGE
     args.Set("newSeat", e->GetNewWeapon());
 });
 
+static js::Event localMetaChangeEvent(alt::CEvent::Type::LOCAL_SYNCED_META_CHANGE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CLocalMetaDataChangeEvent*>(ev);
+
+    args.Set("player", e->GetTarget());
+    args.Set("key", e->GetKey());
+    args.Set("oldValue", e->GetOldVal());
+    args.Set("newValue", e->GetVal());
+});
+
 // TODO
 static js::Event connectionQueueAddEvent(alt::CEvent::Type::CONNECTION_QUEUE_ADD, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
@@ -135,4 +145,15 @@ static js::Event playerDimensionChangeEvent(alt::CEvent::Type::PLAYER_DIMENSION_
     args.Set("player", e->GetTarget());
     args.Set("oldDimension", e->GetOldDimension());
     args.Set("newDimension", e->GetNewDimension());
+});
+
+static js::Event playerAnimationChangeEvent(alt::CEvent::Type::PLAYER_CHANGE_ANIMATION_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CPlayerChangeAnimationEvent*>(ev);
+
+    args.Set("player", e->GetTarget());
+    args.Set("oldAnimDict", e->GetOldAnimationDict());
+    args.Set("newAnimDict", e->GetNewAnimationDict());
+    args.Set("oldAnimName", e->GetNewAnimationName());
+    args.Set("newAnimName", e->GetNewAnimationName());
 });

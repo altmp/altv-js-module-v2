@@ -11,8 +11,10 @@ Event.register(alt.Enums.EventType.PLAYER_ENTERING_VEHICLE, "PlayerVehicleEnteri
 Event.register(alt.Enums.EventType.PLAYER_LEAVE_VEHICLE, "PlayerVehicleLeft");
 Event.register(alt.Enums.EventType.PLAYER_CHANGE_VEHICLE_SEAT, "PlayerVehicleSeatChange");
 Event.register(alt.Enums.EventType.PLAYER_WEAPON_CHANGE, "PlayerWeaponChange");
+Event.register(alt.Enums.EventType.LOCAL_SYNCED_META_CHANGE, "LocalMetaChange");
 Event.register(alt.Enums.EventType.CONNECTION_QUEUE_ADD, "ConnectionQueueAdd");
 Event.register(alt.Enums.EventType.CONNECTION_QUEUE_REMOVE, "ConnectionQueueRemove");
 Event.register(alt.Enums.EventType.PLAYER_REQUEST_CONTROL, "RequestControl");
 Event.register(alt.Enums.EventType.PLAYER_CHANGE_INTERIOR_EVENT, "PlayerInteriorChange");
 Event.register(alt.Enums.EventType.PLAYER_DIMENSION_CHANGE, "PlayerDimensionChange");
+Event.register(alt.Enums.EventType.PLAYER_CHANGE_ANIMATION_EVENT, "PlayerAnimationChange");
