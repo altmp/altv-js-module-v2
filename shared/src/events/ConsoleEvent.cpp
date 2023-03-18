@@ -7,4 +7,3 @@ static js::Event consoleCommandEvent(alt::CEvent::Type::CONSOLE_COMMAND_EVENT, [
     args.Set("command", e->GetName());
     args.Set("args", e->GetArgs());
 });
-
