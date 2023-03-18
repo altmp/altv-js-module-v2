@@ -15,6 +15,9 @@ namespace js
     {
         NONE,
 
+        ENTITY_ENTER_COLSHAPE,
+        ENTITY_LEAVE_COLSHAPE,
+
         SIZE
     };
 
