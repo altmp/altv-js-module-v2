@@ -1,6 +1,6 @@
+#include "Logger.h"
 #include "Module.h"
 #include "interfaces/IResource.h"
-#include "Logger.h"
 
 static void ToggleEvent(js::FunctionContext& ctx)
 {
@@ -50,27 +50,35 @@ static void GetEntityFactory(js::FunctionContext& ctx)
 
 static void CreateEntity(js::FunctionContext& ctx)
 {
-    if(!ctx.CheckArgCount(1, INT32_MAX)) return;
+    if(!ctx.CheckArgCount(2)) return;
 
     alt::IBaseObject::Type type;
     if(!ctx.GetArg(0, type)) return;
+
+    js::Object args;
+    if(!ctx.GetArg(1, args)) return;
 
     alt::IBaseObject* object = nullptr;
     switch(type)
     {
         case alt::IBaseObject::Type::VEHICLE:
         {
-            uint32_t model;
-            if(!ctx.GetArg(1, model)) return;
-            alt::Vector3f pos;
-            if(!ctx.GetArg(2, pos)) return;
-            alt::Vector3f rot;
-            if(!ctx.GetArg(3, rot)) return;
+            uint32_t model = 0;
+            if(args.GetType("model") == js::Type::NUMBER) model = args.Get<uint32_t>("model");
+            else if(args.GetType("model") == js::Type::STRING)
+                model = alt::ICore::Instance().Hash(args.Get<std::string>("model"));
+            alt::Vector3f pos = args.Get<alt::Vector3f>("pos");
+            alt::Vector3f rot = args.Get<alt::Vector3f>("rot");
             object = alt::ICore::Instance().CreateVehicle(model, pos, rot);
             break;
         }
     }
 
+    if(!object)
+    {
+        ctx.Return(nullptr);
+        return;
+    }
     js::IResource* resource = ctx.GetResource();
     js::ScriptObject* scriptObject = resource->GetOrCreateScriptObject(ctx.GetContext(), object);
     if(!scriptObject)
@@ -80,12 +88,7 @@ static void CreateEntity(js::FunctionContext& ctx)
     }
 
     js::Function func = resource->GetBindingExport<v8::Function>("entity:addEntityToAll");
-    if(!func.IsValid())
-    {
-        js::Logger::Error("Failed to get entity:addEntityToAll binding export");
-        ctx.Return(nullptr);
-        return;
-    }
+    if(!ctx.Check(func.IsValid(), "INTERNAL ERROR: Failed to get entity:addEntityToAll function")) return;
     func.Call(scriptObject->Get());
 
     ctx.Return(scriptObject->Get());
