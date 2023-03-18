@@ -3,7 +3,7 @@
 
 extern js::Class resourceClass;
 
-void Current(js::LazyPropertyContext& ctx)
+static void Current(js::LazyPropertyContext& ctx)
 {
     alt::IResource* resource = ctx.GetResource()->GetResource();
     if(!resource)
@@ -15,7 +15,7 @@ void Current(js::LazyPropertyContext& ctx)
     ctx.Return(resourceObj);
 }
 
-void Get(js::FunctionContext& ctx)
+static void Get(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
     std::string resourceName;
@@ -30,7 +30,7 @@ void Get(js::FunctionContext& ctx)
     ctx.Return(resourceObj);
 }
 
-void Exists(js::FunctionContext& ctx)
+static void Exists(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
     std::string resourceName;
@@ -39,7 +39,15 @@ void Exists(js::FunctionContext& ctx)
     ctx.Return(resource != nullptr);
 }
 
-void PathGetter(js::PropertyContext& ctx)
+static void TypeGetter(js::PropertyContext& ctx)
+{
+    if(!ctx.CheckExtraInternalFieldValue()) return;
+
+    alt::IResource* resource = ctx.GetExtraInternalFieldValue<alt::IResource>();
+    ctx.Return(resource->GetType());
+}
+
+static void PathGetter(js::PropertyContext& ctx)
 {
     if(!ctx.CheckExtraInternalFieldValue()) return;
 
@@ -47,7 +55,7 @@ void PathGetter(js::PropertyContext& ctx)
     ctx.Return(resource->GetPath());
 }
 
-void NameGetter(js::PropertyContext& ctx)
+static void NameGetter(js::PropertyContext& ctx)
 {
     if(!ctx.CheckExtraInternalFieldValue()) return;
 
@@ -55,12 +63,48 @@ void NameGetter(js::PropertyContext& ctx)
     ctx.Return(resource->GetName());
 }
 
-void MainGetter(js::PropertyContext& ctx)
+static void MainGetter(js::PropertyContext& ctx)
 {
     if(!ctx.CheckExtraInternalFieldValue()) return;
 
     alt::IResource* resource = ctx.GetExtraInternalFieldValue<alt::IResource>();
     ctx.Return(resource->GetMain());
+}
+
+static void ExportsGetter(js::PropertyContext& ctx)
+{
+    if(!ctx.CheckExtraInternalFieldValue()) return;
+
+    alt::IResource* resource = ctx.GetExtraInternalFieldValue<alt::IResource>();
+    ctx.Return(js::MValueToJS(resource->GetExports()));
+}
+
+static void DependenciesGetter(js::PropertyContext& ctx)
+{
+    if(!ctx.CheckExtraInternalFieldValue()) return;
+
+    alt::IResource* resource = ctx.GetExtraInternalFieldValue<alt::IResource>();
+    // todo: change this when its a std::vector instead of alt::Array
+    std::vector<std::string> dependencies;
+    for(auto& dependency : resource->GetDependencies())
+    {
+        dependencies.push_back(dependency);
+    }
+    ctx.Return(dependencies);
+}
+
+static void DependantsGetter(js::PropertyContext& ctx)
+{
+    if(!ctx.CheckExtraInternalFieldValue()) return;
+
+    alt::IResource* resource = ctx.GetExtraInternalFieldValue<alt::IResource>();
+    // todo: change this when its a std::vector instead of alt::Array
+    std::vector<std::string> dependants;
+    for(auto& dependant : resource->GetDependants())
+    {
+        dependants.push_back(dependant);
+    }
+    ctx.Return(dependants);
 }
 
 // clang-format off
@@ -70,7 +114,11 @@ extern js::Class resourceClass("Resource", nullptr, [](js::ClassTemplate& tpl)
     tpl.StaticFunction("get", Get);
     tpl.StaticFunction("exists", Exists);
 
+    tpl.Property("type", TypeGetter);
     tpl.Property("path", PathGetter);
     tpl.Property("name", NameGetter);
     tpl.Property("main", MainGetter);
+    tpl.Property("exports", ExportsGetter);
+    tpl.Property("dependencies", DependenciesGetter);
+    tpl.Property("dependants", DependantsGetter);
 }, true);
