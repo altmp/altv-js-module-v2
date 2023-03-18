@@ -72,11 +72,12 @@ namespace js
         template<typename T>
         T Get(const std::string& key) const
         {
+            using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
             v8::MaybeLocal<v8::Value> maybeVal = object->Get(context, js::JSValue(key));
             v8::Local<v8::Value> val;
             if(!maybeVal.ToLocal(&val)) return T();
-            std::optional<T> result = js::CppValue<T>(val);
-            return result.has_value() ? result.value() : T();
+            std::optional<Type> result = js::CppValue<Type>(val);
+            return result.has_value() ? (T)result.value() : T();
         }
 
         js::Type GetType(const std::string& key);
