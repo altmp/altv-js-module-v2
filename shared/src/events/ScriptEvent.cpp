@@ -55,10 +55,22 @@ static js::Event explosionEvent(alt::CEvent::Type::EXPLOSION_EVENT, [](const alt
     args.Set("target", e->GetTarget());
 });
 
-// TODO
 static js::Event fireEvent(alt::CEvent::Type::FIRE_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
-    //
+    auto e = static_cast<const alt::CFireEvent*>(ev);
+
+    args.Set("player", e->GetSource());
+    const alt::Array<alt::CFireEvent::FireInfo>& fires = e->GetFires();
+    js::Array firesArr(fires.GetSize());
+    for (uint32_t i = 0; i < fires.GetSize(); i++)
+    {
+        const alt::CFireEvent::FireInfo& fire = fires[i];
+        js::Object fireObj;
+        fireObj.Set("pos", fire.position);
+        fireObj.Set("weaponHash", fire.weaponHash);
+        firesArr.Set(i, fireObj.Get());
+    }
+    args.Set("fires", firesArr.Get());
 });
 
 static js::Event startProjectileEvent(alt::CEvent::Type::START_PROJECTILE_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
