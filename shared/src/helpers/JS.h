@@ -2,11 +2,14 @@
 
 #include "v8-persistent-handle.h"
 #include "Convert.h"
+#include "Type.h"
 
 namespace js
 {
     template<typename T>
     using Persistent = v8::Persistent<T, v8::CopyablePersistentTraits<T>>;
+
+    class IResource;
 
     class Value
     {
@@ -14,6 +17,7 @@ namespace js
 
     protected:
         v8::Local<v8::Context> context;
+        IResource* resource = nullptr;
 
         Value(bool _valid, v8::Local<v8::Context> _context = v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()) : valid(_valid), context(_context) {}
 
@@ -27,6 +31,8 @@ namespace js
         {
             return context;
         }
+
+        IResource* GetResource();
     };
 
     class Object : public Value
@@ -36,6 +42,7 @@ namespace js
 
     private:
         v8::Local<v8::Object> object;
+        std::unordered_map<std::string, js::Type> typeCache;
 
     public:
         Object() : Value(true), object(v8::Object::New(v8::Isolate::GetCurrent())) {}
@@ -71,6 +78,8 @@ namespace js
             std::optional<T> result = js::CppValue<T>(val);
             return result.has_value() ? result.value() : T();
         }
+
+        js::Type GetType(const std::string& key);
 
         void SetAccessor(const std::string& key, v8::AccessorNameGetterCallback getter, v8::AccessorNameSetterCallback setter = nullptr, void* data = nullptr)
         {
