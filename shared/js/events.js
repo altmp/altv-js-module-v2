@@ -1,4 +1,3 @@
-// clang-format off
 requireBinding("shared/utils.js");
 
 export class Event {

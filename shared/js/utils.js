@@ -1,4 +1,3 @@
-// clang-format off
 requireBinding("shared/timers.js");
 const { inspect } = requireBinding("shared/logging.js");
 

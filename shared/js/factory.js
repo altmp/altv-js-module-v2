@@ -1,5 +1,3 @@
-// clang-format off
-
 function setEntityFactory(altClass, type) {
     return (factory) => {
         if(typeof factory !== 'function' || !altClass.isPrototypeOf(factory)) throw new Error(`Factory has to inherit from alt.${altClass.name}`);
