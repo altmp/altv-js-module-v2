@@ -1,6 +1,7 @@
 {
 	"recommendations": [
 		"xaver.clang-format",
-        "tboox.xmake-vscode"
+    "tboox.xmake-vscode",
+    "EditorConfig.EditorConfig"
 	],
 }
