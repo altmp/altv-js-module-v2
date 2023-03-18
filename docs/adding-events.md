@@ -65,4 +65,34 @@ To keep the event names consistent, here are a few rules on how to name the even
 
 ## Custom events
 
-TODO
+If we want to add events that are not sent by alt:V, then these are also easy to add.
+
+First of all, we don't need to add the `js::Event` handler as with alt:V events, because we are handling this data ourselves with a custom event.
+
+When we want to register a custom event, we simply go to the C++ `js::EventType` enum and add a new event type there after the last type added, but before the `SIZE` type.
+
+Then we can register the event in the JS side by calling `Event.register` with `true` as the third argument.
+
+To invoke our custom event, we need to call `Event.invoke` also with `true` as the third argument.
+
+Example:
+```js
+const { Event } = requireBinding("shared/events.js");
+
+Event.register(alt.Enums.CustomEventType.MY_CUSTOM_EVENT, "CustomEvent"); // Assuming we added `MY_CUSTOM_EVENT` to the js::EventType enum in C++
+
+alt.onSomeOtherEvent(({ someState }) => {
+    if(someState) Event.invoke(alt.Enums.CustomEventType.MY_CUSTOM_EVENT, { myData: 5 }, true);
+});
+```
+
+Alternatively, if the event should be invoked from C++, use the `js::Event::SendEvent` function.
+
+Example:
+```cpp
+js::EventArgs args;
+args.Set("myData", 5);
+alt::Event::SendEvent(js::EventType::MY_CUSTOM_EVENT, args, resource);
+```
+
+As a real example on how a custom event is implemented, check [this commit](https://github.com/LeonMrBonnie/altv-js-module-v2/commit/df577247a03fae10059b653452d8121998c41e37).
