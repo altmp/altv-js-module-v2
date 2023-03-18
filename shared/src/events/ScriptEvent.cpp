@@ -23,11 +23,13 @@ static js::Event serverScriptEvent(alt::CEvent::Type::SERVER_SCRIPT_EVENT, [](co
     args.Set("args", argsArray.Get());
 });
 
-// TODO
-//? ColShape, CollisionShape ? Rename this
 static js::Event colshapeEvent(alt::CEvent::Type::COLSHAPE_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
-    //
+    auto e = static_cast<const alt::CColShapeEvent*>(ev);
+
+    args.Set("entity", e->GetEntity());
+    args.Set("colShape", e->GetTarget());
+    args.Set("state", e->GetState());
 });
 
 static js::Event weaponDamageEvent(alt::CEvent::Type::WEAPON_DAMAGE_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
