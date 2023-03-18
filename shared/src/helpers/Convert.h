@@ -356,6 +356,14 @@ namespace js
             if(!obj.has_value()) return std::nullopt;
             return std::optional<T>(dynamic_cast<T>(obj.value()));
         }
+        else if constexpr(std::is_same_v<T, js::Object>)
+        {
+            return js::Object(val.As<v8::Object>());
+        }
+        else if constexpr(std::is_same_v<T, js::Array>)
+        {
+            return js::Array(val.As<v8::Array>());
+        }
         else if constexpr(std::is_same_v<T, std::vector<typename T::value_type>>)
         {
             if(!val->IsArray()) return std::nullopt;
