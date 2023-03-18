@@ -12,7 +12,7 @@ static void GetEnumObject(js::LazyPropertyContext& ctx)
     {
         obj.Set(key.data(), (int)value);
     }
-    ctx.Return(obj.Get());
+    ctx.Return(obj);
 }
 
 template<typename T, T Start, T End>
@@ -25,7 +25,7 @@ static void GetEnumObjectWithStartEnd(js::LazyPropertyContext& ctx)
         auto& entry = values[i];
         obj.Set(entry.second.data(), (int)entry.first);
     }
-    ctx.Return(obj.Get());
+    ctx.Return(obj);
 }
 
 // clang-format off

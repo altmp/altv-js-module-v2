@@ -9,7 +9,7 @@ static js::Event clientScriptEvent(alt::CEvent::Type::CLIENT_SCRIPT_EVENT, [](co
     const alt::MValueArgs& eventArgs = e->GetArgs();
     js::Array argsArray(eventArgs.GetSize());
     js::MValueArgsToJS(eventArgs, argsArray);
-    args.Set("args", argsArray.Get());
+    args.Set("args", argsArray);
 });
 
 static js::Event serverScriptEvent(alt::CEvent::Type::SERVER_SCRIPT_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
@@ -20,7 +20,7 @@ static js::Event serverScriptEvent(alt::CEvent::Type::SERVER_SCRIPT_EVENT, [](co
     const alt::MValueArgs& eventArgs = e->GetArgs();
     js::Array argsArray(eventArgs.GetSize());
     js::MValueArgsToJS(eventArgs, argsArray);
-    args.Set("args", argsArray.Get());
+    args.Set("args", argsArray);
 });
 
 static js::Event colshapeEvent(alt::CEvent::Type::COLSHAPE_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
@@ -68,9 +68,9 @@ static js::Event fireEvent(alt::CEvent::Type::FIRE_EVENT, [](const alt::CEvent* 
         js::Object fireObj;
         fireObj.Set("pos", fire.position);
         fireObj.Set("weaponHash", fire.weaponHash);
-        firesArr.Set(i, fireObj.Get());
+        firesArr.Set(i, fireObj);
     }
-    args.Set("fires", firesArr.Get());
+    args.Set("fires", firesArr);
 });
 
 static js::Event startProjectileEvent(alt::CEvent::Type::START_PROJECTILE_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
