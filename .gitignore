@@ -1,5 +1,5 @@
 .xmake
-.vscode
+.vscode/compile_commands.json
 build
 server/deps/nodejs/lib/Release/*.dll
 server/deps/nodejs/lib/Release/*.lib
