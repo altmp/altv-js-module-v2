@@ -1,0 +1,38 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "ALT_CLIENT_API",
+                "ALT_CLIENT",
+                "ALT_SERVER_API",
+                "ALT_SERVER",
+                "JS_MODULE_VERSION",
+                "DYNAMIC_BUILD",
+                "WIN32",
+                "NODE_WANT_INTERNALS"
+            ],
+            "windowsSdkVersion": "10.0.19041.0",
+            "cppStandard": "c++20",
+            "intelliSenseMode": "msvc-x64",
+            "includePath": [
+                "client/src",
+                "client/deps",
+                "server/src",
+                "server/deps",
+                "shared/src",
+                "deps",
+                "deps/cpp-sdk",
+                "server/deps/nodejs/include",
+                "server/deps/nodejs/deps/v8/include",
+                "server/deps/nodejs/deps/uv/include",
+                "build"
+            ],
+            "compilerPath": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.32.31326\\bin\\Hostx64\\x64\\cl.exe",
+        }
+    ],
+    "version": 4
+}
