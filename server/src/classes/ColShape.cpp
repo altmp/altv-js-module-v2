@@ -14,3 +14,6 @@ extern js::Class colShapeClass("ColShape", &worldObjectClass, nullptr, [](js::Cl
     tpl.Method<alt::IColShape, bool, uint16_t, &alt::IColShape::IsEntityIdIn>("isEntityIdIn");
     tpl.Method<alt::IColShape, bool, alt::Position, &alt::IColShape::IsPointIn>("isPointIn");
 });
+
+extern js::Class checkpointClass("Checkpoint", &colShapeClass, nullptr, [](js::ClassTemplate& tpl)
+{});
