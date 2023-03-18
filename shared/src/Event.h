@@ -15,9 +15,6 @@ namespace js
     {
         NONE,
 
-        RESOURCE_START,
-        RESOURCE_STOP,
-
         SIZE
     };
 

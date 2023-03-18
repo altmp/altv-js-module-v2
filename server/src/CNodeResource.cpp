@@ -63,8 +63,6 @@ bool CNodeResource::Start()
         OnTick();
     }
 
-    IResource::Started();
-
     return true;
 }
 
@@ -76,7 +74,6 @@ bool CNodeResource::Stop()
 
     {
         v8::Context::Scope scope(GetContext());
-        IResource::Stopped();
 
         node::EmitAsyncDestroy(isolate, asyncContext);
         asyncResource.Reset();

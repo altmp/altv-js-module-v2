@@ -62,17 +62,6 @@ namespace js
             Event::RegisterEvents(this);
         }
 
-        void Started()
-        {
-            js::Event::EventArgs args{ { "resourceName", js::JSValue(resource->GetName()) } };
-            js::Event::SendEvent(js::EventType::RESOURCE_START, args, this);
-        }
-        void Stopped()
-        {
-            js::Event::EventArgs args{ { "resourceName", js::JSValue(resource->GetName()) } };
-            js::Event::SendEvent(js::EventType::RESOURCE_STOP, args, this);
-        }
-
     public:
         IResource(alt::IResource* _resource, v8::Isolate* _isolate) : resource(_resource), isolate(_isolate) {}
         virtual ~IResource() = default;
