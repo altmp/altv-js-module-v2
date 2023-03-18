@@ -229,6 +229,23 @@ namespace js
             }
             return false;
         }
+        bool GetValueAsHash(uint32_t& outValue)
+        {
+            if(this->errored) return false;
+            Type argType = GetValueType();
+            if(argType == Type::STRING)
+            {
+                std::string str = CppValue(value.As<v8::String>());
+                outValue = alt::ICore::Instance().Hash(str.c_str());
+                return true;
+            }
+            else if(argType == Type::NUMBER)
+            {
+                outValue = (uint32_t)CppValue(value.As<v8::Number>());
+                return true;
+            }
+            return false;
+        }
     };
 
     template<class T>
