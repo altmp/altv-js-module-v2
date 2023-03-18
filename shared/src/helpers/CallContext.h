@@ -54,7 +54,7 @@ namespace js
 
         void Throw(const std::string& message)
         {
-            info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(message)));
+            js::Throw(message);
             errored = true;
         }
 
