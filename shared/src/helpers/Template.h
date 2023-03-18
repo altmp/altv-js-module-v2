@@ -88,7 +88,7 @@ namespace js
                 return;
             }
             constexpr bool isEnum = std::is_enum_v<Type>;
-            if constexpr(isEnum) (obj->*Setter)(static_cast<Type>(value->Int32Value().ToChecked()));
+            if constexpr(isEnum) (obj->*Setter)(static_cast<Type>(value->Int32Value(info.GetIsolate()->GetEnteredOrMicrotaskContext()).ToChecked()));
             else
             {
                 auto val = CppValue<typename std::remove_cv_t<typename std::remove_reference_t<Type>>>(value);

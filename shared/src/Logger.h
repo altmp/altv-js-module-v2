@@ -25,7 +25,7 @@ namespace js
         template<Type type>
         class Instance
         {
-            constexpr Logger& Get() const
+            Logger& Get() const
             {
                 static Logger logger(type);
                 return logger;
