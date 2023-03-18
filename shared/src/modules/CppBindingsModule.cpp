@@ -75,9 +75,9 @@ static void CreateEntity(js::FunctionContext& ctx)
 
         case alt::IBaseObject::Type::COLSHAPE:
         {
-            switch(args.Get<uint8_t>("colShapeType"))
+            switch(args.Get<alt::IColShape::ColShapeType>("colShapeType"))
             {
-                case(uint8_t)alt::IColShape::ColShapeType::SPHERE:
+                case alt::IColShape::ColShapeType::SPHERE:
                 {
                     alt::Vector3f pos = args.Get<alt::Vector3f>("pos");
                     float radius = args.Get<float>("radius");
@@ -86,7 +86,7 @@ static void CreateEntity(js::FunctionContext& ctx)
                     break;
                 }
 
-                case(uint8_t)alt::IColShape::ColShapeType::CYLINDER:
+                case alt::IColShape::ColShapeType::CYLINDER:
                 {
                     alt::Vector3f pos = args.Get<alt::Vector3f>("pos");
                     float radius = args.Get<float>("radius");
@@ -96,7 +96,7 @@ static void CreateEntity(js::FunctionContext& ctx)
                     break;
                 }
 
-                case(uint8_t)alt::IColShape::ColShapeType::CIRCLE:
+                case alt::IColShape::ColShapeType::CIRCLE:
                 {
                     alt::Vector3f pos = args.Get<alt::Vector3f>("pos");
                     float radius = args.Get<float>("radius");
@@ -105,7 +105,7 @@ static void CreateEntity(js::FunctionContext& ctx)
                     break;
                 }
 
-                case(uint8_t)alt::IColShape::ColShapeType::CUBOID:
+                case alt::IColShape::ColShapeType::CUBOID:
                 {
                     alt::Vector3f pos1 = args.Get<alt::Vector3f>("pos1");
                     alt::Vector3f pos2 = args.Get<alt::Vector3f>("pos2");
@@ -114,7 +114,7 @@ static void CreateEntity(js::FunctionContext& ctx)
                     break;
                 }
 
-                case(uint8_t)alt::IColShape::ColShapeType::RECT:
+                case alt::IColShape::ColShapeType::RECT:
                 {
                     float x1 = args.Get<float>("x1");
                     float y1 = args.Get<float>("y1");
@@ -125,7 +125,7 @@ static void CreateEntity(js::FunctionContext& ctx)
                     break;
                 }
 
-                case(uint8_t)alt::IColShape::ColShapeType::CHECKPOINT_CYLINDER:
+                case alt::IColShape::ColShapeType::CHECKPOINT_CYLINDER:
                 {
                     uint8_t type = args.Get<uint8_t>("type");
                     alt::Vector3f pos = args.Get<alt::Vector3f>("pos");
@@ -137,7 +137,7 @@ static void CreateEntity(js::FunctionContext& ctx)
                     break;
                 }
 
-                case(uint8_t)alt::IColShape::ColShapeType::POLYGON:
+                case alt::IColShape::ColShapeType::POLYGON:
                 {
                     float minZ = args.Get<float>("minZ");
                     float maxZ = args.Get<float>("maxZ");
