@@ -53,6 +53,5 @@ namespace js
 
         static void SendEvent(const alt::CEvent* ev, IResource* resource);
         static void SendEvent(EventType type, EventArgs& args, IResource* resource);
-        static void RegisterEvents(IResource* resource);
     };
 }  // namespace js

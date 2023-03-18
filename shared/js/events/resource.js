@@ -1,6 +1,6 @@
 // clang-format off
 const { Event } = requireBinding("shared/events.js");
 
-Event.register("RESOURCE_START", "ResourceStart");
-Event.register("RESOURCE_STOP", "ResourceStop");
-Event.register("RESOURCE_ERROR", "ResourceError");
+Event.register(alt.Enums.EventType.RESOURCE_START, "ResourceStart");
+Event.register(alt.Enums.EventType.RESOURCE_STOP, "ResourceStop");
+Event.register(alt.Enums.EventType.RESOURCE_ERROR, "ResourceError");

@@ -1,11 +1,6 @@
 // clang-format off
 requireBinding("shared/utils.js");
 
-const serverScriptEventType = __serverScriptEventType;
-const clientScriptEventType = __clientScriptEventType;
-const cppEventsMap = new Map();
-const customEventsMap = new Map();
-
 export class Event {
     /** @type {Map<number, Function[]>} */
     static #handlers = new Map();
@@ -17,26 +12,31 @@ export class Event {
     /** @type {Map<string, Function[]>} */
     static #remoteScriptEventHandlers = new Map();
 
-    static async #registerCallback(name, eventName, custom, handler) {
+    /**
+     * @param {string} name
+     * @param {number} type
+     * @param {boolean} custom
+     * @param {Function} handler
+     */
+    static async #registerCallback(name, type, custom, handler) {
         if(typeof handler !== "function") throw new Error(`Handler for event '${name}' is not a function`);
 
-        const typeMap = custom ? customEventsMap : cppEventsMap;
-        if(typeMap.size === 0) await alt.Utils.waitForNextTick(); // Needed to ensure that the event types are registered
-
-        const type = typeMap.get(eventName);
         const map = custom ? Event.#customHandlers : Event.#handlers;
-
         if(!map.has(type)) map.set(type, [ handler ]);
         else map.get(type).push(handler);
 
         if(!custom) cppBindings.toggleEvent(type, true);
     }
 
-    static #unregisterCallback(name, eventName, custom, handler) {
+    /**
+     * @param {string} name
+     * @param {number} type
+     * @param {boolean} custom
+     * @param {Function} handler
+     */
+    static #unregisterCallback(name, type, custom, handler) {
         if(typeof handler !== "function") throw new Error(`Handler for event '${name}' is not a function`);
 
-        const typeMap = custom ? customEventsMap : cppEventsMap;
-        const type = typeMap.get(eventName);
         const map = custom ? Event.#customHandlers : Event.#handlers;
         const handlers = map.get(type);
         if(!handlers) return;
@@ -47,6 +47,10 @@ export class Event {
         if(!custom) cppBindings.toggleEvent(type, false);
     }
 
+    /**
+     * @param {{ eventName: string }} ctx
+     * @param {boolean} local
+     */
     static #handleScriptEvent(ctx, local) {
         const name = ctx.eventName;
         const handlers = local ? Event.#localScriptEventHandlers.get(name) : Event.#remoteScriptEventHandlers.get(name);
@@ -58,24 +62,36 @@ export class Event {
         }
     }
 
-    static #getEventHandlers(name, custom) {
-        const typeMap = custom ? customEventsMap : cppEventsMap;
-        const type = typeMap.get(name);
+    /**
+     * @param {number} type
+     * @param {boolean} custom
+     */
+    static #getEventHandlers(type, custom) {
         const map = custom ? Event.#customHandlers : Event.#handlers;
         return map.get(type);
     }
 
-    static #getEventFunc(name, eventName, custom) {
-        const func = Event.#registerCallback.bind(undefined, name, eventName, custom);
+    /**
+     * @param {string} name
+     * @param {number} type
+     * @param {boolean} custom
+     */
+    static #getEventFunc(name, type, custom) {
+        const func = Event.#registerCallback.bind(undefined, name, type, custom);
         Object.defineProperties(func, {
             "listeners": {
-                get: Event.#getEventHandlers.bind(undefined, eventName, custom)
+                get: Event.#getEventHandlers.bind(undefined, type, custom)
             },
         });
-        func.remove = Event.#unregisterCallback.bind(undefined, name, eventName, custom);
+        func.remove = Event.#unregisterCallback.bind(undefined, name, type, custom);
         return func;
     }
 
+    /**
+     * @param {boolean} local
+     * @param {string} name
+     * @param {Function} handler
+     */
     static subscribeScriptEvent(local, name, handler) {
         if(typeof name !== "string") throw new Error(`Event name is not a string`);
         if(typeof handler !== "function") throw new Error(`Handler for ${local ? "local" : "remote"} script event '${name}' is not a function`);
@@ -86,17 +102,22 @@ export class Event {
     }
 
     /**
-     * @param {string} eventName Name of the event enum value in C++
+     * @param {number} type Event type
      * @param {string} name Event name (e.g. `PlayerConnect` is accessible via `alt.Events.onPlayerConnect`)
      * @param {string} custom alt:V built-in event or a custom JS module event
      */
-    static register(eventName, name, custom = false) {
-        alt.Events[`on${name}`] = Event.#getEventFunc(name, eventName, custom);
+    static register(type, name, custom = false) {
+        alt.Events[`on${name}`] = Event.#getEventFunc(name, type, custom);
     }
 
+    /**
+     * @param {number} eventType
+     * @param {Record<string, unknown>} ctx
+     * @param {boolean} custom
+     */
     static invoke(eventType, ctx, custom) {
-        if(eventType === serverScriptEventType) Event.#handleScriptEvent(ctx, alt.isServer);
-        else if(eventType === clientScriptEventType) Event.#handleScriptEvent(ctx, alt.isClient);
+        if(eventType === alt.Enums.EventType.CLIENT_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isServer);
+        else if(eventType === alt.Enums.EventType.SERVER_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isClient);
 
         const map = custom ? Event.#customHandlers : Event.#handlers;
         const handlers = map.get(eventType);
@@ -112,16 +133,6 @@ if(alt.isClient) {
 }
 else {
     alt.Events.onClient = Event.subscribeScriptEvent.bind(undefined, false);
-}
-
-export function setEvents(cppEvents, customEvents) {
-    for (const event in cppEvents) {
-        cppEventsMap.set(cppEvents[event], parseInt(event));
-    }
-
-    for (const event in customEvents) {
-        customEventsMap.set(customEvents[event], parseInt(event));
-    }
 }
 
 export function onEvent(custom, eventType, eventData) {

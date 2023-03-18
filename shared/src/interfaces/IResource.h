@@ -57,11 +57,6 @@ namespace js
         void InitializeBinding(Binding* binding);
         void RegisterBindingExport(const std::string& name, const std::string& bindingName, const std::string& exportName);
 
-        void InitializeEvents()
-        {
-            Event::RegisterEvents(this);
-        }
-
     public:
         IResource(alt::IResource* _resource, v8::Isolate* _isolate) : resource(_resource), isolate(_isolate) {}
         virtual ~IResource() = default;
@@ -118,7 +113,6 @@ namespace js
         {
             // Register the needed exports of our bindings
             RegisterBindingExport("timers:tick", "shared/timers.js", "tick");
-            RegisterBindingExport("events:setEvents", "shared/events.js", "setEvents");
             RegisterBindingExport("events:onEvent", "shared/events.js", "onEvent");
 
             RegisterBindingExport("classes:vector3", "shared/classes/vector.js", "Vector3");

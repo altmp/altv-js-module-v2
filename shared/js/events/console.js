@@ -1,4 +1,4 @@
 // clang-format off
 const { Event } = requireBinding("shared/events.js");
 
-Event.register("CONSOLE_COMMAND_EVENT", "ConsoleCommand");
+Event.register(alt.Enums.EventType.CONSOLE_COMMAND_EVENT, "ConsoleCommand");

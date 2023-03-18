@@ -46,30 +46,3 @@ void js::Event::SendEvent(EventType type, EventArgs& args, IResource* resource)
 {
     CallEventBinding(true, (int)type, args, resource);
 }
-
-void js::Event::RegisterEvents(js::IResource* resource)
-{
-    v8::Local<v8::Function> func = resource->GetBindingExport<v8::Function>("events:setEvents");
-    if(func.IsEmpty()) return;
-
-    v8::Isolate* isolate = resource->GetIsolate();
-    v8::Local<v8::Context> context = resource->GetContext();
-    v8::Local<v8::Object> eventsObj = v8::Object::New(isolate);
-    v8::Local<v8::Object> customEventsObj = v8::Object::New(isolate);
-
-    auto values = magic_enum::enum_entries<alt::CEvent::Type>();
-    for(int i = (int)alt::CEvent::Type::NONE + 1; i < (int)alt::CEvent::Type::ALL; i++)
-    {
-        auto& entry = values[i];
-        eventsObj->Set(context, js::JSValue((int)entry.first), js::JSValue(entry.second.data()));
-    }
-    auto customValues = magic_enum::enum_entries<js::EventType>();
-    for(int i = (int)js::EventType::NONE + 1; i < (int)js::EventType::SIZE; i++)
-    {
-        auto& entry = customValues[i];
-        customEventsObj->Set(context, js::JSValue((int)entry.first), js::JSValue(entry.second.data()));
-    }
-
-    std::vector<v8::Local<v8::Value>> args = { eventsObj, customEventsObj };
-    func->Call(context, v8::Undefined(isolate), args.size(), args.data());
-}

@@ -1,4 +1,4 @@
 // clang-format off
 const { Event } = requireBinding("shared/events.js");
 
-Event.register("PLAYER_CONNECT", "PlayerConnect");
+Event.register(alt.Enums.EventType.PLAYER_CONNECT, "PlayerConnect");
