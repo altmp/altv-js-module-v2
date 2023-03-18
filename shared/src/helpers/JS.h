@@ -11,7 +11,7 @@ namespace js
 
     class IResource;
 
-    void Throw(const std::string& message)
+    static void Throw(const std::string& message)
     {
         v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(js::JSValue(message)));
     }
