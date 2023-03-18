@@ -10,11 +10,23 @@ Event.register(alt.Enums.EventType.START_PROJECTILE_EVENT, "ProjectileStart");
 // Custom ColShape events
 Event.register(alt.Enums.CustomEventType.ENTITY_ENTER_COLSHAPE, "EntityColShapeEnter", true);
 Event.register(alt.Enums.CustomEventType.ENTITY_LEAVE_COLSHAPE, "EntityColShapeLeave", true);
+Event.register(alt.Enums.CustomEventType.ENTITY_ENTER_COLSHAPE, "EntityCheckpointEnter", true);
+Event.register(alt.Enums.CustomEventType.ENTITY_LEAVE_COLSHAPE, "EntityCheckpointLeave", true);
+
+function getColShapeEventType(colShape, state) {
+    const isCheckpoint = colShape instanceof alt.Checkpoint;
+    if (!isCheckpoint && !state) return alt.Enums.CustomEventType.ENTITY_ENTER_COLSHAPE;
+    if (!isCheckpoint && state) return alt.Enums.CustomEventType.ENTITY_LEAVE_COLSHAPE;
+    if (isCheckpoint && !state) return alt.Enums.CustomEventType.ENTITY_ENTER_CHECKPOINT;
+    if (isCheckpoint && state) return alt.Enums.CustomEventType.ENTITY_LEAVE_CHECKPOINT;
+}
+
 alt.Events.onColShapeEvent(({ entity, colShape, state }) => {
-    const type = state ? alt.Enums.CustomEventType.ENTITY_ENTER_COLSHAPE : alt.Enums.CustomEventType.ENTITY_LEAVE_COLSHAPE;
+    const eventType = getColShapeEventType(colShape, state);
     const data = {
         entity,
         colShape
     };
-    Event.invoke(type, data, true);
+
+    Event.invoke(eventType, data, true);
 });
