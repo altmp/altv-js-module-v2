@@ -163,7 +163,6 @@ namespace js
         bool GetArg(int index, T& outValue, Type typeToCheck = Type::INVALID)
         {
             using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
-            static_assert(IsJSValueConvertible<Type>, "Type is not convertible to JS value");
             if(errored) return false;
             if(typeToCheck != js::Type::INVALID && !CheckArgType(index, typeToCheck)) return false;
 
