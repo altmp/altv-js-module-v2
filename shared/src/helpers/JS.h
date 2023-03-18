@@ -134,6 +134,11 @@ namespace js
             return array;
         }
 
+        uint32_t Length() const
+        {
+            return array->Length();
+        }
+
         template<typename T>
         T Get(uint32_t index)
         {
