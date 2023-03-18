@@ -109,7 +109,10 @@ namespace js
                     info.GetReturnValue().Set(JSValue(value));
             }
             else
+            {
+                static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
                 info.GetReturnValue().Set(JSValue(value));
+            }
         }
     };
 
