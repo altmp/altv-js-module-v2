@@ -24,10 +24,10 @@ static js::Event serverScriptEvent(alt::CEvent::Type::SERVER_SCRIPT_EVENT, [](co
 });
 
 // TODO
-//? ColShape, CollisionShape ?
+//? ColShape, CollisionShape ? Rename this
 static js::Event colshapeEvent(alt::CEvent::Type::COLSHAPE_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
-    // 
+    //
 });
 
 static js::Event weaponDamageEvent(alt::CEvent::Type::WEAPON_DAMAGE_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
@@ -56,7 +56,7 @@ static js::Event explosionEvent(alt::CEvent::Type::EXPLOSION_EVENT, [](const alt
 // TODO
 static js::Event fireEvent(alt::CEvent::Type::FIRE_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
-    // 
+    //
 });
 
 static js::Event startProjectileEvent(alt::CEvent::Type::START_PROJECTILE_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)

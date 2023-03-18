@@ -36,7 +36,7 @@ static js::Event playerDamageEvent(alt::CEvent::Type::PLAYER_DAMAGE, [](const al
 {
     auto e = static_cast<const alt::CPlayerDamageEvent*>(ev);
 
-    args.Set("victim", e->GetTarget());
+    args.Set("player", e->GetTarget());
     args.Set("attacker", e->GetAttacker());
     args.Set("healthDamage", e->GetHealthDamage());
     args.Set("armourDamage", e->GetArmourDamage());

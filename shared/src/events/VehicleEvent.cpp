@@ -24,16 +24,6 @@ static js::Event vehicleDetachEvent(alt::CEvent::Type::VEHICLE_DETACH, [](const 
     args.Set("detachedVehicle", e->GetDetached());
 });
 
-//? Does it belong here ?
-static js::Event netOwnerChangeEvent(alt::CEvent::Type::NETOWNER_CHANGE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
-{
-    auto e = static_cast<const alt::CNetOwnerChangeEvent*>(ev);
-
-    args.Set("entity", e->GetTarget());
-    args.Set("oldNetOwner", e->GetOldOwner());
-    args.Set("newNetOwner", e->GetNewOwner());
-});
-
 static js::Event vehicleDamageEvent(alt::CEvent::Type::VEHICLE_DAMAGE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
     auto e = static_cast<const alt::CVehicleDamageEvent*>(ev);
