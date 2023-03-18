@@ -11,6 +11,11 @@ namespace js
 
     class IResource;
 
+    void Throw(const std::string& message)
+    {
+        v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(js::JSValue(message)));
+    }
+
     class Value
     {
         bool valid = true;
@@ -78,6 +83,27 @@ namespace js
             if(!maybeVal.ToLocal(&val)) return T();
             std::optional<Type> result = js::CppValue<Type>(val);
             return result.has_value() ? (T)result.value() : T();
+        }
+
+        template<typename T>
+        bool Get(const std::string& key, T& out)
+        {
+            using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
+            v8::MaybeLocal<v8::Value> maybeVal = object->Get(context, js::JSValue(key));
+            v8::Local<v8::Value> val;
+            if(!maybeVal.ToLocal(&val))
+            {
+                Throw("Failed to get property '" + key + "'");
+                return false;
+            }
+            std::optional<Type> result = js::CppValue<Type>(val);
+            if(!result.has_value())
+            {
+                Throw("Failed to get property '" + key + "'");
+                return false;
+            }
+            out = (T)result.value();
+            return true;
         }
 
         std::vector<std::string> GetKeys() const
