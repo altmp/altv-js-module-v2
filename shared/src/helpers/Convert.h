@@ -208,6 +208,25 @@ namespace js
         return alt::RGBA(rVal->NumberValue(ctx).ToChecked(), gVal->NumberValue(ctx).ToChecked(), bVal->NumberValue(ctx).ToChecked(), aVal->NumberValue(ctx).ToChecked());
     }
     std::optional<alt::IBaseObject*> ToBaseObject(v8::Local<v8::Value> val);
+
+    // https://stackoverflow.com/a/16337657/19498259
+    template<typename>
+    struct IsStdVector : std::false_type
+    {
+    };
+    template<typename T, typename A>
+    struct IsStdVector<std::vector<T, A>> : std::true_type
+    {
+    };
+    template<typename>
+    struct IsStdUnorderedMap : std::false_type
+    {
+    };
+    template<typename T, typename A>
+    struct IsStdUnorderedMap<std::unordered_map<T, A>> : std::true_type
+    {
+    };
+
     template<typename T>
     std::optional<T> CppValue(v8::Local<v8::Value> val)
     {
@@ -256,7 +275,7 @@ namespace js
         {
             return js::Array(val.As<v8::Array>());
         }
-        else if constexpr(std::is_same_v<T, std::vector<typename T::value_type>>)
+        else if constexpr(IsStdVector<T>::value)
         {
             if(!val->IsArray()) return std::nullopt;
             std::vector<typename T::value_type> vec;
@@ -269,13 +288,21 @@ namespace js
             }
             return vec;
         }
-        else if constexpr(std::is_same_v<T, std::unordered_map<typename T::value_type::first_type, typename T::value_type::second_type>>)
+        else if constexpr(IsStdUnorderedMap<T>::value)
         {
             if(!val->IsObject()) return std::nullopt;
-            return CppValue<typename T::value_type>(val.As<v8::Object>());
+            std::unordered_map<std::string, typename T::value_type::second_type> map;
+            js::Object obj(val.As<v8::Object>());
+            std::vector<std::string> keys = obj.GetKeys();
+            for(std::string& key : keys)
+            {
+                auto val = obj.template Get<typename T::value_type::second_type>(key);
+                map.insert({ key, val });
+            }
+            return map;
         }
-        else
-            static_assert("Invalid type specified to CppValue<v8::Value>");
+
+        return std::nullopt;
     }
 
     IResource* GetCurrentResource(v8::Isolate* isolate = nullptr);
