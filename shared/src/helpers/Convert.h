@@ -12,6 +12,9 @@ namespace js
     class Array;
     class IResource;
 
+    class Object;
+    class Array;
+
     alt::MValue JSToMValue(v8::Local<v8::Value> val, bool allowFunction = true);
     v8::Local<v8::Value> MValueToJS(alt::MValueConst val);
     void MValueArgsToJS(alt::MValueArgs args, Array& argsArray);
@@ -99,6 +102,8 @@ namespace js
     v8::Local<v8::Value> JSValue(alt::Position pos);
     v8::Local<v8::Value> JSValue(alt::Rotation rot);
     v8::Local<v8::Value> JSValue(alt::RGBA rgba);
+    v8::Local<v8::Value> JSValue(const js::Object& jsObj);
+    v8::Local<v8::Value> JSValue(const js::Array& jsArr);
 
     template<typename T, typename = void>
     constexpr bool IsJSValueConvertible = false;

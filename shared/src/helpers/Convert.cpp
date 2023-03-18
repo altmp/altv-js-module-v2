@@ -49,6 +49,16 @@ v8::Local<v8::Value> js::JSValue(alt::RGBA rgba)
     return resource->CreateRGBA(rgba);
 }
 
+v8::Local<v8::Value> js::JSValue(const js::Object& jsObj)
+{
+    return jsObj.Get();
+}
+
+v8::Local<v8::Value> js::JSValue(const js::Array& jsArr)
+{
+    return jsArr.Get();
+}
+
 alt::MValue js::JSToMValue(v8::Local<v8::Value> val, bool allowFunction)
 {
     alt::ICore& core = alt::ICore::Instance();
