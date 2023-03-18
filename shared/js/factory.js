@@ -21,15 +21,5 @@ alt.Factory.getVehicleFactory = getEntityFactory(alt.Enums.BaseObjectType.VEHICL
 // Factory ctors
 alt.Vehicle.create = (ctx) => {
     if(typeof ctx !== "object") throw new Error("Invalid args");
-
-    let { model, pos, rot } = ctx;
-    if(typeof model !== "number" && typeof model !== "string") throw new Error("Invalid model arg");
-    if(typeof pos !== "object" || !(pos instanceof alt.Vector3)) throw new Error("Invalid pos arg");
-    if(typeof rot !== "object" || !(rot instanceof alt.Vector3)) rot = new alt.Vector3(0, 0, 0);
-
-    let modelHash = 0;
-    if(typeof model === "number") modelHash = model;
-    else if(typeof model === "string") modelHash = alt.hash(model);
-
-    return cppBindings.createEntity(alt.Enums.BaseObjectType.VEHICLE, modelHash, pos, rot);
+    return cppBindings.createEntity(alt.Enums.BaseObjectType.VEHICLE, ctx);
 };
