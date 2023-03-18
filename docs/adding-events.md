@@ -61,7 +61,7 @@ Now the event will be available in the API by calling `alt.Events.onConsoleComma
 To keep the event names consistent, here are a few rules on how to name the events.
 
 1. Event names have to use PascalCase. (Actually in the end it's camelCase, because the `on` is appendend automatically when its added to the API)
-2. If the event name includes a verb, it should be at the end. (E.g. `VehicleEnter` instead of `EnterVehicle`) (Exceptions allowed where it results in weird grammar)
+2. If the event name includes a verb, it should be at the end. (E.g. `VehicleEnter` instead of `EnterVehicle`) (Exceptions allowed where the verb is not in infinitive form)
 
 ## Custom events
 
