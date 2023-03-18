@@ -1,7 +1,6 @@
 ---
 BasedOnStyle: LLVM
 IndentWidth: 4
----
 Language: Cpp
 ColumnLimit: 190
 AccessModifierOffset: 0
@@ -93,6 +92,7 @@ SpacesInCStyleCastParentheses: false
 SpacesInConditionalStatement: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
-Standard: c++17
+Standard: c++20
 DeriveLineEnding: true
 UseTab: Never
+...
