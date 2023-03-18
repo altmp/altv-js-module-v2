@@ -73,15 +73,12 @@ static void ResetNetOwner(js::FunctionContext& ctx)
 extern js::Class sharedEntityClass;
 extern js::Class entityClass("Entity", &sharedEntityClass, nullptr, [](js::ClassTemplate& tpl)
 {
-    tpl.StaticFunction("getByID", &GetByID);
-
     tpl.DynamicProperty("syncedMeta", nullptr, SyncedMetaSetter, SyncedMetaDeleter, nullptr);
     tpl.DynamicProperty("streamSyncedMeta", nullptr, StreamSyncedMetaSetter, StreamSyncedMetaDeleter, nullptr);
 
     tpl.Method<alt::IEntity, void, alt::IPlayer*, bool, &alt::IEntity::SetNetworkOwner>("setNetOwner");
     tpl.Method("resetNetOwner", ResetNetOwner);
 
-    // attach api
     tpl.Method<alt::IEntity, void, alt::IEntity*, int16_t, int16_t, alt::Position, alt::Rotation, bool, bool, &alt::IEntity::AttachToEntity>("attachTo");
     tpl.Method<alt::IEntity, void, alt::IEntity*, const std::string&, const std::string&, alt::Position, alt::Rotation, bool, bool, &alt::IEntity::AttachToEntity>("attachTo");
     tpl.Method<alt::IEntity, void, &alt::IEntity::Detach>("detach");
@@ -90,4 +87,6 @@ extern js::Class entityClass("Entity", &sharedEntityClass, nullptr, [](js::Class
     tpl.Property<alt::IEntity, bool, &alt::IEntity::GetStreamed, &alt::IEntity::SetStreamed>("streamed");
     tpl.Property<alt::IEntity, bool, &alt::IEntity::IsFrozen, &alt::IEntity::SetFrozen>("frozen");
     tpl.Property<alt::IEntity, bool, &alt::IEntity::HasCollision, &alt::IEntity::SetCollision>("collision");
+
+    tpl.StaticFunction("getByID", &GetByID);
 });
