@@ -57,8 +57,9 @@ namespace js
         template<typename T>
         void Set(const std::string& key, const T& val)
         {
-            static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
-            object->Set(context, js::JSValue(key), js::JSValue(val));
+            using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
+            static_assert(IsJSValueConvertible<Type>, "Type is not convertible to JS value");
+            object->Set(context, js::JSValue(key), js::JSValue((Type)val));
         }
 
         template<typename T>
