@@ -1,0 +1,6 @@
+{
+	"recommendations": [
+		"xaver.clang-format",
+        "tboox.xmake-vscode"
+	],
+}
