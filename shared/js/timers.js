@@ -1,4 +1,3 @@
-// clang-format off
 const timers = new Set();
 
 class Timer {

@@ -1,5 +1,3 @@
-// clang-format off
-// clang-format off
 const { esmLoader } = require("internal/process/esm_loader");
 const { translators } = require("internal/modules/esm/translators");
 const { ModuleWrap } = internalRequire("internal/test/binding").internalBinding("module_wrap");

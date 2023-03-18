@@ -1,6 +1,3 @@
-// clang-format off
-const { Event } = requireBinding("shared/events.js");
-
 // Entity all stores
 /**
  * @type {Map<number, Set<unknown>>}

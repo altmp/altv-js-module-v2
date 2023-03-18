@@ -1,4 +1,3 @@
-// clang-format off
 const primordials = {};
 
 const colorRegExp = /\u001b\[\d\d?m/g;
