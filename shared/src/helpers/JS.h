@@ -80,6 +80,20 @@ namespace js
             return result.has_value() ? (T)result.value() : T();
         }
 
+        std::vector<std::string> GetKeys() const
+        {
+            std::vector<std::string> keys;
+            v8::Local<v8::Array> propNames = object->GetPropertyNames(GetContext()).ToLocalChecked();
+            for(uint32_t i = 0; i < propNames->Length(); i++)
+            {
+                v8::MaybeLocal<v8::Value> maybeKey = propNames->Get(GetContext(), i);
+                v8::Local<v8::Value> key;
+                if(!maybeKey.ToLocal(&key)) continue;
+                keys.push_back(js::CppValue(key.As<v8::String>()));
+            }
+            return keys;
+        }
+
         js::Type GetType(const std::string& key);
 
         void SetAccessor(const std::string& key, v8::AccessorNameGetterCallback getter, v8::AccessorNameSetterCallback setter = nullptr, void* data = nullptr)
