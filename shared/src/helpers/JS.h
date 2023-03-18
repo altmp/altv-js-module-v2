@@ -22,6 +22,11 @@ namespace js
         {
             return valid;
         }
+
+        v8::Local<v8::Context> GetContext() const
+        {
+            return context;
+        }
     };
 
     class Object : public Value
