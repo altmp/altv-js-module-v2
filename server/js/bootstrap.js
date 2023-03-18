@@ -57,8 +57,7 @@ function setupImports() {
     });
   });
   translators.set("altmodule", async function(url) {
-    const name = url.slice(altModuleInternalPrefix.length + 1); // Remove prefix
-    const exports = name === "server" ? alt : altShared;
+    const exports = alt; // The alt module has all of the shared module, so we can just use that
     const exportKeys = Object.keys(exports);
     return new ModuleWrap(url, undefined, exportKeys, function() {
       for (const exportName in exports) {
