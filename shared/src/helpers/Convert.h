@@ -233,8 +233,9 @@ namespace js
         if constexpr(std::is_same_v<T, v8::Local<v8::Value>>) return val;
         else if constexpr(std::is_integral_v<T> || std::is_floating_point_v<T>)
         {
-            T value = (T)val->NumberValue(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()).ToChecked();
-            return std::isnan(value) ? std::nullopt : value;
+            double value = val->NumberValue(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()).ToChecked();
+            if(std::isnan(value)) return std::nullopt;
+            return (T)value;
         }
         else if constexpr(std::is_same_v<T, std::string>)
         {
