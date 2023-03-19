@@ -37,10 +37,20 @@ export class RGBA {
         return [this.r, this.g, this.b, this.a];
     }
 
+    toInt() {
+        let int = this.r << 24;
+        int |= this.g << 16;
+        int |= this.b << 8;
+        int |= this.a;
+        return int;
+    }
+
     static fromArray(arr) {
         return new RGBA(arr[0], arr[1], arr[2], arr[3]);
     }
     static fromObject(obj) {
         return new RGBA(obj.r, obj.g, obj.b, obj.a);
     }
+
+    static zero = new RGBA(0, 0, 0, 0);
 }
