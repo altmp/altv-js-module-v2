@@ -33,7 +33,7 @@ static void StopServer(js::FunctionContext& ctx)
 
 // clang-format off
 extern js::Class playerClass, vehicleClass, colShapeClass, checkpointClass;
-extern js::Namespace eventsNamespace;
+extern js::Namespace eventsNamespace, pedModelInfoNamespace, vehicleModelInfoNamespace;
 static js::Module altModule("alt", "alt-shared", { &playerClass, &vehicleClass, &colShapeClass, &checkpointClass }, [](js::ModuleTemplate& module)
 {
     module.StaticProperty("isClient", false);
@@ -47,6 +47,8 @@ static js::Module altModule("alt", "alt-shared", { &playerClass, &vehicleClass, 
     // todo: get server config
 
     module.Namespace(eventsNamespace);
+    module.Namespace(pedModelInfoNamespace);
+    module.Namespace(vehicleModelInfoNamespace);
 
     // ColShapes namespaces
     module.Namespace("ColshapeSphere");
