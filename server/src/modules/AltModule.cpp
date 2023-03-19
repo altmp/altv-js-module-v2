@@ -6,6 +6,14 @@ static void NetTimeGetter(js::PropertyContext& ctx)
     ctx.Return(alt::ICore::Instance().GetNetTime());
 }
 
+static void GetServerConfig(js::LazyPropertyContext& ctx)
+{
+    Config::Value::ValuePtr config = alt::ICore::Instance().GetServerConfig();
+    v8::Local<v8::Value> configVal = js::ConfigValueToJS(config);
+    if(!ctx.Check(!configVal.IsEmpty(), "Failed to convert config")) return;
+    ctx.Return(configVal);
+}
+
 static void SetServerPassword(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
@@ -41,10 +49,11 @@ static js::Module altModule("alt", "alt-shared", { &playerClass, &vehicleClass, 
     module.StaticProperty("rootDir", alt::ICore::Instance().GetRootDirectory());
     module.StaticProperty("netTime", NetTimeGetter);
 
+    module.StaticLazyProperty("serverConfig", GetServerConfig);
+
     module.StaticFunction("setServerPassword", SetServerPassword);
     module.StaticFunction("hashServerPasword", HashServerPassword);
     module.StaticFunction("stopServer", StopServer);
-    // todo: get server config
 
     module.Namespace(eventsNamespace);
     module.Namespace(pedModelInfoNamespace);
