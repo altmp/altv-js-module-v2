@@ -74,6 +74,7 @@ namespace js
             object->Set(context, js::JSValue(key), js::JSValue((Type)val));
         }
 
+        // Falls back to default value if the value is not found or the type doesn't match
         template<typename T>
         T Get(const std::string& key) const
         {
@@ -85,6 +86,7 @@ namespace js
             return result.has_value() ? (T)result.value() : T();
         }
 
+        // Throws an error if the value is not found or the type doesn't match
         template<typename T>
         bool Get(const std::string& key, T& out)
         {
