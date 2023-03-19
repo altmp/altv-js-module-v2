@@ -108,18 +108,6 @@ static js::Event localMetaChangeEvent(alt::CEvent::Type::LOCAL_SYNCED_META_CHANG
     args.Set("newValue", e->GetVal());
 });
 
-// TODO
-static js::Event connectionQueueAddEvent(alt::CEvent::Type::CONNECTION_QUEUE_ADD, [](const alt::CEvent* ev, js::Event::EventArgs& args)
-{
-    auto e = static_cast<const alt::CConnectionQueueAddEvent*>(ev);
-});
-
-// TODO
-static js::Event connectionQueueRemoveEvent(alt::CEvent::Type::CONNECTION_QUEUE_REMOVE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
-{
-    auto e = static_cast<const alt::CConnectionQueueRemoveEvent*>(ev);
-});
-
 static js::Event requestControlEvent(alt::CEvent::Type::PLAYER_REQUEST_CONTROL, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
     auto e = static_cast<const alt::CPlayerRequestControlEvent*>(ev);
