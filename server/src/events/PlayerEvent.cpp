@@ -98,16 +98,6 @@ static js::Event playerWeaponChangeEvent(alt::CEvent::Type::PLAYER_WEAPON_CHANGE
     args.Set("newSeat", e->GetNewWeapon());
 });
 
-static js::Event localMetaChangeEvent(alt::CEvent::Type::LOCAL_SYNCED_META_CHANGE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
-{
-    auto e = static_cast<const alt::CLocalMetaDataChangeEvent*>(ev);
-
-    args.Set("player", e->GetTarget());
-    args.Set("key", e->GetKey());
-    args.Set("oldValue", e->GetOldVal());
-    args.Set("newValue", e->GetVal());
-});
-
 static js::Event requestControlEvent(alt::CEvent::Type::PLAYER_REQUEST_CONTROL, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
     auto e = static_cast<const alt::CPlayerRequestControlEvent*>(ev);
