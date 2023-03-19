@@ -15,10 +15,10 @@ Event.register(alt.Enums.CustomEventType.ENTITY_LEAVE_COLSHAPE, "EntityCheckpoin
 
 function getColShapeEventType(colShape, state) {
     const isCheckpoint = colShape instanceof alt.Checkpoint;
-    if (!isCheckpoint && !state) return alt.Enums.CustomEventType.ENTITY_ENTER_COLSHAPE;
-    if (!isCheckpoint && state) return alt.Enums.CustomEventType.ENTITY_LEAVE_COLSHAPE;
-    if (isCheckpoint && !state) return alt.Enums.CustomEventType.ENTITY_ENTER_CHECKPOINT;
-    if (isCheckpoint && state) return alt.Enums.CustomEventType.ENTITY_LEAVE_CHECKPOINT;
+    if (!isCheckpoint && state) return alt.Enums.CustomEventType.ENTITY_ENTER_COLSHAPE;
+    if (!isCheckpoint && !state) return alt.Enums.CustomEventType.ENTITY_LEAVE_COLSHAPE;
+    if (isCheckpoint && state) return alt.Enums.CustomEventType.ENTITY_ENTER_CHECKPOINT;
+    if (isCheckpoint && !state) return alt.Enums.CustomEventType.ENTITY_LEAVE_CHECKPOINT;
 }
 
 alt.Events.onColShapeEvent(({ entity, colShape, state }) => {
