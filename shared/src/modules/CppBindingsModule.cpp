@@ -196,6 +196,20 @@ static void CreateEntity(js::FunctionContext& ctx)
     ctx.Return(scriptObject->Get());
 }
 
+static void GetAllEntities(js::FunctionContext& ctx)
+{
+    js::IResource* resource = ctx.GetResource();
+    std::vector<alt::IEntity*> entities = alt::ICore::Instance().GetEntities();
+    js::Array entitiesArr;
+    for(auto& object : entities)
+    {
+        js::ScriptObject* scriptObject = resource->GetOrCreateScriptObject(ctx.GetContext(), object);
+        if(!scriptObject) continue;
+        entitiesArr.Push(scriptObject->Get());
+    }
+    ctx.Return(entities);
+}
+
 // clang-format off
 // Used to provide C++ functions to the JS bindings
 static js::Module cppBindingsModule("cppBindings", [](js::ModuleTemplate& module)
@@ -205,4 +219,5 @@ static js::Module cppBindingsModule("cppBindings", [](js::ModuleTemplate& module
     module.StaticFunction("getEntityFactory", GetEntityFactory);
 
     module.StaticFunction("createEntity", CreateEntity);
+    module.StaticFunction("getAllEntities", GetAllEntities);
 });
