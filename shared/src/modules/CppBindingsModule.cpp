@@ -75,7 +75,10 @@ static void CreateEntity(js::FunctionContext& ctx)
 
         case alt::IBaseObject::Type::COLSHAPE:
         {
-            switch(args.Get<alt::IColShape::ColShapeType>("colShapeType"))
+            alt::IColShape::ColShapeType colShapeType;
+            if(!args.Get("colShapeType", colShapeType)) return;
+
+            switch(colShapeType)
             {
                 case alt::IColShape::ColShapeType::SPHERE:
                 {
