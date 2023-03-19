@@ -47,6 +47,16 @@ static void Hash(js::FunctionContext& ctx)
     ctx.Return(alt::ICore::Instance().Hash(str));
 }
 
+static void SHA256(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    std::string str;
+    if(!ctx.GetArg(0, str)) return;
+
+    ctx.Return(alt::ICore::Instance().StringToSHA256(str));
+}
+
 // clang-format off
 extern js::Class baseObjectClass, worldObjectClass, entityClass, resourceClass;
 extern js::Namespace enumsNamespace, sharedEventsNamespace;
@@ -55,9 +65,11 @@ static js::Module sharedModule("alt-shared", "", { &baseObjectClass, &worldObjec
     module.StaticFunction("log", Log<LogType::INFO>);
     module.StaticFunction("logWarn", Log<LogType::WARN>);
     module.StaticFunction("logError", Log<LogType::ERR>);
-    // todo: maybe a function to set logger settings like depth, numeric seperator etc.
-
     module.StaticFunction("hash", &Hash);
+    module.StaticFunction("sha256", &SHA256);
+
+    module.StaticProperty("isDebug", alt::ICore::Instance().IsDebug());
+    // todo: global (synced) meta
 
     module.Namespace("Timers");
     module.Namespace("Utils");
