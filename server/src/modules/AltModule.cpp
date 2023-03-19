@@ -10,4 +10,12 @@ static js::Module altModule("alt", "alt-shared", { &playerClass, &vehicleClass, 
     module.StaticProperty("isServer", true);
 
     module.Namespace(eventsNamespace);
+
+    // ColShapes namespaces
+    module.Namespace("ColshapeSphere");
+    module.Namespace("ColshapeCylinder");
+    module.Namespace("ColshapeCircle");
+    module.Namespace("ColshapeCuboid");
+    module.Namespace("ColshapeRectangle");
+    module.Namespace("ColshapePolygon");
 });

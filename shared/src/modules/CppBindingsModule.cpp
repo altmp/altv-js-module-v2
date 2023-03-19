@@ -141,6 +141,19 @@ static void CreateEntity(js::FunctionContext& ctx)
                     break;
                 }
 
+                case alt::IColShape::ColShapeType::POLYGON:
+                {
+                    float minZ, maxZ;
+                    std::vector<alt::Vector2f> points;
+
+                    if(!args.Get("minZ", minZ)) return;
+                    if(!args.Get("maxZ", maxZ)) return;
+                    if(!args.Get("points", points)) return;
+
+                    object = alt::ICore::Instance().CreateColShapePolygon(minZ, maxZ, points);
+                    break;
+                }
+
                 case alt::IColShape::ColShapeType::CHECKPOINT_CYLINDER:
                 {
                     uint8_t type;
@@ -155,19 +168,6 @@ static void CreateEntity(js::FunctionContext& ctx)
                     if(!args.Get("color", color)) return;
 
                     object = alt::ICore::Instance().CreateCheckpoint(type, pos, radius, height, color);
-                    break;
-                }
-
-                case alt::IColShape::ColShapeType::POLYGON:
-                {
-                    float minZ, maxZ;
-                    std::vector<alt::Vector2f> points;
-
-                    if(!args.Get("minZ", minZ)) return;
-                    if(!args.Get("maxZ", maxZ)) return;
-                    if(!args.Get("points", points)) return;
-
-                    object = alt::ICore::Instance().CreateColShapePolygon(minZ, maxZ, points);
                     break;
                 }
             }
