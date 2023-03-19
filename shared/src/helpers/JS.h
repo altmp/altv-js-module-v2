@@ -86,7 +86,7 @@ namespace js
             return result.has_value() ? (T)result.value() : T();
         }
 
-        // Throws an error if the value is not found or the type doesn't match
+        // Throws an error and returns false if the value is not found or the type doesn't match
         template<typename T>
         bool Get(const std::string& key, T& out)
         {
