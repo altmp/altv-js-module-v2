@@ -16,4 +16,6 @@ extern js::Class colShapeClass("ColShape", &worldObjectClass, nullptr, [](js::Cl
 });
 
 extern js::Class checkpointClass("Checkpoint", &colShapeClass, nullptr, [](js::ClassTemplate& tpl)
-{});
+{
+    tpl.BindToType(alt::IBaseObject::Type::CHECKPOINT);
+});
