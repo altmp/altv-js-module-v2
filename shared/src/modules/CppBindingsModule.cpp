@@ -67,7 +67,8 @@ static void CreateEntity(js::FunctionContext& ctx)
             if(args.GetType("model") == js::Type::NUMBER) model = args.Get<uint32_t>("model");
             else if(args.GetType("model") == js::Type::STRING)
                 model = alt::ICore::Instance().Hash(args.Get<std::string>("model"));
-            alt::Vector3f pos = args.Get<alt::Vector3f>("pos");
+            alt::Vector3f pos;
+            if(!args.Get("pos", pos)) return;
             alt::Vector3f rot = args.Get<alt::Vector3f>("rot");
             object = alt::ICore::Instance().CreateVehicle(model, pos, rot);
             break;
