@@ -17,6 +17,8 @@ namespace js
 
         ENTITY_ENTER_COLSHAPE,
         ENTITY_LEAVE_COLSHAPE,
+        ENTITY_ENTER_CHECKPOINT,
+        ENTITY_LEAVE_CHECKPOINT,
 
         SIZE
     };
