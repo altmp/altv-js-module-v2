@@ -300,6 +300,58 @@ void js::MValueArgsToJS(alt::MValueArgs args, Array& argsArray)
     for(size_t i = 0; i < args.GetSize(); ++i) argsArray.Push(MValueToJS(args[i]));
 }
 
+v8::Local<v8::Value> js::ConfigValueToJS(Config::Value::ValuePtr val)
+{
+    v8 ::Isolate* isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
+
+    v8::Local<v8::Value> out;
+    switch(val->GetType())
+    {
+        case Config::Value::Type::STRING:
+        {
+            out = JSValue(val->AsString());
+            break;
+        }
+        case Config::Value::Type::NUMBER:
+        {
+            out = JSValue(val->AsNumber());
+            break;
+        }
+        case Config::Value::Type::BOOL:
+        {
+            out = JSValue(val->AsBool());
+            break;
+        }
+        case Config::Value::Type::LIST:
+        {
+            v8::Local<v8::Array> arr = v8::Array::New(isolate, val->GetSize());
+            for(size_t i = 0; i < val->GetSize(); i++)
+            {
+                v8::Local<v8::Value> value = ConfigValueToJS(val[i]);
+                if(value.IsEmpty()) continue;
+                arr->Set(ctx, i, value);
+            }
+            out = arr;
+            break;
+        }
+        case Config::Value::Type::DICT:
+        {
+            v8::Local<v8::Object> obj = v8::Object::New(isolate);
+            for(auto& pair : val->AsDict())
+            {
+                v8::Local<v8::Value> value = ConfigValueToJS(pair.second);
+                if(value.IsEmpty()) continue;
+                obj->Set(ctx, JSValue(pair.first), value);
+            }
+            out = obj;
+            break;
+        }
+        default: return v8::Local<v8::Value>();
+    }
+    return out;
+}
+
 std::optional<alt::IBaseObject*> js::ToBaseObject(v8::Local<v8::Value> val)
 {
     IResource* resource = GetCurrentResource();

@@ -18,6 +18,7 @@ namespace js
     alt::MValue JSToMValue(v8::Local<v8::Value> val, bool allowFunction = true);
     v8::Local<v8::Value> MValueToJS(alt::MValueConst val);
     void MValueArgsToJS(alt::MValueArgs args, Array& argsArray);
+    v8::Local<v8::Value> ConfigValueToJS(Config::Value::ValuePtr val);
 
     inline v8::Local<v8::String> JSValue(const char* val)
     {
