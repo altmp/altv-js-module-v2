@@ -79,8 +79,11 @@ static void CreateEntity(js::FunctionContext& ctx)
             {
                 case alt::IColShape::ColShapeType::SPHERE:
                 {
-                    alt::Vector3f pos = args.Get<alt::Vector3f>("pos");
-                    float radius = args.Get<float>("radius");
+                    alt::Vector3f pos;
+                    float radius;
+
+                    if(!args.Get("pos", pos)) return;
+                    if(!args.Get("radius", radius)) return;
 
                     object = alt::ICore::Instance().CreateColShapeSphere(pos, radius);
                     break;
@@ -88,9 +91,12 @@ static void CreateEntity(js::FunctionContext& ctx)
 
                 case alt::IColShape::ColShapeType::CYLINDER:
                 {
-                    alt::Vector3f pos = args.Get<alt::Vector3f>("pos");
-                    float radius = args.Get<float>("radius");
-                    float height = args.Get<float>("height");
+                    alt::Vector3f pos;
+                    float radius, height;
+
+                    if(!args.Get("pos", pos)) return;
+                    if(!args.Get("radius", radius)) return;
+                    if(!args.Get("height", height)) return;
 
                     object = alt::ICore::Instance().CreateColShapeCylinder(pos, radius, height);
                     break;
@@ -98,8 +104,11 @@ static void CreateEntity(js::FunctionContext& ctx)
 
                 case alt::IColShape::ColShapeType::CIRCLE:
                 {
-                    alt::Vector3f pos = args.Get<alt::Vector3f>("pos");
-                    float radius = args.Get<float>("radius");
+                    alt::Vector3f pos;
+                    float radius;
+
+                    if(!args.Get("pos", pos)) return;
+                    if(!args.Get("radius", radius)) return;
 
                     object = alt::ICore::Instance().CreateColShapeCircle(pos, radius);
                     break;
@@ -107,8 +116,10 @@ static void CreateEntity(js::FunctionContext& ctx)
 
                 case alt::IColShape::ColShapeType::CUBOID:
                 {
-                    alt::Vector3f pos1 = args.Get<alt::Vector3f>("pos1");
-                    alt::Vector3f pos2 = args.Get<alt::Vector3f>("pos2");
+                    alt::Vector3f pos1, pos2;
+
+                    if(!args.Get("pos1", pos1)) return;
+                    if(!args.Get("pos2", pos2)) return;
 
                     object = alt::ICore::Instance().CreateColShapeCube(pos1, pos2);
                     break;
@@ -116,10 +127,14 @@ static void CreateEntity(js::FunctionContext& ctx)
 
                 case alt::IColShape::ColShapeType::RECT:
                 {
-                    float x1 = args.Get<float>("x1");
-                    float y1 = args.Get<float>("y1");
-                    float x2 = args.Get<float>("x2");
-                    float y2 = args.Get<float>("y2");
+                    float x1, y1, x2, y2;
+
+                    if(!args.Get("x1", x1)) return;
+                    if(!args.Get("y1", y1)) return;
+                    if(!args.Get("x2", x2)) return;
+                    if(!args.Get("y2", y2)) return;
+
+                    std::cout << "x1: " << x1 << std::endl;
 
                     object = alt::ICore::Instance().CreateColShapeRectangle(x1, y1, x2, y2, 0);
                     break;
@@ -127,11 +142,16 @@ static void CreateEntity(js::FunctionContext& ctx)
 
                 case alt::IColShape::ColShapeType::CHECKPOINT_CYLINDER:
                 {
-                    uint8_t type = args.Get<uint8_t>("type");
-                    alt::Vector3f pos = args.Get<alt::Vector3f>("pos");
-                    float radius = args.Get<float>("radius");
-                    float height = args.Get<float>("height");
-                    alt::RGBA color = args.Get<alt::RGBA>("color");
+                    uint8_t type;
+                    alt::Vector3f pos;
+                    float radius, height;
+                    alt::RGBA color;
+
+                    if(!args.Get("type", type)) return;
+                    if(!args.Get("pos", pos)) return;
+                    if(!args.Get("radius", radius)) return;
+                    if(!args.Get("height", height)) return;
+                    if(!args.Get("color", color)) return;
 
                     object = alt::ICore::Instance().CreateCheckpoint(type, pos, radius, height, color);
                     break;
@@ -139,9 +159,12 @@ static void CreateEntity(js::FunctionContext& ctx)
 
                 case alt::IColShape::ColShapeType::POLYGON:
                 {
-                    float minZ = args.Get<float>("minZ");
-                    float maxZ = args.Get<float>("maxZ");
-                    auto points = args.Get<std::vector<alt::Vector2f>>("points");
+                    float minZ, maxZ;
+                    std::vector<alt::Vector2f> points;
+
+                    if(!args.Get("minZ", minZ)) return;
+                    if(!args.Get("maxZ", maxZ)) return;
+                    if(!args.Get("points", points)) return;
 
                     object = alt::ICore::Instance().CreateColShapePolygon(minZ, maxZ, points);
                     break;
