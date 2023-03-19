@@ -15,6 +15,14 @@ static void Current(js::LazyPropertyContext& ctx)
     ctx.Return(resourceObj);
 }
 
+static void All(js::LazyPropertyContext& ctx)
+{
+    std::vector<alt::IResource*> resources = alt::ICore::Instance().GetAllResources();
+    js::Array arr(resources.size());
+    for(auto resource : resources) arr.Push(resourceClass.Create(ctx.GetContext(), resource));
+    ctx.Return(arr);
+}
+
 static void Get(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
@@ -111,6 +119,7 @@ static void DependantsGetter(js::PropertyContext& ctx)
 extern js::Class resourceClass("Resource", nullptr, [](js::ClassTemplate& tpl)
 {
     tpl.StaticLazyProperty("current", Current);
+    tpl.StaticLazyProperty("all", All);
     tpl.StaticFunction("get", Get);
     tpl.StaticFunction("exists", Exists);
 
