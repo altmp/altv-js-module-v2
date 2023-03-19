@@ -1,3 +1,5 @@
+const { Event } = requireBinding("shared/events.js");
+
 Event.register(alt.Enums.EventType.COLSHAPE_EVENT, "ColShapeEvent");
 Event.register(alt.Enums.EventType.WEAPON_DAMAGE_EVENT, "WeaponDamage");
 Event.register(alt.Enums.EventType.EXPLOSION_EVENT, "Explosion");
