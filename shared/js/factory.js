@@ -30,3 +30,9 @@ alt.ColShape.create = (ctx) => {
     if(typeof ctx !== "object") throw new Error("Invalid args");
     return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
 };
+
+alt.Checkpoint.create = (ctx) => {
+    if(typeof ctx !== "object") throw new Error("Invalid args");
+    ctx.colShapeType = alt.Enums.ColShapeType.CHECKPOINT_CYLINDER;
+    return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
+};
