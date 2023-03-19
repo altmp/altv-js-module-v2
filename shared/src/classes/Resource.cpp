@@ -26,8 +26,10 @@ static void All(js::LazyPropertyContext& ctx)
 static void Get(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
+
     std::string resourceName;
     if(!ctx.GetArg(0, resourceName)) return;
+
     alt::IResource* resource = alt::ICore::Instance().GetResource(resourceName);
     if(!resource)
     {
@@ -41,10 +43,42 @@ static void Get(js::FunctionContext& ctx)
 static void Exists(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
+
     std::string resourceName;
     if(!ctx.GetArg(0, resourceName)) return;
+
     alt::IResource* resource = alt::ICore::Instance().GetResource(resourceName);
     ctx.Return(resource != nullptr);
+}
+
+static void Start(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    std::string resourceName;
+    if(!ctx.GetArg(0, resourceName)) return;
+
+    alt::ICore::Instance().StartResource(resourceName);
+}
+
+static void Stop(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    std::string resourceName;
+    if(!ctx.GetArg(0, resourceName)) return;
+
+    alt::ICore::Instance().StopResource(resourceName);
+}
+
+static void Restart(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    std::string resourceName;
+    if(!ctx.GetArg(0, resourceName)) return;
+
+    alt::ICore::Instance().RestartResource(resourceName);
 }
 
 static void TypeGetter(js::PropertyContext& ctx)
@@ -122,6 +156,9 @@ extern js::Class resourceClass("Resource", nullptr, [](js::ClassTemplate& tpl)
     tpl.StaticLazyProperty("all", All);
     tpl.StaticFunction("get", Get);
     tpl.StaticFunction("exists", Exists);
+    tpl.StaticFunction("start", Start);
+    tpl.StaticFunction("stop", Stop);
+    tpl.StaticFunction("restart", Restart);
 
     tpl.Property("type", TypeGetter);
     tpl.Property("path", PathGetter);
