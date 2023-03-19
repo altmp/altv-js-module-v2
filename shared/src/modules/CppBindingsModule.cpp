@@ -137,8 +137,6 @@ static void CreateEntity(js::FunctionContext& ctx)
                     if(!args.Get("x2", x2)) return;
                     if(!args.Get("y2", y2)) return;
 
-                    std::cout << "x1: " << x1 << std::endl;
-
                     object = alt::ICore::Instance().CreateColShapeRectangle(x1, y1, x2, y2, 0);
                     break;
                 }
