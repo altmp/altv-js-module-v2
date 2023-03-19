@@ -2,9 +2,9 @@
 #include "Namespace.h"
 
 // clang-format off
-extern js::Class playerClass, vehicleClass;
+extern js::Class playerClass, vehicleClass, colShapeClass, checkpointClass;
 extern js::Namespace eventsNamespace;
-static js::Module altModule("alt", "alt-shared", { &playerClass, &vehicleClass }, [](js::ModuleTemplate& module)
+static js::Module altModule("alt", "alt-shared", { &playerClass, &vehicleClass, &colShapeClass, &checkpointClass }, [](js::ModuleTemplate& module)
 {
     module.StaticProperty("isClient", false);
     module.StaticProperty("isServer", true);
