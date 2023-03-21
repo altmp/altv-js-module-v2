@@ -122,6 +122,8 @@ namespace js
             RegisterBindingExport("logging:inspectMultiple", "shared/logging.js", "inspectMultiple");
 
             RegisterBindingExport("entity:addEntityToAll", "shared/entity.js", "addEntityToAll");
+
+            RegisterBindingExport("utils:hash", "shared/utils.js", "hash");
         }
         template<typename T = v8::Value>
         v8::Local<T> GetBindingExport(const std::string& name)

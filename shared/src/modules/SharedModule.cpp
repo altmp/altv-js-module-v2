@@ -37,16 +37,6 @@ static void Log(js::FunctionContext& ctx)
         alt::ICore::Instance().LogError(msg.value(), resource->GetResource());
 }
 
-static void Hash(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(1)) return;
-
-    std::string str;
-    if(!ctx.GetArg(0, str)) return;
-
-    ctx.Return(alt::ICore::Instance().Hash(str));
-}
-
 static void SHA256(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
@@ -65,7 +55,6 @@ static js::Module sharedModule("alt-shared", "", { &baseObjectClass, &worldObjec
     module.StaticFunction("log", Log<LogType::INFO>);
     module.StaticFunction("logWarn", Log<LogType::WARN>);
     module.StaticFunction("logError", Log<LogType::ERR>);
-    module.StaticFunction("hash", &Hash);
     module.StaticFunction("sha256", &SHA256);
 
     module.StaticProperty("isDebug", alt::ICore::Instance().IsDebug());
@@ -76,6 +65,7 @@ static js::Module sharedModule("alt-shared", "", { &baseObjectClass, &worldObjec
     module.Namespace("Factory");
     module.Namespace(enumsNamespace);
 
+    module.StaticBindingExport("hash", "utils:hash");
     module.StaticBindingExport("Vector3", "classes:vector3");
     module.StaticBindingExport("Vector2", "classes:vector2");
     module.StaticBindingExport("RGBA", "classes:rgba");
