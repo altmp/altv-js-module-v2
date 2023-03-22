@@ -12,7 +12,7 @@ export function hash(str) {
     const string = str.toLowerCase();
     const length = string.length;
     let hash = 0;
-    for (hash = i = 0; i < length; i++) {
+    for (let i = 0; i < length; i++) {
         hash += string.charCodeAt(i);
         hash += (hash << 10);
         hash ^= (hash >>> 6);
