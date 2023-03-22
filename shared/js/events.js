@@ -55,9 +55,13 @@ export class Event {
         const handlers = local ? Event.#localScriptEventHandlers.get(name) : Event.#remoteScriptEventHandlers.get(name);
         if(!handlers) return;
 
+        const evCtx = {
+            args: ctx.args
+        };
+        if(alt.isServer && !local) evCtx.player = ctx.player;
+
         for(let handler of handlers) {
-            if(alt.isServer && !local) handler(ctx.player, ...ctx.args);
-            else handler(...ctx.args);
+            handler(evCtx);
         }
     }
 
