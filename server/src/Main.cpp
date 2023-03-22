@@ -44,7 +44,7 @@ EXPORT bool altMain(alt::ICore* core)
     alt::ICore::SetInstance(core);
 
     CNodeRuntime& runtime = CNodeRuntime::Instance();
-    core->RegisterScriptRuntime("js", &runtime);
+    core->RegisterScriptRuntime("jsv2", &runtime);
     if(!runtime.Initialize()) return false;
 
     js::Logger::Colored("Loaded ~g~JS module v2");
