@@ -64,5 +64,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method("emit", &Emit);
     tpl.Method<alt::IPlayer, void, alt::Position, uint32_t, &alt::IPlayer::Spawn>("spawn");
 
+    tpl.Method<alt::IPlayer, void, uint32_t, int32_t, bool, &alt::IPlayer::GiveWeapon>("giveWeapon");
+
     tpl.StaticFunction("getByID", &GetByID);
 });
