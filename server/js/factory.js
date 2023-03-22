@@ -1,13 +1,20 @@
 const { setEntityFactory, getEntityFactory } = requireBinding("shared/factory.js");
 
 alt.Factory.setColShapeFactory = setEntityFactory(alt.ColShape, alt.Enums.BaseObjectType.COLSHAPE);
-
 alt.Factory.getColShapeFactory = getEntityFactory(alt.Enums.BaseObjectType.COLSHAPE);
+
+alt.Factory.setPedFactory = setEntityFactory(alt.Ped, alt.Enums.BaseObjectType.PED);
+alt.Factory.getPedFactory = getEntityFactory(alt.Enums.BaseObjectType.PED);
 
 // Factory ctors
 alt.Vehicle.create = (ctx) => {
     if(typeof ctx !== "object") throw new Error("Invalid args");
     return cppBindings.createEntity(alt.Enums.BaseObjectType.VEHICLE, ctx);
+};
+
+alt.Ped.create = (ctx) => {
+    if(typeof ctx !== "object") throw new Error("Invalid args");
+    return cppBindings.createEntity(alt.Enums.BaseObjectType.PED, ctx);
 };
 
 alt.ColShape.create = (ctx) => {
