@@ -97,8 +97,6 @@ bool CNodeResource::Stop()
 
 void CNodeResource::OnEvent(const alt::CEvent* ev)
 {
-    node::CallbackScope callbackScope(isolate, asyncResource.Get(isolate), asyncContext);
-
     IResource::OnEvent(ev);
 }
 
