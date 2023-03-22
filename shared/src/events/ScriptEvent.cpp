@@ -6,6 +6,10 @@ static js::Event clientScriptEvent(alt::CEvent::Type::CLIENT_SCRIPT_EVENT, [](co
     auto e = static_cast<const alt::CClientScriptEvent*>(ev);
     args.Set("eventName", e->GetName());
 
+#ifdef ALT_SERVER_API
+    args.Set("player", e->GetTarget());
+#endif
+
     const alt::MValueArgs& eventArgs = e->GetArgs();
     js::Array argsArray(eventArgs.GetSize());
     js::MValueArgsToJS(eventArgs, argsArray);
