@@ -81,6 +81,11 @@ namespace js
 
         void OnRemoveBaseObject(alt::IBaseObject* object) override
         {
+            v8::Locker locker(isolate);
+            v8::Isolate::Scope isolateScope(isolate);
+            v8::HandleScope handleScope(isolate);
+            v8::Context::Scope contextScope(GetContext());
+
             IScriptObjectHandler::DestroyScriptObject(object);
         }
 
