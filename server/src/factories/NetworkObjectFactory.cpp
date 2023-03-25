@@ -9,5 +9,5 @@ static js::FactoryHandler networkObjectFactory(alt::IBaseObject::Type::NETWORK_O
     alt::Vector3f pos;
     if(!args.Get("pos", pos)) return nullptr;
     alt::Vector3f rot = args.Get<alt::Vector3f>("rot");
-    return alt::ICore::Instance().CreateObject(model, pos, rot);
+    return alt::ICore::Instance().CreateNetworkObject(model, pos, rot);
 });
