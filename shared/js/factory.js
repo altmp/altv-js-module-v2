@@ -17,3 +17,6 @@ alt.Factory.setVehicleFactory = setEntityFactory(alt.Vehicle, alt.Enums.BaseObje
 
 alt.Factory.getPlayerFactory = getEntityFactory(alt.Enums.BaseObjectType.PLAYER);
 alt.Factory.getVehicleFactory = getEntityFactory(alt.Enums.BaseObjectType.VEHICLE);
+
+alt.Factory.setPedFactory = setEntityFactory(alt.Ped, alt.Enums.BaseObjectType.PED);
+alt.Factory.getPedFactory = getEntityFactory(alt.Enums.BaseObjectType.PED);

@@ -43,6 +43,7 @@ alt.Entity.all = entityAllSet;
 addAllGetter(alt.Player, alt.Enums.BaseObjectType.PLAYER);
 addAllGetter(alt.Vehicle, alt.Enums.BaseObjectType.VEHICLE);
 addAllGetter(alt.Ped, alt.Enums.BaseObjectType.PED);
+addAllGetter(alt.NetworkObject, alt.Enums.BaseObjectType.NETWORK_OBJECT);
 
 // Register all entities that were created before this resource was loaded
 const entities = cppBindings.getAllEntities();
