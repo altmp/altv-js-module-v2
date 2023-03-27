@@ -6,6 +6,35 @@ static void NetTimeGetter(js::PropertyContext& ctx)
     ctx.Return(alt::ICore::Instance().GetNetTime());
 }
 
+static void SyncedMetaGetter(js::DynamicPropertyContext<v8::Value>& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetSyncedMetaData(ctx.GetProperty()));
+}
+
+static void SyncedMetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
+{
+    alt::MValue value;
+    if(!ctx.GetValue(value)) return;
+    alt::ICore::Instance().SetSyncedMetaData(ctx.GetProperty(), value);
+}
+
+static void SyncedMetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
+{
+    if(!alt::ICore::Instance().HasSyncedMetaData(ctx.GetProperty()))
+    {
+        ctx.Return(false);
+        return;
+    }
+
+    alt::ICore::Instance().DeleteSyncedMetaData(ctx.GetProperty());
+    ctx.Return(true);
+}
+
+static void SyncedMetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetSyncedMetaDataKeys());
+}
+
 static void GetServerConfig(js::LazyPropertyContext& ctx)
 {
     Config::Value::ValuePtr config = alt::ICore::Instance().GetServerConfig();
@@ -39,33 +68,71 @@ static void StopServer(js::FunctionContext& ctx)
     alt::ICore::Instance().StopServer();
 }
 
-static void SyncedMetaGetter(js::DynamicPropertyContext<v8::Value>& ctx)
+static void ToggleWorldProfiler(js::FunctionContext& ctx)
 {
-    ctx.Return(alt::ICore::Instance().GetSyncedMetaData(ctx.GetProperty()));
+    if(!ctx.CheckArgCount(1)) return;
+
+    bool state;
+    if(!ctx.GetArg(0, state)) return;
+
+    alt::ICore::Instance().SetWorldProfiler(state);
 }
 
-static void SyncedMetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
+static void GetEntitiesInDimension(js::FunctionContext& ctx)
 {
-    alt::MValue value;
-    if(!ctx.GetValue(value)) return;
-    alt::ICore::Instance().SetSyncedMetaData(ctx.GetProperty(), value);
+    if(!ctx.CheckArgCount(2)) return;
+
+    uint32_t dimension;
+    if(!ctx.GetArg(0, dimension)) return;
+
+    uint64_t entityTypes;
+    if(!ctx.GetArg(1, entityTypes)) return;
+
+    std::vector<alt::IBaseObject*> entities = alt::ICore::Instance().GetEntitiesInDimension(dimension, entityTypes);
+    ctx.Return(entities);
 }
 
-static void SyncedMetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
+static void GetEntitiesInRange(js::FunctionContext& ctx)
 {
-    if(!alt::ICore::Instance().HasSyncedMetaData(ctx.GetProperty()))
-    {
-        ctx.Return(false);
-        return;
-    }
+    if(!ctx.CheckArgCount(4)) return;
 
-    alt::ICore::Instance().DeleteSyncedMetaData(ctx.GetProperty());
-    ctx.Return(true);
+    alt::Vector3f pos;
+    if(!ctx.GetArg(0, pos)) return;
+
+    int32_t range;
+    if(!ctx.GetArg(1, range)) return;
+
+    uint32_t dimension;
+    if(!ctx.GetArg(2, dimension)) return;
+
+    uint64_t entityTypes;
+    if(!ctx.GetArg(3, entityTypes)) return;
+
+    std::vector<alt::IBaseObject*> entities = alt::ICore::Instance().GetEntitiesInRange(pos, range, dimension, entityTypes);
+    ctx.Return(entities);
 }
 
-static void SyncedMetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
+static void GetClosestEntities(js::FunctionContext& ctx)
 {
-    ctx.Return(alt::ICore::Instance().GetSyncedMetaDataKeys());
+    if(!ctx.CheckArgCount(5)) return;
+
+    alt::Vector3f pos;
+    if(!ctx.GetArg(0, pos)) return;
+
+    int32_t range;
+    if(!ctx.GetArg(1, range)) return;
+
+    uint32_t dimension;
+    if(!ctx.GetArg(2, dimension)) return;
+
+    uint32_t maxCount;
+    if(!ctx.GetArg(3, maxCount)) return;
+
+    uint64_t entityTypes;
+    if(!ctx.GetArg(4, entityTypes)) return;
+
+    std::vector<alt::IBaseObject*> entities = alt::ICore::Instance().GetClosestEntities(pos, range, dimension, maxCount, entityTypes);
+    ctx.Return(entities);
 }
 
 // clang-format off
@@ -85,6 +152,10 @@ static js::Module altModule("alt", "alt-shared", { &playerClass, &vehicleClass, 
     module.StaticFunction("setServerPassword", SetServerPassword);
     module.StaticFunction("hashServerPasword", HashServerPassword);
     module.StaticFunction("stopServer", StopServer);
+    module.StaticFunction("toggleWorldProfiler", ToggleWorldProfiler);
+    module.StaticFunction("getEntitiesInDimension", GetEntitiesInDimension);
+    module.StaticFunction("getEntitiesInRange", GetEntitiesInRange);
+    module.StaticFunction("getClosestEntities", GetClosestEntities);
 
     module.Namespace(eventsNamespace);
     module.Namespace(pedModelInfoNamespace);
