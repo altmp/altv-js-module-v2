@@ -76,49 +76,21 @@ static void MetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
     ctx.Return(alt::ICore::Instance().GetMetaDataKeys());
 }
 
-static void SyncedMetaGetter(js::DynamicPropertyContext<v8::Value>& ctx)
-{
-    ctx.Return(alt::ICore::Instance().GetSyncedMetaData(ctx.GetProperty()));
-}
-
-static void SyncedMetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
-{
-    alt::MValue value;
-    if(!ctx.GetValue(value)) return;
-    alt::ICore::Instance().SetSyncedMetaData(ctx.GetProperty(), value);
-}
-
-static void SyncedMetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
-{
-    if(!alt::ICore::Instance().HasSyncedMetaData(ctx.GetProperty()))
-    {
-        ctx.Return(false);
-        return;
-    }
-
-    alt::ICore::Instance().DeleteSyncedMetaData(ctx.GetProperty());
-    ctx.Return(true);
-}
-
-static void SyncedMetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
-{
-    ctx.Return(alt::ICore::Instance().GetSyncedMetaDataKeys());
-}
-
 // clang-format off
 extern js::Class baseObjectClass, worldObjectClass, entityClass, resourceClass;
 extern js::Namespace enumsNamespace, sharedEventsNamespace;
 static js::Module sharedModule("alt-shared", "", { &baseObjectClass, &worldObjectClass, &entityClass, &resourceClass }, [](js::ModuleTemplate& module)
 {
+    module.StaticProperty("isDebug", alt::ICore::Instance().IsDebug());
+    module.StaticProperty("version", alt::ICore::Instance().GetVersion());
+    module.StaticProperty("branch", alt::ICore::Instance().GetBranch());
+
     module.StaticFunction("log", Log<LogType::INFO>);
     module.StaticFunction("logWarn", Log<LogType::WARN>);
     module.StaticFunction("logError", Log<LogType::ERR>);
     module.StaticFunction("sha256", &SHA256);
 
-    module.StaticProperty("isDebug", alt::ICore::Instance().IsDebug());
-
     module.StaticDynamicProperty("meta", MetaGetter, MetaSetter, MetaDeleter, MetaEnumerator);
-    module.StaticDynamicProperty("syncedMeta", SyncedMetaGetter, SyncedMetaSetter, SyncedMetaDeleter, SyncedMetaEnumerator);
 
     module.Namespace("Timers");
     module.Namespace("Utils");

@@ -39,6 +39,35 @@ static void StopServer(js::FunctionContext& ctx)
     alt::ICore::Instance().StopServer();
 }
 
+static void SyncedMetaGetter(js::DynamicPropertyContext<v8::Value>& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetSyncedMetaData(ctx.GetProperty()));
+}
+
+static void SyncedMetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
+{
+    alt::MValue value;
+    if(!ctx.GetValue(value)) return;
+    alt::ICore::Instance().SetSyncedMetaData(ctx.GetProperty(), value);
+}
+
+static void SyncedMetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
+{
+    if(!alt::ICore::Instance().HasSyncedMetaData(ctx.GetProperty()))
+    {
+        ctx.Return(false);
+        return;
+    }
+
+    alt::ICore::Instance().DeleteSyncedMetaData(ctx.GetProperty());
+    ctx.Return(true);
+}
+
+static void SyncedMetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetSyncedMetaDataKeys());
+}
+
 // clang-format off
 extern js::Class playerClass, vehicleClass, colShapeClass, checkpointClass, pedClass, networkObjectClass;
 extern js::Namespace eventsNamespace, pedModelInfoNamespace, vehicleModelInfoNamespace;
@@ -48,6 +77,8 @@ static js::Module altModule("alt", "alt-shared", { &playerClass, &vehicleClass, 
     module.StaticProperty("isServer", true);
     module.StaticProperty("rootDir", alt::ICore::Instance().GetRootDirectory());
     module.StaticProperty("netTime", NetTimeGetter);
+
+    module.StaticDynamicProperty("syncedMeta", SyncedMetaGetter, SyncedMetaSetter, SyncedMetaDeleter, SyncedMetaEnumerator);
 
     module.StaticLazyProperty("serverConfig", GetServerConfig);
 
