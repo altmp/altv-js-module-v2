@@ -232,6 +232,14 @@ namespace js
     std::optional<T> CppValue(v8::Local<v8::Value> val)
     {
         if constexpr(std::is_same_v<T, v8::Local<v8::Value>>) return val;
+        else if constexpr(std::is_same_v<T, int64_t> || std::is_same_v<T, uint64_t>)
+        {
+            constexpr bool isSigned = std::is_same_v<T, int64_t>;
+            v8::Local<v8::BigInt> bigInt = val->ToBigInt(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()).ToLocalChecked();
+            if constexpr(isSigned) return bigInt->Int64Value();
+            else
+                return bigInt->Uint64Value();
+        }
         else if constexpr(std::is_integral_v<T> || std::is_floating_point_v<T>)
         {
             double value = val->NumberValue(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()).ToChecked();
