@@ -59,6 +59,8 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
 {
     tpl.BindToType(alt::IBaseObject::Type::PLAYER);
 
+    tpl.LazyProperty<alt::IPlayer, &alt::IPlayer::GetName>("name");
+
     tpl.Property("model", &ModelGetter, &ModelSetter);
 
     tpl.Method("emit", &Emit);
