@@ -1514,6 +1514,15 @@ namespace js
             // todo: use native data property
             Get()->SetAccessorProperty(js::JSValue(name), WrapProperty(getter), setter ? WrapProperty(setter) : v8::Local<v8::FunctionTemplate>());
         }
+        // Property returns an object that will call the specified handlers
+        void StaticDynamicProperty(const std::string& name,
+                                   DynamicPropertyGetter getter,
+                                   DynamicPropertySetter setter = nullptr,
+                                   DynamicPropertyDeleter deleter = nullptr,
+                                   DynamicPropertyEnumerator enumerator = nullptr)
+        {
+            Get()->SetLazyDataProperty(js::JSValue(name), Wrapper::DynamicPropertyLazyHandler, v8::External::New(GetIsolate(), data));
+        }
 
         void StaticLazyProperty(const std::string& name, LazyPropertyCallback callback)
         {
