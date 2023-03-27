@@ -53,6 +53,27 @@ static void Emit(js::FunctionContext& ctx)
     alt::ICore::Instance().TriggerClientEvent(player, eventName, args);
 }
 
+static void EmitUnreliable(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1, 32)) return;
+
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    std::string eventName;
+    if(!ctx.GetArg(0, eventName)) return;
+
+    alt::MValueArgs args;
+    args.Reserve(ctx.GetArgCount() - 1);
+    alt::MValue val;
+    for(int i = 1; i < ctx.GetArgCount(); i++)
+    {
+        if(!ctx.GetArg(i, val)) continue;
+        args.Push(val);
+    }
+    alt::ICore::Instance().TriggerClientEventUnreliable(player, eventName, args);
+}
+
 // clang-format off
 extern js::Class sharedPlayerClass;
 extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::ClassTemplate& tpl)
@@ -64,6 +85,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Property("model", &ModelGetter, &ModelSetter);
 
     tpl.Method("emit", &Emit);
+    tpl.Method("emitUnreliable", &EmitUnreliable);
     tpl.Method<alt::IPlayer, void, alt::Position, uint32_t, &alt::IPlayer::Spawn>("spawn");
 
     tpl.Method<alt::IPlayer, void, uint32_t, int32_t, bool, &alt::IPlayer::GiveWeapon>("giveWeapon");
