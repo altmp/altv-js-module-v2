@@ -1492,6 +1492,19 @@ namespace js
         Persistent<TemplateType> tpl;
 
     public:
+        struct DynamicPropertyData
+        {
+            DynamicPropertyGetter getter;
+            DynamicPropertySetter setter;
+            DynamicPropertyDeleter deleter;
+            DynamicPropertyEnumerator enumerator;
+
+            DynamicPropertyData(DynamicPropertyGetter _getter, DynamicPropertySetter _setter, DynamicPropertyDeleter _deleter, DynamicPropertyEnumerator _enumerator)
+                : getter(_getter), setter(_setter), deleter(_deleter), enumerator(_enumerator)
+            {
+            }
+        };
+
         Template(v8::Isolate* _isolate, v8::Local<TemplateType> _templ) : isolate(_isolate), tpl(_isolate, _templ) {}
 
         v8::Local<TemplateType> Get() const
@@ -1521,6 +1534,7 @@ namespace js
                                    DynamicPropertyDeleter deleter = nullptr,
                                    DynamicPropertyEnumerator enumerator = nullptr)
         {
+            DynamicPropertyData* data = new DynamicPropertyData(getter, setter, deleter, enumerator);
             Get()->SetLazyDataProperty(js::JSValue(name), Wrapper::DynamicPropertyLazyHandler, v8::External::New(GetIsolate(), data));
         }
 
@@ -1559,21 +1573,6 @@ namespace js
 
     class ClassTemplate : public Template<v8::FunctionTemplate>
     {
-    public:
-        struct DynamicPropertyData
-        {
-            DynamicPropertyGetter getter;
-            DynamicPropertySetter setter;
-            DynamicPropertyDeleter deleter;
-            DynamicPropertyEnumerator enumerator;
-
-            DynamicPropertyData(DynamicPropertyGetter _getter, DynamicPropertySetter _setter, DynamicPropertyDeleter _deleter, DynamicPropertyEnumerator _enumerator)
-                : getter(_getter), setter(_setter), deleter(_deleter), enumerator(_enumerator)
-            {
-            }
-        };
-
-    private:
         friend class Class;
 
         Class* class_;

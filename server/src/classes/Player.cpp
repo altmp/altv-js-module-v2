@@ -54,6 +54,30 @@ static void CurrentWeaponSetter(js::PropertyContext& ctx)
     player->SetCurrentWeapon(weapon);
 }
 
+static void WeaponsGetter(js::PropertyContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    std::vector<alt::Weapon> weapons = player->GetWeapons();
+    js::Array arr(weapons.size());
+    for(auto weapon : weapons)
+    {
+        js::Object obj;
+        obj.Set("hash", weapon.hash);
+        obj.Set("tintIndex", weapon.tintIndex);
+        js::Array components(weapon.components.size());
+        for(auto component : weapon.components)
+        {
+            components.Push(component);
+        }
+        obj.Set("components", components);
+        arr.Push(obj);
+    }
+
+    ctx.Return(arr);
+}
+
 static void SendNamesGetter(js::PropertyContext& ctx)
 {
     if(!ctx.CheckThis()) return;
@@ -262,7 +286,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Property<alt::IPlayer, uint16_t, &alt::IPlayer::GetHealth, &alt::IPlayer::SetHealth>("health");
     tpl.Property<alt::IPlayer, uint16_t, &alt::IPlayer::GetMaxHealth, &alt::IPlayer::SetMaxHealth>("maxHealth");
     tpl.Property<alt::IPlayer, bool, &alt::IPlayer::GetInvincible, &alt::IPlayer::SetInvincible>("invincible");
-    tpl.Property<alt::IPlayer, &alt::IPlayer::GetWeapons>("weapons");
+    tpl.Property("weapons", &WeaponsGetter);
     tpl.Property<alt::IPlayer, &alt::IPlayer::GetInteriorLocation>("interiorLocation");
     tpl.Property<alt::IPlayer, &alt::IPlayer::GetLastDamagedBodyPart>("lastDamagedBodyPart");
     tpl.Property("sendNames", &SendNamesGetter, &SendNamesSetter);
