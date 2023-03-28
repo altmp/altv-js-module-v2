@@ -123,6 +123,7 @@ namespace js
             RegisterBindingExport("classes:vector3", "shared/classes/vector.js", "Vector3");
             RegisterBindingExport("classes:vector2", "shared/classes/vector.js", "Vector2");
             RegisterBindingExport("classes:rgba", "shared/classes/rgba.js", "RGBA");
+            RegisterBindingExport("classes:quaternion", "shared/classes/quaternion.js", "Quaternion");
 
             RegisterBindingExport("logging:inspectMultiple", "shared/logging.js", "inspectMultiple");
 
