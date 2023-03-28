@@ -10,6 +10,17 @@ static void GetByID(js::FunctionContext& ctx)
     ctx.Return((alt::IBaseObject*)alt::ICore::Instance().GetEntityByID(id));
 }
 
+static void ResetNetOwner(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    bool disableMigration;
+    if(!ctx.GetArg(0, disableMigration)) return;
+
+    alt::IEntity* entity = ctx.GetThisObject<alt::IEntity>();
+    entity->SetNetworkOwner(nullptr, disableMigration);
+}
+
 static void SyncedMetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
 {
     if(!ctx.CheckParent()) return;
@@ -58,24 +69,10 @@ static void StreamSyncedMetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx
     ctx.Return(true);
 }
 
-static void ResetNetOwner(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(1)) return;
-
-    bool disableMigration;
-    if(!ctx.GetArg(0, disableMigration)) return;
-
-    alt::IEntity* entity = ctx.GetThisObject<alt::IEntity>();
-    entity->SetNetworkOwner(nullptr, disableMigration);
-}
-
 // clang-format off
 extern js::Class sharedEntityClass;
 extern js::Class entityClass("Entity", &sharedEntityClass, nullptr, [](js::ClassTemplate& tpl)
 {
-    tpl.DynamicProperty("syncedMeta", nullptr, SyncedMetaSetter, SyncedMetaDeleter, nullptr);
-    tpl.DynamicProperty("streamSyncedMeta", nullptr, StreamSyncedMetaSetter, StreamSyncedMetaDeleter, nullptr);
-
     tpl.Method<alt::IEntity, void, alt::IPlayer*, bool, &alt::IEntity::SetNetworkOwner>("setNetOwner");
     tpl.Method("resetNetOwner", ResetNetOwner);
 
@@ -87,6 +84,9 @@ extern js::Class entityClass("Entity", &sharedEntityClass, nullptr, [](js::Class
     tpl.Property<alt::IEntity, bool, &alt::IEntity::GetStreamed, &alt::IEntity::SetStreamed>("streamed");
     tpl.Property<alt::IEntity, bool, &alt::IEntity::IsFrozen, &alt::IEntity::SetFrozen>("frozen");
     tpl.Property<alt::IEntity, bool, &alt::IEntity::HasCollision, &alt::IEntity::SetCollision>("collision");
+
+    tpl.DynamicProperty("syncedMeta", nullptr, SyncedMetaSetter, SyncedMetaDeleter, nullptr);
+    tpl.DynamicProperty("streamSyncedMeta", nullptr, StreamSyncedMetaSetter, StreamSyncedMetaDeleter, nullptr);
 
     tpl.StaticFunction("getByID", &GetByID);
 });
