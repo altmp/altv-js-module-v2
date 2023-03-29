@@ -15,6 +15,9 @@ namespace js
     class Object;
     class Array;
 
+    static constexpr int64_t JS_MAX_SAFE_INTEGER = 9007199254740991;
+    static constexpr int64_t JS_MIN_SAFE_INTEGER = JS_MAX_SAFE_INTEGER * -1;
+
     alt::MValue JSToMValue(v8::Local<v8::Value> val, bool allowFunction = true);
     v8::Local<v8::Value> MValueToJS(alt::MValueConst val);
     void MValueArgsToJS(alt::MValueArgs args, Array& argsArray);
@@ -48,12 +51,14 @@ namespace js
     {
         return v8::Integer::NewFromUnsigned(v8::Isolate::GetCurrent(), val);
     }
-    inline v8::Local<v8::BigInt> JSValue(int64_t val)
+    inline v8::Local<v8::Value> JSValue(int64_t val)
     {
+        if(val >= JS_MIN_SAFE_INTEGER && val <= JS_MAX_SAFE_INTEGER) return JSValue((double)val);
         return v8::BigInt::New(v8::Isolate::GetCurrent(), val);
     }
-    inline v8::Local<v8::BigInt> JSValue(uint64_t val)
+    inline v8::Local<v8::Value> JSValue(uint64_t val)
     {
+        if(val >= JS_MIN_SAFE_INTEGER && val <= JS_MAX_SAFE_INTEGER) return JSValue((double)val);
         return v8::BigInt::NewFromUnsigned(v8::Isolate::GetCurrent(), val);
     }
     template<class T>

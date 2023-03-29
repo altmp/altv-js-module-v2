@@ -207,9 +207,6 @@ alt::MValue js::JSToMValue(v8::Local<v8::Value> val, bool allowFunction)
 
 v8::Local<v8::Value> js::MValueToJS(alt::MValueConst val)
 {
-    static constexpr int64_t JS_MAX_SAFE_INTEGER = 9007199254740991;
-    static constexpr int64_t JS_MIN_SAFE_INTEGER = JS_MAX_SAFE_INTEGER * -1;
-
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
     v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
     js::IResource* resource = js::IResource::GetFromContext(ctx);
