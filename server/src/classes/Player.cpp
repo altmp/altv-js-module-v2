@@ -271,12 +271,13 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
 {
     tpl.BindToType(alt::IBaseObject::Type::PLAYER);
 
+    tpl.LazyProperty<alt::IPlayer, &alt::IPlayer::GetIP>("ip");
+    tpl.LazyProperty<alt::IPlayer, &alt::IPlayer::GetSocialID>("socialId");
+    tpl.LazyProperty<alt::IPlayer, &alt::IPlayer::GetHwidHash>("hwidHash");
+    tpl.LazyProperty<alt::IPlayer, &alt::IPlayer::GetHwidExHash>("hwidExHash");
+
     tpl.Property<alt::IPlayer, &alt::IPlayer::IsConnected>("isConnected");
     tpl.Property<alt::IPlayer, &alt::IPlayer::GetPing>("ping");
-    tpl.Property<alt::IPlayer, &alt::IPlayer::GetIP>("ip");
-    tpl.Property<alt::IPlayer, &alt::IPlayer::GetSocialID>("socialId");
-    tpl.Property<alt::IPlayer, &alt::IPlayer::GetHwidHash>("hwidHash");
-    tpl.Property<alt::IPlayer, &alt::IPlayer::GetHwidExHash>("hwidExHash");
     tpl.Property<alt::IPlayer, &alt::IPlayer::GetAuthToken>("authToken");
     tpl.Property<alt::IPlayer, &alt::IPlayer::GetDiscordId>("discordId");
     tpl.Property("model", &ModelGetter, &ModelSetter);
