@@ -86,7 +86,7 @@ static js::Module sharedModule("alt-shared", "", { &baseObjectClass, &worldObjec
     module.StaticProperty("branch", alt::ICore::Instance().GetBranch());
 
     module.StaticFunction("log", Log<LogType::INFO>);
-    module.StaticFunction("logWarn", Log<LogType::WARN>);
+    module.StaticFunction("logWarning", Log<LogType::WARN>);
     module.StaticFunction("logError", Log<LogType::ERR>);
     module.StaticFunction("sha256", &SHA256);
 

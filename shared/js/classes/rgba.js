@@ -20,7 +20,7 @@ export class RGBA {
                 this.r = obj.r;
                 this.g = obj.g;
                 this.b = obj.b;
-                this.a = obj.a;
+                if(obj.a) this.a = obj.a;
             }
             else if(Array.isArray(arg)) {
                 const arr = arg;
