@@ -2138,6 +2138,11 @@ namespace js
         {
             Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Class, Getter>, Wrapper::PropertySetterHandler<Class, Type, Setter>);
         }
+        template<class Class, typename GetterType, typename SetterType, GetterType (Class::*Getter)() const, void (Class::*Setter)(SetterType)>
+        void Property(const std::string& name)
+        {
+            Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Class, GetterType>, Wrapper::PropertySetterHandler<Class, Type, SetterType>);
+        }
         // If getter is nullptr, tries to get the getter defined by a base class
         void Property(const std::string& name, PropertyCallback getter = nullptr, PropertyCallback setter = nullptr)
         {
