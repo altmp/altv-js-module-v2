@@ -3,8 +3,8 @@
 #include "cpp-sdk/ICore.h"
 
 // clang-format off
-extern js::Class entityClass;
-extern js::Class pedClass("Ped", &entityClass, nullptr, [](js::ClassTemplate& tpl)
+extern js::Class sharedPedClass;
+extern js::Class pedClass("Ped", &sharedPedClass, nullptr, [](js::ClassTemplate& tpl)
 {
     tpl.BindToType(alt::IBaseObject::Type::PED);
 
