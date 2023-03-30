@@ -6,11 +6,32 @@ export class Quaternion {
     #z = 0;
     #w = 0;
 
-    constructor(x, y, z, w) {
+    constructor(...args) {
         this.#x = x;
         this.#y = y;
         this.#z = z;
         this.#w = w;
+        if(args.length === 4) {
+            this.#x = parseInt(args[0]);
+            this.#y = parseInt(args[1]);
+            this.#z = parseInt(args[2]);
+            this.#w = parseInt(args[3]);
+        }
+        else if(args.length === 1) {
+            const arg = args[0];
+            if(Array.isArray(arg)) {
+                this.#x = parseInt(arg[0]);
+                this.#y = parseInt(arg[1]);
+                this.#z = parseInt(arg[2]);
+                this.#w = parseInt(arg[3]);
+            }
+            else if(typeof arg === "object") {
+                this.#x = parseInt(arg.x);
+                this.#y = parseInt(arg.y);
+                this.#z = parseInt(arg.z);
+                this.#w = parseInt(arg.w);
+            }
+        }
     }
 
     get x() {
