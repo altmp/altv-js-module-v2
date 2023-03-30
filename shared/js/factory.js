@@ -20,3 +20,22 @@ alt.Factory.getVehicleFactory = getEntityFactory(alt.Enums.BaseObjectType.VEHICL
 
 alt.Factory.setPedFactory = setEntityFactory(alt.Ped, alt.Enums.BaseObjectType.PED);
 alt.Factory.getPedFactory = getEntityFactory(alt.Enums.BaseObjectType.PED);
+
+// Factory ctors
+alt.PointBlip.create = (ctx) => {
+    if(typeof ctx !== "object") throw new Error("Invalid args");
+    ctx.blipType = alt.Enums.BlipType.DESTINATION;
+    return cppBindings.createEntity(alt.Enums.BaseObjectType.BLIP, ctx);
+};
+
+alt.AreaBlip.create = (ctx) => {
+    if(typeof ctx !== "object") throw new Error("Invalid args");
+    ctx.blipType = alt.Enums.BlipType.AREA;
+    return cppBindings.createEntity(alt.Enums.BaseObjectType.BLIP, ctx);
+};
+
+alt.RadiusBlip.create = (ctx) => {
+    if(typeof ctx !== "object") throw new Error("Invalid args");
+    ctx.blipType = alt.Enums.BlipType.RADIUS;
+    return cppBindings.createEntity(alt.Enums.BaseObjectType.BLIP, ctx);
+};
