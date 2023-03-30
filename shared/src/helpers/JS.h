@@ -108,6 +108,11 @@ namespace js
             return true;
         }
 
+        bool Has(const std::string& key) const
+        {
+            return object->HasOwnProperty(context, js::JSValue(key)).FromMaybe(false);
+        }
+
         std::vector<std::string> GetKeys() const
         {
             std::vector<std::string> keys;
