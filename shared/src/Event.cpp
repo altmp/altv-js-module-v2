@@ -19,7 +19,7 @@ void js::Event::CancelEventCallback(const v8::FunctionCallbackInfo<v8::Value>& i
     if(ev->WasCancelled()) return;
     ev->Cancel();
     js::Object thisObj{ info.This() };
-    thisObj.Set("cancelled", true);
+    thisObj.Set("isCancelled", true);
 }
 
 v8::Local<v8::Function> js::Event::GetCancelFunction(js::IResource* resource, const alt::CEvent* ev)
@@ -37,7 +37,7 @@ void js::Event::SendEvent(const alt::CEvent* ev, IResource* resource)
     EventArgs eventArgs;
     eventHandler->argsCb(ev, eventArgs);
     eventArgs.Set("cancel", GetCancelFunction(resource, ev));
-    eventArgs.Set("cancelled", ev->WasCancelled());
+    eventArgs.Set("isCancelled", ev->WasCancelled());
 
     CallEventBinding(false, (int)ev->GetType(), eventArgs, resource);
 }
