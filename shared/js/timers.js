@@ -2,8 +2,11 @@ const timers = new Set();
 
 class Timer {
     constructor(interval, callback, once) {
+        if(typeof interval !== "number") throw new Error("Expected a number as first argument");
+        if(typeof callback !== "function") throw new Error("Expected a function as second argument");
+
         this.interval = interval;
-        this.callback = callback;
+        this.callback = callback.bind(this);
         this.lastTick = 0;
         this.once = once;
         timers.add(this);

@@ -45,11 +45,12 @@ export class RGBA {
         return int;
     }
 
-    static fromArray(arr) {
-        return new RGBA(arr[0], arr[1], arr[2], arr[3]);
-    }
-    static fromObject(obj) {
-        return new RGBA(obj.r, obj.g, obj.b, obj.a);
+    static fromInt(int) {
+        const r = (int >> 24) & 0xFF;
+        const g = (int >> 16) & 0xFF;
+        const b = (int >> 8) & 0xFF;
+        const a = int & 0xFF;
+        return new RGBA(r, g, b, a);
     }
 
     static zero = new RGBA(0, 0, 0, 0);

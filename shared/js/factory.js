@@ -21,6 +21,9 @@ alt.Factory.getVehicleFactory = getEntityFactory(alt.Enums.BaseObjectType.VEHICL
 alt.Factory.setPedFactory = setEntityFactory(alt.Ped, alt.Enums.BaseObjectType.PED);
 alt.Factory.getPedFactory = getEntityFactory(alt.Enums.BaseObjectType.PED);
 
+alt.Factory.setBlipFactory = setEntityFactory(alt.Blip, alt.Enums.BaseObjectType.BLIP);
+alt.Factory.getBlipFactory = getEntityFactory(alt.Enums.BaseObjectType.BLIP);
+
 // Factory ctors
 alt.PointBlip.create = (ctx) => {
     if(typeof ctx !== "object") throw new Error("Invalid args");

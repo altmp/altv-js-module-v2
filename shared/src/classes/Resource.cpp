@@ -149,6 +149,14 @@ static void DependantsGetter(js::PropertyContext& ctx)
     ctx.Return(dependants);
 }
 
+static void IsStartedGetter(js::PropertyContext& ctx)
+{
+    if(!ctx.CheckExtraInternalFieldValue()) return;
+
+    alt::IResource* resource = ctx.GetExtraInternalFieldValue<alt::IResource>();
+    ctx.Return(resource->IsStarted());
+}
+
 // clang-format off
 extern js::Class resourceClass("Resource", nullptr, [](js::ClassTemplate& tpl)
 {
@@ -167,4 +175,5 @@ extern js::Class resourceClass("Resource", nullptr, [](js::ClassTemplate& tpl)
     tpl.Property("exports", ExportsGetter);
     tpl.Property("dependencies", DependenciesGetter);
     tpl.Property("dependants", DependantsGetter);
+    tpl.Property("isStarted", IsStartedGetter);
 }, true);

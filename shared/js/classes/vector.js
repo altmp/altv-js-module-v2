@@ -73,10 +73,14 @@ class Vector {
         return new this.constructor(...fixedValues);
     }
 
-    get length() {
+    get lengthSquared() {
         let sum = 0;
         for(let i = 0; i < this.#size; i++) sum += this.values[i] * this.values[i];
-        return Math.sqrt(sum);
+        return sum;
+    }
+
+    get length() {
+        return Math.sqrt(this.lengthSquared);
     }
 
     get negative() {
