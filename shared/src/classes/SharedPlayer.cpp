@@ -65,5 +65,4 @@ extern js::Class sharedPlayerClass("Player", nullptr, [](js::ClassTemplate& tpl)
 
     tpl.Method("getWeaponTintIndex", GetWeaponTintIndex);
     tpl.Method("hasWeaponComponent", HasWeaponComponent);
-
 });
