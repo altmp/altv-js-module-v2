@@ -34,7 +34,7 @@ declare module "@altv/server" {
         get name(): string;
     }
 
-    export interface PedModelInfo {
+    export class PedModelInfo {
         get hash(): number;
         get name(): string;
         get type(): number;
@@ -46,7 +46,7 @@ declare module "@altv/server" {
         static get(model: string | number): PedModelInfo;
     }
 
-    export interface VehicleModelInfo {
+    export class VehicleModelInfo {
         get title(): string;
         get modelType(): shared.Enums.VehicleModelType;
         get wheelsCount(): number;
@@ -71,7 +71,7 @@ declare module "@altv/server" {
         get pos(): shared.Vector3;
 
         // Server
-        set pos(pos: shared.Vector3): void;
+        set pos(pos: shared.Vector3);
         get dimension(): number;
     }
 
@@ -95,10 +95,10 @@ declare module "@altv/server" {
         attachTo(entity: Entity, entityBone: number | string, ownBone: number | string, pos: shared.Vector3, rot: shared.Vector3, enableCollisions: boolean, noFixedRotation: boolean): void;
         detach(): void;
 
-        set visible(visible: boolean): void;
-        set streamed(streamed: boolean): void;
-        set frozen(frozen: boolean): void;
-        set collision(collision: boolean): void;
+        set visible(visible: boolean);
+        set streamed(streamed: boolean);
+        set frozen(frozen: boolean);
+        set collision(collision: boolean);
 
         static getByID(id: number): Entity | null;
     }
@@ -237,7 +237,7 @@ declare module "@altv/server" {
         alpha?: number;
         textureVariation?: number;
         lodDistance?: number;
-    };
+    }
     export class NetworkObject extends Entity {
         // Shared
         get alpha(): number;
