@@ -7,6 +7,9 @@ declare module "@altv/shared" {
     export const version: string;
     export const branch: string;
 
+    export const isClient: boolean;
+    export const isServer: boolean;
+
     export function log(...args: any[]): void;
     export function logWarning(...args: any[]): void;
     export function logError(...args: any[]): void;
@@ -104,6 +107,26 @@ declare module "@altv/shared" {
 			AREA = 11,
 			GALLERY = 12,
 			PICKUP_OBJECT = 13
+        }
+        export const enum VehicleModelType {
+            INVALID,
+			PED,
+			AUTOMOBILE,
+			PLANE,
+			TRAILER,
+			QUAD_BIKE,
+			SUBMARINE_CAR,
+			AMPHIBIOUS_AUTOMOBILE,
+			AMPHIBIOUS_QUAD_BIKE,
+			HELI,
+			BLIMP,
+			AUTOGYRO,
+			BIKE,
+			BMX,
+			BOAT,
+			TRAIN,
+			SUBMARINE,
+			OBJECT
         }
         // todo: add missing enums
     }
@@ -321,23 +344,6 @@ declare module "@altv/shared" {
         destroy(): void;
     }
 
-    export class WorldObject extends BaseObject {
-        get pos(): Vector3;
-    }
-
-    export class Entity extends WorldObject {
-        get id(): number;
-        get model(): number;
-        get netOwner(): Player | null;
-        get rot(): Vector3;
-        get visible(): boolean;
-
-        get syncedMeta(): Record<string, any>;
-        get streamSyncedMeta(): Record<string, any>;
-
-        static get all(): ReadonlyArray<Entity>;
-    }
-
     export class Resource {
         get type(): string;
         get name(): string;
@@ -356,110 +362,5 @@ declare module "@altv/shared" {
 
         static get current(): Resource;
         static get all(): ReadonlyArray<Resource>;
-    }
-
-    export class Player extends Entity {
-        get name(): string;
-        get health(): number;
-        get maxHealth(): number;
-        get currentWeaponComponents(): ReadonlyArray<number>;
-        get currentWeaponTintIndex(): number;
-        get currentWeapon(): number;
-        get isDead(): boolean;
-        get isJumping(): boolean;
-        get isAiming(): boolean;
-        get isShooting(): boolean;
-        get isReloading(): boolean;
-        get armour(): number;
-        get maxArmour(): number;
-        get moveSpeed(): number;
-        get aimPos(): Vector3;
-        get headRotation(): Vector3;
-        get isInVehicle(): boolean;
-        get vehicle(): Vehicle | null;
-        get seat(): number;
-        get entityAimingAt(): Entity | null;
-        get entityAimOffset(): Vector3;
-        get isFlashlightActive(): boolean;
-        get isSuperJumpEnabled(): boolean;
-        get isCrouching(): boolean;
-        get isStealthy(): boolean;
-        get currentAnimationDict(): number;
-        get currentAnimationName(): number;
-        get isSpawned(): boolean;
-        get forwardSpeed(): number;
-        get strafeSpeed(): number;
-
-        getWeaponTintIndex(weapon: number | string): number;
-        hasWeaponComponent(weapon: number | string, component: number | string): boolean;
-
-        static get all(): ReadonlyArray<Player>;
-    }
-
-    export class Vehicle extends Entity {
-        // todo: add missing api
-
-        static get all(): ReadonlyArray<Vehicle>;
-    }
-
-    export class Blip extends WorldObject {
-        get id(): number;
-        get isGlobal(): boolean;
-        get target(): Entity | null;
-        get isAttached(): boolean;
-        get attachedTo(): Entity | null;
-        get blipType(): Enums.BlipType;
-
-        scale: Vector2;
-        display: number;
-        sprite: number;
-        color: number;
-        secondaryColor: RGBA;
-        alpha: number;
-        flashTimer: number;
-        flashInterval: number;
-        friendly: boolean;
-        route: boolean;
-        bright: boolean;
-        number: number;
-        showCone: boolean;
-        flashes: boolean;
-        flashesAlternate: boolean;
-        shortRange: boolean;
-        priority: number;
-        rotation: number;
-        gxtName: string;
-        name: string;
-        routeColor: RGBA;
-        pulse: boolean;
-        missionCreator: boolean;
-        tickVisible: boolean;
-        headingIndicatorVisible: boolean;
-        outlineIndicatorVisible: boolean;
-        friendIndicatorVisible: boolean;
-        crewIndicatorVisible: boolean;
-        category: number;
-        highDetail: boolean;
-        shrinked: boolean;
-
-        attachTo(entity: Entity): void;
-        fade(opacity: number, duration: number): void;
-    }
-
-    export class NetworkObject extends Entity {
-        get alpha(): number;
-        get textureVariation(): number;
-        get lodDistance(): number;
-
-        static get all(): ReadonlyArray<NetworkObject>;
-    }
-
-    export class Ped extends Entity {
-        get health(): number;
-        get maxHealth(): number;
-        get armour(): number;
-        get currentWeapon(): number;
-
-        static get all(): ReadonlyArray<Ped>;
     }
 }
