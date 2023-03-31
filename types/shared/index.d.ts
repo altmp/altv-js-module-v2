@@ -120,15 +120,14 @@ declare module "@altv/shared" {
             readonly listeners: ReadonlyArray<(context: Context) => void>;
         };
 
-        interface ClientScriptEventContext extends EventContext {
+        interface ScriptEventContext extends EventContext {
             readonly eventName: string;
             readonly args: any[];
+        }
+        interface ClientScriptEventContext extends ScriptEventContext {
             readonly player: Player | undefined;
         }
-        interface ServerEventContext extends EventContext {
-            readonly eventName: string;
-            readonly args: any[];
-        }
+        interface ServerEventContext extends ScriptEventContext {}
         interface ConsoleCommandEventContext extends EventContext {
             readonly name: string;
             readonly args: string[];
@@ -205,7 +204,10 @@ declare module "@altv/shared" {
 
         export const onNetOwnerChange: Event<NetOwnerChangeEventContext>;
 
-        export function emit(name: string, ...args: any[]): void;
+        export function on(eventName: string, callback: (context: { args: any[] }) => void): void;
+        export function onRemote(eventName: string, callback: (context: { args: any[], player: Player | undefined }) => void): void;
+
+        export function emit(eventName: string, ...args: any[]): void;
     }
 
     export namespace PointBlip {}
@@ -332,6 +334,8 @@ declare module "@altv/shared" {
 
         get syncedMeta(): Record<string, any>;
         get streamSyncedMeta(): Record<string, any>;
+
+        static get all(): ReadonlyArray<Entity>;
     }
 
     export class Resource {
@@ -388,10 +392,14 @@ declare module "@altv/shared" {
 
         getWeaponTintIndex(weapon: number | string): number;
         hasWeaponComponent(weapon: number | string, component: number | string): boolean;
+
+        static get all(): ReadonlyArray<Player>;
     }
 
     export class Vehicle extends Entity {
         // todo: add missing api
+
+        static get all(): ReadonlyArray<Vehicle>;
     }
 
     export class Blip extends WorldObject {
@@ -442,6 +450,8 @@ declare module "@altv/shared" {
         get alpha(): number;
         get textureVariation(): number;
         get lodDistance(): number;
+
+        static get all(): ReadonlyArray<NetworkObject>;
     }
 
     export class Ped extends Entity {
@@ -449,5 +459,7 @@ declare module "@altv/shared" {
         get maxHealth(): number;
         get armour(): number;
         get currentWeapon(): number;
+
+        static get all(): ReadonlyArray<Ped>;
     }
 }
