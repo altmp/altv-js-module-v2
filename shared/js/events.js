@@ -1,4 +1,5 @@
-requireBinding("shared/utils.js");
+/** @type {typeof import("./utils.js")} */
+const { assert } = requireBinding("shared/utils.js");
 
 export class Event {
     /** @type {Map<number, Function[]>} */
@@ -18,7 +19,7 @@ export class Event {
      * @param {Function} handler
      */
     static async #registerCallback(name, type, custom, handler) {
-        if (typeof handler !== "function") throw new Error(`Handler for event '${name}' is not a function`);
+        assert(typeof handler === "function", `Handler for event '${name}' is not a function`);
 
         const map = custom ? Event.#customHandlers : Event.#handlers;
         if (!map.has(type)) map.set(type, [handler]);
@@ -34,7 +35,7 @@ export class Event {
      * @param {Function} handler
      */
     static #unregisterCallback(name, type, custom, handler) {
-        if (typeof handler !== "function") throw new Error(`Handler for event '${name}' is not a function`);
+        assert(typeof handler === "function", `Handler for event '${name}' is not a function`);
 
         const map = custom ? Event.#customHandlers : Event.#handlers;
         const handlers = map.get(type);
@@ -96,9 +97,11 @@ export class Event {
      * @param {Function} handler
      */
     static subscribeScriptEvent(local, name, handler) {
-        if (typeof name !== "string") throw new Error(`Event name is not a string`);
-        if (typeof handler !== "function")
-            throw new Error(`Handler for ${local ? "local" : "remote"} script event '${name}' is not a function`);
+        assert(typeof name === "string", `Event name is not a string`);
+        assert(
+            typeof handler === "function",
+            `Handler for ${local ? "local" : "remote"} script event '${name}' is not a function`
+        );
 
         const map = local ? Event.#localScriptEventHandlers : Event.#remoteScriptEventHandlers;
         if (!map.has(name)) map.set(name, [handler]);

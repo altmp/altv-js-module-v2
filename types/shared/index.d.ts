@@ -52,6 +52,9 @@ declare module "@altv/shared" {
         export function wait(ms: number): Promise<void>;
         export function waitForNextTick(): Promise<void>;
         export function waitFor(callback: () => boolean): Promise<void>;
+
+        export class AssertionError extends Error {}
+        export function assert(condition: any, message?: string): asserts condition;
     }
 
     export namespace Factory {

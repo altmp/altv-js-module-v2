@@ -1,9 +1,11 @@
+/** @type {typeof import("./utils.js")} */
+const { assert } = requireBinding("shared/utils.js");
 const timers = new Set();
 
 class Timer {
     constructor(interval, callback, once) {
-        if (typeof interval !== "number") throw new Error("Expected a number as first argument");
-        if (typeof callback !== "function") throw new Error("Expected a function as second argument");
+        assert(typeof interval === "number", "Expected a number as first argument");
+        assert(typeof callback === "function", "Expected a function as second argument");
 
         this.interval = interval;
         this.callback = callback.bind(this);
