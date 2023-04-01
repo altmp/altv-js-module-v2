@@ -3,7 +3,7 @@ const { esmLoader } = require("internal/process/esm_loader");
 const { translators } = require("internal/modules/esm/translators");
 const { ModuleWrap } = bindings.internalBinding("module_wrap");
 const path = require("path");
-const dns = require('dns');
+const dns = require("dns");
 const url = require("url");
 
 const alt = __altModule;
@@ -35,7 +35,7 @@ function setup() {
 
     // Allows users to use "localhost" address instead of 127.0.0.1 for tcp connections (e.g. database)
     // https://github.com/nodejs/node/issues/40702#issuecomment-958157082
-    dns.setDefaultResultOrder('ipv4first');
+    dns.setDefaultResultOrder("ipv4first");
 
     setupImports();
 }
@@ -47,78 +47,83 @@ function setupImports() {
     const altModuleInternalPrefix = "altmodule";
     const altResourceInternalPrefix = "altresource";
 
-    translators.set("altresource", async function(url) {
+    translators.set("altresource", async function (url) {
         const name = url.slice(altResourceInternalPrefix.length + 1); // Remove prefix
         const exports = alt.Resource.get(name).exports;
-        return new ModuleWrap(url, undefined, Object.keys(exports), function() {
-        for (const exportName in exports) {
-            let value;
-            try {
-            value = exports[exportName];
-            } catch {}
-            this.setExport(exportName, value);
-        }
+        return new ModuleWrap(url, undefined, Object.keys(exports), function () {
+            for (const exportName in exports) {
+                let value;
+                try {
+                    value = exports[exportName];
+                } catch {}
+                this.setExport(exportName, value);
+            }
         });
     });
-    translators.set("altmodule", async function(url) {
+    translators.set("altmodule", async function (url) {
         const exports = alt; // The alt module has all of the shared module, so we can just use that
         const exportKeys = Object.keys(exports);
-        return new ModuleWrap(url, undefined, exportKeys, function() {
-        for (const exportName in exports) {
-            let value;
-            try {
-            value = exports[exportName];
-            } catch {}
-            this.setExport(exportName, value);
-        }
+        return new ModuleWrap(url, undefined, exportKeys, function () {
+            for (const exportName in exports) {
+                let value;
+                try {
+                    value = exports[exportName];
+                } catch {}
+                this.setExport(exportName, value);
+            }
         });
     });
 
     const _warningPackages = {
-        "node-fetch": "Console hangs"
+        "node-fetch": "Console hangs",
     };
-    const customLoaders = [{
-        exports: {
-        resolve(specifier, context, defaultResolve) {
-            if(specifier.startsWith(`${altResourceImportPrefix}/`))
-            return {
-                url: `${altResourceInternalPrefix}:${specifier.slice(altResourceImportPrefix.length + 1)}`,
-                shortCircuit: true
-            };
+    const customLoaders = [
+        {
+            exports: {
+                resolve(specifier, context, defaultResolve) {
+                    if (specifier.startsWith(`${altResourceImportPrefix}/`))
+                        return {
+                            url: `${altResourceInternalPrefix}:${specifier.slice(altResourceImportPrefix.length + 1)}`,
+                            shortCircuit: true,
+                        };
 
-            if(specifier.startsWith(`${altModuleImportPrefix}/`))
-            return {
-                url: `${altModuleInternalPrefix}:${specifier.slice(altModuleImportPrefix.length + 1)}`,
-                shortCircuit: true
-            };
+                    if (specifier.startsWith(`${altModuleImportPrefix}/`))
+                        return {
+                            url: `${altModuleInternalPrefix}:${specifier.slice(altModuleImportPrefix.length + 1)}`,
+                            shortCircuit: true,
+                        };
 
-            if(_warningPackages.hasOwnProperty(specifier)) alt.logWarning(`Using the module "${specifier}" can cause problems. Reason: ${_warningPackages[specifier]}`);
-            return defaultResolve(specifier, context, defaultResolve);
+                    if (_warningPackages.hasOwnProperty(specifier))
+                        alt.logWarning(
+                            `Using the module "${specifier}" can cause problems. Reason: ${_warningPackages[specifier]}`
+                        );
+                    return defaultResolve(specifier, context, defaultResolve);
+                },
+                load(url, context, defaultLoad) {
+                    if (url.startsWith(`${altResourceInternalPrefix}:`))
+                        return {
+                            format: "altresource",
+                            source: null,
+                            shortCircuit: true,
+                        };
+
+                    if (url.startsWith(`${altModuleInternalPrefix}:`)) {
+                        const name = url.slice(altModuleInternalPrefix.length + 1); // Remove prefix
+                        if (name !== "server" && name !== "shared") {
+                            alt.logError("Invalid alt:V module import:", name);
+                            return defaultLoad(url, context, defaultLoad);
+                        }
+                        return {
+                            format: "altmodule",
+                            source: null,
+                            shortCircuit: true,
+                        };
+                    }
+                    return defaultLoad(url, context, defaultLoad);
+                },
+            },
         },
-        load(url, context, defaultLoad) {
-            if(url.startsWith(`${altResourceInternalPrefix}:`))
-            return {
-                format: "altresource",
-                source: null,
-                shortCircuit: true
-            };
-
-            if(url.startsWith(`${altModuleInternalPrefix}:`)) {
-            const name = url.slice(altModuleInternalPrefix.length + 1); // Remove prefix
-            if(name !== "server" && name !== "shared") {
-                alt.logError("Invalid alt:V module import:", name);
-                return defaultLoad(url, context, defaultLoad);
-            }
-            return {
-                format: "altmodule",
-                source: null,
-                shortCircuit: true
-            };
-            }
-            return defaultLoad(url, context, defaultLoad);
-        },
-        }
-    }];
+    ];
     esmLoader.addCustomLoaders(customLoaders);
 }
 
