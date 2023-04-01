@@ -46,19 +46,16 @@ const templateTypeTemplate = `typename Arg{INDEX}`;
 const maxCount = 16;
 
 let resultStr = "";
-for(let i = 1; i < maxCount + 1; i++)
-{
+for (let i = 1; i < maxCount + 1; i++) {
     let templateTypes = "";
     let methodTypes = "";
     let methodArgs = "";
-    for(let j = 0; j < i; j++)
-    {
+    for (let j = 0; j < i; j++) {
         let tpl = templateTypeTemplate;
         templateTypes += tpl.replace("{INDEX}", j);
         methodTypes += `Arg${j}`;
         methodArgs += `GetArg<CleanArg<Arg${j}>>(info, ${j})`;
-        if(j < i - 1)
-        {
+        if (j < i - 1) {
             templateTypes += ", ";
             methodTypes += ", ";
             methodArgs += ", ";
@@ -99,17 +96,14 @@ void Method(const std::string& name)
 }`;
 
 resultStr = "";
-for(let i = 1; i < maxCount + 1; i++)
-{
+for (let i = 1; i < maxCount + 1; i++) {
     let templateTypes = "";
     let methodTypes = "";
-    for(let j = 0; j < i; j++)
-    {
+    for (let j = 0; j < i; j++) {
         let tpl = templateTypeTemplate;
         templateTypes += tpl.replace("{INDEX}", j);
         methodTypes += `Arg${j}`;
-        if(j < i - 1)
-        {
+        if (j < i - 1) {
             templateTypes += ", ";
             methodTypes += ", ";
         }

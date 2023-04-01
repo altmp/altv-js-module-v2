@@ -18,13 +18,13 @@ export class Event {
      * @param {Function} handler
      */
     static async #registerCallback(name, type, custom, handler) {
-        if(typeof handler !== "function") throw new Error(`Handler for event '${name}' is not a function`);
+        if (typeof handler !== "function") throw new Error(`Handler for event '${name}' is not a function`);
 
         const map = custom ? Event.#customHandlers : Event.#handlers;
-        if(!map.has(type)) map.set(type, [ handler ]);
+        if (!map.has(type)) map.set(type, [handler]);
         else map.get(type).push(handler);
 
-        if(!custom) cppBindings.toggleEvent(type, true);
+        if (!custom) cppBindings.toggleEvent(type, true);
     }
 
     /**
@@ -34,16 +34,16 @@ export class Event {
      * @param {Function} handler
      */
     static #unregisterCallback(name, type, custom, handler) {
-        if(typeof handler !== "function") throw new Error(`Handler for event '${name}' is not a function`);
+        if (typeof handler !== "function") throw new Error(`Handler for event '${name}' is not a function`);
 
         const map = custom ? Event.#customHandlers : Event.#handlers;
         const handlers = map.get(type);
-        if(!handlers) return;
+        if (!handlers) return;
         const idx = handlers.indexOf(handler);
-        if(idx === -1) return;
+        if (idx === -1) return;
         handlers.splice(idx, 1);
 
-        if(!custom) cppBindings.toggleEvent(type, false);
+        if (!custom) cppBindings.toggleEvent(type, false);
     }
 
     /**
@@ -53,14 +53,14 @@ export class Event {
     static #handleScriptEvent(ctx, local) {
         const name = ctx.eventName;
         const handlers = local ? Event.#localScriptEventHandlers.get(name) : Event.#remoteScriptEventHandlers.get(name);
-        if(!handlers) return;
+        if (!handlers) return;
 
         const evCtx = {
-            args: ctx.args
+            args: ctx.args,
         };
-        if(alt.isServer && !local) evCtx.player = ctx.player;
+        if (alt.isServer && !local) evCtx.player = ctx.player;
 
-        for(let handler of handlers) {
+        for (let handler of handlers) {
             handler(evCtx);
         }
     }
@@ -82,8 +82,8 @@ export class Event {
     static #getEventFunc(name, type, custom) {
         const func = Event.#registerCallback.bind(undefined, name, type, custom);
         Object.defineProperties(func, {
-            "listeners": {
-                get: Event.#getEventHandlers.bind(undefined, type, custom)
+            listeners: {
+                get: Event.#getEventHandlers.bind(undefined, type, custom),
             },
         });
         func.remove = Event.#unregisterCallback.bind(undefined, name, type, custom);
@@ -96,11 +96,12 @@ export class Event {
      * @param {Function} handler
      */
     static subscribeScriptEvent(local, name, handler) {
-        if(typeof name !== "string") throw new Error(`Event name is not a string`);
-        if(typeof handler !== "function") throw new Error(`Handler for ${local ? "local" : "remote"} script event '${name}' is not a function`);
+        if (typeof name !== "string") throw new Error(`Event name is not a string`);
+        if (typeof handler !== "function")
+            throw new Error(`Handler for ${local ? "local" : "remote"} script event '${name}' is not a function`);
 
         const map = local ? Event.#localScriptEventHandlers : Event.#remoteScriptEventHandlers;
-        if(!map.has(name)) map.set(name, [ handler ]);
+        if (!map.has(name)) map.set(name, [handler]);
         else map.get(name).push(handler);
     }
 
@@ -119,22 +120,21 @@ export class Event {
      * @param {boolean} custom
      */
     static invoke(eventType, ctx, custom) {
-        if(eventType === alt.Enums.EventType.CLIENT_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isServer);
-        else if(eventType === alt.Enums.EventType.SERVER_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isClient);
+        if (eventType === alt.Enums.EventType.CLIENT_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isServer);
+        else if (eventType === alt.Enums.EventType.SERVER_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isClient);
 
         const map = custom ? Event.#customHandlers : Event.#handlers;
         const handlers = map.get(eventType);
-        if(!handlers) return;
-        for(const handler of handlers) handler(ctx);
+        if (!handlers) return;
+        for (const handler of handlers) handler(ctx);
     }
 }
 
 alt.Events.on = Event.subscribeScriptEvent.bind(undefined, true);
 alt.Events.onRemote = Event.subscribeScriptEvent.bind(undefined, false);
-if(alt.isClient) {
+if (alt.isClient) {
     alt.Events.onServer = Event.subscribeScriptEvent.bind(undefined, false);
-}
-else {
+} else {
     alt.Events.onClient = Event.subscribeScriptEvent.bind(undefined, false);
 }
 

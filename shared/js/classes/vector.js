@@ -13,18 +13,18 @@ class VectorCache {
 
     insert(values) {
         const map = this.#cache;
-        for(let i = 0; i < this.#size; i++) {
-            if(!map.has(values[i])) map.set(values[i], new Map());
+        for (let i = 0; i < this.#size; i++) {
+            if (!map.has(values[i])) map.set(values[i], new Map());
             map = map.get(values[i]);
-            if(i === this.#size - 1) map.set(values[i], new this.#ctor(...values));
+            if (i === this.#size - 1) map.set(values[i], new this.#ctor(...values));
         }
     }
     get(values) {
         const map = this.#cache;
-        for(let i = 0; i < this.#size; i++) {
-            if(!map.has(values[i])) return null;
+        for (let i = 0; i < this.#size; i++) {
+            if (!map.has(values[i])) return null;
             map = map.get(values[i]);
-            if(i === this.#size - 1) return map.get(values[i]);
+            if (i === this.#size - 1) return map.get(values[i]);
         }
     }
 }
@@ -59,7 +59,7 @@ class Vector {
     dot(...args) {
         let values = this.#getArgValues(...args);
         let sum = 0;
-        for(let i = 0; i < this.#size; i++) sum += this.values[i] * values[i];
+        for (let i = 0; i < this.#size; i++) sum += this.values[i] * values[i];
         return sum;
     }
 
@@ -69,13 +69,13 @@ class Vector {
 
     toFixed(precision = 4) {
         let fixedValues = [];
-        for(let i = 0; i < this.#size; i++) fixedValues.push(parseFloat(this.values[i].toFixed(precision)));
+        for (let i = 0; i < this.#size; i++) fixedValues.push(parseFloat(this.values[i].toFixed(precision)));
         return new this.constructor(...fixedValues);
     }
 
     get lengthSquared() {
         let sum = 0;
-        for(let i = 0; i < this.#size; i++) sum += this.values[i] * this.values[i];
+        for (let i = 0; i < this.#size; i++) sum += this.values[i] * this.values[i];
         return sum;
     }
 
@@ -84,11 +84,11 @@ class Vector {
     }
 
     get negative() {
-        return new this.constructor(...this.values.map(value => -value));
+        return new this.constructor(...this.values.map((value) => -value));
     }
 
     get inverse() {
-        return new this.constructor(...this.values.map(value => 1 / value));
+        return new this.constructor(...this.values.map((value) => 1 / value));
     }
 
     get normalized() {
@@ -102,14 +102,14 @@ class Vector {
     distanceToSquared(...args) {
         let values = this.#getArgValues(...args);
         let sum = 0;
-        for(let i = 0; i < this.#size; i++) sum += (this.values[i] - values[i]) * (this.values[i] - values[i]);
+        for (let i = 0; i < this.#size; i++) sum += (this.values[i] - values[i]) * (this.values[i] - values[i]);
         return sum;
     }
 
     angleTo(...args) {
         let values = this.#getArgValues(...args);
         let dot = this.dot(...values);
-        let length = this.length * Math.sqrt(values.map(value => value * value).reduce((a, b) => a + b));
+        let length = this.length * Math.sqrt(values.map((value) => value * value).reduce((a, b) => a + b));
         return Math.acos(dot / length);
     }
 
@@ -118,17 +118,17 @@ class Vector {
     }
 
     toDegrees() {
-        return new this.constructor(...this.values.map(value => value * (180 / Math.PI)));
+        return new this.constructor(...this.values.map((value) => value * (180 / Math.PI)));
     }
 
     toRadians() {
-        return new this.constructor(...this.values.map(value => value * (Math.PI / 180)));
+        return new this.constructor(...this.values.map((value) => value * (Math.PI / 180)));
     }
 
     isInRange(range, ...args) {
         let values = this.#getArgValues(...args);
-        for(let i = 0; i < this.#size; i++) {
-            if(this.values[i] < values[i] - range || this.values[i] > values[i] + range) return false;
+        for (let i = 0; i < this.#size; i++) {
+            if (this.values[i] < values[i] - range || this.values[i] > values[i] + range) return false;
         }
         return true;
     }
@@ -140,14 +140,13 @@ class Vector {
 
     #getArgValues(...args) {
         let values = [];
-        if(args.length === this.#size) values = args;
-        else if(args.length === 1) {
+        if (args.length === this.#size) values = args;
+        else if (args.length === 1) {
             const arg = args[0];
-            if(arg instanceof Vector) values = arg.values;
-            else if(Array.isArray(arg)) values = arg;
-            else for(let i = 0; i < this.#size; i++) values.push(arg);
-        }
-        else throw new Error("Invalid arguments");
+            if (arg instanceof Vector) values = arg.values;
+            else if (Array.isArray(arg)) values = arg;
+            else for (let i = 0; i < this.#size; i++) values.push(arg);
+        } else throw new Error("Invalid arguments");
         return values;
     }
 }
@@ -155,13 +154,12 @@ class Vector {
 export class Vector3 extends Vector {
     constructor(...args) {
         let values;
-        if(args.length === 3) values = [parseInt(args[0]), parseInt(args[1]), parseInt(args[2])];
-        else if(args.length === 1) {
+        if (args.length === 3) values = [parseInt(args[0]), parseInt(args[1]), parseInt(args[2])];
+        else if (args.length === 1) {
             const arg = args[0];
-            if(Array.isArray(arg)) values = [parseInt(arg[0]), parseInt(arg[1]), parseInt(arg[2])];
-            else if(typeof arg === "object") values = [parseInt(arg.x), parseInt(arg.y), parseInt(arg.z)];
-        }
-        else throw new Error("Invalid arguments");
+            if (Array.isArray(arg)) values = [parseInt(arg[0]), parseInt(arg[1]), parseInt(arg[2])];
+            else if (typeof arg === "object") values = [parseInt(arg.x), parseInt(arg.y), parseInt(arg.z)];
+        } else throw new Error("Invalid arguments");
         super(3, values);
     }
 
@@ -197,13 +195,12 @@ export class Vector3 extends Vector {
 export class Vector2 extends Vector {
     constructor(...args) {
         let values;
-        if(args.length === 2) values = [parseInt(args[0]), parseInt(args[1])];
-        else if(args.length === 1) {
+        if (args.length === 2) values = [parseInt(args[0]), parseInt(args[1])];
+        else if (args.length === 1) {
             const arg = args[0];
-            if(Array.isArray(arg)) values = [parseInt(arg[0]), parseInt(arg[1])];
-            else if(typeof arg === "object") values = [parseInt(arg.x), parseInt(arg.y)];
-        }
-        else throw new Error("Invalid arguments");
+            if (Array.isArray(arg)) values = [parseInt(arg[0]), parseInt(arg[1])];
+            else if (typeof arg === "object") values = [parseInt(arg.x), parseInt(arg.y)];
+        } else throw new Error("Invalid arguments");
         super(2, values);
     }
 

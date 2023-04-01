@@ -7,30 +7,27 @@ export class RGBA {
     a = 255;
 
     constructor(...args) {
-        if(args.length >= 3) {
+        if (args.length >= 3) {
             this.r = args[0];
             this.g = args[1];
             this.b = args[2];
-            if(args.length === 4) this.a = args[3];
-        }
-        else if(args.length === 1) {
+            if (args.length === 4) this.a = args[3];
+        } else if (args.length === 1) {
             const arg = args[0];
-            if(typeof arg === "object") {
+            if (typeof arg === "object") {
                 const obj = arg;
                 this.r = obj.r;
                 this.g = obj.g;
                 this.b = obj.b;
-                if(obj.a) this.a = obj.a;
-            }
-            else if(Array.isArray(arg)) {
+                if (obj.a) this.a = obj.a;
+            } else if (Array.isArray(arg)) {
                 const arr = arg;
                 this.r = arr[0];
                 this.g = arr[1];
                 this.b = arr[2];
-                if(arr.length === 4) this.a = arr[3];
+                if (arr.length === 4) this.a = arr[3];
             }
-        }
-        else throw new Error("Invalid arguments");
+        } else throw new Error("Invalid arguments");
     }
 
     toArray() {
@@ -46,10 +43,10 @@ export class RGBA {
     }
 
     static fromInt(int) {
-        const r = (int >> 24) & 0xFF;
-        const g = (int >> 16) & 0xFF;
-        const b = (int >> 8) & 0xFF;
-        const a = int & 0xFF;
+        const r = (int >> 24) & 0xff;
+        const g = (int >> 16) & 0xff;
+        const b = (int >> 8) & 0xff;
+        const a = int & 0xff;
         return new RGBA(r, g, b, a);
     }
 

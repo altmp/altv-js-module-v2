@@ -6,7 +6,7 @@ const fs = require("fs").promises;
 const pathUtil = require("path");
 
 // Base path should point to the main directory of the repo
-if(process.argv.length < 3) {
+if (process.argv.length < 3) {
     showError("Missing 'basePath' argument");
     showUsage();
     process.exit(1);
@@ -17,7 +17,7 @@ const basePath = process.argv[2];
 const paths = [
     { path: "client/js/", scope: "client" },
     { path: "server/js/", scope: "server" },
-    { path: "shared/js/", scope: "shared" }
+    { path: "shared/js/", scope: "shared" },
 ];
 
 // Full output file
@@ -38,29 +38,33 @@ const bindingTemplate = `{ "{BINDING_NAME}", Binding{ "{BINDING_NAME}", Binding:
 // Result bindings output path
 const outputPath = "shared/src/BindingsMap.cpp";
 
-(async() => {
+(async () => {
     showLog("Generating bindings...");
     const bindings = [];
     for (const { path, scope: pathScope } of paths) {
         const bindingsPath = pathUtil.resolve(__dirname, basePath, path);
-        for await(const file of getBindingFiles(bindingsPath)) {
+        for await (const file of getBindingFiles(bindingsPath)) {
             const name = pathUtil.relative(bindingsPath, file).replace(/\\/g, "/").toLowerCase();
             // Generate the binding data
             const src = await fs.readFile(file, "utf8");
-            bindings.push({ name: `${pathScope}/${name}`, src: getBindingCodeChars(src, name === "bootstrap.js"), scope: pathScope.toUpperCase() });
+            bindings.push({
+                name: `${pathScope}/${name}`,
+                src: getBindingCodeChars(src, name === "bootstrap.js"),
+                scope: pathScope.toUpperCase(),
+            });
             showLog(`Generated bindings for: ${pathUtil.relative(`${__dirname}/..`, file).replace(/\\/g, "/")}`);
         }
     }
     // Generate data for the bindings map
     let bindingsList = "";
-    for(let i = 0; i < bindings.length; i++) {
+    for (let i = 0; i < bindings.length; i++) {
         const binding = bindings[i];
         const bindingStr = bindingTemplate
             .replace(/\{BINDING_NAME\}/g, binding.name)
             .replace("{BINDING_SCOPE}", binding.scope)
             .replace("{BINDING_SRC}", binding.src);
         bindingsList += bindingStr;
-        if(i < bindings.length - 1) bindingsList += ",\n        ";
+        if (i < bindings.length - 1) bindingsList += ",\n        ";
     }
 
     const outputStr = resultTemplate
@@ -75,8 +79,8 @@ async function* getBindingFiles(dir) {
     const items = await fs.readdir(dir, { withFileTypes: true });
     for (const item of items) {
         const path = pathUtil.resolve(dir, item.name);
-        if(item.isDirectory()) yield* getBindingFiles(path);
-        if(!path.endsWith(".js")) continue;
+        if (item.isDirectory()) yield* getBindingFiles(path);
+        if (!path.endsWith(".js")) continue;
         else yield path;
     }
 }
@@ -87,22 +91,29 @@ async function* getBindingFiles(dir) {
 function getBindingCodeChars(src, shouldSkipAddingConsts) {
     // These consts have to be added so the bindings work at runtime, as the globals are removed after loading the bindings
     let code = src;
-    if(!shouldSkipAddingConsts && !code.includes("const alt =")) code = `const alt = __alt;\n${code}`;
-    if(!shouldSkipAddingConsts && !code.includes("const cppBindings =")) code = `const cppBindings = __cppBindings;\n${code}`;
+    if (!shouldSkipAddingConsts && !code.includes("const alt =")) code = `const alt = __alt;\n${code}`;
+    if (!shouldSkipAddingConsts && !code.includes("const cppBindings ="))
+        code = `const cppBindings = __cppBindings;\n${code}`;
     const chars = code.split("").map((char) => char.charCodeAt(0));
     return chars.toString();
 }
 
 function getDate() {
     const date = new Date();
-    const day = date.getDate(), month = date.getMonth() + 1, year = date.getFullYear();
+    const day = date.getDate(),
+        month = date.getMonth() + 1,
+        year = date.getFullYear();
     return `${day < 10 ? `0${day}` : day}/${month < 10 ? `0${month}` : month}/${year}`;
 }
 
 function getTime() {
     const date = new Date();
-    const hours = date.getHours(), minutes = date.getMinutes(), seconds = date.getSeconds();
-    return `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+    const hours = date.getHours(),
+        minutes = date.getMinutes(),
+        seconds = date.getSeconds();
+    return `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${
+        seconds < 10 ? `0${seconds}` : seconds
+    }`;
 }
 
 function showLog(...args) {
@@ -116,5 +127,7 @@ function showError(...args) {
 function showUsage() {
     showLog("Usage: convert-bindings.js <basePath> <scope>");
     showLog("<basePath>: Path to the base of the repository");
-    showLog("<scope>: 'SHARED' includes only shared bindings, 'CLIENT' shared and client bindings, 'SERVER' shared and server bindings");
+    showLog(
+        "<scope>: 'SHARED' includes only shared bindings, 'CLIENT' shared and client bindings, 'SERVER' shared and server bindings"
+    );
 }

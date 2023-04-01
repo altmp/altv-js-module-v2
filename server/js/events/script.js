@@ -24,7 +24,7 @@ alt.Events.onColShapeEvent(({ entity, colShape, state }) => {
     const eventType = getColShapeEventType(colShape, state);
     const data = {
         entity,
-        colShape
+        colShape,
     };
 
     Event.invoke(eventType, data, true);

@@ -11,21 +11,19 @@ export class Quaternion {
         this.#y = y;
         this.#z = z;
         this.#w = w;
-        if(args.length === 4) {
+        if (args.length === 4) {
             this.#x = parseInt(args[0]);
             this.#y = parseInt(args[1]);
             this.#z = parseInt(args[2]);
             this.#w = parseInt(args[3]);
-        }
-        else if(args.length === 1) {
+        } else if (args.length === 1) {
             const arg = args[0];
-            if(Array.isArray(arg)) {
+            if (Array.isArray(arg)) {
                 this.#x = parseInt(arg[0]);
                 this.#y = parseInt(arg[1]);
                 this.#z = parseInt(arg[2]);
                 this.#w = parseInt(arg[3]);
-            }
-            else if(typeof arg === "object") {
+            } else if (typeof arg === "object") {
                 this.#x = parseInt(arg.x);
                 this.#y = parseInt(arg.y);
                 this.#z = parseInt(arg.z);
@@ -87,8 +85,7 @@ export class Quaternion {
         const s = Math.sqrt(1 - this.#w * this.#w);
         if (s < 0.001) {
             return new Vector3(this.#x, this.#y, this.#z);
-        }
-        else {
+        } else {
             return new Vector3(this.#x / s, this.#y / s, this.#z / s);
         }
     }
@@ -116,10 +113,22 @@ export class Quaternion {
         const zw = z * w;
 
         return [
-            1 - 2 * (yy + zz), 2 * (xy - zw), 2 * (xz + yw), 0,
-            2 * (xy + zw), 1 - 2 * (xx + zz), 2 * (yz - xw), 0,
-            2 * (xz - yw), 2 * (yz + xw), 1 - 2 * (xx + yy), 0,
-            0, 0, 0, 1
+            1 - 2 * (yy + zz),
+            2 * (xy - zw),
+            2 * (xz + yw),
+            0,
+            2 * (xy + zw),
+            1 - 2 * (xx + zz),
+            2 * (yz - xw),
+            0,
+            2 * (xz - yw),
+            2 * (yz + xw),
+            1 - 2 * (xx + yy),
+            0,
+            0,
+            0,
+            0,
+            1,
         ];
     }
 
@@ -191,12 +200,7 @@ export class Quaternion {
         const halfAngle = angle / 2;
         const s = Math.sin(halfAngle);
 
-        return new Quaternion(
-            axis.x * s,
-            axis.y * s,
-            axis.z * s,
-            Math.cos(halfAngle)
-        );
+        return new Quaternion(axis.x * s, axis.y * s, axis.z * s, Math.cos(halfAngle));
     }
 
     static fromMatrix(matrix) {
@@ -211,8 +215,7 @@ export class Quaternion {
                 (matrix[1] - matrix[4]) / S,
                 0.25 * S
             );
-        }
-        else if (matrix[0] > matrix[5] && matrix[0] > matrix[10]) {
+        } else if (matrix[0] > matrix[5] && matrix[0] > matrix[10]) {
             S = Math.sqrt(1.0 + matrix[0] - matrix[5] - matrix[10]) * 2;
             return new Quaternion(
                 0.25 * S,
@@ -220,8 +223,7 @@ export class Quaternion {
                 (matrix[8] + matrix[2]) / S,
                 (matrix[6] - matrix[9]) / S
             );
-        }
-        else if (matrix[5] > matrix[10]) {
+        } else if (matrix[5] > matrix[10]) {
             S = Math.sqrt(1.0 + matrix[5] - matrix[0] - matrix[10]) * 2;
             return new Quaternion(
                 (matrix[1] + matrix[4]) / S,
@@ -229,8 +231,7 @@ export class Quaternion {
                 (matrix[6] + matrix[9]) / S,
                 (matrix[8] - matrix[2]) / S
             );
-        }
-        else {
+        } else {
             S = Math.sqrt(1.0 + matrix[10] - matrix[0] - matrix[5]) * 2;
             return new Quaternion(
                 (matrix[8] + matrix[2]) / S,

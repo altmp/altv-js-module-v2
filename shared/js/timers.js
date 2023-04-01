@@ -2,8 +2,8 @@ const timers = new Set();
 
 class Timer {
     constructor(interval, callback, once) {
-        if(typeof interval !== "number") throw new Error("Expected a number as first argument");
-        if(typeof callback !== "function") throw new Error("Expected a function as second argument");
+        if (typeof interval !== "number") throw new Error("Expected a number as first argument");
+        if (typeof callback !== "function") throw new Error("Expected a function as second argument");
 
         this.interval = interval;
         this.callback = callback.bind(this);
@@ -17,7 +17,7 @@ class Timer {
     }
 
     tick() {
-        if (this.interval === 0 || (Date.now() - this.lastTick > this.interval)) {
+        if (this.interval === 0 || Date.now() - this.lastTick > this.interval) {
             this.callback();
             this.lastTick = Date.now();
             if (this.once) this.destroy();
@@ -26,19 +26,27 @@ class Timer {
 }
 
 class Interval extends Timer {
-    constructor(callback, interval) { super(interval, callback, false); }
+    constructor(callback, interval) {
+        super(interval, callback, false);
+    }
 }
 
 class Timeout extends Timer {
-    constructor(callback, interval) { super(interval, callback, true); }
+    constructor(callback, interval) {
+        super(interval, callback, true);
+    }
 }
 
 class EveryTick extends Timer {
-    constructor(callback) { super(0, callback, false); }
+    constructor(callback) {
+        super(0, callback, false);
+    }
 }
 
 class NextTick extends Timer {
-    constructor(callback) { super(0, callback, true); }
+    constructor(callback) {
+        super(0, callback, true);
+    }
 }
 
 alt.Timers.Interval = Interval;

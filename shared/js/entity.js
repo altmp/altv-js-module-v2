@@ -47,4 +47,4 @@ addAllGetter(alt.NetworkObject, alt.Enums.BaseObjectType.NETWORK_OBJECT);
 
 // Register all entities that were created before this resource was loaded
 const entities = cppBindings.getAllEntities();
-for(const entity of entities) addEntityToAll(entity);
+for (const entity of entities) addEntityToAll(entity);
