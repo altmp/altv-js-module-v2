@@ -23,7 +23,7 @@ v8::Local<v8::Module> js::Binding::Compile(IResource* resource)
     }
     v8::Local<v8::Module> mod = maybeModule.ToLocalChecked();
     v8::Maybe<bool> result = mod->InstantiateModule(context, &ResolveModuleCallback);
-    if(result.IsNothing() || !result.ToChecked())
+    if(result.IsNothing() || !result.ToChecked() || mod->GetStatus() != v8::Module::kInstantiated)
     {
         Logger::Error("INTERNAL ERROR: Failed to instantiate bindings module", name);
         return v8::Local<v8::Module>();

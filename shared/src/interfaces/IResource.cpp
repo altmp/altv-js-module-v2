@@ -62,6 +62,12 @@ void js::IResource::InitializeBinding(js::Binding* binding)
     }
     if(module->GetStatus() == v8::Module::Status::kEvaluated) return;
 
+    if(module->GetStatus() == v8::Module::Status::kEvaluating)
+    {
+        Logger::Error("INTERNAL ERROR: Binding module", binding->GetName(), "is already evaluating; circular dependency?");
+        return;
+    }
+
     module->Evaluate(GetContext());
     if(module->GetStatus() != v8::Module::Status::kEvaluated)
     {

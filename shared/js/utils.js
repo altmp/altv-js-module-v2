@@ -1,4 +1,3 @@
-requireBinding("shared/timers.js");
 const { inspect } = requireBinding("shared/logging.js");
 
 alt.Utils.inspect = inspect;
