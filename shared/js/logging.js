@@ -2931,4 +2931,9 @@ const inspectMultiple = (options, ...args) => {
     return str;
 };
 
+if (!globalThis.console) globalThis.console = {};
+globalThis.console.log = alt.log;
+globalThis.console.warn = alt.logWarning;
+globalThis.console.error = alt.logError;
+
 export { inspectMultiple, inspect };
