@@ -164,6 +164,7 @@ namespace js
         {
             using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
             if(errored) return false;
+            if(index >= info.Length()) return false;
             if(typeToCheck != js::Type::INVALID && !CheckArgType(index, typeToCheck)) return false;
 
             std::optional<Type> result = CppValue<Type>(info[index]);
@@ -181,6 +182,7 @@ namespace js
         {
             using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
             if(errored) return defaultValue;
+            if(index >= info.Length()) return defaultValue;
             if(typeToCheck != js::Type::INVALID && !CheckArgType(index, typeToCheck)) return defaultValue;
 
             std::optional<Type> result = CppValue<Type>(info[index]);
