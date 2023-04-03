@@ -223,6 +223,30 @@ static void RemoveWeapon(js::FunctionContext& ctx)
     player->RemoveWeapon(weapon);
 }
 
+static void PlayAnimation(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2, 10)) return;
+
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    std::string animDict;
+    if(!ctx.GetArg(0, animDict)) return;
+    std::string animName;
+    if(!ctx.GetArg(1, animName)) return;
+
+    float blendInSpeed = ctx.GetArg(2, 8.0f);
+    float blendOutSpeed = ctx.GetArg(3, 8.0f);
+    int32_t duration = ctx.GetArg(4, -1);
+    uint32_t flag = ctx.GetArg(5, 0);
+    float playbackRate = ctx.GetArg(6, 1.0f);
+    bool lockX = ctx.GetArg(7, false);
+    bool lockY = ctx.GetArg(8, false);
+    bool lockZ = ctx.GetArg(9, false);
+
+    player->PlayAnimation(animDict, animName, blendInSpeed, blendOutSpeed, duration, flag, playbackRate, lockX, lockY, lockZ);
+}
+
 static void LocalMetaGetter(js::DynamicPropertyContext<v8::Value>& ctx)
 {
     if(!ctx.CheckParent()) return;
@@ -311,6 +335,8 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method<alt::IPlayer, void, alt::IVehicle*, uint8_t, &alt::IPlayer::SetIntoVehicle>("setIntoVehicle");
     tpl.Method<alt::IPlayer, void, const std::string&, const std::string&, uint32_t, &alt::IPlayer::PlayAmbientSpeech>("playAmbientSpeech");
     // todo: appearance methods
+    tpl.Method("playAnimation", &PlayAnimation);
+    tpl.Method<alt::IPlayer, void, &alt::IPlayer::ClearTasks>("clearTasks");
 
     tpl.DynamicProperty("localMeta", LocalMetaGetter, LocalMetaSetter, LocalMetaDeleter, LocalMetaEnumerator);
 
