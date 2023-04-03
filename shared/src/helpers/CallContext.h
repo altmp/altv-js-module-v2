@@ -175,6 +175,18 @@ namespace js
             return false;
         }
 
+        // If no type to check is specified, it will try to convert the value to the specified type
+        template<class T>
+        T GetArg(int index, const T& defaultValue = T(), Type typeToCheck = Type::INVALID)
+        {
+            using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
+            if(errored) return defaultValue;
+            if(typeToCheck != js::Type::INVALID && !CheckArgType(index, typeToCheck)) return defaultValue;
+
+            std::optional<Type> result = CppValue<Type>(info[index]);
+            return result.has_value() ? (T)result.value() : defaultValue;
+        }
+
         bool GetArgAsHash(int index, uint32_t& outValue)
         {
             if(errored) return false;
