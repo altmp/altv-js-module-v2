@@ -39,8 +39,7 @@ namespace js
     bool IsRGBA(v8::Local<v8::Value> value, IResource* resource);
     bool IsBaseObject(v8::Local<v8::Value> value, IResource* resource);
 
-    template<typename T>
-    static Type GetType(v8::Local<T> value, js::IResource* resource)
+    static Type GetType(v8::Local<v8::Value> value, js::IResource* resource)
     {
         if(value.IsEmpty()) return Type::INVALID;
         if(value->IsUndefined()) return Type::UNDEFINED;
@@ -63,10 +62,13 @@ namespace js
             if(value->IsSet()) return Type::SET;
             if(value->IsBigInt()) return Type::BIG_INT;
 
-            if(IsVector3(value, resource)) return Type::VECTOR3;
-            if(IsVector2(value, resource)) return Type::VECTOR2;
-            if(IsRGBA(value, resource)) return Type::RGBA;
-            if(IsBaseObject(value, resource)) return Type::BASE_OBJECT;
+            if(resource)
+            {
+                if(IsVector3(value, resource)) return Type::VECTOR3;
+                if(IsVector2(value, resource)) return Type::VECTOR2;
+                if(IsRGBA(value, resource)) return Type::RGBA;
+                if(IsBaseObject(value, resource)) return Type::BASE_OBJECT;
+            }
 
             return Type::OBJECT;
         }
