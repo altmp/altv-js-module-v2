@@ -149,7 +149,10 @@ void js::ClassTemplate::DumpRegisteredKeys()
 {
     std::fstream outFile("v2debug/" + class_->GetName() + ".txt", std::ios::out);
     if(!outFile.good()) return;
+
     std::stringstream ss;
+    ss << class_->GetName() << ": (Inherits from " << (class_->GetParentClass() ? class_->GetParentClass()->GetName() : "<none>") << ")\n\n";
+
     std::unordered_map<std::string, std::vector<std::string>> keysSortedByType;
     for(auto& [key, type] : registeredKeys)
     {
