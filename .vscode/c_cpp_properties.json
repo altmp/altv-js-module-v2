@@ -13,7 +13,8 @@
                 "JS_MODULE_VERSION",
                 "DYNAMIC_BUILD",
                 "WIN32",
-                "NODE_WANT_INTERNALS"
+                "NODE_WANT_INTERNALS",
+                "DEBUG_BINDINGS"
             ],
             "windowsSdkVersion": "10.0.19041.0",
             "cppStandard": "c++20",

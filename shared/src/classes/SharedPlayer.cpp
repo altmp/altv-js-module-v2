@@ -29,7 +29,7 @@ static void GetWeaponTintIndex(js::FunctionContext& ctx)
 }
 
 // clang-format off
-extern js::Class sharedPlayerClass("Player", nullptr, [](js::ClassTemplate& tpl)
+extern js::Class sharedPlayerClass("SharedPlayer", nullptr, [](js::ClassTemplate& tpl)
 {
     tpl.LazyProperty<alt::IPlayer, &alt::IPlayer::GetName>("name");
 

@@ -1577,6 +1577,15 @@ namespace js
 
         Class* class_;
 
+#ifdef DEBUG_BINDINGS
+        std::unordered_map<std::string, std::string> registeredKeys;
+
+        void RegisterKey(const std::string& type, const std::string& key)
+        {
+            registeredKeys.insert({ key, type });
+        }
+#endif
+
         template<class T>
         using ClassMap = std::unordered_map<v8::Isolate*, std::unordered_map<Class*, T>>;
 
@@ -1632,69 +1641,112 @@ namespace js
     public:
         ClassTemplate(v8::Isolate* isolate, Class* _class, v8::Local<v8::FunctionTemplate> tpl) : Template(isolate, tpl), class_(_class) {}
 
+#ifdef DEBUG_BINDINGS
+        void DumpRegisteredKeys();
+#endif
+
         void Method(const std::string& name, FunctionCallback callback)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), WrapFunction(callback));
         }
-#pragma region "Method overloads"
         template<class Class, typename Ret, Ret (Class::*Method)()>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Method>));
         }
         template<class Class, typename Ret, Ret (Class::*Method)() const>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Method>));
         }
+#pragma region "Method overloads"
         template<class Class, typename Ret, typename Arg0, Ret (Class::*Method)(Arg0)>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Method>));
         }
         template<class Class, typename Ret, typename Arg0, Ret (Class::*Method)(Arg0) const>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Method>));
         }
         template<class Class, typename Ret, typename Arg0, typename Arg1, Ret (Class::*Method)(Arg0, Arg1)>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Method>));
         }
         template<class Class, typename Ret, typename Arg0, typename Arg1, Ret (Class::*Method)(Arg0, Arg1) const>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Method>));
         }
         template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, Ret (Class::*Method)(Arg0, Arg1, Arg2)>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Method>));
         }
         template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, Ret (Class::*Method)(Arg0, Arg1, Arg2) const>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Method>));
         }
         template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, typename Arg3, Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3)>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Method>));
         }
         template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, typename Arg3, Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3) const>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Method>));
         }
         template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, typename Arg3, typename Arg4, Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4)>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Method>));
         }
         template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, typename Arg3, typename Arg4, Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4) const>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Method>));
         }
         template<class Class,
@@ -1708,6 +1760,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5)>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Method>));
         }
         template<class Class,
@@ -1721,6 +1776,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5) const>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Method>));
         }
         template<class Class,
@@ -1735,6 +1793,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6)>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Method>));
         }
         template<class Class,
@@ -1749,6 +1810,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6) const>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Method>));
         }
         template<class Class,
@@ -1764,6 +1828,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7)>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name),
                                             v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Method>));
         }
@@ -1780,6 +1847,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7) const>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name),
                                             v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Method>));
         }
@@ -1797,6 +1867,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8)>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name),
                                             v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Method>));
         }
@@ -1814,6 +1887,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8) const>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name),
                                             v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Method>));
         }
@@ -1832,6 +1908,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9)>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name),
                                             v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Method>));
         }
@@ -1850,6 +1929,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9) const>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name),
                                             v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Method>));
         }
@@ -1869,6 +1951,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10)>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(
               js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Method>));
         }
@@ -1888,6 +1973,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10) const>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(
               js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Method>));
         }
@@ -1908,6 +1996,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11)>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(
               js::JSValue(name),
               v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Method>));
@@ -1929,6 +2020,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11) const>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(
               js::JSValue(name),
               v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Method>));
@@ -1951,6 +2045,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12)>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(
               js::JSValue(name),
               v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Method>));
@@ -1973,6 +2070,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12) const>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(
               js::JSValue(name),
               v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Method>));
@@ -1996,6 +2096,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13)>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(
               js::JSValue(name),
               v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Method>));
@@ -2019,6 +2122,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13) const>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(
               js::JSValue(name),
               v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Method>));
@@ -2043,6 +2149,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14)>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(
               js::JSValue(name),
               v8::FunctionTemplate::New(GetIsolate(),
@@ -2068,6 +2177,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14) const>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(
               js::JSValue(name),
               v8::FunctionTemplate::New(GetIsolate(),
@@ -2094,6 +2206,9 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14, Arg15)>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(
               js::JSValue(name),
               v8::FunctionTemplate::New(GetIsolate(),
@@ -2120,32 +2235,46 @@ namespace js
                  Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14, Arg15) const>
         void Method(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Method", name);
+#endif
             Get()->PrototypeTemplate()->Set(
               js::JSValue(name),
               v8::FunctionTemplate::New(GetIsolate(),
                                         Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14, Arg15, Method>));
         }
-
 #pragma endregion
 
         template<class Class, auto(Class::*Getter)() const>
         void Property(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Property", name);
+#endif
             Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Class, Getter>);
         }
         template<class Class, typename Type, Type (Class::*Getter)() const, void (Class::*Setter)(Type)>
         void Property(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Property", name);
+#endif
             Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Class, Getter>, Wrapper::PropertySetterHandler<Class, Type, Setter>);
         }
         template<class Class, typename GetterType, typename SetterType, GetterType (Class::*Getter)() const, void (Class::*Setter)(SetterType)>
         void Property(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Property", name);
+#endif
             Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Class, Getter>, Wrapper::PropertySetterHandler<Class, SetterType, Setter>);
         }
         // If getter is nullptr, tries to get the getter defined by a base class
         void Property(const std::string& name, PropertyCallback getter = nullptr, PropertyCallback setter = nullptr)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("Property", name);
+#endif
             if(getter && !setter)
             {
                 v8::Local<v8::FunctionTemplate> getterTemplate = WrapProperty(getter);
@@ -2173,10 +2302,16 @@ namespace js
         template<class Class, auto(Class::*Getter)() const>
         void LazyProperty(const std::string& name)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("LazyProperty", name);
+#endif
             Get()->InstanceTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler<Class, Getter>);
         }
         void LazyProperty(const std::string& name, LazyPropertyCallback callback)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("LazyProperty", name);
+#endif
             Get()->InstanceTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler, v8::External::New(GetIsolate(), callback));
         }
 
@@ -2187,6 +2322,9 @@ namespace js
                              DynamicPropertyDeleter deleter = nullptr,
                              DynamicPropertyEnumerator enumerator = nullptr)
         {
+#ifdef DEBUG_BINDINGS
+            RegisterKey("DynamicProperty", name);
+#endif
             DynamicPropertyData* data = GetDynamicPropertyData(GetIsolate(), class_, name);
             if(!data)
             {

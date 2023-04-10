@@ -3,7 +3,7 @@
 
 // clang-format off
 extern js::Class baseObjectClass;
-extern js::Class sharedBlipClass("Blip", &baseObjectClass, nullptr, [](js::ClassTemplate& tpl)
+extern js::Class sharedBlipClass("SharedBlip", &baseObjectClass, nullptr, [](js::ClassTemplate& tpl)
 {
     tpl.LazyProperty<alt::IBlip, &alt::IBlip::GetID>("id");
 

@@ -4,7 +4,7 @@
 
 // clang-format off
 extern js::Class entityClass;
-extern js::Class sharedPedClass("Ped", &entityClass, nullptr, [](js::ClassTemplate& tpl)
+extern js::Class sharedPedClass("SharedPed", &entityClass, nullptr, [](js::ClassTemplate& tpl)
 {
     tpl.Property<alt::IPed, &alt::IPed::GetHealth>("health");
     tpl.Property<alt::IPed, &alt::IPed::GetMaxHealth>("maxHealth");

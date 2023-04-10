@@ -2,6 +2,9 @@
 #include "interfaces/IResource.h"
 #include "Namespace.h"
 
+#include <fstream>
+#include <filesystem>
+
 alt::IBaseObject* js::Wrapper::GetThisObjectFromInfo(const v8::PropertyCallbackInfo<v8::Value>& info)
 {
     return IResource::GetFromContext(info.GetIsolate()->GetCurrentContext())->GetScriptObject(info.This())->GetObject();
@@ -140,3 +143,34 @@ void js::ClassTemplate::BindToType(alt::IBaseObject::Type type)
 {
     IScriptObjectHandler::BindClassToType(type, class_);
 }
+
+#ifdef DEBUG_BINDINGS
+void js::ClassTemplate::DumpRegisteredKeys()
+{
+    std::fstream outFile("v2debug/" + class_->GetName() + ".txt", std::ios::out);
+    if(!outFile.good()) return;
+    std::stringstream ss;
+    std::unordered_map<std::string, std::vector<std::string>> keysSortedByType;
+    for(auto& [key, type] : registeredKeys)
+    {
+        if(!keysSortedByType.contains(type)) keysSortedByType[type] = std::vector<std::string>{ key };
+        else
+            keysSortedByType[type].push_back(key);
+    }
+
+    for(auto& [type, keys] : keysSortedByType)
+    {
+        ss << type << ":\n";
+        for(auto& key : keys)
+        {
+            ss << "\t" << key << "\n";
+        }
+        ss << "\n";
+    }
+
+    outFile << ss.str();
+    outFile.close();
+
+    registeredKeys.clear();
+}
+#endif

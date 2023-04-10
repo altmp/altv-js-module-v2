@@ -53,7 +53,7 @@ static void NeonEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
 
 // clang-format off
 extern js::Class entityClass;
-extern js::Class sharedVehicleClass("Vehicle", &entityClass, nullptr, [](js::ClassTemplate& tpl)
+extern js::Class sharedVehicleClass("SharedVehicle", &entityClass, nullptr, [](js::ClassTemplate& tpl)
 {
     tpl.DynamicProperty("neon", &NeonGetter, &NeonSetter, nullptr, &NeonEnumerator);
 

@@ -29,6 +29,11 @@ option("auto-update-deps")
     set_default(true)
     set_showmenu(true)
 
+option("debug-bindings")
+    set_description("Print generated bindings")
+    set_default(false)
+    set_showmenu(true)
+
 -- Rules
 rule("generate-bindings")
     before_build(function(target)
@@ -67,6 +72,9 @@ target("shared")
     set_configdir("shared/src")
     add_configfiles("shared/src/Version.h.in")
     add_rules("generate-bindings")
+    if has_config("debug-bindings") then
+        add_defines("DEBUG_BINDINGS=1")
+    end
 
 target("server")
     set_basename("js-module-v2")
