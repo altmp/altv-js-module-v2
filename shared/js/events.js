@@ -93,10 +93,19 @@ export class Event {
 
     /**
      * @param {boolean} local
+     */
+    static getScriptEventFunc(local) {
+        const func = Event.#subscribeScriptEvent.bind(undefined, local);
+        func.remove = Event.#unsubscribeScriptEvent.bind(undefined, local);
+        return func;
+    }
+
+    /**
+     * @param {boolean} local
      * @param {string} name
      * @param {Function} handler
      */
-    static subscribeScriptEvent(local, name, handler) {
+    static #subscribeScriptEvent(local, name, handler) {
         assert(typeof name === "string", `Event name is not a string`);
         assert(
             typeof handler === "function",
@@ -106,6 +115,21 @@ export class Event {
         const map = local ? Event.#localScriptEventHandlers : Event.#remoteScriptEventHandlers;
         if (!map.has(name)) map.set(name, [handler]);
         else map.get(name).push(handler);
+    }
+
+    static #unsubscribeScriptEvent(local, name, handler) {
+        assert(typeof name === "string", `Event name is not a string`);
+        assert(
+            typeof handler === "function",
+            `Handler for ${local ? "local" : "remote"} script event '${name}' is not a function`
+        );
+
+        const map = local ? Event.#localScriptEventHandlers : Event.#remoteScriptEventHandlers;
+        const handlers = map.get(name);
+        if (!handlers) return;
+        const idx = handlers.indexOf(handler);
+        if (idx === -1) return;
+        handlers.splice(idx, 1);
     }
 
     /**
@@ -123,8 +147,8 @@ export class Event {
      * @param {boolean} custom
      */
     static invoke(eventType, ctx, custom) {
-        if (eventType === alt.Enums.EventType.CLIENT_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isServer);
-        else if (eventType === alt.Enums.EventType.SERVER_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isClient);
+        if (eventType === alt.Enums.EventType.CLIENT_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isClient);
+        else if (eventType === alt.Enums.EventType.SERVER_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isServer);
 
         const map = custom ? Event.#customHandlers : Event.#handlers;
         const handlers = map.get(eventType);
@@ -133,12 +157,12 @@ export class Event {
     }
 }
 
-alt.Events.on = Event.subscribeScriptEvent.bind(undefined, true);
-alt.Events.onRemote = Event.subscribeScriptEvent.bind(undefined, false);
+alt.Events.on = Event.getScriptEventFunc(true);
+alt.Events.onRemote = Event.getScriptEventFunc(false);
 if (alt.isClient) {
-    alt.Events.onServer = Event.subscribeScriptEvent.bind(undefined, false);
+    alt.Events.onServer = Event.getScriptEventFunc(false);
 } else {
-    alt.Events.onClient = Event.subscribeScriptEvent.bind(undefined, false);
+    alt.Events.onClient = Event.getScriptEventFunc(false);
 }
 
 export function onEvent(custom, eventType, eventData) {
