@@ -31,6 +31,15 @@ alt.Factory.getPedFactory = getEntityFactory(alt.Enums.BaseObjectType.PED);
 alt.Factory.setBlipFactory = setEntityFactory(alt.Blip, alt.Enums.BaseObjectType.BLIP);
 alt.Factory.getBlipFactory = getEntityFactory(alt.Enums.BaseObjectType.BLIP);
 
+alt.Factory.setVirtualEntityFactory = setEntityFactory(alt.VirtualEntity, alt.Enums.BaseObjectType.VIRTUAL_ENTITY);
+alt.Factory.getVirtualEntityFactory = getEntityFactory(alt.Enums.BaseObjectType.VIRTUAL_ENTITY);
+
+alt.Factory.setVirtualEntityGroupFactory = setEntityFactory(
+    alt.VirtualEntityGroup,
+    alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP
+);
+alt.Factory.getVirtualEntityGroupFactory = getEntityFactory(alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP);
+
 // Factory ctors
 alt.PointBlip.create = (ctx) => {
     assert(typeof ctx === "object", "Invalid args");
@@ -48,4 +57,14 @@ alt.RadiusBlip.create = (ctx) => {
     assert(typeof ctx === "object", "Invalid args");
     ctx.blipType = alt.Enums.BlipType.RADIUS;
     return cppBindings.createEntity(alt.Enums.BaseObjectType.BLIP, ctx);
+};
+
+alt.VirtualEntity.create = (ctx) => {
+    assert(typeof ctx === "object", "Invalid args");
+    return cppBindings.createEntity(alt.Enums.BaseObjectType.VIRTUAL_ENTITY, ctx);
+};
+
+alt.VirtualEntityGroup.create = (ctx) => {
+    assert(typeof ctx === "object", "Invalid args");
+    return cppBindings.createEntity(alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP, ctx);
 };
