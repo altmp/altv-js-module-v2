@@ -291,6 +291,45 @@ static void GetDlcProps(js::FunctionContext& ctx)
     ctx.Return(obj);
 }
 
+static void GetHeadOverlay(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint8_t overlay;
+    if(!ctx.GetArg(0, overlay)) return;
+
+    alt::HeadOverlay headOverlay = player->GetHeadOverlay(overlay);
+    js::Object obj;
+    obj.Set("index", headOverlay.index);
+    obj.Set("opacity", headOverlay.opacity);
+    obj.Set("colorType", headOverlay.colorType);
+    obj.Set("colorIndex", headOverlay.colorIndex);
+    obj.Set("secondColorIndex", headOverlay.secondColorIndex);
+    ctx.Return(obj);
+}
+
+static void GetHeadBlendData(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    alt::HeadBlendData headBlend = player->GetHeadBlendData();
+
+    js::Object obj;
+    obj.Set("shapeFirstID", headBlend.shapeFirstID);
+    obj.Set("shapeSecondID", headBlend.shapeSecondID);
+    obj.Set("shapeThirdID", headBlend.shapeThirdID);
+    obj.Set("skinFirstID", headBlend.skinFirstID);
+    obj.Set("skinSecondID", headBlend.skinSecondID);
+    obj.Set("skinThirdID", headBlend.skinThirdID);
+    obj.Set("shapeMix", headBlend.shapeMix);
+    obj.Set("skinMix", headBlend.skinMix);
+    obj.Set("thirdMix", headBlend.thirdMix);
+    ctx.Return(obj);
+}
+
 static void PlayAnimation(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
@@ -410,7 +449,23 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method<alt::IPlayer, bool, uint16_t, &alt::IPlayer::IsEntityInStreamingRange>("isEntityInStreamingRange");
     tpl.Method<alt::IPlayer, void, alt::IVehicle*, uint8_t, &alt::IPlayer::SetIntoVehicle>("setIntoVehicle");
     tpl.Method<alt::IPlayer, void, const std::string&, const std::string&, uint32_t, &alt::IPlayer::PlayAmbientSpeech>("playAmbientSpeech");
-    // todo: appearance methods
+    tpl.Method<alt::IPlayer, bool, uint8_t, uint8_t, float, &alt::IPlayer::SetHeadOverlay>("setHeadOverlay");
+    tpl.Method<alt::IPlayer, bool, uint8_t, &alt::IPlayer::RemoveHeadOverlay>("removeHeadOverlay");
+    tpl.Method<alt::IPlayer, bool, uint8_t, uint8_t, uint8_t, uint8_t, &alt::IPlayer::SetHeadOverlayColor>("setHeadOverlayColor");
+    tpl.Method("getHeadOverlay", &GetHeadOverlay);
+    tpl.Method<alt::IPlayer, bool, uint8_t, float, &alt::IPlayer::SetFaceFeature>("setFaceFeatureScale");
+    tpl.Method<alt::IPlayer, float, uint8_t, &alt::IPlayer::GetFaceFeatureScale>("getFaceFeatureScale");
+    tpl.Method<alt::IPlayer, bool, uint8_t, &alt::IPlayer::RemoveFaceFeature>("removeFaceFeature");
+    tpl.Method<alt::IPlayer, bool, uint8_t, uint8_t, uint8_t, uint8_t, &alt::IPlayer::SetHeadBlendPaletteColor>("setHeadBlendPaletteColor");
+    tpl.Method<alt::IPlayer, alt::RGBA, uint8_t, &alt::IPlayer::GetHeadBlendPaletteColor>("getHeadBlendPaletteColor");
+    tpl.Method<alt::IPlayer, void, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, float, float, float, &alt::IPlayer::SetHeadBlendData>("setHeadBlendData");
+    tpl.Method("getHeadBlendData", &GetHeadBlendData);
+    tpl.Method<alt::IPlayer, bool, int16_t, &alt::IPlayer::SetEyeColor>("setEyeColor");
+    tpl.Method<alt::IPlayer, int16_t, &alt::IPlayer::GetEyeColor>("getEyeColor");
+    tpl.Method<alt::IPlayer, void, uint8_t, &alt::IPlayer::SetHairColor>("setHairColor");
+    tpl.Method<alt::IPlayer, uint8_t, &alt::IPlayer::GetHairColor>("getHairColor");
+    tpl.Method<alt::IPlayer, void, uint8_t, &alt::IPlayer::SetHairHighlightColor>("setHairHighlightColor");
+    tpl.Method<alt::IPlayer, uint8_t, &alt::IPlayer::GetHairHighlightColor>("getHairHighlightColor");
     tpl.Method("playAnimation", &PlayAnimation);
     tpl.Method<alt::IPlayer, void, &alt::IPlayer::ClearTasks>("clearTasks");
 
