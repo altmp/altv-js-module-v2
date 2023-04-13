@@ -36,3 +36,11 @@ static js::Event vehicleDamageEvent(alt::CEvent::Type::VEHICLE_DAMAGE, [](const 
     args.Set("petrolTankDamage", e->GetPetrolTankHealthDamage());
     args.Set("weaponHash", e->GetDamagedWith());
 });
+
+static js::Event vehicleSirenEvent(alt::CEvent::Type::VEHICLE_SIREN, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CVehicleSirenEvent*>(ev);
+
+    args.Set("vehicle", e->GetTarget());
+    args.Set("state", e->GetToggle());
+});
