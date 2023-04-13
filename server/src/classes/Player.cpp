@@ -223,6 +223,74 @@ static void RemoveWeapon(js::FunctionContext& ctx)
     player->RemoveWeapon(weapon);
 }
 
+static void GetClothes(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint8_t component;
+    if(!ctx.GetArg(0, component)) return;
+
+    alt::Cloth cloth = player->GetClothes(component);
+    js::Object obj;
+    obj.Set("drawable", cloth.drawableId);
+    obj.Set("texture", cloth.textureId);
+    obj.Set("palette", cloth.paletteId);
+    ctx.Return(obj);
+}
+
+static void GetDlcClothes(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint8_t component;
+    if(!ctx.GetArg(0, component)) return;
+
+    alt::DlcCloth cloth = player->GetDlcClothes(component);
+    js::Object obj;
+    obj.Set("dlc", cloth.dlc);
+    obj.Set("drawable", cloth.drawableId);
+    obj.Set("texture", cloth.textureId);
+    obj.Set("palette", cloth.paletteId);
+    ctx.Return(obj);
+}
+
+static void GetProps(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint8_t component;
+    if(!ctx.GetArg(0, component)) return;
+
+    alt::Prop prop = player->GetProps(component);
+    js::Object obj;
+    obj.Set("drawable", prop.drawableId);
+    obj.Set("texture", prop.textureId);
+    ctx.Return(obj);
+}
+
+static void GetDlcProps(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint8_t component;
+    if(!ctx.GetArg(0, component)) return;
+
+    alt::DlcProp prop = player->GetDlcProps(component);
+    js::Object obj;
+    obj.Set("dlc", prop.dlc);
+    obj.Set("drawable", prop.drawableId);
+    obj.Set("texture", prop.textureId);
+    ctx.Return(obj);
+}
+
 static void PlayAnimation(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
@@ -330,7 +398,15 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method<alt::IPlayer, void, int, int, int, int, int, int, &alt::IPlayer::SetDateTime>("setDateTime");
     tpl.Method<alt::IPlayer, void, uint32_t, &alt::IPlayer::SetWeather>("setWeather");
     tpl.Method<alt::IPlayer, void, const std::string&, &alt::IPlayer::Kick>("kick");
-    // todo: clothes and props methods
+    tpl.Method("getClothes", &GetClothes);
+    tpl.Method<alt::IPlayer, bool, uint8_t, uint16_t, uint8_t, uint8_t, &alt::IPlayer::SetClothes>("setClothes");
+    tpl.Method("getDlcClothes", &GetDlcClothes);
+    tpl.Method<alt::IPlayer, bool, uint8_t, uint16_t, uint8_t, uint8_t, uint32_t, &alt::IPlayer::SetDlcClothes>("setDlcClothes");
+    tpl.Method("getProps", &GetProps);
+    tpl.Method<alt::IPlayer, bool, uint8_t, uint16_t, uint8_t, &alt::IPlayer::SetProps>("setProps");
+    tpl.Method("getDlcProps", &GetDlcProps);
+    tpl.Method<alt::IPlayer, bool, uint8_t, uint8_t, uint8_t, uint32_t, &alt::IPlayer::SetDlcProps>("setDlcProps");
+    tpl.Method<alt::IPlayer, void, uint8_t, &alt::IPlayer::ClearProps>("clearProps");
     tpl.Method<alt::IPlayer, bool, uint16_t, &alt::IPlayer::IsEntityInStreamingRange>("isEntityInStreamingRange");
     tpl.Method<alt::IPlayer, void, alt::IVehicle*, uint8_t, &alt::IPlayer::SetIntoVehicle>("setIntoVehicle");
     tpl.Method<alt::IPlayer, void, const std::string&, const std::string&, uint32_t, &alt::IPlayer::PlayAmbientSpeech>("playAmbientSpeech");
