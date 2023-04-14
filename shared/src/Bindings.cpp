@@ -11,10 +11,8 @@ v8::Local<v8::Module> js::Binding::Compile(IResource* resource)
     v8::Isolate* isolate = resource->GetIsolate();
     v8::Local<v8::Context> context = resource->GetContext();
     std::string moduleName = "internal:" + name;
-    v8::ScriptOrigin origin{
-        isolate, v8::String::NewFromUtf8(isolate, moduleName.c_str()).ToLocalChecked(), 0, 0, false, -1, v8::Local<v8::Value>(), false, false, true, v8::Local<v8::PrimitiveArray>()
-    };
-    v8::ScriptCompiler::Source source{ v8::String::NewFromUtf8(isolate, src.c_str()).ToLocalChecked(), origin };
+    v8::ScriptOrigin origin{ isolate, JSValue(moduleName), 0, 0, false, -1, v8::Local<v8::Value>(), false, false, true, v8::Local<v8::PrimitiveArray>() };
+    v8::ScriptCompiler::Source source{ JSValue(src), origin };
     v8::MaybeLocal<v8::Module> maybeModule = v8::ScriptCompiler::CompileModule(isolate, &source);
     if(maybeModule.IsEmpty())
     {
@@ -47,17 +45,12 @@ v8::Local<v8::Module> js::Binding::GetCompiledModule(IResource* resource)
 
 std::vector<js::Binding*> js::Binding::GetBindingsForScope(Scope scope)
 {
-    std::vector<Binding*> sharedBindings;
     std::vector<Binding*> bindings;
     for(auto& [_, binding] : __bindings)
     {
-        if(binding.scope == Scope::SHARED) sharedBindings.push_back(&binding);
-        else if(binding.scope == scope)
-            bindings.push_back(&binding);
+        if(binding.scope == Scope::SHARED || binding.scope == scope) bindings.push_back(&binding);
     }
-    // Insert shared bindings at the beginning
-    sharedBindings.insert(sharedBindings.end(), bindings.begin(), bindings.end());
-    return sharedBindings;
+    return bindings;
 }
 
 void js::Binding::CleanupForResource(IResource* resource)

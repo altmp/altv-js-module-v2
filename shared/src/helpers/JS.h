@@ -142,7 +142,9 @@ namespace js
         std::vector<std::string> GetKeys() const
         {
             std::vector<std::string> keys;
-            v8::Local<v8::Array> propNames = object->GetPropertyNames(GetContext()).ToLocalChecked();
+            v8::MaybeLocal<v8::Array> maybePropNames = object->GetPropertyNames(GetContext());
+            v8::Local<v8::Array> propNames;
+            if(!maybePropNames.ToLocal(&propNames)) return keys;
             for(uint32_t i = 0; i < propNames->Length(); i++)
             {
                 v8::MaybeLocal<v8::Value> maybeKey = propNames->Get(GetContext(), i);
