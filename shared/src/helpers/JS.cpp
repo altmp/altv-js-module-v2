@@ -1,6 +1,54 @@
 #include "JS.h"
 #include "interfaces/IResource.h"
 
+#include <filesystem>
+
+std::string PrettifyFilePath(js::IResource* resource, std::string path)
+{
+    if(path.starts_with("file:///")) path = path.substr(8);
+
+    std::filesystem::path fsPath(path);
+    if(fsPath.is_absolute())
+    {
+        std::string resourcePath = resource->GetResource()->GetPath();
+        std::replace(path.begin(), path.end(), '\\', '/');
+        std::replace(resourcePath.begin(), resourcePath.end(), '\\', '/');
+        if(path.starts_with(resourcePath)) return path.substr(resourcePath.length() + 1);
+        else
+            return path;
+    }
+    else
+        return path;
+}
+
+void js::TryCatch::PrintError()
+{
+    v8::Isolate* isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> context = isolate->GetEnteredOrMicrotaskContext();
+    IResource* resource = IResource::GetFromContext(context);
+    v8::Local<v8::Value> exception = tryCatch.Exception();
+    v8::Local<v8::Message> message = tryCatch.Message();
+    if(exception.IsEmpty() && message.IsEmpty()) return;
+
+    v8::MaybeLocal<v8::String> maybeSourceLine = message->GetSourceLine(context);
+    std::string sourceLine = maybeSourceLine.IsEmpty() ? "" : *v8::String::Utf8Value(isolate, maybeSourceLine.ToLocalChecked());
+    int32_t line = message->GetLineNumber(context).FromMaybe(0);
+    std::string lineStr = line == 0 ? "<unknown>" : std::to_string(line);
+    std::string file = *v8::String::Utf8Value(isolate, message->GetScriptOrigin().ResourceName());
+    if(file.empty() || file == "undefined") file = "<unknown>";
+    else
+        file = PrettifyFilePath(resource, file);
+
+    v8::MaybeLocal<v8::Value> stackTrace = tryCatch.StackTrace(context);
+    std::string stack = stackTrace.IsEmpty() ? "" : *v8::String::Utf8Value(isolate, stackTrace.ToLocalChecked());
+    std::string exceptionStr = *v8::String::Utf8Value(isolate, exception);
+
+    Logger::Error("[JS] Exception caught in resource '" + resource->GetResource()->GetName() + "' in file '" + file + "' at line " + lineStr);
+    if(!exceptionStr.empty() && stack.empty()) Logger::Error("[JS]", exceptionStr);
+    if(!stack.empty()) Logger::Error("[JS]", stack);
+    // todo: error event
+}
+
 js::IResource* js::Value::GetResource()
 {
     if(!resource) resource = IResource::GetFromContext(GetContext());

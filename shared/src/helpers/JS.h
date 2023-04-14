@@ -16,6 +16,32 @@ namespace js
         v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(js::JSValue(message)));
     }
 
+    class TryCatch
+    {
+        v8::TryCatch tryCatch;
+
+        void PrintError();
+
+    public:
+        TryCatch() : tryCatch(v8::Isolate::GetCurrent()) {}
+        TryCatch(v8::Isolate* isolate) : tryCatch(isolate) {}
+
+        bool Check(bool printError = true)
+        {
+            if(tryCatch.HasCaught())
+            {
+                if(printError) PrintError();
+                tryCatch.Reset();
+                return true;
+            }
+            return false;
+        }
+        void ReThrow()
+        {
+            tryCatch.ReThrow();
+        }
+    };
+
     class Value
     {
         bool valid = true;
@@ -218,11 +244,13 @@ namespace js
 
     private:
         v8::Local<v8::Function> function;
+        TryCatch tryCatch;
 
         v8::MaybeLocal<v8::Value> CallNative(v8::Local<v8::Value> thisObj, v8::Local<v8::Value>* argv, int argc)
         {
-            // todo: try/catch
-            return function->Call(context, thisObj, argc, argv);
+            v8::MaybeLocal<v8::Value> retVal = function->Call(context, thisObj, argc, argv);
+            tryCatch.Check();
+            return retVal;
         }
 
     public:

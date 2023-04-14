@@ -83,7 +83,8 @@
         "future": "cpp",
         "numeric": "cpp",
         "random": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "filesystem": "cpp"
     },
     "[cpp]": {
         "editor.defaultFormatter": "xaver.clang-format",
