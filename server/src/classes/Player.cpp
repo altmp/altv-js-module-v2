@@ -113,42 +113,6 @@ static void EyeColorSetter(js::PropertyContext& ctx)
     ctx.Return(player->SetEyeColor(color));
 }
 
-static void HairColorGetter(js::PropertyContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
-    ctx.Return(player->GetHairColor());
-}
-
-static void HairColorSetter(js::PropertyContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
-
-    int16_t color;
-    if(!ctx.GetValue(color)) return;
-
-    player->SetHairColor(color);
-}
-
-static void HairHighlightColorGetter(js::PropertyContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
-    ctx.Return(player->GetHairHighlightColor());
-}
-
-static void HairHighlightColorSetter(js::PropertyContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
-
-    uint8_t color;
-    if(!ctx.GetValue(color)) return;
-
-    player->SetHairHighlightColor(color);
-}
-
 static void WeaponsGetter(js::PropertyContext& ctx)
 {
     if(!ctx.CheckThis()) return;
@@ -405,6 +369,31 @@ static void GetHeadOverlay(js::FunctionContext& ctx)
     ctx.Return(obj);
 }
 
+static void SetHeadBlendPaletteColor(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2, 4)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint8_t id;
+    if(!ctx.GetArg(0, id)) return;
+
+    alt::RGBA color;
+    if(ctx.GetArgCount() == 2)
+    {
+        if(!ctx.GetArg(1, color)) return;
+    }
+    else
+    {
+        uint8_t r, g, b;
+        if(!ctx.GetArg(1, r)) return;
+        if(!ctx.GetArg(2, g)) return;
+        if(!ctx.GetArg(3, b)) return;
+        color = alt::RGBA{ r, g, b, 0 };
+    }
+    player->SetHeadBlendPaletteColor(id, color.r, color.g, color.b);
+}
+
 static void PlayAnimation(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
@@ -495,8 +484,8 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Property<alt::IPlayer, bool, &alt::IPlayer::GetInvincible, &alt::IPlayer::SetInvincible>("invincible");
     tpl.Property("headBlendData", &HeadBlendDataGetter, &HeadBlendDataSetter);
     tpl.Property("eyeColor", &EyeColorGetter, &EyeColorSetter);
-    tpl.Property("hairColor", &HairColorGetter, &HairColorSetter);
-    tpl.Property("hairHighlightColor", &HairHighlightColorGetter, &HairHighlightColorSetter);
+    tpl.Property<alt::IPlayer, uint8_t, &alt::IPlayer::GetHairColor, &alt::IPlayer::SetHairColor>("hairColor");
+    tpl.Property<alt::IPlayer, uint8_t, &alt::IPlayer::GetHairHighlightColor, &alt::IPlayer::SetHairHighlightColor>("hairHighlightColor");
     tpl.Property("weapons", &WeaponsGetter);
     tpl.Property<alt::IPlayer, &alt::IPlayer::GetInteriorLocation>("interiorLocation");
     tpl.Property<alt::IPlayer, &alt::IPlayer::GetLastDamagedBodyPart>("lastDamagedBodyPart");
@@ -535,7 +524,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method<alt::IPlayer, bool, uint8_t, float, &alt::IPlayer::SetFaceFeature>("setFaceFeatureScale");
     tpl.Method<alt::IPlayer, float, uint8_t, &alt::IPlayer::GetFaceFeatureScale>("getFaceFeatureScale");
     tpl.Method<alt::IPlayer, bool, uint8_t, &alt::IPlayer::RemoveFaceFeature>("removeFaceFeature");
-    tpl.Method<alt::IPlayer, bool, uint8_t, uint8_t, uint8_t, uint8_t, &alt::IPlayer::SetHeadBlendPaletteColor>("setHeadBlendPaletteColor");
+    tpl.Method("setHeadBlendPaletteColor", &SetHeadBlendPaletteColor);
     tpl.Method<alt::IPlayer, alt::RGBA, uint8_t, &alt::IPlayer::GetHeadBlendPaletteColor>("getHeadBlendPaletteColor");
     tpl.Method("playAnimation", &PlayAnimation);
     tpl.Method<alt::IPlayer, void, &alt::IPlayer::ClearTasks>("clearTasks");
