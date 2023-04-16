@@ -21,26 +21,6 @@ static void NeonGetter(js::DynamicPropertyContext<v8::Value>& ctx)
     ctx.Return(val);
 }
 
-static void NeonSetter(js::DynamicPropertyContext<v8::Value>& ctx)
-{
-    if(!ctx.CheckParent()) return;
-    alt::IVehicle* vehicle = ctx.GetParent<alt::IVehicle>();
-
-    bool left, right, front, back;
-    vehicle->GetNeonActive(&left, &right, &front, &back);
-    bool val = false;
-    std::string prop = ctx.GetProperty();
-    if(prop == "left") left = val;
-    else if(prop == "right")
-        right = val;
-    else if(prop == "front")
-        front = val;
-    else if(prop == "back")
-        back = val;
-
-    vehicle->SetNeonActive(left, right, front, back);
-}
-
 static void NeonEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
 {
     js::Array arr(4);
@@ -55,7 +35,7 @@ static void NeonEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
 extern js::Class entityClass;
 extern js::Class sharedVehicleClass("SharedVehicle", &entityClass, nullptr, [](js::ClassTemplate& tpl)
 {
-    tpl.DynamicProperty("neon", &NeonGetter, &NeonSetter, nullptr, &NeonEnumerator);
+    tpl.DynamicProperty("neon", &NeonGetter, nullptr, nullptr, &NeonEnumerator);
 
     tpl.Property<alt::IVehicle, &alt::IVehicle::GetDriver>("driver");
     tpl.Property<alt::IVehicle, &alt::IVehicle::IsDestroyed>("isDestroyed");
@@ -85,8 +65,7 @@ extern js::Class sharedVehicleClass("SharedVehicle", &entityClass, nullptr, [](j
     tpl.Property<alt::IVehicle, &alt::IVehicle::GetNeonColor>("neonColor");
     tpl.Property<alt::IVehicle, &alt::IVehicle::GetLivery>("livery");
     tpl.Property<alt::IVehicle, &alt::IVehicle::GetRoofLivery>("roofLivery");
-    // todo: fix const in sdk
-    //tpl.Property<alt::IVehicle, &alt::IVehicle::GetAppearanceDataBase64>("appearanceDataBase64");
+    tpl.Property<alt::IVehicle, &alt::IVehicle::GetAppearanceDataBase64>("appearanceDataBase64");
     tpl.Property<alt::IVehicle, &alt::IVehicle::IsEngineOn>("isEngineOn");
     tpl.Property<alt::IVehicle, &alt::IVehicle::IsHandbrakeActive>("isHandbrakeActive");
     tpl.Property<alt::IVehicle, &alt::IVehicle::GetHeadlightColor>("headlightColor");
@@ -98,8 +77,7 @@ extern js::Class sharedVehicleClass("SharedVehicle", &entityClass, nullptr, [](j
     tpl.Property<alt::IVehicle, &alt::IVehicle::GetRoofState>("roofState");
     tpl.Property<alt::IVehicle, &alt::IVehicle::IsFlamethrowerActive>("isFlamethrowerActive");
     tpl.Property<alt::IVehicle, &alt::IVehicle::GetLightsMultiplier>("lightsMultiplier");
-    // todo: fix const in sdk
-    //tpl.Property<alt::IVehicle, &alt::IVehicle::GetGameStateBase64>("gameStateBase64");
+    tpl.Property<alt::IVehicle, &alt::IVehicle::GetGameStateBase64>("gameStateBase64");
     tpl.Property<alt::IVehicle, &alt::IVehicle::GetEngineHealth>("engineHealth");
     tpl.Property<alt::IVehicle, &alt::IVehicle::GetPetrolTankHealth>("petrolTankHealth");
     tpl.Property<alt::IVehicle, &alt::IVehicle::GetWheelsCount>("wheelsCount");
@@ -107,11 +85,9 @@ extern js::Class sharedVehicleClass("SharedVehicle", &entityClass, nullptr, [](j
     tpl.Property<alt::IVehicle, &alt::IVehicle::GetBodyHealth>("bodyHealth");
     tpl.Property<alt::IVehicle, &alt::IVehicle::GetBodyAdditionalHealth>("bodyAdditionalHealth");
     tpl.Property<alt::IVehicle, &alt::IVehicle::HasArmoredWindows>("hasArmoredWindows");
-    // todo: fix const in sdk
-    //tpl.Property<alt::IVehicle, &alt::IVehicle::GetDamageDataBase64>("damageDataBase64");
+    tpl.Property<alt::IVehicle, &alt::IVehicle::GetDamageDataBase64>("damageDataBase64");
     tpl.Property<alt::IVehicle, &alt::IVehicle::IsManualEngineControl>("isManualEngineControl");
-    // todo: fix const in sdk
-    //tpl.Property<alt::IVehicle, &alt::IVehicle::GetScriptDataBase64>("scriptDataBase64");
+    tpl.Property<alt::IVehicle, &alt::IVehicle::GetScriptDataBase64>("scriptDataBase64");
     tpl.Property<alt::IVehicle, &alt::IVehicle::GetVelocity>("velocity");
 
     tpl.Method<alt::IVehicle, uint8_t, uint8_t, &alt::IVehicle::GetMod>("getMod");
