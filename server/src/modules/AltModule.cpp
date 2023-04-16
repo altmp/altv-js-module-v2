@@ -144,6 +144,8 @@ static js::Module altModule("alt", "alt-shared", { &playerClass, &vehicleClass, 
     module.StaticProperty("isServer", true);
     module.StaticProperty("rootDir", alt::ICore::Instance().GetRootDirectory());
     module.StaticProperty("netTime", NetTimeGetter);
+    module.StaticProperty("defaultDimension", alt::DEFAULT_DIMENSION);
+    module.StaticProperty("globalDimension", alt::GLOBAL_DIMENSION);
 
     module.StaticDynamicProperty("syncedMeta", SyncedMetaGetter, SyncedMetaSetter, SyncedMetaDeleter, SyncedMetaEnumerator);
 
