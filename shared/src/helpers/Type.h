@@ -31,12 +31,14 @@ namespace js
         VECTOR3,
         VECTOR2,
         RGBA,
+        QUATERNION,
         BASE_OBJECT,
     };
 
     bool IsVector3(v8::Local<v8::Value> value, IResource* resource);
     bool IsVector2(v8::Local<v8::Value> value, IResource* resource);
     bool IsRGBA(v8::Local<v8::Value> value, IResource* resource);
+    bool IsQuaternion(v8::Local<v8::Value> value, IResource* resource);
     bool IsBaseObject(v8::Local<v8::Value> value, IResource* resource);
 
     static Type GetType(v8::Local<v8::Value> value, js::IResource* resource)
@@ -67,6 +69,7 @@ namespace js
                 if(IsVector3(value, resource)) return Type::VECTOR3;
                 if(IsVector2(value, resource)) return Type::VECTOR2;
                 if(IsRGBA(value, resource)) return Type::RGBA;
+                if(IsQuaternion(value, resource)) return Type::QUATERNION;
                 if(IsBaseObject(value, resource)) return Type::BASE_OBJECT;
             }
 
@@ -100,6 +103,7 @@ namespace js
             case Type::VECTOR3: return "Vector3";
             case Type::VECTOR2: return "Vector2";
             case Type::RGBA: return "RGBA";
+            case Type::QUATERNION: return "Quaternion";
             case Type::BASE_OBJECT: return "BaseObject";
         }
         return "Invalid";

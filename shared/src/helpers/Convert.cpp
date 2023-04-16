@@ -49,6 +49,14 @@ v8::Local<v8::Value> js::JSValue(alt::RGBA rgba)
     return resource->CreateRGBA(rgba);
 }
 
+v8::Local<v8::Value> js::JSValue(alt::Quaternion quaternion)
+{
+    v8::Isolate* isolate = v8::Isolate::GetCurrent();
+    IResource* resource = GetCurrentResource(isolate);
+    if(!resource) return v8::Null(isolate);
+    return resource->CreateQuaternion(quaternion);
+}
+
 v8::Local<v8::Value> js::JSValue(const js::Object& jsObj)
 {
     return jsObj.Get();

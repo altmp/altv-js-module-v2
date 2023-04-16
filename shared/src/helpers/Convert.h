@@ -108,6 +108,7 @@ namespace js
     v8::Local<v8::Value> JSValue(alt::Position pos);
     v8::Local<v8::Value> JSValue(alt::Rotation rot);
     v8::Local<v8::Value> JSValue(alt::RGBA rgba);
+    v8::Local<v8::Value> JSValue(alt::Quaternion quaternion);
     v8::Local<v8::Value> JSValue(const js::Object& jsObj);
     v8::Local<v8::Value> JSValue(const js::Array& jsArr);
 
@@ -213,6 +214,28 @@ namespace js
 
         return alt::RGBA(rVal->NumberValue(ctx).ToChecked(), gVal->NumberValue(ctx).ToChecked(), bVal->NumberValue(ctx).ToChecked(), aVal->NumberValue(ctx).ToChecked());
     }
+    static std::optional<alt::Quaternion> ToQuaternion(v8::Local<v8::Value> val)
+    {
+        if(!val->IsObject()) return std::nullopt;
+
+        v8::Local<v8::Object> obj = val.As<v8::Object>();
+        v8::Local<v8::Context> ctx = obj->CreationContext();
+        v8::Isolate* isolate = ctx->GetIsolate();
+
+        v8::Local<v8::Value> xVal;
+        v8::Local<v8::Value> yVal;
+        v8::Local<v8::Value> zVal;
+        v8::Local<v8::Value> wVal;
+
+        if(!obj->Get(ctx, js::JSValue("x")).ToLocal(&xVal)) return std::nullopt;
+        if(!obj->Get(ctx, js::JSValue("y")).ToLocal(&yVal)) return std::nullopt;
+        if(!obj->Get(ctx, js::JSValue("z")).ToLocal(&zVal)) return std::nullopt;
+        if(!obj->Get(ctx, js::JSValue("w")).ToLocal(&wVal)) return std::nullopt;
+
+        if(!xVal->IsNumber() || !yVal->IsNumber() || !zVal->IsNumber() || !wVal->IsNumber()) return std::nullopt;
+
+        return alt::Quaternion(xVal->NumberValue(ctx).ToChecked(), yVal->NumberValue(ctx).ToChecked(), zVal->NumberValue(ctx).ToChecked(), wVal->NumberValue(ctx).ToChecked());
+    }
     std::optional<alt::IBaseObject*> ToBaseObject(v8::Local<v8::Value> val);
 
     // https://stackoverflow.com/a/16337657/19498259
@@ -276,6 +299,10 @@ namespace js
         else if constexpr(std::is_same_v<T, alt::RGBA>)
         {
             return ToRGBA(val);
+        }
+        else if constexpr(std::is_same_v<T, alt::Quaternion>)
+        {
+            return ToQuaternion(val);
         }
         else if constexpr(std::is_same_v<T, alt::IBaseObject*> || std::is_base_of_v<alt::IBaseObject, std::remove_pointer_t<T>>)
         {

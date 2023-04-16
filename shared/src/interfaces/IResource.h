@@ -164,6 +164,14 @@ namespace js
             std::array<v8::Local<v8::Value>, 4> args = { js::JSValue(rgba.r), js::JSValue(rgba.g), js::JSValue(rgba.b), js::JSValue(rgba.a) };
             return rgbaClass->NewInstance(GetContext(), args.size(), args.data()).ToLocalChecked();
         }
+        v8::Local<v8::Object> CreateQuaternion(alt::Quaternion quaternion)
+        {
+            v8::Local<v8::Function> quaternionClass = GetBindingExport<v8::Function>("classes:quaternion");
+            if(quaternionClass.IsEmpty()) return v8::Local<v8::Object>();
+
+            std::array<v8::Local<v8::Value>, 4> args = { js::JSValue(quaternion.x), js::JSValue(quaternion.y), js::JSValue(quaternion.z), js::JSValue(quaternion.w) };
+            return quaternionClass->NewInstance(GetContext(), args.size(), args.data()).ToLocalChecked();
+        }
         bool IsVector3(v8::Local<v8::Value> val)
         {
             v8::Local<v8::Function> vector3 = GetBindingExport<v8::Function>("classes:vector3");
@@ -184,6 +192,13 @@ namespace js
             if(rgbaClass.IsEmpty()) return false;
 
             return val->IsObject() && val.As<v8::Object>()->InstanceOf(GetContext(), rgbaClass).ToChecked();
+        }
+        bool IsQuaternion(v8::Local<v8::Value> val)
+        {
+            v8::Local<v8::Function> quaternionClass = GetBindingExport<v8::Function>("classes:quaternion");
+            if(quaternionClass.IsEmpty()) return false;
+
+            return val->IsObject() && val.As<v8::Object>()->InstanceOf(GetContext(), quaternionClass).ToChecked();
         }
         bool IsBaseObject(v8::Local<v8::Value> val)
         {

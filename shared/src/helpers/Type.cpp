@@ -16,6 +16,11 @@ bool js::IsRGBA(v8::Local<v8::Value> value, IResource* resource)
     return resource->IsRGBA(value);
 }
 
+bool js::IsQuaternion(v8::Local<v8::Value> value, IResource* resource)
+{
+    return resource->IsQuaternion(value);
+}
+
 bool js::IsBaseObject(v8::Local<v8::Value> value, IResource* resource)
 {
     return resource->IsBaseObject(value);
