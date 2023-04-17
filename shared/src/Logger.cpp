@@ -16,13 +16,14 @@ js::Logger& js::Logger::operator<<(const js::Logger::EndlStruct&)
         }
     }
 
-    if(type == Type::INFO) alt::ICore::Instance().LogInfo(stream.str(), altResource);
-    else if(type == Type::COLORED)
-        alt::ICore::Instance().LogColored(stream.str(), altResource);
-    else if(type == Type::WARN)
-        alt::ICore::Instance().LogWarning(stream.str(), altResource);
-    else if(type == Type::ERR)
-        alt::ICore::Instance().LogError(stream.str(), altResource);
+    std::string str = stream.str();
+    switch(type)
+    {
+        case Type::INFO: alt::ICore::Instance().LogInfo(str, altResource); break;
+        case Type::COLORED: alt::ICore::Instance().LogColored(str, altResource); break;
+        case Type::WARN: alt::ICore::Instance().LogWarning(str, altResource); break;
+        case Type::ERR: alt::ICore::Instance().LogError(str, altResource); break;
+    }
     stream.str("");
     return *this;
 }
