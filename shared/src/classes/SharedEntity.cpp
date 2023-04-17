@@ -35,8 +35,8 @@ extern js::Class worldObjectClass;
 extern js::Class sharedEntityClass("SharedEntity", &worldObjectClass, nullptr, [](js::ClassTemplate& tpl)
 {
     tpl.LazyProperty<alt::IEntity, &alt::IEntity::GetID>("id");
-    tpl.LazyProperty<alt::IEntity, &alt::IEntity::GetModel>("model");
 
+    tpl.Property<alt::IEntity, &alt::IEntity::GetModel>("model");
     tpl.Property<alt::IEntity, &alt::IEntity::GetNetworkOwner>("netOwner");
     tpl.Property<alt::IEntity, alt::Rotation, &alt::IEntity::GetRotation, &alt::IEntity::SetRotation>("rot");
     tpl.Property<alt::IEntity, &alt::IEntity::GetVisible>("visible");
