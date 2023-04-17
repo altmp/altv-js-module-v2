@@ -3,6 +3,11 @@ const { assert } = requireBinding("shared/utils.js");
 const timers = new Set();
 
 class Timer {
+    interval;
+    callback;
+    lastTick;
+    once;
+
     constructor(interval, callback, once) {
         assert(typeof interval === "number", "Expected a number as first argument");
         assert(typeof callback === "function", "Expected a function as second argument");
@@ -60,6 +65,10 @@ alt.Timers.setInterval = (interval, callback) => new Interval(interval, callback
 alt.Timers.setTimeout = (interval, callback) => new Timeout(interval, callback);
 alt.Timers.everyTick = (callback) => new EveryTick(callback);
 alt.Timers.nextTick = (callback) => new NextTick(callback);
+
+alt.Timers.getTimers = () => {
+    return Array.from(timers);
+};
 
 globalThis.setInterval = alt.Timers.setInterval;
 globalThis.setTimeout = alt.Timers.setTimeout;
