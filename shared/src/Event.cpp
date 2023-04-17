@@ -6,13 +6,10 @@ void js::Event::CallEventBinding(bool custom, int type, EventArgs& args, IResour
 {
     v8::Isolate* isolate = resource->GetIsolate();
     v8::Local<v8::Context> context = resource->GetContext();
-    v8::Local<v8::Function> onEvent = resource->GetBindingExport<v8::Function>("events:onEvent");
-    if(onEvent.IsEmpty()) return;
+    js::Function onEvent = resource->GetBindingExport<v8::Function>("events:onEvent");
+    if(!onEvent.IsValid()) return;
 
-    js::TryCatch tryCatch;
-    std::array<v8::Local<v8::Value>, 3> funcArgs = { js::JSValue(custom), js::JSValue(type), args.Get() };
-    onEvent->Call(context, v8::Undefined(isolate), funcArgs.size(), funcArgs.data());
-    tryCatch.Check();
+    onEvent.Call(custom, type, args.Get());
 }
 
 void js::Event::CancelEventCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
