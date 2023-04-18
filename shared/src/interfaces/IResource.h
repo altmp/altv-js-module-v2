@@ -42,6 +42,8 @@ namespace js
 
         std::unordered_map<std::string, Persistent<v8::Value>> bindingExports;
 
+        std::unordered_map<alt::IResource*, Persistent<v8::Object>> resourceObjects;
+
         void Initialize()
         {
             context.Get(isolate)->SetAlignedPointerInEmbedderData(ContextInternalFieldIdx, this);
@@ -96,6 +98,8 @@ namespace js
             v8::HandleScope handleScope(isolate);
             v8::Context::Scope contextScope(GetContext());
 
+            if(ev->GetType() == alt::CEvent::Type::RESOURCE_STOP) DestroyResourceObject(static_cast<const alt::CResourceStopEvent*>(ev)->GetResource());
+
             Event::SendEvent(ev, this);
         }
 
@@ -138,6 +142,14 @@ namespace js
             if(!bindingExports.contains(name)) return v8::Local<T>();
             v8::Local<v8::Value> val = bindingExports.at(name).Get(isolate);
             return val.As<T>();
+        }
+
+        v8::Local<v8::Object> CreateResourceObject(alt::IResource* resource);
+        void DestroyResourceObject(alt::IResource* resource)
+        {
+            if(!resourceObjects.contains(resource)) return;
+            resourceObjects.at(resource).Get(isolate)->SetAlignedPointerInInternalField(1, nullptr);
+            resourceObjects.erase(resource);
         }
 
         v8::Local<v8::Object> CreateVector3(alt::Vector3f vec)

@@ -126,3 +126,12 @@ void js::IResource::InitializeBindings(Binding::Scope scope, Module& altModule)
         RegisterBindingExports();
     }
 }
+
+extern js::Class resourceClass;
+v8::Local<v8::Object> js::IResource::CreateResourceObject(alt::IResource* resource)
+{
+    if(resourceObjects.contains(resource)) return resourceObjects.at(resource).Get(isolate);
+    v8::Local<v8::Object> resourceObj = resourceClass.Create(GetContext(), resource);
+    resourceObjects.insert({ resource, Persistent<v8::Object>(GetIsolate(), resourceObj) });
+    return resourceObj;
+}

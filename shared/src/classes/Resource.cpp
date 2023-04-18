@@ -1,42 +1,43 @@
 #include "Class.h"
 #include "interfaces/IResource.h"
 
-extern js::Class resourceClass;
-
 static void Current(js::LazyPropertyContext& ctx)
 {
-    alt::IResource* resource = ctx.GetResource()->GetResource();
-    if(!resource)
+    js::IResource* resource = ctx.GetResource();
+    if(!resource || !resource->GetResource())
     {
         ctx.Return(nullptr);
         return;
     }
-    v8::Local<v8::Object> resourceObj = resourceClass.Create(ctx.GetContext(), resource);
+    v8::Local<v8::Object> resourceObj = resource->CreateResourceObject(resource->GetResource());
     ctx.Return(resourceObj);
 }
 
 static void All(js::LazyPropertyContext& ctx)
 {
+    js::IResource* resource = ctx.GetResource();
+
     std::vector<alt::IResource*> resources = alt::ICore::Instance().GetAllResources();
     js::Array arr(resources.size());
-    for(auto resource : resources) arr.Push(resourceClass.Create(ctx.GetContext(), resource));
+    for(auto res : resources) arr.Push(resource->CreateResourceObject(res));
     ctx.Return(arr);
 }
 
 static void Get(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
+    js::IResource* resource = ctx.GetResource();
 
     std::string resourceName;
     if(!ctx.GetArg(0, resourceName)) return;
 
-    alt::IResource* resource = alt::ICore::Instance().GetResource(resourceName);
-    if(!resource)
+    alt::IResource* res = alt::ICore::Instance().GetResource(resourceName);
+    if(!res)
     {
         ctx.Return(nullptr);
         return;
     }
-    v8::Local<v8::Object> resourceObj = resourceClass.Create(ctx.GetContext(), resource);
+    v8::Local<v8::Object> resourceObj = resource->CreateResourceObject(res);
     ctx.Return(resourceObj);
 }
 
@@ -126,7 +127,6 @@ static void DependenciesGetter(js::PropertyContext& ctx)
     if(!ctx.CheckExtraInternalFieldValue()) return;
 
     alt::IResource* resource = ctx.GetExtraInternalFieldValue<alt::IResource>();
-    // todo: change this when its a std::vector instead of alt::Array
     std::vector<std::string> dependencies;
     for(auto& dependency : resource->GetDependencies())
     {
@@ -140,7 +140,6 @@ static void DependantsGetter(js::PropertyContext& ctx)
     if(!ctx.CheckExtraInternalFieldValue()) return;
 
     alt::IResource* resource = ctx.GetExtraInternalFieldValue<alt::IResource>();
-    // todo: change this when its a std::vector instead of alt::Array
     std::vector<std::string> dependants;
     for(auto& dependant : resource->GetDependants())
     {
