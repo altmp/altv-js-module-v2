@@ -73,8 +73,14 @@ alt.Timers.getTimers = () => {
 globalThis.setInterval = alt.Timers.setInterval;
 globalThis.setTimeout = alt.Timers.setTimeout;
 
-globalThis.clearInterval = (interval) => interval.destroy();
-globalThis.clearTimeout = (timeout) => timeout.destroy();
+globalThis.clearInterval = (interval) => {
+    if (!(interval instanceof Interval)) throw new Error("Expected an Interval as first argument");
+    interval.destroy();
+};
+globalThis.clearTimeout = (timeout) => {
+    if (!(timeout instanceof Timeout)) throw new Error("Expected a Timeout as first argument");
+    timeout.destroy();
+};
 
 export function tick() {
     for (const timer of timers) timer.tick();
