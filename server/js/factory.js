@@ -7,7 +7,7 @@ alt.Factory.setColShapeFactory = setEntityFactory(alt.ColShape, alt.Enums.BaseOb
 alt.Factory.getColShapeFactory = getEntityFactory(alt.Enums.BaseObjectType.COLSHAPE);
 
 alt.Factory.setObjectFactory = setEntityFactory(alt.Object, alt.Enums.BaseObjectType.NETWORK_OBJECT);
-alt.Factory.setObjectFactory = getEntityFactory(alt.Enums.BaseObjectType.NETWORK_OBJECT);
+alt.Factory.getObjectFactory = getEntityFactory(alt.Enums.BaseObjectType.NETWORK_OBJECT);
 
 // Factory ctors
 alt.Vehicle.create = (ctx) => {
