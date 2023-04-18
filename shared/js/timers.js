@@ -73,6 +73,9 @@ alt.Timers.getTimers = () => {
 globalThis.setInterval = alt.Timers.setInterval;
 globalThis.setTimeout = alt.Timers.setTimeout;
 
+globalThis.clearInterval = (interval) => interval.destroy();
+globalThis.clearTimeout = (timeout) => timeout.destroy();
+
 export function tick() {
     for (const timer of timers) timer.tick();
 }
