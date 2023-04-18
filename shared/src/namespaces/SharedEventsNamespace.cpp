@@ -8,12 +8,12 @@ static void Emit(js::FunctionContext& ctx)
     if(!ctx.GetArg(0, eventName)) return;
 
     alt::MValueArgs args;
-    args.Reserve(ctx.GetArgCount() - 1);
+    args.reserve(ctx.GetArgCount() - 1);
     alt::MValue val;
     for(int i = 1; i < ctx.GetArgCount(); i++)
     {
         if(!ctx.GetArg(i, val)) continue;
-        args.Push(val);
+        args.push_back(val);
     }
     alt::ICore::Instance().TriggerLocalEvent(eventName, args);
 }

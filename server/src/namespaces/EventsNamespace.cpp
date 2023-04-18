@@ -19,12 +19,12 @@ static void EmitPlayers(js::FunctionContext& ctx)
     if(!ctx.GetArg(1, eventName)) return;
 
     alt::MValueArgs args;
-    args.Reserve(ctx.GetArgCount() - 2);
+    args.reserve(ctx.GetArgCount() - 2);
     alt::MValue val;
     for(int i = 2; i < ctx.GetArgCount(); i++)
     {
         if(!ctx.GetArg(i, val)) continue;
-        args.Push(val);
+        args.push_back(val);
     }
     alt::ICore::Instance().TriggerClientEvent(players, eventName, args);
 }
@@ -48,12 +48,12 @@ static void EmitPlayersUnreliable(js::FunctionContext& ctx)
     if(!ctx.GetArg(1, eventName)) return;
 
     alt::MValueArgs args;
-    args.Reserve(ctx.GetArgCount() - 2);
+    args.reserve(ctx.GetArgCount() - 2);
     alt::MValue val;
     for(int i = 2; i < ctx.GetArgCount(); i++)
     {
         if(!ctx.GetArg(i, val)) continue;
-        args.Push(val);
+        args.push_back(val);
     }
     alt::ICore::Instance().TriggerClientEventUnreliable(players, eventName, args);
 }
@@ -66,12 +66,12 @@ static void EmitAllPlayers(js::FunctionContext& ctx)
     if(!ctx.GetArg(0, eventName)) return;
 
     alt::MValueArgs args;
-    args.Reserve(ctx.GetArgCount() - 1);
+    args.reserve(ctx.GetArgCount() - 1);
     alt::MValue val;
     for(int i = 1; i < ctx.GetArgCount(); i++)
     {
         if(!ctx.GetArg(i, val)) continue;
-        args.Push(val);
+        args.push_back(val);
     }
     alt::ICore::Instance().TriggerClientEventForAll(eventName, args);
 }
@@ -84,12 +84,12 @@ static void EmitAllPlayersUnreliable(js::FunctionContext& ctx)
     if(!ctx.GetArg(0, eventName)) return;
 
     alt::MValueArgs args;
-    args.Reserve(ctx.GetArgCount() - 1);
+    args.reserve(ctx.GetArgCount() - 1);
     alt::MValue val;
     for(int i = 1; i < ctx.GetArgCount(); i++)
     {
         if(!ctx.GetArg(i, val)) continue;
-        args.Push(val);
+        args.push_back(val);
     }
     alt::ICore::Instance().TriggerClientEventUnreliableForAll(eventName, args);
 }

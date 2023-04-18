@@ -14,8 +14,8 @@ alt::MValue js::IResource::Function::Call(alt::MValueArgs args) const
 
     v8::Local<v8::Function> jsFunc = function.Get(isolate);
     std::vector<v8::Local<v8::Value>> jsArgs;
-    jsArgs.reserve(args.GetSize());
-    for(size_t i = 0; i < args.GetSize(); ++i) jsArgs.push_back(MValueToJS(args[i]));
+    jsArgs.reserve(args.size());
+    for(size_t i = 0; i < args.size(); ++i) jsArgs.push_back(MValueToJS(args[i]));
 
     js::Function func(jsFunc);
     auto result = func.Call<alt::MValue>(jsArgs);
@@ -27,8 +27,8 @@ void js::IResource::Function::ExternalFunctionCallback(const v8::FunctionCallbac
 {
     alt::MValueFunctionConst* func = static_cast<alt::MValueFunctionConst*>(info.Data().As<v8::External>()->Value());
     alt::MValueArgs args;
-    args.Reserve(info.Length());
-    for(size_t i = 0; i < info.Length(); ++i) args.Push(JSToMValue(info[i], false));
+    args.reserve(info.Length());
+    for(size_t i = 0; i < info.Length(); ++i) args.push_back(JSToMValue(info[i], false));
     alt::MValue retValue = (*func)->Call(args);
     info.GetReturnValue().Set(MValueToJS(retValue));
 }

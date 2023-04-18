@@ -11,7 +11,7 @@ static js::Event clientScriptEvent(alt::CEvent::Type::CLIENT_SCRIPT_EVENT, [](co
 #endif
 
     const alt::MValueArgs& eventArgs = e->GetArgs();
-    js::Array argsArray(eventArgs.GetSize());
+    js::Array argsArray(eventArgs.size());
     js::MValueArgsToJS(eventArgs, argsArray);
     args.Set("args", argsArray);
 });
@@ -22,7 +22,7 @@ static js::Event serverScriptEvent(alt::CEvent::Type::SERVER_SCRIPT_EVENT, [](co
     args.Set("eventName", e->GetName());
 
     const alt::MValueArgs& eventArgs = e->GetArgs();
-    js::Array argsArray(eventArgs.GetSize());
+    js::Array argsArray(eventArgs.size());
     js::MValueArgsToJS(eventArgs, argsArray);
     args.Set("args", argsArray);
 });

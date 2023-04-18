@@ -302,7 +302,7 @@ v8::Local<v8::Value> js::MValueToJS(alt::MValueConst val)
 
 void js::MValueArgsToJS(alt::MValueArgs args, Array& argsArray)
 {
-    for(size_t i = 0; i < args.GetSize(); ++i) argsArray.Push(MValueToJS(args[i]));
+    for(size_t i = 0; i < args.size(); ++i) argsArray.Push(MValueToJS(args[i]));
 }
 
 v8::Local<v8::Value> js::ConfigValueToJS(Config::Value::ValuePtr val)
