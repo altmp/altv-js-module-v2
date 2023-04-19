@@ -1,5 +1,33 @@
 #include "Namespace.h"
 
+static void DoesExtraExist(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+    js::Object thisObj = ctx.GetThis();
+    uint32_t model = thisObj.Get<uint32_t>("model");
+    const alt::VehicleModelInfo& info = alt::ICore::Instance().GetVehicleModelByHash(model);
+    if(!ctx.Check(info.modelType != alt::VehicleModelInfo::Type::INVALID, "Invalid vehicle model")) return;
+
+    uint8_t extraId;
+    if(!ctx.GetArg(0, extraId)) return;
+
+    ctx.Return(info.DoesExtraExist(extraId));
+}
+
+static void DoesExtraDefault(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+    js::Object thisObj = ctx.GetThis();
+    uint32_t model = thisObj.Get<uint32_t>("model");
+    const alt::VehicleModelInfo& info = alt::ICore::Instance().GetVehicleModelByHash(model);
+    if(!ctx.Check(info.modelType != alt::VehicleModelInfo::Type::INVALID, "Invalid vehicle model")) return;
+
+    uint8_t extraId;
+    if(!ctx.GetArg(0, extraId)) return;
+
+    ctx.Return(info.DoesExtraDefault(extraId));
+}
+
 static void Get(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
@@ -10,7 +38,10 @@ static void Get(js::FunctionContext& ctx)
     const alt::VehicleModelInfo& info = alt::ICore::Instance().GetVehicleModelByHash(model);
     if(!ctx.Check(info.modelType != alt::VehicleModelInfo::Type::INVALID, "Invalid vehicle model")) return;
 
+    v8::Local<v8::Context> context = ctx.GetContext();
+
     js::Object modelObj;
+    modelObj.Set("model", model);
     modelObj.Set("title", info.title);
     modelObj.Set("modelType", info.modelType);
     modelObj.Set("wheelsCount", info.wheelsCount);
@@ -24,8 +55,7 @@ static void Get(js::FunctionContext& ctx)
     js::Array modkits;
     for(uint16_t modkit : info.modkits)
     {
-        if(modkit == 0xFFFF) continue;
-        modkits.Push(modkit);
+        modkits.Push(modkit != 0xFFFF);
     }
     modelObj.Set("modkits", modkits);
     modelObj.Set("extras", info.extras);
@@ -41,6 +71,8 @@ static void Get(js::FunctionContext& ctx)
         bones.Push(boneObj);
     }
     modelObj.Set("bones", bones);
+    modelObj.Set("doesExtraExist", js::WrapFunction(DoesExtraExist)->GetFunction(context).ToLocalChecked());
+    modelObj.Set("doesExtraDefault", js::WrapFunction(DoesExtraDefault)->GetFunction(context).ToLocalChecked());
 
     ctx.Return(modelObj);
 }
