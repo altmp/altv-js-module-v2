@@ -78,6 +78,11 @@ namespace js
             return Check(GetExtraInternalFieldValue<void*>() != nullptr, "Invalid extra internal field value");
         }
 
+        v8::Local<v8::Object> GetThis()
+        {
+            return info.This();
+        }
+
         template<class T>
         T* GetThisObject()
         {
