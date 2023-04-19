@@ -110,11 +110,8 @@ namespace js
             v8::HandleScope handleScope(isolate);
             v8::Context::Scope contextScope(GetContext());
 
-            v8::Local<v8::Function> onTick = GetBindingExport<v8::Function>("timers:tick");
-            if(!onTick.IsEmpty())
-            {
-                onTick->Call(GetContext(), v8::Undefined(isolate), 0, nullptr);
-            }
+            js::Function onTick = GetBindingExport<v8::Function>("timers:tick");
+            if(onTick.IsValid()) onTick.Call();
         }
 
         void InitializeBindings(Binding::Scope scope, Module& altModule);

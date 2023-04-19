@@ -46,7 +46,11 @@ void js::TryCatch::PrintError()
     Logger::Error("[JS] Exception caught in resource '" + resource->GetResource()->GetName() + "' in file '" + file + "' at line " + lineStr);
     if(!exceptionStr.empty() && stack.empty()) Logger::Error("[JS]", exceptionStr);
     if(!stack.empty()) Logger::Error("[JS]", stack);
-    // todo: error event
+
+    js::Event::EventArgs args;
+    args.Set("error", exceptionStr);
+    args.Set("stack", stack);
+    js::Event::SendEvent(js::EventType::ERROR, args, resource);
 }
 
 js::IResource* js::Value::GetResource()
