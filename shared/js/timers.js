@@ -14,7 +14,7 @@ class Timer {
 
         this.interval = interval;
         this.callback = callback.bind(this);
-        this.lastTick = 0;
+        this.lastTick = Date.now();
         this.once = once;
         timers.add(this);
     }
