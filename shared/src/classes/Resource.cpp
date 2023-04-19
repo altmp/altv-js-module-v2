@@ -1,7 +1,7 @@
 #include "Class.h"
 #include "interfaces/IResource.h"
 
-static void Current(js::LazyPropertyContext& ctx)
+static void Current(js::PropertyContext& ctx)
 {
     js::IResource* resource = ctx.GetResource();
     if(!resource || !resource->GetResource())
@@ -13,7 +13,7 @@ static void Current(js::LazyPropertyContext& ctx)
     ctx.Return(resourceObj);
 }
 
-static void All(js::LazyPropertyContext& ctx)
+static void All(js::PropertyContext& ctx)
 {
     js::IResource* resource = ctx.GetResource();
 
@@ -159,8 +159,9 @@ static void IsStartedGetter(js::PropertyContext& ctx)
 // clang-format off
 extern js::Class resourceClass("Resource", nullptr, [](js::ClassTemplate& tpl)
 {
-    tpl.StaticLazyProperty("current", Current);
-    tpl.StaticLazyProperty("all", All);
+    tpl.StaticProperty("current", Current);
+    tpl.StaticProperty("all", All);
+
     tpl.StaticFunction("get", Get);
     tpl.StaticFunction("exists", Exists);
     tpl.StaticFunction("start", Start);
