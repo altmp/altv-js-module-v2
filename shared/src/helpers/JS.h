@@ -292,8 +292,16 @@ namespace js
         template<typename Ret = void, typename... Args>
         std::conditional_t<std::is_same_v<Ret, void>, void, std::optional<Ret>> Call(const Args&... args)
         {
-            v8::Local<v8::Value> argv[] = { js::JSValue(args)... };
-            v8::MaybeLocal<v8::Value> retValue = CallNative(v8::Undefined(context->GetIsolate()), argv, sizeof...(args));
+            v8::MaybeLocal<v8::Value> retValue;
+            if constexpr(sizeof...(args) == 0)
+            {
+                retValue = CallNative(v8::Undefined(context->GetIsolate()), nullptr, 0);
+            }
+            else
+            {
+                v8::Local<v8::Value> argv[] = { js::JSValue(args)... };
+                retValue = CallNative(v8::Undefined(context->GetIsolate()), argv, sizeof...(args));
+            }
             if constexpr(std::is_same_v<Ret, void>) return;
             else
             {
@@ -306,8 +314,16 @@ namespace js
         template<typename Ret = void, typename... Args>
         std::conditional_t<std::is_same_v<Ret, void>, void, std::optional<Ret>> Call(const Object& thisObj, const Args&... args)
         {
-            v8::Local<v8::Value> argv[] = { js::JSValue(args)... };
-            v8::MaybeLocal<v8::Value> retValue = CallNative(thisObj.Get(), argv, sizeof...(args));
+            v8::MaybeLocal<v8::Value> retValue;
+            if constexpr(sizeof...(args) == 0)
+            {
+                retValue = CallNative(thisObj.Get(), nullptr, 0);
+            }
+            else
+            {
+                v8::Local<v8::Value> argv[] = { js::JSValue(args)... };
+                retValue = CallNative(thisObj.Get(), argv, sizeof...(args));
+            }
             if constexpr(std::is_same_v<Ret, void>) return;
             else
             {
