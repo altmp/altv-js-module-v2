@@ -22,7 +22,11 @@ static void Get(js::FunctionContext& ctx)
     modelObj.Set("interiorColor", info.interiorColor);
     modelObj.Set("dashboardColor", info.dashboardColor);
     js::Array modkits;
-    for(uint16_t modkit : info.modkits) modkits.Push(modkit);
+    for(uint16_t modkit : info.modkits)
+    {
+        if(modkit == 0xFFFF) continue;
+        modkits.Push(modkit);
+    }
     modelObj.Set("modkits", modkits);
     modelObj.Set("extras", info.extras);
     modelObj.Set("defaultExtras", info.defaultExtras);
