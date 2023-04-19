@@ -147,6 +147,7 @@ export class Event {
      * @param {boolean} custom
      */
     static invoke(eventType, ctx, custom) {
+        Object.freeze(ctx);
         if (eventType === alt.Enums.EventType.CLIENT_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isClient);
         else if (eventType === alt.Enums.EventType.SERVER_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isServer);
 
