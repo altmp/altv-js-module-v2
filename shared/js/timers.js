@@ -16,9 +16,9 @@ class Timer {
     lastTick;
     once;
 
-    constructor(interval, callback, once) {
-        assert(typeof interval === "number", "Expected a number as first argument");
-        assert(typeof callback === "function", "Expected a function as second argument");
+    constructor(callback, interval, once) {
+        assert(typeof callback === "function", "Expected a function as first argument");
+        assert(typeof interval === "number", "Expected a number as second argument");
 
         this.interval = interval;
         this.callback = callback.bind(this);
@@ -50,25 +50,25 @@ class Timer {
 
 class Interval extends Timer {
     constructor(callback, interval) {
-        super(interval, callback, false);
+        super(callback, interval, false);
     }
 }
 
 class Timeout extends Timer {
     constructor(callback, interval) {
-        super(interval, callback, true);
+        super(callback, interval, true);
     }
 }
 
 class EveryTick extends Timer {
     constructor(callback) {
-        super(0, callback, false);
+        super(callback, 0, false);
     }
 }
 
 class NextTick extends Timer {
     constructor(callback) {
-        super(0, callback, true);
+        super(callback, 0, true);
     }
 }
 
@@ -78,8 +78,8 @@ alt.Timers.EveryTick = EveryTick;
 alt.Timers.NextTick = NextTick;
 alt.Timers.setWarningThreshold = Timer.setWarningThreshold;
 
-alt.Timers.setInterval = (interval, callback) => new Interval(interval, callback);
-alt.Timers.setTimeout = (interval, callback) => new Timeout(interval, callback);
+alt.Timers.setInterval = (callback, interval) => new Interval(callback, interval);
+alt.Timers.setTimeout = (callback, interval) => new Timeout(callback, interval);
 alt.Timers.everyTick = (callback) => new EveryTick(callback);
 alt.Timers.nextTick = (callback) => new NextTick(callback);
 
@@ -106,6 +106,7 @@ export function tick() {
         } catch (e) {
             alt.logError(`[JS] Exception caught while invoking timer callback`);
             alt.logError(e);
+            if (timer.once) timer.destroy();
         }
     }
 }
