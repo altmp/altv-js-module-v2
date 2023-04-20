@@ -1,8 +1,16 @@
 /** @type {typeof import("./utils.js")} */
 const { assert } = requireBinding("shared/utils.js");
+
+/** @type {Set<Timer>} */
 const timers = new Set();
 
 class Timer {
+    static #warningThreshold = 100;
+    static setWarningThreshold(threshold) {
+        assert(typeof threshold === "number", "Expected a number as first argument");
+        Timer.#warningThreshold = threshold;
+    }
+
     interval;
     callback;
     lastTick;
@@ -25,9 +33,17 @@ class Timer {
 
     tick() {
         if (this.interval === 0 || Date.now() - this.lastTick > this.interval) {
+            const start = Date.now();
             this.callback();
             this.lastTick = Date.now();
             if (this.once) this.destroy();
+
+            const duration = this.lastTick - start;
+            if (duration > Timer.#warningThreshold) {
+                alt.logWarning(
+                    `[JS] Timer callback took ${duration}ms to execute (Threshold: ${Timer.#warningThreshold}ms)`
+                );
+            }
         }
     }
 }
@@ -60,6 +76,7 @@ alt.Timers.Interval = Interval;
 alt.Timers.Timeout = Timeout;
 alt.Timers.EveryTick = EveryTick;
 alt.Timers.NextTick = NextTick;
+alt.Timers.setWarningThreshold = Timer.setWarningThreshold;
 
 alt.Timers.setInterval = (interval, callback) => new Interval(interval, callback);
 alt.Timers.setTimeout = (interval, callback) => new Timeout(interval, callback);

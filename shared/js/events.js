@@ -12,6 +12,13 @@ export class Event {
     /** @type {Map<string, Function[]>} */
     static #remoteScriptEventHandlers = new Map();
 
+    /** Warning threshold in ms */
+    static #warningThreshold = 100;
+    static setWarningThreshold(threshold) {
+        assert(typeof threshold === "number", "Expected a number as first argument");
+        Event.#warningThreshold = threshold;
+    }
+
     /**
      * @param {string} name
      * @param {number} type
@@ -63,7 +70,16 @@ export class Event {
 
         for (let handler of handlers) {
             try {
+                const startTime = Date.now();
                 handler(evCtx);
+                const duration = Date.now() - startTime;
+                if (duration > Event.#warningThreshold) {
+                    alt.logWarning(
+                        `[JS] Event handler for script event '${name}' took ${duration}ms to execute (Threshold: ${
+                            Event.#warningThreshold
+                        }ms)`
+                    );
+                }
             } catch (e) {
                 alt.logError(`[JS] Exception caught while invoking script event '${name}' handler`);
                 alt.logError(e);
@@ -161,7 +177,14 @@ export class Event {
         if (!handlers) return;
         for (const handler of handlers) {
             try {
+                const startTime = Date.now();
                 handler(ctx);
+                const duration = Date.now() - startTime;
+                if (duration > Event.#warningThreshold) {
+                    alt.logWarning(
+                        `[JS] Event handler took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`
+                    );
+                }
             } catch (e) {
                 alt.logError(`[JS] Exception caught while invoking event handler`);
                 alt.logError(e);
@@ -177,6 +200,7 @@ if (alt.isClient) {
 } else {
     alt.Events.onClient = Event.getScriptEventFunc(false);
 }
+alt.Events.setWarningThreshold = Event.setWarningThreshold;
 
 export function onEvent(custom, eventType, eventData) {
     Event.invoke(eventType, eventData, custom);
