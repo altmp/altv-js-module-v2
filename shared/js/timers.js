@@ -83,9 +83,9 @@ alt.Timers.setTimeout = (callback, interval) => new Timeout(callback, interval);
 alt.Timers.everyTick = (callback) => new EveryTick(callback);
 alt.Timers.nextTick = (callback) => new NextTick(callback);
 
-alt.Timers.getTimers = () => {
-    return Array.from(timers);
-};
+Object.defineProperty(alt.Timers, "all", {
+    get: () => Array.from(timers),
+});
 
 globalThis.setInterval = alt.Timers.setInterval;
 globalThis.setTimeout = alt.Timers.setTimeout;
