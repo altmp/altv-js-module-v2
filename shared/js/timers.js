@@ -83,5 +83,12 @@ globalThis.clearTimeout = (timeout) => {
 };
 
 export function tick() {
-    for (const timer of timers) timer.tick();
+    for (const timer of timers) {
+        try {
+            timer.tick();
+        } catch (e) {
+            alt.logError(`[JS] Exception caught while invoking timer callback`);
+            alt.logError(e);
+        }
+    }
 }

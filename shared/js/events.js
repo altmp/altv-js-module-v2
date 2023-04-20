@@ -62,7 +62,12 @@ export class Event {
         if (alt.isServer && !local) evCtx.player = ctx.player;
 
         for (let handler of handlers) {
-            handler(evCtx);
+            try {
+                handler(evCtx);
+            } catch (e) {
+                alt.logError(`[JS] Exception caught while invoking script event '${name}' handler`);
+                alt.logError(e);
+            }
         }
     }
 
@@ -154,7 +159,14 @@ export class Event {
         const map = custom ? Event.#customHandlers : Event.#handlers;
         const handlers = map.get(eventType);
         if (!handlers) return;
-        for (const handler of handlers) handler(ctx);
+        for (const handler of handlers) {
+            try {
+                handler(ctx);
+            } catch (e) {
+                alt.logError(`[JS] Exception caught while invoking event handler`);
+                alt.logError(e);
+            }
+        }
     }
 }
 
