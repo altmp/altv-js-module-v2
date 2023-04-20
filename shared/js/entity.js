@@ -8,7 +8,9 @@ const entityAllSet = new Set(); // Stores a set of all entities
 function addAllGetter(class_, type) {
     const set = new Set();
     entityAllMap.set(type, set);
-    class_.all = set;
+    Object.defineProperty(class_, "all", {
+        get: () => Array.from(set),
+    });
 }
 
 alt.Events.onBaseObjectCreate(({ object }) => {
