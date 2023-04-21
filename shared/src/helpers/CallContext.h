@@ -269,8 +269,8 @@ namespace js
         }
     };
 
-    template<class Info>
-    class DynamicPropertyContext : public PropertyContextBase<v8::PropertyCallbackInfo<Info>>
+    template<class Type>
+    class DynamicPropertyContext : public PropertyContextBase<v8::PropertyCallbackInfo<Type>>
     {
         std::string property;
         v8::Local<v8::Object> parent;           // Used for dynamic properties
@@ -278,17 +278,17 @@ namespace js
 
     public:
         template<class T>
-        DynamicPropertyContext(const v8::PropertyCallbackInfo<Info>& _info) : PropertyContextBase<v8::PropertyCallbackInfo<Info>>(_info)
+        DynamicPropertyContext(const v8::PropertyCallbackInfo<T>& _info) : PropertyContextBase<v8::PropertyCallbackInfo<T>>(_info)
         {
         }
         template<class T>
-        DynamicPropertyContext(const v8::PropertyCallbackInfo<Info>& _info, v8::Local<v8::Name> _property)
-            : PropertyContextBase<v8::PropertyCallbackInfo<Info>>(_info), property(js::CppValue<std::string>(_property.As<v8::Value>()).value())
+        DynamicPropertyContext(const v8::PropertyCallbackInfo<T>& _info, v8::Local<v8::Name> _property)
+            : PropertyContextBase<v8::PropertyCallbackInfo<T>>(_info), property(js::CppValue<std::string>(_property.As<v8::Value>()).value())
         {
         }
         template<class T>
-        DynamicPropertyContext(const v8::PropertyCallbackInfo<Info>& _info, v8::Local<v8::Name> _property, v8::Local<v8::Value> _value)
-            : PropertyContextBase<v8::PropertyCallbackInfo<Info>>(_info, _value), property(js::CppValue<std::string>(_property.As<v8::Value>()).value())
+        DynamicPropertyContext(const v8::PropertyCallbackInfo<T>& _info, v8::Local<v8::Name> _property, v8::Local<v8::Value> _value)
+            : PropertyContextBase<v8::PropertyCallbackInfo<T>>(_info, _value), property(js::CppValue<std::string>(_property.As<v8::Value>()).value())
         {
         }
 
