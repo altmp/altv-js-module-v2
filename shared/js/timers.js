@@ -11,10 +11,16 @@ class Timer {
         Timer.#warningThreshold = threshold;
     }
 
+    /** @type {number} */
     interval;
+    /** @type {Function} */
     callback;
+    /** @type {number} */
     lastTick;
+    /** @type {boolean} */
     once;
+    /** @type {{ fileName: string, lineNumber: number }} */
+    location;
 
     constructor(callback, interval, once) {
         assert(typeof callback === "function", "Expected a function as first argument");
@@ -24,6 +30,7 @@ class Timer {
         this.callback = callback.bind(this);
         this.lastTick = Date.now();
         this.once = once;
+        this.location = cppBindings.getCurrentSourceLocation();
         timers.add(this);
     }
 
@@ -41,7 +48,9 @@ class Timer {
             const duration = this.lastTick - start;
             if (duration > Timer.#warningThreshold) {
                 alt.logWarning(
-                    `[JS] Timer callback took ${duration}ms to execute (Threshold: ${Timer.#warningThreshold}ms)`
+                    `[JS] Timer callback in resource '${cppBindings.resourceName}' (${this.location.fileName}:${
+                        this.location.lineNumber
+                    }) took ${duration}ms to execute (Threshold: ${Timer.#warningThreshold}ms)`
                 );
             }
         }

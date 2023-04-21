@@ -2,14 +2,14 @@
 const { assert } = requireBinding("shared/utils.js");
 
 export class Event {
-    /** @type {Map<number, Function[]>} */
+    /** @type {Map<number, ({ handler: Function, location: { fileName: string, lineNumber: number } })[]>} */
     static #handlers = new Map();
-    /** @type {Map<number, Function[]>} */
+    /** @type {Map<number, ({ handler: Function, location: { fileName: string, lineNumber: number } })[]>} */
     static #customHandlers = new Map();
 
-    /** @type {Map<string, Function[]>} */
+    /** @type {Map<string, ({ handler: Function, location: { fileName: string, lineNumber: number } })[]>} */
     static #localScriptEventHandlers = new Map();
-    /** @type {Map<string, Function[]>} */
+    /** @type {Map<string, ({ handler: Function, location: { fileName: string, lineNumber: number } })[]>} */
     static #remoteScriptEventHandlers = new Map();
 
     /** Warning threshold in ms */
@@ -28,9 +28,14 @@ export class Event {
     static async #registerCallback(name, type, custom, handler) {
         assert(typeof handler === "function", `Handler for event '${name}' is not a function`);
 
+        const location = cppBindings.getCurrentSourceLocation();
+        const handlerObj = {
+            handler,
+            location,
+        };
         const map = custom ? Event.#customHandlers : Event.#handlers;
-        if (!map.has(type)) map.set(type, [handler]);
-        else map.get(type).push(handler);
+        if (!map.has(type)) map.set(type, [handlerObj]);
+        else map.get(type).push(handlerObj);
 
         if (!custom) cppBindings.toggleEvent(type, true);
     }
@@ -47,7 +52,7 @@ export class Event {
         const map = custom ? Event.#customHandlers : Event.#handlers;
         const handlers = map.get(type);
         if (!handlers) return;
-        const idx = handlers.indexOf(handler);
+        const idx = handlers.findIndex((value) => value.handler === handler);
         if (idx === -1) return;
         handlers.splice(idx, 1);
 
@@ -68,14 +73,16 @@ export class Event {
         };
         if (alt.isServer && !local) evCtx.player = ctx.player;
 
-        for (let handler of handlers) {
+        for (let { handler, location } of handlers) {
             try {
                 const startTime = Date.now();
                 handler(evCtx);
                 const duration = Date.now() - startTime;
                 if (duration > Event.#warningThreshold) {
                     alt.logWarning(
-                        `[JS] Event handler for script event '${name}' took ${duration}ms to execute (Threshold: ${
+                        `[JS] Event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${
+                            location.lineNumber
+                        }) for script event '${name}' took ${duration}ms to execute (Threshold: ${
                             Event.#warningThreshold
                         }ms)`
                     );
@@ -133,9 +140,14 @@ export class Event {
             `Handler for ${local ? "local" : "remote"} script event '${name}' is not a function`
         );
 
+        const location = cppBindings.getCurrentSourceLocation();
+        const handlerObj = {
+            handler,
+            location,
+        };
         const map = local ? Event.#localScriptEventHandlers : Event.#remoteScriptEventHandlers;
-        if (!map.has(name)) map.set(name, [handler]);
-        else map.get(name).push(handler);
+        if (!map.has(name)) map.set(name, [handlerObj]);
+        else map.get(name).push(handlerObj);
     }
 
     static #unsubscribeScriptEvent(local, name, handler) {
@@ -148,7 +160,7 @@ export class Event {
         const map = local ? Event.#localScriptEventHandlers : Event.#remoteScriptEventHandlers;
         const handlers = map.get(name);
         if (!handlers) return;
-        const idx = handlers.indexOf(handler);
+        const idx = handlers.findIndex((value) => value.handler === handler);
         if (idx === -1) return;
         handlers.splice(idx, 1);
     }
@@ -175,14 +187,16 @@ export class Event {
         const map = custom ? Event.#customHandlers : Event.#handlers;
         const handlers = map.get(eventType);
         if (!handlers) return;
-        for (const handler of handlers) {
+        for (const { handler, location } of handlers) {
             try {
                 const startTime = Date.now();
                 handler(ctx);
                 const duration = Date.now() - startTime;
                 if (duration > Event.#warningThreshold) {
                     alt.logWarning(
-                        `[JS] Event handler took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`
+                        `[JS] Event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${
+                            location.lineNumber
+                        }) took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`
                     );
                 }
             } catch (e) {

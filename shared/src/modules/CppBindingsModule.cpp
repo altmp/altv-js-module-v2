@@ -107,6 +107,11 @@ static void GetCurrentSourceLocation(js::FunctionContext& ctx)
     ctx.Return(obj);
 }
 
+static void ResourceNameGetter(js::LazyPropertyContext& ctx)
+{
+    ctx.Return(ctx.GetResource()->GetResource()->GetName());
+}
+
 // clang-format off
 // Used to provide C++ functions to the JS bindings
 static js::Module cppBindingsModule("cppBindings", [](js::ModuleTemplate& module)
@@ -118,4 +123,6 @@ static js::Module cppBindingsModule("cppBindings", [](js::ModuleTemplate& module
     module.StaticFunction("createEntity", CreateEntity);
     module.StaticFunction("getAllEntities", GetAllEntities);
     module.StaticFunction("getCurrentSourceLocation", GetCurrentSourceLocation);
+
+    module.StaticLazyProperty("resourceName", ResourceNameGetter);
 });
