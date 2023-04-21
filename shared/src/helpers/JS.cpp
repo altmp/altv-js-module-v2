@@ -3,7 +3,7 @@
 
 #include <filesystem>
 
-std::string PrettifyFilePath(js::IResource* resource, std::string path)
+static std::string PrettifyFilePath(js::IResource* resource, std::string path)
 {
     if(path.starts_with("file:///")) path = path.substr(8);
 
@@ -19,6 +19,21 @@ std::string PrettifyFilePath(js::IResource* resource, std::string path)
     }
     else
         return path;
+}
+
+js::SourceLocation js::GetCurrentSourceLocation(IResource* resource, int framesToSkip)
+{
+    v8::Isolate* isolate = resource->GetIsolate();
+    v8::Local<v8::StackTrace> stackTrace = v8::StackTrace::CurrentStackTrace(isolate, framesToSkip + 5);
+    for(int i = framesToSkip; i < stackTrace->GetFrameCount(); i++)
+    {
+        v8::Local<v8::StackFrame> frame = stackTrace->GetFrame(isolate, i);
+        if(!frame->IsUserJavaScript()) continue;
+        std::string scriptName = CppValue(frame->GetScriptName());
+        if(scriptName.empty() || scriptName.starts_with("internal:")) continue;
+        return SourceLocation{ PrettifyFilePath(resource, scriptName), frame->GetLineNumber() };
+    }
+    return SourceLocation{};
 }
 
 void js::TryCatch::PrintError()

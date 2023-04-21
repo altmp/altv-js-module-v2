@@ -18,9 +18,11 @@ export function waitFor(cb, timeout) {
         });
     });
 }
+
 alt.Utils.wait = wait;
 alt.Utils.waitForNextTick = waitForNextTick;
 alt.Utils.waitFor = waitFor;
+alt.Utils.getCurrentSourceLocation = cppBindings.getCurrentSourceLocation;
 
 export class AssertionError extends Error {}
 export function assert(condition, message) {

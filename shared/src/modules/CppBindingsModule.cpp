@@ -95,6 +95,18 @@ static void GetAllEntities(js::FunctionContext& ctx)
     ctx.Return(entities);
 }
 
+static void GetCurrentSourceLocation(js::FunctionContext& ctx)
+{
+    int framesToSkip = ctx.GetArg<int>(0, 0);
+
+    js::Object obj;
+    js::SourceLocation location = js::GetCurrentSourceLocation(ctx.GetResource(), framesToSkip);
+    obj.Set("fileName", location.file);
+    obj.Set("lineNumber", location.line);
+
+    ctx.Return(obj);
+}
+
 // clang-format off
 // Used to provide C++ functions to the JS bindings
 static js::Module cppBindingsModule("cppBindings", [](js::ModuleTemplate& module)
@@ -105,4 +117,5 @@ static js::Module cppBindingsModule("cppBindings", [](js::ModuleTemplate& module
 
     module.StaticFunction("createEntity", CreateEntity);
     module.StaticFunction("getAllEntities", GetAllEntities);
+    module.StaticFunction("getCurrentSourceLocation", GetCurrentSourceLocation);
 });

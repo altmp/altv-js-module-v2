@@ -16,6 +16,17 @@ namespace js
         v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(js::JSValue(message)));
     }
 
+    struct SourceLocation
+    {
+        bool valid = false;
+        std::string file;
+        int line = 0;
+
+        SourceLocation() = default;
+        SourceLocation(const std::string& _file, int _line) : valid(true), file(_file), line(_line) {}
+    };
+    SourceLocation GetCurrentSourceLocation(IResource* resource, int framesToSkip = 0);
+
     class TryCatch
     {
         v8::TryCatch tryCatch;
