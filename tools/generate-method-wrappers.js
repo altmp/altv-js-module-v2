@@ -96,13 +96,13 @@ void Method(const std::string& name)
 }
 */
 const overloadTemplate = `
-template<class Class, typename Ret, {TEMPLATE_TYPES}, Ret (Class::*Method)({METHOD_TYPES}) {CONST}>
+template<class Class, typename Ret, {TEMPLATE_TYPES}, Ret (Class::*ClassMethod)({METHOD_TYPES}) {CONST}>
 void Method(const std::string& name)
 {
 #ifdef DEBUG_BINDINGS
     RegisterKey("Method", name);
 #endif
-    Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, {METHOD_TYPES}, Method>));
+    Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, {METHOD_TYPES}, ClassMethod>));
 }`;
 
 resultStr = "";
