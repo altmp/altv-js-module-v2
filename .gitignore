@@ -6,7 +6,7 @@ server/deps/nodejs/lib/Release/*.dll
 server/deps/nodejs/lib/Release/*.lib
 server/deps/nodejs/lib/Debug/*.dll
 server/deps/nodejs/lib/Debug/*.lib
-server/deps/nodejs/lib/*.so
+server/deps/nodejs/lib/*.so.*
 client/deps/v8/lib/Release/*.lib
 client/deps/v8/lib/Debug/*.lib
 deps/v8pp/v8pp/config.hpp
