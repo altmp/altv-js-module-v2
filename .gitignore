@@ -11,3 +11,4 @@ client/deps/v8/lib/Debug/*.lib
 deps/v8pp/v8pp/config.hpp
 shared/src/Version.h
 shared/src/BindingsMap.cpp
+vs2022/
