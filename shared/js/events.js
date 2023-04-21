@@ -19,6 +19,12 @@ export class Event {
         Event.#warningThreshold = threshold;
     }
 
+    static #sourceLocationFrameSkipCount = 0;
+    static setSourceLocationFrameSkipCount(count) {
+        assert(typeof count === "number", "Expected a number as first argument");
+        Event.#sourceLocationFrameSkipCount = count;
+    }
+
     /**
      * @param {string} name
      * @param {number} type
@@ -28,7 +34,7 @@ export class Event {
     static async #registerCallback(name, type, custom, handler) {
         assert(typeof handler === "function", `Handler for event '${name}' is not a function`);
 
-        const location = cppBindings.getCurrentSourceLocation();
+        const location = cppBindings.getCurrentSourceLocation(Event.#sourceLocationFrameSkipCount);
         const handlerObj = {
             handler,
             location,
@@ -140,7 +146,7 @@ export class Event {
             `Handler for ${local ? "local" : "remote"} script event '${name}' is not a function`
         );
 
-        const location = cppBindings.getCurrentSourceLocation();
+        const location = cppBindings.getCurrentSourceLocation(Event.#sourceLocationFrameSkipCount);
         const handlerObj = {
             handler,
             location,
@@ -215,6 +221,7 @@ if (alt.isClient) {
     alt.Events.onClient = Event.getScriptEventFunc(false);
 }
 alt.Events.setWarningThreshold = Event.setWarningThreshold;
+alt.Events.setSourceLocationFrameSkipCount = Event.setSourceLocationFrameSkipCount;
 
 export function onEvent(custom, eventType, eventData) {
     Event.invoke(eventType, eventData, custom);
