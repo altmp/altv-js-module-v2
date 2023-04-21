@@ -138,15 +138,22 @@ namespace js
             }
         }
 
+        class BadArgException : public std::exception
+        {
+        public:
+            BadArgException(const std::string& msg) : std::exception(msg.c_str()) {}
+        };
+
         template<class T>
         using CleanArg = typename std::remove_cv_t<typename std::remove_reference_t<T>>;
 
         template<class T>
         inline T GetArg(const v8::FunctionCallbackInfo<v8::Value>& info, int i)
         {
-            if(info.Length() <= i) return T();
+            if(info.Length() <= i) throw BadArgException("Missing argument at index " + std::to_string(i));
             std::optional<T> val = CppValue<T>(info[i]);
-            return val.has_value() ? val.value() : T();
+            if(!val.has_value()) throw BadArgException("Invalid argument at index " + std::to_string(i));
+            return val.value();
         }
 
 #pragma region "Template method handlers"
@@ -160,13 +167,20 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class, typename Ret, typename Arg0, Ret (Class::*Method)(Arg0) const>
@@ -178,13 +192,20 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class, typename Ret, typename Arg0, typename Arg1, Ret (Class::*Method)(Arg0, Arg1)>
@@ -196,13 +217,20 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class, typename Ret, typename Arg0, typename Arg1, Ret (Class::*Method)(Arg0, Arg1) const>
@@ -214,13 +242,20 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, Ret (Class::*Method)(Arg0, Arg1, Arg2)>
@@ -232,13 +267,20 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, Ret (Class::*Method)(Arg0, Arg1, Arg2) const>
@@ -250,13 +292,20 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, typename Arg3, Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3)>
@@ -268,14 +317,21 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(
+                      JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(
-                  JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, typename Arg3, Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3) const>
@@ -287,14 +343,21 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(
+                      JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(
-                  JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, typename Arg3, typename Arg4, Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4)>
@@ -306,15 +369,22 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(
-                  GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3), GetArg<CleanArg<Arg4>>(info, 4));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(
+                      GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3), GetArg<CleanArg<Arg4>>(info, 4));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(
+                      GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3), GetArg<CleanArg<Arg4>>(info, 4))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(
-                  GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3), GetArg<CleanArg<Arg4>>(info, 4))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, typename Arg3, typename Arg4, Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4) const>
@@ -326,15 +396,22 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(
-                  GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3), GetArg<CleanArg<Arg4>>(info, 4));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(
+                      GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3), GetArg<CleanArg<Arg4>>(info, 4));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(
+                      GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3), GetArg<CleanArg<Arg4>>(info, 4))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(
-                  GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3), GetArg<CleanArg<Arg4>>(info, 4))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -354,23 +431,30 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -390,23 +474,30 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -427,25 +518,32 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -466,25 +564,32 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -506,27 +611,34 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6),
+                                   GetArg<CleanArg<Arg7>>(info, 7));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6),
+                                                                     GetArg<CleanArg<Arg7>>(info, 7))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -548,27 +660,34 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6),
+                                   GetArg<CleanArg<Arg7>>(info, 7));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6),
+                                                                     GetArg<CleanArg<Arg7>>(info, 7))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -591,29 +710,36 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6),
+                                   GetArg<CleanArg<Arg7>>(info, 7),
+                                   GetArg<CleanArg<Arg8>>(info, 8));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6),
+                                                                     GetArg<CleanArg<Arg7>>(info, 7),
+                                                                     GetArg<CleanArg<Arg8>>(info, 8))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -636,29 +762,36 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6),
+                                   GetArg<CleanArg<Arg7>>(info, 7),
+                                   GetArg<CleanArg<Arg8>>(info, 8));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6),
+                                                                     GetArg<CleanArg<Arg7>>(info, 7),
+                                                                     GetArg<CleanArg<Arg8>>(info, 8))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -682,31 +815,38 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6),
+                                   GetArg<CleanArg<Arg7>>(info, 7),
+                                   GetArg<CleanArg<Arg8>>(info, 8),
+                                   GetArg<CleanArg<Arg9>>(info, 9));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6),
+                                                                     GetArg<CleanArg<Arg7>>(info, 7),
+                                                                     GetArg<CleanArg<Arg8>>(info, 8),
+                                                                     GetArg<CleanArg<Arg9>>(info, 9))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -730,31 +870,38 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6),
+                                   GetArg<CleanArg<Arg7>>(info, 7),
+                                   GetArg<CleanArg<Arg8>>(info, 8),
+                                   GetArg<CleanArg<Arg9>>(info, 9));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6),
+                                                                     GetArg<CleanArg<Arg7>>(info, 7),
+                                                                     GetArg<CleanArg<Arg8>>(info, 8),
+                                                                     GetArg<CleanArg<Arg9>>(info, 9))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -779,33 +926,40 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6),
+                                   GetArg<CleanArg<Arg7>>(info, 7),
+                                   GetArg<CleanArg<Arg8>>(info, 8),
+                                   GetArg<CleanArg<Arg9>>(info, 9),
+                                   GetArg<CleanArg<Arg10>>(info, 10));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6),
+                                                                     GetArg<CleanArg<Arg7>>(info, 7),
+                                                                     GetArg<CleanArg<Arg8>>(info, 8),
+                                                                     GetArg<CleanArg<Arg9>>(info, 9),
+                                                                     GetArg<CleanArg<Arg10>>(info, 10))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -830,33 +984,40 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6),
+                                   GetArg<CleanArg<Arg7>>(info, 7),
+                                   GetArg<CleanArg<Arg8>>(info, 8),
+                                   GetArg<CleanArg<Arg9>>(info, 9),
+                                   GetArg<CleanArg<Arg10>>(info, 10));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6),
+                                                                     GetArg<CleanArg<Arg7>>(info, 7),
+                                                                     GetArg<CleanArg<Arg8>>(info, 8),
+                                                                     GetArg<CleanArg<Arg9>>(info, 9),
+                                                                     GetArg<CleanArg<Arg10>>(info, 10))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -882,35 +1043,42 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6),
+                                   GetArg<CleanArg<Arg7>>(info, 7),
+                                   GetArg<CleanArg<Arg8>>(info, 8),
+                                   GetArg<CleanArg<Arg9>>(info, 9),
+                                   GetArg<CleanArg<Arg10>>(info, 10),
+                                   GetArg<CleanArg<Arg11>>(info, 11));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6),
+                                                                     GetArg<CleanArg<Arg7>>(info, 7),
+                                                                     GetArg<CleanArg<Arg8>>(info, 8),
+                                                                     GetArg<CleanArg<Arg9>>(info, 9),
+                                                                     GetArg<CleanArg<Arg10>>(info, 10),
+                                                                     GetArg<CleanArg<Arg11>>(info, 11))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -936,35 +1104,42 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6),
+                                   GetArg<CleanArg<Arg7>>(info, 7),
+                                   GetArg<CleanArg<Arg8>>(info, 8),
+                                   GetArg<CleanArg<Arg9>>(info, 9),
+                                   GetArg<CleanArg<Arg10>>(info, 10),
+                                   GetArg<CleanArg<Arg11>>(info, 11));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6),
+                                                                     GetArg<CleanArg<Arg7>>(info, 7),
+                                                                     GetArg<CleanArg<Arg8>>(info, 8),
+                                                                     GetArg<CleanArg<Arg9>>(info, 9),
+                                                                     GetArg<CleanArg<Arg10>>(info, 10),
+                                                                     GetArg<CleanArg<Arg11>>(info, 11))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -991,37 +1166,44 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11),
-                               GetArg<CleanArg<Arg12>>(info, 12));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6),
+                                   GetArg<CleanArg<Arg7>>(info, 7),
+                                   GetArg<CleanArg<Arg8>>(info, 8),
+                                   GetArg<CleanArg<Arg9>>(info, 9),
+                                   GetArg<CleanArg<Arg10>>(info, 10),
+                                   GetArg<CleanArg<Arg11>>(info, 11),
+                                   GetArg<CleanArg<Arg12>>(info, 12));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6),
+                                                                     GetArg<CleanArg<Arg7>>(info, 7),
+                                                                     GetArg<CleanArg<Arg8>>(info, 8),
+                                                                     GetArg<CleanArg<Arg9>>(info, 9),
+                                                                     GetArg<CleanArg<Arg10>>(info, 10),
+                                                                     GetArg<CleanArg<Arg11>>(info, 11),
+                                                                     GetArg<CleanArg<Arg12>>(info, 12))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11),
-                                                                 GetArg<CleanArg<Arg12>>(info, 12))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -1048,37 +1230,44 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11),
-                               GetArg<CleanArg<Arg12>>(info, 12));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6),
+                                   GetArg<CleanArg<Arg7>>(info, 7),
+                                   GetArg<CleanArg<Arg8>>(info, 8),
+                                   GetArg<CleanArg<Arg9>>(info, 9),
+                                   GetArg<CleanArg<Arg10>>(info, 10),
+                                   GetArg<CleanArg<Arg11>>(info, 11),
+                                   GetArg<CleanArg<Arg12>>(info, 12));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6),
+                                                                     GetArg<CleanArg<Arg7>>(info, 7),
+                                                                     GetArg<CleanArg<Arg8>>(info, 8),
+                                                                     GetArg<CleanArg<Arg9>>(info, 9),
+                                                                     GetArg<CleanArg<Arg10>>(info, 10),
+                                                                     GetArg<CleanArg<Arg11>>(info, 11),
+                                                                     GetArg<CleanArg<Arg12>>(info, 12))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11),
-                                                                 GetArg<CleanArg<Arg12>>(info, 12))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -1106,39 +1295,46 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11),
-                               GetArg<CleanArg<Arg12>>(info, 12),
-                               GetArg<CleanArg<Arg13>>(info, 13));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6),
+                                   GetArg<CleanArg<Arg7>>(info, 7),
+                                   GetArg<CleanArg<Arg8>>(info, 8),
+                                   GetArg<CleanArg<Arg9>>(info, 9),
+                                   GetArg<CleanArg<Arg10>>(info, 10),
+                                   GetArg<CleanArg<Arg11>>(info, 11),
+                                   GetArg<CleanArg<Arg12>>(info, 12),
+                                   GetArg<CleanArg<Arg13>>(info, 13));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6),
+                                                                     GetArg<CleanArg<Arg7>>(info, 7),
+                                                                     GetArg<CleanArg<Arg8>>(info, 8),
+                                                                     GetArg<CleanArg<Arg9>>(info, 9),
+                                                                     GetArg<CleanArg<Arg10>>(info, 10),
+                                                                     GetArg<CleanArg<Arg11>>(info, 11),
+                                                                     GetArg<CleanArg<Arg12>>(info, 12),
+                                                                     GetArg<CleanArg<Arg13>>(info, 13))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11),
-                                                                 GetArg<CleanArg<Arg12>>(info, 12),
-                                                                 GetArg<CleanArg<Arg13>>(info, 13))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -1166,39 +1362,46 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11),
-                               GetArg<CleanArg<Arg12>>(info, 12),
-                               GetArg<CleanArg<Arg13>>(info, 13));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6),
+                                   GetArg<CleanArg<Arg7>>(info, 7),
+                                   GetArg<CleanArg<Arg8>>(info, 8),
+                                   GetArg<CleanArg<Arg9>>(info, 9),
+                                   GetArg<CleanArg<Arg10>>(info, 10),
+                                   GetArg<CleanArg<Arg11>>(info, 11),
+                                   GetArg<CleanArg<Arg12>>(info, 12),
+                                   GetArg<CleanArg<Arg13>>(info, 13));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6),
+                                                                     GetArg<CleanArg<Arg7>>(info, 7),
+                                                                     GetArg<CleanArg<Arg8>>(info, 8),
+                                                                     GetArg<CleanArg<Arg9>>(info, 9),
+                                                                     GetArg<CleanArg<Arg10>>(info, 10),
+                                                                     GetArg<CleanArg<Arg11>>(info, 11),
+                                                                     GetArg<CleanArg<Arg12>>(info, 12),
+                                                                     GetArg<CleanArg<Arg13>>(info, 13))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11),
-                                                                 GetArg<CleanArg<Arg12>>(info, 12),
-                                                                 GetArg<CleanArg<Arg13>>(info, 13))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -1227,41 +1430,48 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11),
-                               GetArg<CleanArg<Arg12>>(info, 12),
-                               GetArg<CleanArg<Arg13>>(info, 13),
-                               GetArg<CleanArg<Arg14>>(info, 14));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6),
+                                   GetArg<CleanArg<Arg7>>(info, 7),
+                                   GetArg<CleanArg<Arg8>>(info, 8),
+                                   GetArg<CleanArg<Arg9>>(info, 9),
+                                   GetArg<CleanArg<Arg10>>(info, 10),
+                                   GetArg<CleanArg<Arg11>>(info, 11),
+                                   GetArg<CleanArg<Arg12>>(info, 12),
+                                   GetArg<CleanArg<Arg13>>(info, 13),
+                                   GetArg<CleanArg<Arg14>>(info, 14));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6),
+                                                                     GetArg<CleanArg<Arg7>>(info, 7),
+                                                                     GetArg<CleanArg<Arg8>>(info, 8),
+                                                                     GetArg<CleanArg<Arg9>>(info, 9),
+                                                                     GetArg<CleanArg<Arg10>>(info, 10),
+                                                                     GetArg<CleanArg<Arg11>>(info, 11),
+                                                                     GetArg<CleanArg<Arg12>>(info, 12),
+                                                                     GetArg<CleanArg<Arg13>>(info, 13),
+                                                                     GetArg<CleanArg<Arg14>>(info, 14))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11),
-                                                                 GetArg<CleanArg<Arg12>>(info, 12),
-                                                                 GetArg<CleanArg<Arg13>>(info, 13),
-                                                                 GetArg<CleanArg<Arg14>>(info, 14))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -1290,41 +1500,48 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11),
-                               GetArg<CleanArg<Arg12>>(info, 12),
-                               GetArg<CleanArg<Arg13>>(info, 13),
-                               GetArg<CleanArg<Arg14>>(info, 14));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6),
+                                   GetArg<CleanArg<Arg7>>(info, 7),
+                                   GetArg<CleanArg<Arg8>>(info, 8),
+                                   GetArg<CleanArg<Arg9>>(info, 9),
+                                   GetArg<CleanArg<Arg10>>(info, 10),
+                                   GetArg<CleanArg<Arg11>>(info, 11),
+                                   GetArg<CleanArg<Arg12>>(info, 12),
+                                   GetArg<CleanArg<Arg13>>(info, 13),
+                                   GetArg<CleanArg<Arg14>>(info, 14));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6),
+                                                                     GetArg<CleanArg<Arg7>>(info, 7),
+                                                                     GetArg<CleanArg<Arg8>>(info, 8),
+                                                                     GetArg<CleanArg<Arg9>>(info, 9),
+                                                                     GetArg<CleanArg<Arg10>>(info, 10),
+                                                                     GetArg<CleanArg<Arg11>>(info, 11),
+                                                                     GetArg<CleanArg<Arg12>>(info, 12),
+                                                                     GetArg<CleanArg<Arg13>>(info, 13),
+                                                                     GetArg<CleanArg<Arg14>>(info, 14))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11),
-                                                                 GetArg<CleanArg<Arg12>>(info, 12),
-                                                                 GetArg<CleanArg<Arg13>>(info, 13),
-                                                                 GetArg<CleanArg<Arg14>>(info, 14))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -1354,43 +1571,50 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11),
-                               GetArg<CleanArg<Arg12>>(info, 12),
-                               GetArg<CleanArg<Arg13>>(info, 13),
-                               GetArg<CleanArg<Arg14>>(info, 14),
-                               GetArg<CleanArg<Arg15>>(info, 15));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6),
+                                   GetArg<CleanArg<Arg7>>(info, 7),
+                                   GetArg<CleanArg<Arg8>>(info, 8),
+                                   GetArg<CleanArg<Arg9>>(info, 9),
+                                   GetArg<CleanArg<Arg10>>(info, 10),
+                                   GetArg<CleanArg<Arg11>>(info, 11),
+                                   GetArg<CleanArg<Arg12>>(info, 12),
+                                   GetArg<CleanArg<Arg13>>(info, 13),
+                                   GetArg<CleanArg<Arg14>>(info, 14),
+                                   GetArg<CleanArg<Arg15>>(info, 15));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6),
+                                                                     GetArg<CleanArg<Arg7>>(info, 7),
+                                                                     GetArg<CleanArg<Arg8>>(info, 8),
+                                                                     GetArg<CleanArg<Arg9>>(info, 9),
+                                                                     GetArg<CleanArg<Arg10>>(info, 10),
+                                                                     GetArg<CleanArg<Arg11>>(info, 11),
+                                                                     GetArg<CleanArg<Arg12>>(info, 12),
+                                                                     GetArg<CleanArg<Arg13>>(info, 13),
+                                                                     GetArg<CleanArg<Arg14>>(info, 14),
+                                                                     GetArg<CleanArg<Arg15>>(info, 15))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11),
-                                                                 GetArg<CleanArg<Arg12>>(info, 12),
-                                                                 GetArg<CleanArg<Arg13>>(info, 13),
-                                                                 GetArg<CleanArg<Arg14>>(info, 14),
-                                                                 GetArg<CleanArg<Arg15>>(info, 15))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
         template<class Class,
@@ -1420,46 +1644,52 @@ namespace js
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
                 return;
             }
-            if constexpr(std::is_same_v<void, Ret>)
+            try
             {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11),
-                               GetArg<CleanArg<Arg12>>(info, 12),
-                               GetArg<CleanArg<Arg13>>(info, 13),
-                               GetArg<CleanArg<Arg14>>(info, 14),
-                               GetArg<CleanArg<Arg15>>(info, 15));
+                if constexpr(std::is_same_v<void, Ret>)
+                {
+                    (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                   GetArg<CleanArg<Arg1>>(info, 1),
+                                   GetArg<CleanArg<Arg2>>(info, 2),
+                                   GetArg<CleanArg<Arg3>>(info, 3),
+                                   GetArg<CleanArg<Arg4>>(info, 4),
+                                   GetArg<CleanArg<Arg5>>(info, 5),
+                                   GetArg<CleanArg<Arg6>>(info, 6),
+                                   GetArg<CleanArg<Arg7>>(info, 7),
+                                   GetArg<CleanArg<Arg8>>(info, 8),
+                                   GetArg<CleanArg<Arg9>>(info, 9),
+                                   GetArg<CleanArg<Arg10>>(info, 10),
+                                   GetArg<CleanArg<Arg11>>(info, 11),
+                                   GetArg<CleanArg<Arg12>>(info, 12),
+                                   GetArg<CleanArg<Arg13>>(info, 13),
+                                   GetArg<CleanArg<Arg14>>(info, 14),
+                                   GetArg<CleanArg<Arg15>>(info, 15));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
+                                                                     GetArg<CleanArg<Arg1>>(info, 1),
+                                                                     GetArg<CleanArg<Arg2>>(info, 2),
+                                                                     GetArg<CleanArg<Arg3>>(info, 3),
+                                                                     GetArg<CleanArg<Arg4>>(info, 4),
+                                                                     GetArg<CleanArg<Arg5>>(info, 5),
+                                                                     GetArg<CleanArg<Arg6>>(info, 6),
+                                                                     GetArg<CleanArg<Arg7>>(info, 7),
+                                                                     GetArg<CleanArg<Arg8>>(info, 8),
+                                                                     GetArg<CleanArg<Arg9>>(info, 9),
+                                                                     GetArg<CleanArg<Arg10>>(info, 10),
+                                                                     GetArg<CleanArg<Arg11>>(info, 11),
+                                                                     GetArg<CleanArg<Arg12>>(info, 12),
+                                                                     GetArg<CleanArg<Arg13>>(info, 13),
+                                                                     GetArg<CleanArg<Arg14>>(info, 14),
+                                                                     GetArg<CleanArg<Arg15>>(info, 15))));
+                }
             }
-            else
+            catch(BadArgException& e)
             {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11),
-                                                                 GetArg<CleanArg<Arg12>>(info, 12),
-                                                                 GetArg<CleanArg<Arg13>>(info, 13),
-                                                                 GetArg<CleanArg<Arg14>>(info, 14),
-                                                                 GetArg<CleanArg<Arg15>>(info, 15))));
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
             }
         }
-
 #pragma endregion
 
         void DynamicPropertyLazyHandler(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info);

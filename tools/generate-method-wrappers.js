@@ -33,13 +33,20 @@ static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
         return;
     }
-    if constexpr(std::is_same_v<void, Ret>)
+    try
     {
-        (obj->*Method)({METHOD_ARGS});
+        if constexpr(std::is_same_v<void, Ret>)
+        {
+            (obj->*Method)({METHOD_ARGS});
+        }
+        else
+        {
+            info.GetReturnValue().Set(JSValue((obj->*Method)({METHOD_ARGS})));
+        }
     }
-    else
+    catch(BadArgException& e)
     {
-        info.GetReturnValue().Set(JSValue((obj->*Method)({METHOD_ARGS})));
+        info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
     }
 }`;
 const templateTypeTemplate = `typename Arg{INDEX}`;
