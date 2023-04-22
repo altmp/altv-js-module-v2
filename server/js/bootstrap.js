@@ -47,7 +47,7 @@ function setupImports() {
     const altModuleInternalPrefix = "altmodule";
     const altResourceInternalPrefix = "altresource";
 
-    translators.set("altresource", async function (url) {
+    translators.set(altResourceInternalPrefix, async function (url) {
         const name = url.slice(altResourceInternalPrefix.length + 1); // Remove prefix
         const exports = alt.Resource.get(name).exports;
         return new ModuleWrap(url, undefined, Object.keys(exports), function () {
@@ -60,7 +60,7 @@ function setupImports() {
             }
         });
     });
-    translators.set("altmodule", async function (url) {
+    translators.set(altModuleInternalPrefix, async function (url) {
         const exports = alt; // The alt module has all of the shared module, so we can just use that
         const exportKeys = Object.keys(exports);
         return new ModuleWrap(url, undefined, exportKeys, function () {
