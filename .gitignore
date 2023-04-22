@@ -1,4 +1,5 @@
 .xmake
+.vs
 .vscode/compile_commands.json
 .vscode/.cache/
 build
@@ -13,3 +14,4 @@ deps/v8pp/v8pp/config.hpp
 shared/src/Version.h
 shared/src/BindingsMap.cpp
 vs2022/
+vsxmake2022/

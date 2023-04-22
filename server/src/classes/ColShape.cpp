@@ -10,9 +10,9 @@ extern js::Class colShapeClass("ColShape", &worldObjectClass, nullptr, [](js::Cl
     tpl.LazyProperty<alt::IColShape, &alt::IColShape::GetColshapeType>("type");
     tpl.Property<alt::IColShape, bool, &alt::IColShape::IsPlayersOnly, &alt::IColShape::SetPlayersOnly>("playersOnly");
 
-    tpl.Method<alt::IColShape, bool, alt::IEntity*, &alt::IColShape::IsEntityIn>("isEntityIn");
-    tpl.Method<alt::IColShape, bool, uint16_t, &alt::IColShape::IsEntityIdIn>("isEntityIdIn");
-    tpl.Method<alt::IColShape, bool, alt::Position, &alt::IColShape::IsPointIn>("isPointIn");
+    tpl.MethodEx<&alt::IColShape::IsEntityIn>("isEntityIn");
+    tpl.MethodEx<&alt::IColShape::IsEntityIdIn>("isEntityIdIn");
+    tpl.MethodEx<&alt::IColShape::IsPointIn>("isPointIn");
 });
 
 extern js::Class checkpointClass("Checkpoint", &colShapeClass, nullptr, [](js::ClassTemplate& tpl)
