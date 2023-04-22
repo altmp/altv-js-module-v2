@@ -37,6 +37,7 @@ void js::Event::SendEvent(const alt::CEvent* ev, IResource* resource)
     eventHandler->argsCb(ev, eventArgs);
     eventArgs.Set("cancel", GetCancelFunction(resource, ev));
     eventArgs.Set("isCancelled", ev->WasCancelled());
+    eventArgs.Freeze();
 
     CallEventBinding(false, (int)ev->GetType(), eventArgs, resource);
 }
