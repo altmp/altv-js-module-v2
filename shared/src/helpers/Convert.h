@@ -321,26 +321,41 @@ namespace js
         else if constexpr(IsStdVector<T>::value)
         {
             if(!val->IsArray()) return std::nullopt;
+            v8::Local<v8::Context> context = v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext();
             std::vector<typename T::value_type> vec;
-            js::Array arr(val.As<v8::Array>());
-            vec.reserve(arr.Length());
-            for(uint32_t i = 0; i < arr.Length(); i++)
+            v8::Local<v8::Array> arr = val.As<v8::Array>();
+            vec.reserve(arr->Length());
+            for(uint32_t i = 0; i < arr->Length(); i++)
             {
-                auto val = arr.template Get<typename T::value_type>(i);
-                vec.push_back(val);
+                auto maybeVal = arr->Get(context, i);
+                v8::Local<v8::Value> val;
+                if(!maybeVal.ToLocal(&val)) continue;
+                std::optional<typename T::value_type> value = CppValue<typename T::value_type>(val);
+                if(!value.has_value()) continue;
+                vec.push_back(value.value());
             }
             return vec;
         }
         else if constexpr(IsStdUnorderedMap<T>::value)
         {
             if(!val->IsObject()) return std::nullopt;
+            v8::Local<v8::Context> context = v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext();
             std::unordered_map<std::string, typename T::value_type::second_type> map;
-            js::Object obj(val.As<v8::Object>());
-            std::vector<std::string> keys = obj.GetKeys();
+            v8::Local<v8::Object> obj = val.As<v8::Object>();
+            auto maybeKeys = obj->GetOwnPropertyNames(context);
+            v8::Local<v8::Array> keysArr;
+            if(!maybeKeys.ToLocal(&keysArr)) return std::nullopt;
+            std::optional<std::vector<std::string>> keysOpt = CppValue<std::vector<std::string>>(keysArr);
+            if(!keysOpt.has_value()) return std::nullopt;
+            const std::vector<std::string>& keys = keysOpt.value();
             for(std::string& key : keys)
             {
-                auto val = obj.template Get<typename T::value_type::second_type>(key);
-                map.insert({ key, val });
+                auto maybeVal = obj->Get(context, js::JSValue(key));
+                v8::Local<v8::Value> val;
+                if(!maybeVal.ToLocal(&val)) continue;
+                std::optional<typename T::value_type::second_type> value = CppValue<typename T::value_type::second_type>(val);
+                if(!value.has_value()) continue;
+                map.insert({ key, value.value() });
             }
             return map;
         }

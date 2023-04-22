@@ -190,7 +190,7 @@ namespace js
                 if(!configurable) attr |= (int)v8::PropertyAttribute::DontDelete;
                 if(!writable) attr |= (int)v8::PropertyAttribute::ReadOnly;
                 if(!enumerable) attr |= (int)v8::PropertyAttribute::DontEnum;
-                object->DefineOwnProperty(context, js::JSValue(key), (v8::PropertyAttribute)attr);
+                object->DefineOwnProperty(context, js::JSValue(key), js::JSValue(val), (v8::PropertyAttribute)attr);
             }
         }
     };

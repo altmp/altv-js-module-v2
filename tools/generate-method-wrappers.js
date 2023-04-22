@@ -33,13 +33,20 @@ static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
         return;
     }
-    if constexpr(std::is_same_v<void, Ret>)
+    try
     {
-        (obj->*Method)({METHOD_ARGS});
+        if constexpr(std::is_same_v<void, Ret>)
+        {
+            (obj->*Method)({METHOD_ARGS});
+        }
+        else
+        {
+            info.GetReturnValue().Set(JSValue((obj->*Method)({METHOD_ARGS})));
+        }
     }
-    else
+    catch(BadArgException& e)
     {
-        info.GetReturnValue().Set(JSValue((obj->*Method)({METHOD_ARGS})));
+        info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
     }
 }`;
 const templateTypeTemplate = `typename Arg{INDEX}`;
@@ -89,13 +96,13 @@ void Method(const std::string& name)
 }
 */
 const overloadTemplate = `
-template<class Class, typename Ret, {TEMPLATE_TYPES}, Ret (Class::*Method)({METHOD_TYPES}) {CONST}>
+template<class Class, typename Ret, {TEMPLATE_TYPES}, Ret (Class::*ClassMethod)({METHOD_TYPES}) {CONST}>
 void Method(const std::string& name)
 {
 #ifdef DEBUG_BINDINGS
     RegisterKey("Method", name);
 #endif
-    Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, {METHOD_TYPES}, Method>));
+    Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, {METHOD_TYPES}, ClassMethod>));
 }`;
 
 resultStr = "";

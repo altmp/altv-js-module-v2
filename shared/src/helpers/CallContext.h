@@ -23,7 +23,7 @@ namespace js
         {
             if(errored) return nullptr;
             if(thisObject) return thisObject;
-            std::optional<alt::IBaseObject*> object = CppValue<alt::IBaseObject*>(info.This().As<v8::Value>());
+            std::optional<alt::IBaseObject*> object = CppValue<alt::IBaseObject*>(info.This());
             if(!object.has_value()) return nullptr;
             thisObject = object.value();
             return thisObject;
@@ -213,8 +213,8 @@ namespace js
         }
     };
 
-    template<class T = v8::Value>
-    class PropertyContextBase : public CallContext<T>
+    template<class Info>
+    class PropertyContextBase : public CallContext<Info>
     {
         v8::Local<v8::Value> value;
         Type valueType = Type::INVALID;
@@ -227,8 +227,8 @@ namespace js
         }
 
     public:
-        PropertyContextBase(const T& _info) : CallContext<T>(_info) {}
-        PropertyContextBase(const T& _info, v8::Local<v8::Value> _value) : CallContext<T>(_info), value(_value) {}
+        PropertyContextBase(const Info& _info) : CallContext<Info>(_info) {}
+        PropertyContextBase(const Info& _info, v8::Local<v8::Value> _value) : CallContext<Info>(_info), value(_value) {}
 
         bool CheckValueType(Type type)
         {
@@ -269,8 +269,8 @@ namespace js
         }
     };
 
-    template<class T>
-    class DynamicPropertyContext : public PropertyContextBase<v8::PropertyCallbackInfo<T>>
+    template<class Type>
+    class DynamicPropertyContext : public PropertyContextBase<v8::PropertyCallbackInfo<Type>>
     {
         std::string property;
         v8::Local<v8::Object> parent;           // Used for dynamic properties

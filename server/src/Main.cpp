@@ -41,6 +41,7 @@ namespace shared
 
 EXPORT bool altMain(alt::ICore* core)
 {
+    printf("Printing shit out!\n");
     alt::ICore::SetInstance(core);
 
     CNodeRuntime& runtime = CNodeRuntime::Instance();

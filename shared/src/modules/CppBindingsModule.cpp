@@ -2,6 +2,7 @@
 #include "Module.h"
 #include "interfaces/IResource.h"
 #include "FactoryHandler.h"
+#include "magic_enum/include/magic_enum.hpp"
 
 static void ToggleEvent(js::FunctionContext& ctx)
 {
@@ -70,7 +71,7 @@ static void CreateEntity(js::FunctionContext& ctx)
     js::ScriptObject* scriptObject = resource->GetOrCreateScriptObject(ctx.GetContext(), object);
     if(!scriptObject)
     {
-        ctx.Return(nullptr);
+        ctx.Throw("Failed to create entity of type " + std::string(magic_enum::enum_name(type)));
         return;
     }
 

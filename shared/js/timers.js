@@ -11,6 +11,12 @@ class Timer {
         Timer.#warningThreshold = threshold;
     }
 
+    static #sourceLocationFrameSkipCount = 0;
+    static setSourceLocationFrameSkipCount(count) {
+        assert(typeof count === "number", "Expected a number as first argument");
+        Timer.#sourceLocationFrameSkipCount = count;
+    }
+
     /** @type {number} */
     interval;
     /** @type {Function} */
@@ -30,7 +36,7 @@ class Timer {
         this.callback = callback.bind(this);
         this.lastTick = Date.now();
         this.once = once;
-        this.location = cppBindings.getCurrentSourceLocation();
+        this.location = cppBindings.getCurrentSourceLocation(Timer.#sourceLocationFrameSkipCount);
         timers.add(this);
     }
 
@@ -86,6 +92,7 @@ alt.Timers.Timeout = Timeout;
 alt.Timers.EveryTick = EveryTick;
 alt.Timers.NextTick = NextTick;
 alt.Timers.setWarningThreshold = Timer.setWarningThreshold;
+alt.Timers.setSourceLocationFrameSkipCount = Timer.setSourceLocationFrameSkipCount;
 
 alt.Timers.setInterval = (callback, interval) => new Interval(callback, interval);
 alt.Timers.setTimeout = (callback, interval) => new Timeout(callback, interval);

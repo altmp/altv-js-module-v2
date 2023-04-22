@@ -9,6 +9,18 @@
 #include "CallContext.h"
 #include "Logger.h"
 
+template<typename T>
+struct function_traits;
+
+template<typename Class, typename Return, typename... Args>
+struct function_traits<Return(Class::*)(Args...)>
+{
+    using ClassType = Class;
+    using ReturnType = Return;
+    using FunctionPointer = Return(Class::*)(Args...);
+    using Arguments = std::tuple<Args...>;
+};
+
 namespace js
 {
     class Namespace;
@@ -32,21 +44,21 @@ namespace js
         static void FunctionHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             FunctionContext ctx{ info };
-            auto callback = static_cast<FunctionCallback>(info.Data().As<v8::External>()->Value());
+            auto callback = reinterpret_cast<FunctionCallback>(info.Data().As<v8::External>()->Value());
             callback(ctx);
         }
 
         static void PropertyHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             PropertyContext ctx{ info, info[0] };
-            auto callback = static_cast<PropertyCallback>(info.Data().As<v8::External>()->Value());
+            auto callback = reinterpret_cast<PropertyCallback>(info.Data().As<v8::External>()->Value());
             callback(ctx);
         }
 
         static void LazyPropertyHandler(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
         {
             LazyPropertyContext ctx{ info };
-            auto callback = static_cast<LazyPropertyCallback>(info.Data().As<v8::External>()->Value());
+            auto callback = reinterpret_cast<LazyPropertyCallback>(info.Data().As<v8::External>()->Value());
             callback(ctx);
         }
         template<class Class, auto(Class::*Getter)() const>
@@ -101,6 +113,32 @@ namespace js
             }
         }
 
+        template<typename T>
+        static void MethodHandlerEx(const v8::FunctionCallbackInfo<v8::Value>& info)
+        {
+            using FT = function_traits<T>;
+            using Class = FT::ClassType;
+            using Return = FT::ReturnType;
+            using Arguments = FT::Arguments;
+            using Function = FT::FunctionPointer;
+
+            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
+            
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
+            if constexpr(std::is_same_v<void, Return>)
+            {
+                (obj->Function)();
+            }
+            else
+            {
+                info.GetReturnValue().Set(JSValue((obj->Function)()));
+            }
+        }
+
         template<class Class, typename Ret, Ret (Class::*Method)()>
         static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
@@ -138,1329 +176,38 @@ namespace js
             }
         }
 
+        class BadArgException : public std::exception
+        {
+            std::string msg;
+
+        public:
+            BadArgException(const std::string& _msg) : msg(_msg) {}
+
+            const char* what() const noexcept override 
+            { 
+                return msg.c_str();
+            }
+        };
+
         template<class T>
         using CleanArg = typename std::remove_cv_t<typename std::remove_reference_t<T>>;
 
         template<class T>
         inline T GetArg(const v8::FunctionCallbackInfo<v8::Value>& info, int i)
         {
-            if(info.Length() <= i) return T();
+            if(info.Length() <= i) throw BadArgException("Missing argument at index " + std::to_string(i));
             std::optional<T> val = CppValue<T>(info[i]);
+            if(!val.has_value()) throw BadArgException("Invalid argument at index " + std::to_string(i));
+            return val.value();
+        }
+
+        template<class T, std::size_t... Indices>
+        inline auto GetArgTuple(const v8::FunctionCallbackInfo<v8::Value>& info, std::index_sequence<Indices...> b)
+        {
+            if(info.Length() <= Indices) return T();
+            std::optional<T> val = CppValue<T>(info[Indices]);
             return val.has_value() ? val.value() : T();
         }
-
-#pragma region "Template method handlers"
-
-        template<class Class, typename Ret, typename Arg0, Ret (Class::*Method)(Arg0)>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0))));
-            }
-        }
-        template<class Class, typename Ret, typename Arg0, Ret (Class::*Method)(Arg0) const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0))));
-            }
-        }
-        template<class Class, typename Ret, typename Arg0, typename Arg1, Ret (Class::*Method)(Arg0, Arg1)>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1))));
-            }
-        }
-        template<class Class, typename Ret, typename Arg0, typename Arg1, Ret (Class::*Method)(Arg0, Arg1) const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1))));
-            }
-        }
-        template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, Ret (Class::*Method)(Arg0, Arg1, Arg2)>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2))));
-            }
-        }
-        template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, Ret (Class::*Method)(Arg0, Arg1, Arg2) const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2))));
-            }
-        }
-        template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, typename Arg3, Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3)>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3));
-            }
-            else
-            {
-                info.GetReturnValue().Set(
-                  JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3))));
-            }
-        }
-        template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, typename Arg3, Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3) const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3));
-            }
-            else
-            {
-                info.GetReturnValue().Set(
-                  JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3))));
-            }
-        }
-        template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, typename Arg3, typename Arg4, Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4)>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(
-                  GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3), GetArg<CleanArg<Arg4>>(info, 4));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(
-                  GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3), GetArg<CleanArg<Arg4>>(info, 4))));
-            }
-        }
-        template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, typename Arg3, typename Arg4, Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4) const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(
-                  GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3), GetArg<CleanArg<Arg4>>(info, 4));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(
-                  GetArg<CleanArg<Arg0>>(info, 0), GetArg<CleanArg<Arg1>>(info, 1), GetArg<CleanArg<Arg2>>(info, 2), GetArg<CleanArg<Arg3>>(info, 3), GetArg<CleanArg<Arg4>>(info, 4))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5)>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5) const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6)>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6) const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7)>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7) const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8)>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8) const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9)>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9) const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10)>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10) const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11)>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11) const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 typename Arg12,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12)>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11),
-                               GetArg<CleanArg<Arg12>>(info, 12));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11),
-                                                                 GetArg<CleanArg<Arg12>>(info, 12))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 typename Arg12,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12) const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11),
-                               GetArg<CleanArg<Arg12>>(info, 12));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11),
-                                                                 GetArg<CleanArg<Arg12>>(info, 12))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 typename Arg12,
-                 typename Arg13,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13)>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11),
-                               GetArg<CleanArg<Arg12>>(info, 12),
-                               GetArg<CleanArg<Arg13>>(info, 13));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11),
-                                                                 GetArg<CleanArg<Arg12>>(info, 12),
-                                                                 GetArg<CleanArg<Arg13>>(info, 13))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 typename Arg12,
-                 typename Arg13,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13) const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11),
-                               GetArg<CleanArg<Arg12>>(info, 12),
-                               GetArg<CleanArg<Arg13>>(info, 13));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11),
-                                                                 GetArg<CleanArg<Arg12>>(info, 12),
-                                                                 GetArg<CleanArg<Arg13>>(info, 13))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 typename Arg12,
-                 typename Arg13,
-                 typename Arg14,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14)>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11),
-                               GetArg<CleanArg<Arg12>>(info, 12),
-                               GetArg<CleanArg<Arg13>>(info, 13),
-                               GetArg<CleanArg<Arg14>>(info, 14));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11),
-                                                                 GetArg<CleanArg<Arg12>>(info, 12),
-                                                                 GetArg<CleanArg<Arg13>>(info, 13),
-                                                                 GetArg<CleanArg<Arg14>>(info, 14))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 typename Arg12,
-                 typename Arg13,
-                 typename Arg14,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14) const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11),
-                               GetArg<CleanArg<Arg12>>(info, 12),
-                               GetArg<CleanArg<Arg13>>(info, 13),
-                               GetArg<CleanArg<Arg14>>(info, 14));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11),
-                                                                 GetArg<CleanArg<Arg12>>(info, 12),
-                                                                 GetArg<CleanArg<Arg13>>(info, 13),
-                                                                 GetArg<CleanArg<Arg14>>(info, 14))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 typename Arg12,
-                 typename Arg13,
-                 typename Arg14,
-                 typename Arg15,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14, Arg15)>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11),
-                               GetArg<CleanArg<Arg12>>(info, 12),
-                               GetArg<CleanArg<Arg13>>(info, 13),
-                               GetArg<CleanArg<Arg14>>(info, 14),
-                               GetArg<CleanArg<Arg15>>(info, 15));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11),
-                                                                 GetArg<CleanArg<Arg12>>(info, 12),
-                                                                 GetArg<CleanArg<Arg13>>(info, 13),
-                                                                 GetArg<CleanArg<Arg14>>(info, 14),
-                                                                 GetArg<CleanArg<Arg15>>(info, 15))));
-            }
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 typename Arg12,
-                 typename Arg13,
-                 typename Arg14,
-                 typename Arg15,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14, Arg15) const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                               GetArg<CleanArg<Arg1>>(info, 1),
-                               GetArg<CleanArg<Arg2>>(info, 2),
-                               GetArg<CleanArg<Arg3>>(info, 3),
-                               GetArg<CleanArg<Arg4>>(info, 4),
-                               GetArg<CleanArg<Arg5>>(info, 5),
-                               GetArg<CleanArg<Arg6>>(info, 6),
-                               GetArg<CleanArg<Arg7>>(info, 7),
-                               GetArg<CleanArg<Arg8>>(info, 8),
-                               GetArg<CleanArg<Arg9>>(info, 9),
-                               GetArg<CleanArg<Arg10>>(info, 10),
-                               GetArg<CleanArg<Arg11>>(info, 11),
-                               GetArg<CleanArg<Arg12>>(info, 12),
-                               GetArg<CleanArg<Arg13>>(info, 13),
-                               GetArg<CleanArg<Arg14>>(info, 14),
-                               GetArg<CleanArg<Arg15>>(info, 15));
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)(GetArg<CleanArg<Arg0>>(info, 0),
-                                                                 GetArg<CleanArg<Arg1>>(info, 1),
-                                                                 GetArg<CleanArg<Arg2>>(info, 2),
-                                                                 GetArg<CleanArg<Arg3>>(info, 3),
-                                                                 GetArg<CleanArg<Arg4>>(info, 4),
-                                                                 GetArg<CleanArg<Arg5>>(info, 5),
-                                                                 GetArg<CleanArg<Arg6>>(info, 6),
-                                                                 GetArg<CleanArg<Arg7>>(info, 7),
-                                                                 GetArg<CleanArg<Arg8>>(info, 8),
-                                                                 GetArg<CleanArg<Arg9>>(info, 9),
-                                                                 GetArg<CleanArg<Arg10>>(info, 10),
-                                                                 GetArg<CleanArg<Arg11>>(info, 11),
-                                                                 GetArg<CleanArg<Arg12>>(info, 12),
-                                                                 GetArg<CleanArg<Arg13>>(info, 13),
-                                                                 GetArg<CleanArg<Arg14>>(info, 14),
-                                                                 GetArg<CleanArg<Arg15>>(info, 15))));
-            }
-        }
-
-#pragma endregion
 
         void DynamicPropertyLazyHandler(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info);
 
@@ -1474,14 +221,14 @@ namespace js
     static v8::Local<v8::FunctionTemplate> WrapFunction(FunctionCallback cb)
     {
         v8::Isolate* isolate = v8::Isolate::GetCurrent();
-        v8::Local<v8::FunctionTemplate> tpl = v8::FunctionTemplate::New(isolate, Wrapper::FunctionHandler, v8::External::New(isolate, cb));
+        v8::Local<v8::FunctionTemplate> tpl = v8::FunctionTemplate::New(isolate, Wrapper::FunctionHandler, v8::External::New(isolate, (void*)cb));
         return tpl;
     }
 
     static v8::Local<v8::FunctionTemplate> WrapProperty(PropertyCallback cb)
     {
         v8::Isolate* isolate = v8::Isolate::GetCurrent();
-        v8::Local<v8::FunctionTemplate> tpl = v8::FunctionTemplate::New(isolate, Wrapper::PropertyHandler, v8::External::New(isolate, cb));
+        v8::Local<v8::FunctionTemplate> tpl = v8::FunctionTemplate::New(isolate, Wrapper::PropertyHandler, v8::External::New(isolate, (void*)cb));
         return tpl;
     }
 
@@ -1540,7 +287,7 @@ namespace js
 
         void StaticLazyProperty(const std::string& name, LazyPropertyCallback callback)
         {
-            Get()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler, v8::External::New(GetIsolate(), callback));
+            Get()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler, v8::External::New(GetIsolate(), (void*)callback));
         }
 
         void StaticFunction(const std::string& name, FunctionCallback callback)
@@ -1641,6 +388,131 @@ namespace js
     public:
         ClassTemplate(v8::Isolate* isolate, Class* _class, v8::Local<v8::FunctionTemplate> tpl) : Template(isolate, tpl), class_(_class) {}
 
+        template<auto x>
+        struct function_traits;
+
+        template<class Class, class Return, class...Args, Return(Class::* FuncPtr)(Args...)>
+        struct function_traits<FuncPtr>
+        {
+            using ClassType = Class;
+            using ReturnType = Return;
+            typedef Return(Class::*FunctionPointerType)(Args...);
+            using Arguments = std::tuple<Args...>;
+
+            static constexpr decltype(FuncPtr) FunctionPtr = FuncPtr;
+        };
+
+        template<class Class, class Return, class...Args, Return(Class::* FuncPtr)(Args...) const>
+        struct function_traits<FuncPtr>
+        {
+            using ClassType = Class;
+            using ReturnType = Return;
+            typedef Return(Class::*FunctionPointerType)(Args...);
+            using Arguments = std::tuple<Args...>;
+
+            static constexpr decltype(FuncPtr) FunctionPtr = FuncPtr;
+        };
+
+        // template<auto Func, typename... Args>
+        // void MethodEx(const std::string& name)
+        // {
+        //     using FT = function_traits<Func>;
+        //     using Class = FT::ClassType;
+        //     using Return = FT::ReturnType;
+        //     using Arguments = FT::Arguments;
+        //     using Function = FT::FunctionPointerType;
+
+        //     Get()->PrototypeTemplate()->Set(
+        //         js::JSValue(name),
+        //         v8::FunctionTemplate::New(
+        //             GetIsolate(),
+        //             [](const v8::FunctionCallbackInfo<v8::Value>& info)
+        //             {
+        //                 Class* obj = dynamic_cast<Class*>(Wrapper::GetThisObjectFromInfo(info));
+        //                 if(obj == nullptr)
+        //                 {
+        //                     info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+        //                     return;
+        //                 }
+
+        //                 try
+        //                 {
+        //                     auto MakeTuple = [&]<size_t... Ints>(std::index_sequence<Ints...>) -> auto
+        //                     {
+        //                         return std::make_tuple(
+        //                             Wrapper::GetArg<Wrapper::CleanArg<std::tuple_element_t<Ints, Arguments>>>(info, Ints)...
+        //                         );
+        //                     };
+
+        //                     auto values = MakeTuple(std::make_index_sequence<std::tuple_size_v<Arguments>>());
+        //                     if constexpr(std::is_same_v<void, Return>)
+        //                     {
+        //                         std::apply(std::bind_front(Func, obj), values);
+        //                     }
+        //                     else
+        //                     {
+        //                         info.GetReturnValue().Set(JSValue(std::apply(std::bind_front(Func, obj), values)));
+        //                     }
+        //                 }
+        //                 catch(Wrapper::BadArgException& e)
+        //                 {
+        //                     info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
+        //                 }
+        //             }
+        //         )
+        //     );
+        // }
+
+        template<auto Func>
+        void MethodEx(const std::string& name)
+        {
+            using FT = function_traits<Func>;
+            using Class = FT::ClassType;
+            using Return = FT::ReturnType;
+            using Arguments = FT::Arguments;
+            using Function = FT::FunctionPointerType;
+
+            Get()->PrototypeTemplate()->Set(
+                js::JSValue(name),
+                v8::FunctionTemplate::New(
+                    GetIsolate(),
+                    [](const v8::FunctionCallbackInfo<v8::Value>& info)
+                    {
+                        Class* obj = dynamic_cast<Class*>(Wrapper::GetThisObjectFromInfo(info));
+                        if(obj == nullptr)
+                        {
+                            info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                            return;
+                        }
+
+                        try
+                        {
+                            auto MakeTuple = [&]<size_t... Ints>(std::index_sequence<Ints...>) -> auto
+                            {
+                                return std::make_tuple(
+                                    Wrapper::GetArg<Wrapper::CleanArg<std::tuple_element_t<Ints, Arguments>>>(info, Ints)...
+                                );
+                            };
+
+                            auto values = MakeTuple(std::make_index_sequence<std::tuple_size_v<Arguments>>());
+                            if constexpr(std::is_same_v<void, Return>)
+                            {
+                                std::apply(std::bind_front(Func, obj), values);
+                            }
+                            else
+                            {
+                                info.GetReturnValue().Set(JSValue(std::apply(std::bind_front(Func, obj), values)));
+                            }
+                        }
+                        catch(Wrapper::BadArgException& e)
+                        {
+                            info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
+                        }
+                    }
+                )
+            );
+        }
+
 #ifdef DEBUG_BINDINGS
         void DumpRegisteredKeys();
 #endif
@@ -1651,597 +523,6 @@ namespace js
             RegisterKey("Method", name);
 #endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), WrapFunction(callback));
-        }
-        template<class Class, typename Ret, Ret (Class::*Method)()>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Method>));
-        }
-        template<class Class, typename Ret, Ret (Class::*Method)() const>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Method>));
-        }
-#pragma region "Method overloads"
-        template<class Class, typename Ret, typename Arg0, Ret (Class::*Method)(Arg0)>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Method>));
-        }
-        template<class Class, typename Ret, typename Arg0, Ret (Class::*Method)(Arg0) const>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Method>));
-        }
-        template<class Class, typename Ret, typename Arg0, typename Arg1, Ret (Class::*Method)(Arg0, Arg1)>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Method>));
-        }
-        template<class Class, typename Ret, typename Arg0, typename Arg1, Ret (Class::*Method)(Arg0, Arg1) const>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Method>));
-        }
-        template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, Ret (Class::*Method)(Arg0, Arg1, Arg2)>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Method>));
-        }
-        template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, Ret (Class::*Method)(Arg0, Arg1, Arg2) const>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Method>));
-        }
-        template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, typename Arg3, Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3)>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Method>));
-        }
-        template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, typename Arg3, Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3) const>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Method>));
-        }
-        template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, typename Arg3, typename Arg4, Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4)>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Method>));
-        }
-        template<class Class, typename Ret, typename Arg0, typename Arg1, typename Arg2, typename Arg3, typename Arg4, Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4) const>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5)>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5) const>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6)>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6) const>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7)>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name),
-                                            v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7) const>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name),
-                                            v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8)>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name),
-                                            v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8) const>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name),
-                                            v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9)>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name),
-                                            v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9) const>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(js::JSValue(name),
-                                            v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10)>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(
-              js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10) const>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(
-              js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11)>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(
-              js::JSValue(name),
-              v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11) const>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(
-              js::JSValue(name),
-              v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 typename Arg12,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12)>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(
-              js::JSValue(name),
-              v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 typename Arg12,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12) const>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(
-              js::JSValue(name),
-              v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 typename Arg12,
-                 typename Arg13,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13)>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(
-              js::JSValue(name),
-              v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 typename Arg12,
-                 typename Arg13,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13) const>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(
-              js::JSValue(name),
-              v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 typename Arg12,
-                 typename Arg13,
-                 typename Arg14,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14)>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(
-              js::JSValue(name),
-              v8::FunctionTemplate::New(GetIsolate(),
-                                        Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 typename Arg12,
-                 typename Arg13,
-                 typename Arg14,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14) const>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(
-              js::JSValue(name),
-              v8::FunctionTemplate::New(GetIsolate(),
-                                        Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 typename Arg12,
-                 typename Arg13,
-                 typename Arg14,
-                 typename Arg15,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14, Arg15)>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(
-              js::JSValue(name),
-              v8::FunctionTemplate::New(GetIsolate(),
-                                        Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14, Arg15, Method>));
-        }
-        template<class Class,
-                 typename Ret,
-                 typename Arg0,
-                 typename Arg1,
-                 typename Arg2,
-                 typename Arg3,
-                 typename Arg4,
-                 typename Arg5,
-                 typename Arg6,
-                 typename Arg7,
-                 typename Arg8,
-                 typename Arg9,
-                 typename Arg10,
-                 typename Arg11,
-                 typename Arg12,
-                 typename Arg13,
-                 typename Arg14,
-                 typename Arg15,
-                 Ret (Class::*Method)(Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14, Arg15) const>
-        void Method(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
-            Get()->PrototypeTemplate()->Set(
-              js::JSValue(name),
-              v8::FunctionTemplate::New(GetIsolate(),
-                                        Wrapper::MethodHandler<Class, Ret, Arg0, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14, Arg15, Method>));
         }
 #pragma endregion
 
@@ -2312,7 +593,7 @@ namespace js
 #ifdef DEBUG_BINDINGS
             RegisterKey("LazyProperty", name);
 #endif
-            Get()->InstanceTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler, v8::External::New(GetIsolate(), callback));
+            Get()->InstanceTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler, v8::External::New(GetIsolate(), (void*)callback));
         }
 
         // Property returns an object that will call the specified handlers
@@ -2344,7 +625,7 @@ namespace js
         // Allows instances of this class to be called as a function
         void CallHandler(FunctionCallback cb)
         {
-            Get()->PrototypeTemplate()->SetCallAsFunctionHandler(Wrapper::FunctionHandler, v8::External::New(GetIsolate(), cb));
+            Get()->PrototypeTemplate()->SetCallAsFunctionHandler(Wrapper::FunctionHandler, v8::External::New(GetIsolate(), (void*)cb));
         }
 
         void BindToType(alt::IBaseObject::Type type);
