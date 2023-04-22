@@ -490,6 +490,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Property<alt::IPlayer, &alt::IPlayer::GetInteriorLocation>("interiorLocation");
     tpl.Property<alt::IPlayer, &alt::IPlayer::GetLastDamagedBodyPart>("lastDamagedBodyPart");
     tpl.Property("sendNames", &SendNamesGetter, &SendNamesSetter);
+    tpl.Property<alt::IPlayer, &alt::IPlayer::GetCloudAuthHash>("cloudAuthHash");
 
     tpl.Method("emit", &Emit);
     tpl.Method("emitUnreliable", &EmitUnreliable);
