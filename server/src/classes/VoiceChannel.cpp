@@ -14,10 +14,10 @@ extern js::Class voiceChannelClass("VoiceChannel", &baseObjectClass, nullptr, []
     tpl.Property<&alt::IVoiceChannel::GetPlayers>("players");
     tpl.Property<&alt::IVoiceChannel::GetPlayerCount>("playerCount");
 
-    tpl.Mehtod<&alt::IVoiceChannel::HasPlayer>("hasPlayer");
-    tpl.Mehtod<&alt::IVoiceChannel::AddPlayer>("addPlayer");
-    tpl.Mehtod<&alt::IVoiceChannel::RemovePlayer>("removePlayer");
-    tpl.Mehtod<&alt::IVoiceChannel::IsPlayerMuted>("isPlayerMuted");
-    tpl.Mehtod<&alt::IVoiceChannel::MutePlayer>("mutePlayer");
-    tpl.Mehtod<&alt::IVoiceChannel::UnmutePlayer>("unmutePlayer");
+    tpl.Method<&alt::IVoiceChannel::HasPlayer>("hasPlayer");
+    tpl.Method<&alt::IVoiceChannel::AddPlayer>("addPlayer");
+    tpl.Method<&alt::IVoiceChannel::RemovePlayer>("removePlayer");
+    tpl.Method<&alt::IVoiceChannel::IsPlayerMuted>("isPlayerMuted");
+    tpl.Method<&alt::IVoiceChannel::MutePlayer>("mutePlayer");
+    tpl.Method<&alt::IVoiceChannel::UnmutePlayer>("unmutePlayer");
 });

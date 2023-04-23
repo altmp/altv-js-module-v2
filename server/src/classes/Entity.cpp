@@ -131,11 +131,11 @@ static void StreamSyncedMetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx
 extern js::Class sharedEntityClass;
 extern js::Class entityClass("Entity", &sharedEntityClass, nullptr, [](js::ClassTemplate& tpl)
 {
-    tpl.Mehtod<&alt::IEntity::SetNetworkOwner>("setNetOwner");
+    tpl.Method<&alt::IEntity::SetNetworkOwner>("setNetOwner");
     tpl.Method("resetNetOwner", ResetNetOwner);
 
     tpl.Method("attachTo", &AttachTo);
-    tpl.Mehtod<&alt::IEntity::Detach>("detach");
+    tpl.Method<&alt::IEntity::Detach>("detach");
 
     tpl.Property<&alt::IEntity::GetVisible, &alt::IEntity::SetVisible>("visible");
     tpl.Property<&alt::IEntity::GetStreamed, &alt::IEntity::SetStreamed>("streamed");
