@@ -108,4 +108,15 @@ namespace js
         }
         return "Invalid";
     }
+
+    static std::string TypeToString(std::initializer_list<Type> types)
+    {
+        std::stringstream typesString;
+        for(size_t i = 0; i < types.size(); i++)
+        {
+            typesString << TypeToString(types.begin()[i]);
+            if(i != types.size() - 1) typesString << ", ";
+        }
+        return typesString.str();
+    }
 }  // namespace js
