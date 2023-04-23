@@ -36,10 +36,10 @@ extern js::Class sharedEntityClass("SharedEntity", &worldObjectClass, nullptr, [
 {
     tpl.LazyProperty<alt::IEntity, &alt::IEntity::GetID>("id");
 
-    tpl.Property<alt::IEntity, &alt::IEntity::GetModel>("model");
-    tpl.Property<alt::IEntity, &alt::IEntity::GetNetworkOwner>("netOwner");
-    tpl.Property<alt::IEntity, alt::Rotation, &alt::IEntity::GetRotation, &alt::IEntity::SetRotation>("rot");
-    tpl.Property<alt::IEntity, &alt::IEntity::GetVisible>("visible");
+    tpl.Property<&alt::IEntity::GetModel>("model");
+    tpl.Property<&alt::IEntity::GetNetworkOwner>("netOwner");
+    tpl.Property<&alt::IEntity::GetRotation, &alt::IEntity::SetRotation>("rot");
+    tpl.Property<&alt::IEntity::GetVisible>("visible");
 
     tpl.DynamicProperty("syncedMeta", SyncedMetaGetter, nullptr, nullptr, SyncedMetaEnumerator);
     tpl.DynamicProperty("streamSyncedMeta", StreamSyncedMetaGetter, nullptr, nullptr, StreamSyncedMetaEnumerator);

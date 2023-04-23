@@ -20,12 +20,12 @@ extern js::Class networkObjectClass("NetworkObject", &sharedNetworkObjectClass, 
 {
     tpl.BindToType(alt::IBaseObject::Type::NETWORK_OBJECT);
 
-    tpl.MethodEx<&alt::INetworkObject::ActivatePhysics>("activatePhysics");
-    tpl.MethodEx<&alt::INetworkObject::PlaceOnGroundProperly>("placeOnGroundProperly");
+    tpl.Mehtod<&alt::INetworkObject::ActivatePhysics>("activatePhysics");
+    tpl.Mehtod<&alt::INetworkObject::PlaceOnGroundProperly>("placeOnGroundProperly");
 
-    tpl.Property<alt::INetworkObject, uint8_t, &alt::INetworkObject::GetAlpha, &alt::INetworkObject::SetAlpha>("alpha");
-    tpl.Property<alt::INetworkObject, uint8_t, &alt::INetworkObject::GetTextureVariation, &alt::INetworkObject::SetTextureVariation>("textureVariation");
-    tpl.Property<alt::INetworkObject, uint16_t, &alt::INetworkObject::GetLodDistance, &alt::INetworkObject::SetLodDistance>("lodDistance");
+    tpl.Property<&alt::INetworkObject::GetAlpha, &alt::INetworkObject::SetAlpha>("alpha");
+    tpl.Property<&alt::INetworkObject::GetTextureVariation, &alt::INetworkObject::SetTextureVariation>("textureVariation");
+    tpl.Property<&alt::INetworkObject::GetLodDistance, &alt::INetworkObject::SetLodDistance>("lodDistance");
 
     tpl.StaticFunction("getByID", &GetByID);
 });

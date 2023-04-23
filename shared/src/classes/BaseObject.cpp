@@ -54,13 +54,13 @@ static void MetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
 // clang-format off
 extern js::Class baseObjectClass("BaseObject", nullptr, [](js::ClassTemplate& tpl)
 {
-    tpl.Property<alt::IBaseObject, &alt::IBaseObject::GetType>("type");
+    tpl.Property<&alt::IBaseObject::GetType>("type");
     tpl.Property("valid", ValidGetter);
 
     tpl.Method("destroy", Destroy);
 
-    tpl.MethodEx<&alt::IBaseObject::SetMetaData>("setMetaData");
-    tpl.MethodEx<&alt::IBaseObject::GetMetaData>("getMetaData");
+    tpl.Mehtod<&alt::IBaseObject::SetMetaData>("setMetaData");
+    tpl.Mehtod<&alt::IBaseObject::GetMetaData>("getMetaData");
 
     tpl.DynamicProperty("meta", MetaGetter, MetaSetter, MetaDeleter, MetaEnumerator);
 });
