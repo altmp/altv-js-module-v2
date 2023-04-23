@@ -134,69 +134,6 @@ namespace js
             }
         }
 
-        template<typename T>
-        static void MethodHandlerEx(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            using FT = function_traits<T>;
-            using Class = FT::ClassType;
-            using Return = FT::ReturnType;
-            using Arguments = FT::Arguments;
-            using Function = FT::FunctionPointer;
-
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Return>)
-            {
-                (obj->Function)();
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->Function)()));
-            }
-        }
-
-        template<class Class, typename Ret, Ret (Class::*Method)()>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)();
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)()));
-            }
-        }
-        template<class Class, typename Ret, Ret (Class::*Method)() const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)();
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)()));
-            }
-        }
-
         class BadArgException : public std::exception
         {
             std::string msg;
@@ -478,9 +415,6 @@ namespace js
 #ifdef DEBUG_BINDINGS
             RegisterKey("Property", name);
 #endif
-            using FT = function_traits<Getter>;
-            using Class = FT::ClassType;
-
             Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Getter>);
         }
 
