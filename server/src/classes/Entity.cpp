@@ -76,9 +76,8 @@ extern js::Class entityClass("Entity", &sharedEntityClass, nullptr, [](js::Class
     tpl.MethodEx<&alt::IEntity::SetNetworkOwner>("setNetOwner");
     tpl.Method("resetNetOwner", ResetNetOwner);
 
-    //TODO: If function have overload distinguish it somehow
-    // tpl.MethodEx<&alt::IEntity::AttachToEntity(alt::IEntity*, int16_t, int16_t, Position, Rotation, bool, bool)>("attachTo");
-    // tpl.MethodEx<&alt::IEntity::AttachToEntity>("attachTo");
+    tpl.MethodEx<static_cast<void(alt::IEntity:: *)(alt::IEntity *, int16_t, int16_t, alt::Position, alt::Rotation, bool, bool)>(&alt::IEntity::AttachToEntity)>("attachTo");
+    tpl.MethodEx<static_cast<void(alt::IEntity:: *)(alt::IEntity *, const std::string&, const std::string&, alt::Position, alt::Rotation, bool, bool)>(&alt::IEntity::AttachToEntity)>("attachTo");
     tpl.MethodEx<&alt::IEntity::Detach>("detach");
 
     tpl.Property<alt::IEntity, bool, &alt::IEntity::GetVisible, &alt::IEntity::SetVisible>("visible");
