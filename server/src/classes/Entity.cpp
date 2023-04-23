@@ -12,6 +12,7 @@ static void GetByID(js::FunctionContext& ctx)
 
 static void ResetNetOwner(js::FunctionContext& ctx)
 {
+    if(!ctx.CheckThis()) return;
     if(!ctx.CheckArgCount(1)) return;
 
     bool disableMigration;
