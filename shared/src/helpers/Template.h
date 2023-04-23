@@ -409,58 +409,8 @@ namespace js
     public:
         ClassTemplate(v8::Isolate* isolate, Class* _class, v8::Local<v8::FunctionTemplate> tpl) : Template(isolate, tpl), class_(_class) {}
 
-        // template<auto Func, typename... Args>
-        // void MethodEx(const std::string& name)
-        // {
-        //     using FT = function_traits<Func>;
-        //     using Class = FT::ClassType;
-        //     using Return = FT::ReturnType;
-        //     using Arguments = FT::Arguments;
-        //     using Function = FT::FunctionPointerType;
-
-        //     Get()->PrototypeTemplate()->Set(
-        //         js::JSValue(name),
-        //         v8::FunctionTemplate::New(
-        //             GetIsolate(),
-        //             [](const v8::FunctionCallbackInfo<v8::Value>& info)
-        //             {
-        //                 Class* obj = dynamic_cast<Class*>(Wrapper::GetThisObjectFromInfo(info));
-        //                 if(obj == nullptr)
-        //                 {
-        //                     info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-        //                     return;
-        //                 }
-
-        //                 try
-        //                 {
-        //                     auto MakeTuple = [&]<size_t... Ints>(std::index_sequence<Ints...>) -> auto
-        //                     {
-        //                         return std::make_tuple(
-        //                             Wrapper::GetArg<Wrapper::CleanArg<std::tuple_element_t<Ints, Arguments>>>(info, Ints)...
-        //                         );
-        //                     };
-
-        //                     auto values = MakeTuple(std::make_index_sequence<std::tuple_size_v<Arguments>>());
-        //                     if constexpr(std::is_same_v<void, Return>)
-        //                     {
-        //                         std::apply(std::bind_front(Func, obj), values);
-        //                     }
-        //                     else
-        //                     {
-        //                         info.GetReturnValue().Set(JSValue(std::apply(std::bind_front(Func, obj), values)));
-        //                     }
-        //                 }
-        //                 catch(Wrapper::BadArgException& e)
-        //                 {
-        //                     info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
-        //                 }
-        //             }
-        //         )
-        //     );
-        // }
-
         template<auto Func>
-        void Mehtod(const std::string& name)
+        void Method(const std::string& name)
         {
             using FT = function_traits<Func>;
             using Class = FT::ClassType;

@@ -44,6 +44,6 @@ extern js::Class sharedBlipClass("SharedBlip", &baseObjectClass, nullptr, [](js:
     tpl.Property<&alt::IBlip::GetAsHighDetail, &alt::IBlip::SetAsHighDetail>("highDetail");
     tpl.Property<&alt::IBlip::GetShrinked, &alt::IBlip::SetShrinked>("shrinked");
 
-    tpl.Mehtod<&alt::IBlip::AttachTo>("attachTo");
-    tpl.Mehtod<&alt::IBlip::Fade>("fade");
+    tpl.Method<&alt::IBlip::AttachTo>("attachTo");
+    tpl.Method<&alt::IBlip::Fade>("fade");
 });

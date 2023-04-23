@@ -20,8 +20,8 @@ extern js::Class networkObjectClass("NetworkObject", &sharedNetworkObjectClass, 
 {
     tpl.BindToType(alt::IBaseObject::Type::NETWORK_OBJECT);
 
-    tpl.Mehtod<&alt::INetworkObject::ActivatePhysics>("activatePhysics");
-    tpl.Mehtod<&alt::INetworkObject::PlaceOnGroundProperly>("placeOnGroundProperly");
+    tpl.Method<&alt::INetworkObject::ActivatePhysics>("activatePhysics");
+    tpl.Method<&alt::INetworkObject::PlaceOnGroundProperly>("placeOnGroundProperly");
 
     tpl.Property<&alt::INetworkObject::GetAlpha, &alt::INetworkObject::SetAlpha>("alpha");
     tpl.Property<&alt::INetworkObject::GetTextureVariation, &alt::INetworkObject::SetTextureVariation>("textureVariation");
