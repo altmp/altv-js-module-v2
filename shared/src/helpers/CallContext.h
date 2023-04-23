@@ -145,6 +145,19 @@ namespace js
             return Check(GetArgType(index) == type,
                          "Invalid argument type at index " + std::to_string(index) + ", expected " + TypeToString(type) + " but got " + TypeToString(GetArgType(index)));
         }
+        bool CheckArgType(int index, std::initializer_list<Type> types)
+        {
+            bool result = false;
+            for(Type type : types)
+            {
+                if(GetArgType(index) == type)
+                {
+                    result = true;
+                    break;
+                }
+            }
+            return Check(result, "Invalid argument type at index " + std::to_string(index) + ", expected one of " + TypeToString(types) + " but got " + TypeToString(GetArgType(index)));
+        }
         bool CheckCtor()
         {
             return Check(info.IsConstructCall(), "Constructor called as function");
