@@ -193,6 +193,16 @@ namespace js
                 object->DefineOwnProperty(context, js::JSValue(key), js::JSValue(val), (v8::PropertyAttribute)attr);
             }
         }
+
+        void Freeze()
+        {
+            object->SetIntegrityLevel(context, v8::IntegrityLevel::kFrozen);
+        }
+
+        void Seal()
+        {
+            object->SetIntegrityLevel(context, v8::IntegrityLevel::kSealed);
+        }
     };
 
     class Array : public Value

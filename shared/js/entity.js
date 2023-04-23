@@ -40,7 +40,9 @@ export function addEntityToAll(entity) {
 }
 
 // Register all getters
-alt.Entity.all = entityAllSet;
+Object.defineProperty(alt.Entity, "all", {
+    get: () => Array.from(entityAllSet),
+});
 
 addAllGetter(alt.Player, alt.Enums.BaseObjectType.PLAYER);
 addAllGetter(alt.Vehicle, alt.Enums.BaseObjectType.VEHICLE);
