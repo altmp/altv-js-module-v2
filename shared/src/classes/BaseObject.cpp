@@ -59,8 +59,5 @@ extern js::Class baseObjectClass("BaseObject", nullptr, [](js::ClassTemplate& tp
 
     tpl.Method("destroy", Destroy);
 
-    tpl.Method<&alt::IBaseObject::SetMetaData>("setMetaData");
-    tpl.Method<&alt::IBaseObject::GetMetaData>("getMetaData");
-
     tpl.DynamicProperty("meta", MetaGetter, MetaSetter, MetaDeleter, MetaEnumerator);
 });
