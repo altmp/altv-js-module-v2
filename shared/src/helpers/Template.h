@@ -9,16 +9,29 @@
 #include "CallContext.h"
 #include "Logger.h"
 
-template<typename T>
+template<auto x>
 struct function_traits;
 
-template<typename Class, typename Return, typename... Args>
-struct function_traits<Return(Class::*)(Args...)>
+template<class Class, class Return, class...Args, Return(Class::* FuncPtr)(Args...)>
+struct function_traits<FuncPtr>
 {
     using ClassType = Class;
     using ReturnType = Return;
-    using FunctionPointer = Return(Class::*)(Args...);
+    typedef Return(Class::*FunctionPointerType)(Args...);
     using Arguments = std::tuple<Args...>;
+
+    static constexpr decltype(FuncPtr) FunctionPtr = FuncPtr;
+};
+
+template<class Class, class Return, class...Args, Return(Class::* FuncPtr)(Args...) const>
+struct function_traits<FuncPtr>
+{
+    using ClassType = Class;
+    using ReturnType = Return;
+    typedef Return(Class::*FunctionPointerType)(Args...);
+    using Arguments = std::tuple<Args...>;
+
+    static constexpr decltype(FuncPtr) FunctionPtr = FuncPtr;
 };
 
 namespace js
@@ -76,9 +89,12 @@ namespace js
                 info.GetReturnValue().Set(JSValue((obj->*Getter)()));
         }
 
-        template<class Class, auto(Class::*Getter)() const>
+        template<auto Getter>
         static void PropertyGetterHandler(v8::Local<v8::String>, const v8::PropertyCallbackInfo<v8::Value>& info)
         {
+            using FT = function_traits<Getter>;
+            using Class = FT::ClassType;
+
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
             if(obj == nullptr)
             {
@@ -90,9 +106,14 @@ namespace js
             else
                 info.GetReturnValue().Set(JSValue((obj->*Getter)()));
         }
-        template<class Class, typename Type, void (Class::*Setter)(Type)>
+        template<auto Setter>
         static void PropertySetterHandler(v8::Local<v8::String>, v8::Local<v8::Value> value, const v8::PropertyCallbackInfo<void>& info)
         {
+            using FT = function_traits<Setter>;
+            using Class = FT::ClassType;
+            using Arguments = FT::Arguments;
+            using Type = std::tuple_element_t<0, Arguments>;
+
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
             if(obj == nullptr)
             {
@@ -388,31 +409,6 @@ namespace js
     public:
         ClassTemplate(v8::Isolate* isolate, Class* _class, v8::Local<v8::FunctionTemplate> tpl) : Template(isolate, tpl), class_(_class) {}
 
-        template<auto x>
-        struct function_traits;
-
-        template<class Class, class Return, class...Args, Return(Class::* FuncPtr)(Args...)>
-        struct function_traits<FuncPtr>
-        {
-            using ClassType = Class;
-            using ReturnType = Return;
-            typedef Return(Class::*FunctionPointerType)(Args...);
-            using Arguments = std::tuple<Args...>;
-
-            static constexpr decltype(FuncPtr) FunctionPtr = FuncPtr;
-        };
-
-        template<class Class, class Return, class...Args, Return(Class::* FuncPtr)(Args...) const>
-        struct function_traits<FuncPtr>
-        {
-            using ClassType = Class;
-            using ReturnType = Return;
-            typedef Return(Class::*FunctionPointerType)(Args...);
-            using Arguments = std::tuple<Args...>;
-
-            static constexpr decltype(FuncPtr) FunctionPtr = FuncPtr;
-        };
-
         // template<auto Func, typename... Args>
         // void MethodEx(const std::string& name)
         // {
@@ -464,7 +460,7 @@ namespace js
         // }
 
         template<auto Func>
-        void MethodEx(const std::string& name)
+        void Mehtod(const std::string& name)
         {
             using FT = function_traits<Func>;
             using Class = FT::ClassType;
@@ -526,30 +522,27 @@ namespace js
         }
 #pragma endregion
 
-        template<class Class, auto(Class::*Getter)() const>
+        template<auto Getter>
         void Property(const std::string& name)
         {
 #ifdef DEBUG_BINDINGS
             RegisterKey("Property", name);
 #endif
-            Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Class, Getter>);
+            using FT = function_traits<Getter>;
+            using Class = FT::ClassType;
+
+            Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Getter>);
         }
-        template<class Class, typename Type, Type (Class::*Getter)() const, void (Class::*Setter)(Type)>
+
+        template<auto Getter, auto Setter>
         void Property(const std::string& name)
         {
 #ifdef DEBUG_BINDINGS
             RegisterKey("Property", name);
 #endif
-            Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Class, Getter>, Wrapper::PropertySetterHandler<Class, Type, Setter>);
+            Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Getter>, Wrapper::PropertySetterHandler<Setter>);
         }
-        template<class Class, typename GetterType, typename SetterType, GetterType (Class::*Getter)() const, void (Class::*Setter)(SetterType)>
-        void Property(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Property", name);
-#endif
-            Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Class, Getter>, Wrapper::PropertySetterHandler<Class, SetterType, Setter>);
-        }
+
         // If getter is nullptr, tries to get the getter defined by a base class
         void Property(const std::string& name, PropertyCallback getter = nullptr, PropertyCallback setter = nullptr)
         {
