@@ -14,10 +14,10 @@ extern js::Class voiceChannelClass("VoiceChannel", &baseObjectClass, nullptr, []
     tpl.Property<alt::IVoiceChannel, &alt::IVoiceChannel::GetPlayers>("players");
     tpl.Property<alt::IVoiceChannel, &alt::IVoiceChannel::GetPlayerCount>("playerCount");
 
-    tpl.Method<alt::IVoiceChannel, bool, alt::IPlayer*, &alt::IVoiceChannel::HasPlayer>("hasPlayer");
-    tpl.Method<alt::IVoiceChannel, void, alt::IPlayer*, &alt::IVoiceChannel::AddPlayer>("addPlayer");
-    tpl.Method<alt::IVoiceChannel, void, alt::IPlayer*, &alt::IVoiceChannel::RemovePlayer>("removePlayer");
-    tpl.Method<alt::IVoiceChannel, bool, alt::IPlayer*, &alt::IVoiceChannel::IsPlayerMuted>("isPlayerMuted");
-    tpl.Method<alt::IVoiceChannel, void, alt::IPlayer*, &alt::IVoiceChannel::MutePlayer>("mutePlayer");
-    tpl.Method<alt::IVoiceChannel, void, alt::IPlayer*, &alt::IVoiceChannel::UnmutePlayer>("unmutePlayer");
+    tpl.MethodEx<&alt::IVoiceChannel::HasPlayer>("hasPlayer");
+    tpl.MethodEx<&alt::IVoiceChannel::AddPlayer>("addPlayer");
+    tpl.MethodEx<&alt::IVoiceChannel::RemovePlayer>("removePlayer");
+    tpl.MethodEx<&alt::IVoiceChannel::IsPlayerMuted>("isPlayerMuted");
+    tpl.MethodEx<&alt::IVoiceChannel::MutePlayer>("mutePlayer");
+    tpl.MethodEx<&alt::IVoiceChannel::UnmutePlayer>("unmutePlayer");
 });

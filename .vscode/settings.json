@@ -84,7 +84,9 @@
         "numeric": "cpp",
         "random": "cpp",
         "regex": "cpp",
-        "filesystem": "cpp"
+        "filesystem": "cpp",
+        "ranges": "cpp",
+        "span": "cpp"
     },
     "[cpp]": {
         "editor.defaultFormatter": "xaver.clang-format",

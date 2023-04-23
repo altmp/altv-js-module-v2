@@ -73,12 +73,15 @@ static void StreamSyncedMetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx
 extern js::Class sharedEntityClass;
 extern js::Class entityClass("Entity", &sharedEntityClass, nullptr, [](js::ClassTemplate& tpl)
 {
-    tpl.Method<alt::IEntity, void, alt::IPlayer*, bool, &alt::IEntity::SetNetworkOwner>("setNetOwner");
+    tpl.MethodEx<&alt::IEntity::SetNetworkOwner>("setNetOwner");
     tpl.Method("resetNetOwner", ResetNetOwner);
 
-    tpl.Method<alt::IEntity, void, alt::IEntity*, int16_t, int16_t, alt::Position, alt::Rotation, bool, bool, &alt::IEntity::AttachToEntity>("attachTo");
-    tpl.Method<alt::IEntity, void, alt::IEntity*, const std::string&, const std::string&, alt::Position, alt::Rotation, bool, bool, &alt::IEntity::AttachToEntity>("attachTo");
-    tpl.Method<alt::IEntity, void, &alt::IEntity::Detach>("detach");
+    tpl.MethodEx<&alt::IEntity::SetVisible>("setVisibleEx");
+
+    //TODO: If function have overload distinguish it somehow
+    // tpl.MethodEx<&alt::IEntity::AttachToEntity(alt::IEntity*, int16_t, int16_t, Position, Rotation, bool, bool)>("attachTo");
+    // tpl.MethodEx<&alt::IEntity::AttachToEntity>("attachTo");
+    tpl.MethodEx<&alt::IEntity::Detach>("detach");
 
     tpl.Property<alt::IEntity, bool, &alt::IEntity::GetVisible, &alt::IEntity::SetVisible>("visible");
     tpl.Property<alt::IEntity, bool, &alt::IEntity::GetStreamed, &alt::IEntity::SetStreamed>("streamed");
