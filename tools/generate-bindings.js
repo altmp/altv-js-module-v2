@@ -3,7 +3,9 @@
 // Usage: node tools/generate-bindings.js [basePath] [scope=shared|client|server]
 
 const fs = require("fs").promises;
+const { constants } = require("fs");
 const pathUtil = require("path");
+const crypto = require("crypto");
 
 // Base path should point to the main directory of the repo
 if (process.argv.length < 3) {
@@ -38,23 +40,45 @@ const bindingTemplate = `{ "{BINDING_NAME}", Binding{ "{BINDING_NAME}", Binding:
 // Result bindings output path
 const outputPath = "shared/src/BindingsMap.cpp";
 
+const hashesOutputPath = "build/bindings-hashes.json";
+
 (async () => {
-    showLog("Generating bindings...");
+    const fileHashes = {};
+    const previousHashes = {};
+    let anyHashChanged = false;
+
+    const hashesOutputPathResolved = pathUtil.resolve(__dirname, basePath, hashesOutputPath);
+    if (await doesFileExist(hashesOutputPathResolved)) {
+        const hashesStr = await fs.readFile(hashesOutputPathResolved, "utf8");
+        Object.assign(previousHashes, JSON.parse(hashesStr));
+        showLog("Loaded previous bindings hashes");
+    }
+
     const bindings = [];
     for (const { path, scope: pathScope } of paths) {
         const bindingsPath = pathUtil.resolve(__dirname, basePath, path);
         for await (const file of getBindingFiles(bindingsPath)) {
             const name = pathUtil.relative(bindingsPath, file).replace(/\\/g, "/").toLowerCase();
+            const bindingName = `${pathScope}/${name}`;
             // Generate the binding data
             const src = await fs.readFile(file, "utf8");
             bindings.push({
-                name: `${pathScope}/${name}`,
+                name: bindingName,
                 src: getBindingCodeChars(src, name === "bootstrap.js"),
                 scope: pathScope.toUpperCase(),
             });
+            // Store hash
+            fileHashes[bindingName] = getHash(src);
+            if (fileHashes[bindingName] != previousHashes[bindingName]) anyHashChanged = true;
             showLog(`Generated bindings for: ${pathUtil.relative(`${__dirname}/..`, file).replace(/\\/g, "/")}`);
         }
     }
+
+    if (!anyHashChanged) {
+        showLog("No bindings changed, skipping writing bindings result");
+        return;
+    }
+
     // Generate data for the bindings map
     let bindingsList = "";
     for (let i = 0; i < bindings.length; i++) {
@@ -66,6 +90,10 @@ const outputPath = "shared/src/BindingsMap.cpp";
         bindingsList += bindingStr;
         if (i < bindings.length - 1) bindingsList += ",\n        ";
     }
+
+    // Store file hashes
+    await fs.writeFile(hashesOutputPathResolved, JSON.stringify(fileHashes));
+    showLog(`Wrote bindings hashes to file: ${hashesOutputPath}`);
 
     const outputStr = resultTemplate
         .replace("{DATE}", `${getDate()} ${getTime()}`)
@@ -96,6 +124,21 @@ function getBindingCodeChars(src, shouldSkipAddingConsts) {
         code = `const cppBindings = __cppBindings;\n${code}`;
     const chars = code.split("").map((char) => char.charCodeAt(0));
     return chars.toString();
+}
+
+function getHash(str) {
+    const hash = crypto.createHash("sha256");
+    hash.update(str);
+    return hash.digest("hex");
+}
+
+async function doesFileExist(path) {
+    try {
+        await fs.access(path, constants.F_OK);
+        return true;
+    } catch (e) {
+        return false;
+    }
 }
 
 function getDate() {
