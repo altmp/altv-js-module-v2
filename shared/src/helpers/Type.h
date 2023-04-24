@@ -2,6 +2,8 @@
 
 #include "v8.h"
 
+#include <sstream>
+
 namespace js
 {
     class IResource;
