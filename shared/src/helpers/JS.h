@@ -125,20 +125,20 @@ namespace js
 
         // Throws an error and returns false if the value is not found or the type doesn't match
         template<typename T>
-        bool Get(const std::string& key, T& out)
+        bool Get(const std::string& key, T& out, bool throwOnError = true)
         {
             using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
             v8::MaybeLocal<v8::Value> maybeVal = object->Get(context, js::JSValue(key));
             v8::Local<v8::Value> val;
             if(!maybeVal.ToLocal(&val))
             {
-                Throw("Failed to get property '" + key + "'");
+                if(throwOnError) Throw("Failed to get property '" + key + "', value not found");
                 return false;
             }
             std::optional<Type> result = js::CppValue<Type>(val);
             if(!result.has_value())
             {
-                Throw("Failed to get property '" + key + "'");
+                if(throwOnError) Throw("Failed to get property '" + key + "', invalid type");
                 return false;
             }
             out = (T)result.value();
@@ -167,6 +167,18 @@ namespace js
         }
 
         js::Type GetType(const std::string& key);
+
+        template<typename T>
+        std::unordered_map<std::string, T> ToMap()
+        {
+            std::unordered_map<std::string, T> map;
+            for(const std::string& key : GetKeys())
+            {
+                T val;
+                if(Get(key, val, false)) map.insert({ key, val });
+            }
+            return map;
+        }
 
         void SetAccessor(const std::string& key, v8::AccessorNameGetterCallback getter, v8::AccessorNameSetterCallback setter = nullptr, void* data = nullptr)
         {
