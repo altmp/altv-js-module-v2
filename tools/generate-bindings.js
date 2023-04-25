@@ -47,7 +47,7 @@ const hashesOutputPath = "build/bindings-hashes.json";
     const previousHashes = {};
     let anyHashChanged = false;
 
-    const hashesOutputPathResolved = pathUtil.resolve(__dirname, basePath, hashesOutputPath);
+    const hashesOutputPathResolved = resolvePath(hashesOutputPath);
     if (await doesFileExist(hashesOutputPathResolved)) {
         const hashesStr = await fs.readFile(hashesOutputPathResolved, "utf8");
         Object.assign(previousHashes, JSON.parse(hashesStr));
@@ -56,7 +56,7 @@ const hashesOutputPath = "build/bindings-hashes.json";
 
     const bindings = [];
     for (const { path, scope: pathScope } of paths) {
-        const bindingsPath = pathUtil.resolve(__dirname, basePath, path);
+        const bindingsPath = resolvePath(path);
         for await (const file of getBindingFiles(bindingsPath)) {
             const name = pathUtil.relative(bindingsPath, file).replace(/\\/g, "/").toLowerCase();
             const bindingName = `${pathScope}/${name}`;
@@ -98,7 +98,7 @@ const hashesOutputPath = "build/bindings-hashes.json";
     const outputStr = resultTemplate
         .replace("{DATE}", `${getDate()} ${getTime()}`)
         .replace("{BINDINGS_LIST}", bindingsList);
-    await fs.writeFile(pathUtil.resolve(__dirname, basePath, outputPath), outputStr);
+    await fs.writeFile(resolvePath(outputPath), outputStr);
     showLog(`Wrote bindings result to file: ${outputPath}`);
 })();
 
@@ -139,6 +139,10 @@ async function doesFileExist(path) {
     } catch (e) {
         return false;
     }
+}
+
+function resolvePath(path) {
+    return pathUtil.resolve(__dirname, basePath, path);
 }
 
 function getDate() {
