@@ -64,7 +64,7 @@ class Vector {
     }
 
     toArray() {
-        return this.values;
+        return Array.from(this.values);
     }
 
     toFixed(precision = 4) {
@@ -159,6 +159,7 @@ export class Vector3 extends Vector {
             const arg = args[0];
             if (Array.isArray(arg)) values = [parseInt(arg[0]), parseInt(arg[1]), parseInt(arg[2])];
             else if (typeof arg === "object") values = [parseInt(arg.x), parseInt(arg.y), parseInt(arg.z)];
+            else values = [parseInt(arg), parseInt(arg), parseInt(arg)];
         } else throw new Error("Invalid arguments");
         super(3, values);
     }
@@ -200,6 +201,7 @@ export class Vector2 extends Vector {
             const arg = args[0];
             if (Array.isArray(arg)) values = [parseInt(arg[0]), parseInt(arg[1])];
             else if (typeof arg === "object") values = [parseInt(arg.x), parseInt(arg.y)];
+            else values = [parseInt(arg), parseInt(arg)];
         } else throw new Error("Invalid arguments");
         super(2, values);
     }

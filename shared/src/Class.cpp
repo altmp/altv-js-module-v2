@@ -1,9 +1,14 @@
 #include "Class.h"
 #include "interfaces/IResource.h"
 
+static void DefaultCtor(js::FunctionContext& ctx)
+{
+    if(ctx.GetArgCount() != 0) ctx.Throw("Use alt.*.create() to create an instance of this class");
+}
+
 void js::Class::Register(v8::Isolate* isolate)
 {
-    ClassTemplate tpl{ isolate, this, ctor ? WrapFunction(ctor) : v8::FunctionTemplate::New(isolate) };
+    ClassTemplate tpl{ isolate, this, ctor ? WrapFunction(ctor) : WrapFunction(DefaultCtor) };
     if(parentClass)
     {
         if(!parentClass->templateMap.contains(isolate)) parentClass->Register(isolate);

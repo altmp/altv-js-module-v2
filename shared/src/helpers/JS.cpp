@@ -43,7 +43,7 @@ void js::TryCatch::PrintError()
     IResource* resource = IResource::GetFromContext(context);
     v8::Local<v8::Value> exception = tryCatch.Exception();
     v8::Local<v8::Message> message = tryCatch.Message();
-    if(exception.IsEmpty() && message.IsEmpty()) return;
+    if(exception.IsEmpty() || message.IsEmpty()) return;
 
     v8::MaybeLocal<v8::String> maybeSourceLine = message->GetSourceLine(context);
     std::string sourceLine = maybeSourceLine.IsEmpty() ? "" : *v8::String::Utf8Value(isolate, maybeSourceLine.ToLocalChecked());

@@ -8,5 +8,6 @@ static js::FactoryHandler virtualEntityFactory(alt::IBaseObject::Type::VIRTUAL_E
     if(!args.Get("pos", pos)) return nullptr;
     uint32_t streamingRange;
     if(!args.Get("streamingRange", streamingRange)) return nullptr;
-    return alt::ICore::Instance().CreateVirtualEntity(group, pos, streamingRange);
+    js::Object dataObj = args.Get<js::Object>("data");
+    return alt::ICore::Instance().CreateVirtualEntity(group, pos, streamingRange, dataObj.ToMap<alt::MValue>());
 });
