@@ -48,7 +48,7 @@ const hashesOutputPath = "build/bindings-hashes.json";
     let anyHashChanged = false;
 
     const hashesOutputPathResolved = resolvePath(hashesOutputPath);
-    if (await doesFileExist(hashesOutputPathResolved)) {
+    if ((await doesFileExist(resolvePath("build"))) && (await doesFileExist(hashesOutputPathResolved))) {
         const hashesStr = await fs.readFile(hashesOutputPathResolved, "utf8");
         Object.assign(previousHashes, JSON.parse(hashesStr));
         showLog("Loaded previous bindings hashes");
