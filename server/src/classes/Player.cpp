@@ -509,7 +509,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method("emit", &Emit);
     tpl.Method("emitUnreliable", &EmitUnreliable);
     tpl.Method("spawn", &Spawn);
-    tpl.MethodEx<&alt::IPlayer::Despawn>("despawn");
+    tpl.Method<&alt::IPlayer::Despawn>("despawn");
     tpl.Method("setWeaponTintIndex", &SetWeaponTintIndex);
     tpl.Method("addWeaponComponent", &AddWeaponComponent);
     tpl.Method("removeWeaponComponent", &RemoveWeaponComponent);
