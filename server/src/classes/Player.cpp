@@ -199,6 +199,20 @@ static void EmitUnreliable(js::FunctionContext& ctx)
     alt::ICore::Instance().TriggerClientEventUnreliable(player, eventName, args);
 }
 
+static void Spawn(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1, 2)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    alt::Vector3f pos;
+    if(!ctx.GetArg(0, pos)) return;
+
+    uint32_t delay = ctx.GetArg<uint32_t>(1);
+
+    player->Spawn(pos, delay);
+}
+
 static void SetWeaponTintIndex(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
@@ -494,7 +508,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
 
     tpl.Method("emit", &Emit);
     tpl.Method("emitUnreliable", &EmitUnreliable);
-    tpl.MethodEx<&alt::IPlayer::Spawn>("spawn");
+    tpl.Method("spawn", &Spawn);
     tpl.MethodEx<&alt::IPlayer::Despawn>("despawn");
     tpl.Method("setWeaponTintIndex", &SetWeaponTintIndex);
     tpl.Method("addWeaponComponent", &AddWeaponComponent);
