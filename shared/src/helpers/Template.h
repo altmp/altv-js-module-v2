@@ -74,9 +74,12 @@ namespace js
             auto callback = reinterpret_cast<LazyPropertyCallback>(info.Data().As<v8::External>()->Value());
             callback(ctx);
         }
-        template<class Class, auto(Class::*Getter)() const>
+        template<auto Getter>
         static void LazyPropertyHandler(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
         {
+            using FT = function_traits<Getter>;
+            using Class = FT::ClassType;
+            
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
             if(obj == nullptr)
             {
@@ -157,14 +160,6 @@ namespace js
             std::optional<T> val = CppValue<T>(info[i]);
             if(!val.has_value()) throw BadArgException("Invalid argument at index " + std::to_string(i));
             return val.value();
-        }
-
-        template<class T, std::size_t... Indices>
-        inline auto GetArgTuple(const v8::FunctionCallbackInfo<v8::Value>& info, std::index_sequence<Indices...> b)
-        {
-            if(info.Length() <= Indices) return T();
-            std::optional<T> val = CppValue<T>(info[Indices]);
-            return val.has_value() ? val.value() : T();
         }
 
         void DynamicPropertyLazyHandler(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info);
@@ -452,13 +447,13 @@ namespace js
             }
         }
 
-        template<class Class, auto(Class::*Getter)() const>
+        template<auto Getter>
         void LazyProperty(const std::string& name)
         {
 #ifdef DEBUG_BINDINGS
             RegisterKey("LazyProperty", name);
 #endif
-            Get()->InstanceTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler<Class, Getter>, v8::Local<v8::Value>(), v8::PropertyAttribute::ReadOnly);
+            Get()->InstanceTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler<Getter>, v8::Local<v8::Value>(), v8::PropertyAttribute::ReadOnly);
         }
         void LazyProperty(const std::string& name, LazyPropertyCallback callback)
         {

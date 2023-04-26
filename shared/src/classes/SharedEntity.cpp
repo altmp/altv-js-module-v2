@@ -34,7 +34,7 @@ static void StreamSyncedMetaEnumerator(js::DynamicPropertyContext<v8::Array>& ct
 extern js::Class worldObjectClass;
 extern js::Class sharedEntityClass("SharedEntity", &worldObjectClass, nullptr, [](js::ClassTemplate& tpl)
 {
-    tpl.LazyProperty<alt::IEntity, &alt::IEntity::GetID>("id");
+    tpl.LazyProperty<&alt::IEntity::GetID>("id");
 
     tpl.Property<&alt::IEntity::GetModel>("model");
     tpl.Property<&alt::IEntity::GetNetworkOwner>("netOwner");

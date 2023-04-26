@@ -32,7 +32,7 @@ static void GetWeaponTintIndex(js::FunctionContext& ctx)
 extern js::Class entityClass;
 extern js::Class sharedPlayerClass("SharedPlayer", &entityClass, nullptr, [](js::ClassTemplate& tpl)
 {
-    tpl.LazyProperty<alt::IPlayer, &alt::IPlayer::GetName>("name");
+    tpl.LazyProperty<&alt::IPlayer::GetName>("name");
 
     tpl.Property<&alt::IPlayer::GetHealth>("health");
     tpl.Property<&alt::IPlayer::GetMaxHealth>("maxHealth");

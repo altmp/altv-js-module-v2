@@ -7,7 +7,7 @@ extern js::Class colShapeClass("ColShape", &worldObjectClass, nullptr, [](js::Cl
 {
     tpl.BindToType(alt::IBaseObject::Type::COLSHAPE);
 
-    tpl.LazyProperty<alt::IColShape, &alt::IColShape::GetColshapeType>("type");
+    tpl.LazyProperty<&alt::IColShape::GetColshapeType>("type");
     tpl.Property<&alt::IColShape::IsPlayersOnly, &alt::IColShape::SetPlayersOnly>("playersOnly");
 
     tpl.Method<&alt::IColShape::IsEntityIn>("isEntityIn");
