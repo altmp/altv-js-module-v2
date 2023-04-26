@@ -13,11 +13,11 @@ template<typename T>
 struct function_traits;
 
 template<typename Class, typename Return, typename... Args>
-struct function_traits<Return(Class::*)(Args...)>
+struct function_traits<Return (Class::*)(Args...)>
 {
     using ClassType = Class;
     using ReturnType = Return;
-    using FunctionPointer = Return(Class::*)(Args...);
+    using FunctionPointer = Return (Class::*)(Args...);
     using Arguments = std::tuple<Args...>;
 };
 
@@ -123,7 +123,7 @@ namespace js
             using Function = FT::FunctionPointer;
 
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            
+
             if(obj == nullptr)
             {
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
@@ -183,8 +183,8 @@ namespace js
         public:
             BadArgException(const std::string& _msg) : msg(_msg) {}
 
-            const char* what() const noexcept override 
-            { 
+            const char* what() const noexcept override
+            {
                 return msg.c_str();
             }
         };
@@ -391,23 +391,23 @@ namespace js
         template<auto x>
         struct function_traits;
 
-        template<class Class, class Return, class...Args, Return(Class::* FuncPtr)(Args...)>
+        template<class Class, class Return, class... Args, Return (Class::*FuncPtr)(Args...)>
         struct function_traits<FuncPtr>
         {
             using ClassType = Class;
             using ReturnType = Return;
-            typedef Return(Class::*FunctionPointerType)(Args...);
+            typedef Return (Class::*FunctionPointerType)(Args...);
             using Arguments = std::tuple<Args...>;
 
             static constexpr decltype(FuncPtr) FunctionPtr = FuncPtr;
         };
 
-        template<class Class, class Return, class...Args, Return(Class::* FuncPtr)(Args...) const>
+        template<class Class, class Return, class... Args, Return (Class::*FuncPtr)(Args...) const>
         struct function_traits<FuncPtr>
         {
             using ClassType = Class;
             using ReturnType = Return;
-            typedef Return(Class::*FunctionPointerType)(Args...);
+            typedef Return (Class::*FunctionPointerType)(Args...);
             using Arguments = std::tuple<Args...>;
 
             static constexpr decltype(FuncPtr) FunctionPtr = FuncPtr;
@@ -472,45 +472,40 @@ namespace js
             using Arguments = FT::Arguments;
             using Function = FT::FunctionPointerType;
 
-            Get()->PrototypeTemplate()->Set(
-                js::JSValue(name),
-                v8::FunctionTemplate::New(
-                    GetIsolate(),
-                    [](const v8::FunctionCallbackInfo<v8::Value>& info)
-                    {
-                        Class* obj = dynamic_cast<Class*>(Wrapper::GetThisObjectFromInfo(info));
-                        if(obj == nullptr)
-                        {
-                            info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                            return;
-                        }
+            Get()->PrototypeTemplate()->Set(js::JSValue(name),
+                                            v8::FunctionTemplate::New(GetIsolate(),
+                                                                      [](const v8::FunctionCallbackInfo<v8::Value>& info)
+                                                                      {
+                                                                          Class* obj = dynamic_cast<Class*>(Wrapper::GetThisObjectFromInfo(info));
+                                                                          if(obj == nullptr)
+                                                                          {
+                                                                              info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                                                                              return;
+                                                                          }
 
-                        try
-                        {
-                            auto MakeTuple = [&]<size_t... Ints>(std::index_sequence<Ints...>) -> auto
-                            {
-                                return std::make_tuple(
-                                    Wrapper::GetArg<Wrapper::CleanArg<std::tuple_element_t<Ints, Arguments>>>(info, Ints)...
-                                );
-                            };
+                                                                          try
+                                                                          {
+                                                                              auto MakeTuple = [&]<size_t... Ints>(std::index_sequence<Ints...>)->auto
+                                                                              {
+                                                                                  return std::make_tuple(
+                                                                                    Wrapper::GetArg<Wrapper::CleanArg<std::tuple_element_t<Ints, Arguments>>>(info, Ints)...);
+                                                                              };
 
-                            auto values = MakeTuple(std::make_index_sequence<std::tuple_size_v<Arguments>>());
-                            if constexpr(std::is_same_v<void, Return>)
-                            {
-                                std::apply(std::bind_front(Func, obj), values);
-                            }
-                            else
-                            {
-                                info.GetReturnValue().Set(JSValue(std::apply(std::bind_front(Func, obj), values)));
-                            }
-                        }
-                        catch(Wrapper::BadArgException& e)
-                        {
-                            info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
-                        }
-                    }
-                )
-            );
+                                                                              auto values = MakeTuple(std::make_index_sequence<std::tuple_size_v<Arguments>>());
+                                                                              if constexpr(std::is_same_v<void, Return>)
+                                                                              {
+                                                                                  std::apply(std::bind_front(Func, obj), values);
+                                                                              }
+                                                                              else
+                                                                              {
+                                                                                  info.GetReturnValue().Set(JSValue(std::apply(std::bind_front(Func, obj), values)));
+                                                                              }
+                                                                          }
+                                                                          catch(Wrapper::BadArgException& e)
+                                                                          {
+                                                                              info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
+                                                                          }
+                                                                      }));
         }
 
 #ifdef DEBUG_BINDINGS
@@ -586,14 +581,15 @@ namespace js
 #ifdef DEBUG_BINDINGS
             RegisterKey("LazyProperty", name);
 #endif
-            Get()->InstanceTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler<Class, Getter>);
+            Get()->InstanceTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler<Class, Getter>, v8::Local<v8::Value>(), v8::PropertyAttribute::ReadOnly);
         }
         void LazyProperty(const std::string& name, LazyPropertyCallback callback)
         {
 #ifdef DEBUG_BINDINGS
             RegisterKey("LazyProperty", name);
 #endif
-            Get()->InstanceTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler, v8::External::New(GetIsolate(), (void*)callback));
+            Get()->InstanceTemplate()->SetLazyDataProperty(
+              js::JSValue(name), Wrapper::LazyPropertyHandler, v8::External::New(GetIsolate(), (void*)callback), v8::PropertyAttribute::ReadOnly);
         }
 
         // Property returns an object that will call the specified handlers
