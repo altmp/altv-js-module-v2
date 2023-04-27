@@ -12,23 +12,23 @@
 template<auto x>
 struct function_traits;
 
-template<class Class, class Return, class...Args, Return(Class::* FuncPtr)(Args...)>
+template<class Class, class Return, class... Args, Return (Class::*FuncPtr)(Args...)>
 struct function_traits<FuncPtr>
 {
     using ClassType = Class;
     using ReturnType = Return;
-    typedef Return(Class::*FunctionPointerType)(Args...);
+    typedef Return (Class::*FunctionPointerType)(Args...);
     using Arguments = std::tuple<Args...>;
 
     static constexpr decltype(FuncPtr) FunctionPtr = FuncPtr;
 };
 
-template<class Class, class Return, class...Args, Return(Class::* FuncPtr)(Args...) const>
+template<class Class, class Return, class... Args, Return (Class::*FuncPtr)(Args...) const>
 struct function_traits<FuncPtr>
 {
     using ClassType = Class;
     using ReturnType = Return;
-    typedef Return(Class::*FunctionPointerType)(Args...);
+    typedef Return (Class::*FunctionPointerType)(Args...);
     using Arguments = std::tuple<Args...>;
 
     static constexpr decltype(FuncPtr) FunctionPtr = FuncPtr;
@@ -79,7 +79,7 @@ namespace js
         {
             using FT = function_traits<Getter>;
             using Class = FT::ClassType;
-            
+
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
             if(obj == nullptr)
             {
@@ -405,7 +405,7 @@ namespace js
 #ifdef DEBUG_BINDINGS
             RegisterKey("Property", name);
 #endif
-            Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Getter>);
+            Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Getter>, nullptr, v8::Local<v8::Value>(), v8::DEFAULT, v8::ReadOnly);
         }
 
         template<auto Getter, auto Setter>
@@ -443,7 +443,7 @@ namespace js
                 }
                 else
                     getterTemplate = WrapProperty(getter);
-                Get()->PrototypeTemplate()->SetAccessorProperty(js::JSValue(name), getterTemplate, WrapProperty(setter));
+                Get()->PrototypeTemplate()->SetAccessorProperty(js::JSValue(name), getterTemplate, WrapProperty(setter), setter ? v8::None : v8::ReadOnly);
             }
         }
 
