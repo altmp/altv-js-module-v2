@@ -138,7 +138,7 @@ namespace js
                 if(!val.has_value())
                 {
                     info.GetIsolate()->ThrowException(v8::Exception::Error(
-                      JSValue("Invalid value, expected type '" + TypeToString(CppTypeToJSType<CleanArg<Type>>()) + "' but received '" + TypeToString(GetType(value, resource)) + "'")));
+                      JSValue("Invalid value type, expected " + TypeToString(CppTypeToJSType<CleanArg<Type>>()) + " but received " + TypeToString(GetType(value, resource)))));
                     return;
                 }
                 (obj->*Setter)(val.value());
@@ -165,8 +165,8 @@ namespace js
             std::optional<T> val = CppValue<T>(info[i]);
             if(!val.has_value())
             {
-                throw BadArgException("Invalid argument at index " + std::to_string(i) + ", expected type '" + TypeToString(CppTypeToJSType<T>()) + "' but received '" +
-                                      TypeToString(GetType(info[i], resource)) + "'");
+                throw BadArgException("Invalid argument type at index " + std::to_string(i) + ", expected " + TypeToString(CppTypeToJSType<T>()) + " but received " +
+                                      TypeToString(GetType(info[i], resource)));
             }
             return val.value();
         }
