@@ -7,17 +7,17 @@ extern js::Class voiceChannelClass("VoiceChannel", &baseObjectClass, nullptr, []
 {
     tpl.BindToType(alt::IBaseObject::Type::VOICE_CHANNEL);
 
-    tpl.LazyProperty<alt::IVoiceChannel, &alt::IVoiceChannel::GetID>("id");
-    tpl.LazyProperty<alt::IVoiceChannel, &alt::IVoiceChannel::IsSpatial>("isSpatial");
-    tpl.LazyProperty<alt::IVoiceChannel, &alt::IVoiceChannel::GetMaxDistance>("maxDistance");
+    tpl.LazyProperty<&alt::IVoiceChannel::GetID>("id");
+    tpl.LazyProperty<&alt::IVoiceChannel::IsSpatial>("isSpatial");
+    tpl.LazyProperty<&alt::IVoiceChannel::GetMaxDistance>("maxDistance");
 
-    tpl.Property<alt::IVoiceChannel, &alt::IVoiceChannel::GetPlayers>("players");
-    tpl.Property<alt::IVoiceChannel, &alt::IVoiceChannel::GetPlayerCount>("playerCount");
+    tpl.Property<&alt::IVoiceChannel::GetPlayers>("players");
+    tpl.Property<&alt::IVoiceChannel::GetPlayerCount>("playerCount");
 
-    tpl.MethodEx<&alt::IVoiceChannel::HasPlayer>("hasPlayer");
-    tpl.MethodEx<&alt::IVoiceChannel::AddPlayer>("addPlayer");
-    tpl.MethodEx<&alt::IVoiceChannel::RemovePlayer>("removePlayer");
-    tpl.MethodEx<&alt::IVoiceChannel::IsPlayerMuted>("isPlayerMuted");
-    tpl.MethodEx<&alt::IVoiceChannel::MutePlayer>("mutePlayer");
-    tpl.MethodEx<&alt::IVoiceChannel::UnmutePlayer>("unmutePlayer");
+    tpl.Method<&alt::IVoiceChannel::HasPlayer>("hasPlayer");
+    tpl.Method<&alt::IVoiceChannel::AddPlayer>("addPlayer");
+    tpl.Method<&alt::IVoiceChannel::RemovePlayer>("removePlayer");
+    tpl.Method<&alt::IVoiceChannel::IsPlayerMuted>("isPlayerMuted");
+    tpl.Method<&alt::IVoiceChannel::MutePlayer>("mutePlayer");
+    tpl.Method<&alt::IVoiceChannel::UnmutePlayer>("unmutePlayer");
 });

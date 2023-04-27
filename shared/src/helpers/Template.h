@@ -9,16 +9,29 @@
 #include "CallContext.h"
 #include "Logger.h"
 
-template<typename T>
+template<auto x>
 struct function_traits;
 
-template<typename Class, typename Return, typename... Args>
-struct function_traits<Return (Class::*)(Args...)>
+template<class Class, class Return, class...Args, Return(Class::* FuncPtr)(Args...)>
+struct function_traits<FuncPtr>
 {
     using ClassType = Class;
     using ReturnType = Return;
-    using FunctionPointer = Return (Class::*)(Args...);
+    typedef Return(Class::*FunctionPointerType)(Args...);
     using Arguments = std::tuple<Args...>;
+
+    static constexpr decltype(FuncPtr) FunctionPtr = FuncPtr;
+};
+
+template<class Class, class Return, class...Args, Return(Class::* FuncPtr)(Args...) const>
+struct function_traits<FuncPtr>
+{
+    using ClassType = Class;
+    using ReturnType = Return;
+    typedef Return(Class::*FunctionPointerType)(Args...);
+    using Arguments = std::tuple<Args...>;
+
+    static constexpr decltype(FuncPtr) FunctionPtr = FuncPtr;
 };
 
 namespace js
@@ -61,9 +74,12 @@ namespace js
             auto callback = reinterpret_cast<LazyPropertyCallback>(info.Data().As<v8::External>()->Value());
             callback(ctx);
         }
-        template<class Class, auto(Class::*Getter)() const>
+        template<auto Getter>
         static void LazyPropertyHandler(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
         {
+            using FT = function_traits<Getter>;
+            using Class = FT::ClassType;
+            
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
             if(obj == nullptr)
             {
@@ -76,9 +92,12 @@ namespace js
                 info.GetReturnValue().Set(JSValue((obj->*Getter)()));
         }
 
-        template<class Class, auto(Class::*Getter)() const>
+        template<auto Getter>
         static void PropertyGetterHandler(v8::Local<v8::String>, const v8::PropertyCallbackInfo<v8::Value>& info)
         {
+            using FT = function_traits<Getter>;
+            using Class = FT::ClassType;
+
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
             if(obj == nullptr)
             {
@@ -90,9 +109,14 @@ namespace js
             else
                 info.GetReturnValue().Set(JSValue((obj->*Getter)()));
         }
-        template<class Class, typename Type, void (Class::*Setter)(Type)>
+        template<auto Setter>
         static void PropertySetterHandler(v8::Local<v8::String>, v8::Local<v8::Value> value, const v8::PropertyCallbackInfo<void>& info)
         {
+            using FT = function_traits<Setter>;
+            using Class = FT::ClassType;
+            using Arguments = FT::Arguments;
+            using Type = std::tuple_element_t<0, Arguments>;
+
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
             if(obj == nullptr)
             {
@@ -110,69 +134,6 @@ namespace js
                     return;
                 }
                 (obj->*Setter)(val.value());
-            }
-        }
-
-        template<typename T>
-        static void MethodHandlerEx(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            using FT = function_traits<T>;
-            using Class = FT::ClassType;
-            using Return = FT::ReturnType;
-            using Arguments = FT::Arguments;
-            using Function = FT::FunctionPointer;
-
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Return>)
-            {
-                (obj->Function)();
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->Function)()));
-            }
-        }
-
-        template<class Class, typename Ret, Ret (Class::*Method)()>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)();
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)()));
-            }
-        }
-        template<class Class, typename Ret, Ret (Class::*Method)() const>
-        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
-        {
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            if constexpr(std::is_same_v<void, Ret>)
-            {
-                (obj->*Method)();
-            }
-            else
-            {
-                info.GetReturnValue().Set(JSValue((obj->*Method)()));
             }
         }
 
@@ -199,14 +160,6 @@ namespace js
             std::optional<T> val = CppValue<T>(info[i]);
             if(!val.has_value()) throw BadArgException("Invalid argument at index " + std::to_string(i));
             return val.value();
-        }
-
-        template<class T, std::size_t... Indices>
-        inline auto GetArgTuple(const v8::FunctionCallbackInfo<v8::Value>& info, std::index_sequence<Indices...> b)
-        {
-            if(info.Length() <= Indices) return T();
-            std::optional<T> val = CppValue<T>(info[Indices]);
-            return val.has_value() ? val.value() : T();
         }
 
         void DynamicPropertyLazyHandler(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info);
@@ -388,83 +341,8 @@ namespace js
     public:
         ClassTemplate(v8::Isolate* isolate, Class* _class, v8::Local<v8::FunctionTemplate> tpl) : Template(isolate, tpl), class_(_class) {}
 
-        template<auto x>
-        struct function_traits;
-
-        template<class Class, class Return, class... Args, Return (Class::*FuncPtr)(Args...)>
-        struct function_traits<FuncPtr>
-        {
-            using ClassType = Class;
-            using ReturnType = Return;
-            typedef Return (Class::*FunctionPointerType)(Args...);
-            using Arguments = std::tuple<Args...>;
-
-            static constexpr decltype(FuncPtr) FunctionPtr = FuncPtr;
-        };
-
-        template<class Class, class Return, class... Args, Return (Class::*FuncPtr)(Args...) const>
-        struct function_traits<FuncPtr>
-        {
-            using ClassType = Class;
-            using ReturnType = Return;
-            typedef Return (Class::*FunctionPointerType)(Args...);
-            using Arguments = std::tuple<Args...>;
-
-            static constexpr decltype(FuncPtr) FunctionPtr = FuncPtr;
-        };
-
-        // template<auto Func, typename... Args>
-        // void MethodEx(const std::string& name)
-        // {
-        //     using FT = function_traits<Func>;
-        //     using Class = FT::ClassType;
-        //     using Return = FT::ReturnType;
-        //     using Arguments = FT::Arguments;
-        //     using Function = FT::FunctionPointerType;
-
-        //     Get()->PrototypeTemplate()->Set(
-        //         js::JSValue(name),
-        //         v8::FunctionTemplate::New(
-        //             GetIsolate(),
-        //             [](const v8::FunctionCallbackInfo<v8::Value>& info)
-        //             {
-        //                 Class* obj = dynamic_cast<Class*>(Wrapper::GetThisObjectFromInfo(info));
-        //                 if(obj == nullptr)
-        //                 {
-        //                     info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-        //                     return;
-        //                 }
-
-        //                 try
-        //                 {
-        //                     auto MakeTuple = [&]<size_t... Ints>(std::index_sequence<Ints...>) -> auto
-        //                     {
-        //                         return std::make_tuple(
-        //                             Wrapper::GetArg<Wrapper::CleanArg<std::tuple_element_t<Ints, Arguments>>>(info, Ints)...
-        //                         );
-        //                     };
-
-        //                     auto values = MakeTuple(std::make_index_sequence<std::tuple_size_v<Arguments>>());
-        //                     if constexpr(std::is_same_v<void, Return>)
-        //                     {
-        //                         std::apply(std::bind_front(Func, obj), values);
-        //                     }
-        //                     else
-        //                     {
-        //                         info.GetReturnValue().Set(JSValue(std::apply(std::bind_front(Func, obj), values)));
-        //                     }
-        //                 }
-        //                 catch(Wrapper::BadArgException& e)
-        //                 {
-        //                     info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
-        //                 }
-        //             }
-        //         )
-        //     );
-        // }
-
         template<auto Func>
-        void MethodEx(const std::string& name)
+        void Method(const std::string& name)
         {
             using FT = function_traits<Func>;
             using Class = FT::ClassType;
@@ -521,30 +399,24 @@ namespace js
         }
 #pragma endregion
 
-        template<class Class, auto(Class::*Getter)() const>
+        template<auto Getter>
         void Property(const std::string& name)
         {
 #ifdef DEBUG_BINDINGS
             RegisterKey("Property", name);
 #endif
-            Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Class, Getter>);
+            Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Getter>);
         }
-        template<class Class, typename Type, Type (Class::*Getter)() const, void (Class::*Setter)(Type)>
+
+        template<auto Getter, auto Setter>
         void Property(const std::string& name)
         {
 #ifdef DEBUG_BINDINGS
             RegisterKey("Property", name);
 #endif
-            Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Class, Getter>, Wrapper::PropertySetterHandler<Class, Type, Setter>);
+            Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Getter>, Wrapper::PropertySetterHandler<Setter>);
         }
-        template<class Class, typename GetterType, typename SetterType, GetterType (Class::*Getter)() const, void (Class::*Setter)(SetterType)>
-        void Property(const std::string& name)
-        {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Property", name);
-#endif
-            Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Class, Getter>, Wrapper::PropertySetterHandler<Class, SetterType, Setter>);
-        }
+
         // If getter is nullptr, tries to get the getter defined by a base class
         void Property(const std::string& name, PropertyCallback getter = nullptr, PropertyCallback setter = nullptr)
         {
@@ -575,13 +447,13 @@ namespace js
             }
         }
 
-        template<class Class, auto(Class::*Getter)() const>
+        template<auto Getter>
         void LazyProperty(const std::string& name)
         {
 #ifdef DEBUG_BINDINGS
             RegisterKey("LazyProperty", name);
 #endif
-            Get()->InstanceTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler<Class, Getter>, v8::Local<v8::Value>(), v8::PropertyAttribute::ReadOnly);
+            Get()->InstanceTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler<Getter>, v8::Local<v8::Value>(), v8::PropertyAttribute::ReadOnly);
         }
         void LazyProperty(const std::string& name, LazyPropertyCallback callback)
         {

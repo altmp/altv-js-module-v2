@@ -131,16 +131,16 @@ static void StreamSyncedMetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx
 extern js::Class sharedEntityClass;
 extern js::Class entityClass("Entity", &sharedEntityClass, nullptr, [](js::ClassTemplate& tpl)
 {
-    tpl.MethodEx<&alt::IEntity::SetNetworkOwner>("setNetOwner");
+    tpl.Method<&alt::IEntity::SetNetworkOwner>("setNetOwner");
     tpl.Method("resetNetOwner", ResetNetOwner);
 
     tpl.Method("attachTo", &AttachTo);
-    tpl.MethodEx<&alt::IEntity::Detach>("detach");
+    tpl.Method<&alt::IEntity::Detach>("detach");
 
-    tpl.Property<alt::IEntity, bool, &alt::IEntity::GetVisible, &alt::IEntity::SetVisible>("visible");
-    tpl.Property<alt::IEntity, bool, &alt::IEntity::GetStreamed, &alt::IEntity::SetStreamed>("streamed");
-    tpl.Property<alt::IEntity, bool, &alt::IEntity::IsFrozen, &alt::IEntity::SetFrozen>("frozen");
-    tpl.Property<alt::IEntity, bool, &alt::IEntity::HasCollision, &alt::IEntity::SetCollision>("collision");
+    tpl.Property<&alt::IEntity::GetVisible, &alt::IEntity::SetVisible>("visible");
+    tpl.Property<&alt::IEntity::GetStreamed, &alt::IEntity::SetStreamed>("streamed");
+    tpl.Property<&alt::IEntity::IsFrozen, &alt::IEntity::SetFrozen>("frozen");
+    tpl.Property<&alt::IEntity::HasCollision, &alt::IEntity::SetCollision>("collision");
 
     tpl.DynamicProperty("syncedMeta", nullptr, SyncedMetaSetter, SyncedMetaDeleter, nullptr);
     tpl.DynamicProperty("streamSyncedMeta", nullptr, StreamSyncedMetaSetter, StreamSyncedMetaDeleter, nullptr);

@@ -7,12 +7,12 @@ extern js::Class colShapeClass("ColShape", &worldObjectClass, nullptr, [](js::Cl
 {
     tpl.BindToType(alt::IBaseObject::Type::COLSHAPE);
 
-    tpl.LazyProperty<alt::IColShape, &alt::IColShape::GetColshapeType>("type");
-    tpl.Property<alt::IColShape, bool, &alt::IColShape::IsPlayersOnly, &alt::IColShape::SetPlayersOnly>("playersOnly");
+    tpl.LazyProperty<&alt::IColShape::GetColshapeType>("type");
+    tpl.Property<&alt::IColShape::IsPlayersOnly, &alt::IColShape::SetPlayersOnly>("playersOnly");
 
-    tpl.MethodEx<&alt::IColShape::IsEntityIn>("isEntityIn");
-    tpl.MethodEx<&alt::IColShape::IsEntityIdIn>("isEntityIdIn");
-    tpl.MethodEx<&alt::IColShape::IsPointIn>("isPointIn");
+    tpl.Method<&alt::IColShape::IsEntityIn>("isEntityIn");
+    tpl.Method<&alt::IColShape::IsEntityIdIn>("isEntityIdIn");
+    tpl.Method<&alt::IColShape::IsPointIn>("isPointIn");
 });
 
 extern js::Class checkpointClass("Checkpoint", &colShapeClass, nullptr, [](js::ClassTemplate& tpl)

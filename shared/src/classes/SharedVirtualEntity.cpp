@@ -19,9 +19,9 @@ static void StreamSyncedMetaEnumerator(js::DynamicPropertyContext<v8::Array>& ct
 extern js::Class worldObjectClass;
 extern js::Class sharedVirtualEntityClass("SharedVirtualEntity", &worldObjectClass, nullptr, [](js::ClassTemplate& tpl)
 {
-    tpl.LazyProperty<alt::IVirtualEntity, &alt::IVirtualEntity::GetID>("id");
-    tpl.LazyProperty<alt::IVirtualEntity, &alt::IVirtualEntity::GetGroup>("group");
-    tpl.LazyProperty<alt::IVirtualEntity, &alt::IVirtualEntity::GetStreamingDistance>("streamingDistance");
+    tpl.LazyProperty<&alt::IVirtualEntity::GetID>("id");
+    tpl.LazyProperty<&alt::IVirtualEntity::GetGroup>("group");
+    tpl.LazyProperty<&alt::IVirtualEntity::GetStreamingDistance>("streamingDistance");
 
     tpl.DynamicProperty("streamSyncedMeta", StreamSyncedMetaGetter, nullptr, nullptr, StreamSyncedMetaEnumerator);
 });
