@@ -50,9 +50,15 @@ namespace js
 
     namespace Wrapper
     {
+        template<class T>
+        using CleanArg = typename std::remove_cv_t<typename std::remove_reference_t<T>>;
+
         alt::IBaseObject* GetThisObjectFromInfo(const v8::PropertyCallbackInfo<v8::Value>& info);
         alt::IBaseObject* GetThisObjectFromInfo(const v8::PropertyCallbackInfo<void>& info);
         alt::IBaseObject* GetThisObjectFromInfo(const v8::FunctionCallbackInfo<v8::Value>& info);
+        js::IResource* GetResourceFromInfo(const v8::PropertyCallbackInfo<v8::Value>& info);
+        js::IResource* GetResourceFromInfo(const v8::PropertyCallbackInfo<void>& info);
+        js::IResource* GetResourceFromInfo(const v8::FunctionCallbackInfo<v8::Value>& info);
 
         static void FunctionHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
@@ -118,6 +124,7 @@ namespace js
             using Type = std::tuple_element_t<0, Arguments>;
 
             Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
+            js::IResource* resource = GetResourceFromInfo(info);
             if(obj == nullptr)
             {
                 info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
@@ -127,10 +134,11 @@ namespace js
             if constexpr(isEnum) (obj->*Setter)(static_cast<Type>(value->Int32Value(info.GetIsolate()->GetEnteredOrMicrotaskContext()).ToChecked()));
             else
             {
-                auto val = CppValue<typename std::remove_cv_t<typename std::remove_reference_t<Type>>>(value);
+                auto val = CppValue<CleanArg<Type>>(value);
                 if(!val.has_value())
                 {
-                    info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid value")));
+                    info.GetIsolate()->ThrowException(v8::Exception::Error(
+                      JSValue("Invalid value, expected type '" + TypeToString(CppTypeToJSType<CleanArg<Type>>()) + "' but received '" + TypeToString(GetType(value, resource)) + "'")));
                     return;
                 }
                 (obj->*Setter)(val.value());
@@ -151,14 +159,15 @@ namespace js
         };
 
         template<class T>
-        using CleanArg = typename std::remove_cv_t<typename std::remove_reference_t<T>>;
-
-        template<class T>
-        inline T GetArg(const v8::FunctionCallbackInfo<v8::Value>& info, int i)
+        inline T GetArg(IResource* resource, const v8::FunctionCallbackInfo<v8::Value>& info, int i)
         {
             if(info.Length() <= i) throw BadArgException("Missing argument at index " + std::to_string(i));
             std::optional<T> val = CppValue<T>(info[i]);
-            if(!val.has_value()) throw BadArgException("Invalid argument at index " + std::to_string(i));
+            if(!val.has_value())
+            {
+                throw BadArgException("Invalid argument at index " + std::to_string(i) + ", expected type '" + TypeToString(CppTypeToJSType<T>()) + "' but received '" +
+                                      TypeToString(GetType(info[i], resource)) + "'");
+            }
             return val.value();
         }
 
@@ -354,6 +363,7 @@ namespace js
                                             v8::FunctionTemplate::New(GetIsolate(),
                                                                       [](const v8::FunctionCallbackInfo<v8::Value>& info)
                                                                       {
+                                                                          js::IResource* resource = Wrapper::GetResourceFromInfo(info);
                                                                           Class* obj = dynamic_cast<Class*>(Wrapper::GetThisObjectFromInfo(info));
                                                                           if(obj == nullptr)
                                                                           {
@@ -366,7 +376,7 @@ namespace js
                                                                               auto MakeTuple = [&]<size_t... Ints>(std::index_sequence<Ints...>)->auto
                                                                               {
                                                                                   return std::make_tuple(
-                                                                                    Wrapper::GetArg<Wrapper::CleanArg<std::tuple_element_t<Ints, Arguments>>>(info, Ints)...);
+                                                                                    Wrapper::GetArg<Wrapper::CleanArg<std::tuple_element_t<Ints, Arguments>>>(resource, info, Ints)...);
                                                                               };
 
                                                                               auto values = MakeTuple(std::make_index_sequence<std::tuple_size_v<Arguments>>());

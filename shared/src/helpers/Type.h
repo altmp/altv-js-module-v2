@@ -1,6 +1,7 @@
 #pragma once
 
 #include "v8.h"
+#include "cpp-sdk/SDK.h"
 
 #include <sstream>
 
@@ -120,5 +121,23 @@ namespace js
             if(i != types.size() - 1) typesString << ", ";
         }
         return typesString.str();
+    }
+
+    template<typename T>
+    static constexpr Type CppTypeToJSType()
+    {
+        // clang-format off
+        if constexpr(std::is_same_v<T, nullptr_t>) return Type::NULL_TYPE;
+        if constexpr(std::is_same_v<T, bool>) return Type::BOOLEAN;
+        if constexpr((std::is_integral_v<T> || std::is_floating_point_v<T>) && sizeof(T) < 8) return Type::NUMBER;
+        if constexpr((std::is_integral_v<T> || std::is_floating_point_v<T>) && sizeof(T) > 8) return Type::BIG_INT;
+        if constexpr(std::is_same_v<T, std::string>) return Type::STRING;
+        if constexpr(std::is_same_v<T, alt::Vector3f>) return Type::VECTOR3;
+        if constexpr(std::is_same_v<T, alt::Vector2f>) return Type::VECTOR2;
+        if constexpr(std::is_same_v<T, alt::RGBA>) return Type::RGBA;
+        if constexpr(std::is_same_v<T, alt::Quaternion>) return Type::QUATERNION;
+        if constexpr(std::is_base_of_v<alt::IBaseObject, std::remove_pointer_t<T>>) return Type::BASE_OBJECT;
+        return Type::INVALID;
+        // clang-format on
     }
 }  // namespace js

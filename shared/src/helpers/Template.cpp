@@ -17,6 +17,18 @@ alt::IBaseObject* js::Wrapper::GetThisObjectFromInfo(const v8::FunctionCallbackI
 {
     return IResource::GetFromContext(info.GetIsolate()->GetCurrentContext())->GetScriptObject(info.This())->GetObject();
 }
+js::IResource* js::Wrapper::GetResourceFromInfo(const v8::PropertyCallbackInfo<v8::Value>& info)
+{
+    return IResource::GetFromContext(info.GetIsolate()->GetCurrentContext());
+}
+js::IResource* js::Wrapper::GetResourceFromInfo(const v8::PropertyCallbackInfo<void>& info)
+{
+    return IResource::GetFromContext(info.GetIsolate()->GetCurrentContext());
+}
+js::IResource* js::Wrapper::GetResourceFromInfo(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    return IResource::GetFromContext(info.GetIsolate()->GetCurrentContext());
+}
 
 void js::Wrapper::DynamicPropertyLazyHandler(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
 {
