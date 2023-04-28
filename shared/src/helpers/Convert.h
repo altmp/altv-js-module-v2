@@ -268,7 +268,7 @@ namespace js
             else
                 return bigInt->Uint64Value();
         }
-        else if constexpr(std::is_integral_v<T> || std::is_floating_point_v<T>)
+        else if constexpr(std::is_integral_v<T> || std::is_floating_point_v<T> || std::is_enum_v<T>)
         {
             if(val->IsNull()) return std::nullopt;
             double value = val->NumberValue(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()).ToChecked();

@@ -116,22 +116,24 @@ namespace js
         template<class T>
         void Return(const T& value)
         {
+            using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
+
             if(errored) return;
             // Use fast primitive setters if possible
-            if constexpr(std::is_same_v<T, bool> || std::is_same_v<T, double> || std::is_same_v<T, float> || std::is_same_v<T, int32_t> || std::is_same_v<T, uint32_t>)
-                info.GetReturnValue().Set(value);
-            else if constexpr(std::is_same_v<T, std::nullptr_t>)
+            if constexpr(std::is_same_v<Type, bool> || std::is_same_v<Type, double> || std::is_same_v<Type, float> || std::is_same_v<Type, int32_t> || std::is_same_v<Type, uint32_t>)
+                info.GetReturnValue().Set((Type)value);
+            else if constexpr(std::is_same_v<Type, std::nullptr_t>)
                 info.GetReturnValue().SetNull();
-            else if constexpr(std::is_same_v<T, std::string>)
+            else if constexpr(std::is_same_v<Type, std::string>)
             {
                 if(value.length() == 0) info.GetReturnValue().SetEmptyString();
                 else
-                    info.GetReturnValue().Set(JSValue(value));
+                    info.GetReturnValue().Set(JSValue((Type)value));
             }
             else
             {
-                static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
-                info.GetReturnValue().Set(JSValue(value));
+                static_assert(IsJSValueConvertible<Type>, "Type is not convertible to JS value");
+                info.GetReturnValue().Set(JSValue((Type)value));
             }
         }
     };
@@ -195,7 +197,6 @@ namespace js
         template<class T>
         bool GetArg(int index, T& outValue, Type typeToCheck = Type::INVALID)
         {
-            using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
             if(errored) return false;
             if(index >= info.Length())
             {
@@ -204,7 +205,7 @@ namespace js
             }
             if(typeToCheck != js::Type::INVALID && !CheckArgType(index, typeToCheck)) return false;
 
-            std::optional<Type> result = CppValue<Type>(info[index]);
+            std::optional<T> result = CppValue<T>(info[index]);
             if(!result.has_value())
             {
                 Throw("Invalid argument type at index " + std::to_string(index) + ", expected " + TypeToString(CppTypeToJSType<T>()) + " but got " + TypeToString(GetArgType(index)));
@@ -218,12 +219,11 @@ namespace js
         template<class T>
         T GetArg(int index, const T& defaultValue = T(), Type typeToCheck = Type::INVALID)
         {
-            using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
             if(errored) return defaultValue;
             if(index >= info.Length()) return defaultValue;
             if(typeToCheck != js::Type::INVALID && !CheckArgType(index, typeToCheck)) return defaultValue;
 
-            std::optional<Type> result = CppValue<Type>(info[index]);
+            std::optional<T> result = CppValue<T>(info[index]);
             return result.has_value() ? (T)result.value() : defaultValue;
         }
 
@@ -272,11 +272,10 @@ namespace js
         template<class T>
         bool GetValue(T& outValue, Type typeToCheck = Type::INVALID)
         {
-            using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
             if(this->errored) return false;
             if(typeToCheck != js::Type::INVALID && !CheckValueType(typeToCheck)) return false;
 
-            std::optional<Type> result = CppValue<Type>(value);
+            std::optional<T> result = CppValue<T>(value);
             if(!result.has_value())
             {
                 Throw("Invalid value type, expected " + TypeToString(CppTypeToJSType<T>()) + " but got " + TypeToString(GetValueType()));
