@@ -270,6 +270,7 @@ namespace js
         }
         else if constexpr(std::is_integral_v<T> || std::is_floating_point_v<T>)
         {
+            if(val->IsNull()) return std::nullopt;
             double value = val->NumberValue(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()).ToChecked();
             if(std::isnan(value)) return std::nullopt;
             return (T)value;
