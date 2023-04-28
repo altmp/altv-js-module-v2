@@ -42,6 +42,20 @@ static void ModKitSetter(js::PropertyContext& ctx)
     vehicle->SetModKit(modKit);
 }
 
+static void SetMod(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
+
+    uint8_t category;
+    if(!ctx.GetArg(0, category)) return;
+
+    uint8_t id;
+    if(!ctx.GetArg(1, id)) return;
+
+    ctx.Check(vehicle->SetMod(category, id), "Failed to set mod, invalid mod or modkit not set");
+}
+
 static void GetByID(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
@@ -116,7 +130,7 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Property<&alt::IVehicle::GetQuaternion, &alt::IVehicle::SetQuaternion>("quaternion");
 
     tpl.Method<&alt::IVehicle::SetFixed>("repair");
-    tpl.Method<&alt::IVehicle::SetMod>("setMod");
+    tpl.Method("setMod", &SetMod);
     tpl.Method<&alt::IVehicle::SetWheels>("setWheels");
     tpl.Method<&alt::IVehicle::SetDoorState>("setDoorState");
     tpl.Method<&alt::IVehicle::SetWindowOpened>("setWindowOpened");
