@@ -6,9 +6,11 @@ static void NeonSetter(js::DynamicPropertyContext<v8::Value>& ctx)
     if(!ctx.CheckParent()) return;
     alt::IVehicle* vehicle = ctx.GetParent<alt::IVehicle>();
 
+    bool val;
+    if(!ctx.GetValue(val)) return;
+
     bool left, right, front, back;
     vehicle->GetNeonActive(&left, &right, &front, &back);
-    bool val = false;
     std::string prop = ctx.GetProperty();
     if(prop == "left") left = val;
     else if(prop == "right")
