@@ -9,6 +9,9 @@ alt.Factory.getColShapeFactory = getEntityFactory(alt.Enums.BaseObjectType.COLSH
 alt.Factory.setObjectFactory = setEntityFactory(alt.Object, alt.Enums.BaseObjectType.NETWORK_OBJECT);
 alt.Factory.getObjectFactory = getEntityFactory(alt.Enums.BaseObjectType.NETWORK_OBJECT);
 
+alt.Factory.setVoiceChannelFactory = setEntityFactory(alt.VoiceChannel, alt.Enums.BaseObjectType.VOICE_CHANNEL);
+alt.Factory.getVoiceChannelFactory = getEntityFactory(alt.Enums.BaseObjectType.VOICE_CHANNEL);
+
 // Factory ctors
 alt.Vehicle.create = (ctx) => {
     assert(typeof ctx === "object", "Invalid args");
@@ -70,4 +73,9 @@ alt.Checkpoint.create = (ctx) => {
     assert(typeof ctx === "object", "Invalid args");
     ctx.colShapeType = alt.Enums.ColShapeType.CHECKPOINT_CYLINDER;
     return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
+};
+
+alt.VoiceChannel.create = (ctx) => {
+    assert(typeof ctx === "object", "Invalid args");
+    return cppBindings.createEntity(alt.Enums.BaseObjectType.VOICE_CHANNEL, ctx);
 };
