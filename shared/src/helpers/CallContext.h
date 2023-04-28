@@ -182,16 +182,21 @@ namespace js
         {
             using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
             if(errored) return false;
-            if(index >= info.Length()) return false;
+            if(index >= info.Length())
+            {
+                Throw("Missing argument at index " + std::to_string(index));
+                return false;
+            }
             if(typeToCheck != js::Type::INVALID && !CheckArgType(index, typeToCheck)) return false;
 
             std::optional<Type> result = CppValue<Type>(info[index]);
-            if(result.has_value())
+            if(!result.has_value())
             {
-                outValue = (T)result.value();
-                return true;
+                Throw("Invalid argument type at index " + std::to_string(index) + ", expected " + TypeToString(CppTypeToJSType<T>()) + " but got " + TypeToString(GetArgType(index)));
+                return false;
             }
-            return false;
+            outValue = (T)result.value();
+            return true;
         }
 
         // If no type to check is specified, it will try to convert the value to the specified type
@@ -222,6 +227,7 @@ namespace js
                 outValue = (uint32_t)CppValue(info[index].As<v8::Number>());
                 return true;
             }
+            Throw("Invalid argument type at index " + std::to_string(index) + ", expected string or number but got " + TypeToString(argType));
             return false;
         }
     };
@@ -251,17 +257,18 @@ namespace js
         template<class T>
         bool GetValue(T& outValue, Type typeToCheck = Type::INVALID)
         {
-            static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
+            using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
             if(this->errored) return false;
-            if(typeToCheck != Type::INVALID && !CheckValueType(typeToCheck)) return false;
+            if(typeToCheck != js::Type::INVALID && !CheckValueType(typeToCheck)) return false;
 
-            std::optional<T> result = CppValue<T>(value);
-            if(result.has_value())
+            std::optional<Type> result = CppValue<Type>(value);
+            if(!result.has_value())
             {
-                outValue = result.value();
-                return true;
+                Throw("Invalid argument type at index " + std::to_string(index) + ", expected " + TypeToString(CppTypeToJSType<T>()) + " but got " + TypeToString(GetValueType()));
+                return false;
             }
-            return false;
+            outValue = (T)result.value();
+            return true;
         }
         bool GetValueAsHash(uint32_t& outValue)
         {
