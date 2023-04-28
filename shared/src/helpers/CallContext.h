@@ -16,6 +16,8 @@ namespace js
     protected:
         CallbackInfo info;
         bool errored = false;
+        std::string error;
+        bool noThrow = false;
         IResource* resource = nullptr;
         alt::IBaseObject* thisObject = nullptr;
 
@@ -47,14 +49,27 @@ namespace js
             return GetIsolate()->GetCurrentContext();
         }
 
+        const std::string& GetError()
+        {
+            return error;
+        }
+
         bool Errored() const
         {
             return errored;
         }
 
+        // Don't throw a JS exception if a check fails
+        // Make sure to manually check for errors when using this
+        void MarkAsNoThrow()
+        {
+            noThrow = true;
+        }
+
         void Throw(const std::string& message)
         {
-            js::Throw(message);
+            if(!noThrow) js::Throw(message);
+            error = message;
             errored = true;
         }
 
