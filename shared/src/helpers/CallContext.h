@@ -264,7 +264,7 @@ namespace js
             std::optional<Type> result = CppValue<Type>(value);
             if(!result.has_value())
             {
-                Throw("Invalid argument type, expected " + TypeToString(CppTypeToJSType<T>()) + " but got " + TypeToString(GetValueType()));
+                Throw("Invalid value type, expected " + TypeToString(CppTypeToJSType<T>()) + " but got " + TypeToString(GetValueType()));
                 return false;
             }
             outValue = (T)result.value();
