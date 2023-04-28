@@ -53,13 +53,6 @@ namespace js
         template<class T>
         using CleanArg = typename std::remove_cv_t<typename std::remove_reference_t<T>>;
 
-        alt::IBaseObject* GetThisObjectFromInfo(const v8::PropertyCallbackInfo<v8::Value>& info);
-        alt::IBaseObject* GetThisObjectFromInfo(const v8::PropertyCallbackInfo<void>& info);
-        alt::IBaseObject* GetThisObjectFromInfo(const v8::FunctionCallbackInfo<v8::Value>& info);
-        js::IResource* GetResourceFromInfo(const v8::PropertyCallbackInfo<v8::Value>& info);
-        js::IResource* GetResourceFromInfo(const v8::PropertyCallbackInfo<void>& info);
-        js::IResource* GetResourceFromInfo(const v8::FunctionCallbackInfo<v8::Value>& info);
-
         static void FunctionHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
             FunctionContext ctx{ info };
@@ -80,23 +73,6 @@ namespace js
             auto callback = reinterpret_cast<LazyPropertyCallback>(info.Data().As<v8::External>()->Value());
             callback(ctx);
         }
-        template<auto Getter>
-        static void LazyPropertyHandler(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
-        {
-            using FT = function_traits<Getter>;
-            using Class = FT::ClassType;
-
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            constexpr bool isEnum = std::is_enum_v<decltype((obj->*Getter)())>;
-            if constexpr(isEnum) info.GetReturnValue().Set(JSValue((int)(obj->*Getter)()));
-            else
-                info.GetReturnValue().Set(JSValue((obj->*Getter)()));
-        }
 
         class BadArgException : public std::exception
         {
@@ -112,16 +88,11 @@ namespace js
         };
 
         template<class T>
-        inline T GetArg(IResource* resource, const v8::FunctionCallbackInfo<v8::Value>& info, int i)
+        inline T GetArg(FunctionContext& ctx, int i)
         {
-            if(info.Length() <= i) throw BadArgException("Missing argument at index " + std::to_string(i));
-            std::optional<T> val = CppValue<T>(info[i]);
-            if(!val.has_value())
-            {
-                throw BadArgException("Invalid argument type at index " + std::to_string(i) + ", expected " + TypeToString(CppTypeToJSType<T>()) + " but received " +
-                                      TypeToString(GetType(info[i], resource)));
-            }
-            return val.value();
+            T value;
+            if(!ctx.GetArg(i, value)) throw BadArgException(ctx.GetError());
+            return value;
         }
 
         template<auto Func>
@@ -132,34 +103,28 @@ namespace js
             using Return = FT::ReturnType;
             using Arguments = FT::Arguments;
 
-            js::IResource* resource = Wrapper::GetResourceFromInfo(info);
-            Class* obj = dynamic_cast<Class*>(Wrapper::GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
+            FunctionContext ctx{ info };
+            if(!ctx.CheckThis()) return;
+
+            ctx.MarkAsNoThrow();
+            Class* obj = ctx.GetThisObject<Class>();
+            js::IResource* resource = ctx.GetResource();
 
             try
             {
-                auto MakeTuple = [&]<size_t... Ints>(std::index_sequence<Ints...>)->auto
+                constexpr auto MakeTuple = [&]<size_t... Ints>(std::index_sequence<Ints...>)->auto
                 {
-                    return std::make_tuple(Wrapper::GetArg<Wrapper::CleanArg<std::tuple_element_t<Ints, Arguments>>>(resource, info, Ints)...);
+                    return std::make_tuple(Wrapper::GetArg<Wrapper::CleanArg<std::tuple_element_t<Ints, Arguments>>>(ctx, Ints)...);
                 };
 
                 auto values = MakeTuple(std::make_index_sequence<std::tuple_size_v<Arguments>>());
-                if constexpr(std::is_same_v<void, Return>)
-                {
-                    std::apply(std::bind_front(Func, obj), values);
-                }
+                if constexpr(std::is_same_v<void, Return>) std::apply(std::bind_front(Func, obj), values);
                 else
-                {
-                    info.GetReturnValue().Set(JSValue(std::apply(std::bind_front(Func, obj), values)));
-                }
+                    ctx.Return(std::apply(std::bind_front(Func, obj), values));
             }
             catch(BadArgException& e)
             {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
+                js::Throw(e.what());
             }
         }
         template<auto Getter>
@@ -168,16 +133,11 @@ namespace js
             using FT = function_traits<Getter>;
             using Class = FT::ClassType;
 
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            constexpr bool isEnum = std::is_enum_v<decltype((obj->*Getter)())>;
-            if constexpr(isEnum) info.GetReturnValue().Set(JSValue((int)(obj->*Getter)()));
-            else
-                info.GetReturnValue().Set(JSValue((obj->*Getter)()));
+            PropertyContextBase<v8::PropertyCallbackInfo<v8::Value>> ctx{ info };
+            if(!ctx.CheckThis()) return;
+
+            Class* obj = ctx.GetThisObject<Class>();
+            ctx.Return((obj->*Getter)());
         }
         template<auto Setter>
         static void PropertySetterHandler(v8::Local<v8::String>, v8::Local<v8::Value> value, const v8::PropertyCallbackInfo<void>& info)
@@ -186,27 +146,27 @@ namespace js
             using Class = FT::ClassType;
             using Arguments = FT::Arguments;
             using Type = std::tuple_element_t<0, Arguments>;
+            using CleanType = CleanArg<Type>;
 
-            Class* obj = dynamic_cast<Class*>(GetThisObjectFromInfo(info));
-            js::IResource* resource = GetResourceFromInfo(info);
-            if(obj == nullptr)
-            {
-                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                return;
-            }
-            constexpr bool isEnum = std::is_enum_v<Type>;
-            if constexpr(isEnum) (obj->*Setter)(static_cast<Type>(value->Int32Value(info.GetIsolate()->GetEnteredOrMicrotaskContext()).ToChecked()));
-            else
-            {
-                auto val = CppValue<CleanArg<Type>>(value);
-                if(!val.has_value())
-                {
-                    info.GetIsolate()->ThrowException(v8::Exception::Error(
-                      JSValue("Invalid value type, expected " + TypeToString(CppTypeToJSType<CleanArg<Type>>()) + " but received " + TypeToString(GetType(value, resource)))));
-                    return;
-                }
-                (obj->*Setter)(val.value());
-            }
+            PropertyContextBase<v8::PropertyCallbackInfo<void>> ctx{ info, value };
+            if(!ctx.CheckThis()) return;
+
+            Class* obj = ctx.GetThisObject<Class>();
+            CleanType val;
+            if(!ctx.GetValue(val)) return;
+            (obj->*Setter)(val);
+        }
+        template<auto Getter>
+        static void LazyPropertyHandler(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+        {
+            using FT = function_traits<Getter>;
+            using Class = FT::ClassType;
+
+            PropertyContextBase<v8::PropertyCallbackInfo<v8::Value>> ctx{ info };
+            if(!ctx.CheckThis()) return;
+
+            Class* obj = ctx.GetThisObject<Class>();
+            ctx.Return((obj->*Getter)());
         }
 
         void DynamicPropertyLazyHandler(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info);
