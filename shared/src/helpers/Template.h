@@ -98,6 +98,70 @@ namespace js
                 info.GetReturnValue().Set(JSValue((obj->*Getter)()));
         }
 
+        class BadArgException : public std::exception
+        {
+            std::string msg;
+
+        public:
+            BadArgException(const std::string& _msg) : msg(_msg) {}
+
+            const char* what() const noexcept override
+            {
+                return msg.c_str();
+            }
+        };
+
+        template<class T>
+        inline T GetArg(IResource* resource, const v8::FunctionCallbackInfo<v8::Value>& info, int i)
+        {
+            if(info.Length() <= i) throw BadArgException("Missing argument at index " + std::to_string(i));
+            std::optional<T> val = CppValue<T>(info[i]);
+            if(!val.has_value())
+            {
+                throw BadArgException("Invalid argument type at index " + std::to_string(i) + ", expected " + TypeToString(CppTypeToJSType<T>()) + " but received " +
+                                      TypeToString(GetType(info[i], resource)));
+            }
+            return val.value();
+        }
+
+        template<auto Func>
+        static void MethodHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
+        {
+            using FT = function_traits<Func>;
+            using Class = FT::ClassType;
+            using Return = FT::ReturnType;
+            using Arguments = FT::Arguments;
+
+            js::IResource* resource = Wrapper::GetResourceFromInfo(info);
+            Class* obj = dynamic_cast<Class*>(Wrapper::GetThisObjectFromInfo(info));
+            if(obj == nullptr)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
+                return;
+            }
+
+            try
+            {
+                auto MakeTuple = [&]<size_t... Ints>(std::index_sequence<Ints...>)->auto
+                {
+                    return std::make_tuple(Wrapper::GetArg<Wrapper::CleanArg<std::tuple_element_t<Ints, Arguments>>>(resource, info, Ints)...);
+                };
+
+                auto values = MakeTuple(std::make_index_sequence<std::tuple_size_v<Arguments>>());
+                if constexpr(std::is_same_v<void, Return>)
+                {
+                    std::apply(std::bind_front(Func, obj), values);
+                }
+                else
+                {
+                    info.GetReturnValue().Set(JSValue(std::apply(std::bind_front(Func, obj), values)));
+                }
+            }
+            catch(BadArgException& e)
+            {
+                info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
+            }
+        }
         template<auto Getter>
         static void PropertyGetterHandler(v8::Local<v8::String>, const v8::PropertyCallbackInfo<v8::Value>& info)
         {
@@ -143,32 +207,6 @@ namespace js
                 }
                 (obj->*Setter)(val.value());
             }
-        }
-
-        class BadArgException : public std::exception
-        {
-            std::string msg;
-
-        public:
-            BadArgException(const std::string& _msg) : msg(_msg) {}
-
-            const char* what() const noexcept override
-            {
-                return msg.c_str();
-            }
-        };
-
-        template<class T>
-        inline T GetArg(IResource* resource, const v8::FunctionCallbackInfo<v8::Value>& info, int i)
-        {
-            if(info.Length() <= i) throw BadArgException("Missing argument at index " + std::to_string(i));
-            std::optional<T> val = CppValue<T>(info[i]);
-            if(!val.has_value())
-            {
-                throw BadArgException("Invalid argument type at index " + std::to_string(i) + ", expected " + TypeToString(CppTypeToJSType<T>()) + " but received " +
-                                      TypeToString(GetType(info[i], resource)));
-            }
-            return val.value();
         }
 
         void DynamicPropertyLazyHandler(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info);
@@ -353,47 +391,7 @@ namespace js
         template<auto Func>
         void Method(const std::string& name)
         {
-            using FT = function_traits<Func>;
-            using Class = FT::ClassType;
-            using Return = FT::ReturnType;
-            using Arguments = FT::Arguments;
-            using Function = FT::FunctionPointerType;
-
-            Get()->PrototypeTemplate()->Set(js::JSValue(name),
-                                            v8::FunctionTemplate::New(GetIsolate(),
-                                                                      [](const v8::FunctionCallbackInfo<v8::Value>& info)
-                                                                      {
-                                                                          js::IResource* resource = Wrapper::GetResourceFromInfo(info);
-                                                                          Class* obj = dynamic_cast<Class*>(Wrapper::GetThisObjectFromInfo(info));
-                                                                          if(obj == nullptr)
-                                                                          {
-                                                                              info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue("Invalid base object")));
-                                                                              return;
-                                                                          }
-
-                                                                          try
-                                                                          {
-                                                                              auto MakeTuple = [&]<size_t... Ints>(std::index_sequence<Ints...>)->auto
-                                                                              {
-                                                                                  return std::make_tuple(
-                                                                                    Wrapper::GetArg<Wrapper::CleanArg<std::tuple_element_t<Ints, Arguments>>>(resource, info, Ints)...);
-                                                                              };
-
-                                                                              auto values = MakeTuple(std::make_index_sequence<std::tuple_size_v<Arguments>>());
-                                                                              if constexpr(std::is_same_v<void, Return>)
-                                                                              {
-                                                                                  std::apply(std::bind_front(Func, obj), values);
-                                                                              }
-                                                                              else
-                                                                              {
-                                                                                  info.GetReturnValue().Set(JSValue(std::apply(std::bind_front(Func, obj), values)));
-                                                                              }
-                                                                          }
-                                                                          catch(Wrapper::BadArgException& e)
-                                                                          {
-                                                                              info.GetIsolate()->ThrowException(v8::Exception::Error(JSValue(e.what())));
-                                                                          }
-                                                                      }));
+            Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Func>));
         }
 
 #ifdef DEBUG_BINDINGS
