@@ -497,7 +497,7 @@ namespace js
                 if(deleter) data->deleter = deleter;
                 if(enumerator) data->enumerator = enumerator;
             }
-            Get()->PrototypeTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::DynamicPropertyLazyHandler, v8::External::New(GetIsolate(), data));
+            Get()->PrototypeTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::DynamicPropertyLazyHandler, v8::External::New(GetIsolate(), data), v8::ReadOnly);
         }
 
         // Allows instances of this class to be called as a function
