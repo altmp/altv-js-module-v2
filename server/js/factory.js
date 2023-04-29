@@ -33,37 +33,37 @@ alt.ColShape.create = (ctx) => {
     return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
 };
 
-alt.ColshapeSphere.create = (ctx) => {
+alt.ColShapeSphere.create = (ctx) => {
     assert(typeof ctx === "object", "Invalid args");
     ctx.colShapeType = alt.Enums.ColShapeType.SPHERE;
     return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
 };
 
-alt.ColshapeCylinder.create = (ctx) => {
+alt.ColShapeCylinder.create = (ctx) => {
     assert(typeof ctx === "object", "Invalid args");
     ctx.colShapeType = alt.Enums.ColShapeType.CYLINDER;
     return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
 };
 
-alt.ColshapeCircle.create = (ctx) => {
+alt.ColShapeCircle.create = (ctx) => {
     assert(typeof ctx === "object", "Invalid args");
     ctx.colShapeType = alt.Enums.ColShapeType.CIRCLE;
     return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
 };
 
-alt.ColshapeCuboid.create = (ctx) => {
+alt.ColShapeCuboid.create = (ctx) => {
     assert(typeof ctx === "object", "Invalid args");
     ctx.colShapeType = alt.Enums.ColShapeType.CUBOID;
     return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
 };
 
-alt.ColshapeRectangle.create = (ctx) => {
+alt.ColShapeRectangle.create = (ctx) => {
     assert(typeof ctx === "object", "Invalid args");
     ctx.colShapeType = alt.Enums.ColShapeType.RECT;
     return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
 };
 
-alt.ColshapePolygon.create = (ctx) => {
+alt.ColShapePolygon.create = (ctx) => {
     assert(typeof ctx === "object", "Invalid args");
     ctx.colShapeType = alt.Enums.ColShapeType.POLYGON;
     return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
