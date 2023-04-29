@@ -164,10 +164,10 @@ static js::Module altModule("alt", "alt-shared", { &playerClass, &vehicleClass, 
     module.Namespace(vehicleModelInfoNamespace);
 
     // ColShapes namespaces
-    module.Namespace("ColshapeSphere");
-    module.Namespace("ColshapeCylinder");
-    module.Namespace("ColshapeCircle");
-    module.Namespace("ColshapeCuboid");
-    module.Namespace("ColshapeRectangle");
-    module.Namespace("ColshapePolygon");
+    module.Namespace("ColShapeSphere");
+    module.Namespace("ColShapeCylinder");
+    module.Namespace("ColShapeCircle");
+    module.Namespace("ColShapeCuboid");
+    module.Namespace("ColShapeRectangle");
+    module.Namespace("ColShapePolygon");
 });
