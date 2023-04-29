@@ -20,7 +20,206 @@ declare module "@altv/server" {
     export function getClosestEntities(pos: shared.Vector3, range: number, dimension: number, maxCount: number, entityTypes: number): ReadonlyArray<Entity>;
 
     export namespace Events {
-        // todo: add server events
+        export interface EventContext {
+            cancel(): void;
+            readonly isCancelled: boolean;
+        }
+        export interface Event<Context extends EventContext> {
+            (callback: (context: Context) => void): void;
+
+            remove(callback: Callback): void;
+            readonly listeners: ReadonlyArray<(context: Context) => void>;
+        }
+
+        interface PlayerConnectEventContext extends EventContext {
+            readonly player: Player;
+        }
+        interface PlayerConnectDeniedEventContext extends EventContext {
+            readonly reason: shared.Enums.ConnectDeniedReason;
+            readonly name: string;
+            readonly ip: string;
+            readonly passwordHash: number;
+            readonly isDebug: boolean;
+            readonly branch: string;
+            readonly version: string;
+            readonly cdnUrl: string;
+            readonly discordId: string;
+        }
+        interface PlayerDisconnectEventContext extends EventContext {
+            readonly player: Player;
+            readonly reason: string;
+        }
+        interface PlayerDamageEventContext extends EventContext {
+            readonly player: Player;
+            readonly attacker: Entity | null;
+            readonly healthDamage: number;
+            readonly armourDamage: number;
+            readonly weaponHash: number;
+        }
+        interface PlayerDeathEventContext extends EventContext {
+            readonly player: Player;
+            readonly killer: Entity | null;
+            readonly weaponHash: number;
+        }
+        /**
+         * @remarks The seat indexes start with 1 (driver seat).
+         */
+        interface PlayerEnteredVehicleEventContext extends EventContext {
+            readonly player: Player;
+            readonly vehicle: Vehicle;
+            readonly seat: number;
+        }
+        /**
+         * @remarks The seat indexes start with 1 (driver seat).
+         */
+        interface PlayerVehicleEnteringEventContext extends EventContext {
+            readonly player: Player;
+            readonly vehicle: Vehicle;
+            readonly seat: number;
+        }
+        /**
+         * @remarks The seat indexes start with 1 (driver seat).
+         */
+        interface PlayerVehicleLeftEventContext extends EventContext {
+            readonly player: Player;
+            readonly vehicle: Vehicle;
+            readonly seat: number;
+        }
+        /**
+         * @remarks The seat indexes start with 1 (driver seat).
+         */
+        interface PlayerVehicleSeatChangeEventContext extends EventContext {
+            readonly player: Player;
+            readonly vehicle: Vehicle;
+            readonly oldSeat: number;
+            readonly newSeat: number;
+        }
+        interface PlayerWeaponChangeEventContext extends EventContext {
+            readonly player: Player;
+            readonly oldWeapon: number;
+            readonly newWeapon: number;
+        }
+        interface PlayerRequestControlEventContext extends EventContext {
+            readonly player: Player;
+            readonly target: Entity | null;
+        }
+        interface PlayerInteriorChangeEventContext extends EventContext {
+            readonly player: Player;
+            readonly oldInterior: number;
+            readonly newInterior: number;
+        }
+        interface PlayerDimensionChangeEventContext extends EventContext {
+            readonly player: Player;
+            readonly oldDimension: number;
+            readonly newDimension: number;
+        }
+        interface ColshapeEventContext extends EventContext {
+            readonly entity: Entity;
+            readonly colShape: Colshape;
+            readonly state: boolean;
+        }
+        interface EntityColShapeEventContext extends EventContext {
+            readonly entity: Entity;
+            readonly colShape: Colshape;
+        }
+        interface EntityCheckpointEventContext extends EventContext {
+            readonly entity: Entity;
+            readonly colShape: Checkpoint;
+        }
+        interface WeaponDamageEventContext extends EventContext {
+            readonly source: Player;
+            readonly target: Entity;
+            readonly weaponHash: number;
+            readonly damage: number;
+            readonly offset: shared.Vector3;
+            readonly bodyPart: shared.Enums.BodyPart;
+        }
+        interface ExplosionEventContext extends EventContext {
+            readonly source: Player;
+            readonly type: shared.Enums.ExplosionType;
+            readonly pos: shared.Vector3;
+            readonly fx: number;
+            readonly target: Entity | null;
+        }
+        interface FireEventContext extends EventContext {
+            readonly player: Player;
+            readonly fires: Array<IFireInfo>;
+        }
+        interface StartProjectileEventContext extends EventContext {
+            readonly player: Player;
+            readonly pos: shared.Vector3;
+            readonly dir: shared.Vector3;
+            readonly ammoHash: number;
+            readonly weaponHash: number;
+        }
+        interface ConnectionQueueEventContext extends EventContext {
+            connectionInfo: IConnectionQueueInfo;
+        }
+        interface VehicleDestroyEventContext extends EventContext {
+            vehicle: Vehicle;
+        }
+        interface VehicleAttachEventContext extends EventContext {
+            vehicle: Vehicle;
+            attachedVehicle: Vehicle;
+        }
+        interface VehicleDetachEventContext extends EventContext {
+            vehicle: Vehicle;
+            detachedVehicle: Vehicle;
+        }
+        interface VehicleDamageEventContext extends EventContext {
+            vehicle: Vehicle;
+            attacker: Entity | null;
+            bodyHealthDamage: number;
+            additionalBodyHealthDamage: number;
+            engineHealthDamage: number;
+            petrolTankDamage: number;
+            weaponHash: number;
+        }
+        interface VehicleSirenEventContext extends EventContext {
+            vehicle: Vehicle;
+            state: boolean;
+        }
+
+        export const onPlayerConnect: Event<PlayerConnectEventContext>;
+        export const onPlayerConnectDenied: Event<PlayerConnectDeniedEventContext>;
+        export const onPlayerDisconnect: Event<PlayerDisconnectEventContext>;
+
+        export const onPlayerDamage: Event<PlayerDamageEventContext>;
+        export const onPlayerDeath: Event<PlayerDeathEventContext>;
+
+        export const onPlayerEnteredVehicle: Event<PlayerEnteredVehicleEventContext>;
+        export const onPlayerVehicleEntering: Event<PlayerVehicleEnteringEventContext>;
+        export const onPlayerVehicleLeft: Event<PlayerVehicleLeftEventContext>;
+        export const onPlayerVehicleSeatChange: Event<PlayerVehicleSeatChangeEventContext>;
+
+        export const onPlayerWeaponChange: Event<PlayerWeaponChangeEventContext>;
+
+        export const onPlayerRequestControl: Event<PlayerRequestControlEventContext>;
+
+        export const onPlayerInteriorChange: Event<PlayerInteriorChangeEventContext>;
+        export const onPlayerDimensionChange: Event<PlayerDimensionChangeEventContext>;
+
+        export const onColshapeEvent: Event<ColshapeEventContext>;
+        export const onEntityColShapeEnter: Event<EntityColShapeEventContext>;
+        export const onEntityColShapeLeave: Event<EntityColShapeEventContext>;
+        export const onEntityCheckpointEnter: Event<EntityCheckpointEventContext>;
+        export const onEntityCheckpointLeave: Event<EntityCheckpointEventContext>;
+
+        export const onWeaponDamage: Event<WeaponDamageEventContext>;
+        export const onExplosion: Event<ExplosionEventContext>;
+        export const onFire: Event<FireEventContext>;
+        export const onStartProjectile: Event<StartProjectileEventContext>;
+
+        export const onServerStarted: Event<EventContext>;
+
+        export const onConnectionQueueAdd: Event<ConnectionQueueEventContext>;
+        export const onConnectionQueueRemove: Event<ConnectionQueueEventContext>;
+
+        export const onVehicleDestroy: Event<VehicleDestroyEventContext>;
+        export const onVehicleAttach: Event<VehicleAttachEventContext>;
+        export const onVehicleDetach: Event<VehicleDetachEventContext>;
+        export const onVehicleDamage: Event<VehicleDamageEventContext>;
+        export const onVehicleSiren: Event<VehicleSirenEventContext>;
 
         export function emitPlayers(players: Player[], eventName: string, ...args: any[]): void;
         export function emitPlayersUnreliable(players: Player[], eventName: string, ...args: any[]): void;
@@ -268,6 +467,40 @@ declare module "@altv/server" {
         // Server
         static create(args: PedCreateArgs): Ped;
         static getByID(id: number): Ped | null;
+    }
+
+    export interface IFireInfo {
+        readonly pos: shared.Vector3;
+        readonly weaponHash: number;
+    }
+
+    export interface IConnectionInfo {
+        readonly name: string;
+        readonly socialID: string;
+        readonly hwidHash: string;
+        readonly hwidExHash: string;
+        readonly authToken: string;
+        readonly isDebug: boolean;
+        readonly branch: string;
+        readonly build: number;
+        readonly cdnUrl: string;
+        readonly passwordHash: string;
+        readonly ip: string;
+        readonly discordUserID: string;
+        readonly socialClubName: string;
+        readonly id: number;
+        readonly cloudAuthHash: string;
+    }
+
+    export interface IConnectionQueueInfo extends IConnectionInfo {
+        /**
+         * Accepts client connection.
+         *
+         * @param sendNames Send names of all players on server to this client. Defaults to `true`.
+         */
+        accept: (sendNames?: boolean) => void;
+        decline: (reason: string) => void;
+        readonly isAccepted: boolean;
     }
 
     // todo: colshapes
