@@ -28,6 +28,9 @@ export class AssertionError extends Error {}
 export function assert(condition, message) {
     if (!condition) throw new alt.Utils.AssertionError(message ?? "Assertion failed");
 }
+export function assertIsObject(value, message) {
+    assert(value !== null && typeof value === "object", message);
+}
 alt.Utils.AssertionError = AssertionError;
 alt.Utils.assert = assert;
 

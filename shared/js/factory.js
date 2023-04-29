@@ -1,5 +1,5 @@
 /** @type {typeof import("./utils.js")} */
-const { assert } = requireBinding("shared/utils.js");
+const { assert, assertIsObject } = requireBinding("shared/utils.js");
 
 export function setEntityFactory(altClass, type) {
     return (factory) => {
@@ -42,29 +42,29 @@ alt.Factory.getVirtualEntityGroupFactory = getEntityFactory(alt.Enums.BaseObject
 
 // Factory ctors
 alt.PointBlip.create = (ctx) => {
-    assert(typeof ctx === "object", "Invalid args");
+    assertIsObject(ctx, "Invalid args");
     ctx.blipType = alt.Enums.BlipType.DESTINATION;
     return cppBindings.createEntity(alt.Enums.BaseObjectType.BLIP, ctx);
 };
 
 alt.AreaBlip.create = (ctx) => {
-    assert(typeof ctx === "object", "Invalid args");
+    assertIsObject(ctx, "Invalid args");
     ctx.blipType = alt.Enums.BlipType.AREA;
     return cppBindings.createEntity(alt.Enums.BaseObjectType.BLIP, ctx);
 };
 
 alt.RadiusBlip.create = (ctx) => {
-    assert(typeof ctx === "object", "Invalid args");
+    assertIsObject(ctx, "Invalid args");
     ctx.blipType = alt.Enums.BlipType.RADIUS;
     return cppBindings.createEntity(alt.Enums.BaseObjectType.BLIP, ctx);
 };
 
 alt.VirtualEntity.create = (ctx) => {
-    assert(typeof ctx === "object", "Invalid args");
+    assertIsObject(ctx, "Invalid args");
     return cppBindings.createEntity(alt.Enums.BaseObjectType.VIRTUAL_ENTITY, ctx);
 };
 
 alt.VirtualEntityGroup.create = (ctx) => {
-    assert(typeof ctx === "object", "Invalid args");
+    assertIsObject(ctx, "Invalid args");
     return cppBindings.createEntity(alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP, ctx);
 };
