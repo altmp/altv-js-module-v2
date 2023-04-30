@@ -1,0 +1,157 @@
+name: Build & deploy module
+on:
+  push:
+    branches-ignore:
+      - '**'
+    tags:
+      - 'dev/*.*-dev*'
+      - 'rc/*.*-rc*'
+      - 'release/*.*'
+
+jobs:
+  build-server-windows:
+    name: Build windows server
+    runs-on: windows-2019
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Setup xmake
+        uses: xmake-io/github-action-setup-xmake@v1
+        with:
+          xmake-version: latest
+
+      - name: Extract version
+        id: version
+        shell: bash
+        run: |
+          TAG=${GITHUB_REF/refs\/tags\//}
+          echo "BRANCH=${TAG/\/*}" >> $GITHUB_OUTPUT
+          echo "VERSION=${TAG/*\/}" >> $GITHUB_OUTPUT
+
+      - name: Generate xmake project
+        shell: bash
+        run: xmake config --module-version="${VERSION}-${BRANCH}"
+
+      - name: Build xmake project
+        shell: bash
+        run: xmake -b server
+
+      - name: Copy files
+        shell: bash
+        run: |
+          mkdir upload
+          copy build\windows\x64\release\js-module-v2.dll upload
+          copy build\windows\x64\release\js-module-v2.pdb upload
+          copy server\deps\nodejs\lib\Release\libnode.dll upload
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: server-windows
+          path: ./upload
+
+  build-server-linux:
+    name: Build linux server
+    runs-on: ubuntu-20.04
+    jobs:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Setup xmake
+        uses: xmake-io/github-action-setup-xmake@v1
+        with:
+          xmake-version: latest
+
+      - name: Extract version
+        id: version
+        shell: bash
+        run: |
+          TAG=${GITHUB_REF/refs\/tags\//}
+          echo "BRANCH=${TAG/\/*}" >> $GITHUB_OUTPUT
+          echo "VERSION=${TAG/*\/}" >> $GITHUB_OUTPUT
+
+      - name: Generate xmake project
+        shell: bash
+        run: xmake config --module-version="${BRANCH}/${VERSION}"
+
+      - name: Build xmake project
+        shell: bash
+        run: xmake -b server
+
+      - name: Copy files
+        shell: bash
+        run: |
+          mkdir upload
+          copy build\linux\x86_64\release\libjs-module-v2.so upload
+          copy server\deps\nodejs\lib\libnode.so upload
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: server-linux
+          path: ./upload
+
+  release:
+    name: Upload files to GitHub release
+    runs-on: ubuntu-20.04
+    needs: [build-server-windows, build-server-linux]
+    steps:
+      - name: Download windows artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: server-windows
+          path: dist-server-windows
+
+      - name: Download linux artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: server-linux
+          path: dist-server-linux
+
+      - name: Zip artifacts
+        run: |
+          zip -r -j js-module-v2-windows dist-server-windows
+          zip -r -j js-module-v2-linux dist-server-linux
+
+      - name: Extract version
+        id: version
+        shell: bash
+        run: |
+          TAG=${GITHUB_REF/refs\/tags\//}
+          echo "BRANCH=${TAG/\/*}" >> $GITHUB_OUTPUT
+          echo "VERSION=${TAG/*\/}" >> $GITHUB_OUTPUT
+
+       - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${ steps.version.outputs.BRANCH }/${{ steps.version.outputs.VERSION }}
+
+      - name: Upload windows artifacts
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./js-module-v2-windows.zip
+          asset_name: js-module-v2-windows.zip
+          asset_content_type: application/zip
+
+      - name: Upload linux artifacts
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./js-module-v2-linux.zip
+          asset_name: js-module-v2-linux.zip
+          asset_content_type: application/zip
+
