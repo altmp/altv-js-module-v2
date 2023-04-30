@@ -94,17 +94,16 @@ static js::Event playerWeaponChangeEvent(alt::CEvent::Type::PLAYER_WEAPON_CHANGE
     auto e = static_cast<const alt::CPlayerWeaponChangeEvent*>(ev);
 
     args.Set("player", e->GetTarget());
-    args.Set("oldSeat", e->GetOldWeapon());
-    args.Set("newSeat", e->GetNewWeapon());
+    args.Set("oldWeapon", e->GetOldWeapon());
+    args.Set("newWeapon", e->GetNewWeapon());
 });
 
-static js::Event requestControlEvent(alt::CEvent::Type::PLAYER_REQUEST_CONTROL, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+static js::Event playerRequestControlEvent(alt::CEvent::Type::PLAYER_REQUEST_CONTROL, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
     auto e = static_cast<const alt::CPlayerRequestControlEvent*>(ev);
 
     args.Set("player", e->GetPlayer());
     args.Set("target", e->GetTarget());
-
 });
 
 static js::Event playerInteriorChangeEvent(alt::CEvent::Type::PLAYER_CHANGE_INTERIOR_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)

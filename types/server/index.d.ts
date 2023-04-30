@@ -20,7 +20,189 @@ declare module "@altv/server" {
     export function getClosestEntities(pos: shared.Vector3, range: number, dimension: number, maxCount: number, entityTypes: number): ReadonlyArray<Entity>;
 
     export namespace Events {
-        // todo: add server events
+        interface PlayerConnectEventContext extends shared.Events.EventContext {
+            readonly player: Player;
+        }
+        interface PlayerConnectDeniedEventContext extends shared.Events.EventContext {
+            readonly reason: ConnectDeniedReason;
+            readonly name: string;
+            readonly ip: string;
+            readonly passwordHash: number;
+            readonly isDebug: boolean;
+            readonly branch: string;
+            readonly version: string;
+            readonly cdnUrl: string;
+            readonly discordId: string;
+        }
+        interface PlayerDisconnectEventContext extends shared.Events.EventContext {
+            readonly player: Player;
+            readonly reason: string;
+        }
+        interface PlayerDamageEventContext extends shared.Events.EventContext {
+            readonly player: Player;
+            readonly attacker: Entity | null;
+            readonly healthDamage: number;
+            readonly armourDamage: number;
+            readonly weaponHash: number;
+        }
+        interface PlayerDeathEventContext extends shared.Events.EventContext {
+            readonly player: Player;
+            readonly killer: Entity | null;
+            readonly weaponHash: number;
+        }
+        /**
+         * @remarks The seat indexes start with 1 (driver seat).
+         */
+        interface PlayerEnteredVehicleEventContext extends shared.Events.EventContext {
+            readonly player: Player;
+            readonly vehicle: Vehicle;
+            readonly seat: number;
+        }
+        /**
+         * @remarks The seat indexes start with 1 (driver seat).
+         */
+        interface PlayerVehicleEnteringEventContext extends shared.Events.EventContext {
+            readonly player: Player;
+            readonly vehicle: Vehicle;
+            readonly seat: number;
+        }
+        /**
+         * @remarks The seat indexes start with 1 (driver seat).
+         */
+        interface PlayerVehicleLeftEventContext extends shared.Events.EventContext {
+            readonly player: Player;
+            readonly vehicle: Vehicle;
+            readonly seat: number;
+        }
+        /**
+         * @remarks The seat indexes start with 1 (driver seat).
+         */
+        interface PlayerVehicleSeatChangeEventContext extends shared.Events.EventContext {
+            readonly player: Player;
+            readonly vehicle: Vehicle;
+            readonly oldSeat: number;
+            readonly newSeat: number;
+        }
+        interface PlayerWeaponChangeEventContext extends shared.Events.EventContext {
+            readonly player: Player;
+            readonly oldWeapon: number;
+            readonly newWeapon: number;
+        }
+        interface PlayerRequestControlEventContext extends shared.Events.EventContext {
+            readonly player: Player;
+            readonly target: Entity | null;
+        }
+        interface PlayerInteriorChangeEventContext extends shared.Events.EventContext {
+            readonly player: Player;
+            readonly oldInterior: number;
+            readonly newInterior: number;
+        }
+        interface PlayerDimensionChangeEventContext extends shared.Events.EventContext {
+            readonly player: Player;
+            readonly oldDimension: number;
+            readonly newDimension: number;
+        }
+        interface ColshapeEventContext extends shared.Events.EventContext {
+            readonly entity: Entity;
+            readonly colShape: ColShape;
+            readonly state: boolean;
+        }
+        interface EntityColShapeEventContext extends shared.Events.EventContext {
+            readonly entity: Entity;
+            readonly colShape: ColShape;
+        }
+        interface EntityCheckpointEventContext extends shared.Events.EventContext {
+            readonly entity: Entity;
+            readonly colShape: Checkpoint;
+        }
+        interface WeaponDamageEventContext extends shared.Events.EventContext {
+            readonly source: Player;
+            readonly target: Entity;
+            readonly weaponHash: number;
+            readonly damage: number;
+            readonly offset: shared.Vector3;
+            readonly bodyPart: shared.Enums.BodyPart;
+        }
+        interface ExplosionEventContext extends shared.Events.EventContext {
+            readonly source: Player;
+            readonly type: shared.Enums.ExplosionType;
+            readonly pos: shared.Vector3;
+            readonly fx: number;
+            readonly target: Entity | null;
+        }
+        interface FireEventContext extends shared.Events.EventContext {
+            readonly player: Player;
+            readonly fires: Array<IFireInfo>;
+        }
+        interface StartProjectileEventContext extends shared.Events.EventContext {
+            readonly player: Player;
+            readonly pos: shared.Vector3;
+            readonly dir: shared.Vector3;
+            readonly ammoHash: number;
+            readonly weaponHash: number;
+        }
+        interface VehicleDestroyEventContext extends shared.Events.EventContext {
+            vehicle: Vehicle;
+        }
+        interface VehicleAttachEventContext extends shared.Events.EventContext {
+            vehicle: Vehicle;
+            attachedVehicle: Vehicle;
+        }
+        interface VehicleDetachEventContext extends shared.Events.EventContext {
+            vehicle: Vehicle;
+            detachedVehicle: Vehicle;
+        }
+        interface VehicleDamageEventContext extends shared.Events.EventContext {
+            vehicle: Vehicle;
+            attacker: Entity | null;
+            bodyHealthDamage: number;
+            additionalBodyHealthDamage: number;
+            engineHealthDamage: number;
+            petrolTankDamage: number;
+            weaponHash: number;
+        }
+        interface VehicleSirenEventContext extends shared.Events.EventContext {
+            vehicle: Vehicle;
+            state: boolean;
+        }
+
+        export const onPlayerConnect: shared.Events.Event<PlayerConnectEventContext>;
+        export const onPlayerConnectDenied: shared.Events.Event<PlayerConnectDeniedEventContext>;
+        export const onPlayerDisconnect: shared.Events.Event<PlayerDisconnectEventContext>;
+
+        export const onPlayerDamage: shared.Events.Event<PlayerDamageEventContext>;
+        export const onPlayerDeath: shared.Events.Event<PlayerDeathEventContext>;
+
+        export const onPlayerEnteredVehicle: shared.Events.Event<PlayerEnteredVehicleEventContext>;
+        export const onPlayerVehicleEntering: shared.Events.Event<PlayerVehicleEnteringEventContext>;
+        export const onPlayerVehicleLeft: shared.Events.Event<PlayerVehicleLeftEventContext>;
+        export const onPlayerVehicleSeatChange: shared.Events.Event<PlayerVehicleSeatChangeEventContext>;
+
+        export const onPlayerWeaponChange: shared.Events.Event<PlayerWeaponChangeEventContext>;
+
+        export const onPlayerRequestControl: shared.Events.Event<PlayerRequestControlEventContext>;
+
+        export const onPlayerInteriorChange: shared.Events.Event<PlayerInteriorChangeEventContext>;
+        export const onPlayerDimensionChange: shared.Events.Event<PlayerDimensionChangeEventContext>;
+
+        export const onColshapeEvent: shared.Events.Event<ColshapeEventContext>;
+        export const onEntityColShapeEnter: shared.Events.Event<EntityColShapeEventContext>;
+        export const onEntityColShapeLeave: shared.Events.Event<EntityColShapeEventContext>;
+        export const onEntityCheckpointEnter: shared.Events.Event<EntityCheckpointEventContext>;
+        export const onEntityCheckpointLeave: shared.Events.Event<EntityCheckpointEventContext>;
+
+        export const onWeaponDamage: shared.Events.Event<WeaponDamageEventContext>;
+        export const onExplosion: shared.Events.Event<ExplosionEventContext>;
+        export const onFire: shared.Events.Event<FireEventContext>;
+        export const onStartProjectile: shared.Events.Event<StartProjectileEventContext>;
+
+        export const onServerStarted: shared.Events.Event<shared.Events.EventContext>;
+
+        export const onVehicleDestroy: shared.Events.Event<VehicleDestroyEventContext>;
+        export const onVehicleAttach: shared.Events.Event<VehicleAttachEventContext>;
+        export const onVehicleDetach: shared.Events.Event<VehicleDetachEventContext>;
+        export const onVehicleDamage: shared.Events.Event<VehicleDamageEventContext>;
+        export const onVehicleSiren: shared.Events.Event<VehicleSirenEventContext>;
 
         export function emitPlayers(players: Player[], eventName: string, ...args: any[]): void;
         export function emitPlayersUnreliable(players: Player[], eventName: string, ...args: any[]): void;
@@ -142,6 +324,15 @@ declare module "@altv/server" {
         static get all(): ReadonlyArray<Player>;
 
         // Server
+        get ip(): string;
+        get socialId(): number;
+        get hwidHash(): number;
+        get hwidExHash(): number;
+        get isConnected(): boolean;
+        get ping(): number;
+        get authToken(): string;
+        get discordId(): number;
+
         emit(eventName: string, ...args: any[]): void;
         emitUnreliable(eventName: string, ...args: any[]): void;
 
@@ -270,7 +461,28 @@ declare module "@altv/server" {
         static getByID(id: number): Ped | null;
     }
 
-    // todo: colshapes
+    export interface IFireInfo {
+        readonly pos: shared.Vector3;
+        readonly weaponHash: number;
+    }
+
+    export class ColShape extends WorldObject {
+        // Server
+        get colshapeType(): shared.Enums.ColShapeType;
+        get playersOnly(): boolean;
+
+        isEntityIn(entity: Entity): boolean;
+        isEntityIdIn(entityID: number): boolean;
+        isPointIn(position: shared.Vector3): boolean;
+    }
+
+    export const enum ConnectDeniedReason {
+        WRONG_VERSION,
+        WRONG_BRANCH,
+        DEBUG_NOT_ALLOWED,
+        WRONG_PASSWORD,
+        WRONG_CDN_URL
+    }
 
     export * from "@altv/shared";
 }

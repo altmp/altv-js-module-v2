@@ -97,41 +97,178 @@ declare module "@altv/shared" {
             PICKUP,
             SIZE
         }
+        export const enum Permission {
+            NONE,
+            SCREEN_CAPTURE,
+            WEBRTC,
+            CLIPBOARD_ACCESS,
+            All
+        }
+        export const enum PermissionState {
+            ALLOWED,
+            DENIED,
+            UNSPECIFIED,
+            FAILED
+        }
+        export const enum ExplosionType {
+            GRENADE,
+            GRENADELAUNCHER,
+            STICKYBOMB,
+            MOLOTOV,
+            ROCKET,
+            TANKSHELL,
+            HI_OCTANE,
+            CAR,
+            PLANE,
+            PETROL_PUMP,
+            BIKE,
+            DIR_STEAM,
+            DIR_FLAME,
+            DIR_WATER_HYDRANT,
+            DIR_GAS_CANISTER,
+            BOAT,
+            SHIP_DESTROY,
+            TRUCK,
+            BULLET,
+            SMOKEGRENADELAUNCHER,
+            SMOKEGRENADE,
+            BZGAS,
+            FLARE,
+            GAS_CANISTER,
+            EXTINGUISHER,
+            PROGRAMMABLEAR,
+            TRAIN,
+            BARREL,
+            PROPANE,
+            BLIMP,
+            DIR_FLAME_EXPLODE,
+            TANKER,
+            PLANE_ROCKET,
+            VEHICLE_BULLET,
+            GAS_TANK,
+            FIREWORK,
+            SNOWBALL,
+            PROXMINE,
+            VALKYRIE_CANNON,
+            UNKNOWN = -1
+        }
         export const enum BlipType {
             VEHICLE = 1,
-			PED = 2,
-			OBJECT = 3,
-			DESTINATION = 4,
-			CONT = 5,
-			PICKUP_UNK = 6,
-			RADIUS = 7,
-			PICKUP = 8,
-			COP = 9,
-			AREA = 11,
-			GALLERY = 12,
-			PICKUP_OBJECT = 13
+            PED = 2,
+            OBJECT = 3,
+            DESTINATION = 4,
+            CONT = 5,
+            PICKUP_UNK = 6,
+            RADIUS = 7,
+            PICKUP = 8,
+            COP = 9,
+            AREA = 11,
+            GALLERY = 12,
+            PICKUP_OBJECT = 13
+        }
+        export const enum ColShapeType {
+            SPHERE,
+            CYLINDER,
+            CIRCLE,
+            CUBOID,
+            RECT,
+            CHECKPOINT_CYLINDER,
+            POLYGON
         }
         export const enum VehicleModelType {
             INVALID,
-			PED,
-			AUTOMOBILE,
-			PLANE,
-			TRAILER,
-			QUAD_BIKE,
-			SUBMARINE_CAR,
-			AMPHIBIOUS_AUTOMOBILE,
-			AMPHIBIOUS_QUAD_BIKE,
-			HELI,
-			BLIMP,
-			AUTOGYRO,
-			BIKE,
-			BMX,
-			BOAT,
-			TRAIN,
-			SUBMARINE,
-			OBJECT
+            PED,
+            AUTOMOBILE,
+            PLANE,
+            TRAILER,
+            QUAD_BIKE,
+            SUBMARINE_CAR,
+            AMPHIBIOUS_AUTOMOBILE,
+            AMPHIBIOUS_QUAD_BIKE,
+            HELI,
+            BLIMP,
+            AUTOGYRO,
+            BIKE,
+            BMX,
+            BOAT,
+            TRAIN,
+            SUBMARINE,
+            OBJECT
         }
-        // todo: add missing enums
+        export const enum EventType {
+            PLAYER_CONNECT,
+            PLAYER_CONNECT_DENIED,
+            PLAYER_DISCONNECT,
+            PLAYER_DAMAGE,
+            PLAYER_DEATH,
+            PLAYER_ENTER_VEHICLE,
+            PLAYER_ENTERING_VEHICLE,
+            PLAYER_LEAVE_VEHICLE,
+            PLAYER_CHANGE_VEHICLE_SEAT,
+            PLAYER_WEAPON_CHANGE,
+            PLAYER_REQUEST_CONTROL,
+            PLAYER_CHANGE_INTERIOR_EVENT,
+            PLAYER_DIMENSION_CHANGE,
+            PLAYER_CHANGE_ANIMATION_EVENT,
+            COLSHAPE_EVENT,
+            WEAPON_DAMAGE_EVENT,
+            EXPLOSION_EVENT,
+            FIRE_EVENT,
+            START_PROJECTILE_EVENT,
+            SERVER_STARTED,
+            CONNECTION_QUEUE_ADD,
+            CONNECTION_QUEUE_REMOVE,
+            VEHICLE_DESTROY,
+            VEHICLE_ATTACH,
+            VEHICLE_DETACH,
+            VEHICLE_DAMAGE,
+            VEHICLE_SIREN,
+            CONSOLE_COMMAND_EVENT,
+            CREATE_BASE_OBJECT_EVENT,
+            REMOVE_BASE_OBJECT_EVENT,
+            NETOWNER_CHANGE,
+            LOCAL_SYNCED_META_CHANGE,
+            SYNCED_META_CHANGE,
+            STREAM_SYNCED_META_CHANGE,
+            GLOBAL_META_CHANGE,
+            GLOBAL_SYNCED_META_CHANGE,
+            RESOURCE_START,
+            RESOURCE_STOP,
+            RESOURCE_ERROR,
+            SERVER_SCRIPT_EVENT,
+            CLIENT_SCRIPT_EVENT
+        }
+        export const enum CustomEventType {
+            ENTITY_ENTER_COLSHAPE,
+            ENTITY_LEAVE_COLSHAPE,
+            ENTITY_ENTER_CHECKPOINT,
+            ENTITY_LEAVE_CHECKPOINT,
+            ERROR
+        }
+        export const enum BodyPart {
+            PELVIS,
+            LEFT_HIP,
+            LEFT_LEG,
+            LEFT_FOOT,
+            RIGHT_HIP,
+            RIGHT_LEG,
+            RIGHT_FOOT,
+            LOWER_TORSO,
+            UPPER_TORSO,
+            CHEST,
+            UNDER_NECK,
+            LEFT_SHOULDER,
+            LEFT_UPPER_ARM,
+            LEFT_ELBROW,
+            LEFT_WRIST,
+            RIGHT_SHOULDER,
+            RIGHT_UPPER_ARM,
+            RIGHT_ELBROW,
+            RIGHT_WRIST,
+            NECK,
+            HEAD,
+            UNKNOWN = -1
+        }
     }
 
     export namespace Events {
@@ -330,12 +467,33 @@ declare module "@altv/shared" {
         constructor(values: [number, number, number, number]);
         constructor(values: { x: number, y: number, z: number, w: number });
 
-        // todo: add missing api
-
         get x(): number;
         get y(): number;
         get z(): number;
         get w(): number;
+        get length(): number;
+        get lengthSquared(): number;
+        get conjugate(): Quaternion;
+        get inverse(): Quaternion;
+        get normalized(): Quaternion;
+        get pitch(): number;
+        get yaw(): number;
+        get roll(): number;
+        get eulerAngles(): Vector3;
+        get axis(): Vector3;
+        get angle(): number;
+        get matrix(): ReadonlyArray<number>;
+        get forward(): Vector3;
+        get right(): Vector3;
+        get up(): Vector3;
+        get left(): Vector3;
+        get back(): Vector3;
+        get down(): Vector3;
+
+        static fromEuler(x: number, y: number, z: number): Quaternion;
+        static fromAxisAngle(axis: Vector3, angel: number): Quaternion;
+        static fromMatrix(matrix: Array<number>): Quaternion;
+        static fromArray(array: Array<number>): Quaternion;
     }
 
     export class BaseObject {
