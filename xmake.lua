@@ -92,7 +92,8 @@ target("server")
     add_defines("ALT_SERVER_API", "NODE_WANT_INTERNALS=1", "HAVE_OPENSSL=1", "HAVE_INSPECTOR=1")
 
     if is_os("linux") then
-        add_links("server/deps/nodejs/lib/libnode.108")
+        add_links("node")
+        add_linkdirs("$(scriptdir)/server/deps/nodejs/lib")
     else
         if is_mode("debug") then add_links("server/deps/nodejs/lib/Debug/libnode")
         else add_links("server/deps/nodejs/lib/Release/libnode") end

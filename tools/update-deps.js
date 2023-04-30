@@ -63,6 +63,7 @@ const SERVER_FILES = [
     },
     {
         name: "libnode.so.108",
+        nameOverride: "libnode.so",
         path: "server/deps/nodejs/lib",
         urlPath: "deps/nodejs/{BRANCH}/x64_linux",
         os: "x64_linux",
@@ -77,7 +78,7 @@ const SERVER_FILES = [
         if (file.os !== getOSName()) continue;
         const fileUrlPath = file.urlPath.replace("{BRANCH}", getGitBranch()).replace("{OS}", getOSName());
         const url = `${CDN_URL}/${fileUrlPath}/${file.name}`;
-        const path = pathUtil.resolve(__dirname, "../", file.path, file.name);
+        const path = pathUtil.resolve(__dirname, "../", file.path, file.nameOverride ? file.nameOverride : file.name);
 
         let hash = "INVALID";
         const fileExists = await doesFileExist(path);
