@@ -112,7 +112,8 @@ namespace js
 
             try
             {
-                constexpr auto MakeTuple = [&]<size_t... Ints>(std::index_sequence<Ints...>)->auto
+                // todo: make this work as constexpr on linux
+                auto MakeTuple = [&]<size_t... Ints>(std::index_sequence<Ints...>)->auto
                 {
                     return std::make_tuple(Wrapper::GetArg<Wrapper::CleanArg<std::tuple_element_t<Ints, Arguments>>>(ctx, Ints)...);
                 };
