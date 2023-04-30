@@ -2931,9 +2931,32 @@ const inspectMultiple = (options, ...args) => {
     return str;
 };
 
+/** @type {Map<string, number>} */
+const timeLabelMap = new Map();
+function time(label) {
+    if (timeLabelMap.has(label ?? "Timer")) throw new Error(`Label '${label ?? "Timer"}' already running`);
+    timeLabelMap.set(label ?? "Timer", Date.now());
+}
+function timeLog(label) {
+    const start = timeLabelMap.get(label ?? "Timer");
+    if (start === undefined) throw new Error(`No such label '${label ?? "Timer"}' running`);
+    const duration = Date.now() - start;
+    alt.log(`[JS] ${label ?? "Timer"}: ${duration}ms`);
+}
+function timeEnd(label) {
+    const start = timeLabelMap.get(label ?? "Timer");
+    if (start === undefined) throw new Error(`No such label '${label ?? "Timer"}' running`);
+    const duration = Date.now() - start;
+    alt.log(`[JS] ${label ?? "Timer"}: ${duration}ms`);
+    timeLabelMap.delete(label ?? "Timer");
+}
+
 if (!globalThis.console) globalThis.console = {};
 globalThis.console.log = alt.log;
 globalThis.console.warn = alt.logWarning;
 globalThis.console.error = alt.logError;
+globalThis.console.time = time;
+globalThis.console.timeLog = timeLog;
+globalThis.console.timeEnd = timeEnd;
 
 export { inspectMultiple, inspect };
