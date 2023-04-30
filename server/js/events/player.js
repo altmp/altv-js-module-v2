@@ -10,6 +10,6 @@ Event.register(alt.Enums.EventType.PLAYER_ENTERING_VEHICLE, "PlayerEnteringVehic
 Event.register(alt.Enums.EventType.PLAYER_LEAVE_VEHICLE, "PlayerLeftVehicle");
 Event.register(alt.Enums.EventType.PLAYER_CHANGE_VEHICLE_SEAT, "PlayerVehicleSeatChange");
 Event.register(alt.Enums.EventType.PLAYER_WEAPON_CHANGE, "PlayerWeaponChange");
-Event.register(alt.Enums.EventType.PLAYER_REQUEST_CONTROL, "PlayerRequestControl");
+Event.register(alt.Enums.EventType.PLAYER_REQUEST_CONTROL, "PlayerControlRequest");
 Event.register(alt.Enums.EventType.PLAYER_CHANGE_INTERIOR_EVENT, "PlayerInteriorChange");
 Event.register(alt.Enums.EventType.PLAYER_DIMENSION_CHANGE, "PlayerDimensionChange");
