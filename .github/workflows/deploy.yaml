@@ -33,7 +33,7 @@ jobs:
 
       - name: Generate xmake project
         shell: bash
-        run: xmake config --module-version="${VERSION}-${BRANCH}"
+        run: xmake config --module-version="${BRANCH}/${VERSION}" --toolchain="msvc"
 
       - name: Build xmake project
         shell: bash
@@ -77,7 +77,7 @@ jobs:
 
       - name: Generate xmake project
         shell: bash
-        run: xmake config --module-version="${BRANCH}/${VERSION}" --toolchain="msvc"
+        run: xmake config --module-version="${BRANCH}/${VERSION}"
 
       - name: Build xmake project
         shell: bash
