@@ -10,7 +10,7 @@
                 "ALT_CLIENT",
                 "ALT_SERVER_API",
                 "ALT_SERVER",
-                "JS_MODULE_VERSION",
+                "MODULE_VERSION",
                 "DYNAMIC_BUILD",
                 "WIN32",
                 "NODE_WANT_INTERNALS",
@@ -44,7 +44,7 @@
                 "ALT_CLIENT",
                 "ALT_SERVER_API",
                 "ALT_SERVER",
-                "JS_MODULE_VERSION",
+                "MODULE_VERSION",
                 "DYNAMIC_BUILD",
                 "NODE_WANT_INTERNALS",
                 "DEBUG_BINDINGS"

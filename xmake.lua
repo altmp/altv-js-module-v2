@@ -34,6 +34,11 @@ option("debug-bindings")
     set_default(false)
     set_showmenu(true)
 
+option("module-version")
+    set_description("Module version")
+    set_default("internal")
+    set_showmenu(true)
+
 -- Rules
 rule("generate-bindings")
     before_build(function(target)
@@ -90,6 +95,7 @@ target("server")
     add_deps("shared")
     add_rules("update-deps")
     add_defines("ALT_SERVER_API", "NODE_WANT_INTERNALS=1", "HAVE_OPENSSL=1", "HAVE_INSPECTOR=1")
+    add_defines("MODULE_VERSION=\"$(module-version)\"")
 
     if is_os("linux") then
         add_links("node")
@@ -121,6 +127,7 @@ target("client")
     add_deps("shared")
     add_rules("update-deps")
     add_defines("ALT_CLIENT_API", "V8_COMPRESS_POINTERS=1", "V8_31BIT_SMIS_ON_64BIT_ARCH=1", "V8_IMMINENT_DEPRECATION_WARNINGS=1")
+    add_defines("MODULE_VERSION=\"$(module-version)\"")
 
     if is_mode("debug") then
         add_linkdirs("client/deps/v8/lib/Debug")
