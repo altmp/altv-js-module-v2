@@ -56,7 +56,7 @@ jobs:
   build-server-linux:
     name: Build linux server
     runs-on: ubuntu-20.04
-    jobs:
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
