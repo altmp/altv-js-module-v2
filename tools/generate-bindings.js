@@ -50,11 +50,8 @@ const hashesOutputPath = "build/bindings-hashes.json";
     const hashesOutputPathResolved = resolvePath(hashesOutputPath);
     const outputPathResolved = resolvePath(outputPath);
 
-    if (
-        (await doesFileExist(outputPathResolved)) &&
-        (await doesFileExist(resolvePath("build"))) &&
-        (await doesFileExist(hashesOutputPathResolved))
-    ) {
+    await fs.mkdir(resolvePath("build"), { recursive: true });
+    if ((await doesFileExist(outputPathResolved)) && (await doesFileExist(hashesOutputPathResolved))) {
         const hashesStr = await fs.readFile(hashesOutputPathResolved, "utf8");
         Object.assign(previousHashes, JSON.parse(hashesStr));
         showLog("Loaded previous bindings hashes");
