@@ -69,7 +69,7 @@ export class Event {
      * @param {{ eventName: string }} ctx
      * @param {boolean} local
      */
-    static #handleScriptEvent(ctx, local) {
+    static async #handleScriptEvent(ctx, local) {
         const name = ctx.eventName;
         const handlers = local ? Event.#localScriptEventHandlers.get(name) : Event.#remoteScriptEventHandlers.get(name);
         if (!handlers) return;
@@ -82,7 +82,7 @@ export class Event {
         for (let { handler, location } of handlers) {
             try {
                 const startTime = Date.now();
-                handler(evCtx);
+                const result = handler(evCtx);
                 const duration = Date.now() - startTime;
                 if (duration > Event.#warningThreshold) {
                     alt.logWarning(
@@ -93,6 +93,7 @@ export class Event {
                         }ms)`
                     );
                 }
+                if (result instanceof Promise) await result;
             } catch (e) {
                 alt.logError(`[JS] Exception caught while invoking script event '${name}' handler`);
                 alt.logError(e);
@@ -185,7 +186,7 @@ export class Event {
      * @param {Record<string, unknown>} ctx
      * @param {boolean} custom
      */
-    static invoke(eventType, ctx, custom) {
+    static async invoke(eventType, ctx, custom) {
         if (eventType === alt.Enums.EventType.CLIENT_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isClient);
         else if (eventType === alt.Enums.EventType.SERVER_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isServer);
 
@@ -195,7 +196,7 @@ export class Event {
         for (const { handler, location } of handlers) {
             try {
                 const startTime = Date.now();
-                handler(ctx);
+                const result = handler(ctx);
                 const duration = Date.now() - startTime;
                 if (duration > Event.#warningThreshold) {
                     alt.logWarning(
@@ -204,6 +205,7 @@ export class Event {
                         }) took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`
                     );
                 }
+                if (result instanceof Promise) await result;
             } catch (e) {
                 alt.logError(`[JS] Exception caught while invoking event handler`);
                 alt.logError(e);
