@@ -41,7 +41,7 @@ option("module-version")
 
 -- Rules
 rule("generate-bindings")
-    before_build(function(target)
+    on_config(function(target)
         local out = os.iorun("node tools/generate-bindings.js ..")
         if out ~= "" and is_mode("debug") then
             print(out)
@@ -49,7 +49,7 @@ rule("generate-bindings")
     end)
 
 rule("update-deps")
-    before_build(function(target)
+    on_config(function(target)
         if not has_config("auto-update-deps") then return end
         import("core.project.config")
         os.iorun("node tools/update-deps.js " .. target:name() .. " " .. tostring(config.get("mode")))
@@ -59,7 +59,7 @@ rule("update-deps")
 target("cpp-sdk")
     set_kind("headeronly")
     add_headerfiles("$(sdk-path)/**.h")
-    before_build(function(target)
+    on_config(function(target)
         local oldDir = os.cd("$(sdk-path)")
         local out, err = os.iorun("git rev-parse --short HEAD")
         if err ~= "" then
@@ -74,8 +74,6 @@ target("shared")
     set_kind("headeronly")
     add_headerfiles("shared/src/**.h")
     add_deps("cpp-sdk")
-    set_configdir("shared/src")
-    add_configfiles("shared/src/Version.h.in")
     if has_config("debug-bindings") then
         add_defines("DEBUG_BINDINGS=1")
     end

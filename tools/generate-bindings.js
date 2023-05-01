@@ -48,7 +48,13 @@ const hashesOutputPath = "build/bindings-hashes.json";
     let anyHashChanged = false;
 
     const hashesOutputPathResolved = resolvePath(hashesOutputPath);
-    if ((await doesFileExist(resolvePath("build"))) && (await doesFileExist(hashesOutputPathResolved))) {
+    const outputPathResolved = resolvePath(outputPath);
+
+    if (
+        (await doesFileExist(outputPathResolved)) &&
+        (await doesFileExist(resolvePath("build"))) &&
+        (await doesFileExist(hashesOutputPathResolved))
+    ) {
         const hashesStr = await fs.readFile(hashesOutputPathResolved, "utf8");
         Object.assign(previousHashes, JSON.parse(hashesStr));
         showLog("Loaded previous bindings hashes");
@@ -98,7 +104,7 @@ const hashesOutputPath = "build/bindings-hashes.json";
     const outputStr = resultTemplate
         .replace("{DATE}", `${getDate()} ${getTime()}`)
         .replace("{BINDINGS_LIST}", bindingsList);
-    await fs.writeFile(resolvePath(outputPath), outputStr);
+    await fs.writeFile(outputPathResolved, outputStr);
     showLog(`Wrote bindings result to file: ${outputPath}`);
 })();
 
