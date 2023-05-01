@@ -23,6 +23,11 @@ jobs:
         with:
           xmake-version: latest
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
       - name: Extract version
         id: version
         shell: bash
@@ -67,6 +72,11 @@ jobs:
         with:
           xmake-version: latest
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
       - name: Extract version
         id: version
         shell: bash
@@ -84,11 +94,10 @@ jobs:
         run: xmake -b server
 
       - name: Copy files
-        shell: bash
         run: |
           mkdir upload
-          copy build\linux\x86_64\release\libjs-module-v2.so upload
-          copy server\deps\nodejs\lib\libnode.so upload
+          cp build/linux/x86_64/release/libjs-module-v2.so upload
+          cp server/deps/nodejs/lib/libnode.so upload
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3

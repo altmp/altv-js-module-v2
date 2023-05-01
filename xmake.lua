@@ -76,7 +76,6 @@ target("shared")
     add_deps("cpp-sdk")
     set_configdir("shared/src")
     add_configfiles("shared/src/Version.h.in")
-    add_rules("generate-bindings")
     if has_config("debug-bindings") then
         add_defines("DEBUG_BINDINGS=1")
     end
@@ -93,7 +92,7 @@ target("server")
         "build"
     )
     add_deps("shared")
-    add_rules("update-deps")
+    add_rules("generate-bindings", "update-deps")
     add_defines("ALT_SERVER_API", "NODE_WANT_INTERNALS=1", "HAVE_OPENSSL=1", "HAVE_INSPECTOR=1")
     add_defines("MODULE_VERSION=\"$(module-version)\"")
 
@@ -125,7 +124,7 @@ target("client")
         "build"
     )
     add_deps("shared")
-    add_rules("update-deps")
+    add_rules("generate-bindings", "update-deps")
     add_defines("ALT_CLIENT_API", "V8_COMPRESS_POINTERS=1", "V8_31BIT_SMIS_ON_64BIT_ARCH=1", "V8_IMMINENT_DEPRECATION_WARNINGS=1")
     add_defines("MODULE_VERSION=\"$(module-version)\"")
 
