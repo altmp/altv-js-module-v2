@@ -8,6 +8,9 @@ on:
       - 'rc/*.*-rc*'
       - 'release/*.*'
 
+permissions:
+  id-token: write
+
 jobs:
   build-server-windows:
     name: Build windows server
@@ -142,7 +145,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${ steps.version.outputs.BRANCH }/${{ steps.version.outputs.VERSION }}
+          release_name: Release ${{ steps.version.outputs.BRANCH }}/${{ steps.version.outputs.VERSION }}
 
       - name: Upload windows artifacts
         uses: actions/upload-release-asset@v1
