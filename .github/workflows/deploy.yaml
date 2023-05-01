@@ -38,7 +38,7 @@ jobs:
 
       - name: Generate xmake project
         shell: bash
-        run: xmake config -p windows --toolchain=msvc --module-version="${BRANCH}/${VERSION}"
+        run: xmake config -p windows --toolchain=msvc --module-version="${{ steps.version.outputs.BRANCH }}/${{ steps.version.outputs.VERSION }}"
 
       - name: Build xmake project
         shell: bash
@@ -87,7 +87,7 @@ jobs:
 
       - name: Generate xmake project
         shell: bash
-        run: xmake config --module-version="${BRANCH}/${VERSION}"
+        run: xmake config --module-version="${{ steps.version.outputs.BRANCH }}/${{ steps.version.outputs.VERSION }}"
 
       - name: Build xmake project
         shell: bash
