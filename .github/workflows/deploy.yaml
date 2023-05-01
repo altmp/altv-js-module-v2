@@ -45,7 +45,7 @@ jobs:
         run: xmake -b server
 
       - name: Copy files
-        shell: bash
+        shell: cmd
         run: |
           mkdir upload
           copy build\windows\x64\release\js-module-v2.dll upload
