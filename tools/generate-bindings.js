@@ -178,9 +178,6 @@ function showError(...args) {
 }
 
 function showUsage() {
-    showLog("Usage: convert-bindings.js <basePath> <scope>");
+    showLog("Usage: convert-bindings.js <basePath>");
     showLog("<basePath>: Path to the base of the repository");
-    showLog(
-        "<scope>: 'SHARED' includes only shared bindings, 'CLIENT' shared and client bindings, 'SERVER' shared and server bindings"
-    );
 }
