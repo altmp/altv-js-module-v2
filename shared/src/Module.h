@@ -76,5 +76,6 @@ namespace js
 
         static void Initialize(v8::Isolate* isolate);
         static void Cleanup(v8::Isolate* isolate);
+        static void CleanupForResource(IResource* resource);
     };
 }  // namespace js

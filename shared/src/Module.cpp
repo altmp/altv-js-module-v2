@@ -45,3 +45,11 @@ void js::Module::Cleanup(v8::Isolate* isolate)
         module->templateMap.erase(isolate);
     }
 }
+
+void js::Module::CleanupForResource(IResource* resource)
+{
+    for(auto& [_, mod] : GetAll())
+    {
+        mod->instanceMap.erase(resource);
+    }
+}

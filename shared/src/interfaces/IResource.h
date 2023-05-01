@@ -52,6 +52,7 @@ namespace js
         void Reset()
         {
             Binding::CleanupForResource(this);
+            Module::CleanupForResource(this);
             IScriptObjectHandler::Reset();
             context.Reset();
         }
@@ -117,6 +118,7 @@ namespace js
         void InitializeBindings(Binding::Scope scope, Module& altModule);
         virtual void RegisterBindingExports()
         {
+            // todo: rework this, so they are defined in JS directly, instead of needing to add them to this list
             // Register the needed exports of our bindings
             RegisterBindingExport("timers:tick", "shared/timers.js", "tick");
             RegisterBindingExport("events:onEvent", "shared/events.js", "onEvent");
