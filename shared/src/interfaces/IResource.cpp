@@ -28,7 +28,7 @@ void js::IResource::Function::ExternalFunctionCallback(const v8::FunctionCallbac
     alt::MValueFunctionConst* func = static_cast<alt::MValueFunctionConst*>(info.Data().As<v8::External>()->Value());
     alt::MValueArgs args;
     args.reserve(info.Length());
-    for(size_t i = 0; i < info.Length(); ++i) args.push_back(JSToMValue(info[i], false));
+    for(size_t i = 0; i < info.Length(); ++i) args.push_back(JSToMValue(info[i]));
     alt::MValue retValue = (*func)->Call(args);
     info.GetReturnValue().Set(MValueToJS(retValue));
 }
