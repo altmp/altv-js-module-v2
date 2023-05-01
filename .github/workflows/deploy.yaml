@@ -8,9 +8,6 @@ on:
       - 'rc/*.*-rc*'
       - 'release/*.*'
 
-permissions:
-  id-token: write
-
 jobs:
   build-server-windows:
     name: Build windows server
