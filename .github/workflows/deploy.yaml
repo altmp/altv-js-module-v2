@@ -99,7 +99,7 @@ jobs:
   release:
     name: Upload files to GitHub release
     runs-on: ubuntu-20.04
-    needs: [build-server-windows, build-server-linux]
+    needs: [ build-server-windows, build-server-linux ]
     steps:
       - name: Download windows artifacts
         uses: actions/download-artifact@v3
@@ -155,3 +155,15 @@ jobs:
           asset_name: js-module-v2-linux.zip
           asset_content_type: application/zip
 
+  delete-artifacts:
+    name: Delete artifacts
+    runs-on: ubuntu-20.04
+    needs: [ release ]
+    if: ${{ always() }}
+    steps:
+      - name: Delete artifacts
+        uses: geekyeggo/delete-artifact@v2
+        with:
+          name: |
+            server-windows
+            server-linux
