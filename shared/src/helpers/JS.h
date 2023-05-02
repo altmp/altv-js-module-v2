@@ -152,7 +152,11 @@ namespace js
         std::vector<std::string> GetKeys() const
         {
             std::vector<std::string> keys;
-            v8::MaybeLocal<v8::Array> maybePropNames = object->GetPropertyNames(GetContext());
+            v8::MaybeLocal<v8::Array> maybePropNames = object->GetPropertyNames(GetContext(),
+                                                                                v8::KeyCollectionMode::kOwnOnly,
+                                                                                (v8::PropertyFilter)(v8::PropertyFilter::ONLY_ENUMERABLE | v8::PropertyFilter::SKIP_SYMBOLS),
+                                                                                v8::IndexFilter::kSkipIndices,
+                                                                                v8::KeyConversionMode::kConvertToString);
             v8::Local<v8::Array> propNames;
             if(!maybePropNames.ToLocal(&propNames)) return keys;
             for(uint32_t i = 0; i < propNames->Length(); i++)
