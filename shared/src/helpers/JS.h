@@ -247,13 +247,33 @@ namespace js
         }
 
         template<typename T>
-        T Get(uint32_t index)
+        T Get(uint32_t index, const T& defaultValue = T())
         {
             v8::MaybeLocal<v8::Value> maybeVal = array->Get(context, index);
             v8::Local<v8::Value> val;
-            if(!maybeVal.ToLocal(&val)) return T();
+            if(!maybeVal.ToLocal(&val)) return defaultValue;
             std::optional<T> result = js::CppValue<T>(val);
-            return result.has_value() ? result.value() : T();
+            return result.has_value() ? result.value() : defaultValue;
+        }
+
+        template<typename T>
+        bool Get(uint32_t index, T& out, bool throwOnError = true)
+        {
+            v8::MaybeLocal<v8::Value> maybeVal = array->Get(context, index);
+            v8::Local<v8::Value> val;
+            if(!maybeVal.ToLocal(&val))
+            {
+                if(throwOnError) Throw("Failed to get array value at index " + std::to_string(index) + ", invalid index");
+                return false;
+            }
+            std::optional<T> result = js::CppValue<T>(val);
+            if(!result.has_value())
+            {
+                if(throwOnError) Throw("Failed to get array value at index " + std::to_string(index) + ", invalid type");
+                return false;
+            }
+            out = result.value();
+            return true;
         }
 
         template<typename T>
