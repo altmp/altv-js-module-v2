@@ -52,3 +52,4 @@ export function hash(str) {
 
     return hash >>> 0; // Convert to unsigned
 }
+cppBindings.registerExport("utils:hash", hash);

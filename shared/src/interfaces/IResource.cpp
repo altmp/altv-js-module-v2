@@ -77,27 +77,6 @@ void js::IResource::InitializeBinding(js::Binding* binding)
     }
 }
 
-void js::IResource::RegisterBindingExport(const std::string& name, const std::string& bindingName, const std::string& exportName)
-{
-    Binding& binding = Binding::Get(bindingName);
-    if(!binding.IsValid())
-    {
-        Logger::Error("INTERNAL ERROR: Failed to get binding", bindingName, "for export", name);
-        return;
-    }
-    v8::Local<v8::Module> mod = binding.GetCompiledModule(this);
-    v8::Local<v8::Object> moduleNamespace = mod->GetModuleNamespace().As<v8::Object>();
-    v8::MaybeLocal<v8::Value> maybeExportedValue = moduleNamespace->Get(GetContext(), js::JSValue(exportName));
-
-    v8::Local<v8::Value> exportedValue;
-    if(!maybeExportedValue.ToLocal(&exportedValue) || exportedValue->IsUndefined())
-    {
-        Logger::Error("INTERNAL ERROR: Failed to get exported value", exportName, "from binding", bindingName, "for export", name);
-        return;
-    }
-    bindingExports.insert({ name, Persistent<v8::Value>(isolate, exportedValue) });
-}
-
 static void DebugLog(js::FunctionContext& ctx)
 {
     std::string logMsg;
@@ -122,8 +101,7 @@ void js::IResource::InitializeBindings(Binding::Scope scope, Module& altModule)
         TemporaryGlobalExtension requireBindingExtension(ctx, "requireBinding", WrapFunction(RequireBindingNamespaceWrapper)->GetFunction(ctx).ToLocalChecked());
         TemporaryGlobalExtension debugLogExtension(ctx, "debugLog", WrapFunction(DebugLog)->GetFunction(ctx).ToLocalChecked());
 
-        for(auto binding : bindings) InitializeBinding(binding);
-        RegisterBindingExports();
+        for(Binding* binding : bindings) InitializeBinding(binding);
     }
 }
 

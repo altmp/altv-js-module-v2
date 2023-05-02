@@ -35,16 +35,16 @@ get the export from the resource and afterwards use it however needed. These ste
 
 ### Registering a binding export
 
-To register a binding for later use, go to the `js::IResource::RegisterBindingExports` function and add the needed export by calling `RegisterBindingExport` there.
+To register a binding export for later use, call the `cppBindings.registerExport` function in the binding.
 
-This function takes the unique name of the export as first argument (which is later used to access it),
-the file that exports it ([Binding names](#binding-names)) as second argument,
-and the third argument is the name of the export in JS.
+It takes the name of the export as the first argument, and the value as the second argument.
 
 Example:
-```cpp
-//                      Unique name           File path          Export name
-RegisterBindingExport("funcs:myExport", "shared/myTest/test.js", "myExport");
+```js
+function myExport() {
+    // do something
+}
+cppBindings.registerExport("funcs:myExport", myExport);
 ```
 
 ### Getting and using a binding export

@@ -54,11 +54,16 @@ namespace js
             Binding::CleanupForResource(this);
             Module::CleanupForResource(this);
             IScriptObjectHandler::Reset();
+
+            resource = nullptr;
+            isolate = nullptr;
+
             context.Reset();
+            bindingExports.clear();
+            resourceObjects.clear();
         }
 
         void InitializeBinding(Binding* binding);
-        void RegisterBindingExport(const std::string& name, const std::string& bindingName, const std::string& exportName);
 
     public:
         IResource(alt::IResource* _resource, v8::Isolate* _isolate) : resource(_resource), isolate(_isolate) {}
@@ -116,23 +121,13 @@ namespace js
         }
 
         void InitializeBindings(Binding::Scope scope, Module& altModule);
-        virtual void RegisterBindingExports()
+        void SetBindingExport(const std::string& name, v8::Local<v8::Value> val)
         {
-            // todo: rework this, so they are defined in JS directly, instead of needing to add them to this list
-            // Register the needed exports of our bindings
-            RegisterBindingExport("timers:tick", "shared/timers.js", "tick");
-            RegisterBindingExport("events:onEvent", "shared/events.js", "onEvent");
-
-            RegisterBindingExport("classes:vector3", "shared/classes/vector.js", "Vector3");
-            RegisterBindingExport("classes:vector2", "shared/classes/vector.js", "Vector2");
-            RegisterBindingExport("classes:rgba", "shared/classes/rgba.js", "RGBA");
-            RegisterBindingExport("classes:quaternion", "shared/classes/quaternion.js", "Quaternion");
-
-            RegisterBindingExport("logging:inspectMultiple", "shared/logging.js", "inspectMultiple");
-
-            RegisterBindingExport("entity:addEntityToAll", "shared/entity.js", "addEntityToAll");
-
-            RegisterBindingExport("utils:hash", "shared/utils.js", "hash");
+            bindingExports.insert({ name, Persistent<v8::Value>(isolate, val) });
+        }
+        bool HasBindingExport(const std::string& name)
+        {
+            return bindingExports.contains(name);
         }
         template<typename T = v8::Value>
         v8::Local<T> GetBindingExport(const std::string& name)

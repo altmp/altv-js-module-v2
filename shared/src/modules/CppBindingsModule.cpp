@@ -108,6 +108,22 @@ static void GetCurrentSourceLocation(js::FunctionContext& ctx)
     ctx.Return(obj);
 }
 
+static void RegisterExport(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(2)) return;
+
+    std::string name;
+    if(!ctx.GetArg(0, name)) return;
+
+    v8::Local<v8::Value> value;
+    if(!ctx.GetArg(1, value)) return;
+
+    js::IResource* resource = ctx.GetResource();
+    if(!ctx.Check(!resource->HasBindingExport(name), "Export already registered")) return;
+
+    resource->SetBindingExport(name, value);
+}
+
 static void ResourceNameGetter(js::LazyPropertyContext& ctx)
 {
     ctx.Return(ctx.GetResource()->GetResource()->GetName());
@@ -124,6 +140,8 @@ static js::Module cppBindingsModule("cppBindings", [](js::ModuleTemplate& module
     module.StaticFunction("createEntity", CreateEntity);
     module.StaticFunction("getAllEntities", GetAllEntities);
     module.StaticFunction("getCurrentSourceLocation", GetCurrentSourceLocation);
+
+    module.StaticFunction("registerExport", RegisterExport);
 
     module.StaticLazyProperty("resourceName", ResourceNameGetter);
 });

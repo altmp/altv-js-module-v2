@@ -115,7 +115,7 @@ globalThis.clearTimeout = (timeout) => {
     timeout.destroy();
 };
 
-export function tick() {
+function tick() {
     for (const timer of timers) {
         try {
             timer.tick();
@@ -126,3 +126,4 @@ export function tick() {
         }
     }
 }
+cppBindings.registerExport("timers:tick", tick);

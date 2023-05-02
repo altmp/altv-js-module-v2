@@ -33,11 +33,12 @@ alt.Events.onBaseObjectRemove(({ object }) => {
 
 // Needed because base object events are called on next tick, and entities created from scripts
 // should be immediately accessible in .all
-export function addEntityToAll(entity) {
+function addEntityToAll(entity) {
     entityAllSet.add(entity);
     const all = entityAllMap.get(entity.type);
     if (all) all.add(entity);
 }
+cppBindings.registerExport("entity:addEntityToAll", addEntityToAll);
 
 // Register all getters
 Object.defineProperty(alt.Entity, "all", {

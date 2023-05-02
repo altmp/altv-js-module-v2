@@ -52,3 +52,4 @@ export class RGBA {
 
     static zero = new RGBA(0, 0, 0, 0);
 }
+cppBindings.registerExport("classes:rgba", RGBA);

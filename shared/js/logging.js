@@ -2930,6 +2930,7 @@ const inspectMultiple = (options, ...args) => {
     }
     return str;
 };
+cppBindings.registerExport("logging:inspectMultiple", inspectMultiple);
 
 /** @type {Map<string, number>} */
 const timeLabelMap = new Map();
@@ -2958,5 +2959,3 @@ globalThis.console.error = alt.logError;
 globalThis.console.time = time;
 globalThis.console.timeLog = timeLog;
 globalThis.console.timeEnd = timeEnd;
-
-export { inspectMultiple, inspect };
