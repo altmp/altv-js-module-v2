@@ -95,14 +95,14 @@ alt::MValue js::JSToMValue(v8::Local<v8::Value> val, bool allowFunction)
     {
         if(val->IsArray())
         {
-            v8::Local<v8::Array> v8Arr = val.As<v8::Array>();
-            alt::MValueList list = core.CreateMValueList(v8Arr->Length());
-
-            for(uint32_t i = 0; i < v8Arr->Length(); ++i)
+            js::Array arr(val.As<v8::Array>());
+            uint32_t length = arr.Length();
+            alt::MValueList list = core.CreateMValueList(length);
+            alt::MValue val;
+            for(uint32_t i = 0; i < length; i++)
             {
-                v8::Local<v8::Value> value;
-                if(!v8Arr->Get(ctx, i).ToLocal(&value)) continue;
-                list->Set(i, JSToMValue(value, allowFunction));
+                if(!arr.Get(i, val)) continue;
+                list->Set(i, val);
             }
 
             return list;
@@ -133,22 +133,17 @@ alt::MValue js::JSToMValue(v8::Local<v8::Value> val, bool allowFunction)
         else if(val->IsMap())
         {
             v8::Local<v8::Map> map = val.As<v8::Map>();
-            v8::Local<v8::Array> mapArr = map->AsArray();
-            uint32_t size = mapArr->Length();
+            js::Array arr = map->AsArray();
+            uint32_t length = arr.Length();
 
             alt::MValueDict dict = alt::ICore::Instance().CreateMValueDict();
-            for(uint32_t i = 0; i < size; i += 2)
+            for(uint32_t i = 0; i < length; i += 2)
             {
-                auto maybeKey = mapArr->Get(ctx, i);
-                auto maybeValue = mapArr->Get(ctx, i + 1);
-                v8::Local<v8::Value> key;
-                v8::Local<v8::Value> value;
-
-                if(!maybeKey.ToLocal(&key)) continue;
-                if(!maybeValue.ToLocal(&value)) continue;
-                std::string keyString = *v8::String::Utf8Value(isolate, key);
-                if(keyString.empty()) continue;
-                dict->Set(keyString, JSToMValue(value, false));
+                std::string key;
+                if(!arr.Get(i, key)) continue;
+                alt::MValue value;
+                if(!arr.Get(i + 1, value)) continue;
+                dict->Set(key, value);
             }
             return dict;
         }
@@ -190,20 +185,12 @@ alt::MValue js::JSToMValue(v8::Local<v8::Value> val, bool allowFunction)
             else
             {
                 alt::MValueDict dict = core.CreateMValueDict();
-                v8::Local<v8::Array> keys;
-
-                if(!v8Obj->GetOwnPropertyNames(ctx).ToLocal(&keys)) return core.CreateMValueNone();
-
-                for(uint32_t i = 0; i < keys->Length(); ++i)
+                auto keys = obj.GetKeys();
+                for(auto& key : keys)
                 {
-                    v8::Local<v8::Value> v8Key;
-                    if(!keys->Get(ctx, i).ToLocal(&v8Key)) return core.CreateMValueNone();
-                    v8::Local<v8::Value> value;
-                    if(!v8Obj->Get(ctx, v8Key).ToLocal(&value)) return core.CreateMValueNone();
-                    if(value->IsUndefined()) continue;
-
-                    std::string key = *v8::String::Utf8Value(isolate, v8Key);
-                    dict->Set(key, JSToMValue(value, allowFunction));
+                    alt::MValue val;
+                    if(!obj.Get(key, val)) continue;
+                    dict->Set(key, val);
                 }
 
                 return dict;
@@ -242,23 +229,20 @@ v8::Local<v8::Value> js::MValueToJS(alt::MValueConst val)
         case alt::IMValue::Type::LIST:
         {
             alt::MValueListConst list = val.As<alt::IMValueList>();
-            v8::Local<v8::Array> v8Arr = v8::Array::New(isolate, (int)list->GetSize());
+            js::Array arr = v8::Array::New(isolate, (int)list->GetSize());
 
-            for(uint32_t i = 0; i < list->GetSize(); ++i) v8Arr->Set(ctx, i, MValueToJS(list->Get(i)));
+            for(uint32_t i = 0; i < list->GetSize(); ++i) arr.Set(i, list->Get(i));
 
-            return v8Arr;
+            return arr.Get();
         }
         case alt::IMValue::Type::DICT:
         {
             alt::MValueDictConst dict = val.As<alt::IMValueDict>();
-            v8::Local<v8::Object> v8Obj = v8::Object::New(isolate);
+            js::Object obj = v8::Object::New(isolate);
 
-            for(auto it = dict->Begin(); it; it = dict->Next())
-            {
-                v8Obj->Set(ctx, js::JSValue(it->GetKey()), MValueToJS(it->GetValue()));
-            }
+            for(auto it = dict->Begin(); it; it = dict->Next()) obj.Set(it->GetKey(), it->GetValue());
 
-            return v8Obj;
+            return obj.Get();
         }
         case alt::IMValue::Type::BASE_OBJECT:
         {
