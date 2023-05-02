@@ -47,7 +47,12 @@ class Timer {
     tick() {
         if (this.interval === 0 || Date.now() - this.lastTick > this.interval) {
             const start = Date.now();
-            this.callback();
+            try {
+                this.callback();
+            } catch (e) {
+                alt.logError(`[JS] Exception caught while invoking timer callback`);
+                alt.logError(e);
+            }
             this.lastTick = Date.now();
             if (this.once) this.destroy();
 
@@ -117,13 +122,7 @@ globalThis.clearTimeout = (timeout) => {
 
 function tick() {
     for (const timer of timers) {
-        try {
-            timer.tick();
-        } catch (e) {
-            alt.logError(`[JS] Exception caught while invoking timer callback`);
-            alt.logError(e);
-            if (timer.once) timer.destroy();
-        }
+        timer.tick();
     }
 }
 cppBindings.registerExport("timers:tick", tick);
