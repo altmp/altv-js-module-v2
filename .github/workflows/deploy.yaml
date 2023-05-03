@@ -134,6 +134,8 @@ jobs:
           TAG=${GITHUB_REF/refs\/tags\//}
           echo "BRANCH=${TAG/\/*}" >> $GITHUB_OUTPUT
           echo "VERSION=${TAG/*\/}" >> $GITHUB_OUTPUT
+          cd deps/cpp-sdk
+          echo "SDK_COMMIT=${git rev-parse --short HEAD}" >> $GITHUB_OUTPUT
 
       - name: Create Release
         id: create_release
@@ -142,7 +144,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ steps.version.outputs.BRANCH }}/${{ steps.version.outputs.VERSION }}
+          release_name: ${{ steps.version.outputs.BRANCH }}/${{ steps.version.outputs.VERSION }}
+          body: |
+            SDK version: [${{ steps.version.outputs.SDK_COMMIT }}](https://github.com/altmp/cpp-sdk/commit/${{ steps.version.outputs.SDK_COMMIT }})
 
       - name: Upload windows artifacts
         uses: actions/upload-release-asset@v1
