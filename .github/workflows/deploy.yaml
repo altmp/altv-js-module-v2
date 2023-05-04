@@ -84,6 +84,8 @@ jobs:
           TAG=${GITHUB_REF/refs\/tags\//}
           echo "BRANCH=${TAG/\/*}" >> $GITHUB_OUTPUT
           echo "VERSION=${TAG/*\/}" >> $GITHUB_OUTPUT
+          cd deps/cpp-sdk
+          echo "SDK_COMMIT=${git rev-parse --short HEAD}" >> $GITHUB_OUTPUT
 
       - name: Generate xmake project
         shell: bash
@@ -98,6 +100,7 @@ jobs:
           mkdir upload
           cp build/linux/x86_64/release/libjs-module-v2.so upload
           cp server/deps/nodejs/lib/libnode.so upload
+          echo ${{ steps.version.outputs.SDK_COMMIT }} >> upload/sdk.version
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -134,8 +137,7 @@ jobs:
           TAG=${GITHUB_REF/refs\/tags\//}
           echo "BRANCH=${TAG/\/*}" >> $GITHUB_OUTPUT
           echo "VERSION=${TAG/*\/}" >> $GITHUB_OUTPUT
-          cd deps/cpp-sdk
-          echo "SDK_COMMIT=${git rev-parse --short HEAD}" >> $GITHUB_OUTPUT
+          echo "SDK_COMMIT=${cat dist-server-linux/sdk.version}"" >> $GITHUB_OUTPUT
 
       - name: Create Release
         id: create_release
