@@ -125,11 +125,6 @@ jobs:
           name: server-linux
           path: dist-server-linux
 
-      - name: Zip artifacts
-        run: |
-          zip -r -j js-module-v2-windows dist-server-windows
-          zip -r -j js-module-v2-linux dist-server-linux
-
       - name: Extract version
         id: version
         shell: bash
@@ -138,6 +133,12 @@ jobs:
           echo "BRANCH=${TAG/\/*}" >> $GITHUB_OUTPUT
           echo "VERSION=${TAG/*\/}" >> $GITHUB_OUTPUT
           echo "SDK_COMMIT=$(cat dist-server-linux/sdk.version)" >> $GITHUB_OUTPUT
+          rm dist-server-linux/sdk.version
+
+      - name: Zip artifacts
+        run: |
+          zip -r -j js-module-v2-windows dist-server-windows
+          zip -r -j js-module-v2-linux dist-server-linux
 
       - name: Create Release
         id: create_release
