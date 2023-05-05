@@ -2,6 +2,11 @@
 #include "interfaces/IResource.h"
 #include "Class.h"
 
+js::ScriptObject::ScriptObject(v8::Isolate* _isolate, v8::Local<v8::Object> _jsObject, alt::IBaseObject* _object, js::Class* _class)
+    : isolate(_isolate), jsObject(_class->MakePersistent(_jsObject)), object(_object), class_(_class)
+{
+}
+
 js::ScriptObject* js::ScriptObject::Create(v8::Local<v8::Context> context, alt::IBaseObject* object, js::Class* class_)
 {
     v8::Isolate* isolate = context->GetIsolate();
@@ -11,13 +16,13 @@ js::ScriptObject* js::ScriptObject::Create(v8::Local<v8::Context> context, alt::
     return scriptObject;
 }
 
-js::ScriptObject* js::ScriptObject::Create(v8::Local<v8::Context> context, alt::IBaseObject* object, v8::Local<v8::Function> factory)
+js::ScriptObject* js::ScriptObject::Create(v8::Local<v8::Context> context, alt::IBaseObject* object, v8::Local<v8::Function> factory, Class* class_)
 {
     v8::Isolate* isolate = context->GetIsolate();
     v8::MaybeLocal<v8::Object> maybeJsObject = factory->NewInstance(context);
     v8::Local<v8::Object> jsObject;
     if(!maybeJsObject.ToLocal(&jsObject)) return nullptr;
-    ScriptObject* scriptObject = new ScriptObject(isolate, jsObject, object, nullptr);
+    ScriptObject* scriptObject = new ScriptObject(isolate, jsObject, object, class_);
     jsObject->SetAlignedPointerInInternalField(0, scriptObject);
     return scriptObject;
 }

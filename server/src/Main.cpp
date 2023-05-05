@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "interfaces/IResource.h"
 #include "Logger.h"
+#include "CommandHandlers.h"
 
 #include <iostream>
 
@@ -65,6 +66,7 @@ EXPORT bool altMain(alt::ICore* core)
     if(!runtime.Initialize()) return false;
 
     core->SubscribeCommand("js-module-v2", ModuleCommand);
+    core->SubscribeCommand("debughandles", js::DebugHandlesCommand);
 
     js::Logger::Colored("Loaded ~g~JS module v2");
 

@@ -21,12 +21,9 @@ namespace js
         alt::IBaseObject* object = nullptr;
         Class* class_ = nullptr;
 
-        ScriptObject(v8::Isolate* _isolate, v8::Local<v8::Object> _jsObject, alt::IBaseObject* _object, Class* _class)
-            : isolate(_isolate), jsObject(_isolate, _jsObject), object(_object), class_(_class)
-        {
-        }
+        ScriptObject(v8::Isolate* _isolate, v8::Local<v8::Object> _jsObject, alt::IBaseObject* _object, Class* _class);
         static ScriptObject* Create(v8::Local<v8::Context> context, alt::IBaseObject* object, Class* class_);
-        static ScriptObject* Create(v8::Local<v8::Context> context, alt::IBaseObject* object, v8::Local<v8::Function> factory);
+        static ScriptObject* Create(v8::Local<v8::Context> context, alt::IBaseObject* object, v8::Local<v8::Function> factory, Class* class_);
         static ScriptObject* Create(v8::Local<v8::Object> jsObject, alt::IBaseObject* object, Class* class_);
         static ScriptObject* Get(v8::Local<v8::Object> obj);
         static void Destroy(ScriptObject* scriptObject);

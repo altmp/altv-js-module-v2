@@ -110,6 +110,6 @@ v8::Local<v8::Object> js::IResource::CreateResourceObject(alt::IResource* resour
 {
     if(resourceObjects.contains(resource)) return resourceObjects.at(resource).Get(isolate);
     v8::Local<v8::Object> resourceObj = resourceClass.Create(GetContext(), resource);
-    resourceObjects.insert({ resource, Persistent<v8::Object>(GetIsolate(), resourceObj) });
+    resourceObjects.insert({ resource, resourceClass.MakePersistent(resourceObj) });
     return resourceObj;
 }

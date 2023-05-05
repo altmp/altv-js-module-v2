@@ -20,6 +20,15 @@ void js::Class::Register(v8::Isolate* isolate)
     templateMap.insert({ isolate, tpl });
 }
 
+js::Class* js::Class::GetByClassId(uint16_t id)
+{
+    for(auto class_ : GetAll())
+    {
+        if(class_->classId == id) return class_;
+    }
+    return nullptr;
+}
+
 void js::Class::Initialize(v8::Isolate* isolate)
 {
     for(auto class_ : GetAll())

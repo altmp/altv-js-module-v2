@@ -16,6 +16,12 @@ namespace js
 {
     class Class
     {
+        static uint16_t GetNextClassId()
+        {
+            static uint16_t nextId = 100;  // Start with an offset, if we need class ids for other objects in the future
+            return nextId++;
+        }
+
         static std::vector<Class*>& GetAll()
         {
             static std::vector<Class*> classes;
@@ -32,6 +38,7 @@ namespace js
         ClassInitializationCallback initCb;
         std::unordered_map<v8::Isolate*, ClassTemplate> templateMap;
         int internalFieldCount = 0;
+        uint16_t classId = GetNextClassId();
 
         void Register(v8::Isolate* isolate);
 
@@ -47,6 +54,10 @@ namespace js
             GetAll().push_back(this);
         }
 
+        uint16_t GetClassId() const
+        {
+            return classId;
+        }
         const std::string& GetName() const
         {
             return name;
@@ -75,6 +86,15 @@ namespace js
             if(extraInternalFieldValue) obj->SetAlignedPointerInInternalField(1, extraInternalFieldValue);
             return obj;
         }
+
+        Persistent<v8::Object> MakePersistent(v8::Local<v8::Object> value)
+        {
+            Persistent<v8::Object> persistent(value->GetIsolate(), value);
+            persistent.SetWrapperClassId(classId);
+            return persistent;
+        }
+
+        static Class* GetByClassId(uint16_t id);
 
         static void Initialize(v8::Isolate* isolate);
         static void Cleanup(v8::Isolate* isolate);

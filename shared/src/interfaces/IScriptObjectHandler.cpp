@@ -8,21 +8,21 @@ js::ScriptObject* js::IScriptObjectHandler::GetOrCreateScriptObject(v8::Local<v8
     if(existingObject) return existingObject;
 
     ScriptObject* scriptObject = nullptr;
+
+    Class* class_ = GetClassForType(object->GetType());
+    if(!class_)
+    {
+        Logger::Error("Class not found for type", (int)object->GetType());
+        return nullptr;
+    }
+
     if(HasCustomFactory(object->GetType()))
     {
         v8::Local<v8::Function> factory = GetCustomFactory(object->GetType());
-        scriptObject = ScriptObject::Create(context, object, factory);
+        scriptObject = ScriptObject::Create(context, object, factory, class_);
     }
     else
-    {
-        Class* class_ = GetClassForType(object->GetType());
-        if(!class_)
-        {
-            Logger::Error("Class not found for type", (int)object->GetType());
-            return nullptr;
-        }
         scriptObject = ScriptObject::Create(context, object, class_);
-    }
 
     if(!scriptObject)
     {
