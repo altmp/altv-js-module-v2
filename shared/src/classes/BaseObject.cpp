@@ -51,6 +51,20 @@ static void MetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
     ctx.Return(keys);
 }
 
+static void GetByID(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(2)) return;
+
+    alt::IBaseObject::Type type;
+    if(!ctx.GetArg(0, type)) return;
+
+    uint32_t id;
+    if(!ctx.GetArg(1, id)) return;
+
+    alt::IBaseObject* obj = alt::ICore::Instance().GetBaseObjectByID(type, id);
+    ctx.Return(obj);
+}
+
 // clang-format off
 extern js::Class baseObjectClass("BaseObject", nullptr, [](js::ClassTemplate& tpl)
 {
@@ -60,4 +74,6 @@ extern js::Class baseObjectClass("BaseObject", nullptr, [](js::ClassTemplate& tp
     tpl.Method("destroy", Destroy);
 
     tpl.DynamicProperty("meta", MetaGetter, MetaSetter, MetaDeleter, MetaEnumerator);
+
+    tpl.StaticFunction("getByID", GetByID);
 });
