@@ -6,8 +6,8 @@ const { setEntityFactory, getEntityFactory } = requireBinding("shared/factory.js
 alt.Factory.setColShapeFactory = setEntityFactory(alt.ColShape, alt.Enums.BaseObjectType.COLSHAPE);
 alt.Factory.getColShapeFactory = getEntityFactory(alt.Enums.BaseObjectType.COLSHAPE);
 
-alt.Factory.setObjectFactory = setEntityFactory(alt.Object, alt.Enums.BaseObjectType.NETWORK_OBJECT);
-alt.Factory.getObjectFactory = getEntityFactory(alt.Enums.BaseObjectType.NETWORK_OBJECT);
+alt.Factory.setNetworkObjectFactory = setEntityFactory(alt.NetworkObject, alt.Enums.BaseObjectType.NETWORK_OBJECT);
+alt.Factory.getNetworkObjectFactory = getEntityFactory(alt.Enums.BaseObjectType.NETWORK_OBJECT);
 
 alt.Factory.setVoiceChannelFactory = setEntityFactory(alt.VoiceChannel, alt.Enums.BaseObjectType.VOICE_CHANNEL);
 alt.Factory.getVoiceChannelFactory = getEntityFactory(alt.Enums.BaseObjectType.VOICE_CHANNEL);
