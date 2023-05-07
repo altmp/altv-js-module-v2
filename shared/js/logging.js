@@ -1020,7 +1020,7 @@ function getUserOptions(ctx, isCrossContext) {
  * @param {object} opts Optional options object that alters the output.
  */
 /* Legacy: value, showHidden, depth, colors */
-function inspect(value, opts) {
+export function inspect(value, opts) {
     // Default options
     const ctx = {
         budget: {},
