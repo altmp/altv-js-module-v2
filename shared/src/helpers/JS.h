@@ -27,6 +27,8 @@ namespace js
     };
     SourceLocation GetCurrentSourceLocation(IResource* resource, int framesToSkip = 0);
 
+    void RunEventLoop();
+
     class TryCatch
     {
         v8::TryCatch tryCatch;
@@ -397,27 +399,58 @@ namespace js
 
     private:
         Persistent<v8::Promise::Resolver> resolver;
+        Persistent<v8::Promise> promise;
 
         Promise() : Value(true), resolver(v8::Isolate::GetCurrent(), v8::Promise::Resolver::New(context).ToLocalChecked()) {}
 
     public:
-        v8::Local<v8::Promise::Resolver> Get() const
+        Promise(v8::Local<v8::Promise> _promise) : Value(!_promise.IsEmpty()), promise(v8::Isolate::GetCurrent(), _promise) {}
+
+        v8::Local<v8::Promise> Get() const
+        {
+            return promise.Get(v8::Isolate::GetCurrent());
+        }
+
+        v8::Local<v8::Promise::Resolver> GetResolver() const
         {
             return resolver.Get(v8::Isolate::GetCurrent());
+        }
+
+        bool HasResolver() const
+        {
+            return !resolver.IsEmpty();
+        }
+
+        bool Await()
+        {
+            v8::Local<v8::Promise> promise = Get();
+            while(true)
+            {
+                v8::Promise::PromiseState state = promise->State();
+                switch(state)
+                {
+                    case v8::Promise::PromiseState::kPending: RunEventLoop(); break;
+                    case v8::Promise::PromiseState::kFulfilled: return true;
+                    case v8::Promise::PromiseState::kRejected: return false;
+                }
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            }
         }
 
         template<typename T>
         void Resolve(const T& value)
         {
             static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
-            Get()->Resolve(context, JSValue(value));
+            if(!HasResolver()) return;
+            GetResolver()->Resolve(context, JSValue(value));
         }
 
         template<typename T>
         void Reject(const T& value)
         {
             static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
-            Get()->Reject(context, JSValue(value));
+            if(!HasResolver()) return;
+            GetResolver()->Reject(context, JSValue(value));
         }
 
         static std::shared_ptr<Promise> Create()

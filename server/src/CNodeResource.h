@@ -24,4 +24,6 @@ public:
 
     void OnEvent(const alt::CEvent* ev) override;
     void OnTick() override;
+
+    void RunEventLoop() override;
 };

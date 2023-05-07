@@ -36,6 +36,11 @@ js::SourceLocation js::GetCurrentSourceLocation(IResource* resource, int framesT
     return SourceLocation{};
 }
 
+void js::RunEventLoop()
+{
+    GetCurrentResource()->RunEventLoop();
+}
+
 void js::TryCatch::PrintError()
 {
     v8::Isolate* isolate = v8::Isolate::GetCurrent();

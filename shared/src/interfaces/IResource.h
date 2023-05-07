@@ -119,6 +119,10 @@ namespace js
             js::Function onTick = GetBindingExport<v8::Function>("timers:tick");
             if(onTick.IsValid()) onTick.Call();
         }
+        virtual void RunEventLoop()
+        {
+            OnTick();
+        }
 
         void InitializeBindings(Binding::Scope scope, Module& altModule);
         void SetBindingExport(const std::string& name, v8::Local<v8::Value> val)

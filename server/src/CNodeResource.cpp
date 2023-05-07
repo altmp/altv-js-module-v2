@@ -111,3 +111,9 @@ void CNodeResource::OnTick()
     uv_run(uvLoop, UV_RUN_NOWAIT);
     IResource::OnTick();
 }
+
+void CNodeResource::RunEventLoop()
+{
+    CNodeRuntime::Instance().OnTick();
+    IResource::RunEventLoop();
+}
