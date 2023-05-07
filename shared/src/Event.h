@@ -46,7 +46,7 @@ namespace js
             if(it == eventHandlerMap.end()) return nullptr;
             return it->second;
         }
-        static void CallEventBinding(bool custom, int type, EventArgs& args, IResource* resource);
+        static js::Promise CallEventBinding(bool custom, int type, EventArgs& args, IResource* resource);
 
         static void CancelEventCallback(const v8::FunctionCallbackInfo<v8::Value>& info);
         static v8::Local<v8::Function> GetCancelFunction(js::IResource* resource, const alt::CEvent* ev);

@@ -225,6 +225,6 @@ alt.Events.setWarningThreshold = Event.setWarningThreshold;
 alt.Events.setSourceLocationFrameSkipCount = Event.setSourceLocationFrameSkipCount;
 
 function onEvent(custom, eventType, eventData) {
-    Event.invoke(eventType, eventData, custom);
+    return Event.invoke(eventType, eventData, custom);
 }
 cppBindings.registerExport("events:onEvent", onEvent);

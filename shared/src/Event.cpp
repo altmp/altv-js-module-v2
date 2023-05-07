@@ -2,14 +2,15 @@
 #include "interfaces/IResource.h"
 #include "magic_enum/include/magic_enum.hpp"
 
-void js::Event::CallEventBinding(bool custom, int type, EventArgs& args, IResource* resource)
+js::Promise js::Event::CallEventBinding(bool custom, int type, EventArgs& args, IResource* resource)
 {
     v8::Isolate* isolate = resource->GetIsolate();
     v8::Local<v8::Context> context = resource->GetContext();
     js::Function onEvent = resource->GetBindingExport<v8::Function>("events:onEvent");
-    if(!onEvent.IsValid()) return;
+    if(!onEvent.IsValid()) return js::Promise{ v8::Local<v8::Promise>() };
 
-    onEvent.Call(custom, type, args.Get());
+    std::optional<v8::Local<v8::Value>> result = onEvent.Call<v8::Local<v8::Value>>(custom, type, args.Get());
+    return js::Promise{ result.value_or(v8::Local<v8::Value>()).As<v8::Promise>() };
 }
 
 void js::Event::CancelEventCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
@@ -39,10 +40,13 @@ void js::Event::SendEvent(const alt::CEvent* ev, IResource* resource)
     eventArgs.Set("isCancelled", ev->WasCancelled());
     eventArgs.Freeze();
 
-    CallEventBinding(false, (int)ev->GetType(), eventArgs, resource);
+    js::Promise promise = CallEventBinding(false, (int)ev->GetType(), eventArgs, resource);
+    if(!promise.IsValid()) return;
+    if(ev->GetType() == alt::CEvent::Type::RESOURCE_STOP) promise.Await();
 }
 
 void js::Event::SendEvent(EventType type, EventArgs& args, IResource* resource)
 {
-    CallEventBinding(true, (int)type, args, resource);
+    js::Promise promise = CallEventBinding(true, (int)type, args, resource);
+    if(!promise.IsValid()) return;
 }
