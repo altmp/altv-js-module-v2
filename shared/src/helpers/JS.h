@@ -41,7 +41,7 @@ namespace js
 
         bool Check(bool printError = true)
         {
-            if(tryCatch.HasCaught())
+            if(HasCaught())
             {
                 if(printError) PrintError();
                 tryCatch.Reset();
@@ -49,9 +49,15 @@ namespace js
             }
             return false;
         }
+
         void ReThrow()
         {
             tryCatch.ReThrow();
+        }
+
+        bool HasCaught() const
+        {
+            return tryCatch.HasCaught();
         }
     };
 
