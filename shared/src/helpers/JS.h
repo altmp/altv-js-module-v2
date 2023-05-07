@@ -406,8 +406,9 @@ namespace js
     public:
         Promise(v8::Local<v8::Promise> _promise) : Value(!_promise.IsEmpty()), promise(v8::Isolate::GetCurrent(), _promise) {}
 
-        v8::Local<v8::Promise> Get() const
+        v8::Local<v8::Promise> Get()
         {
+            if(!HasPromise() && HasResolver()) promise.Reset(v8::Isolate::GetCurrent(), GetResolver()->GetPromise());
             return promise.Get(v8::Isolate::GetCurrent());
         }
 
@@ -419,6 +420,34 @@ namespace js
         bool HasResolver() const
         {
             return !resolver.IsEmpty();
+        }
+        bool HasPromise() const
+        {
+            return !promise.IsEmpty();
+        }
+
+        v8::Promise::PromiseState State()
+        {
+            return Get()->State();
+        }
+
+        template<typename T>
+        bool GetResult(T& out, bool throwOnError = true)
+        {
+            if(State() == v8::Promise::PromiseState::kPending)
+            {
+                if(throwOnError) Throw("Promise is still pending");
+                return false;
+            }
+            v8::Local<v8::Value> val = Get()->Result();
+            std::optional<T> result = js::CppValue<T>(val);
+            if(!result.has_value())
+            {
+                if(throwOnError) Throw("Failed to get promise result value, invalid type");
+                return false;
+            }
+            out = result.value();
+            return true;
         }
 
         bool Await()
