@@ -152,7 +152,7 @@ static js::Module altModule("alt", "alt-shared", { &playerClass, &vehicleClass, 
     module.StaticLazyProperty("serverConfig", GetServerConfig);
 
     module.StaticFunction("setServerPassword", SetServerPassword);
-    module.StaticFunction("hashServerPasword", HashServerPassword);
+    module.StaticFunction("hashServerPassword", HashServerPassword);
     module.StaticFunction("stopServer", StopServer);
     module.StaticFunction("toggleWorldProfiler", ToggleWorldProfiler);
     module.StaticFunction("getEntitiesInDimension", GetEntitiesInDimension);
