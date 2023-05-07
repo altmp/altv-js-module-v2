@@ -40,6 +40,12 @@ alt.Factory.setVirtualEntityGroupFactory = setEntityFactory(
 );
 alt.Factory.getVirtualEntityGroupFactory = getEntityFactory(alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP);
 
+alt.Factory.setColShapeFactory = setEntityFactory(alt.ColShape, alt.Enums.BaseObjectType.COLSHAPE);
+alt.Factory.getColShapeFactory = getEntityFactory(alt.Enums.BaseObjectType.COLSHAPE);
+
+alt.Factory.setNetworkObjectFactory = setEntityFactory(alt.NetworkObject, alt.Enums.BaseObjectType.NETWORK_OBJECT);
+alt.Factory.getNetworkObjectFactory = getEntityFactory(alt.Enums.BaseObjectType.NETWORK_OBJECT);
+
 // Factory ctors
 alt.PointBlip.create = (ctx) => {
     assertIsObject(ctx, "Invalid args");
