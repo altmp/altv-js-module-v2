@@ -154,12 +154,13 @@ class Vector {
 export class Vector3 extends Vector {
     constructor(...args) {
         let values;
-        if (args.length === 3) values = [parseInt(args[0]), parseInt(args[1]), parseInt(args[2])];
+        if (args.length === 3) values = [valueToNumber(args[0]), valueToNumber(args[1]), valueToNumber(args[2])];
         else if (args.length === 1) {
             const arg = args[0];
-            if (Array.isArray(arg)) values = [parseInt(arg[0]), parseInt(arg[1]), parseInt(arg[2])];
-            else if (typeof arg === "object") values = [parseInt(arg.x), parseInt(arg.y), parseInt(arg.z)];
-            else values = [parseInt(arg), parseInt(arg), parseInt(arg)];
+            if (Array.isArray(arg)) values = [valueToNumber(arg[0]), valueToNumber(arg[1]), valueToNumber(arg[2])];
+            else if (typeof arg === "object")
+                values = [valueToNumber(arg.x), valueToNumber(arg.y), valueToNumber(arg.z)];
+            else values = [valueToNumber(arg), valueToNumber(arg), valueToNumber(arg)];
         } else throw new Error("Invalid arguments");
         super(3, values);
     }
@@ -197,12 +198,12 @@ cppBindings.registerExport("classes:vector3", Vector3);
 export class Vector2 extends Vector {
     constructor(...args) {
         let values;
-        if (args.length === 2) values = [parseInt(args[0]), parseInt(args[1])];
+        if (args.length === 2) values = [valueToNumber(args[0]), valueToNumber(args[1])];
         else if (args.length === 1) {
             const arg = args[0];
-            if (Array.isArray(arg)) values = [parseInt(arg[0]), parseInt(arg[1])];
-            else if (typeof arg === "object") values = [parseInt(arg.x), parseInt(arg.y)];
-            else values = [parseInt(arg), parseInt(arg)];
+            if (Array.isArray(arg)) values = [valueToNumber(arg[0]), valueToNumber(arg[1])];
+            else if (typeof arg === "object") values = [valueToNumber(arg.x), valueToNumber(arg.y)];
+            else values = [valueToNumber(arg), valueToNumber(arg)];
         } else throw new Error("Invalid arguments");
         super(2, values);
     }
@@ -231,3 +232,8 @@ export class Vector2 extends Vector {
     static positiveInfinity = new Vector2(Infinity, Infinity);
 }
 cppBindings.registerExport("classes:vector2", Vector2);
+
+function valueToNumber(val) {
+    if (val === Infinity || val === -Infinity) return val;
+    return parseInt(val);
+}
