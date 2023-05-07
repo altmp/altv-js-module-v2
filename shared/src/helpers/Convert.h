@@ -309,7 +309,8 @@ namespace js
         {
             std::optional<alt::IBaseObject*> obj = ToBaseObject(val);
             if(!obj.has_value()) return std::nullopt;
-            return std::optional<T>(dynamic_cast<T>(obj.value()));
+            T object = dynamic_cast<T>(obj.value());
+            return object ? std::optional<T>(object) : std::nullopt;
         }
         else if constexpr(std::is_same_v<T, js::Object>)
         {
