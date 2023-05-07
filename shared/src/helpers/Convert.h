@@ -58,32 +58,8 @@ namespace js
     }
     inline v8::Local<v8::Value> JSValue(uint64_t val)
     {
-        if(val >= JS_MIN_SAFE_INTEGER && val <= JS_MAX_SAFE_INTEGER) return JSValue((double)val);
+        if(val <= JS_MAX_SAFE_INTEGER) return JSValue((double)val);
         return v8::BigInt::NewFromUnsigned(v8::Isolate::GetCurrent(), val);
-    }
-    template<class T>
-    inline v8::Local<v8::Array> JSValue(const std::vector<T>& arr)
-    {
-        v8::Isolate* isolate = v8::Isolate::GetCurrent();
-        v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
-        auto jsArr = v8::Array::New(isolate, arr.size());
-        for(int i = 0; i < arr.size(); i++)
-        {
-            jsArr->Set(ctx, i, JSValue(arr[i]));
-        }
-        return jsArr;
-    }
-    template<class T>
-    inline v8::Local<v8::Array> JSValue(const std::unordered_map<std::string, T>& map)
-    {
-        v8::Isolate* isolate = v8::Isolate::GetCurrent();
-        v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
-        auto jsObj = v8::Object::New(isolate);
-        for(auto& [key, val] : map)
-        {
-            jsObj->Set(ctx, JSValue(key), JSValue(val));
-        }
-        return jsObj;
     }
     inline v8::Local<v8::Primitive> JSValue(std::nullptr_t val)
     {
@@ -111,6 +87,30 @@ namespace js
     v8::Local<v8::Value> JSValue(alt::Quaternion quaternion);
     v8::Local<v8::Value> JSValue(const js::Object& jsObj);
     v8::Local<v8::Value> JSValue(const js::Array& jsArr);
+    template<class T>
+    inline v8::Local<v8::Array> JSValue(const std::vector<T>& arr)
+    {
+        v8::Isolate* isolate = v8::Isolate::GetCurrent();
+        v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
+        auto jsArr = v8::Array::New(isolate, arr.size());
+        for(int i = 0; i < arr.size(); i++)
+        {
+            jsArr->Set(ctx, i, JSValue(arr[i]));
+        }
+        return jsArr;
+    }
+    template<class T>
+    inline v8::Local<v8::Array> JSValue(const std::unordered_map<std::string, T>& map)
+    {
+        v8::Isolate* isolate = v8::Isolate::GetCurrent();
+        v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
+        auto jsObj = v8::Object::New(isolate);
+        for(auto& [key, val] : map)
+        {
+            jsObj->Set(ctx, JSValue(key), JSValue(val));
+        }
+        return jsObj;
+    }
 
     template<typename T, typename = void>
     constexpr bool IsJSValueConvertible = false;
