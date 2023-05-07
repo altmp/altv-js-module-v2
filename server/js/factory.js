@@ -1,10 +1,9 @@
 /** @type {typeof import("../../shared/js/utils.js")} */
 const { assert, assertIsObject } = requireBinding("shared/utils.js");
 /** @type {typeof import("../../shared/js/factory.js")} */
-const { setEntityFactory, getEntityFactory } = requireBinding("shared/factory.js");
+const { registerFactory } = requireBinding("shared/factory.js");
 
-alt.Factory.setVoiceChannelFactory = setEntityFactory(alt.VoiceChannel, alt.Enums.BaseObjectType.VOICE_CHANNEL);
-alt.Factory.getVoiceChannelFactory = getEntityFactory(alt.Enums.BaseObjectType.VOICE_CHANNEL);
+registerFactory("VoiceChannel", alt.VoiceChannel, alt.Enums.BaseObjectType.VOICE_CHANNEL);
 
 // Factory ctors
 alt.Vehicle.create = (ctx) => {

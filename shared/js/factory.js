@@ -1,50 +1,16 @@
 /** @type {typeof import("./utils.js")} */
 const { assert, assertIsObject } = requireBinding("shared/utils.js");
 
-export function setEntityFactory(altClass, type) {
-    return (factory) => {
-        assert(
-            typeof factory === "function" && altClass.isPrototypeOf(factory),
-            `Factory has to inherit from alt.${altClass.name}`
-        );
-        assert(factory.length === 0, `Factory constructor has to have no arguments`);
-
-        cppBindings.setEntityFactory(type, factory);
-    };
-}
-
-export function getEntityFactory(type) {
-    return () => {
-        return cppBindings.getEntityFactory(type);
-    };
-}
-
-alt.Factory.setPlayerFactory = setEntityFactory(alt.Player, alt.Enums.BaseObjectType.PLAYER);
-alt.Factory.getPlayerFactory = getEntityFactory(alt.Enums.BaseObjectType.PLAYER);
-
-alt.Factory.setVehicleFactory = setEntityFactory(alt.Vehicle, alt.Enums.BaseObjectType.VEHICLE);
-alt.Factory.getVehicleFactory = getEntityFactory(alt.Enums.BaseObjectType.VEHICLE);
-
-alt.Factory.setPedFactory = setEntityFactory(alt.Ped, alt.Enums.BaseObjectType.PED);
-alt.Factory.getPedFactory = getEntityFactory(alt.Enums.BaseObjectType.PED);
-
-alt.Factory.setBlipFactory = setEntityFactory(alt.Blip, alt.Enums.BaseObjectType.BLIP);
-alt.Factory.getBlipFactory = getEntityFactory(alt.Enums.BaseObjectType.BLIP);
-
-alt.Factory.setVirtualEntityFactory = setEntityFactory(alt.VirtualEntity, alt.Enums.BaseObjectType.VIRTUAL_ENTITY);
-alt.Factory.getVirtualEntityFactory = getEntityFactory(alt.Enums.BaseObjectType.VIRTUAL_ENTITY);
-
-alt.Factory.setVirtualEntityGroupFactory = setEntityFactory(
-    alt.VirtualEntityGroup,
-    alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP
-);
-alt.Factory.getVirtualEntityGroupFactory = getEntityFactory(alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP);
-
-alt.Factory.setColShapeFactory = setEntityFactory(alt.ColShape, alt.Enums.BaseObjectType.COLSHAPE);
-alt.Factory.getColShapeFactory = getEntityFactory(alt.Enums.BaseObjectType.COLSHAPE);
-
-alt.Factory.setNetworkObjectFactory = setEntityFactory(alt.NetworkObject, alt.Enums.BaseObjectType.NETWORK_OBJECT);
-alt.Factory.getNetworkObjectFactory = getEntityFactory(alt.Enums.BaseObjectType.NETWORK_OBJECT);
+registerFactory("Player", alt.Player, alt.Enums.BaseObjectType.PLAYER);
+registerFactory("Vehicle", alt.Vehicle, alt.Enums.BaseObjectType.VEHICLE);
+registerFactory("Ped", alt.Ped, alt.Enums.BaseObjectType.PED);
+registerFactory("Blip", alt.Blip, alt.Enums.BaseObjectType.BLIP);
+registerFactory("VoiceChannel", alt.VoiceChannel, alt.Enums.BaseObjectType.VOICE_CHANNEL);
+registerFactory("ColShape", alt.ColShape, alt.Enums.BaseObjectType.COLSHAPE);
+registerFactory("NetworkObject", alt.NetworkObject, alt.Enums.BaseObjectType.NETWORK_OBJECT);
+registerFactory("Checkpoint", alt.Checkpoint, alt.Enums.BaseObjectType.CHECKPOINT);
+registerFactory("VirtualEntity", alt.VirtualEntity, alt.Enums.BaseObjectType.VIRTUAL_ENTITY);
+registerFactory("VirtualEntityGroup", alt.VirtualEntityGroup, alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP);
 
 // Factory ctors
 alt.PointBlip.create = (ctx) => {
@@ -74,3 +40,27 @@ alt.VirtualEntityGroup.create = (ctx) => {
     assertIsObject(ctx, "Invalid args");
     return cppBindings.createEntity(alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP, ctx);
 };
+
+// Helpers
+function setEntityFactory(altClass, type) {
+    return (factory) => {
+        assert(
+            typeof factory === "function" && altClass.isPrototypeOf(factory),
+            `Factory has to inherit from alt.${altClass.name}`
+        );
+        assert(factory.length === 0, `Factory constructor has to have no arguments`);
+
+        cppBindings.setEntityFactory(type, factory);
+    };
+}
+
+function getEntityFactory(type) {
+    return () => {
+        return cppBindings.getEntityFactory(type);
+    };
+}
+
+export function registerFactory(name, altClass, type) {
+    alt.Factory[`set${name}Factory`] = setEntityFactory(altClass, type);
+    alt.Factory[`get${name}Factory`] = getEntityFactory(type);
+}
