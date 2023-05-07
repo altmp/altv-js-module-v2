@@ -60,10 +60,13 @@ static void CreateEntity(js::FunctionContext& ctx)
     js::Object args;
     if(!ctx.GetArg(1, args)) return;
 
+    js::TryCatch tryCatch;
     alt::IBaseObject* object = js::FactoryHandler::Create(type, args);
     if(!object)
     {
-        ctx.Throw("Failed to create entity of type " + std::string(magic_enum::enum_name(type)));
+        if(tryCatch.HasCaught()) tryCatch.ReThrow();
+        else
+            ctx.Throw("Failed to create entity of type " + std::string(magic_enum::enum_name(type)));
         return;
     }
 
@@ -71,7 +74,9 @@ static void CreateEntity(js::FunctionContext& ctx)
     js::ScriptObject* scriptObject = resource->GetOrCreateScriptObject(ctx.GetContext(), object);
     if(!scriptObject)
     {
-        ctx.Throw("Failed to create entity of type " + std::string(magic_enum::enum_name(type)));
+        if(tryCatch.HasCaught()) tryCatch.ReThrow();
+        else
+            ctx.Throw("Failed to create entity of type " + std::string(magic_enum::enum_name(type)));
         return;
     }
 
