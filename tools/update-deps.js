@@ -78,14 +78,14 @@ const SERVER_FILES = [
         if (file.os !== getOSName()) continue;
         const fileUrlPath = file.urlPath.replace("{BRANCH}", getGitBranch()).replace("{OS}", getOSName());
         const url = `${CDN_URL}/${fileUrlPath}/${file.name}`;
-        const path = pathUtil.resolve(__dirname, "../", file.path, file.nameOverride ? file.nameOverride : file.name);
+        const name = file.nameOverride ? file.nameOverride : file.name;
+        const path = pathUtil.resolve(__dirname, "../", file.path, name);
 
         let hash = "INVALID";
         const fileExists = await doesFileExist(path);
         if (fileExists) hash = await getFileHash(path);
         const cdnInfo = await getCDNInfo(url);
-        const name = pathUtil.basename(path);
-        if (cdnInfo.hashList[name] === hash) return;
+        if (cdnInfo.hashList[file.name] === hash) continue;
 
         console.log(`Downloading ${name}... (Version: ${cdnInfo.version})`);
         await downloadFile(url, path);
