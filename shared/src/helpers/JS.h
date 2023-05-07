@@ -432,6 +432,15 @@ namespace js
         }
 
         template<typename T>
+        T GetResult(const T& defaultValue = T())
+        {
+            if(State() == v8::Promise::PromiseState::kPending) return defaultValue;
+            v8::Local<v8::Value> val = Get()->Result();
+            std::optional<T> result = js::CppValue<T>(val);
+            return result.has_value() ? result.value() : defaultValue;
+        }
+
+        template<typename T>
         bool GetResult(T& out, bool throwOnError = true)
         {
             if(State() == v8::Promise::PromiseState::kPending)
