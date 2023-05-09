@@ -211,24 +211,24 @@ v8::Local<v8::Value> js::MValueToJS(alt::MValueConst val)
     {
         case alt::IMValue::Type::NONE: return v8::Undefined(isolate);
         case alt::IMValue::Type::NIL: return js::JSValue(nullptr);
-        case alt::IMValue::Type::BOOL: return js::JSValue(val.As<alt::IMValueBool>()->Value());
+        case alt::IMValue::Type::BOOL: return js::JSValue(std::dynamic_pointer_cast<const alt::IMValueBool>(val)->Value());
         case alt::IMValue::Type::INT:
         {
-            int64_t _val = val.As<alt::IMValueInt>()->Value();
+            int64_t _val = std::dynamic_pointer_cast<const alt::IMValueInt>(val)->Value();
             if(_val >= JS_MIN_SAFE_INTEGER && _val <= JS_MAX_SAFE_INTEGER) return js::JSValue((double)_val);
             return js::JSValue(_val);
         }
         case alt::IMValue::Type::UINT:
         {
-            uint64_t _val = val.As<alt::IMValueUInt>()->Value();
+            uint64_t _val = std::dynamic_pointer_cast<const alt::IMValueUInt>(val)->Value();
             if(_val <= JS_MAX_SAFE_INTEGER) return js::JSValue((double)_val);
             return js::JSValue(_val);
         }
-        case alt::IMValue::Type::DOUBLE: return js::JSValue(val.As<alt::IMValueDouble>()->Value());
-        case alt::IMValue::Type::STRING: return js::JSValue(val.As<alt::IMValueString>()->Value());
+        case alt::IMValue::Type::DOUBLE: return js::JSValue(std::dynamic_pointer_cast<const alt::IMValueDouble>(val)->Value());
+        case alt::IMValue::Type::STRING: return js::JSValue(std::dynamic_pointer_cast<const alt::IMValueString>(val)->Value());
         case alt::IMValue::Type::LIST:
         {
-            alt::MValueListConst list = val.As<alt::IMValueList>();
+            alt::MValueListConst list = std::dynamic_pointer_cast<const alt::IMValueList>(val);
             js::Array arr = v8::Array::New(isolate, (int)list->GetSize());
 
             for(uint32_t i = 0; i < list->GetSize(); ++i) arr.Set(i, list->Get(i));
@@ -237,7 +237,7 @@ v8::Local<v8::Value> js::MValueToJS(alt::MValueConst val)
         }
         case alt::IMValue::Type::DICT:
         {
-            alt::MValueDictConst dict = val.As<alt::IMValueDict>();
+            alt::MValueDictConst dict = std::dynamic_pointer_cast<const alt::IMValueDict>(val);
             js::Object obj = v8::Object::New(isolate);
 
             for(auto it = dict->Begin(); it; it = dict->Next()) obj.Set(it->GetKey(), it->GetValue());
@@ -246,30 +246,30 @@ v8::Local<v8::Value> js::MValueToJS(alt::MValueConst val)
         }
         case alt::IMValue::Type::BASE_OBJECT:
         {
-            alt::IBaseObject* ref = val.As<alt::IMValueBaseObject>()->RawValue();
+            alt::IBaseObject* ref = std::dynamic_pointer_cast<const alt::IMValueBaseObject>(val)->RawValue();
             return resource->GetOrCreateScriptObject(ctx, ref)->Get();
         }
         case alt::IMValue::Type::FUNCTION:
         {
-            alt::MValueFunctionConst fn = val.As<alt::IMValueFunction>();
+            alt::MValueFunctionConst fn = std::dynamic_pointer_cast<const alt::IMValueFunction>(val);
             v8::Local<v8::External> extFn = v8::External::New(isolate, new alt::MValueFunctionConst(fn));
             return v8::Function::New(ctx, IResource::Function::ExternalFunctionCallback, extFn).ToLocalChecked();
         }
         case alt::IMValue::Type::VECTOR3:
         {
-            return resource->CreateVector3(val.As<alt::IMValueVector3>()->Value());
+            return resource->CreateVector3(std::dynamic_pointer_cast<const alt::IMValueVector3>(val)->Value());
         }
         case alt::IMValue::Type::VECTOR2:
         {
-            return resource->CreateVector2(val.As<alt::IMValueVector2>()->Value());
+            return resource->CreateVector2(std::dynamic_pointer_cast<const alt::IMValueVector2>(val)->Value());
         }
         case alt::IMValue::Type::RGBA:
         {
-            return resource->CreateRGBA(val.As<alt::IMValueRGBA>()->Value());
+            return resource->CreateRGBA(std::dynamic_pointer_cast<const alt::IMValueRGBA>(val)->Value());
         }
         case alt::IMValue::Type::BYTE_ARRAY:
         {
-            alt::MValueByteArrayConst buffer = val.As<alt::IMValueByteArray>();
+            alt::MValueByteArrayConst buffer = std::dynamic_pointer_cast<const alt::IMValueByteArray>(val);
             // todo: raw event support
             // Check if the buffer is a raw JS value buffer
             // v8::MaybeLocal<v8::Value> jsVal = RawBytesToJS(buffer);

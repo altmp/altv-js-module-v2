@@ -18,7 +18,7 @@ void CNodeResource::EnvStarted(v8::Local<v8::Value> exports)
         return;
     }
     envStarted = true;
-    alt::MValueDict exportsDict = js::JSToMValue(exports).As<alt::IMValueDict>();
+    alt::MValueDict exportsDict = std::dynamic_pointer_cast<alt::IMValueDict>(js::JSToMValue(exports));
     GetResource()->SetExports(exportsDict);
 }
 
