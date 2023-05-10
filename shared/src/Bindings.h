@@ -27,14 +27,19 @@ namespace js
         bool valid = false;
         std::string name;
         Scope scope;
-        std::string src;
+        ExternalString* src = nullptr;
         std::unordered_map<IResource*, Persistent<v8::Module>> compiledModuleMap;
 
         v8::Local<v8::Module> Compile(IResource* resource);
 
     public:
         Binding() = default;
-        Binding(const std::string& _name, Scope _scope, const std::string& _src) : valid(true), name(_name), scope(_scope), src(_src) {}
+        Binding(const std::string& _name, Scope _scope, const std::vector<char>& _src) : valid(true), name(_name), scope(_scope)
+        {
+            char* data = new char[_src.size()];
+            memcpy(data, _src.data(), _src.size());
+            src = new ExternalString(data, _src.size());
+        }
 
         bool IsValid() const
         {
@@ -48,16 +53,16 @@ namespace js
         {
             return scope;
         }
-        const std::string& GetSource() const
+        const char* GetSource() const
         {
-            return src;
+            return src->data();
         }
         v8::Local<v8::Module> GetCompiledModule(IResource* resource);
 
         static std::vector<Binding*> GetBindingsForScope(Scope scope);
         static Binding& Get(const std::string& name)
         {
-            static Binding invalidBinding;
+            static Binding invalidBinding{};
             if(!__bindings.contains(name)) return invalidBinding;
             return __bindings.at(name);
         }

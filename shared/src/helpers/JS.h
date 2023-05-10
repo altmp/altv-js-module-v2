@@ -521,4 +521,32 @@ namespace js
             ctx->Global()->Delete(ctx, js::JSValue(name));
         }
     };
+
+    class ExternalString : public v8::String::ExternalOneByteStringResource
+    {
+        const char* str;
+        size_t size;
+
+    public:
+        explicit ExternalString(const char* _str, size_t _size) : str(_str), size(_size) {}
+        ExternalString() : str(nullptr), size(0) {}
+
+        ExternalString(const ExternalString&) = delete;
+        ExternalString& operator=(const ExternalString&) = delete;
+
+        const char* data() const override
+        {
+            return str;
+        }
+        size_t length() const override
+        {
+            return size;
+        }
+
+        void Dispose() override
+        {
+            // We should only do this for "eternal" strings that never get deleted,
+            // so don't do anything here
+        }
+    };
 }  // namespace js

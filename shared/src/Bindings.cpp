@@ -12,7 +12,7 @@ v8::Local<v8::Module> js::Binding::Compile(IResource* resource)
     v8::Local<v8::Context> context = resource->GetContext();
     std::string moduleName = "internal:" + name;
     v8::ScriptOrigin origin{ isolate, JSValue(moduleName), -2, 0, false, -1, v8::Local<v8::Value>(), false, false, true, v8::Local<v8::PrimitiveArray>() };
-    v8::ScriptCompiler::Source source{ JSValue(src), origin };
+    v8::ScriptCompiler::Source source{ v8::String::NewExternalOneByte(isolate, src).ToLocalChecked(), origin };
     v8::MaybeLocal<v8::Module> maybeModule = v8::ScriptCompiler::CompileModule(isolate, &source);
     if(maybeModule.IsEmpty())
     {
