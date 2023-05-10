@@ -14,8 +14,7 @@ To add a new binding simply create a JS file in one of the previously mentioned 
 
 The access the API there is a global `alt` available in the bindings which can be used.
 
-For logging in the top level of the binding, use the global `debugLog` function, for other places that are called in the lifecycle
-of the resource after bindings are first evaluated, the normal `alt.log` can be used.
+To use logging in a bindings file, make sure that file calls `requireBinding("shared/logging.js")` before, so that alt.log is available.
 
 After the next compilation of the project, the binding will automatically be compiled and evaluated on resource start and show the errors if there are any.
 

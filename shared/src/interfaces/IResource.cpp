@@ -77,19 +77,6 @@ void js::IResource::InitializeBinding(js::Binding* binding)
     }
 }
 
-static void DebugLog(js::FunctionContext& ctx)
-{
-    std::string logMsg;
-    for(int i = 0; i < ctx.GetArgCount(); i++)
-    {
-        std::string arg;
-        if(!ctx.GetArg(i, arg)) return;
-        logMsg += arg;
-        if(i != ctx.GetArgCount() - 1) logMsg += " ";
-    }
-    js::Logger::Info(logMsg);
-}
-
 void js::IResource::InitializeBindings(Binding::Scope scope, Module& altModule)
 {
     std::vector<Binding*> bindings = Binding::GetBindingsForScope(scope);
@@ -99,7 +86,6 @@ void js::IResource::InitializeBindings(Binding::Scope scope, Module& altModule)
         TemporaryGlobalExtension altExtension(ctx, "__alt", altModule.GetNamespace(this));
         TemporaryGlobalExtension cppBindingsExtension(ctx, "__cppBindings", Module::Get("cppBindings").GetNamespace(this));
         TemporaryGlobalExtension requireBindingExtension(ctx, "requireBinding", WrapFunction(RequireBindingNamespaceWrapper)->GetFunction(ctx).ToLocalChecked());
-        TemporaryGlobalExtension debugLogExtension(ctx, "debugLog", WrapFunction(DebugLog)->GetFunction(ctx).ToLocalChecked());
 
         for(Binding* binding : bindings) InitializeBinding(binding);
     }
