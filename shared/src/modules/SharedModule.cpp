@@ -99,7 +99,6 @@ static js::Module sharedModule("alt-shared", "", { &baseObjectClass, &worldObjec
     module.Namespace("PointBlip");
     module.Namespace("AreaBlip");
     module.Namespace("RadiusBlip");
-    module.Namespace("Appearance");
 
     module.StaticBindingExport("hash", "utils:hash");
     module.StaticBindingExport("Vector3", "classes:vector3");
