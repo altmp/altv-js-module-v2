@@ -45,7 +45,7 @@ declare module "@altv/shared" {
         export function everyTick(callback: () => void): EveryTick;
         export function nextTick(callback: () => void): NextTick;
 
-        export function setWarningThreshold(treshhold: number): void;
+        export function setWarningThreshold(treshold: number): void;
         export function setSourceLocationFrameSkipCount(count: number): void;
 
         export const all: Timer[];
@@ -378,7 +378,7 @@ declare module "@altv/shared" {
 
         export function emit(eventName: string, ...args: any[]): void;
 
-        export function setWarningThreshold(treshhold: number): void;
+        export function setWarningThreshold(treshold: number): void;
         export function setSourceLocationFrameSkipCount(count: number): void;
     }
 
