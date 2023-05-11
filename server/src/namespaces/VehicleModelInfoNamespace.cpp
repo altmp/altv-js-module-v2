@@ -14,7 +14,7 @@ static void DoesExtraExist(js::FunctionContext& ctx)
     ctx.Return(info.DoesExtraExist(extraId));
 }
 
-static void DoesExtraDefault(js::FunctionContext& ctx)
+static void IsExtraDefault(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
     js::Object thisObj = ctx.GetThis();
@@ -72,7 +72,7 @@ static void Get(js::FunctionContext& ctx)
     }
     modelObj.Set("bones", bones);
     modelObj.Set("doesExtraExist", js::WrapFunction(DoesExtraExist)->GetFunction(context).ToLocalChecked());
-    modelObj.Set("doesExtraDefault", js::WrapFunction(DoesExtraDefault)->GetFunction(context).ToLocalChecked());
+    modelObj.Set("isExtraDefault", js::WrapFunction(IsExtraDefault)->GetFunction(context).ToLocalChecked());
 
     ctx.Return(modelObj);
 }

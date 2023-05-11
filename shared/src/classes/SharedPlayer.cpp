@@ -4,7 +4,7 @@
 static void HasWeaponComponent(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(1)) return;
+    if(!ctx.CheckArgCount(2)) return;
     alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
 
     uint32_t weapon;

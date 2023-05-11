@@ -57,8 +57,8 @@ extern js::Class sharedVehicleClass("SharedVehicle", &entityClass, nullptr, [](j
     tpl.Property<&alt::IVehicle::GetWheelVariation>("wheelVariation");
     tpl.Property<&alt::IVehicle::GetCustomTires>("customTires");
     tpl.Property<&alt::IVehicle::GetSpecialDarkness>("specialDarkness");
-    tpl.Property<&alt::IVehicle::GetNumberplateIndex>("numberPlateIndex");
-    tpl.Property<&alt::IVehicle::GetNumberplateText>("numberPlateText");
+    tpl.Property<&alt::IVehicle::GetNumberplateIndex>("numberplateIndex");
+    tpl.Property<&alt::IVehicle::GetNumberplateText>("numberplateText");
     tpl.Property<&alt::IVehicle::GetWindowTint>("windowTint");
     tpl.Property<&alt::IVehicle::GetDirtLevel>("dirtLevel");
     tpl.Property<&alt::IVehicle::IsNeonActive>("isNeonActive");
@@ -92,19 +92,19 @@ extern js::Class sharedVehicleClass("SharedVehicle", &entityClass, nullptr, [](j
 
     tpl.Method<&alt::IVehicle::GetMod>("getMod");
     tpl.Method<&alt::IVehicle::GetModsCount>("getModsCount");
-    tpl.Method<&alt::IVehicle::IsExtraOn>("getIsExtraOn");
+    tpl.Method<&alt::IVehicle::IsExtraOn>("isExtraOn");
     tpl.Method<&alt::IVehicle::GetDoorState>("getDoorState");
-    tpl.Method<&alt::IVehicle::IsWindowOpened>("getIsWindowOpened");
-    tpl.Method<&alt::IVehicle::IsWheelBurst>("getIsWheelBurst");
+    tpl.Method<&alt::IVehicle::IsWindowOpened>("isWindowOpened");
+    tpl.Method<&alt::IVehicle::IsWheelBurst>("isWheelBurst");
     tpl.Method<&alt::IVehicle::DoesWheelHasTire>("getWheelHasTire");
-    tpl.Method<&alt::IVehicle::IsWheelDetached>("getIsWheelDetached");
-    tpl.Method<&alt::IVehicle::IsWheelOnFire>("getIsWheelOnFire");
+    tpl.Method<&alt::IVehicle::IsWheelDetached>("isWheelDetached");
+    tpl.Method<&alt::IVehicle::IsWheelOnFire>("isWheelOnFire");
     tpl.Method<&alt::IVehicle::GetWheelHealth>("getWheelHealth");
     tpl.Method<&alt::IVehicle::GetPartDamageLevel>("getPartDamageLevel");
     tpl.Method<&alt::IVehicle::GetPartBulletHoles>("getPartBulletHoles");
-    tpl.Method<&alt::IVehicle::IsLightDamaged>("getIsLightDamaged");
-    tpl.Method<&alt::IVehicle::IsWindowDamaged>("getIsWindowDamaged");
-    tpl.Method<&alt::IVehicle::IsSpecialLightDamaged>("getIsSpecialLightDamaged");
+    tpl.Method<&alt::IVehicle::IsLightDamaged>("isLightDamaged");
+    tpl.Method<&alt::IVehicle::IsWindowDamaged>("isWindowDamaged");
+    tpl.Method<&alt::IVehicle::IsSpecialLightDamaged>("isSpecialLightDamaged");
     tpl.Method<&alt::IVehicle::GetArmoredWindowHealth>("getArmoredWindowHealth");
     tpl.Method<&alt::IVehicle::GetArmoredWindowShootCount>("getArmoredWindowShootCount");
     tpl.Method<&alt::IVehicle::GetBumperDamageLevel>("getBumperDamageLevel");
