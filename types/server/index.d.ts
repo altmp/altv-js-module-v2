@@ -6,6 +6,8 @@ declare module "@altv/server" {
 
     export const rootDir: string;
     export const netTime: number;
+    export const defaultDimension: number;
+    export const globalDimension: number;
 
     export const syncedMeta: Record<string, any>;
     export const serverConfig: Record<string, any>;
@@ -229,6 +231,7 @@ declare module "@altv/server" {
     }
 
     export class VehicleModelInfo {
+        get model(): number;
         get title(): string;
         get modelType(): shared.Enums.VehicleModelType;
         get wheelsCount(): number;
@@ -245,32 +248,31 @@ declare module "@altv/server" {
         get hasAutoAttachTrailer(): boolean;
         get bones(): ReadonlyArray<BoneInfo>;
 
+        doesExtraExist(extraId: number);
+        isExtraDefault(extraId: number);
+
         static get(model: string | number): VehicleModelInfo;
     }
 
-    export class WorldObject extends shared.BaseObject {
-        // Shared
-        get pos(): shared.Vector3;
-
-        // Server
-        set pos(pos: shared.Vector3);
-        get dimension(): number;
+    export interface BaseObject extends shared.BaseObject {
     }
 
-    export class Entity extends WorldObject {
-        // Shared
-        get id(): number;
-        get model(): number;
-        get netOwner(): Player | null;
-        get rot(): shared.Vector3;
-        get visible(): boolean;
+    export class BaseObject {
+    }
 
-        get syncedMeta(): Record<string, any>;
-        get streamSyncedMeta(): Record<string, any>;
+    export interface WorldObject extends BaseObject, shared.WorldObject {
+        set pos(pos: shared.Vector3);
+        dimension: number;
+    }
 
-        static get all(): ReadonlyArray<Entity>;
+    export class WorldObject {
+    }
 
-        // Server
+    export interface Entity extends WorldObject, shared.Entity {
+        // Inheritance
+        set pos(pos: shared.Vector3);
+        // Inheritance End
+
         setNetOwner(player: Player, disableMigration?: boolean): void;
         resetNetOwner(disableMigration?: boolean): void;
 
@@ -278,52 +280,38 @@ declare module "@altv/server" {
         detach(): void;
 
         set visible(visible: boolean);
-        set streamed(streamed: boolean);
-        set frozen(frozen: boolean);
-        set collision(collision: boolean);
+        streamed: boolean;
+        frozen: boolean;
+        collision: boolean;
+    }
 
+    export class Entity {
         static getByID(id: number): Entity | null;
     }
 
-    export class Player extends Entity {
-        // Shared
-        get name(): string;
-        get health(): number;
-        get maxHealth(): number;
-        get currentWeaponComponents(): ReadonlyArray<number>;
-        get currentWeaponTintIndex(): number;
-        get currentWeapon(): number;
-        get isDead(): boolean;
-        get isJumping(): boolean;
-        get isAiming(): boolean;
-        get isShooting(): boolean;
-        get isReloading(): boolean;
-        get armour(): number;
-        get maxArmour(): number;
-        get moveSpeed(): number;
-        get aimPos(): shared.Vector3;
-        get headRotation(): shared.Vector3;
-        get isInVehicle(): boolean;
-        get vehicle(): Vehicle | null;
-        get seat(): number;
-        get entityAimingAt(): Entity | null;
-        get entityAimOffset(): shared.Vector3;
-        get isFlashlightActive(): boolean;
-        get isSuperJumpEnabled(): boolean;
-        get isCrouching(): boolean;
-        get isStealthy(): boolean;
-        get currentAnimationDict(): number;
-        get currentAnimationName(): number;
-        get isSpawned(): boolean;
-        get forwardSpeed(): number;
-        get strafeSpeed(): number;
+    export interface Ped extends Entity, shared.Ped {
+        // Inheritance
+        set pos(pos: shared.Vector3);
+        set visible(visible: boolean);
+        // Inheritance End
 
-        getWeaponTintIndex(weapon: number | string): number;
-        hasWeaponComponent(weapon: number | string, component: number | string): boolean;
+        set health(health: number);
+        set maxHealth(maxHealth: number);
+        set armour(armour: number);
+        set currentWeapon(weapon: number);
+    }
 
-        static get all(): ReadonlyArray<Player>;
+    export class Ped {
+        static create(args: PedCreateArgs): Ped;
+        static getByID(id: number): Ped | null;
+    }
 
-        // Server
+    export interface Player extends Entity, shared.Player {
+        // Inheritance
+        set pos(pos: shared.Vector3);
+        set visible(visible: boolean);
+        // Inheritance End
+
         get ip(): string;
         get socialId(): number;
         get hwidHash(): number;
@@ -333,68 +321,155 @@ declare module "@altv/server" {
         get authToken(): string;
         get discordId(): number;
 
+        set model(model: number);
+        set armour(armour: number);
+        set maxArmour(maxArmour: number);
+        set currentWeapon(weapon: number);
+        set health(health: number);
+        set maxHealth(maxHealth: number);
+        invincible: boolean;
+        headBlendData: shared.Appearance.HeadblendData;
+        eyeColor: number;
+        get weapons(): shared.WeaponInfo;
+        get interiorLocation(): number;
+        get lastDamagedBodyPart(): number;
+        sendNames: boolean;
+        get cloudAuthHash(): string;
+
         emit(eventName: string, ...args: any[]): void;
         emitUnreliable(eventName: string, ...args: any[]): void;
+        spawn(posiiton: shared.Vector3, timeout?: number): void;
+        despawn(): void;
+        setWeaponTintIndex(weaponHash: number, tintIndex: number): void;
+        addWeaponComponent(weaponHash: number, componentHash: number): void;
+        removeWeaponComponent(weaponHash: number, componentHash: number): void;
+        clearBloodDamage(): void;
+        giveWeapon(weaponHash: number, ammo: number, selectWeapon?: boolean): void;
+        removeWeapon(weaponHash: number): void;
+        removeAllWeapons(): void;
+        setDateTime(day: number, month: number, year: number, hour: number, minute: number, second: number): void;
+        setWeather(weatherId: number): void;
+        kick(reason: string): void;
+        getClothes(component: number): shared.Appearance.Clothing;
+        setClothes(component: number, drawable: number, texture: number, palette: number): void;
+        getDlcClothes(component: number): shared.Appearance.DlcClothing;
+        setDlcClothes(component: number, drawable: number, texture: number, palette: number, dlcHash: number): void;
+        getProps(component: number): shared.Appearance.Prop;
+        setProps(component: number, drawable: number, texture: number): void;
+        getDlcProps(component: number): shared.Appearance.DlcProp;
+        setDlcProps(componend: number, drawable: number, texture: number, dlcHash: number): void;
+        clearProps(component: number): void;
+        isEntityInStreamingRange(entityId: number): void;
+        setIntoVehicle(vehicle: shared.Vehicle, seat: number): void;
+        playAmbientSpeech(speechName: string, speechParam: string, speechDictHash: number): void;
+        setHeadOverlay(overlayId: number, index: number, opacity: number): void;
+        removeHeadOverlay(overlay: number): void;
+        setHeadOverlayColor(overlay: number, colorType: number, colorIndex: number, secondColorIndex: number): void;
+        getHeadOverlay(): shared.Appearance.HeadOverlay;
+        setFaceFeature(index: number, scale: number);
+        getFaceFeatureScale(index: number): number;
+        removeFaceFeature(index: number): void;
+        setHeadBlendPaletteColor(color: shared.RGBA): void;
+        setHeadBlendPaletteColor(r: number, g: number, b: number, a: number): void;
+        getHeadBlendPaletteColor(id: number): shared.RGBA;
+        playAnimation(animDict: string, animName: string, blendInSpeed?: number, blendOutSpeed?: number, duration?: number, flag?: number, playbackRate?: number, lockX?: boolean, lockY?: boolean, lockZ?: boolean): void;
+        clearTasks(): void;
+    }
 
-        // todo: add missing api
-
+    export class Player {
         static getByID(id: number): Player | null;
     }
 
-    export class Vehicle extends Entity {
-        // Shared
-        // todo: add missing api
+    export interface Vehicle extends Entity, shared.Vehicle {
+        // Inheritance
+        set pos(pos: shared.Vector3);
+        set visible(visible: boolean);
+        // Inheritance End
 
-        static get all(): ReadonlyArray<Vehicle>;
+        set modKit(modKit: number);
+        set primaryColor(color: number);
+        set customPrimaryColor(color: shared.RGBA);
+        set secondaryColor(color: number);
+        set customSecondaryColor(color: shared.RGBA);
+        set pearlColor(color: number);
+        set wheelColor(color: number);
+        set interiorColor(color: number);
+        set dashboardColor(color: number);
+        set tireSmokeColor(color: shared.RGBA);
+        set customTires(state: boolean);
+        set specialDarkness(specialDarkness: number);
+        set numberplateIndex(index: number);
+        set numberplateText(text: string);
+        set windowTint(tint: number);
+        set dirtLevel(dirtLevel: number);
+        set neonColor(neonColor: shared.RGBA);
+        set livery(livery: number);
+        set roofLivery(roofLivery: number);
+        set appearanceDataBase64(appearanceData: string);
+        set engineOn(state: boolean);
+        set headlightColor(color: number);
+        set radioStationIndex(radioStation: number);
+        set isSirenActive(state: boolean);
+        set lockState(state: number);
+        set roofState(state: number);
+        set lightsMultiplier(multiplier: number);
+        set engineHealth(health: number);
+        set petrolTankHealth(health: number);
+        set bodyHealth(health: number);
+        set engineHeabodyAdditionalHealthlth(health: number);
+        set manualEngineControl(state: boolean);
+        set damageDataBase64(damageData: string);
+        set scriptDataBase64(scriptrData: string);
+        set gameStateDataBase64(gameStateData: string);
+        set healthDataBase64(healthData: string);
+        get attached(): Vehicle;
+        get attachedTo(): Vehicle;
+        driftMode: boolean;
+        boatAnchorActive: boolean;
+        lightState: number;
+        get hasTimedExplosion(): boolean;
+        get timedExplosionCulprit(): Player;
+        get timedExplosionTime(): number;
+        towingDisabled: boolean;
+        rocketRefuelSpeed: number;
+        counterMeasureCount: number;
+        scriptMaxSpeed: number;
+        hybridExtraActive: boolean;
+        hybridExtraState: number;
+        quaternion: shared.Quaternion;
 
-        // Server
-        // todo: add missing api
+        repair(): void;
+        setMod(category: number, id: number): void;
+        setWheels(type: number, variation: number): void;
+        setDoorState(doorId: number, state: boolean): void;
+        setWindowOpened(windowId: number, state: boolean): void;
+        setWheelBurst(wheelId: number, state: boolean): void;
+        setWheelDetached(wheelId: number, state: boolean): void;
+        setWheelOnFire(wheelId: number, state: boolean): void;
+        setWheelHealth(wheelId: number, health: number): void;
+        setWheelFixed(wheelId: number): void;
+        setPartDamageLevel(partId: number, damageLevel: number): void;
+        setPartBulletHoles(partId: number, shootsCount: number): void;
+        setLightDamaged(lightId: number, isDamaged: boolean): void;
+        setWindowDamaged(windowId: number, isDamaged: boolean): void;
+        setSpecialLightDamaged(lightId: number, isDamaged: boolean): void;
+        setArmoredWindowHealth(windowId: number, health: number);
+        setArmoredWindowShootCount(windowId: number, shootsCount: number): void;
+        setBumperDamageLevel(bumperId: number, damageLevel: number): void;
+        setSearchLight(state: boolean, spottedEntity: Entity): void;
+        setTimedExplosion(state: boolean, culprit: Player, time: number): void;
+        getWeaponCapacity(index: number): void;
+        setWeaponCapacity(index: number, state: number): void;
+    }
+
+    export class Vehicle {
         static getByID(id: number): Vehicle | null;
     }
 
-    export class Blip extends WorldObject {
-        // Shared
-        get id(): number;
-        get isGlobal(): boolean;
-        get target(): Entity | null;
-        get isAttached(): boolean;
-        get attachedTo(): Entity | null;
-        get blipType(): shared.Enums.BlipType;
+    export interface Blip extends BaseObject, shared.Blip {
+    }
 
-        scale: shared.Vector2;
-        display: number;
-        sprite: number;
-        color: number;
-        secondaryColor: shared.RGBA;
-        alpha: number;
-        flashTimer: number;
-        flashInterval: number;
-        friendly: boolean;
-        route: boolean;
-        bright: boolean;
-        number: number;
-        showCone: boolean;
-        flashes: boolean;
-        flashesAlternate: boolean;
-        shortRange: boolean;
-        priority: number;
-        rotation: number;
-        gxtName: string;
-        name: string;
-        routeColor: shared.RGBA;
-        pulse: boolean;
-        missionCreator: boolean;
-        tickVisible: boolean;
-        headingIndicatorVisible: boolean;
-        outlineIndicatorVisible: boolean;
-        friendIndicatorVisible: boolean;
-        crewIndicatorVisible: boolean;
-        category: number;
-        highDetail: boolean;
-        shrinked: boolean;
-
-        attachTo(entity: Entity): void;
-        fade(opacity: number, duration: number): void;
+    export class Blip extends shared.Blip {
     }
 
     interface PointBlipCreateArgs {
@@ -429,15 +504,22 @@ declare module "@altv/server" {
         textureVariation?: number;
         lodDistance?: number;
     }
-    export class NetworkObject extends Entity {
-        // Shared
-        get alpha(): number;
-        get textureVariation(): number;
-        get lodDistance(): number;
 
-        static get all(): ReadonlyArray<NetworkObject>;
+    export interface NetworkObject extends Entity, shared.NetworkObject {
+        // Inheritance
+        set pos(pos: shared.Vector3);
+        set visible(visible: boolean);
+        // Inheritance End
 
-        // Server
+        set alpha(alpha: number);
+        set textureVariation(textureVariation: number);
+        set lodDistance(lodDistance: number);
+
+        activatePhysics(): void;
+        placeOnGroundProperly(): void;
+    }
+
+    export class NetworkObject extends shared.NetworkObject {
         static create(args: NetworkObjectCreateArgs): NetworkObject;
         static getByID(id: number): NetworkObject | null;
     }
@@ -447,27 +529,13 @@ declare module "@altv/server" {
         pos: shared.Vector3;
         rot: shared.Vector3;
     }
-    export class Ped extends Entity {
-        // Shared
-        get health(): number;
-        get maxHealth(): number;
-        get armour(): number;
-        get currentWeapon(): number;
-
-        static get all(): ReadonlyArray<Ped>;
-
-        // Server
-        static create(args: PedCreateArgs): Ped;
-        static getByID(id: number): Ped | null;
-    }
 
     export interface IFireInfo {
         readonly pos: shared.Vector3;
         readonly weaponHash: number;
     }
 
-    export class ColShape extends WorldObject {
-        // Server
+    export interface ColShape extends WorldObject, shared.ColShape {
         get colshapeType(): shared.Enums.ColShapeType;
         get playersOnly(): boolean;
 
@@ -476,12 +544,43 @@ declare module "@altv/server" {
         isPointIn(position: shared.Vector3): boolean;
     }
 
+    export class ColShape extends WorldObject {
+    }
+
     export const enum ConnectDeniedReason {
         WRONG_VERSION,
         WRONG_BRANCH,
         DEBUG_NOT_ALLOWED,
         WRONG_PASSWORD,
         WRONG_CDN_URL
+    }
+
+    export interface VirtualEntityGroup extends BaseObject, shared.VirtualEntityGroup {
+    }
+
+    export class VirtualEntityGroup {
+    }
+
+    export interface VirtualEntity extends WorldObject, shared.VirtualEntity {
+    }
+
+    export class VirtualEntity {
+    }
+
+    export class VoiceChannel extends BaseObject {
+        get id(): number;
+        get isSpatial(): boolean;
+        get maxDistance(): number;
+
+        get players(): ReadonlyArray<Player>;
+        get playerCount(): number;
+
+        hasPlayer(player: Player): boolean;
+        addPlayer(player: Player): void;
+        removePlayer(player: Player): void;
+        isPlayerMuted(player: Player): boolean;
+        mutePlayer(player: Player): void;
+        unmutePlayer(player: Player): void;
     }
 
     export * from "@altv/shared";
