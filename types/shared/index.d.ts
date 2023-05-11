@@ -44,6 +44,11 @@ declare module "@altv/shared" {
         export function setTimeout(callback: () => void, timeout: number): Timeout;
         export function everyTick(callback: () => void): EveryTick;
         export function nextTick(callback: () => void): NextTick;
+
+        export function setWarningThreshold(treshold: number): void;
+        export function setSourceLocationFrameSkipCount(count: number): void;
+
+        export const all: Timer[];
     }
 
     export namespace Utils {
@@ -51,7 +56,7 @@ declare module "@altv/shared" {
 
         export function wait(ms: number): Promise<void>;
         export function waitForNextTick(): Promise<void>;
-        export function waitFor(callback: () => boolean): Promise<void>;
+        export function waitFor(callback: () => boolean, timeout: number): Promise<void>;
 
         export class AssertionError extends Error {}
         export function assert(condition: any, message?: string): asserts condition;
@@ -102,6 +107,7 @@ declare module "@altv/shared" {
             SCREEN_CAPTURE,
             WEBRTC,
             CLIPBOARD_ACCESS,
+            EXTENDED_VOICE_API,
             All
         }
         export const enum PermissionState {
@@ -279,9 +285,9 @@ declare module "@altv/shared" {
         export interface Event<Context extends EventContext> {
             (callback: (context: Context) => void): void;
 
-            remove(callback: Callback): void;
+            remove(callback: (context: Context) => void): void;
             readonly listeners: ReadonlyArray<(context: Context) => void>;
-        };
+        }
 
         interface ScriptEventContext extends EventContext {
             readonly eventName: string;
@@ -371,6 +377,9 @@ declare module "@altv/shared" {
         export function onRemote(eventName: string, callback: (context: { args: any[], player: Player | undefined }) => void): void;
 
         export function emit(eventName: string, ...args: any[]): void;
+
+        export function setWarningThreshold(treshold: number): void;
+        export function setSourceLocationFrameSkipCount(count: number): void;
     }
 
     export namespace PointBlip {}
@@ -496,19 +505,10 @@ declare module "@altv/shared" {
         static fromArray(array: Array<number>): Quaternion;
     }
 
-    export class BaseObject {
-        get type(): Enums.BaseObjectType;
-        get valid(): boolean;
-
-        get meta(): Record<string, any>;
-
-        destroy(): void;
-    }
-
     export class Resource {
         get type(): string;
-        get name(): string;
         get path(): string;
+        get name(): string;
         get main(): string;
         get exports(): Record<string, any>;
         get dependencies(): ReadonlyArray<Resource>;
@@ -523,5 +523,298 @@ declare module "@altv/shared" {
 
         static get current(): Resource;
         static get all(): ReadonlyArray<Resource>;
+    }
+
+    export interface BaseObject {
+        get type(): Enums.BaseObjectType;
+        get valid(): boolean;
+
+        get meta(): Record<string, any>;
+
+        destroy(): void;
+    }
+
+    export class BaseObject {
+        static getById(type: Enums.BaseObjectType, id: number): BaseObject | null;
+    }
+
+    export interface WorldObject extends BaseObject {
+        get pos(): Vector3;
+    }
+
+    export class WorldObject {
+    }
+
+    export interface Entity extends WorldObject {
+        get id(): number;
+
+        get model(): number;
+        get netOwner(): Player | null;
+        get rot(): Vector3;
+        get visible(): boolean;
+
+        get syncedMeta(): Record<string, any>;
+        get streamSyncedMeta(): Record<string, any>;
+    }
+
+    export class Entity {
+        static get all(): ReadonlyArray<Entity>;
+    }
+
+    export interface Ped extends Entity {
+        get health(): number;
+        get maxHealth(): number;
+        get armour(): number;
+        get currentWeapon(): number;
+    }
+
+    export class Ped {
+        static get all(): ReadonlyArray<Ped>;
+    }
+
+    export interface Player extends Entity {
+        get name(): string;
+        get health(): number;
+        get maxHealth(): number;
+        get currentWeaponComponents(): ReadonlyArray<number>;
+        get currentWeaponTintIndex(): number;
+        get currentWeapon(): number;
+        get isDead(): boolean;
+        get isJumping(): boolean;
+        get isAiming(): boolean;
+        get isShooting(): boolean;
+        get isReloading(): boolean;
+        get armour(): number;
+        get maxArmour(): number;
+        get moveSpeed(): number;
+        get aimPos(): Vector3;
+        get headRotation(): Vector3;
+        get isInVehicle(): boolean;
+        get vehicle(): Vehicle | undefined;
+        get seat(): number;
+        get entityAimingAt(): Entity | undefined;
+        get entityAimOffset(): Vector3;
+        get isFlashlightActive(): boolean;
+        get isSuperJumpEnabled(): boolean;
+        get isCrouching(): boolean;
+        get isStealthy(): boolean;
+        get currentAnimationDict(): string;
+        get currentAnimationName(): string;
+        get isSpawned(): boolean;
+        get forwardSpeed(): number;
+        get strafeSpeed(): number;
+
+        getWeaponTintIndex(weapon: number | string): number;
+        hasWeaponComponent(weapon: number | string, component: number | string): boolean;
+    }
+
+    export class Player {
+        static get all(): ReadonlyArray<Player>;
+    }
+
+    export interface Vehicle extends Entity {
+        get neon(): Record<string, boolean>;
+        get driver(): Player;
+        get isDestroyed(): boolean;
+        get modKitsCount(): number;
+        get modKit(): number;
+        get isPrimaryColorRGB(): boolean;
+        get primaryColor(): number;
+        get customPrimaryColor(): RGBA;
+        get isSecondaryColorRGB(): boolean;
+        get secondaryColor(): number;
+        get customSecondaryColor(): RGBA;
+        get pearlColor(): number;
+        get wheelColor(): number;
+        get interiorColor(): number;
+        get dashboardColor(): number;
+        get isTireSmokeColorCustom(): boolean;
+        get tireSmokeColor(): RGBA;
+        get wheelType(): number;
+        get wheelVariation(): number;
+        get customTires(): boolean;
+        get specialDarkness(): number;
+        get numberplateIndex(): number;
+        get numberplateText(): string;
+        get windowTint(): number;
+        get dirtLevel(): number;
+        get isNeonActive(): boolean;
+        get neonColor(): RGBA;
+        get livery(): number;
+        get roofLivery(): number;
+        get appearanceDataBase64(): string;
+        get isEngineOn(): boolean;
+        get isHandbrakeActive(): boolean;
+        get headlightColor(): number;
+        get radioStationIndex(): number;
+        get isSirenActive(): boolean;
+        get lockState(): number;
+        get isDaylightOn(): boolean;
+        get isNightlightOn(): boolean;
+        get roofState(): number;
+        get isFlamethrowerActive(): boolean;
+        get lightsMultiplier(): number;
+        get gameStateBase64(): string;
+        get engineHealth(): number;
+        get petrolTankHealth(): number;
+        get wheelsCount(): number;
+        get repairsCount(): number;
+        get bodyHealth(): number;
+        get bodyAdditionalHealth(): number;
+        get hasArmoredWindows(): boolean;
+        get damageDataBase64(): string;
+        get isManualEngineControl(): boolean;
+        get scriptDataBase64(): string;
+        get velocity(): Vector3;
+
+        getMod(category: number): number;
+        getModsCount(category: number): number;
+        isExtraOn(extraId: number): boolean;
+        getDoorState(doorId: number): number;
+        isWindowOpened(windowId: number): boolean;
+        isWheelBurst(wheelId: number): boolean;
+        doesWheelHasTire(wheelId: number): boolean;
+        isWheelDetached(wheelId: number): boolean;
+        isWheelOnFire(wheelId: number): boolean;
+        getWheelHealth(wheelId: number): number;
+        getPartDamageLevel(partId: number): number;
+        getPartBulletHoles(partId: number): number;
+        isLightDamaged(lightId: number): boolean;
+        isWindowDamaged(windowId: number): boolean;
+        isSpecialLightDamaged(lightId: number): boolean;
+        getArmoredWindowHealth(windowId: number): number;
+        getArmoredWindowShootCount(windowId: number): number;
+        getBumperDamageLevel(bumperId: number): number;
+        toggleExtra(extraId: number, state: boolean): void;
+    }
+
+    export class Vehicle {
+        static get all(): ReadonlyArray<Player>;
+    }
+
+    export interface NetworkObject extends Entity {
+        get alpha(): number;
+        get textureVariation(): number;
+        get lodDistance(): number;
+    }
+
+    export class NetworkObject {
+        static get all(): ReadonlyArray<NetworkObject>;
+    }
+
+    export interface Blip extends BaseObject {
+        get id(): number;
+
+        get isGlobal(): boolean;
+        get target(): Player;
+        get isAttached(): boolean;
+        get attachedTo(): Entity;
+        get blipType(): Enums.BlipType;
+        scale: Vector2;
+        display: number;
+        sprite: number;
+        color: number;
+        secondaryColor: RGBA;
+        alpha: number;
+        flashTimer: number;
+        flashInterval: number;
+        friendly: boolean;
+        route: boolean;
+        bright: boolean;
+        number: number;
+        showCone: boolean;
+        flashes: boolean;
+        flashesAlternate: boolean;
+        shortRange: boolean;
+        priority: number;
+        rotation: number;
+        gxtName: string;
+        name: string;
+        routeColor: RGBA;
+        pulse: boolean;
+        missionCreator: boolean;
+        tickVisible: boolean;
+        headingIndicatorVisible: boolean;
+        outlineIndicatorVisible: boolean;
+        friendIndicatorVisible: boolean;
+        crewIndicatorVisible: boolean;
+        category: number;
+        highDetail: boolean;
+        shrinked: boolean;
+
+        attachTo(entity: Entity): void;
+        fade(opacity: number, duration: number): void;
+    }
+
+    export class Blip extends BaseObject {
+        static get all(): ReadonlyArray<Blip>;
+    }
+
+    export interface VirtualEntityGroup extends BaseObject {
+        get id(): number;
+        get streamingRangeLimit(): number;
+    }
+
+    export class VirtualEntityGroup extends BaseObject {
+        static get all(): ReadonlyArray<VirtualEntityGroup>;
+    }
+
+    export interface VirtualEntity extends WorldObject {
+        get id(): number;
+        get group(): VirtualEntityGroup;
+        get streamingDistance(): number;
+
+        get streamSyncedMeta(): Record<string, any>;
+    }
+
+    export class VirtualEntity extends WorldObject {
+        static get all(): ReadonlyArray<VirtualEntity>;
+    }
+
+    export namespace Appearance {
+        interface Clothing {
+            drawable: number;
+            texture: number;
+            palette: number;
+        }
+
+        interface DlcClothing extends Clothing {
+            dlc: number;
+        }
+
+        interface Prop {
+            drawable: number;
+            palette: number;
+        }
+
+        interface DlcProp extends Prop {
+            dlc: number;
+        }
+
+        interface HeadblendData {
+            shapeFirstID: number;
+            shapeSecondID: number;
+            shapeThirdID: number;
+            skinFirstID: number;
+            skinSecondID: number;
+            skinThirdID: number;
+            shapeMix: number;
+            skinMix: number;
+            thirdMix: number;
+        }
+
+        interface HeadOverlay {
+            index: number;
+            opacity: number;
+            colorType: number;
+            colorIndex: number;
+            secondColorIndex: number;
+        }
+    }
+
+    export interface WeaponInfo {
+        get hash(): number;
+        get tintIndex(): number;
+        get components(): ReadonlyArray<number>;
     }
 }
