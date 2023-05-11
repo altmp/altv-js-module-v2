@@ -321,7 +321,7 @@ declare module "@altv/server" {
         get authToken(): string;
         get discordId(): number;
 
-        set model(model: number);
+        set model(model: number | string);
         set armour(armour: number);
         set maxArmour(maxArmour: number);
         set currentWeapon(weapon: number);
