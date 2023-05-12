@@ -72,7 +72,7 @@ static void Get(js::FunctionContext& ctx)
     }
     modelObj.Set("bones", bones);
     modelObj.SetMethod("doesExtraExist", DoesExtraExist);
-    modelObj.SetMethod("isExtraDefault", DoesExtraExist);
+    modelObj.SetMethod("isExtraDefault", IsExtraDefault);
 
     ctx.Return(modelObj);
 }
