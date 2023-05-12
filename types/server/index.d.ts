@@ -1,6 +1,7 @@
 /**
  * @module @altv/server
  */
+
 declare module "@altv/server" {
     import * as shared from "@altv/shared";
 
@@ -412,7 +413,7 @@ declare module "@altv/server" {
         set headlightColor(color: number);
         set radioStationIndex(radioStation: number);
         set isSirenActive(state: boolean);
-        set lockState(state: number);
+        set lockState(state: shared.Enums.VehicleLockState);
         set roofState(state: number);
         set lightsMultiplier(multiplier: number);
         set engineHealth(health: number);
