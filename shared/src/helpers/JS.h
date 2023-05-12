@@ -3,6 +3,7 @@
 #include "v8-persistent-handle.h"
 #include "Convert.h"
 #include "Type.h"
+#include "Callbacks.h"
 
 namespace js
 {
@@ -118,6 +119,8 @@ namespace js
             static_assert(IsJSValueConvertible<Type>, "Type is not convertible to JS value");
             object->Set(context, js::JSValue(key), js::JSValue((Type)val));
         }
+
+        void SetMethod(const std::string& key, FunctionCallback func);
 
         // Falls back to default value if the value is not found or the type doesn't match
         template<typename T>

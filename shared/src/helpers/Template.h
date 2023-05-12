@@ -8,6 +8,7 @@
 #include "Convert.h"
 #include "CallContext.h"
 #include "Logger.h"
+#include "Callbacks.h"
 
 template<auto x>
 struct function_traits;
@@ -38,15 +39,6 @@ namespace js
 {
     class Namespace;
     class Class;
-
-    using FunctionCallback = void (*)(FunctionContext&);
-    using PropertyCallback = void (*)(PropertyContext&);
-    using LazyPropertyCallback = void (*)(LazyPropertyContext&);
-
-    using DynamicPropertyGetter = void (*)(DynamicPropertyContext<v8::Value>&);
-    using DynamicPropertySetter = void (*)(DynamicPropertyContext<v8::Value>&);
-    using DynamicPropertyDeleter = void (*)(DynamicPropertyContext<v8::Boolean>&);
-    using DynamicPropertyEnumerator = void (*)(DynamicPropertyContext<v8::Array>&);
 
     namespace Wrapper
     {

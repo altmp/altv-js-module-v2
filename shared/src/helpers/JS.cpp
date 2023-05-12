@@ -79,6 +79,11 @@ js::IResource* js::Value::GetResource()
     return resource;
 }
 
+void js::Object::SetMethod(const std::string& key, js::FunctionCallback callback)
+{
+    object->Set(context, JSValue(key), WrapFunction(callback)->GetFunction(context).ToLocalChecked());
+}
+
 js::Type js::Object::GetType(const std::string& key)
 {
     if(typeCache.contains(key)) return typeCache.at(key);
