@@ -546,7 +546,7 @@ declare module "@altv/server" {
         isPointIn(position: shared.Vector3): boolean;
     }
 
-    export class ColShape extends WorldObject {
+    export class ColShape {
     }
 
     export interface Checkpoint extends ColShape, shared.Checkpoint {
