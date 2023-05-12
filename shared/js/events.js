@@ -6,6 +6,8 @@ export class Event {
     static #handlers = new Map();
     /** @type {Map<number, ({ handler: Function, location: { fileName: string, lineNumber: number } })[]>} */
     static #customHandlers = new Map();
+    /** @type {Set<({ handler: Function, location: { fileName: string, lineNumber: number } })>} */
+    static #genericHandlers = new Set();
 
     /** @type {Map<string, ({ handler: Function, location: { fileName: string, lineNumber: number } })[]>} */
     static #localScriptEventHandlers = new Map();
@@ -168,6 +170,68 @@ export class Event {
     }
 
     /**
+     * Gets the name of the event type enum value.
+     * @param {number} type
+     * @param {boolean} custom
+     */
+    static #getEventName(type, custom) {
+        const enumObj = custom ? alt.Enums.CustomEventType : alt.Enums.EventType;
+        return Object.keys(enumObj).find((key) => enumObj[key] === type);
+    }
+
+    /**
+     * @param {number} eventType
+     * @param {Record<string, any>} ctx
+     * @param {boolean} custom
+     */
+    static async #invokeGeneric(eventType, ctx, custom) {
+        const handlers = Event.#genericHandlers;
+        if (!handlers.size) return;
+
+        const genericCtx = {
+            ...ctx,
+            customEvent: custom,
+        };
+        Object.freeze(genericCtx);
+
+        for (let { handler, location } of handlers) {
+            try {
+                const startTime = Date.now();
+                const result = handler(genericCtx);
+                const duration = Date.now() - startTime;
+                if (duration > Event.#warningThreshold) {
+                    alt.logWarning(
+                        `[JS] Generic event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${
+                            location.lineNumber
+                        }) for event '${Event.#getEventName(
+                            eventType,
+                            custom
+                        )}' took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`
+                    );
+                }
+                if (result instanceof Promise) await result;
+            } catch (e) {
+                alt.logError(`[JS] Exception caught while invoking generic event handler`);
+                alt.logError(e);
+            }
+        }
+    }
+
+    static subscribeGeneric(handler) {
+        assert(typeof handler === "function", `Handler for generic event is not a function`);
+
+        const location = cppBindings.getCurrentSourceLocation(Event.#sourceLocationFrameSkipCount);
+        Event.#genericHandlers.add({ handler, location });
+    }
+    static unsubscribeGeneric(handler) {
+        assert(typeof handler === "function", `Handler for generic event is not a function`);
+
+        Event.#genericHandlers.forEach((value) => {
+            if (value.handler === handler) Event.#genericHandlers.delete(value);
+        });
+    }
+
+    /**
      * @param {number} type Event type
      * @param {string} name Event name (e.g. `PlayerConnect` is accessible via `alt.Events.onPlayerConnect`)
      * @param {string} custom alt:V built-in event or a custom JS module event
@@ -182,6 +246,7 @@ export class Event {
      * @param {boolean} custom
      */
     static async invoke(eventType, ctx, custom) {
+        await Event.#invokeGeneric(eventType, ctx, custom);
         if (eventType === alt.Enums.EventType.CLIENT_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isClient);
         else if (eventType === alt.Enums.EventType.SERVER_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isServer);
 
@@ -197,7 +262,10 @@ export class Event {
                     alt.logWarning(
                         `[JS] Event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${
                             location.lineNumber
-                        }) took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`
+                        }) for event '${Event.#getEventName(
+                            eventType,
+                            custom
+                        )}' took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`
                     );
                 }
                 if (result instanceof Promise) await result;
@@ -216,6 +284,10 @@ if (alt.isClient) {
 } else {
     alt.Events.onClient = Event.getScriptEventFunc(false);
 }
+
+alt.Events.onEvent = Event.subscribeGeneric;
+alt.Events.onEvent.remove = Event.unsubscribeGeneric;
+
 alt.Events.setWarningThreshold = Event.setWarningThreshold;
 alt.Events.setSourceLocationFrameSkipCount = Event.setSourceLocationFrameSkipCount;
 
