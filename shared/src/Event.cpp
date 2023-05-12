@@ -2,6 +2,8 @@
 #include "interfaces/IResource.h"
 #include "magic_enum/include/magic_enum.hpp"
 
+extern js::Class eventContextClass;
+
 js::Promise js::Event::CallEventBinding(bool custom, int type, EventArgs& args, IResource* resource)
 {
     v8::Isolate* isolate = resource->GetIsolate();
@@ -13,32 +15,13 @@ js::Promise js::Event::CallEventBinding(bool custom, int type, EventArgs& args, 
     return js::Promise{ result.value_or(v8::Local<v8::Value>()).As<v8::Promise>() };
 }
 
-void js::Event::CancelEventCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-{
-    alt::CEvent* ev = static_cast<alt::CEvent*>(info.Data().As<v8::External>()->Value());
-    if(ev->WasCancelled()) return;
-    ev->Cancel();
-    js::Object thisObj{ info.This() };
-    thisObj.Set("isCancelled", true);
-}
-
-v8::Local<v8::Function> js::Event::GetCancelFunction(js::IResource* resource, const alt::CEvent* ev)
-{
-    v8::Local<v8::Function> func = v8::Function::New(resource->GetContext(), CancelEventCallback, v8::External::New(resource->GetIsolate(), (void*)ev)).ToLocalChecked();
-    func->SetName(js::JSValue("cancel"));
-    return func;
-}
-
 void js::Event::SendEvent(const alt::CEvent* ev, IResource* resource)
 {
     Event* eventHandler = GetEventHandler(ev->GetType());
     if(!eventHandler) return;
 
-    EventArgs eventArgs;
+    EventArgs eventArgs = eventContextClass.Create(resource->GetContext(), (void*)ev);
     eventHandler->argsCb(ev, eventArgs);
-    eventArgs.Set("cancel", GetCancelFunction(resource, ev));
-    eventArgs.Set("isCancelled", ev->WasCancelled());
-    eventArgs.Freeze();
 
     js::Promise promise = CallEventBinding(false, (int)ev->GetType(), eventArgs, resource);
     if(!promise.IsValid()) return;
@@ -50,3 +33,28 @@ void js::Event::SendEvent(EventType type, EventArgs& args, IResource* resource)
     js::Promise promise = CallEventBinding(true, (int)type, args, resource);
     if(!promise.IsValid()) return;
 }
+
+// Class
+static void CancelEventCallback(js::FunctionContext& ctx)
+{
+    alt::CEvent* ev = ctx.GetExtraInternalFieldValue<alt::CEvent>();
+    if(ev->WasCancelled()) return;
+    ev->Cancel();
+}
+static void IsCancelledGetter(js::PropertyContext& ctx)
+{
+    alt::CEvent* ev = ctx.GetExtraInternalFieldValue<alt::CEvent>();
+    ctx.Return(ev->WasCancelled());
+}
+static void TypeGetter(js::LazyPropertyContext& ctx)
+{
+    alt::CEvent* ev = ctx.GetExtraInternalFieldValue<alt::CEvent>();
+    ctx.Return(ev->GetType());
+}
+
+// clang-format off
+extern js::Class eventContextClass("EventContext", nullptr, [](js::ClassTemplate& tpl) {
+    tpl.Method("cancel", CancelEventCallback);
+    tpl.Property("isCancelled", IsCancelledGetter);
+    tpl.LazyProperty("type", TypeGetter);
+}, true);
