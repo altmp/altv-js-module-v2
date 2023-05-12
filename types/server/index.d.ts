@@ -547,6 +547,12 @@ declare module "@altv/server" {
     export class ColShape extends WorldObject {
     }
 
+    export interface Checkpoint extends ColShape, shared.Checkpoint {
+    }
+
+    export class Checkpoint {
+    }
+
     export const enum ConnectDeniedReason {
         WRONG_VERSION,
         WRONG_BRANCH,

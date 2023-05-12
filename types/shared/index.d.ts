@@ -750,6 +750,18 @@ declare module "@altv/shared" {
         static get all(): ReadonlyArray<Blip>;
     }
 
+    export interface ColShape extends WorldObject {
+    }
+
+    export class ColShape {
+    }
+
+    export interface Checkpoint extends ColShape {
+    }
+
+    export class Checkpoint {
+    }
+
     export interface VirtualEntityGroup extends BaseObject {
         get id(): number;
         get streamingRangeLimit(): number;
