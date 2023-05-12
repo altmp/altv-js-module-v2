@@ -301,6 +301,10 @@ declare module "@altv/shared" {
             readonly name: string;
             readonly args: string[];
         }
+        interface ErrorEventContext extends EventContext {
+            readonly error: string;
+            readonly stack: string;
+        }
         interface ResourceEventContext extends EventContext {
             readonly resource: Resource;
         }
@@ -352,6 +356,8 @@ declare module "@altv/shared" {
         }
 
         export const onConsoleCommand: Event<ConsoleCommandEventContext>;
+
+        export const onError: Event<ErrorEventContext>;
 
         export const onResourceStart: Event<ResourceEventContext>;
         export const onResourceStop: Event<ResourceEventContext>;
