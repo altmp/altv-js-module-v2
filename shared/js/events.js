@@ -74,15 +74,10 @@ export class Event {
         const handlers = local ? Event.#localScriptEventHandlers.get(name) : Event.#remoteScriptEventHandlers.get(name);
         if (!handlers) return;
 
-        const evCtx = {
-            args: ctx.args,
-        };
-        if (alt.isServer && !local) evCtx.player = ctx.player;
-
         for (let { handler, location } of handlers) {
             try {
                 const startTime = Date.now();
-                const result = handler(evCtx);
+                const result = handler(ctx);
                 const duration = Date.now() - startTime;
                 if (duration > Event.#warningThreshold) {
                     alt.logWarning(
