@@ -10,6 +10,15 @@ static js::Event colshapeEvent(alt::CEvent::Type::COLSHAPE_EVENT, [](const alt::
     args.Set("state", e->GetState());
 });
 
+static void SetDamageValue(js::FunctionContext& ctx)
+{
+    alt::CWeaponDamageEvent* ev = ctx.GetExtraInternalFieldValue<alt::CWeaponDamageEvent>();
+
+    uint32_t value;
+    if(!ctx.GetArg(0, value)) return;
+
+    ev->SetDamageValue(value);
+}
 static js::Event weaponDamageEvent(alt::CEvent::Type::WEAPON_DAMAGE_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
     auto e = static_cast<const alt::CWeaponDamageEvent*>(ev);
@@ -20,6 +29,8 @@ static js::Event weaponDamageEvent(alt::CEvent::Type::WEAPON_DAMAGE_EVENT, [](co
     args.Set("damage", e->GetDamageValue());
     args.Set("offset", e->GetShotOffset());
     args.Set("bodyPart", e->GetBodyPart());
+
+    args.SetMethod("setDamageValue", SetDamageValue);
 });
 
 static js::Event explosionEvent(alt::CEvent::Type::EXPLOSION_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
