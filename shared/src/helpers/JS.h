@@ -519,6 +519,7 @@ namespace js
         {
             ctx->Global()->Set(ctx, js::JSValue(_name), value);
         }
+        TemporaryGlobalExtension(v8::Local<v8::Context> _ctx, const std::string& _name, FunctionCallback _callback);
         ~TemporaryGlobalExtension()
         {
             ctx->Global()->Delete(ctx, js::JSValue(name));
