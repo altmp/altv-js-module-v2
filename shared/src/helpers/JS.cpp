@@ -94,3 +94,8 @@ js::Type js::Object::GetType(const std::string& key)
     typeCache.insert({ key, type });
     return type;
 }
+
+js::TemporaryGlobalExtension::TemporaryGlobalExtension(v8::Local<v8::Context> _ctx, const std::string& _name, js::FunctionCallback _callback) : ctx(_ctx), name(_name)
+{
+    ctx->Global()->Set(ctx, JSValue(_name), WrapFunction(_callback)->GetFunction(ctx).ToLocalChecked());
+}

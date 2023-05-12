@@ -71,8 +71,8 @@ static void Get(js::FunctionContext& ctx)
         bones.Push(boneObj);
     }
     modelObj.Set("bones", bones);
-    modelObj.Set("doesExtraExist", js::WrapFunction(DoesExtraExist)->GetFunction(context).ToLocalChecked());
-    modelObj.Set("isExtraDefault", js::WrapFunction(IsExtraDefault)->GetFunction(context).ToLocalChecked());
+    modelObj.SetMethod("doesExtraExist", DoesExtraExist);
+    modelObj.SetMethod("isExtraDefault", DoesExtraExist);
 
     ctx.Return(modelObj);
 }

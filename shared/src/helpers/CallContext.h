@@ -10,6 +10,8 @@ namespace js
 {
     class IResource;
 
+    static void Throw(const std::string& message);
+
     template<class CallbackInfo>
     class CallContext
     {

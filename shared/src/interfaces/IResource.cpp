@@ -85,7 +85,7 @@ void js::IResource::InitializeBindings(Binding::Scope scope, Module& altModule)
     {
         TemporaryGlobalExtension altExtension(ctx, "__alt", altModule.GetNamespace(this));
         TemporaryGlobalExtension cppBindingsExtension(ctx, "__cppBindings", Module::Get("cppBindings").GetNamespace(this));
-        TemporaryGlobalExtension requireBindingExtension(ctx, "requireBinding", WrapFunction(RequireBindingNamespaceWrapper)->GetFunction(ctx).ToLocalChecked());
+        TemporaryGlobalExtension requireBindingExtension(ctx, "requireBinding", RequireBindingNamespaceWrapper);
 
         for(Binding* binding : bindings) InitializeBinding(binding);
     }

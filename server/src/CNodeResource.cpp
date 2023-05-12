@@ -51,7 +51,7 @@ bool CNodeResource::Start()
 
     js::TemporaryGlobalExtension altModuleExtension(_context, "__altModule", js::Module::Get("alt").GetNamespace(this));
     js::TemporaryGlobalExtension altSharedModuleExtension(_context, "__altSharedModule", js::Module::Get("alt-shared").GetNamespace(this));
-    js::TemporaryGlobalExtension altServerModuleExtension(_context, "__resourceStarted", js::WrapFunction(ResourceStarted)->GetFunction(_context).ToLocalChecked());
+    js::TemporaryGlobalExtension altServerModuleExtension(_context, "__resourceStarted", ResourceStarted);
     node::LoadEnvironment(env, bootstrapper.GetSource());
 
     asyncResource.Reset(isolate, v8::Object::New(isolate));
