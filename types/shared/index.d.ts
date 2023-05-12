@@ -749,7 +749,7 @@ declare module "@altv/shared" {
         fade(opacity: number, duration: number): void;
     }
 
-    export class Blip extends BaseObject {
+    export class Blip {
         static get all(): ReadonlyArray<Blip>;
     }
 
