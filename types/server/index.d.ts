@@ -125,6 +125,7 @@ declare module "@altv/server" {
             readonly damage: number;
             readonly offset: shared.Vector3;
             readonly bodyPart: shared.Enums.BodyPart;
+            setDamageValue(damage: number): void;
         }
         interface ExplosionEventContext extends shared.Events.EventContext {
             readonly source: Player;
