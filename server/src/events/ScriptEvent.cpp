@@ -12,6 +12,7 @@ static js::Event colshapeEvent(alt::CEvent::Type::COLSHAPE_EVENT, [](const alt::
 
 static void SetDamageValue(js::FunctionContext& ctx)
 {
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::CWeaponDamageEvent* ev = ctx.GetExtraInternalFieldValue<alt::CWeaponDamageEvent>();
 
     uint32_t value;
