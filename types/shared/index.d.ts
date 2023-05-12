@@ -351,9 +351,6 @@ declare module "@altv/shared" {
             readonly newOwner: Player;
         }
 
-        export const onClientScriptEvent: Event<ClientScriptEventContext>;
-        export const onServerScriptEvent: Event<ServerEventContext>;
-
         export const onConsoleCommand: Event<ConsoleCommandEventContext>;
 
         export const onResourceStart: Event<ResourceEventContext>;

@@ -206,6 +206,8 @@ declare module "@altv/server" {
         export const onVehicleDamage: shared.Events.Event<VehicleDamageEventContext>;
         export const onVehicleSiren: shared.Events.Event<VehicleSirenEventContext>;
 
+        export const onClient: shared.Events.Event<ClientScriptEventContext>;
+
         export function emitPlayers(players: Player[], eventName: string, ...args: any[]): void;
         export function emitPlayersUnreliable(players: Player[], eventName: string, ...args: any[]): void;
         export function emitAllPlayers(eventName: string, ...args: any[]): void;
