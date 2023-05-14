@@ -104,7 +104,7 @@ export class Event {
      */
     static #getEventHandlers(type, custom) {
         const map = custom ? Event.#customHandlers : Event.#handlers;
-        return map.get(type);
+        return map.get(type).map((value) => value.handler);
     }
 
     /**
@@ -124,10 +124,26 @@ export class Event {
     }
 
     /**
+     * @param {string} name
+     * @param {boolean} local
+     */
+    static #getScriptEventHandlers(name, local) {
+        const map = local ? Event.#localScriptEventHandlers : Event.#remoteScriptEventHandlers;
+        const obj = {};
+        for (let [key, value] of map.entries()) obj[key] = value.map((value) => value.handler);
+        return obj;
+    }
+
+    /**
      * @param {boolean} local
      */
     static getScriptEventFunc(local) {
         const func = Event.#subscribeScriptEvent.bind(undefined, local);
+        Object.defineProperties(func, {
+            listeners: {
+                get: Event.#getScriptEventHandlers.bind(undefined, type, custom),
+            },
+        });
         func.remove = Event.#unsubscribeScriptEvent.bind(undefined, local);
         return func;
     }
