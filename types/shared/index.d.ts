@@ -203,6 +203,30 @@ declare module "@altv/shared" {
             SUBMARINE,
             OBJECT
         }
+        export const enum BodyPart {
+            PELVIS,
+            LEFT_HIP,
+            LEFT_LEG,
+            LEFT_FOOT,
+            RIGHT_HIP,
+            RIGHT_LEG,
+            RIGHT_FOOT,
+            LOWER_TORSO,
+            UPPER_TORSO,
+            CHEST,
+            UNDER_NECK,
+            LEFT_SHOULDER,
+            LEFT_UPPER_ARM,
+            LEFT_ELBROW,
+            LEFT_WRIST,
+            RIGHT_SHOULDER,
+            RIGHT_UPPER_ARM,
+            RIGHT_ELBROW,
+            RIGHT_WRIST,
+            NECK,
+            HEAD,
+            UNKNOWN = -1
+        }
         export const enum EventType {
             PLAYER_CONNECT,
             PLAYER_CONNECT_DENIED,
