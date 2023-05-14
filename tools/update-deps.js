@@ -37,35 +37,35 @@ const CLIENT_FILES = [
 const SERVER_FILES = [
     {
         name: "libnodev2.lib",
-        path: "server/deps/nodejs/v2/lib/Release",
-        urlPath: "deps/nodejs/{BRANCH}/x64_win32/Release",
+        path: "server/deps/nodejs/lib/Release",
+        urlPath: "deps/nodejs/v2/{BRANCH}/x64_win32/Release",
         os: "x64_win32",
     },
     {
         name: "libnodev2.dll",
-        path: "server/deps/nodejs/v2/lib/Release",
-        urlPath: "deps/nodejs/{BRANCH}/x64_win32/Release",
+        path: "server/deps/nodejs/lib/Release",
+        urlPath: "deps/nodejs/v2/{BRANCH}/x64_win32/Release",
         os: "x64_win32",
     },
     {
         name: "libnodev2.lib",
-        path: "server/deps/nodejs/v2/lib/Debug",
-        urlPath: "deps/nodejs/{BRANCH}/x64_win32/Debug",
+        path: "server/deps/nodejs/lib/Debug",
+        urlPath: "deps/nodejs/v2/{BRANCH}/x64_win32/Debug",
         os: "x64_win32",
         debugOnly: true,
     },
     {
         name: "libnodev2.dll",
-        path: "server/deps/nodejs/v2/lib/Debug",
-        urlPath: "deps/nodejs/{BRANCH}/x64_win32/Debug",
+        path: "server/deps/nodejs/lib/Debug",
+        urlPath: "deps/nodejs/v2/{BRANCH}/x64_win32/Debug",
         os: "x64_win32",
         debugOnly: true,
     },
     {
         name: "libnodev2.so.108",
         nameOverride: "libnodev2.so",
-        path: "server/deps/nodejs/v2/lib",
-        urlPath: "deps/nodejs/{BRANCH}/x64_linux",
+        path: "server/deps/nodejs/lib",
+        urlPath: "deps/nodejs/v2/{BRANCH}/x64_linux",
         os: "x64_linux",
     },
 ];
@@ -93,6 +93,7 @@ const SERVER_FILES = [
 })();
 
 function downloadFile(url, path) {
+    console.log("downloadFile", url);
     return new Promise((resolve, reject) => {
         https
             .get(url, (res) => {
@@ -110,6 +111,7 @@ function downloadFile(url, path) {
  * @returns { Promise<{ version: string, hashList: { [name: string]: string }, sizeList: { [name: string]: string } }> }
  */
 function getCDNInfo(path) {
+    console.log("getCDNInfo", path);
     return new Promise((resolve, reject) => {
         const basePath = pathUtil.dirname(path);
         https
@@ -123,6 +125,7 @@ function getCDNInfo(path) {
 }
 
 async function getFileHash(file) {
+    console.log("getFileHash", file);
     const content = await fs.readFile(file);
     return crypto.createHash("sha1").update(content).digest("hex");
 }
@@ -140,6 +143,7 @@ function getOSName() {
 }
 
 async function doesFileExist(path) {
+    console.log("doesFileExist", path);
     try {
         await fs.stat(path);
         return true;
