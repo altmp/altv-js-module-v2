@@ -1,5 +1,7 @@
 #pragma once
 
+#include <thread>
+
 #include "v8-persistent-handle.h"
 
 #include "Convert.h"
