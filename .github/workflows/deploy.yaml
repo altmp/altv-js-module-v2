@@ -50,7 +50,7 @@ jobs:
           mkdir upload
           copy build\windows\x64\release\js-module-v2.dll upload
           copy build\windows\x64\release\js-module-v2.pdb upload
-          copy server\deps\nodejs\lib\Release\libnode.dll upload
+          copy server\deps\nodejs\lib\Release\libnodev2.dll upload
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -99,7 +99,7 @@ jobs:
         run: |
           mkdir upload
           cp build/linux/x86_64/release/libjs-module-v2.so upload
-          cp server/deps/nodejs/lib/libnode.so upload
+          cp server/deps/nodejs/lib/libnodev2.so upload
           echo ${{ steps.version.outputs.SDK_COMMIT }} >> upload/sdk.version
 
       - name: Upload artifacts
