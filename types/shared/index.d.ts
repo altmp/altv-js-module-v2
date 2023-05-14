@@ -58,6 +58,8 @@ declare module "@altv/shared" {
         export function waitForNextTick(): Promise<void>;
         export function waitFor(callback: () => boolean, timeout: number): Promise<void>;
 
+        export function getCurrentSourceLocation(frameSkipCount: number): number;
+
         export class AssertionError extends Error {}
         export function assert(condition: any, message?: string): asserts condition;
     }
@@ -251,30 +253,6 @@ declare module "@altv/shared" {
             ENTITY_LEAVE_CHECKPOINT,
             ERROR
         }
-        export const enum BodyPart {
-            PELVIS,
-            LEFT_HIP,
-            LEFT_LEG,
-            LEFT_FOOT,
-            RIGHT_HIP,
-            RIGHT_LEG,
-            RIGHT_FOOT,
-            LOWER_TORSO,
-            UPPER_TORSO,
-            CHEST,
-            UNDER_NECK,
-            LEFT_SHOULDER,
-            LEFT_UPPER_ARM,
-            LEFT_ELBROW,
-            LEFT_WRIST,
-            RIGHT_SHOULDER,
-            RIGHT_UPPER_ARM,
-            RIGHT_ELBROW,
-            RIGHT_WRIST,
-            NECK,
-            HEAD,
-            UNKNOWN = -1
-        }
     }
 
     export namespace Events {
@@ -293,13 +271,14 @@ declare module "@altv/shared" {
             readonly eventName: string;
             readonly args: any[];
         }
-        interface ClientScriptEventContext extends ScriptEventContext {
-            readonly player: Player | undefined;
-        }
         interface ServerEventContext extends ScriptEventContext {}
         interface ConsoleCommandEventContext extends EventContext {
             readonly name: string;
             readonly args: string[];
+        }
+        interface ErrorEventContext extends EventContext {
+            readonly error: string;
+            readonly stack: string;
         }
         interface ResourceEventContext extends EventContext {
             readonly resource: Resource;
@@ -351,10 +330,9 @@ declare module "@altv/shared" {
             readonly newOwner: Player;
         }
 
-        export const onClientScriptEvent: Event<ClientScriptEventContext>;
-        export const onServerScriptEvent: Event<ServerEventContext>;
-
         export const onConsoleCommand: Event<ConsoleCommandEventContext>;
+
+        export const onError: Event<ErrorEventContext>;
 
         export const onResourceStart: Event<ResourceEventContext>;
         export const onResourceStop: Event<ResourceEventContext>;
@@ -374,7 +352,6 @@ declare module "@altv/shared" {
         export const onNetOwnerChange: Event<NetOwnerChangeEventContext>;
 
         export function on(eventName: string, callback: (context: { args: any[] }) => void): void;
-        export function onRemote(eventName: string, callback: (context: { args: any[], player: Player | undefined }) => void): void;
 
         export function emit(eventName: string, ...args: any[]): void;
 
@@ -648,7 +625,7 @@ declare module "@altv/shared" {
         get headlightColor(): number;
         get radioStationIndex(): number;
         get isSirenActive(): boolean;
-        get lockState(): number;
+        get lockState(): Enums.VehicleLockState;
         get isDaylightOn(): boolean;
         get isNightlightOn(): boolean;
         get roofState(): number;
@@ -746,8 +723,20 @@ declare module "@altv/shared" {
         fade(opacity: number, duration: number): void;
     }
 
-    export class Blip extends BaseObject {
+    export class Blip {
         static get all(): ReadonlyArray<Blip>;
+    }
+
+    export interface ColShape extends WorldObject {
+    }
+
+    export class ColShape {
+    }
+
+    export interface Checkpoint extends ColShape {
+    }
+
+    export class Checkpoint {
     }
 
     export interface VirtualEntityGroup extends BaseObject {

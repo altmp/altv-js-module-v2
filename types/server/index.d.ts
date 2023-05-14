@@ -1,6 +1,7 @@
 /**
  * @module @altv/server
  */
+
 declare module "@altv/server" {
     import * as shared from "@altv/shared";
 
@@ -22,6 +23,9 @@ declare module "@altv/server" {
     export function getClosestEntities(pos: shared.Vector3, range: number, dimension: number, maxCount: number, entityTypes: number): ReadonlyArray<Entity>;
 
     export namespace Events {
+        interface ClientScriptEventContext extends shared.Events.ScriptEventContext {
+            readonly player: Player;
+        }
         interface PlayerConnectEventContext extends shared.Events.EventContext {
             readonly player: Player;
         }
@@ -124,6 +128,7 @@ declare module "@altv/server" {
             readonly damage: number;
             readonly offset: shared.Vector3;
             readonly bodyPart: shared.Enums.BodyPart;
+            setDamageValue(damage: number): void;
         }
         interface ExplosionEventContext extends shared.Events.EventContext {
             readonly source: Player;
@@ -205,6 +210,11 @@ declare module "@altv/server" {
         export const onVehicleDetach: shared.Events.Event<VehicleDetachEventContext>;
         export const onVehicleDamage: shared.Events.Event<VehicleDamageEventContext>;
         export const onVehicleSiren: shared.Events.Event<VehicleSirenEventContext>;
+
+        export const onClientScriptEvent: shared.Events.Event<ClientScriptEventContext>;
+
+        export function onClient(eventName: string, callback: (context: shared.Events.ScriptEventContext) => void): void;
+        export function onRemote(eventName: string, callback: (context: { args: any[], player: Player }) => void): void;
 
         export function emitPlayers(players: Player[], eventName: string, ...args: any[]): void;
         export function emitPlayersUnreliable(players: Player[], eventName: string, ...args: any[]): void;
@@ -410,7 +420,7 @@ declare module "@altv/server" {
         set headlightColor(color: number);
         set radioStationIndex(radioStation: number);
         set isSirenActive(state: boolean);
-        set lockState(state: number);
+        set lockState(state: shared.Enums.VehicleLockState);
         set roofState(state: number);
         set lightsMultiplier(multiplier: number);
         set engineHealth(health: number);
@@ -544,7 +554,13 @@ declare module "@altv/server" {
         isPointIn(position: shared.Vector3): boolean;
     }
 
-    export class ColShape extends WorldObject {
+    export class ColShape {
+    }
+
+    export interface Checkpoint extends ColShape, shared.Checkpoint {
+    }
+
+    export class Checkpoint {
     }
 
     export const enum ConnectDeniedReason {
