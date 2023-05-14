@@ -98,8 +98,9 @@ target("server")
         add_links("nodev2")
         add_linkdirs("$(scriptdir)/server/deps/nodejs/lib")
     else
-        if is_mode("debug") then add_links("server/deps/nodejs/lib/Debug/libnodev2")
-        else add_links("server/deps/nodejs/lib/Release/libnodev2") end
+        if is_mode("debug") then add_linkdirs("server/deps/nodejs/lib/Debug")
+        else add_linkdirs("server/deps/nodejs/lib/Release") end
+        add_links("libnodev2")
         add_links("dbghelp", "winmm", "shlwapi", "advapi32")
     end
     set_runtimes("MD")
