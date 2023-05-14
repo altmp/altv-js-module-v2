@@ -24,7 +24,7 @@ declare module "@altv/server" {
 
     export namespace Events {
         interface ClientScriptEventContext extends shared.Events.ScriptEventContext {
-            readonly player: Player | undefined;
+            readonly player: Player;
         }
         interface PlayerConnectEventContext extends shared.Events.EventContext {
             readonly player: Player;
@@ -213,6 +213,7 @@ declare module "@altv/server" {
 
         export const onClientScriptEvent: shared.Events.Event<ClientScriptEventContext>;
 
+        export function onClient(eventName: string, callback: (context: shared.Events.ScriptEventContext) => void): void;
         export function onRemote(eventName: string, callback: (context: { args: any[], player: Player }) => void): void;
 
         export function emitPlayers(players: Player[], eventName: string, ...args: any[]): void;
