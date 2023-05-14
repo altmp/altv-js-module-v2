@@ -95,11 +95,11 @@ target("server")
     add_defines("MODULE_VERSION=\"$(module-version)\"")
 
     if is_os("linux") then
-        add_links("node")
+        add_links("nodev2")
         add_linkdirs("$(scriptdir)/server/deps/nodejs/lib")
     else
-        if is_mode("debug") then add_links("server/deps/nodejs/lib/Debug/libnode")
-        else add_links("server/deps/nodejs/lib/Release/libnode") end
+        if is_mode("debug") then add_links("server/deps/nodejs/lib/Debug/libnodev2")
+        else add_links("server/deps/nodejs/lib/Release/libnodev2") end
         add_links("dbghelp", "winmm", "shlwapi", "advapi32")
     end
     set_runtimes("MD")
