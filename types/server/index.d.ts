@@ -23,6 +23,9 @@ declare module "@altv/server" {
     export function getClosestEntities(pos: shared.Vector3, range: number, dimension: number, maxCount: number, entityTypes: number): ReadonlyArray<Entity>;
 
     export namespace Events {
+        interface ClientScriptEventContext extends shared.Events.ScriptEventContext {
+            readonly player: Player | undefined;
+        }
         interface PlayerConnectEventContext extends shared.Events.EventContext {
             readonly player: Player;
         }
@@ -208,7 +211,7 @@ declare module "@altv/server" {
         export const onVehicleDamage: shared.Events.Event<VehicleDamageEventContext>;
         export const onVehicleSiren: shared.Events.Event<VehicleSirenEventContext>;
 
-        export const onClient: shared.Events.Event<ClientScriptEventContext>;
+        export const onClientScriptEvent: shared.Events.Event<ClientScriptEventContext>;
 
         export function onRemote(eventName: string, callback: (context: { args: any[], player: Player }) => void): void;
 

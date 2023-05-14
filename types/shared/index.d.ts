@@ -1710,9 +1710,6 @@ declare module "@altv/shared" {
             readonly eventName: string;
             readonly args: any[];
         }
-        interface ClientScriptEventContext extends ScriptEventContext {
-            readonly player: Player | undefined;
-        }
         interface ServerEventContext extends ScriptEventContext {}
         interface ConsoleCommandEventContext extends EventContext {
             readonly name: string;
@@ -1794,7 +1791,6 @@ declare module "@altv/shared" {
         export const onNetOwnerChange: Event<NetOwnerChangeEventContext>;
 
         export function on(eventName: string, callback: (context: { args: any[] }) => void): void;
-        export function onRemote(eventName: string, callback: (context: { args: any[], player: Player | undefined }) => void): void;
 
         export function emit(eventName: string, ...args: any[]): void;
 
