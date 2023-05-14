@@ -112,12 +112,6 @@ declare module "@altv/shared" {
             EXTENDED_VOICE_API,
             All
         }
-        export const enum PermissionState {
-            ALLOWED,
-            DENIED,
-            UNSPECIFIED,
-            FAILED
-        }
         export const enum ExplosionType {
             GRENADE,
             GRENADELAUNCHER,

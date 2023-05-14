@@ -32,7 +32,6 @@ static void GetEnumObjectWithStartEnd(js::LazyPropertyContext& ctx)
 extern js::Namespace enumsNamespace("Enums", [](js::NamespaceTemplate& tpl) {
     tpl.StaticLazyProperty("BaseObjectType", GetEnumObject<alt::IBaseObject::Type>);
     tpl.StaticLazyProperty("Permission", GetEnumObject<alt::Permission>);
-    tpl.StaticLazyProperty("PermissionState", GetEnumObject<alt::PermissionState>);
     tpl.StaticLazyProperty("ExplosionType", GetEnumObject<alt::CExplosionEvent::ExplosionType>);
     tpl.StaticLazyProperty("BlipType", GetEnumObject<alt::IBlip::BlipType>);
     tpl.StaticLazyProperty("ColShapeType", GetEnumObject<alt::IColShape::ColShapeType>);
