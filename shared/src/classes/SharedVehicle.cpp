@@ -1,7 +1,7 @@
 #include "Class.h"
 #include "cpp-sdk/ICore.h"
 
-static void NeonGetter(js::DynamicPropertyContext<v8::Value>& ctx)
+static void NeonGetter(js::DynamicPropertyGetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IVehicle* vehicle = ctx.GetParent<alt::IVehicle>();
@@ -21,7 +21,7 @@ static void NeonGetter(js::DynamicPropertyContext<v8::Value>& ctx)
     ctx.Return(val);
 }
 
-static void NeonEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
+static void NeonEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
 {
     js::Array arr(4);
     arr.Set(0, "left");

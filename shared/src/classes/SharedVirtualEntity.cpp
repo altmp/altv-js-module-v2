@@ -1,14 +1,14 @@
 #include "Class.h"
 #include "cpp-sdk/ICore.h"
 
-static void StreamSyncedMetaGetter(js::DynamicPropertyContext<v8::Value>& ctx)
+static void StreamSyncedMetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IVirtualEntity* obj = ctx.GetParent<alt::IVirtualEntity>();
     ctx.Return(obj->GetStreamSyncedMetaData(ctx.GetProperty()));
 }
 
-static void StreamSyncedMetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
+static void StreamSyncedMetaEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IVirtualEntity* obj = ctx.GetParent<alt::IVirtualEntity>();

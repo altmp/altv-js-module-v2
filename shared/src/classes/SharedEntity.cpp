@@ -1,14 +1,14 @@
 #include "Class.h"
 #include "cpp-sdk/ICore.h"
 
-static void SyncedMetaGetter(js::DynamicPropertyContext<v8::Value>& ctx)
+static void SyncedMetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IEntity* obj = ctx.GetParent<alt::IEntity>();
     ctx.Return(obj->GetSyncedMetaData(ctx.GetProperty()));
 }
 
-static void SyncedMetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
+static void SyncedMetaEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IEntity* obj = ctx.GetParent<alt::IEntity>();
@@ -16,14 +16,14 @@ static void SyncedMetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
     ctx.Return(keys);
 }
 
-static void StreamSyncedMetaGetter(js::DynamicPropertyContext<v8::Value>& ctx)
+static void StreamSyncedMetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IEntity* obj = ctx.GetParent<alt::IEntity>();
     ctx.Return(obj->GetStreamSyncedMetaData(ctx.GetProperty()));
 }
 
-static void StreamSyncedMetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
+static void StreamSyncedMetaEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IEntity* obj = ctx.GetParent<alt::IEntity>();

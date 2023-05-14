@@ -14,14 +14,14 @@ static void Destroy(js::FunctionContext& ctx)
     alt::ICore::Instance().DestroyBaseObject(obj);
 }
 
-static void MetaGetter(js::DynamicPropertyContext<v8::Value>& ctx)
+static void MetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IBaseObject* obj = ctx.GetParent<alt::IBaseObject>();
     ctx.Return(obj->GetMetaData(ctx.GetProperty()));
 }
 
-static void MetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
+static void MetaSetter(js::DynamicPropertySetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IBaseObject* obj = ctx.GetParent<alt::IBaseObject>();
@@ -30,7 +30,7 @@ static void MetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
     obj->SetMetaData(ctx.GetProperty(), value);
 }
 
-static void MetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
+static void MetaDeleter(js::DynamicPropertyDeleterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IBaseObject* obj = ctx.GetParent<alt::IBaseObject>();
@@ -43,7 +43,7 @@ static void MetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
     ctx.Return(true);
 }
 
-static void MetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
+static void MetaEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IBaseObject* obj = ctx.GetParent<alt::IBaseObject>();

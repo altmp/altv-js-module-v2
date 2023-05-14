@@ -6,19 +6,19 @@ static void NetTimeGetter(js::PropertyContext& ctx)
     ctx.Return(alt::ICore::Instance().GetNetTime());
 }
 
-static void SyncedMetaGetter(js::DynamicPropertyContext<v8::Value>& ctx)
+static void SyncedMetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetSyncedMetaData(ctx.GetProperty()));
 }
 
-static void SyncedMetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
+static void SyncedMetaSetter(js::DynamicPropertySetterContext& ctx)
 {
     alt::MValue value;
     if(!ctx.GetValue(value)) return;
     alt::ICore::Instance().SetSyncedMetaData(ctx.GetProperty(), value);
 }
 
-static void SyncedMetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
+static void SyncedMetaDeleter(js::DynamicPropertyDeleterContext& ctx)
 {
     if(!alt::ICore::Instance().HasSyncedMetaData(ctx.GetProperty()))
     {
@@ -30,7 +30,7 @@ static void SyncedMetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
     ctx.Return(true);
 }
 
-static void SyncedMetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
+static void SyncedMetaEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetSyncedMetaDataKeys());
 }

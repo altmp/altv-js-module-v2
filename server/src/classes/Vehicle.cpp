@@ -1,7 +1,7 @@
 #include "Class.h"
 #include "cpp-sdk/ICore.h"
 
-static void NeonSetter(js::DynamicPropertyContext<v8::Value>& ctx)
+static void NeonSetter(js::DynamicPropertySetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IVehicle* vehicle = ctx.GetParent<alt::IVehicle>();

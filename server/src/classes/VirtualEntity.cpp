@@ -1,7 +1,7 @@
 #include "Class.h"
 #include "cpp-sdk/ICore.h"
 
-static void StreamSyncedMetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
+static void StreamSyncedMetaSetter(js::DynamicPropertySetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IVirtualEntity* obj = ctx.GetParent<alt::IVirtualEntity>();
@@ -12,7 +12,7 @@ static void StreamSyncedMetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
     obj->SetStreamSyncedMetaData(ctx.GetProperty(), value);
 }
 
-static void StreamSyncedMetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
+static void StreamSyncedMetaDeleter(js::DynamicPropertyDeleterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IVirtualEntity* obj = ctx.GetParent<alt::IVirtualEntity>();

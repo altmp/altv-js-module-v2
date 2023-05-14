@@ -9,8 +9,8 @@ namespace js
     using PropertyCallback = void (*)(PropertyContext&);
     using LazyPropertyCallback = void (*)(LazyPropertyContext&);
 
-    using DynamicPropertyGetter = void (*)(DynamicPropertyContext<v8::Value>&);
-    using DynamicPropertySetter = void (*)(DynamicPropertyContext<v8::Value>&);
-    using DynamicPropertyDeleter = void (*)(DynamicPropertyContext<v8::Boolean>&);
-    using DynamicPropertyEnumerator = void (*)(DynamicPropertyContext<v8::Array>&);
+    using DynamicPropertyGetter = void (*)(DynamicPropertyGetterContext&);
+    using DynamicPropertySetter = void (*)(DynamicPropertySetterContext&);
+    using DynamicPropertyDeleter = void (*)(DynamicPropertyDeleterContext&);
+    using DynamicPropertyEnumerator = void (*)(DynamicPropertyEnumeratorContext&);
 }  // namespace js

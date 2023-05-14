@@ -356,4 +356,9 @@ namespace js
 
     using PropertyContext = PropertyContextBase<v8::FunctionCallbackInfo<v8::Value>>;
     using LazyPropertyContext = PropertyContextBase<v8::PropertyCallbackInfo<v8::Value>>;
+
+    using DynamicPropertyGetterContext = DynamicPropertyContext<v8::Value>;
+    using DynamicPropertySetterContext = DynamicPropertyContext<v8::Value>;
+    using DynamicPropertyDeleterContext = DynamicPropertyContext<v8::Boolean>;
+    using DynamicPropertyEnumeratorContext = DynamicPropertyContext<v8::Array>;
 }  // namespace js

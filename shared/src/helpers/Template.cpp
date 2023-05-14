@@ -7,7 +7,7 @@
 
 void js::Wrapper::DynamicPropertyLazyHandler(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
 {
-    DynamicPropertyContext<v8::Value> ctx{ info, property };
+    DynamicPropertyGetterContext ctx{ info, property };
 
     js::ClassTemplate::DynamicPropertyData* data = static_cast<ClassTemplate::DynamicPropertyData*>(info.Data().As<v8::External>()->Value());
     v8::NamedPropertyHandlerConfiguration config;
@@ -29,7 +29,7 @@ void js::Wrapper::DynamicPropertyLazyHandler(v8::Local<v8::Name> property, const
 
 void js::Wrapper::DynamicPropertyGetterHandler(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
 {
-    DynamicPropertyContext<v8::Value> ctx{ info, property };
+    DynamicPropertyGetterContext ctx{ info, property };
     v8::Local<v8::Object> parent = info.This()->GetInternalField(0).As<v8::Object>();
     ctx.SetParent(parent);
 
@@ -39,7 +39,7 @@ void js::Wrapper::DynamicPropertyGetterHandler(v8::Local<v8::Name> property, con
 
 void js::Wrapper::DynamicPropertySetterHandler(v8::Local<v8::Name> property, v8::Local<v8::Value> value, const v8::PropertyCallbackInfo<v8::Value>& info)
 {
-    DynamicPropertyContext<v8::Value> ctx{ info, property, value };
+    DynamicPropertySetterContext ctx{ info, property, value };
     v8::Local<v8::Object> parent = info.This()->GetInternalField(0).As<v8::Object>();
     ctx.SetParent(parent);
 
@@ -50,7 +50,7 @@ void js::Wrapper::DynamicPropertySetterHandler(v8::Local<v8::Name> property, v8:
 
 void js::Wrapper::DynamicPropertyDeleterHandler(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Boolean>& info)
 {
-    DynamicPropertyContext<v8::Boolean> ctx{ info, property };
+    DynamicPropertyDeleterContext ctx{ info, property };
     v8::Local<v8::Object> parent = info.This()->GetInternalField(0).As<v8::Object>();
     ctx.SetParent(parent);
 
@@ -60,7 +60,7 @@ void js::Wrapper::DynamicPropertyDeleterHandler(v8::Local<v8::Name> property, co
 
 void js::Wrapper::DynamicPropertyEnumeratorHandler(const v8::PropertyCallbackInfo<v8::Array>& info)
 {
-    DynamicPropertyContext<v8::Array> ctx{ info };
+    DynamicPropertyEnumeratorContext ctx{ info };
     v8::Local<v8::Object> parent = info.This()->GetInternalField(0).As<v8::Object>();
     ctx.SetParent(parent);
 

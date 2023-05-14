@@ -79,7 +79,7 @@ static void AttachTo(js::FunctionContext& ctx)
     }
 }
 
-static void SyncedMetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
+static void SyncedMetaSetter(js::DynamicPropertySetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IEntity* obj = ctx.GetParent<alt::IEntity>();
@@ -89,7 +89,7 @@ static void SyncedMetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
     obj->SetSyncedMetaData(ctx.GetProperty(), value);
 }
 
-static void SyncedMetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
+static void SyncedMetaDeleter(js::DynamicPropertyDeleterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IEntity* obj = ctx.GetParent<alt::IEntity>();
@@ -103,7 +103,7 @@ static void SyncedMetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
     ctx.Return(true);
 }
 
-static void StreamSyncedMetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
+static void StreamSyncedMetaSetter(js::DynamicPropertySetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IEntity* obj = ctx.GetParent<alt::IEntity>();
@@ -113,7 +113,7 @@ static void StreamSyncedMetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
     obj->SetStreamSyncedMetaData(ctx.GetProperty(), value);
 }
 
-static void StreamSyncedMetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
+static void StreamSyncedMetaDeleter(js::DynamicPropertyDeleterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IEntity* obj = ctx.GetParent<alt::IEntity>();

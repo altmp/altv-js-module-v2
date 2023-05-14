@@ -432,7 +432,7 @@ static void PlayAnimation(js::FunctionContext& ctx)
     player->PlayAnimation(animDict, animName, blendInSpeed, blendOutSpeed, duration, flag, playbackRate, lockX, lockY, lockZ);
 }
 
-static void LocalMetaGetter(js::DynamicPropertyContext<v8::Value>& ctx)
+static void LocalMetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IPlayer* player = ctx.GetParent<alt::IPlayer>();
@@ -440,7 +440,7 @@ static void LocalMetaGetter(js::DynamicPropertyContext<v8::Value>& ctx)
     ctx.Return(player->GetLocalMetaData(ctx.GetProperty()));
 }
 
-static void LocalMetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
+static void LocalMetaSetter(js::DynamicPropertySetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IPlayer* player = ctx.GetParent<alt::IPlayer>();
@@ -451,7 +451,7 @@ static void LocalMetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
     player->SetLocalMetaData(ctx.GetProperty(), value);
 }
 
-static void LocalMetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
+static void LocalMetaDeleter(js::DynamicPropertyDeleterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IPlayer* player = ctx.GetParent<alt::IPlayer>();
@@ -466,7 +466,7 @@ static void LocalMetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
     ctx.Return(true);
 }
 
-static void LocalMetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
+static void LocalMetaEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
 {
     if(!ctx.CheckParent()) return;
     alt::IPlayer* player = ctx.GetParent<alt::IPlayer>();

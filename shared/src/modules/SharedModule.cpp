@@ -47,19 +47,19 @@ static void SHA256(js::FunctionContext& ctx)
     ctx.Return(alt::ICore::Instance().StringToSHA256(str));
 }
 
-static void MetaGetter(js::DynamicPropertyContext<v8::Value>& ctx)
+static void MetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetMetaData(ctx.GetProperty()));
 }
 
-static void MetaSetter(js::DynamicPropertyContext<v8::Value>& ctx)
+static void MetaSetter(js::DynamicPropertySetterContext& ctx)
 {
     alt::MValue value;
     if(!ctx.GetValue(value)) return;
     alt::ICore::Instance().SetMetaData(ctx.GetProperty(), value);
 }
 
-static void MetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
+static void MetaDeleter(js::DynamicPropertyDeleterContext& ctx)
 {
     if(!alt::ICore::Instance().HasMetaData(ctx.GetProperty()))
     {
@@ -71,7 +71,7 @@ static void MetaDeleter(js::DynamicPropertyContext<v8::Boolean>& ctx)
     ctx.Return(true);
 }
 
-static void MetaEnumerator(js::DynamicPropertyContext<v8::Array>& ctx)
+static void MetaEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetMetaDataKeys());
 }
