@@ -213,8 +213,8 @@ declare module "@altv/server" {
 
         export const onClientScriptEvent: shared.Events.Event<ClientScriptEventContext>;
 
-        export function onClient(eventName: string, callback: (context: shared.Events.ScriptEventContext) => void): void;
-        export function onRemote(eventName: string, callback: (context: { args: any[], player: Player }) => void): void;
+        export const onClient: shared.Events.ScriptEvent<ClientScriptEventContext>;
+        export const onRemote: shared.Events.ScriptEvent<ClientScriptEventContext>;
 
         export function emitPlayers(players: Player[], eventName: string, ...args: any[]): void;
         export function emitPlayersUnreliable(players: Player[], eventName: string, ...args: any[]): void;

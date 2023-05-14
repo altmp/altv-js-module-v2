@@ -290,6 +290,12 @@ declare module "@altv/shared" {
             remove(callback: (context: Context) => void): void;
             readonly listeners: ReadonlyArray<(context: Context) => void>;
         }
+        export interface ScriptEvent<Context extends ScriptEventContext> {
+            (name: string, callback: (context: Context) => void): void;
+
+            remove(callback: (name: string, context: Context) => void): void;
+            readonly listeners: Record<string, ReadonlyArray<(name: string, context: Context) => void>>;
+        }
 
         interface ScriptEventContext extends EventContext {
             readonly eventName: string;
@@ -375,7 +381,7 @@ declare module "@altv/shared" {
 
         export const onNetOwnerChange: Event<NetOwnerChangeEventContext>;
 
-        export function on(eventName: string, callback: (context: { args: any[] }) => void): void;
+        export const on: ScriptEvent<ScriptEventContext>;
 
         export function emit(eventName: string, ...args: any[]): void;
 
