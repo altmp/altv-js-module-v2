@@ -99,3 +99,9 @@ v8::Local<v8::Object> js::IResource::CreateResourceObject(alt::IResource* resour
     resourceObjects.insert({ resource, resourceClass.MakePersistent(resourceObj) });
     return resourceObj;
 }
+
+extern js::Class baseObjectClass;
+bool js::IResource::IsBaseObject(v8::Local<v8::Value> val)
+{
+    return val->IsObject() && val.As<v8::Object>()->InstanceOf(GetContext(), baseObjectClass.GetTemplate(isolate).Get()->GetFunction(GetContext()).ToLocalChecked()).ToChecked();
+}

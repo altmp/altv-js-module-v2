@@ -210,11 +210,7 @@ namespace js
 
             return val->IsObject() && val.As<v8::Object>()->InstanceOf(GetContext(), quaternionClass).ToChecked();
         }
-        bool IsBaseObject(v8::Local<v8::Value> val)
-        {
-            extern js::Class baseObjectClass;
-            return val->IsObject() && val.As<v8::Object>()->InstanceOf(GetContext(), baseObjectClass.GetTemplate(isolate).Get()->GetFunction(GetContext()).ToLocalChecked()).ToChecked();
-        }
+        bool IsBaseObject(v8::Local<v8::Value> val);
 
         static IResource* GetFromContext(v8::Local<v8::Context> context)
         {
