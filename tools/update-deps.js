@@ -62,8 +62,7 @@ const SERVER_FILES = [
         debugOnly: true,
     },
     {
-        name: "libnodev2.so.108",
-        nameOverride: "libnodev2.so",
+        name: "libnodev2.so",
         path: "server/deps/nodejs/lib",
         urlPath: "deps/nodejs/v2/{BRANCH}/x64_linux",
         os: "x64_linux",
