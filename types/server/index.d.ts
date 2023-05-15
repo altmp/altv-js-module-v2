@@ -390,6 +390,12 @@ declare module "@altv/server" {
         static getByID(id: number): Player | null;
     }
 
+    interface VehicleCreateArgs {
+        model: number | string;
+        pos: shared.Vector3;
+        rot?: shared.Vector3;
+    }
+
     export interface Vehicle extends Entity, shared.Vehicle {
         // Inheritance
         set pos(pos: shared.Vector3);
@@ -473,6 +479,7 @@ declare module "@altv/server" {
     }
 
     export class Vehicle {
+        static create(args: VehicleCreateArgs): Vehicle;
         static getByID(id: number): Vehicle | null;
     }
 
