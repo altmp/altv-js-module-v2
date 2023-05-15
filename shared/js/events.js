@@ -124,10 +124,9 @@ export class Event {
     }
 
     /**
-     * @param {string} name
      * @param {boolean} local
      */
-    static #getScriptEventHandlers(name, local) {
+    static #getScriptEventHandlers(local) {
         const map = local ? Event.#localScriptEventHandlers : Event.#remoteScriptEventHandlers;
         const obj = {};
         for (let [key, value] of map.entries()) obj[key] = value.map((value) => value.handler);
@@ -141,7 +140,7 @@ export class Event {
         const func = Event.#subscribeScriptEvent.bind(undefined, local);
         Object.defineProperties(func, {
             listeners: {
-                get: Event.#getScriptEventHandlers.bind(undefined, type, custom),
+                get: Event.#getScriptEventHandlers.bind(undefined, local),
             },
         });
         func.remove = Event.#unsubscribeScriptEvent.bind(undefined, local);
