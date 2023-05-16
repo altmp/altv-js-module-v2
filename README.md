@@ -21,5 +21,4 @@ Repository containing the new JS module v2 module for [alt:V multiplayer](https:
 ## Contributions
 
 All contributions are greatly appreciated.
-If there are any questions or you would like to discuss a feature,
-contact the *module maintainer*.
+If there are any questions or you would like to discuss a feature, contact the *module maintainer*.
