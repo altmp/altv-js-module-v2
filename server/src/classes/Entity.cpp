@@ -7,7 +7,7 @@ static void GetByID(js::FunctionContext& ctx)
 
     uint16_t id;
     if(!ctx.GetArg(0, id)) return;
-    ctx.Return((alt::IBaseObject*)alt::ICore::Instance().GetEntityByID(id));
+    ctx.Return((alt::IBaseObject*)alt::ICore::Instance().GetEntityBySyncID(id));
 }
 
 static void ResetNetOwner(js::FunctionContext& ctx)
