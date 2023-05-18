@@ -1,4 +1,5 @@
 #include "CNodeRuntime.h"
+#include "Logger.h"
 
 bool CNodeRuntime::Initialize()
 {
@@ -9,7 +10,7 @@ bool CNodeRuntime::Initialize()
     {
         for(const std::string& error : result->errors())
         {
-            // Log::Error << "Error while initializing node: " << error << Log::Endl;
+            js::Logger::Error("Error while initializing node:", error);
         }
         return false;
     }
