@@ -213,7 +213,9 @@ declare module "@altv/server" {
 
         export const onClientScriptEvent: shared.Events.Event<ClientScriptEventContext>;
 
-        export const onClient: shared.Events.ScriptEvent<ClientScriptEventContext>;
+        export function onClient<Args extends Array<any> = unknown[], PlayerEx extends Player = Player>(eventName: string, callback: (context: { player: PlayerEx; args: Args }) => void): void;
+        export function onClient<PlayerEx extends Player = Player, Args extends Array<any> = unknown[]>(eventName: string, callback: (context: { player: PlayerEx; args: Args }) => void): void;
+
         export const onRemote: shared.Events.ScriptEvent<ClientScriptEventContext>;
 
         export function emitPlayers(players: Player[], eventName: string, ...args: any[]): void;
@@ -264,19 +266,16 @@ declare module "@altv/server" {
         static get(model: string | number): VehicleModelInfo;
     }
 
-    export interface BaseObject extends shared.BaseObject {
-    }
+    export interface BaseObject extends shared.BaseObject {}
 
-    export class BaseObject {
-    }
+    export class BaseObject {}
 
     export interface WorldObject extends BaseObject, shared.WorldObject {
         set pos(pos: shared.Vector3);
         dimension: number;
     }
 
-    export class WorldObject {
-    }
+    export class WorldObject {}
 
     export interface Entity extends WorldObject, shared.Entity {
         // Inheritance
@@ -478,16 +477,14 @@ declare module "@altv/server" {
         setWeaponCapacity(index: number, state: number): void;
     }
 
-    export class Vehicle {
+    export class Vehicle extends shared.Vehicle {
         static create(args: VehicleCreateArgs): Vehicle;
         static getByID(id: number): Vehicle | null;
     }
 
-    export interface Blip extends BaseObject, shared.Blip {
-    }
+    export interface Blip extends BaseObject, shared.Blip {}
 
-    export class Blip extends shared.Blip {
-    }
+    export class Blip extends shared.Blip {}
 
     interface PointBlipCreateArgs {
         pos?: shared.Vector3;
@@ -561,14 +558,11 @@ declare module "@altv/server" {
         isPointIn(position: shared.Vector3): boolean;
     }
 
-    export class ColShape {
-    }
+    export class ColShape {}
 
-    export interface Checkpoint extends ColShape, shared.Checkpoint {
-    }
+    export interface Checkpoint extends ColShape, shared.Checkpoint {}
 
-    export class Checkpoint {
-    }
+    export class Checkpoint {}
 
     export const enum ConnectDeniedReason {
         WRONG_VERSION,
@@ -578,17 +572,13 @@ declare module "@altv/server" {
         WRONG_CDN_URL
     }
 
-    export interface VirtualEntityGroup extends BaseObject, shared.VirtualEntityGroup {
-    }
+    export interface VirtualEntityGroup extends BaseObject, shared.VirtualEntityGroup {}
 
-    export class VirtualEntityGroup {
-    }
+    export class VirtualEntityGroup {}
 
-    export interface VirtualEntity extends WorldObject, shared.VirtualEntity {
-    }
+    export interface VirtualEntity extends WorldObject, shared.VirtualEntity {}
 
-    export class VirtualEntity {
-    }
+    export class VirtualEntity {}
 
     export class VoiceChannel extends BaseObject {
         get id(): number;

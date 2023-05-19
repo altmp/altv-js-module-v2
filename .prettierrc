@@ -3,7 +3,7 @@
     "quoteProps": "consistent",
     "semi": true,
     "singleQuote": false,
-    "trailingComma": "es5",
+    "trailingComma": "none",
     "arrowParens": "always",
-    "printWidth": 120
+    "printWidth": 300
 }
