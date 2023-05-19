@@ -111,11 +111,6 @@ namespace js
 
         void OnTick() override
         {
-            v8::Locker locker(isolate);
-            v8::Isolate::Scope isolateScope(isolate);
-            v8::HandleScope handleScope(isolate);
-            v8::Context::Scope contextScope(GetContext());
-
             js::Function onTick = GetBindingExport<v8::Function>("timers:tick");
             if(onTick.IsValid()) onTick.Call();
         }

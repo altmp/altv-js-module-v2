@@ -31,7 +31,6 @@ bool CNodeResource::Start()
     v8::Local<v8::ObjectTemplate> global = v8::ObjectTemplate::New(isolate);
     v8::Local<v8::Context> _context = node::NewContext(isolate, global);
     v8::Context::Scope scope(_context);
-    _context->SetAlignedPointerInEmbedderData(ContextInternalFieldIdx, this);
     context.Reset(isolate, _context);
 
     IResource::Initialize();

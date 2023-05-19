@@ -1,0 +1,1 @@
+alt.log("Bootstrapper loaded");
