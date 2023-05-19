@@ -419,7 +419,7 @@ declare module "@altv/shared" {
     export class Vector3 extends Vector<Vector3> {
         constructor(x: number, y: number, z: number);
         constructor(values: [number, number, number]);
-        constructor(values: { x: number, y: number, z: number });
+        constructor(values: { x: number; y: number; z: number });
 
         get x(): number;
         get y(): number;
@@ -440,7 +440,7 @@ declare module "@altv/shared" {
     export class Vector2 extends Vector<Vector2> {
         constructor(x: number, y: number);
         constructor(values: [number, number]);
-        constructor(values: { x: number, y: number });
+        constructor(values: { x: number; y: number });
 
         get x(): number;
         get y(): number;
@@ -458,7 +458,7 @@ declare module "@altv/shared" {
     export class RGBA {
         constructor(r: number, g: number, b: number, a?: number);
         constructor(values: [number, number, number, number]);
-        constructor(values: { r: number, g: number, b: number, a?: number });
+        constructor(values: { r: number; g: number; b: number; a?: number });
 
         get r(): number;
         get g(): number;
@@ -475,7 +475,7 @@ declare module "@altv/shared" {
     export class Quaternion {
         constructor(x: number, y: number, z: number, w: number);
         constructor(values: [number, number, number, number]);
-        constructor(values: { x: number, y: number, z: number, w: number });
+        constructor(values: { x: number; y: number; z: number; w: number });
 
         get x(): number;
         get y(): number;
@@ -543,8 +543,7 @@ declare module "@altv/shared" {
         get pos(): Vector3;
     }
 
-    export class WorldObject {
-    }
+    export class WorldObject {}
 
     export interface Entity extends WorldObject {
         get id(): number;
@@ -751,17 +750,13 @@ declare module "@altv/shared" {
         static get all(): ReadonlyArray<Blip>;
     }
 
-    export interface ColShape extends WorldObject {
-    }
+    export interface ColShape extends WorldObject {}
 
-    export class ColShape {
-    }
+    export class ColShape {}
 
-    export interface Checkpoint extends ColShape {
-    }
+    export interface Checkpoint extends ColShape {}
 
-    export class Checkpoint {
-    }
+    export class Checkpoint {}
 
     export interface VirtualEntityGroup extends BaseObject {
         get id(): number;
