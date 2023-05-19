@@ -348,7 +348,7 @@ declare module "@altv/server" {
 
         emit(eventName: string, ...args: any[]): void;
         emitUnreliable(eventName: string, ...args: any[]): void;
-        spawn(posiiton: shared.Vector3, timeout?: number): void;
+        spawn(position: shared.Vector3, timeout?: number): void;
         despawn(): void;
         setWeaponTintIndex(weaponHash: number, tintIndex: number): void;
         addWeaponComponent(weaponHash: number, componentHash: number): void;
