@@ -9,10 +9,8 @@ static void GetByID(js::FunctionContext& ctx)
     uint16_t id;
     if(!ctx.GetArg(0, id)) return;
 
-    alt::IEntity* entity = alt::ICore::Instance().GetEntityBySyncID(id);
-    if(!entity || entity->GetType() != alt::IBaseObject::Type::PED) ctx.Return(nullptr);
-    else
-        ctx.Return((alt::IBaseObject*)entity);
+    alt::IBaseObject* entity = alt::ICore::Instance().GetBaseObjectByID(alt::IBaseObject::Type::PED, id);
+    ctx.Return(entity);
 }
 
 // clang-format off
