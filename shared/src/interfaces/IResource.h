@@ -207,9 +207,10 @@ namespace js
         }
         bool IsBaseObject(v8::Local<v8::Value> val);
 
-        static IResource* GetFromContext(v8::Local<v8::Context> context)
+        template<class ResourceType = js::IResource>
+        static ResourceType* GetFromContext(v8::Local<v8::Context> context)
         {
-            return static_cast<IResource*>(context->GetAlignedPointerFromEmbedderData(ContextInternalFieldIdx));
+            return static_cast<ResourceType*>(context->GetAlignedPointerFromEmbedderData(ContextInternalFieldIdx));
         }
     };
 }  // namespace js
