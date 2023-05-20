@@ -1,1 +1,1 @@
-alt.log("Bootstrapper loaded");
+alt.log("Bootstrapper loaded", alt.Resource.current.name);
