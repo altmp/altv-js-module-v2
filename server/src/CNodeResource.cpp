@@ -34,7 +34,7 @@ bool CNodeResource::Start()
     context.Reset(isolate, _context);
 
     IResource::Initialize();
-    IResource::InitializeBindings(js::Binding::Scope::SERVER, js::Module::Get("alt"));
+    IResource::InitializeBindings(js::Binding::Scope::SERVER, js::Module::Get("@altv/server"));
 
     uvLoop = new uv_loop_t;
     uv_loop_init(uvLoop);
@@ -48,8 +48,8 @@ bool CNodeResource::Start()
     const js::Binding& bootstrapper = js::Binding::Get("server/bootstrap.js");
     if(!bootstrapper.IsValid()) return false;
 
-    js::TemporaryGlobalExtension altModuleExtension(_context, "__altModule", js::Module::Get("alt").GetNamespace(this));
-    js::TemporaryGlobalExtension altSharedModuleExtension(_context, "__altSharedModule", js::Module::Get("alt-shared").GetNamespace(this));
+    js::TemporaryGlobalExtension altModuleExtension(_context, "__altModule", js::Module::Get("@altv/server").GetNamespace(this));
+    js::TemporaryGlobalExtension altSharedModuleExtension(_context, "__altSharedModule", js::Module::Get("@altv/shared").GetNamespace(this));
     js::TemporaryGlobalExtension altServerModuleExtension(_context, "__resourceStarted", ResourceStarted);
     node::LoadEnvironment(env, bootstrapper.GetSource());
 
