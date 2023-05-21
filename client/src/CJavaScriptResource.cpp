@@ -13,6 +13,7 @@ void CJavaScriptResource::StartResource(js::FunctionContext& ctx)
     std::string source{ (char*)fileBuffer.data(), fileBuffer.size() };
     v8::Local<v8::Module> mod = resource->CompileAndRun(resource->GetResource()->GetMain(), source);
     if(!ctx.Check(!mod.IsEmpty(), "Failed to compile main file")) return;
+    resource->modules.insert({ resource->GetResource()->GetMain(), { mod, Module::Type::File } });
 
     alt::MValueDict exportsDict = std::dynamic_pointer_cast<alt::IMValueDict>(js::JSToMValue(mod->GetModuleNamespace()));
     resource->GetResource()->SetExports(exportsDict);
