@@ -38,9 +38,10 @@ void CJavaScriptRuntime::OnTick()
 void CJavaScriptRuntime::OnDispose()
 {
     while(isolate->IsInUse()) isolate->Exit();
+    v8::platform::NotifyIsolateShutdown(platform.get(), isolate);
     isolate->Dispose();
     v8::V8::Dispose();
-    v8::V8::ShutdownPlatform();
+    v8::V8::DisposePlatform();
 
     delete isolate->GetArrayBufferAllocator();
 }

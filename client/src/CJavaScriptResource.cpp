@@ -10,9 +10,10 @@ void CJavaScriptResource::StartResource(js::FunctionContext& ctx)
     alt::IResource* altResource = resource->GetResource();
     const std::string& main = resource->GetResource()->GetMain();
     if(!ctx.Check(!js::DoesFileExist(altResource->GetPackage(), main), "Failed to read main file")) return;
-    std::vector<uint8_t> fileBuffer = js::ReadFile(altResource->GetPackage(), main);
 
+    std::vector<uint8_t> fileBuffer = js::ReadFile(altResource->GetPackage(), main);
     std::string source{ (char*)fileBuffer.data(), fileBuffer.size() };
+
     v8::Local<v8::Module> mod = resource->CompileAndRun(main, source);
     if(!ctx.Check(!mod.IsEmpty(), "Failed to compile main file")) return;
     resource->modules.insert({ main, { mod, Module::Type::File } });
