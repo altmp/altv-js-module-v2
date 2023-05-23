@@ -211,10 +211,10 @@ declare module "@altv/server" {
         export const onVehicleDamage: shared.Events.Event<VehicleDamageEventContext>;
         export const onVehicleSiren: shared.Events.Event<VehicleSirenEventContext>;
 
-        export const onClientScriptEvent: shared.Events.Event<ClientScriptEventContext>;
+        export const onPlayerScriptEvent: shared.Events.Event<ClientScriptEventContext>;
 
-        export function onClient<Args extends Array<any> = unknown[], PlayerEx extends Player = Player>(eventName: string, callback: (context: { player: PlayerEx; args: Args }) => void): void;
-        export function onClient<PlayerEx extends Player = Player, Args extends Array<any> = unknown[]>(eventName: string, callback: (context: { player: PlayerEx; args: Args }) => void): void;
+        export function onPlayer<Args extends Array<any> = unknown[], PlayerEx extends Player = Player>(eventName: string, callback: (context: { player: PlayerEx; args: Args }) => void): void;
+        export function onPlayer<PlayerEx extends Player = Player, Args extends Array<any> = unknown[]>(eventName: string, callback: (context: { player: PlayerEx; args: Args }) => void): void;
 
         export const onRemote: shared.Events.ScriptEvent<ClientScriptEventContext>;
 

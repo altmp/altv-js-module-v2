@@ -39,7 +39,7 @@ export class Event {
         const location = cppBindings.getCurrentSourceLocation(Event.#sourceLocationFrameSkipCount);
         const handlerObj = {
             handler,
-            location,
+            location
         };
         const map = custom ? Event.#customHandlers : Event.#handlers;
         if (!map.has(type)) map.set(type, [handlerObj]);
@@ -82,13 +82,7 @@ export class Event {
                 const result = handler(ctx);
                 const duration = Date.now() - startTime;
                 if (duration > Event.#warningThreshold) {
-                    alt.logWarning(
-                        `[JS] Event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${
-                            location.lineNumber
-                        }) for script event '${name}' took ${duration}ms to execute (Threshold: ${
-                            Event.#warningThreshold
-                        }ms)`
-                    );
+                    alt.logWarning(`[JS] Event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${location.lineNumber}) for script event '${name}' took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`);
                 }
                 if (result instanceof Promise) await result;
             } catch (e) {
@@ -116,8 +110,8 @@ export class Event {
         const func = Event.#registerCallback.bind(undefined, name, type, custom);
         Object.defineProperties(func, {
             listeners: {
-                get: Event.#getEventHandlers.bind(undefined, type, custom),
-            },
+                get: Event.#getEventHandlers.bind(undefined, type, custom)
+            }
         });
         func.remove = Event.#unregisterCallback.bind(undefined, name, type, custom);
         return func;
@@ -140,8 +134,8 @@ export class Event {
         const func = Event.#subscribeScriptEvent.bind(undefined, local);
         Object.defineProperties(func, {
             listeners: {
-                get: Event.#getScriptEventHandlers.bind(undefined, local),
-            },
+                get: Event.#getScriptEventHandlers.bind(undefined, local)
+            }
         });
         func.remove = Event.#unsubscribeScriptEvent.bind(undefined, local);
         return func;
@@ -154,15 +148,12 @@ export class Event {
      */
     static #subscribeScriptEvent(local, name, handler) {
         assert(typeof name === "string", `Event name is not a string`);
-        assert(
-            typeof handler === "function",
-            `Handler for ${local ? "local" : "remote"} script event '${name}' is not a function`
-        );
+        assert(typeof handler === "function", `Handler for ${local ? "local" : "remote"} script event '${name}' is not a function`);
 
         const location = cppBindings.getCurrentSourceLocation(Event.#sourceLocationFrameSkipCount);
         const handlerObj = {
             handler,
-            location,
+            location
         };
         const map = local ? Event.#localScriptEventHandlers : Event.#remoteScriptEventHandlers;
         if (!map.has(name)) map.set(name, [handlerObj]);
@@ -171,10 +162,7 @@ export class Event {
 
     static #unsubscribeScriptEvent(local, name, handler) {
         assert(typeof name === "string", `Event name is not a string`);
-        assert(
-            typeof handler === "function",
-            `Handler for ${local ? "local" : "remote"} script event '${name}' is not a function`
-        );
+        assert(typeof handler === "function", `Handler for ${local ? "local" : "remote"} script event '${name}' is not a function`);
 
         const map = local ? Event.#localScriptEventHandlers : Event.#remoteScriptEventHandlers;
         const handlers = map.get(name);
@@ -205,7 +193,7 @@ export class Event {
 
         const genericCtx = {
             ...ctx,
-            customEvent: custom,
+            customEvent: custom
         };
         Object.freeze(genericCtx);
 
@@ -215,14 +203,7 @@ export class Event {
                 const result = handler(genericCtx);
                 const duration = Date.now() - startTime;
                 if (duration > Event.#warningThreshold) {
-                    alt.logWarning(
-                        `[JS] Generic event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${
-                            location.lineNumber
-                        }) for event '${Event.#getEventName(
-                            eventType,
-                            custom
-                        )}' took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`
-                    );
+                    alt.logWarning(`[JS] Generic event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${location.lineNumber}) for event '${Event.#getEventName(eventType, custom)}' took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`);
                 }
                 if (result instanceof Promise) await result;
             } catch (e) {
@@ -274,14 +255,7 @@ export class Event {
                 const result = handler(ctx);
                 const duration = Date.now() - startTime;
                 if (duration > Event.#warningThreshold) {
-                    alt.logWarning(
-                        `[JS] Event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${
-                            location.lineNumber
-                        }) for event '${Event.#getEventName(
-                            eventType,
-                            custom
-                        )}' took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`
-                    );
+                    alt.logWarning(`[JS] Event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${location.lineNumber}) for event '${Event.#getEventName(eventType, custom)}' took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`);
                 }
                 if (result instanceof Promise) await result;
             } catch (e) {
@@ -297,7 +271,7 @@ alt.Events.onRemote = Event.getScriptEventFunc(false);
 if (alt.isClient) {
     alt.Events.onServer = Event.getScriptEventFunc(false);
 } else {
-    alt.Events.onClient = Event.getScriptEventFunc(false);
+    alt.Events.onPlayer = Event.getScriptEventFunc(false);
 }
 
 alt.Events.onEvent = Event.subscribeGeneric;
