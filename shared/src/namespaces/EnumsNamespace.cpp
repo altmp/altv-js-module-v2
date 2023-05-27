@@ -39,4 +39,5 @@ extern js::Namespace enumsNamespace("Enums", [](js::NamespaceTemplate& tpl) {
     tpl.StaticLazyProperty("BodyPart", GetEnumObject<alt::CWeaponDamageEvent::BodyPart>);
     tpl.StaticLazyProperty("EventType", GetEnumObjectWithStartEnd<alt::CEvent::Type, alt::CEvent::Type::NONE, alt::CEvent::Type::ALL>);
     tpl.StaticLazyProperty("CustomEventType", GetEnumObjectWithStartEnd<js::EventType, js::EventType::NONE, js::EventType::SIZE>);
+    tpl.StaticLazyProperty("MetricType", GetEnumObject<alt::Metric::Type>);
 });
