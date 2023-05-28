@@ -138,7 +138,7 @@ static void GetClosestEntities(js::FunctionContext& ctx)
 // clang-format off
 extern js::Class playerClass, vehicleClass, colShapeClass, checkpointClass, pedClass, networkObjectClass, voiceChannelClass, blipClass, virtualEntityClass, virtualEntityGroupClass;
 extern js::Namespace eventsNamespace, pedModelInfoNamespace, vehicleModelInfoNamespace;
-static js::Module altModule("alt", "alt-shared", { &playerClass, &vehicleClass, &colShapeClass, &checkpointClass, &pedClass, &networkObjectClass, &voiceChannelClass, &blipClass, &virtualEntityClass, &virtualEntityGroupClass }, [](js::ModuleTemplate& module)
+static js::Module altModule("@altv/server", "@altv/shared", { &playerClass, &vehicleClass, &colShapeClass, &checkpointClass, &pedClass, &networkObjectClass, &voiceChannelClass, &blipClass, &virtualEntityClass, &virtualEntityGroupClass }, [](js::ModuleTemplate& module)
 {
     module.StaticProperty("isClient", false);
     module.StaticProperty("isServer", true);

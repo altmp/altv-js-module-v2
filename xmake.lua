@@ -107,7 +107,6 @@ target("server")
     set_symbols("debug")
 
 target("client")
-    set_enabled(false)
     set_basename("js-client-v2")
     if has_config("static-client") then
         set_kind("static")
