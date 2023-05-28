@@ -91,7 +91,7 @@ std::vector<std::string> CNodeRuntime::GetNodeArgs()
 void CNodeRuntime::RegisterMetrics()
 {
     alt::ICore& core = alt::ICore::Instance();
-    static inline auto registerMetric = [&](Metric metric, const char* name, alt::Metric::Type metricType) { metrics[metric] = core.RegisterMetric(name, metricType); };
+    static auto registerMetric = [&](Metric metric, const char* name, alt::Metric::Type metricType) { metrics[metric] = core.RegisterMetric(name, metricType); };
 
     registerMetric(Metric::HEAP_SIZE, "node_heap_size", alt::Metric::Type::METRIC_TYPE_GAUGE);
     registerMetric(Metric::HEAP_LIMIT, "node_heap_limit", alt::Metric::Type::METRIC_TYPE_GAUGE);
@@ -104,7 +104,7 @@ void CNodeRuntime::RegisterMetrics()
 void CNodeRuntime::UpdateMetrics()
 {
     alt::ICore& core = alt::ICore::Instance();
-    static inline auto updateMetric = [&](Metric metric, uint64_t value) { metrics[metric]->SetValue(value); };
+    static auto updateMetric = [&](Metric metric, uint64_t value) { metrics[metric]->SetValue(value); };
 
     v8::HeapStatistics heapStats;
     isolate->GetHeapStatistics(&heapStats);
