@@ -3,6 +3,11 @@
 #include "Bindings.h"
 #include "Event.h"
 
+std::unordered_map<std::string, std::string> CNodeResource::GetMetricAttributes()
+{
+    return { { "resource", GetResource()->GetName() } };
+}
+
 static void ResourceStarted(js::FunctionContext& ctx)
 {
     v8::Local<v8::Value> exports;
@@ -91,6 +96,7 @@ bool CNodeResource::Stop()
     delete uvLoop;
 
     IResource::Reset();
+    IMetricHandler::CleanupMetrics();
 
     return true;
 }

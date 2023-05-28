@@ -3,8 +3,9 @@
 #include "interfaces/IResource.h"
 #include "node.h"
 #include "uv.h"
+#include "helpers/IMetricHandler.h"
 
-class CNodeResource : public js::IResource
+class CNodeResource : public js::IResource, public js::IMetricHandler
 {
     node::IsolateData* nodeData = nullptr;
     node::Environment* env = nullptr;
@@ -13,6 +14,8 @@ class CNodeResource : public js::IResource
     node::async_context asyncContext;
     bool envStarted = false;
     bool startError = false;
+
+    virtual std::unordered_map<std::string, std::string> GetMetricAttributes() override;
 
 public:
     CNodeResource(alt::IResource* resource, v8::Isolate* isolate) : IResource(resource, isolate) {}
