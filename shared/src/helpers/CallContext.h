@@ -116,6 +116,13 @@ namespace js
             return static_cast<T*>(info.This()->GetAlignedPointerFromInternalField(1));
         }
 
+        void SetExtraInternalFieldValue(void* value)
+        {
+            if(errored) return;
+            if(info.This()->InternalFieldCount() != 2) return;
+            info.This()->SetAlignedPointerInInternalField(1, value);
+        }
+
         template<class T>
         void Return(const T& value)
         {
