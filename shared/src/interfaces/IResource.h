@@ -111,11 +111,6 @@ namespace js
 
         void OnTick() override
         {
-            v8::Locker locker(isolate);
-            v8::Isolate::Scope isolateScope(isolate);
-            v8::HandleScope handleScope(isolate);
-            v8::Context::Scope contextScope(GetContext());
-
             js::Function onTick = GetBindingExport<v8::Function>("timers:tick");
             if(onTick.IsValid()) onTick.Call();
         }
@@ -212,9 +207,10 @@ namespace js
         }
         bool IsBaseObject(v8::Local<v8::Value> val);
 
-        static IResource* GetFromContext(v8::Local<v8::Context> context)
+        template<class ResourceType = js::IResource>
+        static ResourceType* GetFromContext(v8::Local<v8::Context> context)
         {
-            return static_cast<IResource*>(context->GetAlignedPointerFromEmbedderData(ContextInternalFieldIdx));
+            return static_cast<ResourceType*>(context->GetAlignedPointerFromEmbedderData(ContextInternalFieldIdx));
         }
     };
 }  // namespace js

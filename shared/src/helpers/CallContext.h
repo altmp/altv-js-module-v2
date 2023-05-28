@@ -41,9 +41,10 @@ namespace js
             return info.GetIsolate();
         }
 
-        IResource* GetResource() const
+        template<class ResourceType = js::IResource>
+        ResourceType* GetResource() const
         {
-            return GetCurrentResource(info.GetIsolate());
+            return static_cast<ResourceType*>(GetCurrentResource(info.GetIsolate()));
         }
 
         v8::Local<v8::Context> GetContext() const

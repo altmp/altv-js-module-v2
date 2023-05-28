@@ -12,13 +12,13 @@ namespace server
 {
     static void Initialize(v8::Local<v8::Object> exports, v8::Local<v8::Value>, v8::Local<v8::Context> context, void*)
     {
-        if(!js::Module::Exists("alt"))
+        if(!js::Module::Exists("@altv/server"))
         {
-            js::Logger::Error("INTERNAL ERROR: alt module not found");
+            js::Logger::Error("INTERNAL ERROR: @altv/server module not found");
             return;
         }
 
-        js::Module& mod = js::Module::Get("alt");
+        js::Module& mod = js::Module::Get("@altv/server");
         exports->SetPrototype(context, mod.GetNamespace(js::IResource::GetFromContext(context)));
     }
     NODE_MODULE_LINKED(alt, Initialize)
@@ -28,13 +28,13 @@ namespace shared
 {
     static void InitializeShared(v8::Local<v8::Object> exports, v8::Local<v8::Value>, v8::Local<v8::Context> context, void*)
     {
-        if(!js::Module::Exists("alt-shared"))
+        if(!js::Module::Exists("@altv/shared"))
         {
-            js::Logger::Error("INTERNAL ERROR: alt-shared module not found");
+            js::Logger::Error("INTERNAL ERROR: @altv/shared module not found");
             return;
         }
 
-        js::Module& mod = js::Module::Get("alt-shared");
+        js::Module& mod = js::Module::Get("@altv/shared");
         exports->SetPrototype(context, mod.GetNamespace(js::IResource::GetFromContext(context)));
     }
     NODE_MODULE_LINKED(altShared, InitializeShared)

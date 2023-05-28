@@ -1,11 +1,24 @@
-#include "version/version.h"
-#include "SDK.h"
+#include "cpp-sdk/version/version.h"
+#include "cpp-sdk/SDK.h"
 
-EXPORT bool altMain(alt::ICore* core)
+#include "CommandHandlers.h"
+#include "CJavaScriptRuntime.h"
+
+EXPORT alt::IScriptRuntime* CreateScriptRuntime(alt::ICore* core)
 {
     alt::ICore::SetInstance(core);
 
-    return true;
+    CJavaScriptRuntime& runtime = CJavaScriptRuntime::Instance();
+    if(!runtime.Initialize()) return nullptr;
+
+    core->SubscribeCommand("debughandles", js::DebugHandlesCommand);
+
+    return &runtime;
+}
+
+EXPORT const char* GetType()
+{
+    return "jsv2";
 }
 
 EXPORT const char* GetSDKHash()
