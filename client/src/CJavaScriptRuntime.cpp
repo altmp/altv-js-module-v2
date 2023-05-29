@@ -1,5 +1,64 @@
 #include "CJavaScriptRuntime.h"
 #include "libplatform/libplatform.h"
+#include "Logger.h"
+
+void CJavaScriptRuntime::OnFatalError(const char* location, const char* message)
+{
+    js::Logger::Error("[JS] V8 fatal error!", location, message);
+}
+
+void CJavaScriptRuntime::OnHeapOOM(const char* location, bool isHeap)
+{
+    if(!isHeap) return;
+    js::Logger::Error("[JS] V8 heap out of memory!", location);
+}
+
+size_t CJavaScriptRuntime::OnNearHeapLimit(void*, size_t current, size_t initial)
+{
+    js::Logger::Warn("[JS] The remaining V8 heap space is approaching critical levels. Increasing heap limit...");
+
+    // Increase the heap limit by 100MB if the heap limit has not exceeded 4GB
+    uint64_t currentLimitMb = (current / 1024) / 1024;
+    if(currentLimitMb < 4096) return current + (100 * 1024 * 1024);
+    else
+        return current;
+}
+
+void CJavaScriptRuntime::OnPromiseRejected(v8::PromiseRejectMessage message)
+{
+    // todo
+}
+
+v8::MaybeLocal<v8::Promise> CJavaScriptRuntime::ImportModuleDynamically(
+  v8::Local<v8::Context> context, v8::Local<v8::Data> hostDefinedOptions, v8::Local<v8::Value> resourceName, v8::Local<v8::String> specifier, v8::Local<v8::FixedArray> importAssertions)
+{
+    // todo
+}
+
+void CJavaScriptRuntime::InitializeImportMetaObject(v8::Local<v8::Context> context, v8::Local<v8::Module>, v8::Local<v8::Object> meta)
+{
+    CJavaScriptResource* resource = js::IResource::GetFromContext<CJavaScriptResource>(context);
+    if(!resource) return;
+
+    js::Object metaObj(meta);
+    metaObj.Set("url", js::GetCurrentSourceLocation(resource).file);
+}
+
+void CJavaScriptRuntime::MessageListener(v8::Local<v8::Message> message, v8::Local<v8::Value> error)
+{
+    js::Logger::Warn("[JS] V8 message received!", js::CppValue(message->Get()));
+}
+
+void CJavaScriptRuntime::SetupIsolateHandlers()
+{
+    isolate->SetFatalErrorHandler(OnFatalError);
+    isolate->SetOOMErrorHandler(OnHeapOOM);
+    isolate->AddNearHeapLimitCallback(OnNearHeapLimit, nullptr);
+    isolate->SetPromiseRejectCallback(OnPromiseRejected);
+    isolate->SetHostImportModuleDynamicallyCallback(ImportModuleDynamically);
+    isolate->SetHostInitializeImportMetaObjectCallback(InitializeImportMetaObject);
+    isolate->AddMessageListener(MessageListener);
+}
 
 bool CJavaScriptRuntime::Initialize()
 {
@@ -16,13 +75,11 @@ bool CJavaScriptRuntime::Initialize()
     isolate = v8::Isolate::New(createParams);
     isolate->SetMicrotasksPolicy(v8::MicrotasksPolicy::kExplicit);
     isolate->SetCaptureStackTraceForUncaughtExceptions(true, 5);
-
-    // todo: add handlers for messages etc.
+    SetupIsolateHandlers();
 
     v8::Locker locker(isolate);
     v8::Isolate::Scope isolateScope(isolate);
     v8::HandleScope handleScope(isolate);
-
     return IRuntime::Initialize();
 }
 
