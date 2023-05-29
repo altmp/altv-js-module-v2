@@ -33,6 +33,7 @@ v8::MaybeLocal<v8::Promise> CJavaScriptRuntime::ImportModuleDynamically(
   v8::Local<v8::Context> context, v8::Local<v8::Data> hostDefinedOptions, v8::Local<v8::Value> resourceName, v8::Local<v8::String> specifier, v8::Local<v8::FixedArray> importAssertions)
 {
     // todo
+    return v8::MaybeLocal<v8::Promise>();
 }
 
 void CJavaScriptRuntime::InitializeImportMetaObject(v8::Local<v8::Context> context, v8::Local<v8::Module>, v8::Local<v8::Object> meta)
