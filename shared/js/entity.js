@@ -6,10 +6,11 @@ const entityAllMap = new Map(); // Stores a map of all entities by type
 const entityAllSet = new Set(); // Stores a set of all entities
 
 function addAllGetter(class_, type) {
+    if (!class_) return;
     const set = new Set();
     entityAllMap.set(type, set);
     Object.defineProperty(class_, "all", {
-        get: () => Array.from(set),
+        get: () => Array.from(set)
     });
 }
 
@@ -42,7 +43,7 @@ cppBindings.registerExport("entity:addEntityToAll", addEntityToAll);
 
 // Register all getters
 Object.defineProperty(alt.Entity, "all", {
-    get: () => Array.from(entityAllSet),
+    get: () => Array.from(entityAllSet)
 });
 
 addAllGetter(alt.Player, alt.Enums.BaseObjectType.PLAYER);
