@@ -8,7 +8,6 @@
 class CJavaScriptRuntime : public js::IRuntime<CJavaScriptRuntime, CJavaScriptResource>
 {
     std::unique_ptr<v8::Platform> platform;
-    v8::Isolate* isolate;
 
     static void OnFatalError(const char* location, const char* message);
     static void OnHeapOOM(const char* location, bool isHeap);
