@@ -5,30 +5,55 @@
 const entityAllMap = new Map(); // Stores a map of all entities by type
 const entityAllSet = new Set(); // Stores a set of all entities
 
-function addAllGetter(class_, type) {
+/**
+ * @param {unknown} class_
+ * @param {number | number[]} types
+ */
+function addAllGetter(class_, types) {
     if (!class_) return;
-    const set = new Set();
-    entityAllMap.set(type, set);
-    Object.defineProperty(class_, "all", {
-        get: () => Array.from(set)
+    if (!Array.isArray(types)) types = [types];
+
+    const sets = [];
+    for (const type of types) {
+        const set = new Set();
+        entityAllMap.set(type, set);
+        sets.push(set);
+    }
+
+    Object.defineProperties(class_, {
+        all: {
+            get: () => {
+                if (class_.__allDirty) class_.__allCached = sets.flatMap((set) => Array.from(set));
+                class_.__allDirty = false;
+                return class_.__allCached;
+            }
+        },
+        __allDirty: {
+            value: false,
+            enumerable: false,
+            writable: true,
+            configurable: false
+        },
+        __allCached: {
+            value: [],
+            enumerable: false,
+            writable: true,
+            configurable: false
+        }
     });
 }
 
 alt.Events.onBaseObjectCreate(({ object }) => {
     if (object instanceof alt.Entity) {
         entityAllSet.add(object);
-        const all = entityAllMap.get(object.type);
-        if (all) all.add(object);
-        else alt.logError("INTERNAL ERROR: Entity type", object.type, "missing from entityAllMap");
+        addEntityToAll(object);
     }
 });
 
 alt.Events.onBaseObjectRemove(({ object }) => {
     if (object instanceof alt.Entity) {
         entityAllSet.delete(object);
-        const all = entityAllMap.get(object.type);
-        if (all) all.delete(object);
-        else alt.logError("INTERNAL ERROR: Entity type", object.type, "missing from entityAllMap");
+        removeEntityFromAll(object);
     }
 });
 
@@ -38,6 +63,13 @@ function addEntityToAll(entity) {
     entityAllSet.add(entity);
     const all = entityAllMap.get(entity.type);
     if (all) all.add(entity);
+    entity.constructor.__allDirty = true;
+}
+function removeEntityFromAll(entity) {
+    entityAllSet.delete(entity);
+    const all = entityAllMap.get(entity.type);
+    if (all) all.delete(entity);
+    entity.constructor.__allDirty = true;
 }
 cppBindings.registerExport("entity:addEntityToAll", addEntityToAll);
 
@@ -47,7 +79,7 @@ Object.defineProperty(alt.Entity, "all", {
 });
 
 addAllGetter(alt.Player, alt.Enums.BaseObjectType.PLAYER);
-addAllGetter(alt.Vehicle, alt.Enums.BaseObjectType.VEHICLE);
+addAllGetter(alt.Vehicle, [alt.Enums.BaseObjectType.VEHICLE, alt.Enums.BaseObjectType.LOCAL_VEHICLE]);
 addAllGetter(alt.Ped, alt.Enums.BaseObjectType.PED);
 addAllGetter(alt.NetworkObject, alt.Enums.BaseObjectType.NETWORK_OBJECT);
 
