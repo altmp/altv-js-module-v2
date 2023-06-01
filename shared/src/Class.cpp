@@ -12,7 +12,7 @@ void js::Class::Register(v8::Isolate* isolate)
     if(parentClass)
     {
         if(!parentClass->templateMap.contains(isolate)) parentClass->Register(isolate);
-        tpl.Get()->Inherit(parentClass->templateMap.at(isolate).Get());
+        tpl.Inherit(parentClass->templateMap.at(isolate));
     }
     initCb(tpl);
     tpl.Get()->SetClassName(js::JSValue(name));
@@ -39,7 +39,9 @@ void js::Class::Initialize(v8::Isolate* isolate)
         Logger::Colored("~g~[BINDINGS] ~w~Dumped class", class_->GetName());
 #endif
     }
-    ClassTemplate::CleanupPropertyGetterMap(isolate);  // Only needed while setting up the templates, so we can free the data here
+
+    // Only needed while setting up the templates, so we can free the data here
+    ClassTemplate::CleanupPropertyGetterMap(isolate);
 }
 
 void js::Class::Cleanup(v8::Isolate* isolate)

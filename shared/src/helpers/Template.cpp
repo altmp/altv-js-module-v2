@@ -131,6 +131,14 @@ void js::ClassTemplate::BindToType(alt::IBaseObject::Type type)
     IScriptObjectHandler::BindClassToType(type, class_);
 }
 
+void js::ClassTemplate::Inherit(ClassTemplate& parent)
+{
+    Get()->Inherit(parent.Get());
+
+    // Inherit static methods
+    for(auto& [name, method] : parent.staticMethods) StaticFunction(name, method);
+}
+
 #ifdef DEBUG_BINDINGS
 void js::ClassTemplate::DumpRegisteredKeys()
 {

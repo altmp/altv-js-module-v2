@@ -243,7 +243,7 @@ namespace js
             Get()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler, v8::External::New(GetIsolate(), (void*)callback));
         }
 
-        void StaticFunction(const std::string& name, FunctionCallback callback)
+        virtual void StaticFunction(const std::string& name, FunctionCallback callback)
         {
             Get()->Set(js::JSValue(name), WrapFunction(callback), (v8::PropertyAttribute)(v8::PropertyAttribute::ReadOnly | v8::PropertyAttribute::DontDelete));
         }
@@ -285,6 +285,8 @@ namespace js
             registeredKeys.insert({ key, type });
         }
 #endif
+
+        std::unordered_map<std::string, js::FunctionCallback> staticMethods;
 
         template<class T>
         using ClassMap = std::unordered_map<v8::Isolate*, std::unordered_map<Class*, T>>;
@@ -451,12 +453,19 @@ namespace js
             Get()->PrototypeTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::DynamicPropertyLazyHandler, v8::External::New(GetIsolate(), data), v8::ReadOnly);
         }
 
+        void StaticFunction(const std::string& name, FunctionCallback callback) override
+        {
+            staticMethods[name] = callback;
+            Template::StaticFunction(name, callback);
+        }
+
         // Allows instances of this class to be called as a function
         void CallHandler(FunctionCallback cb)
         {
             Get()->PrototypeTemplate()->SetCallAsFunctionHandler(Wrapper::FunctionHandler, v8::External::New(GetIsolate(), (void*)cb));
         }
 
+        void Inherit(ClassTemplate& parent);
         void BindToType(alt::IBaseObject::Type type);
     };
 }  // namespace js
