@@ -78,6 +78,7 @@ bool CJavaScriptResource::Start()
     if(mod.IsEmpty())
     {
         js::Logger::Error("[JS] Failed to start bootstrapper");
+        js::Binding::DumpAll();
         return false;
     }
 
