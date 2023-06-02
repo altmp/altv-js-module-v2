@@ -1,5 +1,6 @@
 #include "Bindings.h"
 #include "interfaces/IResource.h"
+#include "magic_enum/include/magic_enum.hpp"
 
 static v8::MaybeLocal<v8::Module> ResolveModuleCallback(v8::Local<v8::Context> context, v8::Local<v8::String> specifier, v8::Local<v8::FixedArray> assertions, v8::Local<v8::Module> referrer)
 {
@@ -59,4 +60,19 @@ void js::Binding::CleanupForResource(IResource* resource)
     {
         binding.compiledModuleMap.erase(resource);
     }
+}
+
+void js::Binding::Dump()
+{
+    Logger::Warn("[JS] Binding:", GetName());
+    Logger::Warn("[JS]   Valid:", IsValid());
+    Logger::Warn("[JS]   Scope:", magic_enum::enum_name(GetScope()));
+    Logger::Warn("[JS]   Source size:", strlen(GetSource()));
+    Logger::Warn(GetSource());
+}
+
+void js::Binding::DumpAll()
+{
+    Logger::Warn("[JS] Bindings count:", __bindings.size());
+    for(auto& [name, binding] : __bindings) binding.Dump();
 }

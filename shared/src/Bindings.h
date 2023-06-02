@@ -59,6 +59,9 @@ namespace js
         }
         v8::Local<v8::Module> GetCompiledModule(IResource* resource);
 
+        // For debugging
+        void Dump();
+
         static std::vector<Binding*> GetBindingsForScope(Scope scope);
         static Binding& Get(const std::string& name)
         {
@@ -67,5 +70,8 @@ namespace js
             return __bindings.at(name);
         }
         static void CleanupForResource(IResource* resource);
+
+        // For debugging
+        static void DumpAll();
     };
 }  // namespace js
