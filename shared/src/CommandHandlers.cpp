@@ -52,3 +52,24 @@ void js::DebugHandlesCommand(const std::vector<std::string>&)
         visitor.Dump();
     }
 }
+
+void js::DumpBindingCommand(const std::vector<std::string>& args)
+{
+    if(!args.size())
+    {
+        Logger::Warn("Usage: dumpbinding <binding name>");
+        return;
+    }
+    js::Binding& binding = js::Binding::Get(args[0]);
+    if(!binding.IsValid())
+    {
+        Logger::Warn("Binding", args[0], "not found");
+        return;
+    }
+    binding.Dump();
+}
+
+void js::DumpAllBindingsCommand(const std::vector<std::string>&)
+{
+    Binding::DumpAll();
+}

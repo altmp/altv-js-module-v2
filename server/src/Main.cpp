@@ -67,6 +67,8 @@ EXPORT bool altMain(alt::ICore* core)
 
     core->SubscribeCommand("js-module-v2", ModuleCommand);
     core->SubscribeCommand("debughandles", js::DebugHandlesCommand);
+    core->SubscribeCommand("dumpbinding", js::DumpBindingCommand);
+    core->SubscribeCommand("dumpallbindings", js::DumpAllBindingsCommand);
 
     js::Logger::Colored("Loaded ~g~JS module v2");
 

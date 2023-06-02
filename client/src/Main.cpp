@@ -12,6 +12,8 @@ EXPORT alt::IScriptRuntime* CreateScriptRuntime(alt::ICore* core)
     if(!runtime.Initialize()) return nullptr;
 
     core->SubscribeCommand("debughandles", js::DebugHandlesCommand);
+    core->SubscribeCommand("dumpbinding", js::DumpBindingCommand);
+    core->SubscribeCommand("dumpallbindings", js::DumpAllBindingsCommand);
 
     return &runtime;
 }
