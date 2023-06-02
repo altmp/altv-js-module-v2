@@ -16,7 +16,6 @@ void CJavaScriptResource::StartResource(js::FunctionContext& ctx)
 
     v8::Local<v8::Module> mod = resource->CompileAndRun(main, source);
     if(!ctx.Check(!mod.IsEmpty(), "Failed to compile main file")) return;
-    resource->modules.insert({ main, { mod, Module::Type::File } });
 
     alt::MValueDict exportsDict = std::dynamic_pointer_cast<alt::IMValueDict>(js::JSToMValue(mod->GetModuleNamespace()));
     resource->GetResource()->SetExports(exportsDict);
@@ -32,6 +31,9 @@ v8::Local<v8::Module> CJavaScriptResource::CompileAndRun(const std::string& path
         return v8::Local<v8::Module>();
     }
     v8::Local<v8::Module> mod = maybeMod.ToLocalChecked();
+
+    if(!path.starts_with("internal:")) modules.insert({ path, { mod, Module::Type::File } });
+
     if(!InstantiateModule(GetContext(), mod))
     {
         js::Logger::Error("[JS] Failed to instantiate file", path);
@@ -73,7 +75,11 @@ bool CJavaScriptResource::Start()
     js::TemporaryGlobalExtension startResourceExtension(GetContext(), "__startResource", StartResource);
     js::TemporaryGlobalExtension altModuleExtension(GetContext(), "__altModule", js::Module::Get("@altv/client").GetNamespace(this));
     v8::Local<v8::Module> mod = CompileAndRun("internal:" + bootstrapper.GetName(), bootstrapper.GetSource());
-    if(mod.IsEmpty()) return false;
+    if(mod.IsEmpty())
+    {
+        js::Logger::Error("[JS] Failed to start bootstrapper");
+        return false;
+    }
 
     return true;
 }
