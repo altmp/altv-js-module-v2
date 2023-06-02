@@ -1,15 +1,6 @@
 #include "Class.h"
 #include "cpp-sdk/ICore.h"
 
-static void GetByID(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(1)) return;
-
-    uint16_t id;
-    if(!ctx.GetArg(0, id)) return;
-    ctx.Return((alt::IBaseObject*)alt::ICore::Instance().GetEntityBySyncID(id));
-}
-
 static void ResetNetOwner(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
@@ -144,6 +135,4 @@ extern js::Class entityClass("Entity", &sharedEntityClass, nullptr, [](js::Class
 
     tpl.DynamicProperty("syncedMeta", nullptr, SyncedMetaSetter, SyncedMetaDeleter, nullptr);
     tpl.DynamicProperty("streamSyncedMeta", nullptr, StreamSyncedMetaSetter, StreamSyncedMetaDeleter, nullptr);
-
-    tpl.StaticFunction("getByID", &GetByID);
 });
