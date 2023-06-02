@@ -61,7 +61,7 @@ v8::MaybeLocal<v8::Module> IModuleHandler::Resolve(v8::Local<v8::Context> contex
     else
     {
         bool isBytecode = false;
-        module = ResolveFile(context, specifier, GetModulePath(referrer), isBytecode, name);
+        module = ResolveFile(context, specifier, GetModulePath(referrer), name, isBytecode);
         type = isBytecode ? Module::Type::Bytecode : Module::Type::File;
     }
 
@@ -88,7 +88,7 @@ v8::MaybeLocal<v8::Module> IModuleHandler::ResolveResource(v8::Local<v8::Context
     return CompileSyntheticModule(specifier, exports.ToMap<v8::Local<v8::Value>>());
 }
 
-v8::MaybeLocal<v8::Module> IModuleHandler::ResolveFile(v8::Local<v8::Context> context, const std::string& specifier, const std::string& referrer, bool& isBytecode, std::string& name)
+v8::MaybeLocal<v8::Module> IModuleHandler::ResolveFile(v8::Local<v8::Context> context, const std::string& specifier, const std::string& referrer, std::string& name, bool& isBytecode)
 {
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
     alt::IResource* resource = js::IResource::GetFromContext(context)->GetResource();

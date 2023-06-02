@@ -56,6 +56,9 @@ bool CJavaScriptResource::Start()
     v8::Isolate::Scope isolateScope(isolate);
     v8::HandleScope handleScope(isolate);
 
+    GetResource()->EnableNatives();
+    auto nativeScope = GetResource()->PushNativesScope();
+
     microtaskQueue = v8::MicrotaskQueue::New(isolate, v8::MicrotasksPolicy::kExplicit);
     v8::Local<v8::Context> _context = v8::Context::New(isolate, nullptr, v8::MaybeLocal<v8::ObjectTemplate>(), v8::Local<v8::Value>(), nullptr, microtaskQueue.get());
     context.Reset(isolate, _context);
@@ -82,6 +85,7 @@ bool CJavaScriptResource::Stop()
     v8::Locker locker(isolate);
     v8::Isolate::Scope isolateScope(isolate);
     v8::HandleScope handleScope(isolate);
+    auto nativeScope = GetResource()->PushNativesScope();
 
     microtaskQueue.reset();
 
@@ -98,6 +102,7 @@ void CJavaScriptResource::OnTick()
     v8::Isolate::Scope isolateScope(isolate);
     v8::HandleScope handleScope(isolate);
     v8::Context::Scope scope(GetContext());
+    auto nativeScope = GetResource()->PushNativesScope();
 
     microtaskQueue->PerformCheckpoint(isolate);
 

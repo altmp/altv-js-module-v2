@@ -45,7 +45,7 @@ protected:
     v8::MaybeLocal<v8::Module> Resolve(v8::Local<v8::Context> context, const std::string& specifier, v8::Local<v8::Module> referrer);
     v8::MaybeLocal<v8::Module> ResolveBuiltin(v8::Local<v8::Context> context, const std::string& specifier);
     v8::MaybeLocal<v8::Module> ResolveResource(v8::Local<v8::Context> context, const std::string& specifier);
-    v8::MaybeLocal<v8::Module> ResolveFile(v8::Local<v8::Context> context, const std::string& specifier, const std::string& referrer, bool& isBytecode, std::string& name);
+    v8::MaybeLocal<v8::Module> ResolveFile(v8::Local<v8::Context> context, const std::string& specifier, const std::string& referrer, std::string& name, bool& isBytecode);
 
     int GetNextScriptId()
     {
