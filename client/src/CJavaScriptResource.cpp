@@ -60,6 +60,7 @@ bool CJavaScriptResource::Start()
 
     GetResource()->EnableNatives();
     auto nativeScope = GetResource()->PushNativesScope();
+    nativeContext = alt::ICore::Instance().CreateNativesContext();
 
     microtaskQueue = v8::MicrotaskQueue::New(isolate, v8::MicrotasksPolicy::kExplicit);
     v8::Local<v8::Context> _context = v8::Context::New(isolate, nullptr, v8::MaybeLocal<v8::ObjectTemplate>(), v8::Local<v8::Value>(), nullptr, microtaskQueue.get());

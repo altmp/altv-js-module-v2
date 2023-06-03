@@ -10,6 +10,7 @@ class CJavaScriptResource : public js::IResource, public IModuleHandler
 {
     std::unique_ptr<v8::MicrotaskQueue> microtaskQueue;
     bool started = false;
+    std::shared_ptr<alt::INative::Context> nativeContext;
 
     static void StartResource(js::FunctionContext& ctx);
 
@@ -24,4 +25,9 @@ public:
     void OnTick() override;
 
     void RunEventLoop() override;
+
+    std::shared_ptr<alt::INative::Context> GetNativeContext()
+    {
+        return nativeContext;
+    }
 };
