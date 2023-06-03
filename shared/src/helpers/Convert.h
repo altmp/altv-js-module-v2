@@ -25,6 +25,7 @@ namespace js
 
     inline v8::Local<v8::String> JSValue(const char* val)
     {
+        if(val == nullptr) return v8::String::Empty(v8::Isolate::GetCurrent());
         return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), val).ToLocalChecked();
     }
     inline v8::Local<v8::String> JSValue(const std::string& val)
