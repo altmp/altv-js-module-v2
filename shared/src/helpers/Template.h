@@ -247,6 +247,11 @@ namespace js
         {
             Get()->Set(js::JSValue(name), WrapFunction(callback), (v8::PropertyAttribute)(v8::PropertyAttribute::ReadOnly | v8::PropertyAttribute::DontDelete));
         }
+
+        void StaticFunction(const std::string& name, v8::Local<v8::FunctionTemplate> callbackTpl)
+        {
+            Get()->Set(js::JSValue(name), callbackTpl, (v8::PropertyAttribute)(v8::PropertyAttribute::ReadOnly | v8::PropertyAttribute::DontDelete));
+        }
     };
 
     class NamespaceTemplate : public Template<v8::ObjectTemplate>
