@@ -90,7 +90,6 @@ v8::Local<v8::Value> js::NativeInvoker::GetPointerReturnValue(alt::INative::Type
 {
     using Type = alt::INative::Type;
 
-    pointersCount += 1;
     switch(type)
     {
         case Type::ARG_BOOL_PTR: return js::JSValue((bool)*reinterpret_cast<int32_t*>(&pointers[pointersCount++]));
@@ -100,7 +99,7 @@ v8::Local<v8::Value> js::NativeInvoker::GetPointerReturnValue(alt::INative::Type
         case Type::ARG_VECTOR3_PTR:
         {
             alt::INative::Vector3* vector = reinterpret_cast<alt::INative::Vector3*>(&pointers[pointersCount]);
-            pointersCount += 2;
+            pointersCount += 3;
             return resource->CreateVector3({ vector->x, vector->y, vector->z });
         }
     }
