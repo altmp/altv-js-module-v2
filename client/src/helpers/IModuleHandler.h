@@ -53,6 +53,11 @@ protected:
         return ++nextScriptId;
     }
 
+    void Reset()
+    {
+        modules.clear();
+    }
+
     std::unordered_map<std::string, Module> modules;
 
 public:
