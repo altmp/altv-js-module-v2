@@ -212,5 +212,14 @@ namespace js
         {
             return static_cast<ResourceType*>(context->GetAlignedPointerFromEmbedderData(ContextInternalFieldIdx));
         }
+        template<class ResourceType = js::IResource>
+        static ResourceType* GetCurrent()
+        {
+            v8::Isolate* isolate = v8::Isolate::GetCurrent();
+            if(!isolate) return nullptr;
+            v8::Local<v8::Context> context = isolate->GetEnteredOrMicrotaskContext();
+            if(context.IsEmpty()) return nullptr;
+            return GetFromContext<ResourceType>(context);
+        }
     };
 }  // namespace js
