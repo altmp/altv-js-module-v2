@@ -2,6 +2,7 @@
 #include "interfaces/IResource.h"
 
 #include <filesystem>
+#include <sstream>
 
 static std::string PrettifyFilePath(js::IResource* resource, std::string path)
 {
@@ -34,6 +35,49 @@ js::SourceLocation js::GetCurrentSourceLocation(IResource* resource, int framesT
         return SourceLocation{ PrettifyFilePath(resource, scriptName), frame->GetLineNumber() };
     }
     return SourceLocation{};
+}
+
+js::StackTrace::StackTrace(const std::vector<Frame>&& _frames, v8::Local<v8::Context> _ctx) : frames(_frames), context(_ctx->GetIsolate(), _ctx) {}
+
+std::string js::StackTrace::ToString(uint32_t offset) const
+{
+    std::stringstream stream;
+    size_t size = frames.size();
+
+    for(size_t i = offset; i < size; i++)
+    {
+        const Frame& frame = frames[i];
+        stream << "  at " << frame.function << " (" << frame.file << ":" << frame.line << ")"
+               << "\n";
+    }
+    return stream.str();
+}
+
+js::StackTrace js::StackTrace::GetCurrent(v8::Isolate* isolate, IResource* resource, int framesToSkip)
+{
+    v8::Local<v8::StackTrace> stackTrace = v8::StackTrace::CurrentStackTrace(isolate, framesToSkip + 5);
+    v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
+
+    std::vector<Frame> frames;
+    for(int i = framesToSkip; i < stackTrace->GetFrameCount(); i++)
+    {
+        v8::Local<v8::StackFrame> frame = stackTrace->GetFrame(isolate, i);
+        Frame frameData;
+        frameData.file = CppValue(frame->GetScriptName());
+        frameData.line = frame->GetLineNumber();
+        if(frame->GetFunctionName().IsEmpty()) frameData.function = "[anonymous]";
+        else
+            frameData.function = CppValue(frame->GetFunctionName());
+
+        frames.push_back(std::move(frameData));
+    }
+
+    return StackTrace{ std::move(frames), ctx };
+}
+
+void js::StackTrace::Print(v8::Isolate* isolate)
+{
+    Logger::Error(GetCurrent(isolate).ToString());
 }
 
 void js::RunEventLoop()

@@ -31,6 +31,31 @@ namespace js
     };
     SourceLocation GetCurrentSourceLocation(IResource* resource, int framesToSkip = 0);
 
+    class StackTrace
+    {
+        struct Frame
+        {
+            std::string file;
+            std::string function;
+            int line;
+        };
+        std::vector<Frame> frames;
+        Persistent<v8::Context> context;
+
+        StackTrace(const std::vector<Frame>&& frames, v8::Local<v8::Context> ctx);
+
+    public:
+        bool IsEmpty()
+        {
+            return frames.empty();
+        }
+
+        std::string ToString(uint32_t offset = 0) const;
+
+        static StackTrace GetCurrent(v8::Isolate* isolate, IResource* resource = nullptr, int framesToSkip = 0);
+        static void Print(v8::Isolate* isolate);
+    };
+
     void RunEventLoop();
 
     class TryCatch
