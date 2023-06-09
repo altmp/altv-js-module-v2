@@ -26,7 +26,12 @@ size_t CJavaScriptRuntime::OnNearHeapLimit(void*, size_t current, size_t initial
 
 void CJavaScriptRuntime::OnPromiseRejected(v8::PromiseRejectMessage message)
 {
-    // todo
+    v8::Isolate* isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
+
+    CJavaScriptResource* resource = js::IResource::GetFromContext<CJavaScriptResource>(ctx);
+    if(!resource) return;
+    resource->OnPromiseRejected(message);
 }
 
 v8::MaybeLocal<v8::Promise> CJavaScriptRuntime::ImportModuleDynamically(

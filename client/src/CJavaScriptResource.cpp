@@ -97,6 +97,7 @@ bool CJavaScriptResource::Stop()
 
     microtaskQueue.reset();
 
+    IExceptionHandler::Reset();
     IResource::Reset();
 
     return true;

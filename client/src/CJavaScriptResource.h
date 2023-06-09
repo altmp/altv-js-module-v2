@@ -3,10 +3,11 @@
 #include "interfaces/IResource.h"
 #include "helpers/JS.h"
 #include "helpers/IModuleHandler.h"
+#include "helpers/IExceptionHandler.h"
 
 #include "v8.h"
 
-class CJavaScriptResource : public js::IResource, public IModuleHandler
+class CJavaScriptResource : public js::IResource, public IModuleHandler, public IExceptionHandler
 {
     std::unique_ptr<v8::MicrotaskQueue> microtaskQueue;
     bool started = false;
