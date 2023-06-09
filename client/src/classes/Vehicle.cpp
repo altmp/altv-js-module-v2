@@ -4,7 +4,7 @@ static void GetByID(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
 
-    uint16_t id;
+    uint32_t id;
     if(!ctx.GetArg(0, id)) return;
 
     alt::IBaseObject* entity = alt::ICore::Instance().GetBaseObjectByID(alt::IBaseObject::Type::VEHICLE, id);
