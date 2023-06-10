@@ -28,8 +28,9 @@ namespace js
 
         SourceLocation() = default;
         SourceLocation(const std::string& _file, int _line) : valid(true), file(_file), line(_line) {}
+
+        static SourceLocation GetCurrent(IResource* resource, int framesToSkip = 0);
     };
-    SourceLocation GetCurrentSourceLocation(IResource* resource, int framesToSkip = 0);
 
     class StackTrace
     {

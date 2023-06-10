@@ -22,7 +22,7 @@ static std::string PrettifyFilePath(js::IResource* resource, std::string path)
         return path;
 }
 
-js::SourceLocation js::GetCurrentSourceLocation(IResource* resource, int framesToSkip)
+js::SourceLocation js::SourceLocation::GetCurrent(IResource* resource, int framesToSkip)
 {
     v8::Isolate* isolate = resource->GetIsolate();
     v8::Local<v8::StackTrace> stackTrace = v8::StackTrace::CurrentStackTrace(isolate, framesToSkip + 5);

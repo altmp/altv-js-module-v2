@@ -106,7 +106,7 @@ static void GetCurrentSourceLocation(js::FunctionContext& ctx)
     int framesToSkip = ctx.GetArg<int>(0, 0);
 
     js::Object obj;
-    js::SourceLocation location = js::GetCurrentSourceLocation(ctx.GetResource(), framesToSkip);
+    js::SourceLocation location = js::SourceLocation::GetCurrent(ctx.GetResource(), framesToSkip);
     obj.Set("fileName", location.file);
     obj.Set("lineNumber", location.line);
 

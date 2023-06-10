@@ -47,7 +47,7 @@ void CJavaScriptRuntime::InitializeImportMetaObject(v8::Local<v8::Context> conte
     if(!resource) return;
 
     js::Object metaObj(meta);
-    metaObj.Set("url", js::GetCurrentSourceLocation(resource).file);
+    metaObj.Set("url", js::SourceLocation::GetCurrent(resource).file);
 }
 
 void CJavaScriptRuntime::MessageListener(v8::Local<v8::Message> message, v8::Local<v8::Value> error)

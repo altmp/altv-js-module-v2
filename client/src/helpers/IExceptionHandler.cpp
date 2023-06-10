@@ -8,7 +8,7 @@ void IExceptionHandler::OnPromiseRejectedWithoutHandler(v8::PromiseRejectMessage
     v8::Isolate* isolate = resource->GetIsolate();
     promiseRejections.push_back(PromiseRejection{ js::Persistent<v8::Promise>(isolate, message.GetPromise()),
                                                   js::Persistent<v8::Value>(isolate, message.GetValue()),
-                                                  js::GetCurrentSourceLocation(resource),
+                                                  js::SourceLocation::GetCurrent(resource),
                                                   js::StackTrace::GetCurrent(isolate, resource) });
 }
 
