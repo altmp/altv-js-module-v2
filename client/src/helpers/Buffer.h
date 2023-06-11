@@ -18,7 +18,7 @@ namespace js
         }
         ~Buffer()
         {
-            delete buf;
+            delete[] buf;
         }
 
         uint8_t* GetBuffer()
