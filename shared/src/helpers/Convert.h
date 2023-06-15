@@ -75,10 +75,6 @@ namespace js
     {
         return MValueToJS(mvalue);
     }
-    inline v8::Local<v8::Value> JSValue(alt::MValue mvalue)
-    {
-        return MValueToJS(mvalue);
-    }
     v8::Local<v8::Value> JSValue(alt::IBaseObject* object);
     v8::Local<v8::Value> JSValue(alt::Vector2f vec);
     v8::Local<v8::Value> JSValue(alt::Vector3f vec);
