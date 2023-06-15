@@ -34,7 +34,7 @@ namespace js
     private:
         std::string name;
         Class* parentClass = nullptr;
-        FunctionCallback ctor;
+        FunctionCallback ctor = nullptr;
         ClassInitializationCallback initCb;
         std::unordered_map<v8::Isolate*, ClassTemplate> templateMap;
         int internalFieldCount = 0;
@@ -50,6 +50,10 @@ namespace js
         }
         Class(const std::string& _name, Class* _parent, FunctionCallback _ctor, ClassInitializationCallback _cb, bool hasExtraExternalField = false)
             : name(_name), parentClass(_parent), ctor(_ctor), initCb(_cb), internalFieldCount(hasExtraExternalField ? 2 : 0)
+        {
+            GetAll().push_back(this);
+        }
+        Class(const std::string& _name, ClassInitializationCallback _cb, bool hasExtraExternalField = false) : name(_name), initCb(_cb), internalFieldCount(hasExtraExternalField ? 2 : 0)
         {
             GetAll().push_back(this);
         }
