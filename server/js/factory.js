@@ -1,74 +1,31 @@
 /** @type {typeof import("../../shared/js/utils.js")} */
 const { assert, assertIsObject } = requireBinding("shared/utils.js");
 /** @type {typeof import("../../shared/js/factory.js")} */
-const { registerFactory } = requireBinding("shared/factory.js");
+const { registerFactory, getFactoryCreateFunction } = requireBinding("shared/factory.js");
 
 registerFactory("VoiceChannel", alt.VoiceChannel, alt.Enums.BaseObjectType.VOICE_CHANNEL);
 
 // Factory ctors
-alt.Vehicle.create = (ctx) => {
-    assertIsObject(ctx, "Invalid args");
-    return cppBindings.createEntity(alt.Enums.BaseObjectType.VEHICLE, ctx);
-};
+alt.Vehicle.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.VEHICLE);
 
-alt.Ped.create = (ctx) => {
-    assertIsObject(ctx, "Invalid args");
-    return cppBindings.createEntity(alt.Enums.BaseObjectType.PED, ctx);
-};
+alt.Ped.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.PED);
 
-alt.NetworkObject.create = (ctx) => {
-    assertIsObject(ctx, "Invalid args");
-    return cppBindings.createEntity(alt.Enums.BaseObjectType.NETWORK_OBJECT, ctx);
-};
+alt.NetworkObject.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.NETWORK_OBJECT);
 
-alt.ColShape.create = (ctx) => {
-    assertIsObject(ctx, "Invalid args");
-    return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
-};
+alt.ColShape.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE);
 
-alt.ColShapeSphere.create = (ctx) => {
-    assertIsObject(ctx, "Invalid args");
-    ctx.colShapeType = alt.Enums.ColShapeType.SPHERE;
-    return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
-};
+alt.ColShapeSphere.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => (ctx.colShapeType = alt.Enums.ColShapeType.SPHERE));
 
-alt.ColShapeCylinder.create = (ctx) => {
-    assertIsObject(ctx, "Invalid args");
-    ctx.colShapeType = alt.Enums.ColShapeType.CYLINDER;
-    return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
-};
+alt.ColShapeCylinder.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => (ctx.colShapeType = alt.Enums.ColShapeType.CYLINDER));
 
-alt.ColShapeCircle.create = (ctx) => {
-    assertIsObject(ctx, "Invalid args");
-    ctx.colShapeType = alt.Enums.ColShapeType.CIRCLE;
-    return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
-};
+alt.ColShapeCircle.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => (ctx.colShapeType = alt.Enums.ColShapeType.CIRCLE));
 
-alt.ColShapeCuboid.create = (ctx) => {
-    assertIsObject(ctx, "Invalid args");
-    ctx.colShapeType = alt.Enums.ColShapeType.CUBOID;
-    return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
-};
+alt.ColShapeCuboid.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => (ctx.colShapeType = alt.Enums.ColShapeType.CUBOID));
 
-alt.ColShapeRectangle.create = (ctx) => {
-    assertIsObject(ctx, "Invalid args");
-    ctx.colShapeType = alt.Enums.ColShapeType.RECT;
-    return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
-};
+alt.ColShapeRectangle.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => (ctx.colShapeType = alt.Enums.ColShapeType.RECTANGLE));
 
-alt.ColShapePolygon.create = (ctx) => {
-    assertIsObject(ctx, "Invalid args");
-    ctx.colShapeType = alt.Enums.ColShapeType.POLYGON;
-    return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
-};
+alt.ColShapePolygon.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => (ctx.colShapeType = alt.Enums.ColShapeType.POLYGON));
 
-alt.Checkpoint.create = (ctx) => {
-    assertIsObject(ctx, "Invalid args");
-    ctx.colShapeType = alt.Enums.ColShapeType.CHECKPOINT_CYLINDER;
-    return cppBindings.createEntity(alt.Enums.BaseObjectType.COLSHAPE, ctx);
-};
+alt.Checkpoint.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => (ctx.colShapeType = alt.Enums.ColShapeType.CHECKPOINT_CYLINDER));
 
-alt.VoiceChannel.create = (ctx) => {
-    assertIsObject(ctx, "Invalid args");
-    return cppBindings.createEntity(alt.Enums.BaseObjectType.VOICE_CHANNEL, ctx);
-};
+alt.VoiceChannel.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.VOICE_CHANNEL);

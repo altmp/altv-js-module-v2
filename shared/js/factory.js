@@ -13,41 +13,20 @@ registerFactory("VirtualEntity", alt.VirtualEntity, alt.Enums.BaseObjectType.VIR
 registerFactory("VirtualEntityGroup", alt.VirtualEntityGroup, alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP);
 
 // Factory ctors
-alt.PointBlip.create = (ctx) => {
-    assertIsObject(ctx, "Invalid args");
-    ctx.blipType = alt.Enums.BlipType.DESTINATION;
-    return cppBindings.createEntity(alt.Enums.BaseObjectType.BLIP, ctx);
-};
+alt.PointBlip.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.BLIP, (ctx) => (ctx.blipType = alt.Enums.BlipType.DESTINATION));
 
-alt.AreaBlip.create = (ctx) => {
-    assertIsObject(ctx, "Invalid args");
-    ctx.blipType = alt.Enums.BlipType.AREA;
-    return cppBindings.createEntity(alt.Enums.BaseObjectType.BLIP, ctx);
-};
+alt.AreaBlip.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.BLIP, (ctx) => (ctx.blipType = alt.Enums.BlipType.AREA));
 
-alt.RadiusBlip.create = (ctx) => {
-    assertIsObject(ctx, "Invalid args");
-    ctx.blipType = alt.Enums.BlipType.RADIUS;
-    return cppBindings.createEntity(alt.Enums.BaseObjectType.BLIP, ctx);
-};
+alt.RadiusBlip.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.BLIP, (ctx) => (ctx.blipType = alt.Enums.BlipType.RADIUS));
 
-alt.VirtualEntity.create = (ctx) => {
-    assertIsObject(ctx, "Invalid args");
-    return cppBindings.createEntity(alt.Enums.BaseObjectType.VIRTUAL_ENTITY, ctx);
-};
+alt.VirtualEntity.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.VIRTUAL_ENTITY);
 
-alt.VirtualEntityGroup.create = (ctx) => {
-    assertIsObject(ctx, "Invalid args");
-    return cppBindings.createEntity(alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP, ctx);
-};
+alt.VirtualEntityGroup.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP);
 
 // Helpers
 function setEntityFactory(altClass, type) {
     return (factory) => {
-        assert(
-            typeof factory === "function" && altClass.isPrototypeOf(factory),
-            `Factory has to inherit from alt.${altClass.name}`
-        );
+        assert(typeof factory === "function" && altClass.isPrototypeOf(factory), `Factory has to inherit from alt.${altClass.name}`);
         assert(factory.length === 0, `Factory constructor has to have no arguments`);
 
         cppBindings.setEntityFactory(type, factory);
@@ -63,4 +42,12 @@ function getEntityFactory(type) {
 export function registerFactory(name, altClass, type) {
     alt.Factory[`set${name}Factory`] = setEntityFactory(altClass, type);
     alt.Factory[`get${name}Factory`] = getEntityFactory(type);
+}
+
+export function getFactoryCreateFunction(type, ctxCb) {
+    return (ctx) => {
+        assertIsObject(ctx, "Invalid args");
+        if (ctxCb) ctxCb(ctx);
+        return cppBindings.createEntity(type, ctx);
+    };
 }
