@@ -1,5 +1,3 @@
-/** @type {typeof import("../../shared/js/utils.js")} */
-const { assert, assertIsObject } = requireBinding("shared/utils.js");
 /** @type {typeof import("../../shared/js/factory.js")} */
 const { registerFactory, getFactoryCreateFunction } = requireBinding("shared/factory.js");
 
