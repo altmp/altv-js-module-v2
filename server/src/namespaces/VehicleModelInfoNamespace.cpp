@@ -71,6 +71,7 @@ static void Get(js::FunctionContext& ctx)
         bones.Push(boneObj);
     }
     modelObj.Set("bones", bones);
+    modelObj.Set("canAttachCars", info.canAttachCars);
     modelObj.SetMethod("doesExtraExist", DoesExtraExist);
     modelObj.SetMethod("isExtraDefault", IsExtraDefault);
 
