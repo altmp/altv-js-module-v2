@@ -430,6 +430,18 @@ static void PlayAnimation(js::FunctionContext& ctx)
     player->PlayAnimation(animDict, animName, blendInSpeed, blendOutSpeed, duration, flag, playbackRate, lockX, lockY, lockZ);
 }
 
+static void HasWeapon(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t weapon;
+    if(!ctx.GetArgAsHash(0, weapon)) return;
+
+    ctx.Return(player->HasWeapon(weapon));
+}
+
 static void LocalMetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
@@ -541,6 +553,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method<&alt::IPlayer::GetHeadBlendPaletteColor>("getHeadBlendPaletteColor");
     tpl.Method("playAnimation", &PlayAnimation);
     tpl.Method<&alt::IPlayer::ClearTasks>("clearTasks");
+    tpl.Method("hasWeapon", HasWeapon);
 
     tpl.DynamicProperty("localMeta", LocalMetaGetter, LocalMetaSetter, LocalMetaDeleter, LocalMetaEnumerator);
 
