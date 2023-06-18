@@ -442,6 +442,60 @@ static void HasWeapon(js::FunctionContext& ctx)
     ctx.Return(player->HasWeapon(weapon));
 }
 
+static void GetAmmo(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    ctx.Return(player->GetAmmo(ammoHash));
+}
+
+static void SetAmmo(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    uint16_t ammoCount;
+    if(!ctx.GetArg(1, ammoCount)) return;
+
+    player->SetAmmo(ammoHash, ammoCount);
+}
+
+static void GetWeaponAmmo(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t weaponHash;
+    if(!ctx.GetArgAsHash(0, weaponHash)) return;
+
+    ctx.Return(player->GetWeaponAmmo(weaponHash));
+}
+
+static void SetWeaponAmmo(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t weaponHash;
+    if(!ctx.GetArgAsHash(0, weaponHash)) return;
+
+    uint16_t ammoCount;
+    if(!ctx.GetArg(1, ammoCount)) return;
+
+    player->SetWeaponAmmo(weaponHash, ammoCount);
+}
+
 static void LocalMetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
@@ -554,6 +608,10 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method("playAnimation", &PlayAnimation);
     tpl.Method<&alt::IPlayer::ClearTasks>("clearTasks");
     tpl.Method("hasWeapon", HasWeapon);
+    tpl.Method("getAmmo", GetAmmo);
+    tpl.Method("setAmmo", SetAmmo);
+    tpl.Method("getWeaponAmmo", GetWeaponAmmo);
+    tpl.Method("setWeaponAmmo", SetWeaponAmmo);
 
     tpl.DynamicProperty("localMeta", LocalMetaGetter, LocalMetaSetter, LocalMetaDeleter, LocalMetaEnumerator);
 
