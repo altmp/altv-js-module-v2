@@ -132,6 +132,7 @@ extern js::Class entityClass("Entity", &sharedEntityClass, nullptr, [](js::Class
     tpl.Property<&alt::IEntity::GetStreamed, &alt::IEntity::SetStreamed>("streamed");
     tpl.Property<&alt::IEntity::IsFrozen, &alt::IEntity::SetFrozen>("frozen");
     tpl.Property<&alt::IEntity::HasCollision, &alt::IEntity::SetCollision>("collision");
+    tpl.Property<&alt::IEntity::GetTimestamp>("timestamp");
 
     tpl.DynamicProperty("syncedMeta", nullptr, SyncedMetaSetter, SyncedMetaDeleter, nullptr);
     tpl.DynamicProperty("streamSyncedMeta", nullptr, StreamSyncedMetaSetter, StreamSyncedMetaDeleter, nullptr);
