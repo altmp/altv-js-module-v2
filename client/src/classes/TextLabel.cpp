@@ -1,16 +1,5 @@
 #include "Class.h"
 
-static void GetByID(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(1)) return;
-
-    uint32_t id;
-    if(!ctx.GetArg(0, id)) return;
-
-    alt::IBaseObject* entity = alt::ICore::Instance().GetBaseObjectByID(alt::IBaseObject::Type::TEXT_LABEL, id);
-    ctx.Return(entity);
-}
-
 // clang-format off
 extern js::Class worldObjectClass;
 extern js::Class textLabelClass("TextLabel", &worldObjectClass, nullptr, [](js::ClassTemplate& tpl)
@@ -29,5 +18,5 @@ extern js::Class textLabelClass("TextLabel", &worldObjectClass, nullptr, [](js::
 
     tpl.Property<&alt::ITextLabel::GetStreamingDistance>("streamingDistance");
 
-    tpl.StaticFunction("getByID", GetByID);
+    tpl.GetByID<alt::IBaseObject::Type::TEXT_LABEL>();
 });
