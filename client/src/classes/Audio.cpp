@@ -72,6 +72,8 @@ static void RemoveOutput(js::FunctionContext& ctx)
 // clang-format off
 extern js::Class audioClass("Audio", [](js::ClassTemplate& tpl)
 {
+    tpl.BindToType(alt::IBaseObject::Type::AUDIO);
+
     tpl.Property<&alt::IAudio::GetSource, &alt::IAudio::SetSource>("source");
     tpl.Property<&alt::IAudio::IsLoop, &alt::IAudio::SetLoop>("loop");
     tpl.Property<&alt::IAudio::GetVolume, &alt::IAudio::SetVolume>("volume");

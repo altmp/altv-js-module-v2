@@ -3,6 +3,8 @@
 // clang-format off
 extern js::Class audioFilterClass("AudioFilter", [](js::ClassTemplate& tpl)
 {
+    tpl.BindToType(alt::IBaseObject::Type::AUDIO_FILTER);
+
     tpl.LazyProperty<&alt::IAudioFilter::GetHash>("hash");
 
     tpl.Method<&alt::IAudioFilter::AddRotateEffect>("addRotateEffect");
