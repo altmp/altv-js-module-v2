@@ -169,6 +169,18 @@ namespace js
         void DynamicPropertyDeleterHandler(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Boolean>& info);
         void DynamicPropertyEnumeratorHandler(const v8::PropertyCallbackInfo<v8::Array>& info);
 
+        template<alt::IBaseObject::Type Type>
+        void GetByIDHandler(FunctionContext& ctx)
+        {
+            if(!ctx.CheckArgCount(1)) return;
+
+            uint32_t id;
+            if(!ctx.GetArg(0, id)) return;
+
+            alt::IBaseObject* entity = alt::ICore::Instance().GetBaseObjectByID(Type, id);
+            ctx.Return(entity);
+        }
+
     }  // namespace Wrapper
 
     static v8::Local<v8::FunctionTemplate> WrapFunction(FunctionCallback cb)
@@ -462,6 +474,12 @@ namespace js
         {
             staticMethods[name] = callback;
             Template::StaticFunction(name, callback);
+        }
+
+        template<alt::IBaseObject::Type Type>
+        void GetByID()
+        {
+            StaticFunction("getByID", Wrapper::GetByIDHandler<Type>);
         }
 
         // Allows instances of this class to be called as a function
