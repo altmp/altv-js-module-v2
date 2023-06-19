@@ -20,4 +20,6 @@ extern js::Class voiceChannelClass("VoiceChannel", &baseObjectClass, nullptr, []
     tpl.Method<&alt::IVoiceChannel::IsPlayerMuted>("isPlayerMuted");
     tpl.Method<&alt::IVoiceChannel::MutePlayer>("mutePlayer");
     tpl.Method<&alt::IVoiceChannel::UnmutePlayer>("unmutePlayer");
+
+    tpl.GetByID<alt::IBaseObject::Type::VOICE_CHANNEL>();
 });

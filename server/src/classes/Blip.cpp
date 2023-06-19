@@ -7,4 +7,6 @@ extern js::Class sharedBlipClass;
 extern js::Class blipClass("Blip", &sharedBlipClass, nullptr, [](js::ClassTemplate& tpl)
 {
     tpl.BindToType(alt::IBaseObject::Type::BLIP);
+
+    tpl.GetByID<alt::IBaseObject::Type::BLIP>();
 });

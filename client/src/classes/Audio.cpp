@@ -90,4 +90,6 @@ extern js::Class audioClass("Audio", [](js::ClassTemplate& tpl)
     tpl.Method<&alt::IAudio::Pause>("pause");
     tpl.Method<&alt::IAudio::Reset>("reset");
     tpl.Method<&alt::IAudio::Seek>("seek");
+
+    tpl.GetByID<alt::IBaseObject::Type::AUDIO>();
 });

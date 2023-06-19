@@ -2,17 +2,6 @@
 #include "interfaces/IResource.h"
 #include "cpp-sdk/ICore.h"
 
-static void GetByID(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(1)) return;
-
-    uint32_t id;
-    if(!ctx.GetArg(0, id)) return;
-
-    alt::IBaseObject* entity = alt::ICore::Instance().GetBaseObjectByID(alt::IBaseObject::Type::PLAYER, id);
-    ctx.Return(entity);
-}
-
 static void ModelGetter(js::PropertyContext& ctx)
 {
     if(!ctx.CheckThis()) return;
@@ -625,5 +614,5 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
 
     tpl.DynamicProperty("localMeta", LocalMetaGetter, LocalMetaSetter, LocalMetaDeleter, LocalMetaEnumerator);
 
-    tpl.StaticFunction("getByID", &GetByID);
+    tpl.GetByID<alt::IBaseObject::Type::PLAYER>();
 });

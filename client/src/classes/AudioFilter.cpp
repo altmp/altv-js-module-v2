@@ -21,4 +21,6 @@ extern js::Class audioFilterClass("AudioFilter", [](js::ClassTemplate& tpl)
     tpl.Method<&alt::IAudioFilter::AddPitchshiftEffect>("addPitchshiftEffect");
     tpl.Method<&alt::IAudioFilter::AddFreeverbEffect>("addFreeverbEffect");
     tpl.Method<&alt::IAudioFilter::RemoveEffect>("removeEffect");
+
+    tpl.GetByID<alt::IBaseObject::Type::AUDIO_FILTER>();
 });

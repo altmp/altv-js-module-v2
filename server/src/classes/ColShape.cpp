@@ -13,9 +13,13 @@ extern js::Class colShapeClass("ColShape", &worldObjectClass, nullptr, [](js::Cl
     tpl.Method<&alt::IColShape::IsEntityIn>("isEntityIn");
     tpl.Method<&alt::IColShape::IsEntityIdIn>("isEntityIdIn");
     tpl.Method<&alt::IColShape::IsPointIn>("isPointIn");
+
+    tpl.GetByID<alt::IBaseObject::Type::COLSHAPE>();
 });
 
 extern js::Class checkpointClass("Checkpoint", &colShapeClass, nullptr, [](js::ClassTemplate& tpl)
 {
     tpl.BindToType(alt::IBaseObject::Type::CHECKPOINT);
+
+    tpl.GetByID<alt::IBaseObject::Type::CHECKPOINT>();
 });

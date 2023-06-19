@@ -56,17 +56,6 @@ static void SetMod(js::FunctionContext& ctx)
     ctx.Check(vehicle->SetMod(category, id), "Failed to set mod, invalid mod or modkit not set");
 }
 
-static void GetByID(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(1)) return;
-
-    uint32_t id;
-    if(!ctx.GetArg(0, id)) return;
-
-    alt::IBaseObject* entity = alt::ICore::Instance().GetBaseObjectByID(alt::IBaseObject::Type::VEHICLE, id);
-    ctx.Return(entity);
-}
-
 // clang-format off
 extern js::Class sharedVehicleClass;
 extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::ClassTemplate& tpl)
@@ -151,5 +140,5 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Method<&alt::IVehicle::GetWeaponCapacity>("getWeaponCapacity");
     tpl.Method<&alt::IVehicle::SetWeaponCapacity>("setWeaponCapacity");
 
-    tpl.StaticFunction("getByID", &GetByID);
+    tpl.GetByID<alt::IBaseObject::Type::VEHICLE>();
 });
