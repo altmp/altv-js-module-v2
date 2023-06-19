@@ -7,7 +7,6 @@ extern js::Class voiceChannelClass("VoiceChannel", &baseObjectClass, nullptr, []
 {
     tpl.BindToType(alt::IBaseObject::Type::VOICE_CHANNEL);
 
-    tpl.LazyProperty<&alt::IVoiceChannel::GetID>("id");
     tpl.LazyProperty<&alt::IVoiceChannel::IsSpatial>("isSpatial");
     tpl.LazyProperty<&alt::IVoiceChannel::GetMaxDistance>("maxDistance");
 

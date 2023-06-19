@@ -68,6 +68,7 @@ static void GetByID(js::FunctionContext& ctx)
 // clang-format off
 extern js::Class baseObjectClass("BaseObject", nullptr, [](js::ClassTemplate& tpl)
 {
+    tpl.LazyProperty<&alt::IBaseObject::GetID>("id");
     tpl.LazyProperty<&alt::IBaseObject::GetType>("type");
     tpl.Property("valid", ValidGetter);
 
