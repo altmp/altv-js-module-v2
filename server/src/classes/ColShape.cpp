@@ -16,10 +16,3 @@ extern js::Class colShapeClass("ColShape", &worldObjectClass, nullptr, [](js::Cl
 
     tpl.GetByID<alt::IBaseObject::Type::COLSHAPE>();
 });
-
-extern js::Class checkpointClass("Checkpoint", &colShapeClass, nullptr, [](js::ClassTemplate& tpl)
-{
-    tpl.BindToType(alt::IBaseObject::Type::CHECKPOINT);
-
-    tpl.GetByID<alt::IBaseObject::Type::CHECKPOINT>();
-});
