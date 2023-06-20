@@ -108,6 +108,13 @@ namespace js
         }
         return jsObj;
     }
+    template<typename T>
+    inline v8::Local<v8::Value> JSValue(const std::optional<T>& opt)
+    {
+        v8::Isolate* isolate = v8::Isolate::GetCurrent();
+        if(!opt.has_value()) return v8::Null(isolate);
+        return JSValue(opt.value());
+    }
 
     template<typename T, typename = void>
     constexpr bool IsJSValueConvertible = false;
