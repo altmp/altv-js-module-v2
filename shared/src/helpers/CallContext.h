@@ -276,7 +276,21 @@ namespace js
 
         bool CheckValueType(Type type)
         {
-            return this->Check(GetValueType() == type, "Invalid value, expected " + TypeToString(type) + " but got " + TypeToString(GetValueType()));
+            return this->Check(GetValueType() == type, "Invalid value type, expected " + TypeToString(type) + " but got " + TypeToString(GetValueType()));
+        }
+
+        bool CheckValueType(std::initializer_list<Type> types)
+        {
+            bool result = false;
+            for(Type type : types)
+            {
+                if(GetValueType() == type)
+                {
+                    result = true;
+                    break;
+                }
+            }
+            return this->Check(result, "Invalid value type, expected one of " + TypeToString(types) + " but got " + TypeToString(GetValueType()));
         }
 
         template<class T>
