@@ -263,16 +263,16 @@ namespace js
         v8::Local<v8::Value> value;
         Type valueType = Type::INVALID;
 
+    public:
+        PropertyContextBase(const Info& _info) : CallContext<Info>(_info) {}
+        PropertyContextBase(const Info& _info, v8::Local<v8::Value> _value) : CallContext<Info>(_info), value(_value) {}
+
         Type GetValueType()
         {
             if(valueType != Type::INVALID) return valueType;
             valueType = GetType(value, this->GetResource());
             return valueType;
         }
-
-    public:
-        PropertyContextBase(const Info& _info) : CallContext<Info>(_info) {}
-        PropertyContextBase(const Info& _info, v8::Local<v8::Value> _value) : CallContext<Info>(_info), value(_value) {}
 
         bool CheckValueType(Type type)
         {
