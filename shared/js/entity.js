@@ -23,8 +23,10 @@ function addAllGetter(class_, types) {
     Object.defineProperties(class_, {
         all: {
             get: () => {
-                if (class_.__allDirty) class_.__allCached = sets.flatMap((set) => Array.from(set));
-                class_.__allDirty = false;
+                if (class_.__allDirty) {
+                    class_.__allCached = sets.flatMap((set) => Array.from(set));
+                    class_.__allDirty = false;
+                }
                 return class_.__allCached;
             }
         },
@@ -44,17 +46,11 @@ function addAllGetter(class_, types) {
 }
 
 alt.Events.onBaseObjectCreate(({ object }) => {
-    if (object instanceof alt.Entity) {
-        entityAllSet.add(object);
-        addEntityToAll(object);
-    }
+    if (object instanceof alt.Entity) addEntityToAll(object);
 });
 
 alt.Events.onBaseObjectRemove(({ object }) => {
-    if (object instanceof alt.Entity) {
-        entityAllSet.delete(object);
-        removeEntityFromAll(object);
-    }
+    if (object instanceof alt.Entity) removeEntityFromAll(object);
 });
 
 // Needed because base object events are called on next tick, and entities created from scripts
@@ -62,13 +58,13 @@ alt.Events.onBaseObjectRemove(({ object }) => {
 function addEntityToAll(entity) {
     entityAllSet.add(entity);
     const all = entityAllMap.get(entity.type);
-    if (all) all.add(entity);
+    all?.add(entity);
     entity.constructor.__allDirty = true;
 }
 function removeEntityFromAll(entity) {
     entityAllSet.delete(entity);
     const all = entityAllMap.get(entity.type);
-    if (all) all.delete(entity);
+    all?.delete(entity);
     entity.constructor.__allDirty = true;
 }
 cppBindings.registerExport("entity:addEntityToAll", addEntityToAll);
