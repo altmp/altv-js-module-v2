@@ -1,3 +1,5 @@
+requireBinding("shared/entity.js");
+
 // Entity streamed-in stores
 /**
  * @type {Map<number, Set<unknown>>}
@@ -76,4 +78,7 @@ addStreamedInGetter(alt.Vehicle, [alt.Enums.BaseObjectType.VEHICLE, alt.Enums.Ba
 addStreamedInGetter(alt.Ped, alt.Enums.BaseObjectType.PED);
 addStreamedInGetter(alt.NetworkObject, alt.Enums.BaseObjectType.NETWORK_OBJECT);
 
-// todo: add already streamed in entities?
+// Add all streamed-in entities to the streamedIn sets
+for (const entity of alt.Entity.all) {
+    if (entity.scriptID !== 0) addEntityToStreamedIn(entity);
+}
