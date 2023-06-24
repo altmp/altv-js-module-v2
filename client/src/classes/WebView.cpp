@@ -42,6 +42,11 @@ static void Emit(js::FunctionContext& ctx)
     view->Trigger(eventName, args);
 }
 
+static void GpuAccelerationActiveGetter(js::PropertyContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().IsWebViewGpuAccelerationActive());
+}
+
 // clang-format off
 extern js::Class baseObjectClass;
 extern js::Class webViewClass("WebView", &baseObjectClass, [](js::ClassTemplate& tpl) {
@@ -60,4 +65,6 @@ extern js::Class webViewClass("WebView", &baseObjectClass, [](js::ClassTemplate&
     tpl.Method<&alt::IWebView::SetExtraHeader>("setExtraHeader");
     tpl.Method<&alt::IWebView::SetZoomLevel>("setZoomLevel");
     tpl.Method<&alt::IWebView::Reload>("reload");
+
+    tpl.StaticProperty("isGpuAccelerationActive", GpuAccelerationActiveGetter);
 });
