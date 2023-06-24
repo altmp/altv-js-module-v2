@@ -57,6 +57,11 @@ namespace js
         {
             GetAll().push_back(this);
         }
+        Class(const std::string& _name, Class* _parent, ClassInitializationCallback _cb, bool hasExtraExternalField = false)
+            : name(_name), parentClass(_parent), initCb(_cb), internalFieldCount(hasExtraExternalField ? 2 : 0)
+        {
+            GetAll().push_back(this);
+        }
 
         uint16_t GetClassId() const
         {
