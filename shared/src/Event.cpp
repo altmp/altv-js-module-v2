@@ -60,7 +60,7 @@ static void TypeGetter(js::LazyPropertyContext& ctx)
 }
 
 // clang-format off
-extern js::Class eventContextClass("EventContext", nullptr, [](js::ClassTemplate& tpl) {
+extern js::Class eventContextClass("EventContext", [](js::ClassTemplate& tpl) {
     tpl.Method("cancel", CancelEventCallback);
     tpl.Property("isCancelled", IsCancelledGetter);
     tpl.LazyProperty("type", TypeGetter);

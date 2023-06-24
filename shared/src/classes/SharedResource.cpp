@@ -76,7 +76,7 @@ static void IsStartedGetter(js::PropertyContext& ctx)
 }
 
 // clang-format off
-extern js::Class sharedResourceClass("SharedResource", nullptr, [](js::ClassTemplate& tpl)
+extern js::Class sharedResourceClass("SharedResource", [](js::ClassTemplate& tpl)
 {
     tpl.Property("type", TypeGetter);
     tpl.Property("path", PathGetter);
