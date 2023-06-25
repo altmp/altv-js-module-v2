@@ -11,7 +11,7 @@ static std::string PrettifyFilePath(js::IResource* resource, std::string path)
     std::filesystem::path fsPath(path);
     if(fsPath.is_absolute())
     {
-        std::string resourcePath = resource->GetResource()->GetPath();
+        std::string resourcePath = resource->GetPath();
         std::replace(path.begin(), path.end(), '\\', '/');
         std::replace(resourcePath.begin(), resourcePath.end(), '\\', '/');
         if(path.starts_with(resourcePath)) return path.substr(resourcePath.length() + 1);
@@ -107,7 +107,7 @@ void js::TryCatch::PrintError()
     std::string stack = stackTrace.IsEmpty() ? "" : *v8::String::Utf8Value(isolate, stackTrace.ToLocalChecked());
     std::string exceptionStr = *v8::String::Utf8Value(isolate, exception);
 
-    Logger::Error("[JS] Exception caught in resource '" + resource->GetResource()->GetName() + "' in file '" + file + "' at line " + lineStr);
+    Logger::Error("[JS] Exception caught in resource '" + resource->GetName() + "' in file '" + file + "' at line " + lineStr);
     if(!exceptionStr.empty() && stack.empty()) Logger::Error("[JS]", exceptionStr);
     if(!stack.empty()) Logger::Error("[JS]", stack);
 

@@ -102,7 +102,7 @@ bool CNodeResource::Stop()
 
 void CNodeResource::OnEvent(const alt::CEvent* ev)
 {
-    IResource::OnEvent(ev);
+    IAltResource::OnEvent(ev);
 }
 
 void CNodeResource::OnTick()
@@ -114,11 +114,11 @@ void CNodeResource::OnTick()
     node::CallbackScope callbackScope(isolate, asyncResource.Get(isolate), asyncContext);
 
     uv_run(uvLoop, UV_RUN_NOWAIT);
-    IResource::OnTick();
+    IAltResource::OnTick();
 }
 
 void CNodeResource::RunEventLoop()
 {
     CNodeRuntime::Instance().OnTick();
-    IResource::RunEventLoop();
+    IAltResource::RunEventLoop();
 }

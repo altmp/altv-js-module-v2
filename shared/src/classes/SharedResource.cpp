@@ -1,5 +1,5 @@
 #include "Class.h"
-#include "interfaces/IResource.h"
+#include "interfaces/IAltResource.h"
 
 static void TypeGetter(js::PropertyContext& ctx)
 {
@@ -75,6 +75,35 @@ static void IsStartedGetter(js::PropertyContext& ctx)
     ctx.Return(resource->IsStarted());
 }
 
+static void Get(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+    js::IAltResource* resource = ctx.GetResource<js::IAltResource>();
+
+    std::string resourceName;
+    if(!ctx.GetArg(0, resourceName)) return;
+
+    alt::IResource* res = alt::ICore::Instance().GetResource(resourceName);
+    if(!res)
+    {
+        ctx.Return(nullptr);
+        return;
+    }
+    v8::Local<v8::Object> resourceObj = resource->CreateResourceObject(res);
+    ctx.Return(resourceObj);
+}
+
+static void Exists(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    std::string resourceName;
+    if(!ctx.GetArg(0, resourceName)) return;
+
+    alt::IResource* resource = alt::ICore::Instance().GetResource(resourceName);
+    ctx.Return(resource != nullptr);
+}
+
 // clang-format off
 extern js::Class sharedResourceClass("SharedResource", [](js::ClassTemplate& tpl)
 {
@@ -86,4 +115,7 @@ extern js::Class sharedResourceClass("SharedResource", [](js::ClassTemplate& tpl
     tpl.Property("dependencies", DependenciesGetter);
     tpl.Property("dependants", DependantsGetter);
     tpl.Property("isStarted", IsStartedGetter);
+
+    tpl.StaticFunction("get", Get);
+    tpl.StaticFunction("exists", Exists);
 }, true);

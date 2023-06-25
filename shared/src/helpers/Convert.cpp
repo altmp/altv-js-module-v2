@@ -1,5 +1,5 @@
 #include "Convert.h"
-#include "interfaces/IResource.h"
+#include "interfaces/IAltResource.h"
 #include "JS.h"
 
 v8::Local<v8::Value> js::JSValue(alt::IBaseObject* object)
@@ -115,7 +115,7 @@ alt::MValue js::JSToMValue(v8::Local<v8::Value> val, bool allowFunction)
                 return core.CreateMValueNone();
             }
             v8::Local<v8::Function> jsFunc = val.As<v8::Function>();
-            IResource::Function* func = new IResource::Function(ctx, jsFunc);
+            IAltResource::Function* func = new IAltResource::Function(ctx, jsFunc);
             return core.CreateMValueFunction(func);
         }
         else if(val->IsArrayBuffer())
@@ -253,7 +253,7 @@ v8::Local<v8::Value> js::MValueToJS(alt::MValueConst val)
         {
             alt::MValueFunctionConst fn = std::dynamic_pointer_cast<const alt::IMValueFunction>(val);
             v8::Local<v8::External> extFn = v8::External::New(isolate, new alt::MValueFunctionConst(fn));
-            return v8::Function::New(ctx, IResource::Function::ExternalFunctionCallback, extFn).ToLocalChecked();
+            return v8::Function::New(ctx, IAltResource::Function::ExternalFunctionCallback, extFn).ToLocalChecked();
         }
         case alt::IMValue::Type::VECTOR3:
         {

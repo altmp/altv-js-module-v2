@@ -1,11 +1,11 @@
 #pragma once
 
-#include "interfaces/IResource.h"
+#include "interfaces/IAltResource.h"
 #include "node.h"
 #include "uv.h"
 #include "helpers/IMetricHandler.h"
 
-class CNodeResource : public js::IResource, public js::IMetricHandler
+class CNodeResource : public js::IAltResource, public js::IMetricHandler
 {
     node::IsolateData* nodeData = nullptr;
     node::Environment* env = nullptr;
@@ -18,7 +18,7 @@ class CNodeResource : public js::IResource, public js::IMetricHandler
     virtual std::unordered_map<std::string, std::string> GetMetricAttributes() override;
 
 public:
-    CNodeResource(alt::IResource* resource, v8::Isolate* isolate) : IResource(resource, isolate) {}
+    CNodeResource(alt::IResource* resource, v8::Isolate* isolate) : IAltResource(resource, isolate) {}
 
     void EnvStarted(v8::Local<v8::Value> exports);
 

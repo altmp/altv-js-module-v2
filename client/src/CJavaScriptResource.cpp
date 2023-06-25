@@ -116,11 +116,11 @@ void CJavaScriptResource::OnTick()
 
     microtaskQueue->PerformCheckpoint(isolate);
 
-    IResource::OnTick();
+    IAltResource::OnTick();
 }
 
 void CJavaScriptResource::RunEventLoop()
 {
     CJavaScriptRuntime::Instance().OnTick();
-    IResource::RunEventLoop();
+    IAltResource::RunEventLoop();
 }

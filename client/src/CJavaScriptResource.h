@@ -1,13 +1,13 @@
 #pragma once
 
-#include "interfaces/IResource.h"
+#include "interfaces/IAltResource.h"
 #include "helpers/JS.h"
 #include "helpers/IModuleHandler.h"
 #include "helpers/IExceptionHandler.h"
 
 #include "v8.h"
 
-class CJavaScriptResource : public js::IResource, public IModuleHandler, public IExceptionHandler
+class CJavaScriptResource : public js::IAltResource, public IModuleHandler, public IExceptionHandler
 {
     std::unique_ptr<v8::MicrotaskQueue> microtaskQueue;
     bool started = false;
@@ -18,7 +18,7 @@ class CJavaScriptResource : public js::IResource, public IModuleHandler, public 
     v8::Local<v8::Module> CompileAndRun(const std::string& path, const std::string& source);
 
 public:
-    CJavaScriptResource(alt::IResource* resource, v8::Isolate* isolate) : IResource(resource, isolate) {}
+    CJavaScriptResource(alt::IResource* resource, v8::Isolate* isolate) : IAltResource(resource, isolate) {}
 
     bool Start() override;
     bool Stop() override;

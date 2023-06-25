@@ -23,7 +23,7 @@ void IExceptionHandler::OnPromiseHandlerAdded(v8::PromiseRejectMessage& message)
 void IExceptionHandler::OnPromiseRejectAfterResolve(v8::PromiseRejectMessage& message)
 {
     js::IResource* resource = js::IResource::GetCurrent();
-    const std::string& resourceName = resource->GetResource()->GetName();
+    const std::string& resourceName = resource->GetName();
     v8::Isolate* isolate = resource->GetIsolate();
     std::string rejectionMsg = *v8::String::Utf8Value(isolate, message.GetValue()->ToString(resource->GetContext()).ToLocalChecked());
 
@@ -34,7 +34,7 @@ void IExceptionHandler::OnPromiseRejectAfterResolve(v8::PromiseRejectMessage& me
 void IExceptionHandler::OnPromiseResolveAfterResolve(v8::PromiseRejectMessage& message)
 {
     js::IResource* resource = js::IResource::GetCurrent();
-    const std::string& resourceName = resource->GetResource()->GetName();
+    const std::string& resourceName = resource->GetName();
     v8::Isolate* isolate = resource->GetIsolate();
     std::string rejectionMsg = *v8::String::Utf8Value(isolate, message.GetValue()->ToString(resource->GetContext()).ToLocalChecked());
 
@@ -45,7 +45,7 @@ void IExceptionHandler::OnPromiseResolveAfterResolve(v8::PromiseRejectMessage& m
 void IExceptionHandler::ProcessExceptions()
 {
     js::IResource* resource = js::IResource::GetCurrent();
-    const std::string& resourceName = resource->GetResource()->GetName();
+    const std::string& resourceName = resource->GetName();
     v8::Isolate* isolate = resource->GetIsolate();
 
     for(PromiseRejection& rejection : promiseRejections)

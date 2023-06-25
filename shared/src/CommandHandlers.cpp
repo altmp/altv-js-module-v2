@@ -1,5 +1,5 @@
 #include "CommandHandlers.h"
-#include "interfaces/IResource.h"
+#include "interfaces/IAltResource.h"
 #include "Class.h"
 #include "Logger.h"
 #include "cpp-sdk/ICore.h"
@@ -40,7 +40,7 @@ void js::DebugHandlesCommand(const std::vector<std::string>&)
     for(alt::IResource* altResource : resources)
     {
         if(altResource->GetType() != "jsv2") continue;
-        js::IResource* resource = static_cast<js::IResource*>(altResource->GetImpl());
+        js::IAltResource* resource = static_cast<js::IAltResource*>(altResource->GetImpl());
 
         v8::Isolate* isolate = resource->GetIsolate();
         v8::Locker locker(isolate);

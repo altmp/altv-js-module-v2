@@ -15,64 +15,47 @@
 
 namespace js
 {
-    class IResource : public alt::IResource::Impl, public IScriptObjectHandler
+    class IResource : public IScriptObjectHandler
     {
-    public:
-        class Function : public alt::IMValueFunction::Impl
-        {
-            IResource* resource;
-            Persistent<v8::Function> function;
-
-        public:
-            Function(v8::Local<v8::Context> context, v8::Local<v8::Function> _function) : resource(GetFromContext(context)), function(resource->GetIsolate(), _function) {}
-
-            alt::MValue Call(alt::MValueArgs args) const override;
-
-            static void ExternalFunctionCallback(const v8::FunctionCallbackInfo<v8::Value>& info);
-        };
-
     protected:
         static constexpr int ContextInternalFieldIdx = 1;
 
         static void RequireBindingNamespaceWrapper(FunctionContext& ctx);
 
-        alt::IResource* resource;
         v8::Isolate* isolate;
         Persistent<v8::Context> context;
 
         std::unordered_map<std::string, Persistent<v8::Value>> bindingExports;
-
-        std::unordered_map<alt::IResource*, Persistent<v8::Object>> resourceObjects;
 
         void Initialize()
         {
             context.Get(isolate)->SetAlignedPointerInEmbedderData(ContextInternalFieldIdx, this);
         }
 
-        void Reset()
+        virtual void Reset()
         {
             Binding::CleanupForResource(this);
             Module::CleanupForResource(this);
             IScriptObjectHandler::Reset();
 
-            resource = nullptr;
             isolate = nullptr;
 
             context.Reset();
             bindingExports.clear();
-            resourceObjects.clear();
         }
 
         void InitializeBinding(Binding* binding);
 
     public:
-        IResource(alt::IResource* _resource, v8::Isolate* _isolate) : resource(_resource), isolate(_isolate) {}
+        IResource(v8::Isolate* _isolate) : isolate(_isolate) {}
         virtual ~IResource() = default;
 
-        alt::IResource* GetResource() const
+        template<class T>
+        T* As()
         {
-            return resource;
+            return static_cast<T*>(this);
         }
+
         v8::Isolate* GetIsolate() const
         {
             return isolate;
@@ -82,42 +65,10 @@ namespace js
             return context.Get(isolate);
         }
 
-        void OnCreateBaseObject(alt::IBaseObject* object) override
-        {
-            // IScriptObjectHandler::GetOrCreateScriptObject(GetContext(), object);
-        }
-
-        void OnRemoveBaseObject(alt::IBaseObject* object) override
-        {
-            v8::Locker locker(isolate);
-            v8::Isolate::Scope isolateScope(isolate);
-            v8::HandleScope handleScope(isolate);
-            v8::Context::Scope contextScope(GetContext());
-
-            IScriptObjectHandler::DestroyScriptObject(object);
-        }
-
-        void OnEvent(const alt::CEvent* ev) override
-        {
-            v8::Locker locker(isolate);
-            v8::Isolate::Scope isolateScope(isolate);
-            v8::HandleScope handleScope(isolate);
-            v8::Context::Scope contextScope(GetContext());
-
-            if(ev->GetType() == alt::CEvent::Type::RESOURCE_STOP) DestroyResourceObject(static_cast<const alt::CResourceStopEvent*>(ev)->GetResource());
-
-            Event::SendEvent(ev, this);
-        }
-
-        void OnTick() override
-        {
-            js::Function onTick = GetBindingExport<v8::Function>("timers:tick");
-            if(onTick.IsValid()) onTick.Call();
-        }
-        virtual void RunEventLoop()
-        {
-            OnTick();
-        }
+        virtual void RunEventLoop() = 0;
+        virtual const std::string& GetName() const = 0;
+        virtual const std::string& GetPath() const = 0;
+        virtual alt::IResource* GetResource() const = 0;
 
         void InitializeBindings(Binding::Scope scope, Module& altModule);
         void SetBindingExport(const std::string& name, v8::Local<v8::Value> val)
@@ -135,14 +86,6 @@ namespace js
             if(!bindingExports.contains(name)) return v8::Local<T>();
             v8::Local<v8::Value> val = bindingExports.at(name).Get(isolate);
             return val.As<T>();
-        }
-
-        v8::Local<v8::Object> CreateResourceObject(alt::IResource* resource);
-        void DestroyResourceObject(alt::IResource* resource)
-        {
-            if(!resourceObjects.contains(resource)) return;
-            resourceObjects.at(resource).Get(isolate)->SetAlignedPointerInInternalField(1, nullptr);
-            resourceObjects.erase(resource);
         }
 
         v8::Local<v8::Object> CreateVector3(alt::Vector3f vec)
