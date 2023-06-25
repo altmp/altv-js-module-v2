@@ -9,14 +9,11 @@ static void Register(js::FunctionContext& ctx)
     if(!ctx.GetArg(0, path)) return;
 
     js::IResource* resource = ctx.GetResource();
-    std::string origin = js::PrettifyFilePath(resource);
+    js::SourceLocation origin = js::SourceLocation::GetCurrent(resource);
 
-    alt::IBaseObject* font = alt::ICore::Instance().RegisterFont(resource, path, origin);
+    alt::IBaseObject* font = alt::ICore::Instance().RegisterFont(resource, path, origin.file);
 
-    if (!font)
-    {
-        return;
-    }
+    if (!font) return;
 
     ctx.Return(font);
 }
