@@ -78,7 +78,7 @@ static void MetaEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
 
 // clang-format off
 extern js::Class baseObjectClass, worldObjectClass, entityClass, resourceClass;
-extern js::Namespace enumsNamespace, sharedEventsNamespace;
+extern js::Namespace enumsNamespace, sharedEventsNamespace, fileNamespace;
 static js::Module sharedModule("@altv/shared", "", { &baseObjectClass, &worldObjectClass, &entityClass, &resourceClass }, [](js::ModuleTemplate& module)
 {
     module.StaticProperty("isDebug", alt::ICore::Instance().IsDebug());
@@ -99,6 +99,7 @@ static js::Module sharedModule("@altv/shared", "", { &baseObjectClass, &worldObj
     module.Namespace("PointBlip");
     module.Namespace("AreaBlip");
     module.Namespace("RadiusBlip");
+    module.Namespace(fileNamespace);
 
     module.StaticBindingExport("hash", "utils:hash");
     module.StaticBindingExport("Vector3", "classes:vector3");
