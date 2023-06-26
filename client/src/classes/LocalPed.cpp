@@ -23,7 +23,7 @@ static void ModelSetter(js::PropertyContext& ctx)
 extern js::Class pedClass;
 extern js::Class localPedClass("LocalPed", &pedClass, nullptr, [](js::ClassTemplate& tpl)
 {
-    tpl.BindToType(alt::IBaseObject::Type::PED);
+    tpl.BindToType(alt::IBaseObject::Type::LOCAL_PED);
 
     tpl.Property("model", ModelGetter, ModelSetter);
     tpl.Property<&alt::ILocalPed::GetStreamingDistance>("streamingDistance");
@@ -31,5 +31,5 @@ extern js::Class localPedClass("LocalPed", &pedClass, nullptr, [](js::ClassTempl
     tpl.Property<&alt::ILocalPed::GetScriptID>("scriptID");
     tpl.Property<&alt::ILocalPed::IsStreamedIn>("isStreamedIn");
 
-    tpl.GetByID<alt::IBaseObject::Type::PED>();
+    tpl.GetByID<alt::IBaseObject::Type::LOCAL_PED>();
 });

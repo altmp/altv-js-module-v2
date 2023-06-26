@@ -9,4 +9,4 @@ alt.Audio.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.AUDIO);
 
 alt.AudioFilter.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.AUDIO_FILTER);
 
-alt.LocalPed.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.PED);
+alt.LocalPed.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.LOCAL_PED);
