@@ -8,3 +8,5 @@ registerFactory("Audio", alt.Audio, alt.Enums.BaseObjectType.AUDIO);
 alt.Audio.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.AUDIO);
 
 alt.AudioFilter.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.AUDIO_FILTER);
+
+alt.LocalPed.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.LOCAL_PED);
