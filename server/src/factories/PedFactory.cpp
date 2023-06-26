@@ -7,6 +7,6 @@ static js::FactoryHandler pedFactory(alt::IBaseObject::Type::PED, [](js::Object&
     else if(args.GetType("model") == js::Type::STRING) model = alt::ICore::Instance().Hash(args.Get<std::string>("model"));
     alt::Vector3f pos;
     if(!args.Get("pos", pos)) return nullptr;
-    float heading = args.Get<float>("rot");
+    float heading = args.Get<float>("heading");
     return alt::ICore::Instance().CreatePed(model, pos, { 0, 0, heading });
 });
