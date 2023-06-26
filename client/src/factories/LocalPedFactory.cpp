@@ -11,9 +11,9 @@ static js::FactoryHandler localPedFactory(alt::IBaseObject::Type::LOCAL_PED, [](
     if(!args.Get("dimension", dimension)) return nullptr;
 
     alt::Vector3f pos;
-    if(!args.Get<alt::Vector3f>("pos", pos)) return nullptr;
+    if(!args.Get("pos", pos)) return nullptr;
 
-    float heading = args.Get<float>("rot");
+    float heading = args.Get<float>("heading");
 
     bool useStreaming = args.Get<bool>("useStreaming", true);
 
