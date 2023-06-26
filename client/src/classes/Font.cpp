@@ -1,5 +1,6 @@
 #include "Class.h"
 #include "cpp-sdk/ICore.h"
+#include "interfaces/IResource.h"
 
 static void Register(js::FunctionContext& ctx)
 {
@@ -11,9 +12,9 @@ static void Register(js::FunctionContext& ctx)
     js::IResource* resource = ctx.GetResource();
     js::SourceLocation origin = js::SourceLocation::GetCurrent(resource);
 
-    alt::IBaseObject* font = alt::ICore::Instance().RegisterFont(resource, path, origin.file);
+    alt::IBaseObject* font = alt::ICore::Instance().RegisterFont(resource->GetResource(), path, origin.file);
 
-    if (!font) return;
+    if(!font) return;
 
     ctx.Return(font);
 }
