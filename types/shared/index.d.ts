@@ -581,9 +581,15 @@ declare module "@altv/shared" {
         get currentWeapon(): number;
         get isDead(): boolean;
         get isJumping(): boolean;
+        get isInRagdoll(): boolean;
         get isAiming(): boolean;
         get isShooting(): boolean;
         get isReloading(): boolean;
+        get isEnteringVehicle(): boolean;
+        get isLeavingVehicle(): boolean;
+        get isOnLadder(): boolean;
+        get isInMelee(): boolean;
+        get isInCover(): boolean;
         get armour(): number;
         get maxArmour(): number;
         get moveSpeed(): number;
