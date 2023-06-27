@@ -41,9 +41,15 @@ extern js::Class sharedPlayerClass("SharedPlayer", &entityClass, nullptr, [](js:
     tpl.Property<&alt::IPlayer::GetCurrentWeapon>("currentWeapon");
     tpl.Property<&alt::IPlayer::IsDead>("isDead");
     tpl.Property<&alt::IPlayer::IsJumping>("isJumping");
+    tpl.Property<&alt::IPlayer::IsInRagdoll>("isInRagdoll");
     tpl.Property<&alt::IPlayer::IsAiming>("isAiming");
     tpl.Property<&alt::IPlayer::IsShooting>("isShooting");
     tpl.Property<&alt::IPlayer::IsReloading>("isReloading");
+    tpl.Property<&alt::IPlayer::IsEnteringVehicle>("isEnteringVehicle");
+    tpl.Property<&alt::IPlayer::IsLeavingVehicle>("isLeavingVehicle");
+    tpl.Property<&alt::IPlayer::IsOnLadder>("isOnLadder");
+    tpl.Property<&alt::IPlayer::IsInMelee>("isInMelee");
+    tpl.Property<&alt::IPlayer::IsInCover>("isInCover");
     tpl.Property<&alt::IPlayer::GetArmour>("armour");
     tpl.Property<&alt::IPlayer::GetMaxArmour>("maxArmour");
     tpl.Property<&alt::IPlayer::GetMoveSpeed>("moveSpeed");
