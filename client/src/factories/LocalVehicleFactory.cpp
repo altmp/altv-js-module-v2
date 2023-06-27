@@ -18,7 +18,7 @@ static js::FactoryHandler localVehicleFactory(alt::IBaseObject::Type::LOCAL_VEHI
 
     bool useStreaming = args.Get<bool>("useStreaming", true);
 
-    uint32_t streamingDistance = args.Get<uint32_t>("streamingDistance", 0);
+    uint32_t streamingDistance = args.Get<uint32_t>("streamingDistance", 300);
 
     return alt::ICore::Instance().CreateLocalVehicle(model, dimension, pos, rot, useStreaming, streamingDistance, args.GetResource()->GetResource());
 });
