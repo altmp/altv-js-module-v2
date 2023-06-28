@@ -190,7 +190,7 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Property<&alt::IVehicle::GetLightsIndicator, &alt::IVehicle::SetLightsIndicator>("indicatorLights");
     tpl.Property<&alt::IVehicle::GetSeatCount>("seatCount");
     tpl.Property<&alt::IVehicle::GetOccupiedSeatsCount>("occupiedSeatsCount");
-    tpl.Property<&alt::IVehicle::IsTaxiLightOn>("TaxiLightOn");
+    tpl.Property<&alt::IVehicle::IsTaxiLightOn>("taxiLightOn");
     tpl.Property<&alt::IVehicle::GetEngineTemperature, &alt::IVehicle::SetEngineTemperature>("engineTemperature");
     tpl.Property<&alt::IVehicle::GetFuelLevel, &alt::IVehicle::SetFuelLevel>("fuelLevel");
     tpl.Property<&alt::IVehicle::GetOilLevel, &alt::IVehicle::SetOilLevel>("oilLevel");
