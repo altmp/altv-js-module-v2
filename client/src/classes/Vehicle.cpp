@@ -1,129 +1,177 @@
 #include "Class.h"
 
-static void HandlingGetter(js::PropertyContext& ctx)
-{
-    extern js::Class Handling;
-    ctx.Return(Handling.Create(ctx.GetContext()));
-}
-
-template<typename GetterFunc>
-static void GetPropertyValue(js::FunctionContext& ctx, GetterFunc getter)
-{
-    if (!ctx.CheckThis()) return;
-    if (!ctx.CheckArgCount(1)) return;
-    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
-
-    uint32_t wheel;
-    if (!ctx.GetArg(0, wheel)) return;
-
-    ctx.Return(getter(vehicle, wheel));
-}
-
-template<typename SetterFunc>
-static void SetPropertyValue(js::FunctionContext& ctx, SetterFunc setter)
-{
-    if (!ctx.CheckThis()) return;
-    if (!ctx.CheckArgCount(2)) return;
-    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
-
-    uint32_t wheel;
-    if (!ctx.GetArg(0, wheel)) return;
-
-    float value;
-    if (!ctx.GetArg(1, value)) return;
-
-    setter(vehicle, wheel, value);
-}
-
 static void GetWheelCamber(js::FunctionContext& ctx)
 {
-    GetPropertyValue(ctx, [](alt::IVehicle* vehicle, uint32_t wheel) {
-        return vehicle->GetWheelCamber(wheel);
-    });
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
+
+    uint32_t wheel;
+    if(!ctx.GetArg(0, wheel)) return;
+
+    ctx.Return(vehicle->GetWheelCamber(wheel));
 }
 
 static void SetWheelCamber(js::FunctionContext& ctx)
 {
-    SetPropertyValue(ctx, [](alt::IVehicle* vehicle, uint32_t wheel, float value) {
-        vehicle->SetWheelCamber(wheel, value);
-    });
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
+
+    uint32_t wheel;
+    if(!ctx.GetArg(0, wheel)) return;
+
+    float value;
+    if(!ctx.GetArg(1, value)) return;
+
+    vehicle->SetWheelCamber(wheel, value);
 }
 
 static void GetWheelTrackWidth(js::FunctionContext& ctx)
 {
-    GetPropertyValue(ctx, [](alt::IVehicle* vehicle, uint32_t wheel) {
-        return vehicle->GetWheelTrackWidth(wheel);
-    });
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
+
+    uint32_t wheel;
+    if(!ctx.GetArg(0, wheel)) return;
+
+    ctx.Return(vehicle->GetWheelTrackWidth(wheel));
 }
 
 static void SetWheelTrackWidth(js::FunctionContext& ctx)
 {
-    SetPropertyValue(ctx, [](alt::IVehicle* vehicle, uint32_t wheel, float value) {
-        vehicle->SetWheelTrackWidth(wheel, value);
-    });
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
+
+    uint32_t wheel;
+    if(!ctx.GetArg(0, wheel)) return;
+
+    float value;
+    if(!ctx.GetArg(1, value)) return;
+
+    vehicle->SetWheelTrackWidth(wheel, value);
 }
 
 static void GetWheelHeight(js::FunctionContext& ctx)
 {
-    GetPropertyValue(ctx, [](alt::IVehicle* vehicle, uint32_t wheel) {
-        return vehicle->GetWheelHeight(wheel);
-    });
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
+
+    uint32_t wheel;
+    if(!ctx.GetArg(0, wheel)) return;
+
+    ctx.Return(vehicle->GetWheelHeight(wheel));
 }
 
 static void SetWheelHeight(js::FunctionContext& ctx)
 {
-    SetPropertyValue(ctx, [](alt::IVehicle* vehicle, uint32_t wheel, float value) {
-        vehicle->SetWheelHeight(wheel, value);
-    });
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
+
+    uint32_t wheel;
+    if(!ctx.GetArg(0, wheel)) return;
+
+    float value;
+    if(!ctx.GetArg(1, value)) return;
+
+    vehicle->SetWheelHeight(wheel, value);
 }
 
 static void GetWheelTyreRadius(js::FunctionContext& ctx)
 {
-    GetPropertyValue(ctx, [](alt::IVehicle* vehicle, uint32_t wheel) {
-        return vehicle->GetWheelTyreRadius(wheel);
-    });
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
+
+    uint32_t wheel;
+    if(!ctx.GetArg(0, wheel)) return;
+
+    ctx.Return(vehicle->GetWheelTyreRadius(wheel));
 }
 
 static void SetWheelTyreRadius(js::FunctionContext& ctx)
 {
-    SetPropertyValue(ctx, [](alt::IVehicle* vehicle, uint32_t wheel, float value) {
-        vehicle->SetWheelTyreRadius(wheel, value);
-    });
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
+
+    uint32_t wheel;
+    if(!ctx.GetArg(0, wheel)) return;
+
+    float value;
+    if(!ctx.GetArg(1, value)) return;
+
+    vehicle->SetWheelTyreRadius(wheel, value);
 }
 
 static void GetWheelRimRadius(js::FunctionContext& ctx)
 {
-    GetPropertyValue(ctx, [](alt::IVehicle* vehicle, uint32_t wheel) {
-        return vehicle->GetWheelRimRadius(wheel);
-    });
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
+
+    uint32_t wheel;
+    if(!ctx.GetArg(0, wheel)) return;
+
+    ctx.Return(vehicle->GetWheelRimRadius(wheel));
 }
 
 static void SetWheelRimRadius(js::FunctionContext& ctx)
 {
-    SetPropertyValue(ctx, [](alt::IVehicle* vehicle, uint32_t wheel, float value) {
-        vehicle->SetWheelRimRadius(wheel, value);
-    });
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
+
+    uint32_t wheel;
+    if(!ctx.GetArg(0, wheel)) return;
+
+    float value;
+    if(!ctx.GetArg(1, value)) return;
+
+    vehicle->SetWheelRimRadius(wheel, value);
 }
 
 static void GetWheelTyreWidth(js::FunctionContext& ctx)
 {
-    GetPropertyValue(ctx, [](alt::IVehicle* vehicle, uint32_t wheel) {
-        return vehicle->GetWheelTyreWidth(wheel);
-    });
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
+
+    uint32_t wheel;
+    if(!ctx.GetArg(0, wheel)) return;
+
+    ctx.Return(vehicle->GetWheelTyreWidth(wheel));
 }
 
 static void SetWheelTyreWidth(js::FunctionContext& ctx)
 {
-    SetPropertyValue(ctx, [](alt::IVehicle* vehicle, uint32_t wheel, float value) {
-        vehicle->SetWheelTyreWidth(wheel, value);
-    });
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
+
+    uint32_t wheel;
+    if(!ctx.GetArg(0, wheel)) return;
+
+    float value;
+    if(!ctx.GetArg(1, value)) return;
+
+    vehicle->SetWheelTyreWidth(wheel, value);
 }
 
 static void GetWheelSurfaceMaterial(js::FunctionContext& ctx)
 {
-    GetPropertyValue(ctx, [](alt::IVehicle* vehicle, uint32_t wheel) {
-        return vehicle->GetWheelSurfaceMaterial(wheel);
-    });
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
+
+    uint32_t wheel;
+    if(!ctx.GetArg(0, wheel)) return;
+
+    ctx.Return(vehicle->GetWheelSurfaceMaterial(wheel));
 }
 
 // clang-format off
@@ -139,7 +187,6 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Property<&alt::IVehicle::GetWheelsCount>("wheelsCount");
     tpl.Property<&alt::IVehicle::GetSpeedVector>("speedVector");
     tpl.Property<&alt::IVehicle::IsHandlingModified>("isHandlingModified");
-    tpl.Property("handling", HandlingGetter);
     tpl.Property<&alt::IVehicle::GetLightsIndicator, &alt::IVehicle::SetLightsIndicator>("indicatorLights");
     tpl.Property<&alt::IVehicle::GetSeatCount>("seatCount");
     tpl.Property<&alt::IVehicle::GetOccupiedSeatsCount>("occupiedSeatsCount");
