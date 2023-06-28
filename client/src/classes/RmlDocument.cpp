@@ -6,11 +6,9 @@ static void Show(js::FunctionContext& ctx)
     if(!ctx.CheckArgCount(0, 2)) return;
     alt::IRmlDocument* document = ctx.GetThisObject<alt::IRmlDocument>();
 
-    bool isModal = false;
-    ctx.GetArg(0, isModal);
+    bool isModal = ctx.GetArg<bool>(0, false);
 
-    bool focused = true;
-    ctx.GetArg(1, focused);
+    bool focused = ctx.GetArg<bool>(1, true);
 
     document->Show(isModal, focused);
 }
