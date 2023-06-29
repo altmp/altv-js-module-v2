@@ -12,3 +12,5 @@ alt.AudioFilter.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.AUDIO
 alt.LocalPed.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.LOCAL_PED);
 
 alt.LocalVehicle.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.LOCAL_VEHICLE);
+
+alt.RmlDocument.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.RML_DOCUMENT);
