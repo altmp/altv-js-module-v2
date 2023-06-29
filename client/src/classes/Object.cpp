@@ -1,6 +1,6 @@
 #include "Class.h"
 
-static void AllWorldGetter(js::LazyPropertyContext& ctx)
+static void AllWorldGetter(js::PropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetWorldObjects());
 }
@@ -8,7 +8,7 @@ static void AllWorldGetter(js::LazyPropertyContext& ctx)
 static void AttachTo(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(4)) return;
+    if(!ctx.CheckArgCount(4, 7)) return;
     if(!ctx.CheckArgType(0, { js::Type::NUMBER, js::Type::BASE_OBJECT })) return;
     alt::IObject* object = ctx.GetThisObject<alt::IObject>();
 
@@ -61,7 +61,7 @@ extern js::Class objectClass("Object", &entityClass, nullptr, [](js::ClassTempla
     tpl.Property<&alt::IObject::GetStreamingDistance>("streamingDistance");
     tpl.Property<&alt::IObject::GetVisible, &alt::IObject::SetVisible>("visible");
 
-    tpl.StaticLazyProperty("allWorld", AllWorldGetter);
+    tpl.StaticProperty("allWorld", AllWorldGetter);
 
     tpl.Method<&alt::IObject::ResetAlpha>("resetAlpha");
     tpl.Method("attachTo", AttachTo);
