@@ -30,7 +30,7 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Method<&alt::IVehicle::ReplaceHandling>("replaceHandling");
     tpl.Method<&alt::IVehicle::ToggleTaxiLight>("toggleTaxiLight");
     tpl.Method<&alt::IVehicle::GetWheelCamber>("getWheelCamber");
-    tpl.Method<&alt::IVehicle::GetWheelCamber>("setWheelCamber");
+    tpl.Method<&alt::IVehicle::SetWheelCamber>("setWheelCamber");
     tpl.Method<&alt::IVehicle::GetWheelTrackWidth>("getWheelTrackWidth");
     tpl.Method<&alt::IVehicle::SetWheelTrackWidth>("setWheelTrackWidth");
     tpl.Method<&alt::IVehicle::GetWheelHeight>("getWheelHeight");
