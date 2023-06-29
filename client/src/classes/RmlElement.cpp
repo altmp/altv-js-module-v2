@@ -55,14 +55,8 @@ static void GetClassList(js::FunctionContext& ctx)
     alt::IRmlElement* element = ctx.GetThisObject<alt::IRmlElement>();
 
     const std::vector<std::string> list = element->GetClassList();
-    size_t size = list.size();
-    js::Array arr(size);
-    for(size_t i = 0; i < size; i++)
-    {
-        arr.Set(i, list[i]);
-    }
 
-    ctx.Return(arr);
+    ctx.Return(list);
 }
 
 static void GetPseudoClassList(js::FunctionContext& ctx)
@@ -71,14 +65,8 @@ static void GetPseudoClassList(js::FunctionContext& ctx)
     alt::IRmlElement* element = ctx.GetThisObject<alt::IRmlElement>();
 
     const std::vector<std::string> list = element->GetPseudoClassList();
-    size_t size = list.size();
-    js::Array arr(size);
-    for(size_t i = 0; i < size; i++)
-    {
-        arr.Set(i, list[i]);
-    }
 
-    ctx.Return(arr);
+    ctx.Return(list);
 }
 
 static void GetAttributes(js::FunctionContext& ctx)
@@ -105,14 +93,8 @@ static void GetElementsByTagName(js::FunctionContext& ctx)
     if(!ctx.GetArg(0, tag)) return;
 
     const std::vector<alt::IRmlElement*> elements = element->GetElementsByTagName(tag);
-    size_t size = elements.size();
-    js::Array arr(size);
-    for(size_t i = 0; i < size; i++)
-    {
-        arr.Set(i, elements[i]);
-    }
 
-    ctx.Return(arr);
+    ctx.Return(elements);
 }
 
 static void GetElementsByClassName(js::FunctionContext& ctx)
@@ -125,14 +107,8 @@ static void GetElementsByClassName(js::FunctionContext& ctx)
     if(!ctx.GetArg(0, className)) return;
 
     const std::vector<alt::IRmlElement*> elements = element->GetElementsByClassName(className);
-    size_t size = elements.size();
-    js::Array arr(size);
-    for(size_t i = 0; i < size; i++)
-    {
-        arr.Set(i, elements[i]);
-    }
 
-    ctx.Return(arr);
+    ctx.Return(elements);
 }
 
 static void QuerySelectorAll(js::FunctionContext& ctx)
@@ -145,14 +121,8 @@ static void QuerySelectorAll(js::FunctionContext& ctx)
     if(!ctx.GetArg(0, selector)) return;
 
     const std::vector<alt::IRmlElement*> elements = element->QuerySelectorAll(selector);
-    size_t size = elements.size();
-    js::Array arr(size);
-    for(size_t i = 0; i < size; i++)
-    {
-        arr.Set(i, elements[i]);
-    }
 
-    ctx.Return(arr);
+    ctx.Return(elements);
 }
 
 // clang-format off
@@ -168,7 +138,7 @@ extern js::Class rmlElementClass("RmlElement", &baseObjectClass, nullptr, [](js:
     tpl.Property<&alt::IRmlElement::GetContainingBlock>("containingBlock");
     tpl.Property<&alt::IRmlElement::GetFocusedElement>("focusedElement");
     tpl.Property<&alt::IRmlElement::GetTagName>("tagName");
-    tpl.Property<&alt::IRmlElement::GetRmlID, &alt::IRmlElement::SetRmlID>("rmlId");
+    tpl.Property<&alt::IRmlElement::GetRmlID, &alt::IRmlElement::SetRmlID>("rmlID");
     tpl.Property<&alt::IRmlElement::IsOwned>("isOwned");
     tpl.Property<&alt::IRmlElement::GetAbsoluteLeft>("absoluteLeft");
     tpl.Property<&alt::IRmlElement::GetAbsoluteTop>("absoluteTop");
