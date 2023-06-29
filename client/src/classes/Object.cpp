@@ -69,5 +69,4 @@ extern js::Class objectClass("Object", &entityClass, nullptr, [](js::ClassTempla
     tpl.Method<&alt::IObject::ToggleCollision>("toggleCollision");
     tpl.Method<&alt::IObject::PlaceOnGroundProperly>("placeOnGroundProperly");
     tpl.Method<&alt::IObject::ActivatePhysics>("activatePhysics");
-    tpl.Method<&alt::IObject::ActivatePhysics>("activatePhysics");
 });
