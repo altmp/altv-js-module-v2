@@ -184,6 +184,25 @@ namespace js
             return true;
         }
 
+        bool GetAsHash(const std::string& key, uint32_t& outValue)
+        {
+            Type argType = GetType(key);
+            if(argType == Type::STRING)
+            {
+                std::string val = Get<std::string>(key);
+                outValue = alt::ICore::Instance().Hash(val);
+                return true;
+            }
+            else if(argType == Type::NUMBER)
+            {
+                uint32_t val = Get<uint32_t>(key);
+                outValue = val;
+                return true;
+            }
+            Throw("Invalid property type at key " + key + ", expected string or number but got " + TypeToString(argType));
+            return false;
+        }
+
         bool Has(const std::string& key) const
         {
             return object->HasOwnProperty(context, js::JSValue(key)).FromMaybe(false);
