@@ -9,9 +9,8 @@ static js::FactoryHandler audioFactory(alt::IBaseObject::Type::AUDIO, [](js::Obj
     float volume;
     if(!args.Get("volume", volume)) return nullptr;
 
-    uint32_t category = 0;
-    if(args.GetType("category") == js::Type::NUMBER)      category = args.Get<uint32_t>("category");
-    else if(args.GetType("category") == js::Type::STRING) category = alt::ICore::Instance().Hash(args.Get<std::string>("category"));
+    uint32_t category;
+    if(!args.GetAsHash("category", category)) return nullptr;
 
     bool frontend = args.Get<bool>("frontend", false);
 

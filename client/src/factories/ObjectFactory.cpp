@@ -3,9 +3,8 @@
 
 // clang-format off
 static js::FactoryHandler objectFactory(alt::IBaseObject::Type::OBJECT, [](js::Object& args) -> alt::IBaseObject* {
-    uint32_t modelHash = 0;
-    if(args.GetType("model") == js::Type::NUMBER)      modelHash = args.Get<uint32_t>("model");
-    else if(args.GetType("model") == js::Type::STRING) modelHash = alt::ICore::Instance().Hash(args.Get<std::string>("model"));
+    uint32_t modelHash;
+    if(!args.GetAsHash("model", modelHash)) return nullptr;
 
     alt::Vector3f pos;
     if(!args.Get("pos", pos)) return nullptr;
