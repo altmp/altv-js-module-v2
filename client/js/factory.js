@@ -14,3 +14,5 @@ alt.LocalPed.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.LOCAL_PE
 alt.LocalVehicle.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.LOCAL_VEHICLE);
 
 alt.RmlDocument.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.RML_DOCUMENT);
+
+alt.WeaponObject.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.OBJECT);
