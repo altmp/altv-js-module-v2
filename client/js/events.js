@@ -8,6 +8,12 @@ alt.Events.onWebViewEvent(({ target, name, args }) => {
     onClassEvent(target, name, args);
 });
 
+// Rmlui events
+addEventsToClass(alt.RmlElement);
+alt.Events.onRmluiEvent(({ target, name, args }) => {
+    onClassEvent(target, name, args, true);
+});
+
 // *** Helpers ***
 function addEventsToClass(class_) {
     if (!class_) return;
@@ -42,8 +48,11 @@ function addEventsToClass(class_) {
     });
 }
 
-function onClassEvent(target, eventName, args) {
+function onClassEvent(target, eventName, args, passArgsRaw = false) {
     const listeners = target?.__eventHandlers?.get(eventName);
     if (!listeners) return;
-    for (const listener of listeners) listener(...args);
+    for (const listener of listeners) {
+        if (passArgsRaw) listener(args);
+        else listener(...args);
+    }
 }
