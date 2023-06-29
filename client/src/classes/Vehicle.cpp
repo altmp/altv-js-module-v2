@@ -1,179 +1,5 @@
 #include "Class.h"
 
-static void GetWheelCamber(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(1)) return;
-    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
-
-    uint32_t wheel;
-    if(!ctx.GetArg(0, wheel)) return;
-
-    ctx.Return(vehicle->GetWheelCamber(wheel));
-}
-
-static void SetWheelCamber(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(2)) return;
-    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
-
-    uint32_t wheel;
-    if(!ctx.GetArg(0, wheel)) return;
-
-    float value;
-    if(!ctx.GetArg(1, value)) return;
-
-    vehicle->SetWheelCamber(wheel, value);
-}
-
-static void GetWheelTrackWidth(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(1)) return;
-    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
-
-    uint32_t wheel;
-    if(!ctx.GetArg(0, wheel)) return;
-
-    ctx.Return(vehicle->GetWheelTrackWidth(wheel));
-}
-
-static void SetWheelTrackWidth(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(2)) return;
-    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
-
-    uint32_t wheel;
-    if(!ctx.GetArg(0, wheel)) return;
-
-    float value;
-    if(!ctx.GetArg(1, value)) return;
-
-    vehicle->SetWheelTrackWidth(wheel, value);
-}
-
-static void GetWheelHeight(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(1)) return;
-    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
-
-    uint32_t wheel;
-    if(!ctx.GetArg(0, wheel)) return;
-
-    ctx.Return(vehicle->GetWheelHeight(wheel));
-}
-
-static void SetWheelHeight(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(2)) return;
-    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
-
-    uint32_t wheel;
-    if(!ctx.GetArg(0, wheel)) return;
-
-    float value;
-    if(!ctx.GetArg(1, value)) return;
-
-    vehicle->SetWheelHeight(wheel, value);
-}
-
-static void GetWheelTyreRadius(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(1)) return;
-    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
-
-    uint32_t wheel;
-    if(!ctx.GetArg(0, wheel)) return;
-
-    ctx.Return(vehicle->GetWheelTyreRadius(wheel));
-}
-
-static void SetWheelTyreRadius(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(2)) return;
-    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
-
-    uint32_t wheel;
-    if(!ctx.GetArg(0, wheel)) return;
-
-    float value;
-    if(!ctx.GetArg(1, value)) return;
-
-    vehicle->SetWheelTyreRadius(wheel, value);
-}
-
-static void GetWheelRimRadius(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(1)) return;
-    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
-
-    uint32_t wheel;
-    if(!ctx.GetArg(0, wheel)) return;
-
-    ctx.Return(vehicle->GetWheelRimRadius(wheel));
-}
-
-static void SetWheelRimRadius(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(2)) return;
-    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
-
-    uint32_t wheel;
-    if(!ctx.GetArg(0, wheel)) return;
-
-    float value;
-    if(!ctx.GetArg(1, value)) return;
-
-    vehicle->SetWheelRimRadius(wheel, value);
-}
-
-static void GetWheelTyreWidth(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(1)) return;
-    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
-
-    uint32_t wheel;
-    if(!ctx.GetArg(0, wheel)) return;
-
-    ctx.Return(vehicle->GetWheelTyreWidth(wheel));
-}
-
-static void SetWheelTyreWidth(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(2)) return;
-    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
-
-    uint32_t wheel;
-    if(!ctx.GetArg(0, wheel)) return;
-
-    float value;
-    if(!ctx.GetArg(1, value)) return;
-
-    vehicle->SetWheelTyreWidth(wheel, value);
-}
-
-static void GetWheelSurfaceMaterial(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(1)) return;
-    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
-
-    uint32_t wheel;
-    if(!ctx.GetArg(0, wheel)) return;
-
-    ctx.Return(vehicle->GetWheelSurfaceMaterial(wheel));
-}
-
 // clang-format off
 extern js::Class sharedVehicleClass;
 extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::ClassTemplate& tpl)
@@ -203,19 +29,19 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Method<&alt::IVehicle::ResetHandling>("resetHandling");
     tpl.Method<&alt::IVehicle::ReplaceHandling>("replaceHandling");
     tpl.Method<&alt::IVehicle::ToggleTaxiLight>("toggleTaxiLight");
-    tpl.Method("getWheelCamber", GetWheelCamber);
-    tpl.Method("setWheelCamber", SetWheelCamber);
-    tpl.Method("getWheelTrackWidth", GetWheelTrackWidth);
-    tpl.Method("setWheelTrackWidth", SetWheelTrackWidth);
-    tpl.Method("getWheelHeight", GetWheelHeight);
-    tpl.Method("setWheelHeight", SetWheelHeight);
-    tpl.Method("getWheelTyreRadius", GetWheelTyreRadius);
-    tpl.Method("setWheelTyreRadius", SetWheelTyreRadius);
-    tpl.Method("getWheelRimRadius", GetWheelRimRadius);
-    tpl.Method("setWheelRimRadius", SetWheelRimRadius);
-    tpl.Method("getWheelTyreWidth", GetWheelTyreWidth);
-    tpl.Method("setWheelTyreWidth", SetWheelTyreWidth);
-    tpl.Method("getWheelSurfaceMaterial", GetWheelSurfaceMaterial);
+    tpl.Method<&alt::IVehicle::GetWheelCamber>("getWheelCamber");
+    tpl.Method<&alt::IVehicle::GetWheelCamber>("setWheelCamber");
+    tpl.Method<&alt::IVehicle::GetWheelTrackWidth>("getWheelTrackWidth");
+    tpl.Method<&alt::IVehicle::SetWheelTrackWidth>("setWheelTrackWidth");
+    tpl.Method<&alt::IVehicle::GetWheelHeight>("getWheelHeight");
+    tpl.Method<&alt::IVehicle::SetWheelHeight>("setWheelHeight");
+    tpl.Method<&alt::IVehicle::GetWheelTyreRadius>("getWheelTyreRadius");
+    tpl.Method<&alt::IVehicle::SetWheelTyreRadius>("setWheelTyreRadius");
+    tpl.Method<&alt::IVehicle::GetWheelRimRadius>("getWheelRimRadius");
+    tpl.Method<&alt::IVehicle::SetWheelRimRadius>("setWheelRimRadius");
+    tpl.Method<&alt::IVehicle::GetWheelTyreWidth>("getWheelTyreWidth");
+    tpl.Method<&alt::IVehicle::SetWheelTyreWidth>("setWheelTyreWidth");
+    tpl.Method<&alt::IVehicle::GetWheelSurfaceMaterial>("getWheelSurfaceMaterial");
     tpl.Method<&alt::IVehicle::ResetDashboardLights>("resetDashboardLights");
 
     tpl.GetByID<alt::IBaseObject::Type::VEHICLE>();
