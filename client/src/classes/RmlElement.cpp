@@ -49,82 +49,6 @@ static void StyleDeleter(js::DynamicPropertyDeleterContext& ctx)
     ctx.Return(true);
 }
 
-static void GetClassList(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    alt::IRmlElement* element = ctx.GetThisObject<alt::IRmlElement>();
-
-    const std::vector<std::string> list = element->GetClassList();
-
-    ctx.Return(list);
-}
-
-static void GetPseudoClassList(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    alt::IRmlElement* element = ctx.GetThisObject<alt::IRmlElement>();
-
-    const std::vector<std::string> list = element->GetPseudoClassList();
-
-    ctx.Return(list);
-}
-
-static void GetAttributes(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    alt::IRmlElement* element = ctx.GetThisObject<alt::IRmlElement>();
-
-    js::Object attributes;
-    for(auto attr : element->GetAttributes())
-    {
-        attributes.Set(attr.first.c_str(), attr.second);
-    }
-
-    ctx.Return(attributes);
-}
-
-static void GetElementsByTagName(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(1)) return;
-    alt::IRmlElement* element = ctx.GetThisObject<alt::IRmlElement>();
-
-    std::string tag;
-    if(!ctx.GetArg(0, tag)) return;
-
-    const std::vector<alt::IRmlElement*> elements = element->GetElementsByTagName(tag);
-
-    ctx.Return(elements);
-}
-
-static void GetElementsByClassName(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(1)) return;
-    alt::IRmlElement* element = ctx.GetThisObject<alt::IRmlElement>();
-
-    std::string className;
-    if(!ctx.GetArg(0, className)) return;
-
-    const std::vector<alt::IRmlElement*> elements = element->GetElementsByClassName(className);
-
-    ctx.Return(elements);
-}
-
-static void QuerySelectorAll(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(1)) return;
-    alt::IRmlElement* element = ctx.GetThisObject<alt::IRmlElement>();
-
-    std::string selector;
-    if(!ctx.GetArg(0, selector)) return;
-
-    const std::vector<alt::IRmlElement*> elements = element->QuerySelectorAll(selector);
-
-    ctx.Return(elements);
-}
-
 // clang-format off
 extern js::Class baseObjectClass;
 extern js::Class rmlElementClass("RmlElement", &baseObjectClass, nullptr, [](js::ClassTemplate& tpl)
@@ -166,17 +90,18 @@ extern js::Class rmlElementClass("RmlElement", &baseObjectClass, nullptr, [](js:
     tpl.Property<&alt::IRmlElement::HasChildren>("hasChildren");
     tpl.Property("childNodes", ChildrenGetter);
     tpl.Property<&alt::IRmlElement::GetOwnerDocument>("ownerDocument");
+    tpl.Property<&alt::IRmlElement::GetAttributes>("attributes");
+    tpl.Property<&alt::IRmlElement::GetClassList>("classList");
+    tpl.Property<&alt::IRmlElement::GetPseudoClassList>("pseudoClassList");
 
     tpl.DynamicProperty("style", StyleGetter, StyleSetter, StyleDeleter, nullptr);
 
     tpl.Method<&alt::IRmlElement::AddClass>("addClass");
     tpl.Method<&alt::IRmlElement::RemoveClass>("removeClass");
     tpl.Method<&alt::IRmlElement::HasClass>("hasClass");
-    tpl.Method("getClassList", GetClassList);
     tpl.Method<&alt::IRmlElement::AddPseudoClass>("addPseudoClass");
     tpl.Method<&alt::IRmlElement::RemovePseudoClass>("removePseudoClass");
     tpl.Method<&alt::IRmlElement::HasPseudoClass>("hasPseudoClass");
-    tpl.Method("getPseudoClassList", GetPseudoClassList);
     tpl.Method<&alt::IRmlElement::SetOffset>("setOffset");
     tpl.Method<&alt::IRmlElement::IsPointWithinElement>("isPointWithinElement");
     tpl.Method<&alt::IRmlElement::SetProperty>("setProperty");
@@ -190,7 +115,6 @@ extern js::Class rmlElementClass("RmlElement", &baseObjectClass, nullptr, [](js:
     tpl.Method<&alt::IRmlElement::RemoveAttribute>("removeAttribute");
     tpl.Method<&alt::IRmlElement::HasAttribute>("hasAttribute");
     tpl.Method<&alt::IRmlElement::GetAttribute>("getAttribute");
-    tpl.Method("getAttributes", GetAttributes);
     tpl.Method<&alt::IRmlElement::GetClosest>("getClosest");
     tpl.Method<&alt::IRmlElement::GetChild>("getChild");
     tpl.Method<&alt::IRmlElement::AppendChild>("appendChild");
@@ -202,10 +126,10 @@ extern js::Class rmlElementClass("RmlElement", &baseObjectClass, nullptr, [](js:
     tpl.Method<&alt::IRmlElement::Click>("click");
     tpl.Method<&alt::IRmlElement::ScrollIntoView>("scrollIntoView");
     tpl.Method<&alt::IRmlElement::GetElementByID>("getElementByID");
-    tpl.Method("getElementsByTagName", GetElementsByTagName);
-    tpl.Method("getElementsByClassName", GetElementsByClassName);
+    tpl.Method<&alt::IRmlElement::GetElementsByTagName>("getElementsByTagName");
+    tpl.Method<&alt::IRmlElement::GetElementsByClassName>("getElementsByClassName");
     tpl.Method<&alt::IRmlElement::QuerySelector>("querySelector");
-    tpl.Method("querySelectorAll", QuerySelectorAll);
+    tpl.Method<&alt::IRmlElement::QuerySelectorAll>("querySelectorAll");
 
     tpl.GetByID<alt::IBaseObject::Type::RML_ELEMENT>();
 });
