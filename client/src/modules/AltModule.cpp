@@ -1,10 +1,10 @@
 #include "Module.h"
 
 // clang-format off
-extern js::Class playerClass, localPlayerClass, vehicleClass, pedClass, networkObjectClass, bufferClass, audioClass, audioFilterClass, blipClass, textLabelClass, checkpointClass, webViewClass, fontClass, localPedClass, localVehicleClass, rmlElementClass;
+extern js::Class playerClass, localPlayerClass, vehicleClass, pedClass, networkObjectClass, bufferClass, audioClass, audioFilterClass, blipClass, textLabelClass, checkpointClass, webViewClass, fontClass, localPedClass, localVehicleClass, rmlDocumentClass, rmlElementClass;
 extern js::Namespace eventsNamespace, discordNamespace, voiceNamespace, localStorageNamespace;
 static js::Module altModule("@altv/client", "@altv/shared",
-    { &playerClass, &localPlayerClass, &vehicleClass, &pedClass, &networkObjectClass, &bufferClass, &audioClass, &audioFilterClass, &blipClass, &textLabelClass, &checkpointClass, &webViewClass, &fontClass, &localPedClass, &localVehicleClass, &rmlElementClass },
+    { &playerClass, &localPlayerClass, &vehicleClass, &pedClass, &networkObjectClass, &bufferClass, &audioClass, &audioFilterClass, &blipClass, &textLabelClass, &checkpointClass, &webViewClass, &fontClass, &localPedClass, &localVehicleClass, &rmlDocumentClass, &rmlElementClass },
 [](js::ModuleTemplate& module) {
     module.StaticProperty("isClient", true);
     module.StaticProperty("isServer", false);
