@@ -5,7 +5,7 @@ static void Send(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
     if(!ctx.CheckArgCount(1)) return;
-    if(!ctx.CheckArgType(0, { js::Type::STRING, js::Type::TYPED_ARRAY, js::Type::ARRAY_BUFFER })) return;
+    if(!ctx.CheckArgType(0, { js::Type::STRING, js::Type::BUFFER })) return;
     alt::IWebSocketClient* websocket = ctx.GetThisObject<alt::IWebSocketClient>();
 
     if(ctx.GetArgType(0) == js::Type::STRING)
@@ -15,19 +15,12 @@ static void Send(js::FunctionContext& ctx)
 
         ctx.Return(websocket->Send(msg));
     }
-    else if (ctx.GetArgType(0) == js::Type::TYPED_ARRAY)
+    else if(ctx.GetArgType(0) == js::Type::BUFFER)
     {
         js::Buffer* buffer;
         if(!ctx.GetArg(0, buffer)) return;
 
-        ctx.Return(websocket->SendBinary());
-    }
-    else if (ctx.GetArgType(0) == js::Type::ARRAY_BUFFER)
-    {
-        js::Buffer* buffer;
-        if(!ctx.GetArg(0, buffer)) return;
-
-        ctx.Return(websocket->SendBinary());
+        ctx.Return(websocket->SendBinary(std::string{ (char*)buffer->GetBuffer(), buffer->GetSize() }));
     }
 }
 
