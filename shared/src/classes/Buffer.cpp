@@ -86,12 +86,34 @@ static void Destroy(js::FunctionContext& ctx)
 static void Constructor(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
+    if(!ctx.CheckArgType(0, { js::Type::NUMBER, js::Type::ARRAY_BUFFER, js::Type::ARRAY_BUFFER_VIEW })) return;
 
-    size_t size;
-    if(!ctx.GetArg(0, size)) return;
-    if(!ctx.Check(size > 0 && size < 4096, "Buffer size must be greater than 0 and less than 4096 bytes")) return;
+    js::Buffer* buffer;
+    if(ctx.GetArgType(0) == js::Type::NUMBER)
+    {
+        size_t size;
+        if(!ctx.GetArg(0, size)) return;
+        if(!ctx.Check(size > 0 && size < 4096, "Buffer size must be greater than 0 and less than 4096 bytes")) return;
 
-    js::Buffer* buffer = new js::Buffer(size);
+        buffer = new js::Buffer(size);
+    }
+    else if(ctx.GetArgType(0) == js::Type::ARRAY_BUFFER)
+    {
+        v8::Local<v8::Value> value;
+        if(!ctx.GetArg(0, value)) return;
+        v8::Local<v8::ArrayBuffer> arrayBuffer = value.As<v8::ArrayBuffer>();
+
+        buffer = new js::Buffer((uint8_t*)arrayBuffer->GetBackingStore()->Data(), arrayBuffer->ByteLength());
+    }
+    else if(ctx.GetArgType(0) == js::Type::ARRAY_BUFFER_VIEW)
+    {
+        v8::Local<v8::Value> value;
+        if(!ctx.GetArg(0, value)) return;
+        v8::Local<v8::ArrayBufferView> arrayBufferView = value.As<v8::ArrayBufferView>();
+
+        buffer = new js::Buffer((uint8_t*)((uintptr_t)arrayBufferView->Buffer()->GetBackingStore()->Data() + (uintptr_t)arrayBufferView->ByteOffset()), arrayBufferView->ByteLength());
+    }
+
     ctx.SetExtraInternalFieldValue(buffer);
 }
 

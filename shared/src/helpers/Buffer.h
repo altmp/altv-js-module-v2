@@ -16,9 +16,14 @@ namespace js
         }
 
     public:
-        Buffer(size_t _size) : size(size)
+        Buffer(size_t _size) : size(_size)
         {
             buf = new uint8_t[_size];
+        }
+        Buffer(uint8_t* _data, size_t _size) : size(_size)
+        {
+            buf = new uint8_t[_size];
+            memcpy(buf, _data, _size);
         }
         ~Buffer()
         {
