@@ -50,6 +50,5 @@ extern js::Class webSocketClientClass("WebSocketClient", &baseObjectClass, [](js
     tpl.Method<&alt::IWebSocketClient::SetExtraHeader>("setExtraHeader");
     tpl.Method<&alt::IWebSocketClient::GetExtraHeaders>("getExtraHeaders");
 
-
     tpl.GetByID<alt::IBaseObject::Type::WEBSOCKET_CLIENT>();
 });
