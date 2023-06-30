@@ -15,4 +15,6 @@ alt.LocalVehicle.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.LOCA
 
 alt.RmlDocument.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.RML_DOCUMENT);
 
-alt.Object.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.OBJECT);
+alt.Object.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.OBJECT, (ctx) => (ctx.isWeaponObject = false));
+
+alt.WeaponObject.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.OBJECT, (ctx) => (ctx.isWeaponObject = true));

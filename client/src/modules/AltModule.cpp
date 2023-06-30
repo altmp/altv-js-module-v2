@@ -14,4 +14,5 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.Namespace(voiceNamespace);
     module.Namespace(localStorageNamespace);
     module.Namespace(statsNamespace);
+    module.Namespace("WeaponObject");
 });
