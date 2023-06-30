@@ -63,3 +63,9 @@ bool js::IResource::IsBaseObject(v8::Local<v8::Value> val)
 {
     return val->IsObject() && val.As<v8::Object>()->InstanceOf(GetContext(), baseObjectClass.GetTemplate(isolate).Get()->GetFunction(GetContext()).ToLocalChecked()).ToChecked();
 }
+
+extern js::Class bufferClass;
+bool js::IResource::IsBuffer(v8::Local<v8::Value> val)
+{
+    return val->IsObject() && val.As<v8::Object>()->InstanceOf(GetContext(), bufferClass.GetTemplate(isolate).Get()->GetFunction(GetContext()).ToLocalChecked()).ToChecked();
+}

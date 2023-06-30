@@ -112,7 +112,6 @@ extern js::Class bufferClass("Buffer", Constructor, [](js::ClassTemplate& tpl)
     tpl.Method("readDouble", Read<double>);
     tpl.Method("readString", Read<std::string>);
 
-    /*
     tpl.Method("writeUInt8", Write<uint8_t>);
     tpl.Method("writeUInt16", Write<uint16_t>);
     tpl.Method("writeUInt32", Write<uint32_t>);
@@ -124,7 +123,6 @@ extern js::Class bufferClass("Buffer", Constructor, [](js::ClassTemplate& tpl)
     tpl.Method("writeFloat", Write<float>);
     tpl.Method("writeDouble", Write<double>);
     tpl.Method("writeString", Write<std::string>);
-    */
 
     tpl.Method("destroy", Destroy);
 }, true);

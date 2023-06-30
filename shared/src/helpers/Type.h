@@ -3,6 +3,8 @@
 #include "v8.h"
 #include "cpp-sdk/SDK.h"
 
+#include "helpers/Buffer.h"
+
 #include <sstream>
 
 namespace js
@@ -21,6 +23,7 @@ namespace js
         FUNCTION,
         ARRAY,
         ARRAY_BUFFER,
+        ARRAY_BUFFER_VIEW,
         SHARED_ARRAY_BUFFER,
         TYPED_ARRAY,
         DATA_VIEW,
@@ -36,6 +39,7 @@ namespace js
         RGBA,
         QUATERNION,
         BASE_OBJECT,
+        BUFFER
     };
 
     bool IsVector3(v8::Local<v8::Value> value, IResource* resource);
@@ -43,6 +47,7 @@ namespace js
     bool IsRGBA(v8::Local<v8::Value> value, IResource* resource);
     bool IsQuaternion(v8::Local<v8::Value> value, IResource* resource);
     bool IsBaseObject(v8::Local<v8::Value> value, IResource* resource);
+    bool IsBuffer(v8::Local<v8::Value> value, IResource* resource);
 
     static Type GetType(v8::Local<v8::Value> value, js::IResource* resource)
     {
@@ -58,6 +63,7 @@ namespace js
             if(value->IsFunction()) return Type::FUNCTION;
             if(value->IsArray()) return Type::ARRAY;
             if(value->IsArrayBuffer()) return Type::ARRAY_BUFFER;
+            if(value->IsArrayBufferView()) return Type::ARRAY_BUFFER_VIEW;
             if(value->IsSharedArrayBuffer()) return Type::SHARED_ARRAY_BUFFER;
             if(value->IsTypedArray()) return Type::TYPED_ARRAY;
             if(value->IsDataView()) return Type::DATA_VIEW;
@@ -74,6 +80,7 @@ namespace js
                 if(IsRGBA(value, resource)) return Type::RGBA;
                 if(IsQuaternion(value, resource)) return Type::QUATERNION;
                 if(IsBaseObject(value, resource)) return Type::BASE_OBJECT;
+                if(IsBuffer(value, resource)) return Type::BUFFER;
             }
 
             return Type::OBJECT;
@@ -95,6 +102,7 @@ namespace js
             case Type::FUNCTION: return "Function";
             case Type::ARRAY: return "Array";
             case Type::ARRAY_BUFFER: return "ArrayBuffer";
+            case Type::ARRAY_BUFFER_VIEW: return "ArrayBufferView";
             case Type::SHARED_ARRAY_BUFFER: return "SharedArrayBuffer";
             case Type::TYPED_ARRAY: return "TypedArray";
             case Type::DATA_VIEW: return "DataView";
@@ -108,6 +116,7 @@ namespace js
             case Type::RGBA: return "RGBA";
             case Type::QUATERNION: return "Quaternion";
             case Type::BASE_OBJECT: return "BaseObject";
+            case Type::BUFFER: return "Buffer";
         }
         return "Invalid";
     }
@@ -137,6 +146,7 @@ namespace js
         if constexpr(std::is_same_v<T, alt::RGBA>) return Type::RGBA;
         if constexpr(std::is_same_v<T, alt::Quaternion>) return Type::QUATERNION;
         if constexpr(std::is_base_of_v<alt::IBaseObject, std::remove_pointer_t<T>>) return Type::BASE_OBJECT;
+        if constexpr(std::is_same_v<std::remove_pointer_t<T>, js::Buffer>) return Type::BUFFER;
         return Type::INVALID;
         // clang-format on
     }

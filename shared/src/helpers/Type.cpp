@@ -25,3 +25,8 @@ bool js::IsBaseObject(v8::Local<v8::Value> value, IResource* resource)
 {
     return resource->IsBaseObject(value);
 }
+
+bool js::IsBuffer(v8::Local<v8::Value> value, IResource* resource)
+{
+    return resource->IsBuffer(value);
+}

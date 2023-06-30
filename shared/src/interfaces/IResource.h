@@ -149,6 +149,7 @@ namespace js
             return val->IsObject() && val.As<v8::Object>()->InstanceOf(GetContext(), quaternionClass).ToChecked();
         }
         bool IsBaseObject(v8::Local<v8::Value> val);
+        bool IsBuffer(v8::Local<v8::Value> val);
 
         template<class ResourceType = js::IResource>
         static ResourceType* GetFromContext(v8::Local<v8::Context> context)

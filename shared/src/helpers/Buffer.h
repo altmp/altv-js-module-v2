@@ -1,7 +1,5 @@
 #pragma once
 
-#include "helpers/JS.h"
-
 #include <string>
 
 namespace js
@@ -10,6 +8,12 @@ namespace js
     {
         uint8_t* buf = nullptr;
         size_t size = 0;
+
+        void ThrowOutOfBoundsException()
+        {
+            v8::Isolate* isolate = v8::Isolate::GetCurrent();
+            isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate, "Buffer offset is out of bounds").ToLocalChecked()));
+        }
 
     public:
         Buffer(size_t _size) : size(size)
@@ -35,7 +39,7 @@ namespace js
         {
             if(offset + sizeof(T) > size)
             {
-                js::Throw("Buffer offset is out of bounds");
+                ThrowOutOfBoundsException();
                 return false;
             }
             val = *reinterpret_cast<T*>((uintptr_t)buf + offset);
@@ -45,7 +49,7 @@ namespace js
         {
             if(offset + length > size)
             {
-                js::Throw("Buffer offset is out of bounds");
+                ThrowOutOfBoundsException();
                 return false;
             }
             val = std::string((char*)buf + offset, length);
@@ -57,7 +61,7 @@ namespace js
         {
             if(offset + sizeof(T) > size)
             {
-                js::Throw("Buffer offset is out of bounds");
+                ThrowOutOfBoundsException();
                 return false;
             }
             *reinterpret_cast<T*>((uintptr_t)buf + offset) = val;
@@ -67,7 +71,7 @@ namespace js
         {
             if(offset + val.length() > size)
             {
-                js::Throw("Buffer offset is out of bounds");
+                ThrowOutOfBoundsException();
                 return false;
             }
             memcpy((char*)buf + offset, val.c_str(), val.length());
