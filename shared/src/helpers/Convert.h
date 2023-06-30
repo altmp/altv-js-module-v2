@@ -241,6 +241,13 @@ namespace js
         return alt::Quaternion(xVal->NumberValue(ctx).ToChecked(), yVal->NumberValue(ctx).ToChecked(), zVal->NumberValue(ctx).ToChecked(), wVal->NumberValue(ctx).ToChecked());
     }
     std::optional<alt::IBaseObject*> ToBaseObject(v8::Local<v8::Value> val);
+    template<typename T>
+    std::optional<T*> ToExtraInternalFieldValue(v8::Local<v8::Value> val)
+    {
+        if(!val->IsObject() || val.As<v8::Object>()->InternalFieldCount() != 2) return std::nullopt;
+        T* ptr = static_cast<T*>(val.As<v8::Object>()->GetAlignedPointerFromInternalField(1));
+        return ptr ? std::optional<T*>(ptr) : std::nullopt;
+    }
 
     // https://stackoverflow.com/a/16337657/19498259
     template<typename>
@@ -364,6 +371,11 @@ namespace js
                 map.insert({ key, value.value() });
             }
             return map;
+        }
+        else if constexpr(std::is_pointer_v<T>)
+        {
+            std::optional<T> value = ToExtraInternalFieldValue<typename std::remove_pointer_t<T>>(val);
+            return value;
         }
 
         return std::nullopt;
