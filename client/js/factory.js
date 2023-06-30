@@ -18,3 +18,5 @@ alt.RmlDocument.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.RML_D
 alt.Object.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.OBJECT, (ctx) => (ctx.isWeaponObject = false));
 
 alt.WeaponObject.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.OBJECT, (ctx) => (ctx.isWeaponObject = true));
+
+alt.WebSocketClient.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.WEBSOCKET_CLIENT);
