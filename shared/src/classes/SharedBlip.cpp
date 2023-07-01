@@ -5,11 +5,10 @@
 extern js::Class baseObjectClass;
 extern js::Class sharedBlipClass("SharedBlip", &baseObjectClass, nullptr, [](js::ClassTemplate& tpl)
 {
-    tpl.Property<&alt::IBlip::IsGlobal>("isGlobal");
-    tpl.Property<&alt::IBlip::GetTarget>("target");
+    tpl.Property<&alt::IBlip::IsGlobal>("global");
     tpl.Property<&alt::IBlip::IsAttached>("isAttached");
     tpl.Property<&alt::IBlip::AttachedTo>("attachedTo");
-    tpl.Property<&alt::IBlip::GetBlipType>("blipType");
+    tpl.Property<&alt::IBlip::GetBlipType, &alt::IBlip::SetBlipType>("blipType");
     tpl.Property<&alt::IBlip::GetScaleXY, &alt::IBlip::SetScaleXY>("scale");
     tpl.Property<&alt::IBlip::GetDisplay, &alt::IBlip::SetDisplay>("display");
     tpl.Property<&alt::IBlip::GetSprite, &alt::IBlip::SetSprite>("sprite");
@@ -41,6 +40,7 @@ extern js::Class sharedBlipClass("SharedBlip", &baseObjectClass, nullptr, [](js:
     tpl.Property<&alt::IBlip::GetCategory, &alt::IBlip::SetCategory>("category");
     tpl.Property<&alt::IBlip::GetAsHighDetail, &alt::IBlip::SetAsHighDetail>("highDetail");
     tpl.Property<&alt::IBlip::GetShrinked, &alt::IBlip::SetShrinked>("shrinked");
+    tpl.Property<&alt::IBlip::IsVisible, &alt::IBlip::SetVisible>("visible");
 
     tpl.Method<&alt::IBlip::AttachTo>("attachTo");
     tpl.Method<&alt::IBlip::Fade>("fade");

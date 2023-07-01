@@ -8,5 +8,11 @@ extern js::Class blipClass("Blip", &sharedBlipClass, nullptr, [](js::ClassTempla
 {
     tpl.BindToType(alt::IBaseObject::Type::BLIP);
 
+    tpl.Property<&alt::IBlip::IsGlobal, &alt::IBlip::SetGlobal>("global");
+    tpl.Property<&alt::IBlip::GetTargets>("targets");
+
+    tpl.Method<&alt::IBlip::AddTargetPlayer>("addTarget");
+    tpl.Method<&alt::IBlip::RemoveTargetPlayer>("removeTarget");
+
     tpl.GetByID<alt::IBaseObject::Type::BLIP>();
 });

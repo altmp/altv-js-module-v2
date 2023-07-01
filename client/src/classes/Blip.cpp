@@ -7,7 +7,7 @@ extern js::Class blipClass("Blip", &sharedBlipClass, nullptr, [](js::ClassTempla
     tpl.BindToType(alt::IBaseObject::Type::BLIP);
 
     tpl.Property<&alt::IBlip::GetGameID>("scriptID");
-    tpl.Property<&alt::IBlip::IsVisible, &alt::IBlip::SetVisible>("visible");
+    tpl.Property<&alt::IBlip::IsStreamedIn>("isStreamedIn");
 
     tpl.GetByID<alt::IBaseObject::Type::BLIP>();
 });
