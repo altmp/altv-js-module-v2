@@ -1,7 +1,7 @@
 #include "Class.h"
 #include "cpp-sdk/ICore.h"
 
-static void ModelHashGetter(js::PropertyContext& ctx)
+static void ModelHashGetter(js::LazyPropertyContext& ctx)
 {
     if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t weaponHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
@@ -10,7 +10,7 @@ static void ModelHashGetter(js::PropertyContext& ctx)
     ctx.Return(weaponData->GetModelHash());
 }
 
-static void NameHashGetter(js::PropertyContext& ctx)
+static void NameHashGetter(js::LazyPropertyContext& ctx)
 {
     if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t weaponHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
@@ -306,8 +306,8 @@ static void Get(js::FunctionContext& ctx)
 // clang-format off
 extern js::Class weaponDataClass("WeaponData", [](js::ClassTemplate tpl)
 {
-    tpl.Property("modelHash", ModelHashGetter);
-    tpl.Property("nameHash", NameHashGetter);
+    tpl.LazyProperty("modelHash", ModelHashGetter);
+    tpl.LazyProperty("nameHash", NameHashGetter);
     tpl.Property("recoilShakeAmplitude", RecoilShakeAmplitudeGetter, RecoilShakeAmplitudeSetter);
     tpl.Property("recoilAccuracyMax", RecoilAccuracyMaxGetter, RecoilAccuracyMaxSetter);
     tpl.Property("recoilAccuracyToAllowHeadshotPlayer", RecoilAccuracyToAllowHeadshotPlayerGetter, RecoilAccuracyToAllowHeadshotPlayerSetter);
