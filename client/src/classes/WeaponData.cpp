@@ -290,7 +290,7 @@ static void PlayerDamageModifierSetter(js::PropertyContext& ctx)
 }
 
 extern js::Class weaponDataClass;
-static void GetForHash(js::FunctionContext& ctx)
+static void Get(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
 
@@ -323,5 +323,5 @@ extern js::Class weaponDataClass("WeaponData", [](js::ClassTemplate tpl)
     tpl.Property("headshotDamageModifier", HeadshotDamageModifierGetter, HeadshotDamageModifierSetter);
     tpl.Property("playerDamageModifier", PlayerDamageModifierGetter, PlayerDamageModifierSetter);
 
-    tpl.StaticFunction("getForHash", GetForHash);
+    tpl.StaticFunction("get", Get);
 }, true);
