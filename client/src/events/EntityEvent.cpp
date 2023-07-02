@@ -12,3 +12,10 @@ static js::Event gameEntityDestroyEvent(alt::CEvent::Type::GAME_ENTITY_DESTROY, 
     auto e = static_cast<const alt::CGameEntityDestroyEvent*>(ev);
     args.Set("entity", e->GetTarget());
 });
+
+static js::Event taskChangeEvent(alt::CEvent::Type::TASK_CHANGE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CTaskChangeEvent*>(ev);
+    args.Set("oldTask", e->GetOldTask());
+    args.Set("newTask", e->GetNewTask());
+});
