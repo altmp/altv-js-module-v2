@@ -96,6 +96,13 @@ namespace js
             return obj;
         }
 
+        v8::Local<v8::Object> Create(v8::Local<v8::Context> context, v8::Local<v8::Value> extraInternalFieldValue = v8::Local<v8::Value>())
+        {
+            v8::Local<v8::Object> obj = templateMap.at(context->GetIsolate()).Get()->InstanceTemplate()->NewInstance(context).ToLocalChecked();
+            if(!extraInternalFieldValue.IsEmpty()) obj->SetInternalField(1, extraInternalFieldValue);
+            return obj;
+        }
+
         Persistent<v8::Object> MakePersistent(v8::Local<v8::Object> value)
         {
             Persistent<v8::Object> persistent(value->GetIsolate(), value);

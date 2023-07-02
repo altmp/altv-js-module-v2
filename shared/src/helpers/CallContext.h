@@ -96,6 +96,11 @@ namespace js
             return Check(GetExtraInternalFieldValue<void*>() != nullptr, "Invalid extra internal field value");
         }
 
+        bool CheckExtraInternalFieldJSValue()
+        {
+            return Check(!info.This()->GetInternalField(1)->IsNullOrUndefined(), "Invalid extra internal field value");
+        }
+
         v8::Local<v8::Object> GetThis()
         {
             return info.This();
@@ -116,11 +121,30 @@ namespace js
             return static_cast<T*>(info.This()->GetAlignedPointerFromInternalField(1));
         }
 
+        template<typename T>
+        T GetExtraInternalFieldJSValue()
+        {
+            if(errored) return {};
+            if(info.This()->InternalFieldCount() != 2) return {};
+            std::optional<T> value = CppValue<T>(info.This()->GetInternalField(1));
+            if(!value.has_value()) return T{};
+            return value.value();
+        }
+
         void SetExtraInternalFieldValue(void* value)
         {
             if(errored) return;
             if(info.This()->InternalFieldCount() != 2) return;
             info.This()->SetAlignedPointerInInternalField(1, value);
+        }
+
+        template<typename T>
+        void SetExtraInternalFieldJSValue(const T& value)
+        {
+            static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
+            if(errored) return;
+            if(info.This()->InternalFieldCount() != 2) return;
+            info.This()->SetInternalField(1, JSValue(value));
         }
 
         template<class T>
