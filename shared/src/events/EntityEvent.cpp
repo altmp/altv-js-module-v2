@@ -21,12 +21,3 @@ static js::Event netOwnerChangeEvent(alt::CEvent::Type::NETOWNER_CHANGE, [](cons
     args.Set("oldOwner", e->GetOldOwner());
     args.Set("newOwner", e->GetNewOwner());
 });
-
-static js::Event entityHitEntityEvent(alt::CEvent::Type::ENTITY_HIT_ENTITY, [](const alt::CEvent* ev, js::Event::EventArgs& args)
-{
-    auto e = static_cast<const alt::CEntityHitEntityEvent*>(ev);
-
-    args.Set("entity", e->GetTarget());
-    args.Set("damager", e->GetDamager());
-    args.Set("weapon", e->GetWeapon());
-});
