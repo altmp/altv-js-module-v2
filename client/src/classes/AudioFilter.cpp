@@ -1,9 +1,30 @@
 #include "Class.h"
 
+static void AudioCategoryGetter(js::PropertyContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    alt::IAudioFilter* filter = ctx.GetThisObject<alt::IAudioFilter>();
+
+    ctx.Return(filter->GetAudCategory());
+}
+
+static void AudioCategorySetter(js::PropertyContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    alt::IAudioFilter* filter = ctx.GetThisObject<alt::IAudioFilter>();
+
+    uint32_t category;
+    if(!ctx.GetValueAsHash(category)) return;
+
+    filter->SetAudCategory(category);
+}
+
 // clang-format off
 extern js::Class audioFilterClass("AudioFilter", [](js::ClassTemplate& tpl)
 {
     tpl.BindToType(alt::IBaseObject::Type::AUDIO_FILTER);
+
+    tpl.Property("audioCategory", AudioCategoryGetter, AudioCategorySetter);
 
     tpl.LazyProperty<&alt::IAudioFilter::GetHash>("hash");
 

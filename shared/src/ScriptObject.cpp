@@ -10,7 +10,7 @@ js::ScriptObject::ScriptObject(v8::Isolate* _isolate, v8::Local<v8::Object> _jsO
 js::ScriptObject* js::ScriptObject::Create(v8::Local<v8::Context> context, alt::IBaseObject* object, js::Class* class_)
 {
     v8::Isolate* isolate = context->GetIsolate();
-    v8::Local<v8::Object> jsObject = class_->Create(context);
+    v8::Local<v8::Object> jsObject = class_->Create(context, nullptr);
     ScriptObject* scriptObject = new ScriptObject(isolate, jsObject, object, class_);
     jsObject->SetAlignedPointerInInternalField(0, scriptObject);
     return scriptObject;
