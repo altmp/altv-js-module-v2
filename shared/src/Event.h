@@ -20,6 +20,8 @@ namespace js
         ENTITY_ENTER_CHECKPOINT,
         ENTITY_LEAVE_CHECKPOINT,
         ERROR,
+        KEY_UP,
+        KEY_DOWN,
 
         SIZE
     };
