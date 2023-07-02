@@ -1,10 +1,16 @@
 #include "Module.h"
 
 // clang-format off
-extern js::Class playerClass, localPlayerClass, vehicleClass, pedClass, networkObjectClass, audioClass, audioFilterClass, blipClass, textLabelClass, checkpointClass, webViewClass, fontClass, localPedClass, localVehicleClass, rmlDocumentClass, rmlElementClass, objectClass, webSocketClientClass, mapZoomDataClass, weaponDataClass;
+extern js::Class playerClass, localPlayerClass, vehicleClass, pedClass, networkObjectClass,
+                audioClass, audioFilterClass, blipClass, textLabelClass, checkpointClass, webViewClass, fontClass,
+                localPedClass, localVehicleClass, rmlDocumentClass, rmlElementClass, objectClass, webSocketClientClass,
+                mapZoomDataClass, virtualEntityClass, virtualEntityGroupClass, weaponDataClass;
 extern js::Namespace eventsNamespace, discordNamespace, voiceNamespace, localStorageNamespace, statsNamespace;
 static js::Module altModule("@altv/client", "@altv/shared",
-    { &playerClass, &localPlayerClass, &vehicleClass, &pedClass, &networkObjectClass, &audioClass, &audioFilterClass, &blipClass, &textLabelClass, &checkpointClass, &webViewClass, &fontClass, &localPedClass, &localVehicleClass, &rmlDocumentClass, &rmlElementClass, &objectClass, &webSocketClientClass, &mapZoomDataClass, &weaponDataClass },
+    { &playerClass, &localPlayerClass, &vehicleClass, &pedClass, &networkObjectClass,
+    &audioClass, &audioFilterClass, &blipClass, &textLabelClass, &checkpointClass, &webViewClass, &fontClass,
+    &localPedClass, &localVehicleClass, &rmlDocumentClass, &rmlElementClass, &objectClass, &webSocketClientClass,
+    &mapZoomDataClass, &virtualEntityClass, &virtualEntityGroupClass, &weaponDataClass },
 [](js::ModuleTemplate& module) {
     module.StaticProperty("isClient", true);
     module.StaticProperty("isServer", false);

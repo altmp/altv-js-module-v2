@@ -1,3 +1,5 @@
+requireBinding("shared/events/entity.js");
+
 // Entity all stores
 /**
  * @type {Map<number, Set<unknown>>}
