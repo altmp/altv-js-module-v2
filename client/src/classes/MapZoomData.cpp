@@ -1,47 +1,20 @@
 #include "Class.h"
 #include "cpp-sdk/ICore.h"
 
-static void Constructor(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckCtor()) return;
-    if(!ctx.CheckArgCount(1)) return;
-    if(!ctx.CheckArgType(0, { js::Type::NUMBER, js::Type::STRING })) return;
-
-    if(ctx.GetArgType(0) == js::Type::NUMBER)
-    {
-        uint8_t zoomDataId;
-        if(!ctx.GetArg(0, zoomDataId)) return;
-
-        auto data = alt::ICore::Instance().GetMapData(zoomDataId);
-        if(!ctx.Check(data != nullptr, "zoomData with this id not found")) return;
-
-        ctx.SetExtraInternalFieldValue();
-    }
-    else
-    {
-        std::string zoomDataAlias;
-        if(!ctx.GetArg(0, zoomDataAlias)) return;
-
-        auto data = alt::ICore::Instance().GetMapData(zoomDataAlias);
-        if(!ctx.Check(data != nullptr, "zoomData with this id not found")) return;
-
-        uint8_t id = alt::ICore::Instance().GetMapDataIDFromAlias(zoomDataAlias);
-        ctx.SetExtraInternalFieldValue(id);
-    }
-}
-
 static void fZoomScaleGetter(js::PropertyContext& ctx)
 {
-    if(!ctx.CheckExtraInternalFieldValue()) return;
-    alt::IMapData* zoomData = ctx.GetExtraInternalFieldValue<alt::IMapData>();
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
+    uint8_t zoomDataId = ctx.GetExtraInternalFieldJSValue<uint8_t>();
+    auto zoomData = alt::ICore::Instance().GetMapData(zoomDataId);
 
     ctx.Return(zoomData->GetZoomScale());
 }
 
 static void fZoomScaleSetter(js::PropertyContext& ctx)
 {
-    if(!ctx.CheckExtraInternalFieldValue()) return;
-    alt::IMapData* zoomData = ctx.GetExtraInternalFieldValue<alt::IMapData>();
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
+    uint8_t zoomDataId = ctx.GetExtraInternalFieldJSValue<uint8_t>();
+    auto zoomData = alt::ICore::Instance().GetMapData(zoomDataId);
 
     float value;
     if(!ctx.GetValue(value)) return;
@@ -51,16 +24,18 @@ static void fZoomScaleSetter(js::PropertyContext& ctx)
 
 static void fZoomSpeedGetter(js::PropertyContext& ctx)
 {
-    if(!ctx.CheckExtraInternalFieldValue()) return;
-    alt::IMapData* zoomData = ctx.GetExtraInternalFieldValue<alt::IMapData>();
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
+    uint8_t zoomDataId = ctx.GetExtraInternalFieldJSValue<uint8_t>();
+    auto zoomData = alt::ICore::Instance().GetMapData(zoomDataId);
 
     ctx.Return(zoomData->GetZoomSpeed());
 }
 
 static void fZoomSpeedSetter(js::PropertyContext& ctx)
 {
-    if(!ctx.CheckExtraInternalFieldValue()) return;
-    alt::IMapData* zoomData = ctx.GetExtraInternalFieldValue<alt::IMapData>();
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
+    uint8_t zoomDataId = ctx.GetExtraInternalFieldJSValue<uint8_t>();
+    auto zoomData = alt::ICore::Instance().GetMapData(zoomDataId);
 
     float value;
     if(!ctx.GetValue(value)) return;
@@ -70,16 +45,18 @@ static void fZoomSpeedSetter(js::PropertyContext& ctx)
 
 static void fScrollSpeedGetter(js::PropertyContext& ctx)
 {
-    if(!ctx.CheckExtraInternalFieldValue()) return;
-    alt::IMapData* zoomData = ctx.GetExtraInternalFieldValue<alt::IMapData>();
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
+    uint8_t zoomDataId = ctx.GetExtraInternalFieldJSValue<uint8_t>();
+    auto zoomData = alt::ICore::Instance().GetMapData(zoomDataId);
 
     ctx.Return(zoomData->GetScrollSpeed());
 }
 
 static void fScrollSpeedSetter(js::PropertyContext& ctx)
 {
-    if(!ctx.CheckExtraInternalFieldValue()) return;
-    alt::IMapData* zoomData = ctx.GetExtraInternalFieldValue<alt::IMapData>();
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
+    uint8_t zoomDataId = ctx.GetExtraInternalFieldJSValue<uint8_t>();
+    auto zoomData = alt::ICore::Instance().GetMapData(zoomDataId);
 
     float value;
     if(!ctx.GetValue(value)) return;
@@ -89,16 +66,18 @@ static void fScrollSpeedSetter(js::PropertyContext& ctx)
 
 static void vTilesXGetter(js::PropertyContext& ctx)
 {
-    if(!ctx.CheckExtraInternalFieldValue()) return;
-    alt::IMapData* zoomData = ctx.GetExtraInternalFieldValue<alt::IMapData>();
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
+    uint8_t zoomDataId = ctx.GetExtraInternalFieldJSValue<uint8_t>();
+    auto zoomData = alt::ICore::Instance().GetMapData(zoomDataId);
 
     ctx.Return(zoomData->GetTilesCountX());
 }
 
 static void vTilesXSetter(js::PropertyContext& ctx)
 {
-    if(!ctx.CheckExtraInternalFieldValue()) return;
-    alt::IMapData* zoomData = ctx.GetExtraInternalFieldValue<alt::IMapData>();
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
+    uint8_t zoomDataId = ctx.GetExtraInternalFieldJSValue<uint8_t>();
+    auto zoomData = alt::ICore::Instance().GetMapData(zoomDataId);
 
     float value;
     if(!ctx.GetValue(value)) return;
@@ -108,16 +87,18 @@ static void vTilesXSetter(js::PropertyContext& ctx)
 
 static void vTilesYGetter(js::PropertyContext& ctx)
 {
-    if(!ctx.CheckExtraInternalFieldValue()) return;
-    alt::IMapData* zoomData = ctx.GetExtraInternalFieldValue<alt::IMapData>();
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
+    uint8_t zoomDataId = ctx.GetExtraInternalFieldJSValue<uint8_t>();
+    auto zoomData = alt::ICore::Instance().GetMapData(zoomDataId);
 
     ctx.Return(zoomData->GetTilesCountY());
 }
 
 static void vTilesYSetter(js::PropertyContext& ctx)
 {
-    if(!ctx.CheckExtraInternalFieldValue()) return;
-    alt::IMapData* zoomData = ctx.GetExtraInternalFieldValue<alt::IMapData>();
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
+    uint8_t zoomDataId = ctx.GetExtraInternalFieldJSValue<uint8_t>();
+    auto zoomData = alt::ICore::Instance().GetMapData(zoomDataId);
 
     float value;
     if(!ctx.GetValue(value)) return;
@@ -125,6 +106,7 @@ static void vTilesYSetter(js::PropertyContext& ctx)
     zoomData->SetTilesCountY(value);
 }
 
+extern js::Class mapZoomDataClass;
 static void Get(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
@@ -132,10 +114,24 @@ static void Get(js::FunctionContext& ctx)
 
     if(ctx.GetArgType(0) == js::Type::NUMBER)
     {
-        uint8_t zoomData;
-        if(!ctx.GetArg(0, zoomData)) return;
+        uint8_t zoomDataId;
+        if(!ctx.GetArg(0, zoomDataId)) return;
 
-        ctx.Return(mapZoomDataClass.Create(ctx.GetIsolate()->GetEnteredOrMicrotaskContext(), zoomData));
+        auto data = alt::ICore::Instance().GetMapData(zoomDataId);
+        if(!ctx.Check(data != nullptr, "No ZoomData exists with this ID")) return;
+
+        ctx.Return(mapZoomDataClass.Create(ctx.GetContext(), js::JSValue(zoomDataId)));
+    }
+    else
+    {
+        std::string zoomDataAlias;
+        if(!ctx.GetArg(0, zoomDataAlias)) return;
+
+        auto data = alt::ICore::Instance().GetMapData(zoomDataAlias);
+        if(!ctx.Check(data != nullptr, "No ZoomData exists with this alias")) return;
+
+        uint8_t zoomDataId = alt::ICore::Instance().GetMapDataIDFromAlias(zoomDataAlias);
+        ctx.Return(mapZoomDataClass.Create(ctx.GetContext(), js::JSValue(zoomDataId)));
     }
 }
 
@@ -146,14 +142,14 @@ static void ResetAll(js::FunctionContext& ctx)
 
 static void Reset(js::FunctionContext& ctx)
 {
-    if(!ctx.CheckExtraInternalFieldValue()) return;
-    alt::IMapData* zoomData = ctx.GetExtraInternalFieldValue<alt::IMapData>();
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
+    uint8_t zoomDataId = ctx.GetExtraInternalFieldJSValue<uint8_t>();
 
-    alt::ICore::Instance().ResetMapData(zoomData);
+    alt::ICore::Instance().ResetMapData(zoomDataId);
 }
 
 // clang-format off
-extern js::Class mapZoomDataClass("MapZoomData", nullptr, Constructor, [](js::ClassTemplate& tpl)
+extern js::Class mapZoomDataClass("MapZoomData", [](js::ClassTemplate& tpl)
 {
     tpl.Property("fZoomScale", fZoomScaleGetter, fZoomScaleSetter);
     tpl.Property("fZoomSpeed", fZoomSpeedGetter, fZoomSpeedSetter);
@@ -161,8 +157,8 @@ extern js::Class mapZoomDataClass("MapZoomData", nullptr, Constructor, [](js::Cl
     tpl.Property("vTilesX", vTilesXGetter, vTilesXSetter);
     tpl.Property("vTilesY", vTilesYGetter, vTilesYSetter);
 
+    tpl.Method("reset", Reset);
+
     tpl.StaticFunction("get", Get);
     tpl.StaticFunction("resetAll", ResetAll);
-
-    tpl.Method("reset", Reset);
-});
+}, true);
