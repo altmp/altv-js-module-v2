@@ -1,5 +1,17 @@
 #include "Class.h"
 
+extern js::Class handlingClass;
+static void HandlingGetter(js::PropertyContext& ctx)
+{
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
+    uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
+
+    auto data = alt::ICore::Instance().GetHandlingData(modelHash);
+    if(!ctx.Check(data != nullptr, "No HandlingData exists with this hash")) return;
+
+    ctx.Return(handlingClass.Create(ctx.GetContext(), js::JSValue(modelHash)));
+}
+
 // clang-format off
 extern js::Class sharedVehicleClass;
 extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::ClassTemplate& tpl)
@@ -12,6 +24,7 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Property<&alt::IVehicle::GetCurrentRPM, &alt::IVehicle::SetCurrentRPM>("rpm");
     tpl.Property<&alt::IVehicle::GetWheelsCount>("wheelsCount");
     tpl.Property<&alt::IVehicle::GetSpeedVector>("speedVector");
+    tpl.Property("handling", HandlingGetter);
     tpl.Property<&alt::IVehicle::IsHandlingModified>("isHandlingModified");
     tpl.Property<&alt::IVehicle::GetLightsIndicator, &alt::IVehicle::SetLightsIndicator>("indicatorLights");
     tpl.Property<&alt::IVehicle::GetSeatCount>("seatCount");
