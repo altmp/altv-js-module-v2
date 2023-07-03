@@ -1328,7 +1328,6 @@ static void Reset(js::FunctionContext& ctx)
 // clang-format off
 extern js::Class handlingClass("Handling", [](js::ClassTemplate& tpl)
 {
-    tpl.StaticProperty("handlingNameHash", HandlingNameHashGetter);
     tpl.Property("mass", MassGetter, MassSetter);
     tpl.Property("initialDragCoeff", InitialDragCoeffGetter, InitialDragCoeffSetter);
     tpl.Property("downforceModifier", DownforceModifierGetter, DownforceModifierSetter);
@@ -1395,6 +1394,8 @@ extern js::Class handlingClass("Handling", [](js::ClassTemplate& tpl)
     tpl.Property("handlingFlags", HandlingFlagsGetter, HandlingFlagsSetter);
     tpl.Property("damageFlags", DamageFlagsGetter, DamageFlagsSetter);
     tpl.Property("isModified", IsModified);
+
+    tpl.StaticProperty("handlingNameHash", HandlingNameHashGetter);
 
     tpl.Method("reset", Reset);
 }, true);
