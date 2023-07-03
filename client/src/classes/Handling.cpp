@@ -1,5 +1,4 @@
 #include "Class.h"
-#include "cpp-sdk/ICore.h"
 
 static void HandlingNameHashGetter(js::LazyPropertyContext& ctx)
 {
@@ -588,26 +587,6 @@ static void TractionCurveMinSetter(js::PropertyContext& ctx)
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetTractionCurveMin(value);
-}
-
-static void TractionCurveMinRatioGetter(js::PropertyContext& ctx)
-{
-    if (!ctx.CheckExtraInternalFieldValue()) return;
-    alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
-
-    ctx.Return(vehicle->GetHandling()->GetTractionCurveMinRatio());
-}
-
-static void TractionCurveMinRatioSetter(js::PropertyContext& ctx)
-{
-    if (!ctx.CheckExtraInternalFieldValue()) return;
-    alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
-
-    float value;
-    if (!ctx.GetValue(value)) return;
-
-    vehicle->ReplaceHandling();
-    vehicle->GetHandling()->SetTractionCurveMinRatio(value);
 }
 
 static void TractionCurveMinRatioGetter(js::PropertyContext& ctx)
