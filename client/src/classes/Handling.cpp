@@ -1,6 +1,6 @@
 #include "Class.h"
 
-static void HandlingNameHashGetter(js::LazyPropertyContext& ctx)
+static void HandlingNameHashGetter(js::PropertyContext& ctx)
 {
     if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
@@ -1328,6 +1328,7 @@ static void Reset(js::FunctionContext& ctx)
 // clang-format off
 extern js::Class handlingClass("Handling", [](js::ClassTemplate& tpl)
 {
+    tpl.Property("handlingNameHash", HandlingNameHashGetter);
     tpl.Property("mass", MassGetter, MassSetter);
     tpl.Property("initialDragCoeff", InitialDragCoeffGetter, InitialDragCoeffSetter);
     tpl.Property("downforceModifier", DownforceModifierGetter, DownforceModifierSetter);
@@ -1394,8 +1395,6 @@ extern js::Class handlingClass("Handling", [](js::ClassTemplate& tpl)
     tpl.Property("handlingFlags", HandlingFlagsGetter, HandlingFlagsSetter);
     tpl.Property("damageFlags", DamageFlagsGetter, DamageFlagsSetter);
     tpl.Property("isModified", IsModified);
-
-    tpl.StaticProperty("handlingNameHash", HandlingNameHashGetter);
 
     tpl.Method("reset", Reset);
 }, true);
