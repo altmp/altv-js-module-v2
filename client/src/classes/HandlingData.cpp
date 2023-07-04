@@ -1,9 +1,10 @@
 #include "Class.h"
 #include "cpp-sdk/ICore.h"
+#include "helpers/ClassInstanceCache.h"
 
 static void HandlingNameHashGetter(js::LazyPropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -243,7 +244,7 @@ static void PercentSubmergedRatioSetter(js::PropertyContext& ctx)
 
 static void DriveBiasFrontGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -252,19 +253,19 @@ static void DriveBiasFrontGetter(js::PropertyContext& ctx)
 
 static void DriveBiasFrontSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetDriveBiasFront(value);
 }
 
 static void AccelerationGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -273,19 +274,19 @@ static void AccelerationGetter(js::PropertyContext& ctx)
 
 static void AccelerationSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetAcceleration(value);
 }
 
 static void InitialDriveGearsGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -294,19 +295,19 @@ static void InitialDriveGearsGetter(js::PropertyContext& ctx)
 
 static void InitialDriveGearsSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     uint32_t value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetInitialDriveGears(value);
 }
 
 static void DriveInertiaGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -315,19 +316,19 @@ static void DriveInertiaGetter(js::PropertyContext& ctx)
 
 static void DriveInertiaSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetDriveInertia(value);
 }
 
 static void ClutchChangeRateScaleUpShiftGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -336,19 +337,19 @@ static void ClutchChangeRateScaleUpShiftGetter(js::PropertyContext& ctx)
 
 static void ClutchChangeRateScaleUpShiftSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetClutchChangeRateScaleUpShift(value);
 }
 
 static void ClutchChangeRateScaleDownShiftGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -357,19 +358,19 @@ static void ClutchChangeRateScaleDownShiftGetter(js::PropertyContext& ctx)
 
 static void ClutchChangeRateScaleDownShiftSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetClutchChangeRateScaleDownShift(value);
 }
 
 static void InitialDriveForceGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -378,19 +379,19 @@ static void InitialDriveForceGetter(js::PropertyContext& ctx)
 
 static void InitialDriveForceSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetInitialDriveForce(value);
 }
 
 static void DriveMaxFlatVelGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -399,19 +400,19 @@ static void DriveMaxFlatVelGetter(js::PropertyContext& ctx)
 
 static void DriveMaxFlatVelSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetDriveMaxFlatVel(value);
 }
 
 static void InitialDriveMaxFlatVelGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -420,19 +421,19 @@ static void InitialDriveMaxFlatVelGetter(js::PropertyContext& ctx)
 
 static void InitialDriveMaxFlatVelSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetInitialDriveMaxFlatVel(value);
 }
 
 static void BrakeForceGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -441,19 +442,19 @@ static void BrakeForceGetter(js::PropertyContext& ctx)
 
 static void BrakeForceSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetBrakeForce(value);
 }
 
 static void BrakeBiasFrontGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -462,19 +463,19 @@ static void BrakeBiasFrontGetter(js::PropertyContext& ctx)
 
 static void BrakeBiasFrontSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetBrakeBiasFront(value);
 }
 
 static void BrakeBiasRearGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -483,19 +484,19 @@ static void BrakeBiasRearGetter(js::PropertyContext& ctx)
 
 static void BrakeBiasRearSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetBrakeBiasRear(value);
 }
 
 static void HandBrakeForceGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -504,19 +505,19 @@ static void HandBrakeForceGetter(js::PropertyContext& ctx)
 
 static void HandBrakeForceSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetHandBrakeForce(value);
 }
 
 static void SteeringLockGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -525,19 +526,19 @@ static void SteeringLockGetter(js::PropertyContext& ctx)
 
 static void SteeringLockSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetSteeringLock(value);
 }
 
 static void SteeringLockRatioGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -546,19 +547,19 @@ static void SteeringLockRatioGetter(js::PropertyContext& ctx)
 
 static void SteeringLockRatioSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetSteeringLockRatio(value);
 }
 
 static void TractionCurveMaxGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -567,19 +568,19 @@ static void TractionCurveMaxGetter(js::PropertyContext& ctx)
 
 static void TractionCurveMaxSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetTractionCurveMax(value);
 }
 
 static void TractionCurveMaxRatioGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -588,19 +589,19 @@ static void TractionCurveMaxRatioGetter(js::PropertyContext& ctx)
 
 static void TractionCurveMaxRatioSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetTractionCurveMaxRatio(value);
 }
 
 static void TractionCurveMinGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -609,19 +610,19 @@ static void TractionCurveMinGetter(js::PropertyContext& ctx)
 
 static void TractionCurveMinSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetTractionCurveMin(value);
 }
 
 static void TractionCurveMinRatioGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -630,19 +631,19 @@ static void TractionCurveMinRatioGetter(js::PropertyContext& ctx)
 
 static void TractionCurveMinRatioSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetTractionCurveMinRatio(value);
 }
 
 static void TractionCurveLateralGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -651,19 +652,19 @@ static void TractionCurveLateralGetter(js::PropertyContext& ctx)
 
 static void TractionCurveLateralSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetTractionCurveLateral(value);
 }
 
 static void TractionCurveLateralRatioGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -672,19 +673,19 @@ static void TractionCurveLateralRatioGetter(js::PropertyContext& ctx)
 
 static void TractionCurveLateralRatioSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetTractionCurveLateralRatio(value);
 }
 
 static void TractionSpringDeltaMaxGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -693,19 +694,19 @@ static void TractionSpringDeltaMaxGetter(js::PropertyContext& ctx)
 
 static void TractionSpringDeltaMaxSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetTractionSpringDeltaMax(value);
 }
 
 static void TractionSpringDeltaMaxRatioGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -714,19 +715,19 @@ static void TractionSpringDeltaMaxRatioGetter(js::PropertyContext& ctx)
 
 static void TractionSpringDeltaMaxRatioSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetTractionSpringDeltaMaxRatio(value);
 }
 
 static void LowSpeedTractionLossMultGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -735,19 +736,19 @@ static void LowSpeedTractionLossMultGetter(js::PropertyContext& ctx)
 
 static void LowSpeedTractionLossMultSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetLowSpeedTractionLossMult(value);
 }
 
 static void CamberStiffnessGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -756,19 +757,19 @@ static void CamberStiffnessGetter(js::PropertyContext& ctx)
 
 static void CamberStiffnessSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetCamberStiffness(value);
 }
 
 static void TractionBiasFrontGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -777,19 +778,19 @@ static void TractionBiasFrontGetter(js::PropertyContext& ctx)
 
 static void TractionBiasFrontSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetTractionBiasFront(value);
 }
 
 static void TractionBiasRearGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -798,19 +799,19 @@ static void TractionBiasRearGetter(js::PropertyContext& ctx)
 
 static void TractionBiasRearSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetTractionBiasRear(value);
 }
 
 static void TractionLossMultGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -819,19 +820,19 @@ static void TractionLossMultGetter(js::PropertyContext& ctx)
 
 static void TractionLossMultSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetTractionLossMult(value);
 }
 
 static void SuspensionForceGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -840,19 +841,19 @@ static void SuspensionForceGetter(js::PropertyContext& ctx)
 
 static void SuspensionForceSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetSuspensionForce(value);
 }
 
 static void SuspensionCompDampGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -861,19 +862,19 @@ static void SuspensionCompDampGetter(js::PropertyContext& ctx)
 
 static void SuspensionCompDampSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetSuspensionCompDamp(value);
 }
 
 static void SuspensionReboundDampGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -882,19 +883,19 @@ static void SuspensionReboundDampGetter(js::PropertyContext& ctx)
 
 static void SuspensionReboundDampSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetSuspensionReboundDamp(value);
 }
 
 static void SuspensionUpperLimitGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -903,19 +904,19 @@ static void SuspensionUpperLimitGetter(js::PropertyContext& ctx)
 
 static void SuspensionUpperLimitSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetSuspensionUpperLimit(value);
 }
 
 static void SuspensionLowerLimitGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -924,19 +925,19 @@ static void SuspensionLowerLimitGetter(js::PropertyContext& ctx)
 
 static void SuspensionLowerLimitSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetSuspensionLowerLimit(value);
 }
 
 static void SuspensionRaiseGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -945,19 +946,19 @@ static void SuspensionRaiseGetter(js::PropertyContext& ctx)
 
 static void SuspensionRaiseSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetSuspensionRaise(value);
 }
 
 static void SuspensionBiasFrontGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -966,19 +967,19 @@ static void SuspensionBiasFrontGetter(js::PropertyContext& ctx)
 
 static void SuspensionBiasFrontSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetSuspensionBiasFront(value);
 }
 
 static void SuspensionBiasRearGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -987,19 +988,19 @@ static void SuspensionBiasRearGetter(js::PropertyContext& ctx)
 
 static void SuspensionBiasRearSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetSuspensionBiasRear(value);
 }
 
 static void AntiRollBarForceGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -1008,19 +1009,19 @@ static void AntiRollBarForceGetter(js::PropertyContext& ctx)
 
 static void AntiRollBarForceSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetAntiRollBarForce(value);
 }
 
 static void AntiRollBarBiasFrontGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -1029,19 +1030,19 @@ static void AntiRollBarBiasFrontGetter(js::PropertyContext& ctx)
 
 static void AntiRollBarBiasFrontSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetAntiRollBarBiasFront(value);
 }
 
 static void AntiRollBarBiasRearGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -1050,19 +1051,19 @@ static void AntiRollBarBiasRearGetter(js::PropertyContext& ctx)
 
 static void AntiRollBarBiasRearSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetAntiRollBarBiasRear(value);
 }
 
 static void RollCentreHeightFrontGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -1071,19 +1072,19 @@ static void RollCentreHeightFrontGetter(js::PropertyContext& ctx)
 
 static void RollCentreHeightFrontSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetRollCentreHeightFront(value);
 }
 
 static void RollCentreHeightRearGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -1092,19 +1093,19 @@ static void RollCentreHeightRearGetter(js::PropertyContext& ctx)
 
 static void RollCentreHeightRearSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetRollCentreHeightRear(value);
 }
 
 static void CollisionDamageMultGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -1113,19 +1114,19 @@ static void CollisionDamageMultGetter(js::PropertyContext& ctx)
 
 static void CollisionDamageMultSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetCollisionDamageMult(value);
 }
 
 static void WeaponDamageMultGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -1134,19 +1135,19 @@ static void WeaponDamageMultGetter(js::PropertyContext& ctx)
 
 static void WeaponDamageMultSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetWeaponDamageMult(value);
 }
 
 static void DeformationDamageMultGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -1155,19 +1156,19 @@ static void DeformationDamageMultGetter(js::PropertyContext& ctx)
 
 static void DeformationDamageMultSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetDeformationDamageMult(value);
 }
 
 static void EngineDamageMultGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -1176,19 +1177,19 @@ static void EngineDamageMultGetter(js::PropertyContext& ctx)
 
 static void EngineDamageMultSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetEngineDamageMult(value);
 }
 
 static void PetrolTankVolumeGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -1197,19 +1198,19 @@ static void PetrolTankVolumeGetter(js::PropertyContext& ctx)
 
 static void PetrolTankVolumeSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetPetrolTankVolume(value);
 }
 
 static void OilVolumeGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -1218,19 +1219,19 @@ static void OilVolumeGetter(js::PropertyContext& ctx)
 
 static void OilVolumeSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetOilVolume(value);
 }
 
 static void SeatOffsetDistXGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -1239,19 +1240,19 @@ static void SeatOffsetDistXGetter(js::PropertyContext& ctx)
 
 static void SeatOffsetDistXSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetSeatOffsetDistX(value);
 }
 
 static void SeatOffsetDistYGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -1260,19 +1261,19 @@ static void SeatOffsetDistYGetter(js::PropertyContext& ctx)
 
 static void SeatOffsetDistYSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetSeatOffsetDistY(value);
 }
 
 static void SeatOffsetDistZGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -1281,19 +1282,19 @@ static void SeatOffsetDistZGetter(js::PropertyContext& ctx)
 
 static void SeatOffsetDistZSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetSeatOffsetDistZ(value);
 }
 
 static void MonetaryValueGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -1302,19 +1303,19 @@ static void MonetaryValueGetter(js::PropertyContext& ctx)
 
 static void MonetaryValueSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     uint32_t value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetMonetaryValue(value);
 }
 
 static void ModelFlagsGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -1323,19 +1324,19 @@ static void ModelFlagsGetter(js::PropertyContext& ctx)
 
 static void ModelFlagsSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     uint32_t value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetModelFlags(value);
 }
 
 static void HandlingFlagsGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -1344,19 +1345,19 @@ static void HandlingFlagsGetter(js::PropertyContext& ctx)
 
 static void HandlingFlagsSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     uint32_t value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetHandlingFlags(value);
 }
 
 static void DamageFlagsGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
@@ -1365,17 +1366,18 @@ static void DamageFlagsGetter(js::PropertyContext& ctx)
 
 static void DamageFlagsSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldJSValue()) return;
+    if(!ctx.CheckExtraInternalFieldJSValue()) return;
     uint32_t modelHash = ctx.GetExtraInternalFieldJSValue<uint32_t>();
     auto handling = alt::ICore::Instance().GetHandlingData(modelHash);
 
     uint32_t value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     handling->SetDamageFlags(value);
 }
 
 extern js::Class handlingDataClass;
+static js::ClassInstanceCache cache(handlingDataClass);
 static void Get(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
@@ -1386,7 +1388,7 @@ static void Get(js::FunctionContext& ctx)
     auto data = alt::ICore::Instance().GetHandlingData(modelHash);
     if(!ctx.Check(data != nullptr, "No HandlingData exists with this hash")) return;
 
-    ctx.Return(handlingDataClass.Create(ctx.GetContext(), js::JSValue(modelHash)));
+    ctx.Return(cache.GetOrCreate(ctx.GetResource(), modelHash));
 }
 
 // clang-format off

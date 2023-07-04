@@ -1,5 +1,6 @@
 #include "Class.h"
 #include "cpp-sdk/ICore.h"
+#include "helpers/ClassInstanceCache.h"
 
 static void fZoomScaleGetter(js::PropertyContext& ctx)
 {
@@ -107,6 +108,7 @@ static void vTilesYSetter(js::PropertyContext& ctx)
 }
 
 extern js::Class mapZoomDataClass;
+static js::ClassInstanceCache cache(mapZoomDataClass);
 static void Get(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
@@ -120,7 +122,7 @@ static void Get(js::FunctionContext& ctx)
         auto data = alt::ICore::Instance().GetMapData(zoomDataId);
         if(!ctx.Check(data != nullptr, "No ZoomData exists with this ID")) return;
 
-        ctx.Return(mapZoomDataClass.Create(ctx.GetContext(), js::JSValue(zoomDataId)));
+        ctx.Return(cache.GetOrCreate(ctx.GetResource(), zoomDataId));
     }
     else
     {
@@ -131,7 +133,7 @@ static void Get(js::FunctionContext& ctx)
         if(!ctx.Check(data != nullptr, "No ZoomData exists with this alias")) return;
 
         uint8_t zoomDataId = alt::ICore::Instance().GetMapDataIDFromAlias(zoomDataAlias);
-        ctx.Return(mapZoomDataClass.Create(ctx.GetContext(), js::JSValue(zoomDataId)));
+        ctx.Return(cache.GetOrCreate(ctx.GetResource(), zoomDataId));
     }
 }
 

@@ -1,5 +1,6 @@
 #include "Class.h"
 #include "cpp-sdk/ICore.h"
+#include "helpers/ClassInstanceCache.h"
 
 static void ModelHashGetter(js::LazyPropertyContext& ctx)
 {
@@ -290,6 +291,7 @@ static void PlayerDamageModifierSetter(js::PropertyContext& ctx)
 }
 
 extern js::Class weaponDataClass;
+static js::ClassInstanceCache cache(weaponDataClass);
 static void Get(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
@@ -300,7 +302,7 @@ static void Get(js::FunctionContext& ctx)
     auto data = alt::ICore::Instance().GetWeaponData(weaponHash);
     if(!ctx.Check(data != nullptr, "No WeaponData exists with this hash")) return;
 
-    ctx.Return(weaponDataClass.Create(ctx.GetContext(), js::JSValue(weaponHash)));
+    ctx.Return(cache.GetOrCreate(ctx.GetResource(), weaponHash));
 }
 
 // clang-format off
