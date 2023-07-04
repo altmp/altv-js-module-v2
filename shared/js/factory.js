@@ -37,7 +37,7 @@ alt.ColShapeRectangle.create = getFactoryCreateFunction(alt.Enums.BaseObjectType
 
 alt.ColShapePolygon.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => (ctx.colShapeType = alt.Enums.ColShapeType.POLYGON));
 
-alt.Checkpoint.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => (ctx.colShapeType = alt.Enums.ColShapeType.CHECKPOINT_CYLINDER));
+alt.Checkpoint.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.CHECKPOINT);
 
 // Helpers
 function setEntityFactory(altClass, type) {
