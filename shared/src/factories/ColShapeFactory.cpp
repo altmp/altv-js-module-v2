@@ -1,4 +1,5 @@
 #include "FactoryHandler.h"
+#include "interfaces/IResource.h"
 
 // clang-format off
 static js::FactoryHandler colShapeFactory(alt::IBaseObject::Type::COLSHAPE, [](js::Object& args) -> alt::IBaseObject* {
@@ -90,7 +91,16 @@ static js::FactoryHandler colShapeFactory(alt::IBaseObject::Type::COLSHAPE, [](j
             if(!args.Get("color", color)) return nullptr;
             if(!args.Get("streamingDistance", streamingDistance)) return nullptr;
 
+            // todo: remove when fixed in core
+            #ifdef ALT_CLIENT_API
+            alt::RGBA iconColor;
+            alt::Vector3f nextPos;
+            if(!args.Get("iconColor", iconColor)) return nullptr;
+            if(!args.Get("nextPos", nextPos)) return nullptr;
+            return alt::ICore::Instance().CreateCheckpoint(type, pos, nextPos, radius, height, color, iconColor, streamingDistance, args.GetResource()->GetResource());
+            #else
             return alt::ICore::Instance().CreateCheckpoint(type, pos, radius, height, color, streamingDistance);
+            #endif
         }
     }
 

@@ -77,9 +77,9 @@ static void MetaEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
 }
 
 // clang-format off
-extern js::Class baseObjectClass, worldObjectClass, entityClass, resourceClass, bufferClass;
+extern js::Class baseObjectClass, worldObjectClass, entityClass, colShapeClass, resourceClass, bufferClass;
 extern js::Namespace enumsNamespace, sharedEventsNamespace, fileNamespace;
-static js::Module sharedModule("@altv/shared", "", { &baseObjectClass, &worldObjectClass, &entityClass, &resourceClass, &bufferClass }, [](js::ModuleTemplate& module)
+static js::Module sharedModule("@altv/shared", "", { &baseObjectClass, &worldObjectClass, &entityClass, &colShapeClass, &resourceClass, &bufferClass }, [](js::ModuleTemplate& module)
 {
     module.StaticProperty("isDebug", alt::ICore::Instance().IsDebug());
     module.StaticProperty("version", alt::ICore::Instance().GetVersion());
@@ -96,10 +96,18 @@ static js::Module sharedModule("@altv/shared", "", { &baseObjectClass, &worldObj
     module.Namespace("Utils");
     module.Namespace("Factory");
     module.Namespace(enumsNamespace);
+    module.Namespace(fileNamespace);
+    // Blip namespaces
     module.Namespace("PointBlip");
     module.Namespace("AreaBlip");
     module.Namespace("RadiusBlip");
-    module.Namespace(fileNamespace);
+    // ColShape namespaces
+    module.Namespace("ColShapeSphere");
+    module.Namespace("ColShapeCylinder");
+    module.Namespace("ColShapeCircle");
+    module.Namespace("ColShapeCuboid");
+    module.Namespace("ColShapeRectangle");
+    module.Namespace("ColShapePolygon");
 
     module.StaticBindingExport("hash", "utils:hash");
     module.StaticBindingExport("Vector3", "classes:vector3");
