@@ -12,6 +12,7 @@
 #include "IScriptObjectHandler.h"
 #include "Event.h"
 #include "Logger.h"
+#include "helpers/ClassInstanceCache.h"
 
 namespace js
 {
@@ -36,6 +37,7 @@ namespace js
         {
             Binding::CleanupForResource(this);
             Module::CleanupForResource(this);
+            ClassInstanceCache::ClearForResource(this);
             IScriptObjectHandler::Reset();
 
             isolate = nullptr;
