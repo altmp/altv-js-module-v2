@@ -458,9 +458,8 @@ namespace js
         Persistent<v8::Promise::Resolver> resolver;
         Persistent<v8::Promise> promise;
 
-        Promise() : Value(true), resolver(v8::Isolate::GetCurrent(), v8::Promise::Resolver::New(context).ToLocalChecked()) {}
-
     public:
+        Promise() : Value(true), resolver(v8::Isolate::GetCurrent(), v8::Promise::Resolver::New(context).ToLocalChecked()) {}
         Promise(v8::Local<v8::Promise> _promise) : Value(!_promise.IsEmpty()), promise(v8::Isolate::GetCurrent(), _promise) {}
 
         v8::Local<v8::Promise> Get()
@@ -550,11 +549,7 @@ namespace js
 
         static std::shared_ptr<Promise> Create()
         {
-            // Needed to allow make_shared to access the private ctor
-            struct Wrap : public Promise
-            {
-            };
-            return std::make_shared<Wrap>();
+            return std::make_shared<Promise>();
         }
     };
 
