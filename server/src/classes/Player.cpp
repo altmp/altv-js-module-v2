@@ -534,6 +534,7 @@ static void GetAmmoFlags(js::FunctionContext& ctx)
     alt::AmmoFlags flags = player->GetAmmoFlags(weaponHash);
 
     js::Object obj;
+    obj.Set("weaponHash", weaponHash);
     obj.Set("infiniteAmmo", flags.infiniteAmmo);
     obj.Set("addSmokeOnExplosion", flags.addSmokeOnExplosion);
     obj.Set("fuse", flags.fuse);
@@ -545,25 +546,28 @@ static void GetAmmoFlags(js::FunctionContext& ctx)
 static void SetAmmoFlags(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(5)) return;
+    if(!ctx.CheckArgCount(1)) return;
     alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
 
-    uint32_t weaponHash;
-    if(!ctx.GetArgAsHash(0, weaponHash)) return;
+    js::Object data;
+    if(!ctx.GetArg(0, data)) return;
+
+    uint32_t ammoHash;
+    if(!data.GetAsHash("weaponHash", ammoHash)) return;
 
     bool infiniteAmmo;
-    if(!ctx.GetArg(1, infiniteAmmo)) return;
+    if(!data.Get("infiniteAmmo", infiniteAmmo)) return;
 
     bool addSmokeOnExplosion;
-    if(!ctx.GetArg(2, addSmokeOnExplosion)) return;
+    if(!data.Get("addSmokeOnExplosion", addSmokeOnExplosion)) return;
 
     bool fuse;
-    if(!ctx.GetArg(3, fuse)) return;
+    if(!data.Get("fuse", fuse)) return;
 
     bool fixedAfterExplosion;
-    if(!ctx.GetArg(4, fixedAfterExplosion)) return;
+    if(!data.Get("fixedAfterExplosion", fixedAfterExplosion)) return;
 
-    player->SetAmmoFlags(weaponHash, alt::AmmoFlags{ infiniteAmmo, addSmokeOnExplosion, fuse, fixedAfterExplosion });
+    player->SetAmmoFlags(ammoHash, alt::AmmoFlags{ infiniteAmmo, addSmokeOnExplosion, fuse, fixedAfterExplosion });
 }
 
 static void GetAmmoMax(js::FunctionContext& ctx)
