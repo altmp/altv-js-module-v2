@@ -9,10 +9,5 @@ static js::FactoryHandler audioFactory(alt::IBaseObject::Type::AUDIO, [](js::Obj
     float volume;
     if(!args.Get("volume", volume)) return nullptr;
 
-    uint32_t category;
-    if(!args.GetAsHash("category", category)) return nullptr;
-
-    bool frontend = args.Get<bool>("frontend", false);
-
-    return alt::ICore::Instance().CreateAudio(source, volume, category, frontend, args.GetResource()->GetResource());
+    return alt::ICore::Instance().CreateAudio(source, volume, args.GetResource()->GetResource());
 });
