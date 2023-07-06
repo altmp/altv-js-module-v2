@@ -570,7 +570,7 @@ namespace js
         {
             static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
             if(!HasResolver()) return;
-            GetResolver()->Resolve(context, JSValue(value));
+            GetResolver()->Resolve(GetContext(), JSValue(value));
         }
 
         template<typename T>
@@ -578,7 +578,7 @@ namespace js
         {
             static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
             if(!HasResolver()) return;
-            GetResolver()->Reject(context, JSValue(value));
+            GetResolver()->Reject(GetContext(), JSValue(value));
         }
 
         static std::shared_ptr<Promise> Create()
