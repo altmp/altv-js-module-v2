@@ -563,7 +563,7 @@ static void SetAmmoFlags(js::FunctionContext& ctx)
     bool fixedAfterExplosion;
     if(!ctx.GetArg(4, fixedAfterExplosion)) return;
 
-    player->SetAmmoFlags(weaponHash, { infiniteAmmo, addSmokeOnExplosion, fuse, fixedAfterExplosion });
+    player->SetAmmoFlags(weaponHash, alt::AmmoFlags{ infiniteAmmo, addSmokeOnExplosion, fuse, fixedAfterExplosion });
 }
 
 static void GetAmmoMax(js::FunctionContext& ctx)
