@@ -9,6 +9,12 @@ alt.Audio.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.AUDIO);
 
 alt.AudioFilter.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.AUDIO_FILTER);
 
+alt.AudioOutputAttached.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.AUDIO_OUTPUT_ATTACHED);
+
+alt.AudioOutputFrontend.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.AUDIO_OUTPUT_FRONTEND);
+
+alt.AudioOutputWorld.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.AUDIO_OUTPUT_WORLD);
+
 alt.LocalPed.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.LOCAL_PED);
 
 alt.LocalVehicle.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.LOCAL_VEHICLE);
