@@ -528,13 +528,13 @@ static void GetAmmoFlags(js::FunctionContext& ctx)
     if(!ctx.CheckArgCount(1)) return;
     alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
 
-    uint32_t weaponHash;
-    if(!ctx.GetArgAsHash(0, weaponHash)) return;
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
 
-    alt::AmmoFlags flags = player->GetAmmoFlags(weaponHash);
+    alt::AmmoFlags flags = player->GetAmmoFlags(ammoHash);
 
     js::Object obj;
-    obj.Set("weaponHash", weaponHash);
+    obj.Set("ammoHash", ammoHash);
     obj.Set("infiniteAmmo", flags.infiniteAmmo);
     obj.Set("addSmokeOnExplosion", flags.addSmokeOnExplosion);
     obj.Set("fuse", flags.fuse);
@@ -553,7 +553,7 @@ static void SetAmmoFlags(js::FunctionContext& ctx)
     if(!ctx.GetArg(0, data)) return;
 
     uint32_t ammoHash;
-    if(!data.GetAsHash("weaponHash", ammoHash)) return;
+    if(!data.GetAsHash("ammoHash", ammoHash)) return;
 
     bool infiniteAmmo;
     if(!data.Get("infiniteAmmo", infiniteAmmo)) return;
