@@ -49,6 +49,20 @@ namespace js
         void InitializeBinding(Binding* binding);
 
     public:
+        class Scope
+        {
+            v8::Locker locker;
+            v8::HandleScope handleScope;
+            v8::Isolate::Scope isolateScope;
+            v8::Context::Scope contextScope;
+
+        public:
+            Scope(IResource* _resource) : locker(_resource->GetIsolate()), handleScope(_resource->GetIsolate()), isolateScope(_resource->GetIsolate()), contextScope(_resource->GetContext())
+            {
+            }
+            ~Scope() = default;
+        };
+
         IResource(v8::Isolate* _isolate) : isolate(_isolate) {}
         virtual ~IResource() = default;
 

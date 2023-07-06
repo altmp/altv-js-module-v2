@@ -25,7 +25,6 @@ public:
     bool Start() override;
     bool Stop() override;
 
-    void OnEvent(const alt::CEvent* ev) override;
     void OnTick() override;
 
     void RunEventLoop() override;

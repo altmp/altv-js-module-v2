@@ -59,20 +59,14 @@ namespace js
 
         void OnRemoveBaseObject(alt::IBaseObject* object) override
         {
-            v8::Locker locker(isolate);
-            v8::Isolate::Scope isolateScope(isolate);
-            v8::HandleScope handleScope(isolate);
-            v8::Context::Scope contextScope(GetContext());
+            IResource::Scope scope(this);
 
             IScriptObjectHandler::DestroyScriptObject(object);
         }
 
         void OnEvent(const alt::CEvent* ev) override
         {
-            v8::Locker locker(isolate);
-            v8::Isolate::Scope isolateScope(isolate);
-            v8::HandleScope handleScope(isolate);
-            v8::Context::Scope contextScope(GetContext());
+            IResource::Scope scope(this);
 
             if(ev->GetType() == alt::CEvent::Type::RESOURCE_STOP) DestroyResourceObject(static_cast<const alt::CResourceStopEvent*>(ev)->GetResource());
 

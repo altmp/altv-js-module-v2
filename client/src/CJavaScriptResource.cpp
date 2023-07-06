@@ -90,9 +90,7 @@ bool CJavaScriptResource::Stop()
 {
     if(context.IsEmpty()) return false;
 
-    v8::Locker locker(isolate);
-    v8::Isolate::Scope isolateScope(isolate);
-    v8::HandleScope handleScope(isolate);
+    IResource::Scope scope(this);
     auto nativeScope = GetResource()->PushNativesScope();
 
     microtaskQueue.reset();
@@ -108,10 +106,7 @@ void CJavaScriptResource::OnTick()
 {
     if(context.IsEmpty()) return;
 
-    v8::Locker locker(isolate);
-    v8::Isolate::Scope isolateScope(isolate);
-    v8::HandleScope handleScope(isolate);
-    v8::Context::Scope scope(GetContext());
+    IResource::Scope scope(this);
     auto nativeScope = GetResource()->PushNativesScope();
 
     microtaskQueue->PerformCheckpoint(isolate);

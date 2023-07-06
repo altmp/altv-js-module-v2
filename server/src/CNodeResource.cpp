@@ -12,7 +12,7 @@ static void ResourceStarted(js::FunctionContext& ctx)
 {
     v8::Local<v8::Value> exports;
     if(!ctx.GetArg(0, exports)) return;
-    static_cast<CNodeResource*>(ctx.GetResource())->EnvStarted(exports);
+    ctx.GetResource<CNodeResource>()->EnvStarted(exports);
 }
 
 void CNodeResource::EnvStarted(v8::Local<v8::Value> exports)
@@ -72,16 +72,10 @@ bool CNodeResource::Start()
 
 bool CNodeResource::Stop()
 {
-    v8::Locker locker(isolate);
-    v8::Isolate::Scope isolateScope(isolate);
-    v8::HandleScope handleScope(isolate);
+    IResource::Scope scope(this);
 
-    {
-        v8::Context::Scope scope(GetContext());
-
-        node::EmitAsyncDestroy(isolate, asyncContext);
-        asyncResource.Reset();
-    }
+    node::EmitAsyncDestroy(isolate, asyncContext);
+    asyncResource.Reset();
 
     node::EmitProcessBeforeExit(env);
     node::EmitProcessExit(env);
@@ -100,17 +94,9 @@ bool CNodeResource::Stop()
     return true;
 }
 
-void CNodeResource::OnEvent(const alt::CEvent* ev)
-{
-    IAltResource::OnEvent(ev);
-}
-
 void CNodeResource::OnTick()
 {
-    v8::Locker locker(isolate);
-    v8::Isolate::Scope isolateScope(isolate);
-    v8::HandleScope handleScope(isolate);
-    v8::Context::Scope scope(GetContext());
+    IResource::Scope scope(this);
     node::CallbackScope callbackScope(isolate, asyncResource.Get(isolate), asyncContext);
 
     uv_run(uvLoop, UV_RUN_NOWAIT);
