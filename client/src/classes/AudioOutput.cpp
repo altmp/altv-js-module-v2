@@ -11,6 +11,7 @@ static void GetFilter(js::PropertyContext& ctx)
 static void SetFilter(js::PropertyContext& ctx)
 {
     if(!ctx.CheckThis()) return;
+    if(!ctx.CheckValueType({ js::Type::NULL_TYPE, js::Type::BASE_OBJECT })) return;
     alt::IAudioOutput* output = ctx.GetThisObject<alt::IAudioOutput>();
 
     if(ctx.GetValueType() == js::Type::NULL_TYPE)
@@ -22,10 +23,6 @@ static void SetFilter(js::PropertyContext& ctx)
         alt::IAudioFilter* filter;
         if(!ctx.GetValue(filter)) return;
         output->AddFilter(filter);
-    }
-    else
-    {
-        ctx.Throw("AudioOutput.filter setter expects null or AudioFilter object");
     }
 }
 
