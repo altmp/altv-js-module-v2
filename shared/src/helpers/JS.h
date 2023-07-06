@@ -115,6 +115,40 @@ namespace js
         IResource* GetResource();
     };
 
+    class PersistentValue
+    {
+        bool valid = true;
+
+    protected:
+        v8::Isolate* isolate;
+        Persistent<v8::Context> context;
+
+        IResource* resource = nullptr;
+
+        PersistentValue(bool _valid, v8::Local<v8::Context> _context = v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext())
+            : valid(_valid), isolate(_context->GetIsolate()), context(_context->GetIsolate(), _context)
+        {
+        }
+
+    public:
+        bool IsValid() const
+        {
+            return valid;
+        }
+
+        v8::Isolate* GetIsolate() const
+        {
+            return isolate;
+        }
+
+        v8::Local<v8::Context> GetContext() const
+        {
+            return context.Get(isolate);
+        }
+
+        IResource* GetResource();
+    };
+
     class Object : public Value
     {
     public:
@@ -449,7 +483,7 @@ namespace js
         }
     };
 
-    class Promise : public Value
+    class Promise : public PersistentValue
     {
     public:
         using V8Type = v8::Promise::Resolver;
@@ -459,8 +493,8 @@ namespace js
         Persistent<v8::Promise> promise;
 
     public:
-        Promise() : Value(true), resolver(v8::Isolate::GetCurrent(), v8::Promise::Resolver::New(context).ToLocalChecked()) {}
-        Promise(v8::Local<v8::Promise> _promise) : Value(!_promise.IsEmpty()), promise(v8::Isolate::GetCurrent(), _promise) {}
+        Promise() : PersistentValue(true), resolver(v8::Isolate::GetCurrent(), v8::Promise::Resolver::New(GetContext()).ToLocalChecked()) {}
+        Promise(v8::Local<v8::Promise> _promise) : PersistentValue(!_promise.IsEmpty()), promise(v8::Isolate::GetCurrent(), _promise) {}
 
         v8::Local<v8::Promise> Get()
         {

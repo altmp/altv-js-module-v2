@@ -123,6 +123,12 @@ js::IResource* js::Value::GetResource()
     return resource;
 }
 
+js::IResource* js::PersistentValue::GetResource()
+{
+    if(!resource) resource = IResource::GetFromContext(GetContext());
+    return resource;
+}
+
 void js::Object::SetMethod(const std::string& key, js::FunctionCallback callback)
 {
     object->Set(context, JSValue(key), WrapFunction(callback)->GetFunction(context).ToLocalChecked());
