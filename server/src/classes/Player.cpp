@@ -495,6 +495,150 @@ static void SetWeaponAmmo(js::FunctionContext& ctx)
     player->SetWeaponAmmo(weaponHash, ammoCount);
 }
 
+static void GetAmmoSpecialType(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    ctx.Return(player->GetAmmoSpecialType(ammoHash));
+}
+
+static void SetAmmoSpecialType(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    alt::AmmoSpecialType ammoSpecialType;
+    if(!ctx.GetArg(1, ammoSpecialType)) return;
+
+    player->SetAmmoSpecialType(ammoHash, ammoSpecialType);
+}
+
+static void GetAmmoFlags(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t weaponHash;
+    if(!ctx.GetArgAsHash(0, weaponHash)) return;
+
+    ctx.Return(player->GetAmmoFlags(weaponHash));
+}
+
+static void SetAmmoFlags(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(5)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t weaponHash;
+    if(!ctx.GetArgAsHash(0, weaponHash)) return;
+
+    bool infiniteAmmo;
+    if(!ctx.GetArg(1, infiniteAmmo)) return;
+
+    bool addSmokeOnExplosion;
+    if(!ctx.GetArg(2, addSmokeOnExplosion)) return;
+
+    bool fuse;
+    if(!ctx.GetArg(3, fuse)) return;
+
+    bool fixedAfterExplosion;
+    if(!ctx.GetArg(4, fixedAfterExplosion)) return;
+
+    player->SetAmmoFlags(weaponHash, { infiniteAmmo, addSmokeOnExplosion, fuse, fixedAfterExplosion });
+}
+
+static void GetAmmoMax(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    ctx.Return(player->GetAmmoMax(ammoHash));
+}
+
+static void SetAmmoMax(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    int32_t ammoMax;
+    if(!ctx.GetArg(1, ammoMax)) return;
+
+    player->SetAmmoMax(ammoHash, ammoMax);
+}
+
+static void GetAmmoMax50(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    ctx.Return(player->GetAmmoMax50(ammoHash));
+}
+
+static void SetAmmoMax50(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    int32_t ammoMax;
+    if(!ctx.GetArg(1, ammoMax)) return;
+
+    player->SetAmmoMax50(ammoHash, ammoMax);
+}
+
+static void GetAmmoMax100(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    ctx.Return(player->GetAmmoMax100(ammoHash));
+}
+
+static void SetAmmoMax100(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    int32_t ammoMax;
+    if(!ctx.GetArg(1, ammoMax)) return;
+
+    player->SetAmmoMax100(ammoHash, ammoMax);
+}
+
 static void LocalMetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
@@ -611,6 +755,16 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method("setAmmo", SetAmmo);
     tpl.Method("getWeaponAmmo", GetWeaponAmmo);
     tpl.Method("setWeaponAmmo", SetWeaponAmmo);
+    tpl.Method("getAmmoSpecialType", GetAmmoSpecialType);
+    tpl.Method("setAmmoSpecialType", SetAmmoSpecialType);
+    tpl.Method("getAmmoFlags", GetAmmoFlags);
+    tpl.Method("setAmmoFlags", SetAmmoFlags);
+    tpl.Method("getAmmoMax", GetAmmoMax);
+    tpl.Method("setAmmoMax", SetAmmoMax);
+    tpl.Method("getAmmoMax50", GetAmmoMax50);
+    tpl.Method("setAmmoMax50", SetAmmoMax50);
+    tpl.Method("getAmmoMax100", GetAmmoMax100);
+    tpl.Method("setAmmoMax100", SetAmmoMax100);
 
     tpl.DynamicProperty("localMeta", LocalMetaGetter, LocalMetaSetter, LocalMetaDeleter, LocalMetaEnumerator);
 
