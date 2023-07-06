@@ -531,7 +531,15 @@ static void GetAmmoFlags(js::FunctionContext& ctx)
     uint32_t weaponHash;
     if(!ctx.GetArgAsHash(0, weaponHash)) return;
 
-    ctx.Return(player->GetAmmoFlags(weaponHash));
+    alt::AmmoFlags flags = player->GetAmmoFlags(weaponHash);
+
+    js::Object obj;
+    obj.Set("infiniteAmmo", flags.infiniteAmmo);
+    obj.Set("addSmokeOnExplosion", flags.addSmokeOnExplosion);
+    obj.Set("fuse", flags.fuse);
+    obj.Set("fixedAfterExplosion", flags.fixedAfterExplosion);
+
+    ctx.Return(obj);
 }
 
 static void SetAmmoFlags(js::FunctionContext& ctx)
