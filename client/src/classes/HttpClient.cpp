@@ -1,18 +1,23 @@
 #include "Class.h"
+#include "interfaces/IAltResource.h"
 
 static std::set<js::Promise*> promises;
 
 static void ResponseCallback(alt::IHttpClient::HttpResponse response, const void* userData)
 {
     js::Promise* promise = const_cast<js::Promise*>(static_cast<const js::Promise*>(userData));
+    js::IAltResource* resource = static_cast<js::IAltResource*>(promise->GetResource());
+    resource->PushNextTickCallback(
+      [=]()
+      {
+          js::Object obj;
+          obj.Set("statusCode", response.statusCode);
+          obj.Set("headers", response.headers);
+          obj.Set("body", response.body);
 
-    js::Object obj;
-    obj.Set("statusCode", response.statusCode);
-    obj.Set("headers", response.headers);
-    obj.Set("body", response.body);
-
-    promise->Resolve(obj);
-    promises.erase(promise);
+          promise->Resolve(obj);
+          promises.erase(promise);
+      });
 }
 
 template<auto Method, bool HasBody, bool HasProgressCallback = false>
