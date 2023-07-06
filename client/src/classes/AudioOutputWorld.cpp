@@ -2,7 +2,7 @@
 
 // clang-format off
 extern js::Class audioOutputClass;
-extern js::Class audioOutputWorldClass("AudioOutputWorld", [](js::ClassTemplate& tpl)
+extern js::Class audioOutputWorldClass("AudioOutputWorld", &audioOutputClass, nullptr, [](js::ClassTemplate& tpl)
 {
     tpl.BindToType(alt::IBaseObject::Type::AUDIO_OUTPUT_WORLD);
 

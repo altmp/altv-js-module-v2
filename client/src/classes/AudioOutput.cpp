@@ -30,7 +30,8 @@ static void SetFilter(js::PropertyContext& ctx)
 }
 
 // clang-format off
-extern js::Class audioOutputClass("AudioOutput", [](js::ClassTemplate& tpl)
+extern js::Class baseObjectClass;
+extern js::Class audioOutputClass("AudioOutput", &baseObjectClass, nullptr, [](js::ClassTemplate& tpl)
 {
     tpl.BindToType(alt::IBaseObject::Type::AUDIO_OUTPUT);
 
