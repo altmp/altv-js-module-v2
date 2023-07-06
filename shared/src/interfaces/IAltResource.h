@@ -2,6 +2,8 @@
 
 #include "IResource.h"
 
+#include <queue>
+
 namespace js
 {
     class IAltResource : public alt::IResource::Impl, public IResource
@@ -20,16 +22,21 @@ namespace js
             static void ExternalFunctionCallback(const v8::FunctionCallbackInfo<v8::Value>& info);
         };
 
+        using NextTickCallback = std::function<void()>;
+
     protected:
         alt::IResource* resource = nullptr;
 
         std::unordered_map<alt::IResource*, Persistent<v8::Object>> resourceObjects;
+
+        std::queue<NextTickCallback> nextTickCallbacks;
 
         void Reset() override
         {
             IResource::Reset();
             resource = nullptr;
             resourceObjects.clear();
+            nextTickCallbacks = {};
         }
 
     public:
@@ -75,6 +82,13 @@ namespace js
 
         void OnTick() override
         {
+            while(!nextTickCallbacks.empty())
+            {
+                NextTickCallback& callback = nextTickCallbacks.front();
+                callback();
+                nextTickCallbacks.pop();
+            }
+
             js::Function onTick = GetBindingExport<v8::Function>("timers:tick");
             if(onTick.IsValid()) onTick.Call();
         }
@@ -85,6 +99,11 @@ namespace js
             if(!resourceObjects.contains(resource)) return;
             resourceObjects.at(resource).Get(isolate)->SetAlignedPointerInInternalField(1, nullptr);
             resourceObjects.erase(resource);
+        }
+
+        void PushNextTickCallback(NextTickCallback&& callback)
+        {
+            nextTickCallbacks.push(std::move(callback));
         }
     };
 }  // namespace js
