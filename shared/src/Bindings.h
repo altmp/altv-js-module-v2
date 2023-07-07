@@ -36,8 +36,9 @@ namespace js
         Binding() = default;
         Binding(const std::string& _name, Scope _scope, const std::vector<char>& _src) : valid(true), name(_name), scope(_scope)
         {
-            char* data = new char[_src.size()];
+            char* data = new char[_src.size() + 1];
             memcpy(data, _src.data(), _src.size());
+            data[_src.size()] = '\0';
             src = new ExternalString(data, _src.size());
         }
 
