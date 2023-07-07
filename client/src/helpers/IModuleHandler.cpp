@@ -67,7 +67,7 @@ v8::MaybeLocal<v8::Module> IModuleHandler::Resolve(v8::Local<v8::Context> contex
 
     if(module.IsEmpty())
     {
-        js::Throw("[JS] Module not found: " + specifier);
+        js::Throw("Module not found: " + specifier);
         return v8::MaybeLocal<v8::Module>();
     }
     modules.insert({ name, Module{ module.ToLocalChecked(), type } });

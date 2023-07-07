@@ -2,41 +2,26 @@
 #include "CJavaScriptRuntime.h"
 #include "helpers/Filesystem.h"
 
-void CJavaScriptResource::StartResource(js::FunctionContext& ctx)
-{
-    CJavaScriptResource* resource = ctx.GetResource<CJavaScriptResource>();
-    v8::Local<v8::Context> context = ctx.GetContext();
-
-    alt::IResource* altResource = resource->GetResource();
-    const std::string& main = resource->GetResource()->GetMain();
-    if(!ctx.Check(js::DoesFileExist(altResource->GetPackage(), main), "Failed to read main file")) return;
-
-    std::vector<uint8_t> fileBuffer = js::ReadFile(altResource->GetPackage(), main);
-    std::string source{ (char*)fileBuffer.data(), fileBuffer.size() };
-
-    v8::Local<v8::Module> mod = resource->CompileAndRun(main, source);
-    if(!ctx.Check(!mod.IsEmpty(), "Failed to compile main file")) return;
-
-    alt::MValueDict exportsDict = std::dynamic_pointer_cast<alt::IMValueDict>(js::JSToMValue(mod->GetModuleNamespace()));
-    resource->GetResource()->SetExports(exportsDict);
-    resource->started = true;
-}
-
 v8::Local<v8::Module> CJavaScriptResource::CompileAndRun(const std::string& path, const std::string& source)
 {
+    js::TryCatch tryCatch(isolate);
+
     v8::MaybeLocal<v8::Module> maybeMod = CompileModule(path, source);
     if(maybeMod.IsEmpty())
     {
         js::Logger::Error("[JS] Failed to compile file", path);
+        tryCatch.Check(true, true);
         return v8::Local<v8::Module>();
     }
     v8::Local<v8::Module> mod = maybeMod.ToLocalChecked();
 
     if(!path.starts_with("internal:")) modules.insert({ path, { mod, Module::Type::File } });
 
-    if(!InstantiateModule(GetContext(), mod))
+    if(!InstantiateModule(GetContext(), mod) || tryCatch.HasCaught())
     {
         js::Logger::Error("[JS] Failed to instantiate file", path);
+        if(mod->GetStatus() == v8::Module::kErrored) js::Logger::Error("[JS]", *v8::String::Utf8Value(isolate, mod->GetException()));
+        tryCatch.Check(true, true);
         return v8::Local<v8::Module>();
     }
     v8::MaybeLocal<v8::Value> maybeResult = EvaluateModule(GetContext(), mod);
@@ -44,6 +29,7 @@ v8::Local<v8::Module> CJavaScriptResource::CompileAndRun(const std::string& path
     {
         js::Logger::Error("[JS] Failed to start file", path);
         if(mod->GetStatus() == v8::Module::kErrored) js::Logger::Error("[JS]", *v8::String::Utf8Value(isolate, mod->GetException()));
+        tryCatch.Check(true, true);
         return v8::Local<v8::Module>();
     }
     js::Promise promise = maybeResult.ToLocalChecked().As<v8::Promise>();
@@ -70,20 +56,17 @@ bool CJavaScriptResource::Start()
     IResource::Initialize();
     IResource::InitializeBindings(js::Binding::Scope::CLIENT, js::Module::Get("@altv/client"));
 
-    const js::Binding& bootstrapper = js::Binding::Get("client/bootstrap.js");
-    if(!bootstrapper.IsValid()) return false;
+    // Read main file
+    alt::IResource* altResource = GetResource();
+    std::string main = altResource->GetMain();
+    if(main[0] != '/') main = '/' + main;
+    if(!js::DoesFileExist(altResource->GetPackage(), main)) return false;
+    std::vector<uint8_t> fileBuffer = js::ReadFile(altResource->GetPackage(), main);
+    std::string source{ (char*)fileBuffer.data(), fileBuffer.size() };
 
-    js::TemporaryGlobalExtension startResourceExtension(GetContext(), "__startResource", StartResource);
-    js::TemporaryGlobalExtension altModuleExtension(GetContext(), "__altModule", js::Module::Get("@altv/client").GetNamespace(this));
-    v8::Local<v8::Module> mod = CompileAndRun("internal:" + bootstrapper.GetName(), bootstrapper.GetSource());
-    if(mod.IsEmpty())
-    {
-        js::Logger::Error("[JS] Failed to start bootstrapper");
-        js::Binding::DumpAll();
-        return false;
-    }
-
-    return true;
+    // Run it
+    v8::Local<v8::Module> mod = CompileAndRun(main, source);
+    return !mod.IsEmpty();
 }
 
 bool CJavaScriptResource::Stop()

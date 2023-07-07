@@ -13,8 +13,6 @@ class CJavaScriptResource : public js::IAltResource, public IModuleHandler, publ
     bool started = false;
     std::shared_ptr<alt::INative::Context> nativeContext;
 
-    static void StartResource(js::FunctionContext& ctx);
-
     v8::Local<v8::Module> CompileAndRun(const std::string& path, const std::string& source);
 
 public:

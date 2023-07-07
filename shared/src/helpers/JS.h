@@ -63,17 +63,17 @@ namespace js
     {
         v8::TryCatch tryCatch;
 
-        void PrintError();
+        void PrintError(bool skipLocation);
 
     public:
         TryCatch() : tryCatch(v8::Isolate::GetCurrent()) {}
         TryCatch(v8::Isolate* isolate) : tryCatch(isolate) {}
 
-        bool Check(bool printError = true)
+        bool Check(bool printError = true, bool skipLocation = false)
         {
             if(HasCaught())
             {
-                if(printError) PrintError();
+                if(printError) PrintError(skipLocation);
                 tryCatch.Reset();
                 return true;
             }

@@ -85,7 +85,7 @@ void js::RunEventLoop()
     GetCurrentResource()->RunEventLoop();
 }
 
-void js::TryCatch::PrintError()
+void js::TryCatch::PrintError(bool skipLocation)
 {
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
     v8::Local<v8::Context> context = isolate->GetEnteredOrMicrotaskContext();
@@ -107,8 +107,12 @@ void js::TryCatch::PrintError()
     std::string stack = stackTrace.IsEmpty() ? "" : *v8::String::Utf8Value(isolate, stackTrace.ToLocalChecked());
     std::string exceptionStr = *v8::String::Utf8Value(isolate, exception);
 
-    Logger::Error("[JS] Exception caught in resource '" + resource->GetName() + "' in file '" + file + "' at line " + lineStr);
-    if(!exceptionStr.empty() && stack.empty()) Logger::Error("[JS]", exceptionStr);
+    if(!skipLocation) Logger::Error("[JS] Exception caught in resource '" + resource->GetName() + "' in file '" + file + "' at line " + lineStr);
+    if(!exceptionStr.empty() && stack.empty())
+    {
+        Logger::Error("[JS]", exceptionStr);
+        Logger::Error("[JS]  ", sourceLine);
+    }
     if(!stack.empty()) Logger::Error("[JS]", stack);
 
     js::Event::EventArgs args;
