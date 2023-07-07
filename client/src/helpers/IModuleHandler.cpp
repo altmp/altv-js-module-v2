@@ -65,7 +65,11 @@ v8::MaybeLocal<v8::Module> IModuleHandler::Resolve(v8::Local<v8::Context> contex
         type = isBytecode ? Module::Type::Bytecode : Module::Type::File;
     }
 
-    if(module.IsEmpty()) return v8::MaybeLocal<v8::Module>();
+    if(module.IsEmpty())
+    {
+        js::Throw("[JS] Module not found: " + specifier);
+        return v8::MaybeLocal<v8::Module>();
+    }
     modules.insert({ name, Module{ module.ToLocalChecked(), type } });
     return module;
 }
