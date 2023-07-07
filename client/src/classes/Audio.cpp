@@ -1,29 +1,5 @@
 #include "Class.h"
 
-static void AddOutput(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(1)) return;
-    alt::IAudio* audio = ctx.GetThisObject<alt::IAudio>();
-
-    alt::IAudioOutput* entity;
-    if(!ctx.GetArg(0, entity)) return;
-
-    audio->AddOutput(entity);
-}
-
-static void RemoveOutput(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(1)) return;
-    alt::IAudio* audio = ctx.GetThisObject<alt::IAudio>();
-
-    alt::IAudioOutput* entity;
-    if(!ctx.GetArg(0, entity)) return;
-
-    audio->RemoveOutput(entity);
-}
-
 // clang-format off
 extern js::Class audioClass("Audio", [](js::ClassTemplate& tpl)
 {
@@ -37,8 +13,8 @@ extern js::Class audioClass("Audio", [](js::ClassTemplate& tpl)
     tpl.Property<&alt::IAudio::GetMaxTime>("maxTime");
     tpl.Property<&alt::IAudio::IsPlaying>("isPlaying");
 
-    tpl.Method("addOutput", AddOutput);
-    tpl.Method("removeOutput", RemoveOutput);
+    tpl.Method<&alt::IAudio::AddOutput>("addOutput");
+    tpl.Method<&alt::IAudio::RemoveOutput>("removeOutput");
     tpl.Method<&alt::IAudio::Play>("play");
     tpl.Method<&alt::IAudio::Pause>("pause");
     tpl.Method<&alt::IAudio::Reset>("reset");
