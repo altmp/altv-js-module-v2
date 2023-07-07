@@ -170,7 +170,7 @@ namespace js
         template<class ResourceType = js::IResource>
         static ResourceType* GetFromContext(v8::Local<v8::Context> context)
         {
-            return static_cast<ResourceType*>(context->GetAlignedPointerFromEmbedderData(ContextInternalFieldIdx));
+            return dynamic_cast<ResourceType*>(static_cast<IResource*>(context->GetAlignedPointerFromEmbedderData(ContextInternalFieldIdx)));
         }
         template<class ResourceType = js::IResource>
         static ResourceType* GetCurrent()
