@@ -8,7 +8,7 @@ add_rules("mode.release")
 
 if is_os("windows") then
     add_toolchains("msvc")
-    add_cxxflags("/MP")
+    -- add_cxxflags("/MP")
 elseif is_os("linux") then
     add_toolchains("gcc")
 end
