@@ -495,6 +495,162 @@ static void SetWeaponAmmo(js::FunctionContext& ctx)
     player->SetWeaponAmmo(weaponHash, ammoCount);
 }
 
+static void GetAmmoSpecialType(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    ctx.Return(player->GetAmmoSpecialType(ammoHash));
+}
+
+static void SetAmmoSpecialType(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    alt::AmmoSpecialType ammoSpecialType;
+    if(!ctx.GetArg(1, ammoSpecialType)) return;
+
+    player->SetAmmoSpecialType(ammoHash, ammoSpecialType);
+}
+
+static void GetAmmoFlags(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    alt::AmmoFlags flags = player->GetAmmoFlags(ammoHash);
+
+    js::Object obj;
+    obj.Set("ammoHash", ammoHash);
+    obj.Set("infiniteAmmo", flags.infiniteAmmo);
+    obj.Set("addSmokeOnExplosion", flags.addSmokeOnExplosion);
+    obj.Set("fuse", flags.fuse);
+    obj.Set("fixedAfterExplosion", flags.fixedAfterExplosion);
+
+    ctx.Return(obj);
+}
+
+static void SetAmmoFlags(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    js::Object data;
+    if(!ctx.GetArg(0, data)) return;
+
+    uint32_t ammoHash;
+    if(!data.GetAsHash("ammoHash", ammoHash)) return;
+
+    bool infiniteAmmo;
+    if(!data.Get("infiniteAmmo", infiniteAmmo)) return;
+
+    bool addSmokeOnExplosion;
+    if(!data.Get("addSmokeOnExplosion", addSmokeOnExplosion)) return;
+
+    bool fuse;
+    if(!data.Get("fuse", fuse)) return;
+
+    bool fixedAfterExplosion;
+    if(!data.Get("fixedAfterExplosion", fixedAfterExplosion)) return;
+
+    player->SetAmmoFlags(ammoHash, alt::AmmoFlags{ infiniteAmmo, addSmokeOnExplosion, fuse, fixedAfterExplosion });
+}
+
+static void GetAmmoMax(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    ctx.Return(player->GetAmmoMax(ammoHash));
+}
+
+static void SetAmmoMax(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    int32_t ammoMax;
+    if(!ctx.GetArg(1, ammoMax)) return;
+
+    player->SetAmmoMax(ammoHash, ammoMax);
+}
+
+static void GetAmmoMax50(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    ctx.Return(player->GetAmmoMax50(ammoHash));
+}
+
+static void SetAmmoMax50(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    int32_t ammoMax;
+    if(!ctx.GetArg(1, ammoMax)) return;
+
+    player->SetAmmoMax50(ammoHash, ammoMax);
+}
+
+static void GetAmmoMax100(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(1)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    ctx.Return(player->GetAmmoMax100(ammoHash));
+}
+
+static void SetAmmoMax100(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t ammoHash;
+    if(!ctx.GetArgAsHash(0, ammoHash)) return;
+
+    int32_t ammoMax;
+    if(!ctx.GetArg(1, ammoMax)) return;
+
+    player->SetAmmoMax100(ammoHash, ammoMax);
+}
+
 static void LocalMetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
@@ -611,6 +767,16 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method("setAmmo", SetAmmo);
     tpl.Method("getWeaponAmmo", GetWeaponAmmo);
     tpl.Method("setWeaponAmmo", SetWeaponAmmo);
+    tpl.Method("getAmmoSpecialType", GetAmmoSpecialType);
+    tpl.Method("setAmmoSpecialType", SetAmmoSpecialType);
+    tpl.Method("getAmmoFlags", GetAmmoFlags);
+    tpl.Method("setAmmoFlags", SetAmmoFlags);
+    tpl.Method("getAmmoMax", GetAmmoMax);
+    tpl.Method("setAmmoMax", SetAmmoMax);
+    tpl.Method("getAmmoMax50", GetAmmoMax50);
+    tpl.Method("setAmmoMax50", SetAmmoMax50);
+    tpl.Method("getAmmoMax100", GetAmmoMax100);
+    tpl.Method("setAmmoMax100", SetAmmoMax100);
 
     tpl.DynamicProperty("localMeta", LocalMetaGetter, LocalMetaSetter, LocalMetaDeleter, LocalMetaEnumerator);
 
