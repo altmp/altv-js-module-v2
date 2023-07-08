@@ -67,7 +67,6 @@ v8::Local<v8::Value> js::JSValue(const js::Array& jsArr)
     return jsArr.Get();
 }
 
-// todo: maybe do this in js instead? needs benchmarking
 alt::MValue js::JSToMValue(v8::Local<v8::Value> val, bool allowFunction)
 {
     alt::ICore& core = alt::ICore::Instance();

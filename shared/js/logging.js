@@ -2,11 +2,7 @@ const primordials = {};
 
 const colorRegExp = /\u001b\[\d\d?m/g;
 
-const {
-    defineProperty: ReflectDefineProperty,
-    getOwnPropertyDescriptor: ReflectGetOwnPropertyDescriptor,
-    ownKeys: ReflectOwnKeys,
-} = Reflect;
+const { defineProperty: ReflectDefineProperty, getOwnPropertyDescriptor: ReflectGetOwnPropertyDescriptor, ownKeys: ReflectOwnKeys } = Reflect;
 
 // `uncurryThis` is equivalent to `func => Function.prototype.call.bind(func)`.
 // It is using `bind.bind(call)` to avoid using `Function.prototype.bind`
@@ -38,26 +34,24 @@ const varargsMethods = [
     "MathMax",
     "MathMin",
     "StringPrototypeConcat",
-    "TypedArrayOf",
+    "TypedArrayOf"
 ];
 
 function getNewKey(key) {
-    return typeof key === "symbol"
-        ? `Symbol${key.description[7].toUpperCase()}${key.description.slice(8)}`
-        : `${key[0].toUpperCase()}${key.slice(1)}`;
+    return typeof key === "symbol" ? `Symbol${key.description[7].toUpperCase()}${key.description.slice(8)}` : `${key[0].toUpperCase()}${key.slice(1)}`;
 }
 
 function copyAccessor(dest, prefix, key, { enumerable, get, set }) {
     ReflectDefineProperty(dest, `${prefix}Get${key}`, {
         __proto__: null,
         value: uncurryThis(get),
-        enumerable,
+        enumerable
     });
     if (set !== undefined) {
         ReflectDefineProperty(dest, `${prefix}Set${key}`, {
             __proto__: null,
             value: uncurryThis(set),
-            enumerable,
+            enumerable
         });
     }
 }
@@ -77,7 +71,7 @@ function copyPropsRenamed(src, dest, prefix) {
                     // `src` is bound as the `this` so that the static `this` points
                     // to the object it was defined on,
                     // e.g.: `ArrayOfApply` gets a `this` of `Array`:
-                    value: applyBind(desc.value, src),
+                    value: applyBind(desc.value, src)
                 });
             }
         }
@@ -101,7 +95,7 @@ function copyPropsRenamedBound(src, dest, prefix) {
             if (varargsMethods.includes(name)) {
                 ReflectDefineProperty(dest, `${name}Apply`, {
                     __proto__: null,
-                    value: applyBind(value, src),
+                    value: applyBind(value, src)
                 });
             }
         }
@@ -125,7 +119,7 @@ function copyPrototype(src, dest, prefix) {
             if (varargsMethods.includes(name)) {
                 ReflectDefineProperty(dest, `${name}Apply`, {
                     __proto__: null,
-                    value: applyBind(value),
+                    value: applyBind(value)
                 });
             }
         }
@@ -192,7 +186,7 @@ function copyPrototype(src, dest, prefix) {
     "Uint8ClampedArray",
     "WeakMap",
     "WeakRef",
-    "WeakSet",
+    "WeakSet"
 ].forEach((name) => {
     // eslint-disable-next-line no-restricted-globals
     const original = globalThis[name];
@@ -220,15 +214,15 @@ function copyPrototype(src, dest, prefix) {
     {
         name: "ArrayIterator",
         original: {
-            prototype: Reflect.getPrototypeOf(Array.prototype[Symbol.iterator]()),
-        },
+            prototype: Reflect.getPrototypeOf(Array.prototype[Symbol.iterator]())
+        }
     },
     {
         name: "StringIterator",
         original: {
-            prototype: Reflect.getPrototypeOf(String.prototype[Symbol.iterator]()),
-        },
-    },
+            prototype: Reflect.getPrototypeOf(String.prototype[Symbol.iterator]())
+        }
+    }
 ].forEach(({ name, original }) => {
     primordials[name] = original;
     // The static %TypedArray% methods require a valid `this`, but can't be bound,
@@ -252,7 +246,7 @@ const {
     SymbolIterator = Symbol.iterator,
     WeakMap = WeakMap,
     WeakRef = WeakRef,
-    WeakSet = WeakSet,
+    WeakSet = WeakSet
 } = primordials;
 
 // Because these functions are used by `makeSafe`, which is exposed
@@ -276,21 +270,15 @@ const createSafeIterator = (factory, next) => {
     return SafeIterator;
 };
 
-primordials.SafeArrayIterator = createSafeIterator(
-    primordials.ArrayPrototypeSymbolIterator,
-    primordials.ArrayIteratorPrototypeNext
-);
-primordials.SafeStringIterator = createSafeIterator(
-    primordials.StringPrototypeSymbolIterator,
-    primordials.StringIteratorPrototypeNext
-);
+primordials.SafeArrayIterator = createSafeIterator(primordials.ArrayPrototypeSymbolIterator, primordials.ArrayIteratorPrototypeNext);
+primordials.SafeStringIterator = createSafeIterator(primordials.StringPrototypeSymbolIterator, primordials.StringIteratorPrototypeNext);
 
 const copyProps = (src, dest) => {
     ArrayPrototypeForEach(ReflectOwnKeys(src), (key) => {
         if (!ReflectGetOwnPropertyDescriptor(dest, key)) {
             ReflectDefineProperty(dest, key, {
                 __proto__: null,
-                ...ReflectGetOwnPropertyDescriptor(src, key),
+                ...ReflectGetOwnPropertyDescriptor(src, key)
             });
         }
     });
@@ -307,11 +295,7 @@ const makeSafe = (unsafe, safe) => {
         ArrayPrototypeForEach(ReflectOwnKeys(unsafe.prototype), (key) => {
             if (!ReflectGetOwnPropertyDescriptor(safe.prototype, key)) {
                 const desc = ReflectGetOwnPropertyDescriptor(unsafe.prototype, key);
-                if (
-                    typeof desc.value === "function" &&
-                    desc.value.length === 0 &&
-                    SymbolIterator in (FunctionPrototypeCall(desc.value, dummy) ?? {})
-                ) {
+                if (typeof desc.value === "function" && desc.value.length === 0 && SymbolIterator in (FunctionPrototypeCall(desc.value, dummy) ?? {})) {
                     const createIterator = uncurryThis(desc.value);
                     next ??= uncurryThis(createIterator(dummy).next);
                     const SafeIterator = createSafeIterator(createIterator, next);
@@ -321,7 +305,7 @@ const makeSafe = (unsafe, safe) => {
                 }
                 ReflectDefineProperty(safe.prototype, key, {
                     __proto__: null,
-                    ...desc,
+                    ...desc
                 });
             }
         });
@@ -404,8 +388,7 @@ const SafePromise = makeSafe(
     }
 );
 
-primordials.PromisePrototypeCatch = (thisPromise, onRejected) =>
-    PromisePrototypeThen(thisPromise, undefined, onRejected);
+primordials.PromisePrototypeCatch = (thisPromise, onRejected) => PromisePrototypeThen(thisPromise, undefined, onRejected);
 
 /**
  * Attaches a callback that is invoked when the Promise is settled (fulfilled or
@@ -419,13 +402,9 @@ primordials.PromisePrototypeCatch = (thisPromise, onRejected) =>
 primordials.SafePromisePrototypeFinally = (thisPromise, onFinally) =>
     // Wrapping on a new Promise is necessary to not expose the SafePromise
     // prototype to user-land.
-    new Promise((a, b) =>
-        new SafePromise((a, b) => PromisePrototypeThen(thisPromise, a, b)).finally(onFinally).then(a, b)
-    );
+    new Promise((a, b) => new SafePromise((a, b) => PromisePrototypeThen(thisPromise, a, b)).finally(onFinally).then(a, b));
 
-primordials.AsyncIteratorPrototype = primordials.ReflectGetPrototypeOf(
-    primordials.ReflectGetPrototypeOf(async function* () {}).prototype
-);
+primordials.AsyncIteratorPrototype = primordials.ReflectGetPrototypeOf(primordials.ReflectGetPrototypeOf(async function* () {}).prototype);
 
 ObjectSetPrototypeOf(primordials, null);
 ObjectFreeze(primordials);
@@ -445,8 +424,8 @@ let {
 
     propertyFilter: { ALL_PROPERTIES, ONLY_ENUMERABLE } = {
         ALL_PROPERTIES: 0,
-        ONLY_ENUMERABLE: 2,
-    },
+        ONLY_ENUMERABLE: 2
+    }
 } = /* internalBinding('util') */ {};
 
 const custom_getOwnNonIndexProperties = (obj, filter) => {
@@ -558,16 +537,10 @@ const {
     SymbolToStringTag = Symbol.toStringTag,
 
     TypedArrayPrototypeGetLength = Object.getOwnPropertyDescriptor(TypedArrayPrototype, "length").get.call,
-    TypedArrayPrototypeGetSymbolToStringTag = Object.getOwnPropertyDescriptor(TypedArrayPrototype, Symbol.toStringTag)
-        .get.call,
+    TypedArrayPrototypeGetSymbolToStringTag = Object.getOwnPropertyDescriptor(TypedArrayPrototype, Symbol.toStringTag).get.call
 } = primordials;
 
-let {
-    customInspectSymbol = Symbol.for("nodejs.util.inspect.custom"),
-    isError = (e) => e instanceof Error,
-    join,
-    removeColors,
-} = /* require('internal/util') */ {};
+let { customInspectSymbol = Symbol.for("nodejs.util.inspect.custom"), isError = (e) => e instanceof Error, join, removeColors } = /* require('internal/util') */ {};
 
 function nodejs_join(output, separator) {
     let str = "";
@@ -606,11 +579,7 @@ function nodejs_isStackOverflowError(err) {
         }
     }
 
-    return (
-        err &&
-        err.name === nodejs_isStackOverflowError.maxStack_ErrorName &&
-        err.message === nodejs_isStackOverflowError.maxStack_ErrorMessage
-    );
+    return err && err.name === nodejs_isStackOverflowError.maxStack_ErrorName && err.message === nodejs_isStackOverflowError.maxStack_ErrorMessage;
 }
 nodejs_isStackOverflowError.maxStack_ErrorMessage = undefined;
 nodejs_isStackOverflowError.maxStack_ErrorName = undefined;
@@ -621,8 +590,7 @@ let {
     // will not work for promise functions tho
     isAsyncFunction = (func) => func?.constructor?.name === "AsyncFunction",
     isGeneratorFunction = (func) => func?.constructor?.name === "GeneratorFunction",
-    isAnyArrayBuffer = (obj) =>
-        obj instanceof ArrayBuffer || (typeof SharedArrayBuffer !== "undefined" && obj instanceof SharedArrayBuffer),
+    isAnyArrayBuffer = (obj) => obj instanceof ArrayBuffer || (typeof SharedArrayBuffer !== "undefined" && obj instanceof SharedArrayBuffer),
     isArrayBuffer,
     isArgumentsObject,
     isBoxedPrimitive,
@@ -647,12 +615,10 @@ let {
     isStringObject = (obj) => typeof obj === "object" && obj != null && obj.constructor === String,
     isNumberObject = (obj) => typeof obj === "object" && obj != null && obj.constructor === Number,
     isBooleanObject = (obj) => typeof obj === "object" && obj != null && obj.constructor === Boolean,
-    isBigIntObject = (obj) => typeof obj === "object" && obj != null && obj.constructor === BigInt,
+    isBigIntObject = (obj) => typeof obj === "object" && obj != null && obj.constructor === BigInt
 } = /* require('internal/util/types') */ {};
 
-const nodejs_isArrayBuffer = (b) =>
-    b instanceof ArrayBuffer ||
-    (typeof b === "object" && b.constructor && b.constructor.name === "ArrayBuffer" && b.byteLength >= 0);
+const nodejs_isArrayBuffer = (b) => b instanceof ArrayBuffer || (typeof b === "object" && b.constructor && b.constructor.name === "ArrayBuffer" && b.byteLength >= 0);
 
 isArrayBuffer = nodejs_isArrayBuffer;
 
@@ -660,14 +626,7 @@ const custom_isArgumentsObject = (obj) => obj + "" === "[object Arguments]" && o
 
 isArgumentsObject = custom_isArgumentsObject;
 
-const custom_isBoxedPrimitive = (obj) =>
-    typeof obj === "object" &&
-    obj != null &&
-    (obj.constructor === Number ||
-        obj.constructor === String ||
-        obj.constructor === Boolean ||
-        obj.constructor === BigInt ||
-        obj.constructor === Symbol);
+const custom_isBoxedPrimitive = (obj) => typeof obj === "object" && obj != null && (obj.constructor === Number || obj.constructor === String || obj.constructor === Boolean || obj.constructor === BigInt || obj.constructor === Symbol);
 
 isBoxedPrimitive = custom_isBoxedPrimitive;
 
@@ -694,10 +653,9 @@ function assert(value, message) {
     }
 }
 
-// TODO: do something with this shit
 // const { NativeModule } = require('internal/bootstrap/loaders');
 const NativeModule = {
-    exists: () => false,
+    exists: () => false
 };
 
 function hideStackFrames(fn) {
@@ -713,11 +671,7 @@ const validateObject = hideStackFrames((value, name, options) => {
     const allowArray = useDefaultOptions ? false : options.allowArray;
     const allowFunction = useDefaultOptions ? false : options.allowFunction;
     const nullable = useDefaultOptions ? false : options.nullable;
-    if (
-        (!nullable && value === null) ||
-        (!allowArray && ArrayIsArray(value)) ||
-        (typeof value !== "object" && (!allowFunction || typeof value !== "function"))
-    ) {
+    if ((!nullable && value === null) || (!allowArray && ArrayIsArray(value)) || (typeof value !== "object" && (!allowFunction || typeof value !== "function"))) {
         throw new Error(`[validateObject] invalid ${name} type of arg, expected: Object`);
     }
 });
@@ -728,12 +682,7 @@ function validateString(value, name) {
 
 let hexSlice;
 
-const builtInObjects = new SafeSet(
-    ArrayPrototypeFilter(
-        ObjectGetOwnPropertyNames(globalThis),
-        (e) => RegExpPrototypeExec(/^[A-Z][a-zA-Z0-9]+$/, e) !== null
-    )
-);
+const builtInObjects = new SafeSet(ArrayPrototypeFilter(ObjectGetOwnPropertyNames(globalThis), (e) => RegExpPrototypeExec(/^[A-Z][a-zA-Z0-9]+$/, e) !== null));
 
 // https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
 const isUndetectableObject = (v) => typeof v === "undefined" && v !== undefined;
@@ -752,7 +701,7 @@ const inspectDefaultOptions = ObjectSeal({
     compact: 3,
     sorted: false,
     getters: false,
-    numericSeparator: false,
+    numericSeparator: false
 });
 
 const kObjectType = 0;
@@ -760,14 +709,10 @@ const kArrayType = 1;
 const kArrayExtrasType = 2;
 
 /* eslint-disable no-control-regex */
-const strEscapeSequencesRegExp =
-    /[\x00-\x1f\x27\x5c\x7f-\x9f]|[\ud800-\udbff](?![\udc00-\udfff])|(?<![\ud800-\udbff])[\udc00-\udfff]/;
-const strEscapeSequencesReplacer =
-    /[\x00-\x1f\x27\x5c\x7f-\x9f]|[\ud800-\udbff](?![\udc00-\udfff])|(?<![\ud800-\udbff])[\udc00-\udfff]/g;
-const strEscapeSequencesRegExpSingle =
-    /[\x00-\x1f\x5c\x7f-\x9f]|[\ud800-\udbff](?![\udc00-\udfff])|(?<![\ud800-\udbff])[\udc00-\udfff]/;
-const strEscapeSequencesReplacerSingle =
-    /[\x00-\x1f\x5c\x7f-\x9f]|[\ud800-\udbff](?![\udc00-\udfff])|(?<![\ud800-\udbff])[\udc00-\udfff]/g;
+const strEscapeSequencesRegExp = /[\x00-\x1f\x27\x5c\x7f-\x9f]|[\ud800-\udbff](?![\udc00-\udfff])|(?<![\ud800-\udbff])[\udc00-\udfff]/;
+const strEscapeSequencesReplacer = /[\x00-\x1f\x27\x5c\x7f-\x9f]|[\ud800-\udbff](?![\udc00-\udfff])|(?<![\ud800-\udbff])[\udc00-\udfff]/g;
+const strEscapeSequencesRegExpSingle = /[\x00-\x1f\x5c\x7f-\x9f]|[\ud800-\udbff](?![\udc00-\udfff])|(?<![\ud800-\udbff])[\udc00-\udfff]/;
+const strEscapeSequencesReplacerSingle = /[\x00-\x1f\x5c\x7f-\x9f]|[\ud800-\udbff](?![\udc00-\udfff])|(?<![\ud800-\udbff])[\udc00-\udfff]/g;
 /* eslint-enable no-control-regex */
 
 const keyStrRegExp = /^[a-zA-Z_][a-zA-Z_0-9]*$/;
@@ -949,18 +894,14 @@ const meta = [
     "\\x9C",
     "\\x9D",
     "\\x9E",
-    "\\x9F", // x9F
+    "\\x9F" // x9F
 ];
 
 // Regex used for ansi escape code splitting
 // Adopted from https://github.com/chalk/ansi-regex/blob/HEAD/index.js
 // License: MIT, authors: @sindresorhus, Qix-, arjunmehta and LitoMore
 // Matches all ansi escape code sequences in a string
-const ansiPattern =
-    "[\\u001B\\u009B][[\\]()#;?]*" +
-    "(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*" +
-    "|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)" +
-    "|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~]))";
+const ansiPattern = "[\\u001B\\u009B][[\\]()#;?]*" + "(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*" + "|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)" + "|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~]))";
 const ansi = new RegExp(ansiPattern, "g");
 
 let getStringWidth;
@@ -980,7 +921,7 @@ function getUserOptions(ctx, isCrossContext) {
         sorted: ctx.sorted,
         getters: ctx.getters,
         numericSeparator: ctx.numericSeparator,
-        ...ctx.userOptions,
+        ...ctx.userOptions
     };
 
     // Typically, the target value will be an instance of `Object`. If that is
@@ -1039,7 +980,7 @@ export function inspect(value, opts) {
         compact: inspectDefaultOptions.compact,
         sorted: inspectDefaultOptions.sorted,
         getters: inspectDefaultOptions.getters,
-        numericSeparator: inspectDefaultOptions.numericSeparator,
+        numericSeparator: inspectDefaultOptions.numericSeparator
     };
     if (arguments.length > 1) {
         // Legacy...
@@ -1085,7 +1026,7 @@ ObjectDefineProperty(inspect, "defaultOptions", {
     set(options) {
         validateObject(options, "options");
         return ObjectAssign(inspectDefaultOptions, options);
-    },
+    }
 });
 
 // Set Graphics Rendition https://en.wikipedia.org/wiki/ANSI_escape_code#graphics
@@ -1138,7 +1079,7 @@ inspect.colors = ObjectAssign(ObjectCreate(null), {
     bgBlueBright: ["bl"],
     bgMagentaBright: ["ml"],
     bgCyanBright: ["cl"],
-    bgWhiteBright: ["wl"],
+    bgWhiteBright: ["wl"]
 });
 
 function defineColorAlias(target, alias) {
@@ -1151,7 +1092,7 @@ function defineColorAlias(target, alias) {
             this[target] = value;
         },
         configurable: true,
-        enumerable: false,
+        enumerable: false
     });
 }
 
@@ -1183,7 +1124,7 @@ inspect.styles = ObjectAssign(ObjectCreate(null), {
     // "name": intentionally not styling
     // TODO(BridgeAR): Highlight regular expressions properly.
     regexp: "red",
-    module: "underline",
+    module: "underline"
 });
 
 function addQuotes(str, quotes) {
@@ -1294,12 +1235,7 @@ function getConstructorName(obj, ctx, recurseTimes, protoProps) {
     const tmp = obj;
     while (obj || isUndetectableObject(obj)) {
         const descriptor = ObjectGetOwnPropertyDescriptor(obj, "constructor");
-        if (
-            descriptor !== undefined &&
-            typeof descriptor.value === "function" &&
-            descriptor.value.name !== "" &&
-            isInstanceof(tmp, descriptor.value)
-        ) {
+        if (descriptor !== undefined && typeof descriptor.value === "function" && descriptor.value.name !== "" && isInstanceof(tmp, descriptor.value)) {
             if (protoProps !== undefined && (firstProto !== obj || !builtInObjects.has(descriptor.value.name))) {
                 addPrototypeProperties(ctx, tmp, firstProto || tmp, recurseTimes, protoProps);
             }
@@ -1328,7 +1264,7 @@ function getConstructorName(obj, ctx, recurseTimes, protoProps) {
         return `${res} <${inspect(firstProto, {
             ...ctx,
             customInspect: false,
-            depth: -1,
+            depth: -1
         })}>`;
     }
 
@@ -1351,11 +1287,7 @@ function addPrototypeProperties(ctx, main, obj, recurseTimes, output) {
             }
             // Stop as soon as a built-in object type is detected.
             const descriptor = ObjectGetOwnPropertyDescriptor(obj, "constructor");
-            if (
-                descriptor !== undefined &&
-                typeof descriptor.value === "function" &&
-                builtInObjects.has(descriptor.value.name)
-            ) {
+            if (descriptor !== undefined && typeof descriptor.value === "function" && builtInObjects.has(descriptor.value.name)) {
                 return;
             }
         }
@@ -1497,13 +1429,7 @@ function formatValue(ctx, value, recurseTimes, typedArray) {
             // a counter internally.
             const depth = ctx.depth === null ? null : ctx.depth - recurseTimes;
             const isCrossContext = proxy !== undefined || !(context instanceof Object);
-            const ret = FunctionPrototypeCall(
-                maybeCustom,
-                context,
-                depth,
-                getUserOptions(ctx, isCrossContext),
-                inspect
-            );
+            const ret = FunctionPrototypeCall(maybeCustom, context, depth, getUserOptions(ctx, isCrossContext), inspect);
             // If the custom inspection method returned `this`, don't go into
             // infinite recursion.
             if (ret !== context) {
@@ -1551,14 +1477,7 @@ function formatRaw(ctx, value, recurseTimes, typedArray) {
     let tag = value[SymbolToStringTag];
     // Only list the tag in case it's non-enumerable / not an own property.
     // Otherwise we'd print this twice.
-    if (
-        typeof tag !== "string" ||
-        (tag !== "" &&
-            (ctx.showHidden ? ObjectPrototypeHasOwnProperty : ObjectPrototypePropertyIsEnumerable)(
-                value,
-                SymbolToStringTag
-            ))
-    ) {
+    if (typeof tag !== "string" || (tag !== "" && (ctx.showHidden ? ObjectPrototypeHasOwnProperty : ObjectPrototypePropertyIsEnumerable)(value, SymbolToStringTag))) {
         tag = "";
     }
     let base = "";
@@ -1577,8 +1496,7 @@ function formatRaw(ctx, value, recurseTimes, typedArray) {
         noIterator = false;
         if (ArrayIsArray(value)) {
             // Only set the constructor for non ordinary ("Array [...]") arrays.
-            const prefix =
-                constructor !== "Array" || tag !== "" ? getPrefix(constructor, tag, "Array", `(${value.length})`) : "";
+            const prefix = constructor !== "Array" || tag !== "" ? getPrefix(constructor, tag, "Array", `(${value.length})`) : "";
             keys = getOwnNonIndexProperties(value, filter);
             braces = [`${prefix}[`, "]"];
             if (value.length === 0 && keys.length === 0 && protoProps === undefined) return `${braces[0]}]`;
@@ -1588,16 +1506,14 @@ function formatRaw(ctx, value, recurseTimes, typedArray) {
             const size = SetPrototypeGetSize(value);
             const prefix = getPrefix(constructor, tag, "Set", `(${size})`);
             keys = getKeys(value, ctx.showHidden);
-            formatter =
-                constructor !== null ? formatSet.bind(null, value) : formatSet.bind(null, SetPrototypeValues(value));
+            formatter = constructor !== null ? formatSet.bind(null, value) : formatSet.bind(null, SetPrototypeValues(value));
             if (size === 0 && keys.length === 0 && protoProps === undefined) return `${prefix}{}`;
             braces = [`${prefix}{`, "}"];
         } else if (isMap(value)) {
             const size = MapPrototypeGetSize(value);
             const prefix = getPrefix(constructor, tag, "Map", `(${size})`);
             keys = getKeys(value, ctx.showHidden);
-            formatter =
-                constructor !== null ? formatMap.bind(null, value) : formatMap.bind(null, MapPrototypeEntries(value));
+            formatter = constructor !== null ? formatMap.bind(null, value) : formatMap.bind(null, MapPrototypeEntries(value));
             if (size === 0 && keys.length === 0 && protoProps === undefined) return `${prefix}{}`;
             braces = [`${prefix}{`, "}"];
         } else if (isTypedArray(value)) {
@@ -1656,9 +1572,7 @@ function formatRaw(ctx, value, recurseTimes, typedArray) {
             }
         } else if (isDate(value)) {
             // Make dates with properties first say the date
-            base = NumberIsNaN(DatePrototypeGetTime(value))
-                ? DatePrototypeToString(value)
-                : DatePrototypeToISOString(value);
+            base = NumberIsNaN(DatePrototypeGetTime(value)) ? DatePrototypeToString(value) : DatePrototypeToISOString(value);
             const prefix = getPrefix(constructor, tag, "Date");
             if (prefix !== "Date ") base = `${prefix}${base}`;
             if (keys.length === 0 && protoProps === undefined) {
@@ -1939,16 +1853,10 @@ function improveStack(stack, constructor, name, tag) {
     // for "regular errors" (errors that "look normal") for now.
     let len = name.length;
 
-    if (
-        constructor === null ||
-        (name.endsWith("Error") &&
-            stack.startsWith(name) &&
-            (stack.length === len || stack[len] === ":" || stack[len] === "\n"))
-    ) {
+    if (constructor === null || (name.endsWith("Error") && stack.startsWith(name) && (stack.length === len || stack[len] === ":" || stack[len] === "\n"))) {
         let fallback = "Error";
         if (constructor === null) {
-            const start =
-                stack.match(/^([A-Z][a-z_ A-Z0-9[\]()-]+)(?::|\n {4}at)/) || stack.match(/^([a-z_A-Z0-9-]*Error)$/);
+            const start = stack.match(/^([A-Z][a-z_ A-Z0-9[\]()-]+)(?::|\n {4}at)/) || stack.match(/^([a-z_A-Z0-9-]*Error)$/);
             fallback = (start && start[1]) || "";
             len = fallback.length;
             fallback = fallback || "Error";
@@ -2139,10 +2047,7 @@ function handleMaxCallStackSize(ctx, err, constructorName, indentationLvl) {
     if (isStackOverflowError(err)) {
         ctx.seen.pop();
         ctx.indentationLvl = indentationLvl;
-        return ctx.stylize(
-            `[${constructorName}: Inspection interrupted ` + "prematurely. Maximum call stack size exceeded.]",
-            "special"
-        );
+        return ctx.stylize(`[${constructorName}: Inspection interrupted ` + "prematurely. Maximum call stack size exceeded.]", "special");
     }
     /* c8 ignore next */
     throw new Error(err.stack);
@@ -2186,10 +2091,7 @@ function formatNumber(fn, number, numericSeparator) {
     if (NumberIsNaN(number)) {
         return fn(string, "number");
     }
-    return fn(
-        `${addNumericSeparator(string)}.${addNumericSeparatorEnd(String(number).slice(string.length + 1))}`,
-        "number"
-    );
+    return fn(`${addNumericSeparator(string)}.${addNumericSeparatorEnd(String(number).slice(string.length + 1))}`, "number");
 }
 
 function formatBigInt(fn, bigint, numericSeparator) {
@@ -2308,9 +2210,7 @@ function formatArrayBuffer(ctx, value) {
             return [...new Uint8Array(buffer)].map((x) => x.toString(16).padStart(2, "0")).join("");
         };
 
-    let str = StringPrototypeTrim(
-        RegExpPrototypeSymbolReplace(/(.{2})/g, hexSlice(buffer, 0, MathMin(ctx.maxArrayLength, buffer.length)), "$1 ")
-    );
+    let str = StringPrototypeTrim(RegExpPrototypeSymbolReplace(/(.{2})/g, hexSlice(buffer, 0, MathMin(ctx.maxArrayLength, buffer.length)), "$1 "));
     const remaining = buffer.length - ctx.maxArrayLength;
     if (remaining > 0) str += ` ... ${remaining} more byte${remaining > 1 ? "s" : ""}`;
     return [`${ctx.stylize("[Uint8Contents]", "special")}: <${str}>`];
@@ -2411,11 +2311,7 @@ function formatMapIterInner(ctx, recurseTimes, entries, state) {
     if (state === kWeak) {
         for (; i < maxLength; i++) {
             const pos = i * 2;
-            output[i] = `${formatValue(ctx, entries[pos], recurseTimes)} => ${formatValue(
-                ctx,
-                entries[pos + 1],
-                recurseTimes
-            )}`;
+            output[i] = `${formatValue(ctx, entries[pos], recurseTimes)} => ${formatValue(ctx, entries[pos + 1], recurseTimes)}`;
         }
         // Sort all entries to have a halfway reliable output (if more entries than
         // retrieved ones exist, we can not reliably return the same output) if the
@@ -2424,10 +2320,7 @@ function formatMapIterInner(ctx, recurseTimes, entries, state) {
     } else {
         for (; i < maxLength; i++) {
             const pos = i * 2;
-            const res = [
-                formatValue(ctx, entries[pos], recurseTimes),
-                formatValue(ctx, entries[pos + 1], recurseTimes),
-            ];
+            const res = [formatValue(ctx, entries[pos], recurseTimes), formatValue(ctx, entries[pos + 1], recurseTimes)];
             output[i] = reduceToSingleString(ctx, res, "", ["[", "]"], kArrayExtrasType, recurseTimes);
         }
     }
@@ -2473,7 +2366,7 @@ function formatProperty(ctx, value, recurseTimes, key, type, desc, original = va
     desc = desc ||
         ObjectGetOwnPropertyDescriptor(value, key) || {
             value: value[key],
-            enumerable: true,
+            enumerable: true
         };
     if (desc.value !== undefined) {
         const diff = ctx.compact !== true || type !== kObjectType ? 2 : 3;
@@ -2487,12 +2380,7 @@ function formatProperty(ctx, value, recurseTimes, key, type, desc, original = va
         const label = desc.set !== undefined ? "Getter/Setter" : "Getter";
         const s = ctx.stylize;
         const sp = "special";
-        if (
-            ctx.getters &&
-            (ctx.getters === true ||
-                (ctx.getters === "get" && desc.set === undefined) ||
-                (ctx.getters === "set" && desc.set !== undefined))
-        ) {
+        if (ctx.getters && (ctx.getters === true || (ctx.getters === "get" && desc.set === undefined) || (ctx.getters === "set" && desc.set !== undefined))) {
             try {
                 const tmp = FunctionPrototypeCall(desc.get, original);
                 ctx.indentationLvl += 2;
@@ -2599,10 +2487,7 @@ function reduceToSingleString(ctx, output, base, braces, extrasType, recurseTime
         }
         // Line up each entry on an individual line.
         const indentation = `\n${StringPrototypeRepeat(" ", ctx.indentationLvl)}`;
-        return (
-            `${base ? `${base} ` : ""}${braces[0]}${indentation}  ` +
-            `${join(output, `,${indentation}  `)}${indentation}${braces[1]}`
-        );
+        return `${base ? `${base} ` : ""}${braces[0]}${indentation}  ` + `${join(output, `,${indentation}  `)}${indentation}${braces[1]}`;
     }
     // Line up all entries on a single line in case the entries do not exceed
     // `breakLength`.
@@ -2648,9 +2533,7 @@ function hasBuiltInToString(value) {
 
     // Check closer if the object is a built-in.
     const descriptor = ObjectGetOwnPropertyDescriptor(pointer, "constructor");
-    return (
-        descriptor !== undefined && typeof descriptor.value === "function" && builtInObjects.has(descriptor.value.name)
-    );
+    return descriptor !== undefined && typeof descriptor.value === "function" && builtInObjects.has(descriptor.value.name);
 }
 
 const firstErrorLine = (error) => StringPrototypeSplit(error.message, "\n", 1)[0];
@@ -2721,18 +2604,14 @@ function formatWithOptionsInternal(inspectOptions, args) {
                                 tempStr = formatNumberNoColor(tempArg, inspectOptions);
                             } else if (typeof tempArg === "bigint") {
                                 tempStr = formatBigIntNoColor(tempArg, inspectOptions);
-                            } else if (
-                                typeof tempArg !== "object" ||
-                                tempArg === null ||
-                                !hasBuiltInToString(tempArg)
-                            ) {
+                            } else if (typeof tempArg !== "object" || tempArg === null || !hasBuiltInToString(tempArg)) {
                                 tempStr = String(tempArg);
                             } else {
                                 tempStr = inspect(tempArg, {
                                     ...inspectOptions,
                                     compact: 3,
                                     colors: false,
-                                    depth: 0,
+                                    depth: 0
                                 });
                             }
                             break;
@@ -2760,7 +2639,7 @@ function formatWithOptionsInternal(inspectOptions, args) {
                                 ...inspectOptions,
                                 showHidden: true,
                                 showProxy: true,
-                                depth: 4,
+                                depth: 4
                             });
                             break;
                         case 105: {

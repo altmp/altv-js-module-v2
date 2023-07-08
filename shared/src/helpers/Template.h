@@ -104,7 +104,6 @@ namespace js
 
             try
             {
-                // todo: make this work as constexpr on linux
                 auto MakeTuple = [&]<size_t... Ints>(std::index_sequence<Ints...>)->auto
                 {
                     return std::make_tuple(Wrapper::GetArg<Wrapper::CleanArg<std::tuple_element_t<Ints, Arguments>>>(ctx, Ints)...);
@@ -236,7 +235,6 @@ namespace js
         }
         void StaticProperty(const std::string& name, PropertyCallback getter, PropertyCallback setter = nullptr)
         {
-            // todo: use native data property
             Get()->SetAccessorProperty(js::JSValue(name), WrapProperty(getter), setter ? WrapProperty(setter) : v8::Local<v8::FunctionTemplate>());
         }
         // Property returns an object that will call the specified handlers
