@@ -5,7 +5,7 @@ static js::Event worldObjectPositionChangeEvent(alt::CEvent::Type::WORLD_OBJECT_
 {
     auto e = static_cast<const alt::CWorldObjectPositionChangeEvent*>(ev);
     args.Set("object", e->GetWorldObject());
-    args.Set("oldPosition", e->GetOldPosition());
+    args.Set("oldPos", e->GetOldPosition());
 });
 
 static js::Event worldObjectStreamInEvent(alt::CEvent::Type::WORLD_OBJECT_STREAM_IN, [](const alt::CEvent* ev, js::Event::EventArgs& args)
