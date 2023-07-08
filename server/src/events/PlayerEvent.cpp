@@ -52,43 +52,6 @@ static js::Event playerDeathEvent(alt::CEvent::Type::PLAYER_DEATH, [](const alt:
     args.Set("weaponHash", e->GetWeapon());
 });
 
-static js::Event playerEnteredVehicleEvent(alt::CEvent::Type::PLAYER_ENTER_VEHICLE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
-{
-    auto e = static_cast<const alt::CPlayerEnterVehicleEvent*>(ev);
-
-    args.Set("player", e->GetPlayer());
-    args.Set("vehicle", e->GetTarget());
-    args.Set("seat", e->GetSeat());
-});
-
-static js::Event playerVehicleEnteringEvent(alt::CEvent::Type::PLAYER_ENTERING_VEHICLE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
-{
-    auto e = static_cast<const alt::CPlayerEnteringVehicleEvent*>(ev);
-
-    args.Set("player", e->GetPlayer());
-    args.Set("vehicle", e->GetTarget());
-    args.Set("seat", e->GetSeat());
-});
-
-static js::Event playerVehicleLeftEvent(alt::CEvent::Type::PLAYER_LEAVE_VEHICLE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
-{
-    auto e = static_cast<const alt::CPlayerLeaveVehicleEvent*>(ev);
-
-    args.Set("player", e->GetPlayer());
-    args.Set("vehicle", e->GetTarget());
-    args.Set("seat", e->GetSeat());
-});
-
-static js::Event playerVehicleSeatChangeEvent(alt::CEvent::Type::PLAYER_CHANGE_VEHICLE_SEAT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
-{
-    auto e = static_cast<const alt::CPlayerChangeVehicleSeatEvent*>(ev);
-
-    args.Set("player", e->GetPlayer());
-    args.Set("vehicle", e->GetTarget());
-    args.Set("oldSeat", e->GetOldSeat());
-    args.Set("newSeat", e->GetNewSeat());
-});
-
 static js::Event playerRequestControlEvent(alt::CEvent::Type::PLAYER_REQUEST_CONTROL, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
     auto e = static_cast<const alt::CPlayerRequestControlEvent*>(ev);
