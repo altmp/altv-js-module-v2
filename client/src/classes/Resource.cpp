@@ -29,6 +29,4 @@ extern js::Class resourceClass("Resource", &sharedResourceClass, nullptr, [](js:
 {
     tpl.StaticProperty("current", Current);
     tpl.StaticProperty("all", All);
-
-    // todo: add missing properties
 }, true);
