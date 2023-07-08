@@ -1,4 +1,14 @@
 #include "Class.h"
+#include "helpers/ClassInstanceCache.h"
+
+extern js::ClassInstanceCache weaponDataCache;
+static void GetCurrentWeaponData(js::PropertyContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    alt::ILocalPlayer* player = ctx.GetThisObject<alt::ILocalPlayer>();
+
+    ctx.Return(weaponDataCache.GetOrCreate(ctx.GetResource(), player->GetCurrentWeaponData()->GetNameHash()));
+}
 
 static void WeaponsGetter(js::PropertyContext& ctx)
 {
@@ -66,7 +76,7 @@ extern js::Class localPlayerClass("LocalPlayer", &playerClass, nullptr, [](js::C
     tpl.Property<&alt::ILocalPlayer::GetCurrentAmmo>("currentAmmo");
     tpl.Property<&alt::ILocalPlayer::GetStamina, &alt::ILocalPlayer::SetStamina>("stamina");
     tpl.Property<&alt::ILocalPlayer::GetMaxStamina, &alt::ILocalPlayer::SetMaxStamina>("maxStamina");
-    //tpl.Property("currentWeaponData", GetCurrentWeaponData);
+    tpl.Property("currentWeaponData", GetCurrentWeaponData);
     tpl.Property("weapons", WeaponsGetter);
 
     tpl.Method("getWeaponAmmo", GetWeaponAmmo);
