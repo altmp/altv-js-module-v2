@@ -75,6 +75,16 @@ static void IsStartedGetter(js::PropertyContext& ctx)
     ctx.Return(resource->IsStarted());
 }
 
+static void ConfigGetter(js::PropertyContext& ctx)
+{
+    if(!ctx.CheckExtraInternalFieldValue()) return;
+
+    alt::IResource* resource = ctx.GetExtraInternalFieldValue<alt::IResource>();
+    v8::Local<v8::Value> config = js::ConfigValueToJS(resource->GetConfig());
+    if(!ctx.Check(!config.IsEmpty(), "Failed to convert config")) return;
+    ctx.Return(config);
+}
+
 static void Get(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
@@ -115,6 +125,7 @@ extern js::Class sharedResourceClass("SharedResource", [](js::ClassTemplate& tpl
     tpl.Property("dependencies", DependenciesGetter);
     tpl.Property("dependants", DependantsGetter);
     tpl.Property("isStarted", IsStartedGetter);
+    tpl.Property("config", ConfigGetter);
 
     tpl.StaticFunction("get", Get);
     tpl.StaticFunction("exists", Exists);
