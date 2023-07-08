@@ -21,3 +21,27 @@ static js::Event netOwnerChangeEvent(alt::CEvent::Type::NETOWNER_CHANGE, [](cons
     args.Set("oldOwner", e->GetOldOwner());
     args.Set("newOwner", e->GetNewOwner());
 });
+
+static void SetDamageValue(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckExtraInternalFieldValue()) return;
+    alt::CWeaponDamageEvent* ev = ctx.GetExtraInternalFieldValue<alt::CWeaponDamageEvent>();
+
+    uint32_t value;
+    if(!ctx.GetArg(0, value)) return;
+
+    ev->SetDamageValue(value);
+}
+static js::Event weaponDamageEvent(alt::CEvent::Type::WEAPON_DAMAGE_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CWeaponDamageEvent*>(ev);
+
+    args.Set("source", e->GetSource());
+    args.Set("target", e->GetTarget());
+    args.Set("weaponHash", e->GetWeaponHash());
+    args.Set("damage", e->GetDamageValue());
+    args.Set("offset", e->GetShotOffset());
+    args.Set("bodyPart", e->GetBodyPart());
+
+    args.SetMethod("setDamageValue", SetDamageValue);
+});

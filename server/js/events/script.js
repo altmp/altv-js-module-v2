@@ -1,7 +1,6 @@
 const { Event } = requireBinding("shared/events.js");
 
 Event.register(alt.Enums.EventType.COLSHAPE_EVENT, "ColShapeEvent");
-Event.register(alt.Enums.EventType.WEAPON_DAMAGE_EVENT, "WeaponDamage");
 Event.register(alt.Enums.EventType.EXPLOSION_EVENT, "Explosion");
 Event.register(alt.Enums.EventType.FIRE_EVENT, "FireStart");
 Event.register(alt.Enums.EventType.START_PROJECTILE_EVENT, "ProjectileStart");
@@ -24,7 +23,7 @@ alt.Events.onColShapeEvent(({ entity, colShape, state }) => {
     const eventType = getColShapeEventType(colShape, state);
     const data = {
         entity,
-        colShape,
+        colShape
     };
 
     Event.invoke(eventType, data, true);
