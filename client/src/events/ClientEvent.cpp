@@ -44,7 +44,7 @@ static js::Event rmluiEvent(alt::CEvent::Type::RMLUI_EVENT, [](const alt::CEvent
 static js::Event windowFocusChangeEvent(alt::CEvent::Type::WINDOW_FOCUS_CHANGE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
     auto e = static_cast<const alt::CWindowFocusChangeEvent*>(ev);
-    args.Set("isFocused", e->GetState());
+    args.Set("state", e->GetState());
 });
 
 static js::Event windowResolutionChangeEvent(alt::CEvent::Type::WINDOW_RESOLUTION_CHANGE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
@@ -52,4 +52,19 @@ static js::Event windowResolutionChangeEvent(alt::CEvent::Type::WINDOW_RESOLUTIO
     auto e = static_cast<const alt::CWindowResolutionChangeEvent*>(ev);
     args.Set("oldResolution", e->GetOldResolution());
     args.Set("newResolution", e->GetNewResolution());
+});
+
+static js::Event connectionCompleteEvent(alt::CEvent::Type::CONNECTION_COMPLETE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CConnectionCompleteEvent*>(ev);
+});
+
+static js::Event disconnectEvent(alt::CEvent::Type::DISCONNECT_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CDisconnectEvent*>(ev);
+});
+
+static js::Event spawnedEvent(alt::CEvent::Type::SPAWNED, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CSpawnedEvent*>(ev);
 });

@@ -23,7 +23,6 @@ static js::Event taskChangeEvent(alt::CEvent::Type::TASK_CHANGE, [](const alt::C
 static js::Event entityHitEntityEvent(alt::CEvent::Type::ENTITY_HIT_ENTITY, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
     auto e = static_cast<const alt::CEntityHitEntityEvent*>(ev);
-
     args.Set("entity", e->GetTarget());
     args.Set("damager", e->GetDamager());
     args.Set("weapon", e->GetWeapon());
