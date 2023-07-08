@@ -97,6 +97,19 @@ namespace js
         return jsArr;
     }
     template<class T>
+    inline v8::Local<v8::Array> JSValue(const std::set<T>& set)
+    {
+        v8::Isolate* isolate = v8::Isolate::GetCurrent();
+        v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
+        auto jsArr = v8::Array::New(isolate, set.size());
+        int i = 0;
+        for(auto& val : set)
+        {
+            jsArr->Set(ctx, i++, JSValue(val));
+        }
+        return jsArr;
+    }
+    template<class T>
     inline v8::Local<v8::Object> JSValue(const std::unordered_map<std::string, T>& map)
     {
         v8::Isolate* isolate = v8::Isolate::GetCurrent();
