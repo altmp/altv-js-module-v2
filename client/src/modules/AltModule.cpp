@@ -150,6 +150,11 @@ static void ScreenResolutionGetter(js::PropertyContext& ctx)
     ctx.Return(alt::ICore::Instance().GetScreenResolution());
 }
 
+static void IsFullscreenGetter(js::PropertyContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().IsFullScreen());
+}
+
 static void AddGxtText(js::FunctionContext& ctx)
 {
     uint32_t hash;
@@ -571,6 +576,24 @@ static void SetMinimapIsRectangle(js::FunctionContext& ctx)
     alt::ICore::Instance().SetMinimapIsRectangle(state);
 }
 
+static void LoadDefaultIpls(js::FunctionContext& ctx)
+{
+    alt::ICore::Instance().LoadDefaultIpls();
+}
+
+static void GetPedBonePos(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(2)) return;
+
+    int32_t scriptId;
+    if(!ctx.GetArg(0, scriptId)) return;
+
+    uint16_t boneId;
+    if(!ctx.GetArg(1, boneId)) return;
+
+    ctx.Return(alt::ICore::Instance().GetPedBonePos(scriptId, boneId));
+}
+
 static void LocalMetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
@@ -614,6 +637,7 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.StaticProperty("rmlControls", RmlControlsGetter, RmlControlsSetter);
     module.StaticProperty("camPos", CamPosGetter);
     module.StaticProperty("screenResolution", ScreenResolutionGetter);
+    module.StaticProperty("isFullscreen", IsFullscreenGetter);
 
     module.StaticLazyProperty("licenseHash", LicenseHashGetter);
     module.StaticLazyProperty("clientConfig", ClientConfigGetter);
@@ -651,6 +675,8 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.StaticFunction("screenToWorld", ScreenToWorld);
     module.StaticFunction("setMinimapComponentPosition", SetMinimapComponentPosition);
     module.StaticFunction("setMinimapIsRectangle", SetMinimapIsRectangle);
+    module.StaticFunction("loadDefaultIpls", LoadDefaultIpls);
+    module.StaticFunction("getPedBonePos", GetPedBonePos);
 
     module.Namespace(eventsNamespace);
     module.Namespace(discordNamespace);
