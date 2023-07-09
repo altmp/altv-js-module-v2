@@ -651,6 +651,36 @@ static void SetAmmoMax100(js::FunctionContext& ctx)
     player->SetAmmoMax100(ammoHash, ammoMax);
 }
 
+static void AddDecoration(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t collection;
+    if(!ctx.GetArgAsHash(0, collection)) return;
+
+    uint32_t overlay;
+    if(!ctx.GetArgAsHash(1, overlay)) return;
+
+    player->AddDecoration(collection, overlay);
+}
+
+static void RemoveDecoration(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint32_t collection;
+    if(!ctx.GetArgAsHash(0, collection)) return;
+
+    uint32_t overlay;
+    if(!ctx.GetArgAsHash(1, overlay)) return;
+
+    player->RemoveDecoration(collection, overlay);
+}
+
 static void LocalMetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
@@ -777,6 +807,9 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method("setAmmoMax50", SetAmmoMax50);
     tpl.Method("getAmmoMax100", GetAmmoMax100);
     tpl.Method("setAmmoMax100", SetAmmoMax100);
+    tpl.Method("addDecoration", AddDecoration);
+    tpl.Method("removeDecoration", RemoveDecoration);
+    tpl.Method<&alt::IPlayer::ClearDecorations>("clearDecorations");
 
     tpl.DynamicProperty("localMeta", LocalMetaGetter, LocalMetaSetter, LocalMetaDeleter, LocalMetaEnumerator);
 
