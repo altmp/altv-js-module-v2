@@ -585,7 +585,7 @@ extern js::Class playerClass, localPlayerClass, vehicleClass, pedClass, networkO
                 localPedClass, localVehicleClass, rmlDocumentClass, rmlElementClass, objectClass, webSocketClientClass,
                 mapZoomDataClass, virtualEntityClass, virtualEntityGroupClass, weaponDataClass, handlingClass, handlingDataClass,
                 httpClientClass, audioOutputClass, audioOutputAttachedClass, audioOutputFrontendClass, audioOutputWorldClass;
-extern js::Namespace eventsNamespace, discordNamespace, voiceNamespace, localStorageNamespace, statsNamespace;
+extern js::Namespace eventsNamespace, discordNamespace, voiceNamespace, localStorageNamespace, statsNamespace, focusDataNamespace;
 static js::Module altModule("@altv/client", "@altv/shared",
     { &playerClass, &localPlayerClass, &vehicleClass, &pedClass, &networkObjectClass,
     &audioClass, &audioFilterClass, &blipClass, &textLabelClass, &checkpointClass, &webViewClass, &fontClass,
@@ -657,6 +657,7 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.Namespace(voiceNamespace);
     module.Namespace(localStorageNamespace);
     module.Namespace(statsNamespace);
+    module.Namespace(focusDataNamespace);
     module.Namespace("WeaponObject");
 
     module.StaticDynamicProperty("localMeta", LocalMetaGetter);
