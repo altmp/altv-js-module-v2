@@ -1,4 +1,5 @@
 #include "Namespace.h"
+#include "interfaces/IAltResource.h"
 
 static void IsReadyGetter(js::PropertyContext& ctx)
 {
@@ -25,6 +26,35 @@ static void AvatarGetter(js::PropertyContext& ctx)
     ctx.Return(alt::ICore::Instance().GetDiscordManager()->GetAvatar());
 }
 
+static void RequestOAuth2Token(js::FunctionContext& ctx)
+{
+    static std::set<js::Promise*> promises;
+
+    if(!ctx.CheckArgCount(1)) return;
+
+    std::string appId;
+    if(!ctx.GetArg(0, appId)) return;
+
+    js::Promise* promise = new js::Promise;
+    promises.insert(promise);
+    js::IAltResource* resource = ctx.GetResource<js::IAltResource>();
+    auto callback = [=](bool success, const std::string& tokenStr)
+    {
+        std::string token = tokenStr;
+        resource->PushNextTickCallback(
+          [=]()
+          {
+              if(success) promise->Resolve(token);
+              else
+                  promise->Reject("Failed to get OAuth2 token");
+              promises.erase(promise);
+          });
+    };
+    alt::ICore::Instance().DiscordRequestOAuth2Token(appId, callback);
+
+    ctx.Return(promise->Get());
+}
+
 // clang-format off
 extern js::Namespace discordNamespace("Discord", [](js::NamespaceTemplate& tpl) {
     tpl.StaticProperty("isReady", IsReadyGetter);
@@ -32,4 +62,6 @@ extern js::Namespace discordNamespace("Discord", [](js::NamespaceTemplate& tpl) 
     tpl.StaticProperty("userName", UserNameGetter);
     tpl.StaticProperty("discriminator", DiscriminatorGetter);
     tpl.StaticProperty("avatar", AvatarGetter);
+
+    tpl.StaticFunction("requestOAuth2Token", RequestOAuth2Token);
 });
