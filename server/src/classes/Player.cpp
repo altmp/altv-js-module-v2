@@ -681,6 +681,24 @@ static void RemoveDecoration(js::FunctionContext& ctx)
     player->RemoveDecoration(collection, overlay);
 }
 
+static void GetDecorations(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    std::vector<alt::CDecoration> decorations = player->GetDecorations();
+    js::Array arr(decorations.size());
+    for(auto decoration : decorations)
+    {
+        js::Object obj;
+        obj.Set("collection", decoration.collection);
+        obj.Set("overlay", decoration.overlay);
+        arr.Push(obj);
+    }
+
+    ctx.Return(arr);
+}
+
 static void LocalMetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
@@ -810,6 +828,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method("addDecoration", AddDecoration);
     tpl.Method("removeDecoration", RemoveDecoration);
     tpl.Method<&alt::IPlayer::ClearDecorations>("clearDecorations");
+    tpl.Method("getDecorations", GetDecorations);
 
     tpl.DynamicProperty("localMeta", LocalMetaGetter, LocalMetaSetter, LocalMetaDeleter, LocalMetaEnumerator);
 
