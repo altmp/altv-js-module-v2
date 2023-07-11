@@ -829,6 +829,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method("removeDecoration", RemoveDecoration);
     tpl.Method<&alt::IPlayer::ClearDecorations>("clearDecorations");
     tpl.Method("getDecorations", GetDecorations);
+    tpl.Method<&alt::IPlayer::PlayScenario>("playScenario");
 
     tpl.DynamicProperty("localMeta", LocalMetaGetter, LocalMetaSetter, LocalMetaDeleter, LocalMetaEnumerator);
 
