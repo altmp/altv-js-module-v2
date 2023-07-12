@@ -150,4 +150,10 @@ namespace js
         return Type::INVALID;
         // clang-format on
     }
+
+    template<typename T>
+    static constexpr std::string CppTypeToString()
+    {
+        return TypeToString(CppTypeToJSType<T>());
+    }
 }  // namespace js
