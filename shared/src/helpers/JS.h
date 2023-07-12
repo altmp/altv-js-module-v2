@@ -491,6 +491,7 @@ namespace js
     private:
         Persistent<v8::Promise::Resolver> resolver;
         Persistent<v8::Promise> promise;
+        Type resultType = Type::INVALID;
 
     public:
         Promise() : PersistentValue(true), resolver(v8::Isolate::GetCurrent(), v8::Promise::Resolver::New(GetContext()).ToLocalChecked()) {}
@@ -542,11 +543,22 @@ namespace js
             std::optional<T> result = js::CppValue<T>(val);
             if(!result.has_value())
             {
-                if(throwOnError) Throw("Failed to get promise result value, invalid type");
+                if(throwOnError) Throw("Failed to get promise result, expected " + CppTypeToString<T>() + " but got " + TypeToString(GetResultType()));
                 return false;
             }
             out = result.value();
             return true;
+        }
+
+        Type GetResultType()
+        {
+            if(Get()->State() == v8::Promise::PromiseState::kPending) return Type::INVALID;
+            if(resultType == Type::INVALID)
+            {
+                v8::Local<v8::Value> val = Get()->Result();
+                resultType = GetType(val, GetResource());
+            }
+            return resultType;
         }
 
         bool Await()
