@@ -242,7 +242,7 @@ namespace js
             std::optional<T> result = CppValue<T>(info[index]);
             if(!result.has_value())
             {
-                Throw("Invalid argument type at index " + std::to_string(index) + ", expected " + TypeToString(CppTypeToJSType<T>()) + " but got " + TypeToString(GetArgType(index)));
+                Throw("Invalid argument type at index " + std::to_string(index) + ", expected " + CppTypeToString<T>() + " but got " + TypeToString(GetArgType(index)));
                 return false;
             }
             outValue = (T)result.value();
@@ -326,7 +326,7 @@ namespace js
             std::optional<T> result = CppValue<T>(value);
             if(!result.has_value())
             {
-                Throw("Invalid value type, expected " + TypeToString(CppTypeToJSType<T>()) + " but got " + TypeToString(GetValueType()));
+                Throw("Invalid value type, expected " + CppTypeToString<T>() + " but got " + TypeToString(GetValueType()));
                 return false;
             }
             outValue = (T)result.value();
