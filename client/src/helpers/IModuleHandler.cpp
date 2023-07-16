@@ -23,15 +23,30 @@ v8::MaybeLocal<v8::Value> IModuleHandler::SyntheticModuleEvaluateCallback(v8::Lo
     return promise;
 }
 
+static inline std::unordered_map<std::string, std::string> TransformImportAssertions(v8::Local<v8::FixedArray> assertions)
+{
+    v8::Isolate* isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
+    std::unordered_map<std::string, std::string> result;
+
+    for(int i = 0; i < assertions->Length(); i += 2)
+    {
+        std::string key = js::CppValue(assertions->Get(ctx, i).As<v8::String>());
+        std::string value = js::CppValue(assertions->Get(ctx, i + 1).As<v8::String>());
+        result.insert({ key, value });
+    }
+
+    return result;
+}
+
 v8::MaybeLocal<v8::Module>
   IModuleHandler::ResolveModuleCallback(v8::Local<v8::Context> context, v8::Local<v8::String> specifier, v8::Local<v8::FixedArray> importAssertions, v8::Local<v8::Module> referrer)
 {
     CJavaScriptResource* resource = js::IResource::GetFromContext<CJavaScriptResource>(context);
     if(!resource) return v8::MaybeLocal<v8::Module>();
 
-    // todo: import assertions?
-
-    return resource->Resolve(context, js::CppValue(specifier), referrer);
+    std::unordered_map<std::string, std::string> assertions = TransformImportAssertions(importAssertions);
+    return resource->Resolve(context, js::CppValue(specifier), referrer, assertions);
 }
 
 bool IModuleHandler::IsBytecodeBuffer(const std::vector<uint8_t>& buffer)
@@ -39,7 +54,8 @@ bool IModuleHandler::IsBytecodeBuffer(const std::vector<uint8_t>& buffer)
     return buffer.size() >= sizeof(bytecodeMagic) && std::memcmp(buffer.data(), bytecodeMagic, sizeof(bytecodeMagic)) == 0;
 }
 
-v8::MaybeLocal<v8::Module> IModuleHandler::Resolve(v8::Local<v8::Context> context, const std::string& specifier, v8::Local<v8::Module> referrer)
+v8::MaybeLocal<v8::Module>
+  IModuleHandler::Resolve(v8::Local<v8::Context> context, const std::string& specifier, v8::Local<v8::Module> referrer, std::unordered_map<std::string, std::string>& assertions)
 {
     v8::Isolate* isolate = context->GetIsolate();
     if(modules.contains(specifier)) return modules.at(specifier).module.Get(isolate);
@@ -48,7 +64,16 @@ v8::MaybeLocal<v8::Module> IModuleHandler::Resolve(v8::Local<v8::Context> contex
     v8::MaybeLocal<v8::Module> module;
     Module::Type type;
 
-    if(js::Module::Exists(specifier))
+    if(assertions.contains("type"))
+    {
+        std::string assertionType = assertions.at("type");
+        if(assertionType == "json")
+        {
+            module = ResolveJSON(context, specifier, GetModulePath(referrer), name);
+            type = Module::Type::JSON;
+        }
+    }
+    else if(js::Module::Exists(specifier))
     {
         module = ResolveBuiltin(context, specifier);
         type = Module::Type::Builtin;
@@ -92,25 +117,48 @@ v8::MaybeLocal<v8::Module> IModuleHandler::ResolveResource(v8::Local<v8::Context
     return CompileSyntheticModule(specifier, exports.ToMap<v8::Local<v8::Value>>());
 }
 
+// Returns pair of resolved name and file content
+static inline std::pair<std::string, std::vector<uint8_t>> ReadFile(v8::Local<v8::Context> context, const std::string& specifier, const std::string& referrer)
+{
+    alt::IResource* resource = js::IResource::GetFromContext(context)->GetResource();
+    alt::IPackage::PathInfo path = alt::ICore::Instance().Resolve(resource, specifier, referrer);
+    if(!path.pkg) return {};
+
+    std::string fileName = path.fileName;
+    if(!path.pkg->FileExists(fileName)) return {};
+    if(!js::DoesFileExist(path.pkg, fileName)) return {};
+
+    std::string name = path.prefix + fileName;
+    return { name, js::ReadFile(path.pkg, fileName) };
+}
+
 v8::MaybeLocal<v8::Module> IModuleHandler::ResolveFile(v8::Local<v8::Context> context, const std::string& specifier, const std::string& referrer, std::string& name, bool& isBytecode)
 {
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
-    alt::IResource* resource = js::IResource::GetFromContext(context)->GetResource();
 
-    alt::IPackage::PathInfo path = alt::ICore::Instance().Resolve(resource, specifier, referrer);
-    if(!path.pkg) return v8::MaybeLocal<v8::Module>();
-    std::string fileName = path.fileName;
-    if(!path.pkg->FileExists(fileName)) return v8::MaybeLocal<v8::Module>();
-    name = path.prefix + fileName;
+    auto [resolvedName, buffer] = ReadFile(context, specifier, referrer);
+    if(modules.contains(resolvedName)) return modules.at(resolvedName).module.Get(isolate);
 
-    if(modules.contains(name)) return modules.at(name).module.Get(isolate);
-
-    if(!js::DoesFileExist(path.pkg, fileName)) return v8::MaybeLocal<v8::Module>();
-    std::vector<uint8_t> buffer = js::ReadFile(path.pkg, fileName);
     isBytecode = IsBytecodeBuffer(buffer);
-
     if(isBytecode) return CompileBytecode(name, buffer);
     return CompileModule(name, std::string{ (char*)buffer.data(), buffer.size() });
+}
+
+v8::MaybeLocal<v8::Module> IModuleHandler::ResolveJSON(v8::Local<v8::Context> context, const std::string& specifier, const std::string& referrer, std::string& name)
+{
+    v8::Isolate* isolate = v8::Isolate::GetCurrent();
+
+    auto [resolvedName, buffer] = ReadFile(context, specifier, referrer);
+    if(modules.contains(resolvedName)) return modules.at(resolvedName).module.Get(isolate);
+
+    std::string source{ (char*)buffer.data(), buffer.size() };
+    v8::MaybeLocal<v8::Value> maybeValue = v8::JSON::Parse(context, js::JSValue(source));
+    if(maybeValue.IsEmpty())
+    {
+        js::Logger::Error("Failed to parse JSON module: " + specifier);
+        return v8::MaybeLocal<v8::Module>();
+    }
+    return CompileSyntheticModule(name, { { "default", maybeValue.ToLocalChecked() } });
 }
 
 v8::MaybeLocal<v8::Module> IModuleHandler::CompileModule(const std::string& name, const std::string& source)

@@ -15,7 +15,8 @@ public:
             Builtin,
             Resource,
             File,
-            Bytecode
+            Bytecode,
+            JSON
         };
 
         js::Persistent<v8::Module> module;
@@ -42,10 +43,12 @@ protected:
 
     bool IsBytecodeBuffer(const std::vector<uint8_t>& buffer);
 
-    v8::MaybeLocal<v8::Module> Resolve(v8::Local<v8::Context> context, const std::string& specifier, v8::Local<v8::Module> referrer);
+    v8::MaybeLocal<v8::Module>
+      Resolve(v8::Local<v8::Context> context, const std::string& specifier, v8::Local<v8::Module> referrer, std::unordered_map<std::string, std::string>& importAssertions);
     v8::MaybeLocal<v8::Module> ResolveBuiltin(v8::Local<v8::Context> context, const std::string& specifier);
     v8::MaybeLocal<v8::Module> ResolveResource(v8::Local<v8::Context> context, const std::string& specifier);
     v8::MaybeLocal<v8::Module> ResolveFile(v8::Local<v8::Context> context, const std::string& specifier, const std::string& referrer, std::string& name, bool& isBytecode);
+    v8::MaybeLocal<v8::Module> ResolveJSON(v8::Local<v8::Context> context, const std::string& specifier, const std::string& referrer, std::string& name);
 
     int GetNextScriptId()
     {
