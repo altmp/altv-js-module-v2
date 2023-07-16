@@ -223,9 +223,13 @@ v8::MaybeLocal<v8::Value> IModuleHandler::EvaluateModule(v8::Local<v8::Context> 
 void IModuleHandler::DumpModulesCache()
 {
     v8::Isolate* isolate = CJavaScriptRuntime::Instance().GetIsolate();
-    js::Logger::Warn("Modules cache:");
+    v8::Locker locker(isolate);
+    v8::HandleScope scope(isolate);
+    v8::Isolate::Scope isolateScope(isolate);
+
+    js::Logger::Info("Modules cache:");
     for(const auto& [name, module] : modules)
     {
-        js::Logger::Colored("~y~", name, "~w~| Type:", magic_enum::enum_name(module.type), "| Status:", magic_enum::enum_name(module.module.Get(isolate)->GetStatus()));
+        js::Logger::Colored("~y~", name, "~w~| Type:~y~", magic_enum::enum_name(module.type), "~w~| Status:~y~", magic_enum::enum_name(module.module.Get(isolate)->GetStatus()));
     }
 }
