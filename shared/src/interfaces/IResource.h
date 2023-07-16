@@ -69,7 +69,7 @@ namespace js
         template<class T>
         T* As()
         {
-            return static_cast<T*>(this);
+            return dynamic_cast<T*>(this);
         }
 
         v8::Isolate* GetIsolate() const
