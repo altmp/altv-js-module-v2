@@ -1,6 +1,7 @@
 #include "cpp-sdk/version/version.h"
 #include "cpp-sdk/SDK.h"
 
+#include "ClientCommandHandlers.h"
 #include "CommandHandlers.h"
 #include "CJavaScriptRuntime.h"
 
@@ -14,6 +15,7 @@ EXPORT alt::IScriptRuntime* CreateScriptRuntime(alt::ICore* core)
     core->SubscribeCommand("debughandles", js::DebugHandlesCommand);
     core->SubscribeCommand("dumpbinding", js::DumpBindingCommand);
     core->SubscribeCommand("dumpallbindings", js::DumpAllBindingsCommand);
+    core->SubscribeCommand("dumpmodulescache", js::DumpModulesCacheCommand);
 
     return &runtime;
 }

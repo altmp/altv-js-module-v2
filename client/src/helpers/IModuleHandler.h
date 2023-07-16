@@ -70,4 +70,6 @@ public:
 
     bool InstantiateModule(v8::Local<v8::Context> context, v8::Local<v8::Module> module);
     v8::MaybeLocal<v8::Value> EvaluateModule(v8::Local<v8::Context> context, v8::Local<v8::Module> module);
+
+    void DumpModulesCache();
 };

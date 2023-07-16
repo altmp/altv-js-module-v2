@@ -4,6 +4,8 @@
 #include "CJavaScriptResource.h"
 #include "Module.h"
 #include "Logger.h"
+#include "magic_enum/include/magic_enum.hpp"
+#include "CJavaScriptRuntime.h"
 
 static constexpr const char bytecodeMagic[] = { 'A', 'L', 'T', 'B', 'C' };
 static constexpr const char resourceImportPrefix[] = "@resource/";
@@ -216,4 +218,14 @@ v8::MaybeLocal<v8::Value> IModuleHandler::EvaluateModule(v8::Local<v8::Context> 
 {
     v8::MaybeLocal<v8::Value> maybeResult = module->Evaluate(context);
     return maybeResult;
+}
+
+void IModuleHandler::DumpModulesCache()
+{
+    v8::Isolate* isolate = CJavaScriptRuntime::Instance().GetIsolate();
+    js::Logger::Warn("Modules cache:");
+    for(const auto& [name, module] : modules)
+    {
+        js::Logger::Colored("~y~", name, "~w~| Type:", magic_enum::enum_name(module.type), "| Status:", magic_enum::enum_name(module.module.Get(isolate)->GetStatus()));
+    }
 }
