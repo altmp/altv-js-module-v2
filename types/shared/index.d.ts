@@ -297,7 +297,7 @@ declare module "@altv/shared" {
         }
         interface ServerEventContext extends ScriptEventContext {}
         interface ConsoleCommandEventContext extends EventContext {
-            readonly name: string;
+            readonly command: string;
             readonly args: string[];
         }
         interface ErrorEventContext extends EventContext {
