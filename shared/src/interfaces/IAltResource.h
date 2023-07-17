@@ -66,6 +66,7 @@ namespace js
 
         void OnRemoveBaseObject(alt::IBaseObject* object) override
         {
+            if(context.IsEmpty()) return;
             IResource::Scope scope(this);
 
             IScriptObjectHandler::DestroyScriptObject(object);
@@ -73,6 +74,7 @@ namespace js
 
         void OnEvent(const alt::CEvent* ev) override
         {
+            if(context.IsEmpty()) return;
             IResource::Scope scope(this);
 
             if(ev->GetType() == alt::CEvent::Type::RESOURCE_STOP) DestroyResourceObject(static_cast<const alt::CResourceStopEvent*>(ev)->GetResource());
