@@ -2,6 +2,7 @@
 const { registerFactory, getFactoryCreateFunction } = requireBinding("shared/factory.js");
 
 registerFactory("Audio", alt.Audio, alt.Enums.BaseObjectType.AUDIO);
+registerFactory("WebView", alt.WebView, alt.Enums.BaseObjectType.WEBVIEW);
 
 // Factory ctors
 
@@ -26,3 +27,5 @@ alt.Object.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.OBJECT, (c
 alt.WeaponObject.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.OBJECT, (ctx) => (ctx.isWeaponObject = true));
 
 alt.WebSocketClient.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.WEBSOCKET_CLIENT);
+
+alt.WebView.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.WEBVIEW);
