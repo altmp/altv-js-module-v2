@@ -2,30 +2,34 @@
 #include "interfaces/IResource.h"
 #include "interfaces/IAltResource.h"
 
-static void GameControlsActiveGetter(js::PropertyContext& ctx)
+static void AreGameControlsActive(js::FunctionContext& ctx)
 {
-    ctx.Return(alt::ICore::Instance().AreControlsEnabled());
+    ctx.Return(ctx.GetResource()->GetResource()->GameControlsActive());
 }
 
-static void GameControlsActiveSetter(js::PropertyContext& ctx)
+static void SetGameControlsActive(js::FunctionContext& ctx)
 {
+    if(!ctx.CheckArgCount(1)) return;
+
     bool val;
-    if(!ctx.GetValue(val)) return;
+    if(!ctx.GetArg(0, val)) return;
 
     ctx.GetResource()->GetResource()->ToggleGameControls(val);
 }
 
-static void CursorVisibleGetter(js::PropertyContext& ctx)
+static void IsCursorVisible(js::FunctionContext& ctx)
 {
     ctx.Return(ctx.GetResource()->GetResource()->CursorVisible());
 }
 
-static void CursorVisibleSetter(js::PropertyContext& ctx)
+static void SetCursorVisible(js::FunctionContext& ctx)
 {
-    bool val;
-    if(!ctx.GetValue(val)) return;
+    if(!ctx.CheckArgCount(1)) return;
 
-    ctx.GetResource()->GetResource()->ToggleCursor(val);
+    bool val;
+    if(!ctx.GetArg(0, val)) return;
+
+    ctx.Return(ctx.GetResource()->GetResource()->ToggleCursor(val));
 }
 
 static void LocaleGetter(js::PropertyContext& ctx)
@@ -48,15 +52,17 @@ static void IsConsoleOpenGetter(js::PropertyContext& ctx)
     ctx.Return(alt::ICore::Instance().IsConsoleOpen());
 }
 
-static void MsPerGameMinuteGetter(js::PropertyContext& ctx)
+static void GetMsPerGameMinute(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetMsPerGameMinute());
 }
 
-static void MsPerGameMinuteSetter(js::PropertyContext& ctx)
+static void SetMsPerGameMinute(js::FunctionContext& ctx)
 {
+    if(!ctx.CheckArgCount(1)) return;
+
     int32_t msPerGameMinute;
-    if(!ctx.GetValue(msPerGameMinute)) return;
+    if(!ctx.GetArg(0, msPerGameMinute)) return;
 
     alt::ICore::Instance().SetMsPerGameMinute(msPerGameMinute);
 }
@@ -74,15 +80,17 @@ static void ClientConfigGetter(js::LazyPropertyContext& ctx)
     ctx.Return(configVal);
 }
 
-static void CamFrozenGetter(js::PropertyContext& ctx)
+static void IsCamFrozen(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().IsCamFrozen());
 }
 
-static void CamFrozenSetter(js::PropertyContext& ctx)
+static void SetCamFrozen(js::FunctionContext& ctx)
 {
+    if(!ctx.CheckArgCount(1)) return;
+
     bool state;
-    if(!ctx.GetValue(state)) return;
+    if(!ctx.GetArg(0, state)) return;
 
     alt::ICore::Instance().SetCamFrozen(state);
 }
@@ -127,15 +135,17 @@ static void ClientPathGetter(js::PropertyContext& ctx)
     ctx.Return(alt::ICore::Instance().GetClientPath());
 }
 
-static void RmlControlsGetter(js::PropertyContext& ctx)
+static void AreRmlControlsActive(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().AreRmlControlsEnabled());
 }
 
-static void RmlControlsSetter(js::PropertyContext& ctx)
+static void SetRmlControlsActive(js::FunctionContext& ctx)
 {
+    if(!ctx.CheckArgCount(1)) return;
+
     bool val;
-    if(!ctx.GetValue(val)) return;
+    if(!ctx.GetArg(0, val)) return;
 
     alt::ICore::Instance().ToggleRmlControls(val);
 }
@@ -618,14 +628,10 @@ static js::Module altModule("@altv/client", "@altv/shared",
 [](js::ModuleTemplate& module) {
     module.StaticProperty("isClient", true);
     module.StaticProperty("isServer", false);
-    module.StaticProperty("gameControlsActive", GameControlsActiveGetter, GameControlsActiveSetter);
-    module.StaticProperty("cursorVisible", CursorVisibleGetter, CursorVisibleSetter);
     module.StaticProperty("locale", LocaleGetter);
     module.StaticProperty("isStreamerModeEnabled", IsStreamerModeEnabledGetter);
     module.StaticProperty("isMenuOpen", IsMenuOpenGetter);
     module.StaticProperty("isConsoleOpen", IsConsoleOpenGetter);
-    module.StaticProperty("msPerGameMinute", MsPerGameMinuteGetter, MsPerGameMinuteSetter);
-    module.StaticProperty("camFrozen", CamFrozenGetter, CamFrozenSetter);
     module.StaticProperty("isGameFocused", IsGameFocusedGetter);
     module.StaticProperty("fps", FpsGetter);
     module.StaticProperty("ping", PingGetter);
@@ -634,7 +640,6 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.StaticProperty("serverIp", ServerIpGetter);
     module.StaticProperty("serverPort", ServerPortGetter);
     module.StaticProperty("clientPath", ClientPathGetter);
-    module.StaticProperty("rmlControls", RmlControlsGetter, RmlControlsSetter);
     module.StaticProperty("camPos", CamPosGetter);
     module.StaticProperty("screenResolution", ScreenResolutionGetter);
     module.StaticProperty("isFullscreen", IsFullscreenGetter);
@@ -642,6 +647,16 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.StaticLazyProperty("licenseHash", LicenseHashGetter);
     module.StaticLazyProperty("clientConfig", ClientConfigGetter);
 
+    module.StaticFunction("areGameControlsActive", AreGameControlsActive);
+    module.StaticFunction("setGameControlsActive", SetGameControlsActive);
+    module.StaticFunction("getMsPerGameMinute", GetMsPerGameMinute);
+    module.StaticFunction("setMsPerGameMinute", SetMsPerGameMinute);
+    module.StaticFunction("isCursorVisible", IsCursorVisible);
+    module.StaticFunction("setCursorVisible", SetCursorVisible);
+    module.StaticFunction("isCamFrozen", IsCamFrozen);
+    module.StaticFunction("setCamFrozen", SetCamFrozen);
+    module.StaticFunction("areRmlControlsActive", AreRmlControlsActive);
+    module.StaticFunction("setRmlControlsActive", SetRmlControlsActive);
     module.StaticFunction("addGxtText", AddGxtText);
     module.StaticFunction("removeGxtText", RemoveGxtText);
     module.StaticFunction("getGxtText", GetGxtText);
