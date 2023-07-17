@@ -65,7 +65,12 @@ bool CJavaScriptResource::Start()
 
     // Run it
     v8::Local<v8::Module> mod = CompileAndRun(main, source);
-    return !mod.IsEmpty();
+    if(mod.IsEmpty()) return false;
+
+    alt::MValueDict exportsDict = std::dynamic_pointer_cast<alt::IMValueDict>(js::JSToMValue(mod->GetModuleNamespace()));
+    GetResource()->SetExports(exportsDict);
+
+    return true;
 }
 
 bool CJavaScriptResource::Stop()
