@@ -30,21 +30,6 @@ function addEventsToClass(class_) {
                 return Object.fromEntries(this.__eventHandlers);
             }
         },
-        on: function (eventName, listener) {
-            assert(eventName && typeof eventName === "string", `Invalid event name: ${eventName}`);
-            assert(listener && typeof listener === "function", `Invalid listener: ${listener}`);
-
-            if (!this.__eventHandlers.has(eventName)) this.__eventHandlers.set(eventName, new Set());
-            this.__eventHandlers.get(eventName).add(listener);
-        },
-        off: function (eventName, listener) {
-            assert(eventName && typeof eventName === "string", `Invalid event name: ${eventName}`);
-            assert(listener && typeof listener === "function", `Invalid listener: ${listener}`);
-
-            if (!this.__eventHandlers.has(eventName)) return;
-            this.__eventHandlers.get(eventName).delete(listener);
-        },
-
         __eventHandlers: {
             value: new Map(),
             enumerable: false,
@@ -52,6 +37,21 @@ function addEventsToClass(class_) {
             configurable: false
         }
     });
+
+    class_.prototype.on = function (eventName, listener) {
+        assert(eventName && typeof eventName === "string", `Invalid event name: ${eventName}`);
+        assert(listener && typeof listener === "function", `Invalid listener: ${listener}`);
+
+        if (!this.__eventHandlers.has(eventName)) this.__eventHandlers.set(eventName, new Set());
+        this.__eventHandlers.get(eventName).add(listener);
+    };
+    class_.prototype.off = function (eventName, listener) {
+        assert(eventName && typeof eventName === "string", `Invalid event name: ${eventName}`);
+        assert(listener && typeof listener === "function", `Invalid listener: ${listener}`);
+
+        if (!this.__eventHandlers.has(eventName)) return;
+        this.__eventHandlers.get(eventName).delete(listener);
+    };
 }
 
 function onClassEvent(target, eventName, args, passArgsRaw = false) {
