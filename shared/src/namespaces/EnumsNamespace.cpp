@@ -1,7 +1,9 @@
 #include "Namespace.h"
+#include "Event.h"
+
 #include "magic_enum/include/magic_enum.hpp"
 #include "cpp-sdk/SDK.h"
-#include "Event.h"
+#include "cpp-sdk/events/CKeyboardEvent.h"
 
 template<typename T>
 static void GetEnumObject(js::LazyPropertyContext& ctx)
@@ -41,4 +43,5 @@ extern js::Namespace enumsNamespace("Enums", [](js::NamespaceTemplate& tpl) {
     tpl.StaticLazyProperty("CustomEventType", GetEnumObjectWithStartEnd<js::EventType, js::EventType::NONE, js::EventType::SIZE>);
     tpl.StaticLazyProperty("MetricType", GetEnumObject<alt::Metric::Type>);
     tpl.StaticLazyProperty("AmmoSpecialType", GetEnumObject<alt::AmmoSpecialType>);
+    tpl.StaticLazyProperty("KeyState", GetEnumObject<alt::CKeyboardEvent::KeyState>);
 });

@@ -16,6 +16,6 @@ Event.register(alt.Enums.CustomEventType.KEY_UP, "KeyUp", true);
 Event.register(alt.Enums.CustomEventType.KEY_DOWN, "KeyDown", true);
 
 alt.Events.onKeyBoardEvent(({ state, key }) => {
-    if (state == "UP") Event.invoke(alt.Enums.CustomEventType.KEY_UP, { key: key }, true);
-    else if (state == "DOWN") Event.invoke(alt.Enums.CustomEventType.KEY_DOWN, { key: key }, true);
+    if (state === alt.Enums.KeyState.UP) Event.invoke(alt.Enums.CustomEventType.KEY_UP, { key: key }, true);
+    else if (state === alt.Enums.KeyState.DOWN) Event.invoke(alt.Enums.CustomEventType.KEY_DOWN, { key: key }, true);
 });
