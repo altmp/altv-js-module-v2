@@ -17,21 +17,6 @@ static void SetGameControlsActive(js::FunctionContext& ctx)
     ctx.GetResource()->GetResource()->ToggleGameControls(val);
 }
 
-static void IsCursorVisible(js::FunctionContext& ctx)
-{
-    ctx.Return(ctx.GetResource()->GetResource()->CursorVisible());
-}
-
-static void SetCursorVisible(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(1)) return;
-
-    bool val;
-    if(!ctx.GetArg(0, val)) return;
-
-    ctx.Return(ctx.GetResource()->GetResource()->ToggleCursor(val));
-}
-
 static void LocaleGetter(js::PropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetLocale());
@@ -78,21 +63,6 @@ static void ClientConfigGetter(js::LazyPropertyContext& ctx)
     v8::Local<v8::Value> configVal = js::ConfigValueToJS(config);
     if(!ctx.Check(!configVal.IsEmpty(), "Failed to convert config")) return;
     ctx.Return(configVal);
-}
-
-static void IsCamFrozen(js::FunctionContext& ctx)
-{
-    ctx.Return(alt::ICore::Instance().IsCamFrozen());
-}
-
-static void SetCamFrozen(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(1)) return;
-
-    bool state;
-    if(!ctx.GetArg(0, state)) return;
-
-    alt::ICore::Instance().SetCamFrozen(state);
 }
 
 static void IsGameFocusedGetter(js::PropertyContext& ctx)
@@ -150,11 +120,6 @@ static void SetRmlControlsActive(js::FunctionContext& ctx)
     alt::ICore::Instance().ToggleRmlControls(val);
 }
 
-static void CamPosGetter(js::PropertyContext& ctx)
-{
-    ctx.Return(alt::ICore::Instance().GetCamPos());
-}
-
 static void ScreenResolutionGetter(js::PropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetScreenResolution());
@@ -163,33 +128,6 @@ static void ScreenResolutionGetter(js::PropertyContext& ctx)
 static void IsFullscreenGetter(js::PropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().IsFullScreen());
-}
-
-static void AddGxtText(js::FunctionContext& ctx)
-{
-    uint32_t hash;
-    if(!ctx.GetArgAsHash(0, hash)) return;
-
-    std::string val;
-    if(!ctx.GetArg(1, val)) return;
-
-    ctx.GetResource()->GetResource()->AddGxtText(hash, val);
-}
-
-static void RemoveGxtText(js::FunctionContext& ctx)
-{
-    uint32_t hash;
-    if(!ctx.GetArgAsHash(0, hash)) return;
-
-    ctx.GetResource()->GetResource()->RemoveGxtText(hash);
-}
-
-static void GetGxtText(js::FunctionContext& ctx)
-{
-    uint32_t hash;
-    if(!ctx.GetArgAsHash(0, hash)) return;
-
-    ctx.Return(ctx.GetResource()->GetResource()->GetGxtText(hash));
 }
 
 static void GetKeyState(js::FunctionContext& ctx)
@@ -205,25 +143,6 @@ static void GetKeyState(js::FunctionContext& ctx)
     ctx.Return(obj);
 }
 
-static void GetCursorPos(js::FunctionContext& ctx)
-{
-    bool normalized = ctx.GetArg<bool>(0, false);
-
-    ctx.Return(alt::ICore::Instance().GetCursorPosition(normalized));
-}
-
-static void SetCursorPos(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(1, 2)) return;
-
-    alt::Vector2f pos;
-    if(!ctx.GetArg(0, pos)) return;
-
-    bool normalized = ctx.GetArg<bool>(1, false);
-
-    alt::ICore::Instance().SetCursorPosition(pos, normalized);
-}
-
 static void DoesConfigFlagExist(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
@@ -232,39 +151,6 @@ static void DoesConfigFlagExist(js::FunctionContext& ctx)
     if(!ctx.GetArg(0, flag)) return;
 
     ctx.Return(alt::ICore::Instance().DoesConfigFlagExist(flag));
-}
-
-static void DoesTextureExistInArchetype(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(2)) return;
-
-    uint32_t modelHash;
-    if(!ctx.GetArgAsHash(0, modelHash)) return;
-
-    std::string textureName;
-    if(!ctx.GetArg(1, textureName)) return;
-
-    ctx.Return(alt::ICore::Instance().GetTextureFromDrawable(modelHash, textureName) != nullptr);
-}
-
-static void RequestIPL(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(1)) return;
-
-    std::string ipl;
-    if(!ctx.GetArg(0, ipl)) return;
-
-    alt::ICore::Instance().RequestIPL(ipl);
-}
-
-static void RemoveIPL(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(1)) return;
-
-    std::string ipl;
-    if(!ctx.GetArg(0, ipl)) return;
-
-    alt::ICore::Instance().RemoveIPL(ipl);
 }
 
 static void BeginScaleformMovieMethodMinimap(js::FunctionContext& ctx)
@@ -385,40 +271,6 @@ static void SetAngularVelocity(js::FunctionContext& ctx)
     if(!ctx.GetArg(1, quat)) return;
 
     alt::ICore::Instance().SetAngularVelocity(entity, { quat.x, quat.y, quat.z, quat.w });
-}
-
-static void LoadModel(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(1, 2)) return;
-
-    uint32_t model;
-    if(!ctx.GetArgAsHash(0, model)) return;
-
-    bool async = ctx.GetArg<bool>(1, false);
-
-    if(!async) alt::ICore::Instance().LoadModel(model);
-    else
-        alt::ICore::Instance().LoadModelAsync(model);
-}
-
-static void LoadYtyp(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(1)) return;
-
-    std::string ytyp;
-    if(!ctx.GetArg(0, ytyp)) return;
-
-    alt::ICore::Instance().LoadYtyp(ytyp);
-}
-
-static void UnloadYtyp(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(1)) return;
-
-    std::string ytyp;
-    if(!ctx.GetArg(0, ytyp)) return;
-
-    alt::ICore::Instance().UnloadYtyp(ytyp);
 }
 
 static void HeadshotToBase64(js::FunctionContext& ctx)
@@ -586,11 +438,6 @@ static void SetMinimapIsRectangle(js::FunctionContext& ctx)
     alt::ICore::Instance().SetMinimapIsRectangle(state);
 }
 
-static void LoadDefaultIpls(js::FunctionContext& ctx)
-{
-    alt::ICore::Instance().LoadDefaultIpls();
-}
-
 static void GetPedBonePos(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(2)) return;
@@ -618,7 +465,8 @@ extern js::Class playerClass, localPlayerClass, vehicleClass, pedClass, networkO
                 localPedClass, localVehicleClass, rmlDocumentClass, rmlElementClass, objectClass, webSocketClientClass,
                 mapZoomDataClass, virtualEntityClass, virtualEntityGroupClass, weaponDataClass, handlingClass, handlingDataClass,
                 httpClientClass, audioOutputClass, audioOutputAttachedClass, audioOutputFrontendClass, audioOutputWorldClass, audioCategoryClass;
-extern js::Namespace eventsNamespace, discordNamespace, voiceNamespace, localStorageNamespace, statsNamespace, focusDataNamespace;
+extern js::Namespace eventsNamespace, discordNamespace, voiceNamespace, localStorageNamespace, statsNamespace, focusDataNamespace,
+                    gxtNamespace, cursorNamespace, camNamespace, streamingNamespace;
 static js::Module altModule("@altv/client", "@altv/shared",
     { &playerClass, &localPlayerClass, &vehicleClass, &pedClass, &networkObjectClass,
     &audioClass, &audioFilterClass, &blipClass, &textLabelClass, &checkpointClass, &webViewClass, &fontClass,
@@ -640,7 +488,6 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.StaticProperty("serverIp", ServerIpGetter);
     module.StaticProperty("serverPort", ServerPortGetter);
     module.StaticProperty("clientPath", ClientPathGetter);
-    module.StaticProperty("camPos", CamPosGetter);
     module.StaticProperty("screenResolution", ScreenResolutionGetter);
     module.StaticProperty("isFullscreen", IsFullscreenGetter);
 
@@ -651,33 +498,18 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.StaticFunction("setGameControlsActive", SetGameControlsActive);
     module.StaticFunction("getMsPerGameMinute", GetMsPerGameMinute);
     module.StaticFunction("setMsPerGameMinute", SetMsPerGameMinute);
-    module.StaticFunction("isCursorVisible", IsCursorVisible);
-    module.StaticFunction("setCursorVisible", SetCursorVisible);
-    module.StaticFunction("isCamFrozen", IsCamFrozen);
-    module.StaticFunction("setCamFrozen", SetCamFrozen);
     module.StaticFunction("areRmlControlsActive", AreRmlControlsActive);
     module.StaticFunction("setRmlControlsActive", SetRmlControlsActive);
-    module.StaticFunction("addGxtText", AddGxtText);
-    module.StaticFunction("removeGxtText", RemoveGxtText);
-    module.StaticFunction("getGxtText", GetGxtText);
     module.StaticFunction("getKeyState", GetKeyState);
-    module.StaticFunction("getCursorPos", GetCursorPos);
-    module.StaticFunction("setCursorPos", SetCursorPos);
     module.StaticFunction("getConfigFlag", GetConfigFlag);
     module.StaticFunction("setConfigFlag", SetConfigFlag);
     module.StaticFunction("doesConfigFlagExist", DoesConfigFlagExist);
-    module.StaticFunction("doesTextureExistInArchetype", DoesTextureExistInArchetype);
-    module.StaticFunction("requestIPL", RequestIPL);
-    module.StaticFunction("removeIPL", RemoveIPL);
     module.StaticFunction("beginScaleformMovieMethodMinimap", BeginScaleformMovieMethodMinimap);
     module.StaticFunction("setWeatherCycle", SetWeatherCycle);
     module.StaticFunction("setWeatherSyncActive", SetWeatherSyncActive);
     module.StaticFunction("getPermissionState", GetPermissionState);
     module.StaticFunction("takeScreenshot", TakeScreenshot);
     module.StaticFunction("setAngularVelocity", SetAngularVelocity);
-    module.StaticFunction("loadModel", LoadModel);
-    module.StaticFunction("loadYtyp", LoadYtyp);
-    module.StaticFunction("unloadYtyp", UnloadYtyp);
     module.StaticFunction("headshotToBase64", HeadshotToBase64);
     module.StaticFunction("setDlcClothes", SetDlcClothes);
     module.StaticFunction("setDlcProps", SetDlcProps);
@@ -690,7 +522,6 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.StaticFunction("screenToWorld", ScreenToWorld);
     module.StaticFunction("setMinimapComponentPosition", SetMinimapComponentPosition);
     module.StaticFunction("setMinimapIsRectangle", SetMinimapIsRectangle);
-    module.StaticFunction("loadDefaultIpls", LoadDefaultIpls);
     module.StaticFunction("getPedBonePos", GetPedBonePos);
 
     module.Namespace(eventsNamespace);
@@ -699,6 +530,10 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.Namespace(localStorageNamespace);
     module.Namespace(statsNamespace);
     module.Namespace(focusDataNamespace);
+    module.Namespace(gxtNamespace);
+    module.Namespace(cursorNamespace);
+    module.Namespace(camNamespace);
+    module.Namespace(streamingNamespace);
     module.Namespace("WeaponObject");
 
     module.StaticDynamicProperty("localMeta", LocalMetaGetter);
