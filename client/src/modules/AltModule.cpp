@@ -17,22 +17,22 @@ static void SetGameControlsActive(js::FunctionContext& ctx)
     ctx.GetResource()->GetResource()->ToggleGameControls(val);
 }
 
-static void LocaleGetter(js::PropertyContext& ctx)
+static void LocaleGetter(js::LazyPropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetLocale());
 }
 
-static void IsStreamerModeEnabledGetter(js::PropertyContext& ctx)
+static void IsStreamerModeEnabledGetter(js::LazyPropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().IsInStreamerMode());
 }
 
-static void IsMenuOpenGetter(js::PropertyContext& ctx)
+static void IsMenuOpen(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().IsMenuOpen());
 }
 
-static void IsConsoleOpenGetter(js::PropertyContext& ctx)
+static void IsConsoleOpen(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().IsConsoleOpen());
 }
@@ -65,42 +65,42 @@ static void ClientConfigGetter(js::LazyPropertyContext& ctx)
     ctx.Return(configVal);
 }
 
-static void IsGameFocusedGetter(js::PropertyContext& ctx)
+static void IsGameFocused(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().IsGameFocused());
 }
 
-static void FpsGetter(js::PropertyContext& ctx)
+static void GetFps(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetFps());
 }
 
-static void PingGetter(js::PropertyContext& ctx)
+static void GetPing(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetPing());
 }
 
-static void TotalPacketsSentGetter(js::PropertyContext& ctx)
+static void GetTotalPacketsSent(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetTotalPacketsSent());
 }
 
-static void TotalPacketsLostGetter(js::PropertyContext& ctx)
+static void GetTotalPacketsLost(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetTotalPacketsLost());
 }
 
-static void ServerIpGetter(js::PropertyContext& ctx)
+static void GetServerIp(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetServerIp());
 }
 
-static void ServerPortGetter(js::PropertyContext& ctx)
+static void GetServerPort(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetServerPort());
 }
 
-static void ClientPathGetter(js::PropertyContext& ctx)
+static void ClientPathGetter(js::LazyPropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetClientPath());
 }
@@ -120,12 +120,12 @@ static void SetRmlControlsActive(js::FunctionContext& ctx)
     alt::ICore::Instance().ToggleRmlControls(val);
 }
 
-static void ScreenResolutionGetter(js::PropertyContext& ctx)
+static void GetScreenResolution(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetScreenResolution());
 }
 
-static void IsFullscreenGetter(js::PropertyContext& ctx)
+static void IsFullscreen(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().IsFullScreen());
 }
@@ -443,24 +443,24 @@ static js::Module altModule("@altv/client", "@altv/shared",
 [](js::ModuleTemplate& module) {
     module.StaticProperty("isClient", true);
     module.StaticProperty("isServer", false);
-    module.StaticProperty("locale", LocaleGetter);
-    module.StaticProperty("isStreamerModeEnabled", IsStreamerModeEnabledGetter);
-    module.StaticProperty("isMenuOpen", IsMenuOpenGetter);
-    module.StaticProperty("isConsoleOpen", IsConsoleOpenGetter);
-    module.StaticProperty("isGameFocused", IsGameFocusedGetter);
-    module.StaticProperty("fps", FpsGetter);
-    module.StaticProperty("ping", PingGetter);
-    module.StaticProperty("totalPacketsSent", TotalPacketsSentGetter);
-    module.StaticProperty("totalPacketsLost", TotalPacketsLostGetter);
-    module.StaticProperty("serverIp", ServerIpGetter);
-    module.StaticProperty("serverPort", ServerPortGetter);
-    module.StaticProperty("clientPath", ClientPathGetter);
-    module.StaticProperty("screenResolution", ScreenResolutionGetter);
-    module.StaticProperty("isFullscreen", IsFullscreenGetter);
 
+    module.StaticLazyProperty("isStreamerModeEnabled", IsStreamerModeEnabledGetter);
+    module.StaticLazyProperty("locale", LocaleGetter);
     module.StaticLazyProperty("licenseHash", LicenseHashGetter);
     module.StaticLazyProperty("clientConfig", ClientConfigGetter);
+    module.StaticLazyProperty("clientPath", ClientPathGetter);
 
+    module.StaticFunction("isMenuOpen", IsMenuOpen);
+    module.StaticFunction("isConsoleOpen", IsConsoleOpen);
+    module.StaticFunction("isGameFocused", IsGameFocused);
+    module.StaticFunction("getFps", GetFps);
+    module.StaticFunction("getPing", GetPing);
+    module.StaticFunction("getTotalPacketsSent", GetTotalPacketsSent);
+    module.StaticFunction("getTotalPacketsLost", GetTotalPacketsLost);
+    module.StaticFunction("getServerIp", GetServerIp);
+    module.StaticFunction("getServerPort", GetServerPort);
+    module.StaticFunction("getScreenResolution", GetScreenResolution);
+    module.StaticFunction("isFullscreen", IsFullscreen);
     module.StaticFunction("areGameControlsActive", AreGameControlsActive);
     module.StaticFunction("setGameControlsActive", SetGameControlsActive);
     module.StaticFunction("getMsPerGameMinute", GetMsPerGameMinute);

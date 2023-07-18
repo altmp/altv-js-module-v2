@@ -1,7 +1,7 @@
 #include "Module.h"
 #include "Namespace.h"
 
-static void NetTimeGetter(js::PropertyContext& ctx)
+static void GetNetTime(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetNetTime());
 }
@@ -143,7 +143,6 @@ static js::Module altModule("@altv/server", "@altv/shared", { &playerClass, &veh
     module.StaticProperty("isClient", false);
     module.StaticProperty("isServer", true);
     module.StaticProperty("rootDir", alt::ICore::Instance().GetRootDirectory());
-    module.StaticProperty("netTime", NetTimeGetter);
     module.StaticProperty("defaultDimension", alt::DEFAULT_DIMENSION);
     module.StaticProperty("globalDimension", alt::GLOBAL_DIMENSION);
 
@@ -151,6 +150,7 @@ static js::Module altModule("@altv/server", "@altv/shared", { &playerClass, &veh
 
     module.StaticLazyProperty("serverConfig", GetServerConfig);
 
+    module.StaticFunction("getNetTime", GetNetTime);
     module.StaticFunction("setServerPassword", SetServerPassword);
     module.StaticFunction("hashServerPassword", HashServerPassword);
     module.StaticFunction("stopServer", StopServer);
