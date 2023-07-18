@@ -143,16 +143,6 @@ static void GetKeyState(js::FunctionContext& ctx)
     ctx.Return(obj);
 }
 
-static void DoesConfigFlagExist(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(1)) return;
-
-    std::string flag;
-    if(!ctx.GetArg(0, flag)) return;
-
-    ctx.Return(alt::ICore::Instance().DoesConfigFlagExist(flag));
-}
-
 static void BeginScaleformMovieMethodMinimap(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
@@ -189,29 +179,6 @@ static void SetWeatherCycle(js::FunctionContext& ctx)
     }
 
     alt::ICore::Instance().SetWeatherCycle(weathers, multipliers);
-}
-
-static void GetConfigFlag(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(1)) return;
-
-    std::string flag;
-    if(!ctx.GetArg(0, flag)) return;
-
-    ctx.Return(alt::ICore::Instance().GetConfigFlag(flag));
-}
-
-static void SetConfigFlag(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(2)) return;
-
-    std::string flag;
-    if(!ctx.GetArg(0, flag)) return;
-
-    bool state;
-    if(!ctx.GetArg(1, state)) return;
-
-    ctx.Return(alt::ICore::Instance().SetConfigFlag(flag, state));
 }
 
 static void SetWeatherSyncActive(js::FunctionContext& ctx)
@@ -466,7 +433,7 @@ extern js::Class playerClass, localPlayerClass, vehicleClass, pedClass, networkO
                 mapZoomDataClass, virtualEntityClass, virtualEntityGroupClass, weaponDataClass, handlingClass, handlingDataClass,
                 httpClientClass, audioOutputClass, audioOutputAttachedClass, audioOutputFrontendClass, audioOutputWorldClass, audioCategoryClass;
 extern js::Namespace eventsNamespace, discordNamespace, voiceNamespace, localStorageNamespace, statsNamespace, focusDataNamespace,
-                    gxtNamespace, cursorNamespace, camNamespace, streamingNamespace;
+                    gxtNamespace, cursorNamespace, camNamespace, streamingNamespace, configFlagNamespace;
 static js::Module altModule("@altv/client", "@altv/shared",
     { &playerClass, &localPlayerClass, &vehicleClass, &pedClass, &networkObjectClass,
     &audioClass, &audioFilterClass, &blipClass, &textLabelClass, &checkpointClass, &webViewClass, &fontClass,
@@ -501,9 +468,6 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.StaticFunction("areRmlControlsActive", AreRmlControlsActive);
     module.StaticFunction("setRmlControlsActive", SetRmlControlsActive);
     module.StaticFunction("getKeyState", GetKeyState);
-    module.StaticFunction("getConfigFlag", GetConfigFlag);
-    module.StaticFunction("setConfigFlag", SetConfigFlag);
-    module.StaticFunction("doesConfigFlagExist", DoesConfigFlagExist);
     module.StaticFunction("beginScaleformMovieMethodMinimap", BeginScaleformMovieMethodMinimap);
     module.StaticFunction("setWeatherCycle", SetWeatherCycle);
     module.StaticFunction("setWeatherSyncActive", SetWeatherSyncActive);
@@ -534,6 +498,7 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.Namespace(cursorNamespace);
     module.Namespace(camNamespace);
     module.Namespace(streamingNamespace);
+    module.Namespace(configFlagNamespace);
     module.Namespace("WeaponObject");
 
     module.StaticDynamicProperty("localMeta", LocalMetaGetter);
