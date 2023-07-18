@@ -15,21 +15,18 @@ namespace js
         CJavaScriptResource* resource;
 
         void* pointers[32] = { 0 };
+        char* stringValues[32] = { 0 };
         int pointersCount = 0;
+        int stringsCount = 0;
         int returnsCount = 1;
 
         char* SaveString(const std::string& str)
         {
-            static char* stringValues[256] = { 0 };
-            static int nextString = 0;
+            char* strVal = (char*)malloc(str.size() + 1);
+            memcpy(strVal, str.c_str(), str.size() + 1);
+            stringValues[stringsCount++] = strVal;
 
-            if(stringValues[nextString]) free(stringValues[nextString]);
-
-            char* _str = _strdup(str.data());
-            stringValues[nextString] = _str;
-            nextString = (nextString + 1) % 256;
-
-            return _str;
+            return strVal;
         }
 
         template<typename T>
@@ -93,9 +90,10 @@ namespace js
         template<>
         bool PushArg<char*>(js::FunctionContext& ctx, int index)
         {
-            v8::Local<v8::Value> val = ctx.GetArg<v8::Local<v8::Value>>(index);
-            char* ptr = nullptr;
+            v8::Local<v8::Value> val;
+            if(!ctx.GetArg(index, val)) return false;
 
+            char* ptr = nullptr;
             if(val->IsString())
             {
                 std::string str = js::CppValue(val.As<v8::String>());
@@ -104,13 +102,25 @@ namespace js
             nativeContext->Push(ptr);
             return true;
         }
+        template<>
+        bool PushArg<void*>(js::FunctionContext& ctx, int index)
+        {
+            v8::Local<v8::Value> val;
+            if(!ctx.GetArg(index, val)) return false;
+
+            nativeContext->Push(GetBufferFromValue(val));
+            return true;
+        }
 
         bool PushArgs(js::FunctionContext& ctx, alt::INative* native);
 
         v8::Local<v8::Value> GetPointerReturnValue(alt::INative::Type type);
         v8::Local<v8::Value> GetReturnValue();
 
+        void* GetBufferFromValue(v8::Local<v8::Value> val);
+
         NativeInvoker(CJavaScriptResource* resource, alt::INative* native);
+        ~NativeInvoker();
 
     public:
         static bool Invoke(js::FunctionContext& ctx, alt::INative* native);

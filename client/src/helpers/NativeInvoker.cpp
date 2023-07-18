@@ -59,12 +59,12 @@ bool js::NativeInvoker::PushArgs(js::FunctionContext& ctx, alt::INative* native)
                 if(!PushArg<alt::INative::Vector3>(ctx, i)) return false;
                 break;
             }
+            */
             case Type::ARG_STRUCT:
             {
                 if(!PushArg<void*>(ctx, i)) return false;
                 break;
             }
-            */
             case Type::ARG_VECTOR3_PTR:
             {
                 if(!PushArg<alt::INative::Vector3*>(ctx, i)) return false;
@@ -77,7 +77,7 @@ bool js::NativeInvoker::PushArgs(js::FunctionContext& ctx, alt::INative* native)
             }
             default:
             {
-                Logger::Warn("[JS] Unknown native argument type ", magic_enum::enum_name(nativeArgs[i]), "for native", native->GetName(), "at index", i);
+                Logger::Warn("[JS] Unknown native argument type", magic_enum::enum_name(nativeArgs[i]), "for native", native->GetName(), "at index", i);
                 break;
             }
         }
@@ -129,13 +129,33 @@ v8::Local<v8::Value> js::NativeInvoker::GetReturnValue()
     return v8::Undefined(resource->GetIsolate());
 }
 
+void* js::NativeInvoker::GetBufferFromValue(v8::Local<v8::Value> val)
+{
+    void* ptr = nullptr;
+    if(val->IsObject() && !val->IsNull() && resource->IsBuffer(val))
+    {
+        Buffer* buffer = static_cast<Buffer*>(val.As<v8::Object>()->GetAlignedPointerFromInternalField(1));
+        if(buffer->GetSize() != 0) ptr = (void*)buffer->GetBuffer();
+    }
+    return ptr;
+}
+
 js::NativeInvoker::NativeInvoker(CJavaScriptResource* resource, alt::INative* native) : resource(resource), native(native), nativeContext(resource->GetNativeContext()) {}
+js::NativeInvoker::~NativeInvoker()
+{
+    for(int i = 0; i < 32; ++i)
+    {
+        if(stringValues[i] != NULL) free(stringValues[i]);
+    }
+}
 
 bool js::NativeInvoker::Invoke(js::FunctionContext& ctx, alt::INative* native)
 {
     CJavaScriptResource* resource = ctx.GetResource<CJavaScriptResource>();
     std::shared_ptr<alt::INative::Context> nativeCtx = resource->GetNativeContext();
     NativeInvoker invoker{ resource, native };
+
+    nativeCtx->Reset();
 
     std::vector<alt::INative::Type> args = native->GetArgTypes();
     if(!ctx.CheckArgCount(invoker.GetMinimumArgCount(), args.size())) return false;
