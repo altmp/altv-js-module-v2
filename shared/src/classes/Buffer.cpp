@@ -1,5 +1,6 @@
 #include "Class.h"
 #include "helpers/Buffer.h"
+#include "interfaces/IResource.h"
 
 template<typename T>
 static void Read(js::FunctionContext& ctx)
@@ -79,8 +80,9 @@ static void Destroy(js::FunctionContext& ctx)
     if(!ctx.CheckExtraInternalFieldValue()) return;
     js::Buffer* buffer = ctx.GetExtraInternalFieldValue<js::Buffer>();
 
-    delete buffer;
+    ctx.GetResource()->RemoveOwnedBuffer(buffer);
     ctx.SetExtraInternalFieldValue(nullptr);
+    delete buffer;
 }
 
 static void Constructor(js::FunctionContext& ctx)
@@ -91,7 +93,7 @@ static void Constructor(js::FunctionContext& ctx)
     js::Buffer* buffer;
     if(ctx.GetArgType(0) == js::Type::NUMBER)
     {
-        size_t size;
+        uint32_t size;
         if(!ctx.GetArg(0, size)) return;
         if(!ctx.Check(size > 0 && size < 4096, "Buffer size must be greater than 0 and less than 4096 bytes")) return;
 
@@ -114,6 +116,7 @@ static void Constructor(js::FunctionContext& ctx)
         buffer = new js::Buffer((uint8_t*)((uintptr_t)arrayBufferView->Buffer()->GetBackingStore()->Data() + (uintptr_t)arrayBufferView->ByteOffset()), arrayBufferView->ByteLength());
     }
 
+    ctx.GetResource()->AddOwnedBuffer(buffer);
     ctx.SetExtraInternalFieldValue(buffer);
 }
 

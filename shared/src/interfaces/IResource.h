@@ -13,6 +13,7 @@
 #include "Event.h"
 #include "Logger.h"
 #include "helpers/ClassInstanceCache.h"
+#include "helpers/Buffer.h"
 
 namespace js
 {
@@ -27,6 +28,8 @@ namespace js
         Persistent<v8::Context> context;
 
         std::unordered_map<std::string, Persistent<v8::Value>> bindingExports;
+
+        std::unordered_map<Buffer*, SourceLocation> ownedBuffers;
 
         void Initialize()
         {
@@ -44,6 +47,17 @@ namespace js
 
             context.Reset();
             bindingExports.clear();
+
+            if(!ownedBuffers.empty())
+            {
+                Logger::Warn("Resource", GetName(), "has", ownedBuffers.size(), "leaking buffer instances, unfreed buffer locations:");
+                for(auto& [buffer, location] : ownedBuffers)
+                {
+                    Logger::Warn("Buffer with size", buffer->GetSize(), "|", location.file + ":" + std::to_string(location.line));
+                    delete buffer;
+                }
+            }
+            ownedBuffers.clear();
         }
 
         void InitializeBinding(Binding* binding);
@@ -166,6 +180,19 @@ namespace js
         }
         bool IsBaseObject(v8::Local<v8::Value> val);
         bool IsBuffer(v8::Local<v8::Value> val);
+
+        void AddOwnedBuffer(Buffer* buffer)
+        {
+            ownedBuffers.insert({ buffer, SourceLocation::GetCurrent(this) });
+        }
+        void RemoveOwnedBuffer(Buffer* buffer)
+        {
+            ownedBuffers.erase(buffer);
+        }
+        auto& GetOwnedBuffers()
+        {
+            return ownedBuffers;
+        }
 
         template<class ResourceType = js::IResource>
         static ResourceType* GetFromContext(v8::Local<v8::Context> context)
