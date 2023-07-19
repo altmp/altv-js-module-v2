@@ -287,7 +287,9 @@ namespace js
         else if constexpr(std::is_same_v<T, int64_t> || std::is_same_v<T, uint64_t>)
         {
             constexpr bool isSigned = std::is_same_v<T, int64_t>;
-            v8::Local<v8::BigInt> bigInt = val->ToBigInt(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()).ToLocalChecked();
+            v8::Local<v8::BigInt> bigInt;
+            v8::MaybeLocal<v8::BigInt> maybeBigInt = val->ToBigInt(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext());
+            if(!maybeBigInt.ToLocal(&bigInt)) return std::nullopt;
             if constexpr(isSigned) return bigInt->Int64Value();
             else
                 return bigInt->Uint64Value();
@@ -295,7 +297,9 @@ namespace js
         else if constexpr(std::is_integral_v<T> || std::is_floating_point_v<T> || std::is_enum_v<T>)
         {
             if(val->IsNull()) return std::nullopt;
-            double value = val->NumberValue(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()).ToChecked();
+            double value;
+            v8::Maybe<double> maybeValue = val->NumberValue(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext());
+            if(!maybeValue.To(&value)) return std::nullopt;
             if(std::isnan(value)) return std::nullopt;
             return (T)value;
         }
