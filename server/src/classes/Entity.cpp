@@ -26,10 +26,10 @@ static void AttachTo(js::FunctionContext& ctx)
 
     if(ctx.GetArgType(1) == js::Type::NUMBER)
     {
-        int16_t otherBoneIndex;
+        uint16_t otherBoneIndex;
         if(!ctx.GetArg(1, otherBoneIndex)) return;
 
-        int16_t myBoneIndex;
+        uint16_t myBoneIndex;
         if(!ctx.GetArg(2, myBoneIndex)) return;
 
         alt::Position pos;
