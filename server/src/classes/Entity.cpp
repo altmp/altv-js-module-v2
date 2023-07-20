@@ -26,11 +26,11 @@ static void AttachTo(js::FunctionContext& ctx)
 
     if(ctx.GetArgType(1) == js::Type::NUMBER)
     {
-        uint16_t otherBoneIndex;
-        if(!ctx.GetArg(1, otherBoneIndex)) return;
+        uint16_t otherBoneId;
+        if(!ctx.GetArg(1, otherBoneId)) return;
 
-        uint16_t myBoneIndex;
-        if(!ctx.GetArg(2, myBoneIndex)) return;
+        uint16_t myBoneId;
+        if(!ctx.GetArg(2, myBoneId)) return;
 
         alt::Position pos;
         if(!ctx.GetArg(3, pos)) return;
@@ -44,7 +44,7 @@ static void AttachTo(js::FunctionContext& ctx)
         bool noFixedRot;
         if(!ctx.GetArg(6, noFixedRot)) return;
 
-        entity->AttachToEntity(target, otherBoneIndex, myBoneIndex, pos, rot, collision, noFixedRot);
+        entity->AttachToEntity(target, otherBoneId, myBoneId, pos, rot, collision, noFixedRot);
     }
     else
     {
