@@ -135,6 +135,32 @@ static void GetClosestEntities(js::FunctionContext& ctx)
     ctx.Return(entities);
 }
 
+static void SetVoiceExternalPublic(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(2)) return;
+
+    std::string ip;
+    if(!ctx.GetArg(0, ip)) return;
+
+    uint16_t port;
+    if(!ctx.GetArg(1, port)) return;
+
+    alt::ICore::Instance().SetVoiceExternalPublic(ip, port);
+}
+
+static void SetVoiceExternal(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(2)) return;
+
+    std::string ip;
+    if(!ctx.GetArg(0, ip)) return;
+
+    uint16_t port;
+    if(!ctx.GetArg(1, port)) return;
+
+    alt::ICore::Instance().SetVoiceExternal(ip, port);
+}
+
 // clang-format off
 extern js::Class playerClass, vehicleClass, checkpointClass, pedClass, networkObjectClass, voiceChannelClass, blipClass, virtualEntityClass, virtualEntityGroupClass, metricClass;
 extern js::Namespace eventsNamespace, pedModelInfoNamespace, vehicleModelInfoNamespace, weaponModelInfoNamespace;
@@ -158,6 +184,8 @@ static js::Module altModule("@altv/server", "@altv/shared", { &playerClass, &veh
     module.StaticFunction("getEntitiesInDimension", GetEntitiesInDimension);
     module.StaticFunction("getEntitiesInRange", GetEntitiesInRange);
     module.StaticFunction("getClosestEntities", GetClosestEntities);
+    module.StaticFunction("setVoiceExternalPublic", SetVoiceExternalPublic);
+    module.StaticFunction("setVoiceExternal", SetVoiceExternal);
 
     module.Namespace(eventsNamespace);
     module.Namespace(pedModelInfoNamespace);
