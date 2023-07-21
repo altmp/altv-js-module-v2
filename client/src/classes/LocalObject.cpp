@@ -42,8 +42,8 @@ static void AttachTo(js::FunctionContext& ctx)
 }
 
 // clang-format off
-extern js::Class entityClass;
-extern js::Class localObjectClass("LocalObject", &entityClass, nullptr, [](js::ClassTemplate& tpl)
+extern js::Class objectClass;
+extern js::Class localObjectClass("LocalObject", &objectClass, nullptr, [](js::ClassTemplate& tpl)
 {
     tpl.BindToType(alt::IBaseObject::Type::LOCAL_OBJECT);
 
