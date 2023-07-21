@@ -162,9 +162,9 @@ static void SetVoiceExternal(js::FunctionContext& ctx)
 }
 
 // clang-format off
-extern js::Class playerClass, vehicleClass, checkpointClass, pedClass, networkObjectClass, voiceChannelClass, blipClass, virtualEntityClass, virtualEntityGroupClass, metricClass;
+extern js::Class playerClass, vehicleClass, checkpointClass, pedClass, objectClass, voiceChannelClass, blipClass, virtualEntityClass, virtualEntityGroupClass, metricClass;
 extern js::Namespace eventsNamespace, pedModelInfoNamespace, vehicleModelInfoNamespace, weaponModelInfoNamespace;
-static js::Module altModule("@altv/server", "@altv/shared", { &playerClass, &vehicleClass, &checkpointClass, &pedClass, &networkObjectClass, &voiceChannelClass, &blipClass, &virtualEntityClass, &virtualEntityGroupClass, &metricClass }, [](js::ModuleTemplate& module)
+static js::Module altModule("@altv/server", "@altv/shared", { &playerClass, &vehicleClass, &checkpointClass, &pedClass, &objectClass, &voiceChannelClass, &blipClass, &virtualEntityClass, &virtualEntityGroupClass, &metricClass }, [](js::ModuleTemplate& module)
 {
     module.StaticProperty("isClient", false);
     module.StaticProperty("isServer", true);

@@ -79,7 +79,7 @@ Object.defineProperty(alt.Entity, "all", {
 addAllGetter(alt.Player, alt.Enums.BaseObjectType.PLAYER);
 addAllGetter(alt.Vehicle, [alt.Enums.BaseObjectType.VEHICLE, alt.Enums.BaseObjectType.LOCAL_VEHICLE]);
 addAllGetter(alt.Ped, alt.Enums.BaseObjectType.PED);
-addAllGetter(alt.NetworkObject, alt.Enums.BaseObjectType.NETWORK_OBJECT);
+addAllGetter(alt.Object, alt.Enums.BaseObjectType.OBJECT);
 
 // Register all entities that were created before this resource was loaded
 const entities = cppBindings.getAllEntities();

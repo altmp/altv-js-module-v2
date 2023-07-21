@@ -2,7 +2,7 @@
 #include "interfaces/IResource.h"
 
 // clang-format off
-static js::FactoryHandler objectFactory(alt::IBaseObject::Type::OBJECT, [](js::Object& args) -> alt::IBaseObject* {
+static js::FactoryHandler localObjectFactory(alt::IBaseObject::Type::LOCAL_OBJECT, [](js::Object& args) -> alt::IBaseObject* {
     bool isWeaponObject;
     if(!args.Get("isWeaponObject", isWeaponObject)) return nullptr;
 
@@ -47,6 +47,6 @@ static js::FactoryHandler objectFactory(alt::IBaseObject::Type::OBJECT, [](js::O
 
         uint32_t streamingDistance = args.Get<uint32_t>("streamingDistance", 0);
 
-        return alt::ICore::Instance().CreateObject(modelHash, pos, rot, noOffset, dynamic, useStreaming, streamingDistance, args.GetResource()->GetResource());
+        return alt::ICore::Instance().CreateLocalObject(modelHash, pos, rot, noOffset, dynamic, useStreaming, streamingDistance, args.GetResource()->GetResource());
     }
 });

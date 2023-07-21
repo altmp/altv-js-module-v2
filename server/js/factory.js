@@ -8,6 +8,6 @@ alt.Vehicle.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.VEHICLE);
 
 alt.Ped.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.PED);
 
-alt.NetworkObject.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.NETWORK_OBJECT);
+alt.Object.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.OBJECT);
 
 alt.VoiceChannel.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.VOICE_CHANNEL);

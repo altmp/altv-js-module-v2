@@ -427,7 +427,7 @@ static void LocalMetaGetter(js::DynamicPropertyGetterContext& ctx)
 }
 
 // clang-format off
-extern js::Class playerClass, localPlayerClass, vehicleClass, pedClass, networkObjectClass,
+extern js::Class playerClass, localPlayerClass, vehicleClass, pedClass, objectClass,
                 audioClass, audioFilterClass, blipClass, textLabelClass, checkpointClass, webViewClass, fontClass,
                 localPedClass, localVehicleClass, rmlDocumentClass, rmlElementClass, localObjectClass, webSocketClientClass,
                 mapZoomDataClass, virtualEntityClass, virtualEntityGroupClass, weaponDataClass, handlingClass, handlingDataClass,
@@ -435,7 +435,7 @@ extern js::Class playerClass, localPlayerClass, vehicleClass, pedClass, networkO
 extern js::Namespace eventsNamespace, discordNamespace, voiceNamespace, localStorageNamespace, statsNamespace, focusDataNamespace,
                     gxtNamespace, cursorNamespace, camNamespace, streamingNamespace, configFlagNamespace;
 static js::Module altModule("@altv/client", "@altv/shared",
-    { &playerClass, &localPlayerClass, &vehicleClass, &pedClass, &networkObjectClass,
+    { &playerClass, &localPlayerClass, &vehicleClass, &pedClass, &objectClass,
     &audioClass, &audioFilterClass, &blipClass, &textLabelClass, &checkpointClass, &webViewClass, &fontClass,
     &localPedClass, &localVehicleClass, &rmlDocumentClass, &rmlElementClass, &localObjectClass, &webSocketClientClass,
     &mapZoomDataClass, &virtualEntityClass, &virtualEntityGroupClass, &weaponDataClass, &handlingClass, &handlingDataClass,

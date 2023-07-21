@@ -76,7 +76,7 @@ Object.defineProperty(alt.Entity, "streamedIn", {
 addStreamedInGetter(alt.Player, alt.Enums.BaseObjectType.PLAYER);
 addStreamedInGetter(alt.Vehicle, [alt.Enums.BaseObjectType.VEHICLE, alt.Enums.BaseObjectType.LOCAL_VEHICLE]);
 addStreamedInGetter(alt.Ped, alt.Enums.BaseObjectType.PED);
-addStreamedInGetter(alt.NetworkObject, alt.Enums.BaseObjectType.NETWORK_OBJECT);
+addStreamedInGetter(alt.Object, alt.Enums.BaseObjectType.OBJECT);
 
 // Add all streamed-in entities to the streamedIn sets
 for (const entity of alt.Entity.all) {

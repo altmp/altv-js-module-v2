@@ -7,7 +7,7 @@ registerFactory("Ped", alt.Ped, alt.Enums.BaseObjectType.PED);
 registerFactory("Blip", alt.Blip, alt.Enums.BaseObjectType.BLIP);
 registerFactory("VoiceChannel", alt.VoiceChannel, alt.Enums.BaseObjectType.VOICE_CHANNEL);
 registerFactory("ColShape", alt.ColShape, alt.Enums.BaseObjectType.COLSHAPE);
-registerFactory("NetworkObject", alt.NetworkObject, alt.Enums.BaseObjectType.NETWORK_OBJECT);
+registerFactory("Object", alt.Object, alt.Enums.BaseObjectType.OBJECT);
 registerFactory("Checkpoint", alt.Checkpoint, alt.Enums.BaseObjectType.CHECKPOINT);
 registerFactory("VirtualEntity", alt.VirtualEntity, alt.Enums.BaseObjectType.VIRTUAL_ENTITY);
 registerFactory("VirtualEntityGroup", alt.VirtualEntityGroup, alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP);
