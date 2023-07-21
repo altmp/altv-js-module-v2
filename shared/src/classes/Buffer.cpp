@@ -18,7 +18,7 @@ static void Read(js::FunctionContext& ctx)
     ctx.Return(val);
 }
 template<>
-static void Read<std::string>(js::FunctionContext& ctx)
+void Read<std::string>(js::FunctionContext& ctx)
 {
     if(!ctx.CheckExtraInternalFieldValue()) return;
     if(!ctx.CheckArgCount(2)) return;
@@ -37,7 +37,7 @@ static void Read<std::string>(js::FunctionContext& ctx)
 }
 
 template<typename T>
-static void Write(js::FunctionContext& ctx)
+void Write(js::FunctionContext& ctx)
 {
     if(!ctx.CheckExtraInternalFieldValue()) return;
     if(!ctx.CheckArgCount(2)) return;
@@ -52,7 +52,7 @@ static void Write(js::FunctionContext& ctx)
     buffer->Write(offset, val);
 }
 template<>
-static void Write<std::string>(js::FunctionContext& ctx)
+void Write<std::string>(js::FunctionContext& ctx)
 {
     if(!ctx.CheckExtraInternalFieldValue()) return;
     if(!ctx.CheckArgCount(2)) return;
