@@ -429,7 +429,7 @@ static void LocalMetaGetter(js::DynamicPropertyGetterContext& ctx)
 // clang-format off
 extern js::Class playerClass, localPlayerClass, vehicleClass, pedClass, networkObjectClass,
                 audioClass, audioFilterClass, blipClass, textLabelClass, checkpointClass, webViewClass, fontClass,
-                localPedClass, localVehicleClass, rmlDocumentClass, rmlElementClass, objectClass, webSocketClientClass,
+                localPedClass, localVehicleClass, rmlDocumentClass, rmlElementClass, localObjectClass, webSocketClientClass,
                 mapZoomDataClass, virtualEntityClass, virtualEntityGroupClass, weaponDataClass, handlingClass, handlingDataClass,
                 httpClientClass, audioOutputClass, audioOutputAttachedClass, audioOutputFrontendClass, audioOutputWorldClass, audioCategoryClass;
 extern js::Namespace eventsNamespace, discordNamespace, voiceNamespace, localStorageNamespace, statsNamespace, focusDataNamespace,
@@ -437,7 +437,7 @@ extern js::Namespace eventsNamespace, discordNamespace, voiceNamespace, localSto
 static js::Module altModule("@altv/client", "@altv/shared",
     { &playerClass, &localPlayerClass, &vehicleClass, &pedClass, &networkObjectClass,
     &audioClass, &audioFilterClass, &blipClass, &textLabelClass, &checkpointClass, &webViewClass, &fontClass,
-    &localPedClass, &localVehicleClass, &rmlDocumentClass, &rmlElementClass, &objectClass, &webSocketClientClass,
+    &localPedClass, &localVehicleClass, &rmlDocumentClass, &rmlElementClass, &localObjectClass, &webSocketClientClass,
     &mapZoomDataClass, &virtualEntityClass, &virtualEntityGroupClass, &weaponDataClass, &handlingClass, &handlingDataClass,
     &httpClientClass, &audioOutputClass, &audioOutputAttachedClass, &audioOutputFrontendClass, &audioOutputWorldClass, &audioCategoryClass },
 [](js::ModuleTemplate& module) {
