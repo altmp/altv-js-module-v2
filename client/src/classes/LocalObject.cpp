@@ -61,12 +61,14 @@ extern js::Class localObjectClass("LocalObject", &objectClass, nullptr, [](js::C
     tpl.Property<&alt::ILocalObject::GetStreamingDistance>("streamingDistance");
     tpl.Property<&alt::ILocalObject::GetVisible, &alt::ILocalObject::SetVisible>("visible");
 
-    tpl.StaticProperty("allWorld", AllWorldGetter);
-
     tpl.Method<&alt::ILocalObject::ResetAlpha>("resetAlpha");
     tpl.Method("attachTo", AttachTo);
     tpl.Method<&alt::ILocalObject::Detach>("detach");
     tpl.Method<&alt::ILocalObject::ToggleCollision>("toggleCollision");
     tpl.Method<&alt::ILocalObject::PlaceOnGroundProperly>("placeOnGroundProperly");
     tpl.Method<&alt::ILocalObject::ActivatePhysics>("activatePhysics");
+
+    tpl.StaticProperty("allWorld", AllWorldGetter);
+
+    tpl.GetByID<alt::IBaseObject::Type::LOCAL_OBJECT>();
 });
