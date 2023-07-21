@@ -395,6 +395,16 @@ static void SetMinimapComponentPosition(js::FunctionContext& ctx)
     alt::ICore::Instance().SetMinimapComponentPosition(name, alignX[0], alignY[0], pos, size);
 }
 
+static void ResetMinimapComponentPosition(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    std::string name;
+    if(!ctx.GetArg(0, name)) return;
+
+    alt::ICore::Instance().ResetMinimapComponentPosition(name);
+}
+
 static void SetMinimapIsRectangle(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
@@ -485,6 +495,7 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.StaticFunction("worldToScreen", WorldToScreen);
     module.StaticFunction("screenToWorld", ScreenToWorld);
     module.StaticFunction("setMinimapComponentPosition", SetMinimapComponentPosition);
+    module.StaticFunction("resetMinimapComponentPosition", ResetMinimapComponentPosition);
     module.StaticFunction("setMinimapIsRectangle", SetMinimapIsRectangle);
     module.StaticFunction("getPedBonePos", GetPedBonePos);
 
