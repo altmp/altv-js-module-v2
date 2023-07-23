@@ -47,6 +47,11 @@ static void SHA256(js::FunctionContext& ctx)
     ctx.Return(alt::ICore::Instance().StringToSHA256(str));
 }
 
+static void GetVoiceConnectionState(js::FunctionContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetVoiceConnectionState());
+}
+
 static void MetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetMetaData(ctx.GetProperty()));
@@ -89,6 +94,7 @@ static js::Module sharedModule("@altv/shared", "", { &baseObjectClass, &worldObj
     module.StaticFunction("logWarning", Log<LogType::WARN>);
     module.StaticFunction("logError", Log<LogType::ERR>);
     module.StaticFunction("sha256", &SHA256);
+    module.StaticFunction("getVoiceConnectionState", GetVoiceConnectionState);
 
     module.StaticDynamicProperty("meta", MetaGetter, MetaSetter, MetaDeleter, MetaEnumerator);
 
