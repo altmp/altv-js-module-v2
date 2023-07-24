@@ -720,6 +720,7 @@ static void RequestCloudID(js::FunctionContext& ctx)
               delete promise;
           });
     };
+    player->RequestCloudID(callback);
 
     ctx.Return(promise->Get());
 }
