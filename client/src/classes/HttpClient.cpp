@@ -1,8 +1,6 @@
 #include "Class.h"
 #include "interfaces/IAltResource.h"
 
-static std::set<js::Promise*> promises;
-
 static void ResponseCallback(alt::IHttpClient::HttpResponse response, const void* userData)
 {
     js::Promise* promise = const_cast<js::Promise*>(static_cast<const js::Promise*>(userData));
@@ -16,7 +14,7 @@ static void ResponseCallback(alt::IHttpClient::HttpResponse response, const void
           obj.Set("body", response.body);
 
           promise->Resolve(obj);
-          promises.erase(promise);
+          delete promise;
       });
 }
 
@@ -37,7 +35,6 @@ static void GenericRequest(js::FunctionContext& ctx)
     }
 
     js::Promise* promise = new js::Promise;
-    promises.insert(promise);
     if constexpr(HasBody) (client->*Method)(ResponseCallback, url, body, (void*)promise);
     else if constexpr(HasProgressCallback)
         (client->*Method)(ResponseCallback, url, (void*)promise, nullptr);

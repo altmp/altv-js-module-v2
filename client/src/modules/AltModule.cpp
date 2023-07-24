@@ -203,7 +203,6 @@ static void GetPermissionState(js::FunctionContext& ctx)
 
 static void TakeScreenshot(js::FunctionContext& ctx)
 {
-    static std::set<js::Promise*> promises;
     bool gameOnly = ctx.GetArg<bool>(0, false);
 
     js::Promise* promise = new js::Promise;
@@ -216,14 +215,13 @@ static void TakeScreenshot(js::FunctionContext& ctx)
           [=]()
           {
               promise->Resolve(base64);
-              promises.erase(promise);
+              delete promise;
           });
     };
     if(!gameOnly) alt::ICore::Instance().TakeScreenshot(callback);
     else
         alt::ICore::Instance().TakeScreenshotGameOnly(callback);
 
-    promises.insert(promise);
     ctx.Return(promise->Get());
 }
 

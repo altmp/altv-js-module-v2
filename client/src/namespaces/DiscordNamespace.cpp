@@ -28,15 +28,12 @@ static void AvatarGetter(js::PropertyContext& ctx)
 
 static void RequestOAuth2Token(js::FunctionContext& ctx)
 {
-    static std::set<js::Promise*> promises;
-
     if(!ctx.CheckArgCount(1)) return;
 
     std::string appId;
     if(!ctx.GetArg(0, appId)) return;
 
     js::Promise* promise = new js::Promise;
-    promises.insert(promise);
     js::IAltResource* resource = ctx.GetResource<js::IAltResource>();
     auto callback = [=](bool success, const std::string& tokenStr)
     {
@@ -47,7 +44,7 @@ static void RequestOAuth2Token(js::FunctionContext& ctx)
               if(success) promise->Resolve(token);
               else
                   promise->Reject("Failed to get OAuth2 token");
-              promises.erase(promise);
+              delete promise;
           });
     };
     alt::ICore::Instance().DiscordRequestOAuth2Token(appId, callback);
