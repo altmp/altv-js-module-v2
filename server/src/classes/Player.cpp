@@ -1,5 +1,5 @@
 #include "Class.h"
-#include "interfaces/IResource.h"
+#include "interfaces/IAltResource.h"
 #include "cpp-sdk/ICore.h"
 
 static void ModelGetter(js::PropertyContext& ctx)
@@ -699,6 +699,31 @@ static void GetDecorations(js::FunctionContext& ctx)
     ctx.Return(arr);
 }
 
+static void RequestCloudID(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+    js::IAltResource* resource = ctx.GetResource<js::IAltResource>();
+
+    js::Promise* promise = new js::Promise;
+
+    const auto callback = [=](bool ok, const std::string& resultStr)
+    {
+        std::string result = resultStr;
+        resource->PushNextTickCallback(
+          [=]()
+          {
+              if(ok) promise->Resolve(result);
+              else
+                  promise->Reject(result);
+
+              delete promise;
+          });
+    };
+
+    ctx.Return(promise->Get());
+}
+
 static void LocalMetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
@@ -831,6 +856,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method<&alt::IPlayer::ClearDecorations>("clearDecorations");
     tpl.Method("getDecorations", GetDecorations);
     tpl.Method<&alt::IPlayer::PlayScenario>("playScenario");
+    tpl.Method("requestCloudID", RequestCloudID);
 
     tpl.DynamicProperty("localMeta", LocalMetaGetter, LocalMetaSetter, LocalMetaDeleter, LocalMetaEnumerator);
 
