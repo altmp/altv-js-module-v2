@@ -116,6 +116,9 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Property<&alt::IVehicle::GetHybridExtraActive, &alt::IVehicle::SetHybridExtraActive>("hybridExtraActive");
     tpl.Property<&alt::IVehicle::GetHybridExtraState, &alt::IVehicle::SetHybridExtraState>("hybridExtraState");
     tpl.Property<&alt::IVehicle::GetQuaternion, &alt::IVehicle::SetQuaternion>("quaternion");
+    tpl.Property<&alt::IVehicle::IsHornActive>("isHornActive");
+    tpl.Property<&alt::IVehicle::GetAccelerationLevel>("accelerationLevel");
+    tpl.Property<&alt::IVehicle::GetBrakeLevel>("brakeLevel");
 
     tpl.Method<&alt::IVehicle::SetFixed>("repair");
     tpl.Method("setMod", &SetMod);
