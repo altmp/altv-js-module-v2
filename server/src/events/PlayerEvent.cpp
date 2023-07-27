@@ -85,3 +85,49 @@ static js::Event playerWeaponChangeEvent(alt::CEvent::Type::PLAYER_WEAPON_CHANGE
     args.Set("oldWeapon", e->GetOldWeapon());
     args.Set("newWeapon", e->GetNewWeapon());
 });
+
+static js::Event requestSyncedSceneEvent(alt::CEvent::Type::REQUEST_SYNCED_SCENE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CRequestSyncedSceneEvent*>(ev);
+
+    args.Set("player", e->GetSource());
+    args.Set("sceneID", e->GetSceneID());
+});
+
+static js::Event startSyncedSceneEvent(alt::CEvent::Type::START_SYNCED_SCENE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CStartSyncedSceneEvent*>(ev);
+
+    args.Set("player", e->GetSource());
+    args.Set("sceneID", e->GetSceneID());
+    args.Set("startPos", e->GetStartPosition());
+    args.Set("startRot", e->GetStartRotation());
+    args.Set("animDict", e->GetAnimDictHash());
+
+    js::Array arr;
+    for(auto& [entity, animHash] : e->GetEntityAndAnimHashPairs())
+    {
+        js::Object obj;
+        obj.Set("entity", entity.get());
+        obj.Set("animHash", animHash);
+        arr.Push(obj);
+    }
+    args.Set("entityAndAnimHashPairs", arr);
+});
+
+static js::Event stopSyncedSceneEvent(alt::CEvent::Type::STOP_SYNCED_SCENE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CStopSyncedSceneEvent*>(ev);
+
+    args.Set("player", e->GetSource());
+    args.Set("sceneID", e->GetSceneID());
+});
+
+static js::Event updateSyncedSceneEvent(alt::CEvent::Type::UPDATE_SYNCED_SCENE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CUpdateSyncedSceneEvent*>(ev);
+
+    args.Set("player", e->GetSource());
+    args.Set("sceneID", e->GetSceneID());
+    args.Set("startRate", e->GetStartRate());
+});

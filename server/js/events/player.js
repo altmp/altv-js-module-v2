@@ -8,3 +8,7 @@ Event.register(alt.Enums.EventType.PLAYER_DEATH, "PlayerDeath");
 Event.register(alt.Enums.EventType.PLAYER_REQUEST_CONTROL, "PlayerControlRequest");
 Event.register(alt.Enums.EventType.PLAYER_CHANGE_INTERIOR_EVENT, "PlayerInteriorChange");
 Event.register(alt.Enums.EventType.PLAYER_DIMENSION_CHANGE, "PlayerDimensionChange");
+Event.register(alt.Enums.EventType.REQUEST_SYNCED_SCENE, "PlayerSyncedSceneRequest");
+Event.register(alt.Enums.EventType.START_SYNCED_SCENE, "PlayerSyncedSceneStart");
+Event.register(alt.Enums.EventType.STOP_SYNCED_SCENE, "PlayerSyncedSceneStop");
+Event.register(alt.Enums.EventType.UPDATE_SYNCED_SCENE, "PlayerSyncedSceneUpdate");
