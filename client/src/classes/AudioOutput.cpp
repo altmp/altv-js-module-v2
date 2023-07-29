@@ -35,6 +35,7 @@ extern js::Class audioOutputClass("AudioOutput", &baseObjectClass, nullptr, [](j
     tpl.Property<&alt::IAudioOutput::IsMuted, &alt::IAudioOutput::SetMuted>("muted");
     tpl.Property<&alt::IAudioOutput::GetVolume, &alt::IAudioOutput::SetVolume>("volume");
     tpl.Property<&alt::IAudioOutput::GetCategory>("category");
+    tpl.Property<&alt::IAudioOutput::GetOwner>("owner");
     tpl.Property("filter", &GetFilter, &SetFilter);
 
     tpl.GetByID<alt::IBaseObject::Type::AUDIO>();

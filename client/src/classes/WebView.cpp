@@ -60,11 +60,14 @@ extern js::Class webViewClass("WebView", &baseObjectClass, [](js::ClassTemplate&
     tpl.Property<&alt::IWebView::IsReady>("isReady");
     tpl.Property<&alt::IWebView::GetSize, &alt::IWebView::SetSize>("size");
     tpl.Property<&alt::IWebView::GetPosition, &alt::IWebView::SetPosition>("position");
+    tpl.Property<&alt::IWebView::GetOutputs>("outputs");
 
     tpl.Method("emit", Emit);
     tpl.Method<&alt::IWebView::SetExtraHeader>("setExtraHeader");
     tpl.Method<&alt::IWebView::SetZoomLevel>("setZoomLevel");
     tpl.Method<&alt::IWebView::Reload>("reload");
+    tpl.Method<&alt::IWebView::AddOutput>("addOutput");
+    tpl.Method<&alt::IWebView::RemoveOutput>("removeOutput");
 
     tpl.StaticProperty("isGpuAccelerationActive", GpuAccelerationActiveGetter);
 });
