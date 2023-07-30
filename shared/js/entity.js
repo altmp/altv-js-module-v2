@@ -76,10 +76,10 @@ Object.defineProperty(alt.Entity, "all", {
     get: () => Array.from(entityAllSet)
 });
 
-addAllGetter(alt.Player, alt.Enums.BaseObjectType.PLAYER);
+addAllGetter(alt.Player, [alt.Enums.BaseObjectType.PLAYER, alt.Enums.BaseObjectType.LOCAL_PLAYER]);
 addAllGetter(alt.Vehicle, [alt.Enums.BaseObjectType.VEHICLE, alt.Enums.BaseObjectType.LOCAL_VEHICLE]);
-addAllGetter(alt.Ped, alt.Enums.BaseObjectType.PED);
-addAllGetter(alt.Object, alt.Enums.BaseObjectType.OBJECT);
+addAllGetter(alt.Ped, [alt.Enums.BaseObjectType.PED, alt.Enums.BaseObjectType.LOCAL_PED]);
+addAllGetter(alt.Object, [alt.Enums.BaseObjectType.OBJECT, alt.Enums.BaseObjectType.LOCAL_OBJECT]);
 
 // Register all entities that were created before this resource was loaded
 const entities = cppBindings.getAllEntities();
