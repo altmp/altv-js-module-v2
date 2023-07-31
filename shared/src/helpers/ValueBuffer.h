@@ -26,6 +26,7 @@ namespace js
     protected:
         IResource* resource = nullptr;
 
+        virtual bool Magic() = 0;
         virtual bool Buffer(void*& data, size_t size) = 0;
         virtual bool Byte(uint8_t& value) = 0;
         virtual bool Bool(bool& value) = 0;
@@ -58,6 +59,7 @@ namespace js
         void ThrowDataCloneError(v8::Local<v8::String> message) override;
         v8::Maybe<bool> WriteHostObject(v8::Isolate* isolate, v8::Local<v8::Object> object) override;
 
+        bool Magic() override;
         bool Buffer(void*& data, size_t size) override;
         bool Byte(uint8_t& value) override;
         bool Bool(bool& value) override;
@@ -89,6 +91,7 @@ namespace js
 
         v8::MaybeLocal<v8::Object> ReadHostObject(v8::Isolate* isolate) override;
 
+        bool Magic() override;
         bool Buffer(void*& data, size_t size) override;
         bool Byte(uint8_t& value) override;
         bool Bool(bool& value) override;

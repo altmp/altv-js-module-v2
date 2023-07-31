@@ -2,6 +2,9 @@
 #include "interfaces/IResource.h"
 #include "JS.h"
 
+// Magic bytes to identify raw JS value buffers
+static constexpr uint8_t magicBytes[] = { 'J', 'S', 'V', 'a', 'l' };
+
 bool js::IValueBuffer::Value(v8::Local<v8::Value>& value)
 {
     ValueType type = GetValueType(value);
@@ -20,6 +23,12 @@ bool js::IValueBuffer::Value(v8::Local<v8::Value>& value)
 }
 
 // *** Writer
+
+bool js::ValueSerializer::Magic()
+{
+    serializer->WriteRawBytes(magicBytes, sizeof(magicBytes));
+    return true;
+}
 
 bool js::ValueSerializer::Buffer(void*& data, size_t size)
 {
@@ -106,7 +115,7 @@ bool js::ValueSerializer::Entity(v8::Local<v8::Value>& value)
         id = object->GetID();
 #else
     remote = true;
-    uint32_t id = object->GetID();
+    id = object->GetID();
 #endif
 
     UInt32(id);
@@ -222,6 +231,7 @@ std::optional<std::pair<uint8_t*, size_t>> js::ValueSerializer::Serialize(v8::Lo
     writer.serializer = &serializer;
 
     writer.serializer->WriteHeader();
+    writer.Magic();
     bool result = writer.Value(value);
     if(!result) return std::nullopt;
 
@@ -229,6 +239,13 @@ std::optional<std::pair<uint8_t*, size_t>> js::ValueSerializer::Serialize(v8::Lo
 }
 
 // *** Reader
+
+bool js::ValueDeserializer::Magic()
+{
+    void* magic = nullptr;
+    if(!Buffer(magic, sizeof(magicBytes))) return false;
+    return memcmp(magic, magicBytes, sizeof(magicBytes)) == 0;
+}
 
 bool js::ValueDeserializer::Buffer(void*& data, size_t size)
 {
@@ -393,6 +410,7 @@ std::optional<v8::Local<v8::Value>> js::ValueDeserializer::Deserialize(uint8_t* 
     reader.deserializer = &deserializer;
 
     if(!reader.deserializer->ReadHeader(resource->GetContext()).FromMaybe(false)) return std::nullopt;
+    if(!reader.Magic()) return std::nullopt;
     v8::Local<v8::Value> value;
     bool result = reader.Value(value);
     if(!result) return std::nullopt;
