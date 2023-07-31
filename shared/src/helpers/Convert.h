@@ -22,6 +22,8 @@ namespace js
     v8::Local<v8::Value> MValueToJS(alt::MValueConst val);
     void MValueArgsToJS(alt::MValueArgs args, Array& argsArray);
     v8::Local<v8::Value> ConfigValueToJS(Config::Value::ValuePtr val);
+    alt::MValueByteArray JSToRawBytes(v8::Local<v8::Value> val, IResource* resource);
+    v8::MaybeLocal<v8::Value> RawBytesToJS(alt::MValueByteArrayConst val, IResource* resource);
 
     inline v8::Local<v8::String> JSValue(const char* val)
     {

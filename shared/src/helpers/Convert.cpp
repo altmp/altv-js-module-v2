@@ -1,6 +1,7 @@
 #include "Convert.h"
 #include "interfaces/IAltResource.h"
 #include "JS.h"
+#include "helpers/ValueBuffer.h"
 
 v8::Local<v8::Value> js::JSValue(alt::IBaseObject* object)
 {
@@ -269,10 +270,9 @@ v8::Local<v8::Value> js::MValueToJS(alt::MValueConst val)
         case alt::IMValue::Type::BYTE_ARRAY:
         {
             alt::MValueByteArrayConst buffer = std::dynamic_pointer_cast<const alt::IMValueByteArray>(val);
-            // todo: raw event support
-            // Check if the buffer is a raw JS value buffer
-            // v8::MaybeLocal<v8::Value> jsVal = RawBytesToJS(buffer);
-            // if(!jsVal.IsEmpty()) return jsVal.ToLocalChecked();
+
+            v8::MaybeLocal<v8::Value> jsVal = RawBytesToJS(buffer, resource);
+            if(!jsVal.IsEmpty()) return jsVal.ToLocalChecked();
 
             v8::Local<v8::ArrayBuffer> v8Buffer = v8::ArrayBuffer::New(isolate, buffer->GetSize());
             std::memcpy(v8Buffer->GetBackingStore()->Data(), buffer->GetData(), buffer->GetSize());
@@ -339,6 +339,20 @@ v8::Local<v8::Value> js::ConfigValueToJS(Config::Value::ValuePtr val)
         default: return v8::Local<v8::Value>();
     }
     return out;
+}
+
+alt::MValueByteArray js::JSToRawBytes(v8::Local<v8::Value> val, IResource* resource)
+{
+    std::optional<std::pair<uint8_t*, size_t>> result = ValueSerializer::Serialize(val, resource);
+    if(!result.has_value()) return {};
+    return alt::ICore::Instance().CreateMValueByteArray(result->first, result->second);
+}
+
+v8::MaybeLocal<v8::Value> js::RawBytesToJS(alt::MValueByteArrayConst val, IResource* resource)
+{
+    std::optional<v8::Local<v8::Value>> result = ValueDeserializer::Deserialize((uint8_t*)val->GetData(), val->GetSize(), resource);
+    if(!result.has_value()) return v8::MaybeLocal<v8::Value>();
+    return result.value();
 }
 
 std::optional<alt::IBaseObject*> js::ToBaseObject(v8::Local<v8::Value> val)
