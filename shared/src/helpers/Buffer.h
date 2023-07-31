@@ -20,10 +20,15 @@ namespace js
         {
             buf = new uint8_t[_size];
         }
-        Buffer(uint8_t* _data, size_t _size) : size(_size)
+        Buffer(uint8_t* _data, size_t _size, bool copy = true) : size(_size)
         {
-            buf = new uint8_t[_size];
-            memcpy(buf, _data, _size);
+            if(copy)
+            {
+                buf = new uint8_t[_size];
+                memcpy(buf, _data, _size);
+            }
+            else
+                buf = _data;
         }
         ~Buffer()
         {
