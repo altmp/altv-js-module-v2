@@ -177,21 +177,7 @@ bool js::ValueSerializer::JSBuffer(v8::Local<v8::Value>& value)
 js::IValueBuffer::ValueType js::ValueSerializer::GetValueType(v8::Local<v8::Value> value)
 {
     if(value.IsEmpty()) return ValueType::INVALID;
-    if(resource->IsBaseObject(value))
-    {
-        js::ScriptObject* scriptObject = resource->GetScriptObject(value);
-        if(!scriptObject) return ValueType::INVALID;
-        alt::IBaseObject* object = scriptObject->GetObject();
-        switch(object->GetType())
-        {
-            case alt::IBaseObject::Type::PLAYER:
-            case alt::IBaseObject::Type::LOCAL_PLAYER:
-            case alt::IBaseObject::Type::VEHICLE:
-            case alt::IBaseObject::Type::PED:
-            case alt::IBaseObject::Type::OBJECT: return ValueType::ENTITY;
-            default: return ValueType::INVALID;
-        }
-    }
+    if(resource->IsBaseObject(value)) return ValueType::ENTITY;
     else if(resource->IsVector3(value))
         return ValueType::VECTOR3;
     else if(resource->IsVector2(value))
