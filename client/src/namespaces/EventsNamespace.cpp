@@ -1,8 +1,10 @@
 #include "Namespace.h"
+#include "interfaces/IResource.h"
 
 static void EmitServer(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1, 32)) return;
+    js::IResource* resource = ctx.GetResource();
 
     std::string eventName;
     if(!ctx.GetArg(0, eventName)) return;
@@ -12,7 +14,17 @@ static void EmitServer(js::FunctionContext& ctx)
     alt::MValue val;
     for(int i = 1; i < ctx.GetArgCount(); i++)
     {
-        if(!ctx.GetArg(i, val)) continue;
+        if(resource->IsRawEmitEnabled())
+        {
+            v8::Local<v8::Value> arg;
+            if(!ctx.GetArg(i, arg)) continue;
+            alt::MValueByteArray result = js::JSToRawBytes(arg, resource);
+            if(!ctx.Check(result.get() != nullptr, "Failed to serialize argument at index " + std::to_string(i))) return;
+            val = result;
+        }
+        else if(!ctx.GetArg(i, val))
+            continue;
+
         args.push_back(val);
     }
     alt::ICore::Instance().TriggerServerEvent(eventName, args);
@@ -21,6 +33,7 @@ static void EmitServer(js::FunctionContext& ctx)
 static void EmitServerUnreliable(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1, 32)) return;
+    js::IResource* resource = ctx.GetResource();
 
     std::string eventName;
     if(!ctx.GetArg(0, eventName)) return;
@@ -30,7 +43,17 @@ static void EmitServerUnreliable(js::FunctionContext& ctx)
     alt::MValue val;
     for(int i = 1; i < ctx.GetArgCount(); i++)
     {
-        if(!ctx.GetArg(i, val)) continue;
+        if(resource->IsRawEmitEnabled())
+        {
+            v8::Local<v8::Value> arg;
+            if(!ctx.GetArg(i, arg)) continue;
+            alt::MValueByteArray result = js::JSToRawBytes(arg, resource);
+            if(!ctx.Check(result.get() != nullptr, "Failed to serialize argument at index " + std::to_string(i))) return;
+            val = result;
+        }
+        else if(!ctx.GetArg(i, val))
+            continue;
+
         args.push_back(val);
     }
     alt::ICore::Instance().TriggerServerEventUnreliable(eventName, args);

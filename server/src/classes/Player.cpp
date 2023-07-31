@@ -148,6 +148,7 @@ static void Emit(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
     if(!ctx.CheckArgCount(1, 32)) return;
+    js::IResource* resource = ctx.GetResource();
 
     alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
 
@@ -159,7 +160,17 @@ static void Emit(js::FunctionContext& ctx)
     alt::MValue val;
     for(int i = 1; i < ctx.GetArgCount(); i++)
     {
-        if(!ctx.GetArg(i, val)) continue;
+        if(resource->IsRawEmitEnabled())
+        {
+            v8::Local<v8::Value> arg;
+            if(!ctx.GetArg(i, arg)) continue;
+            alt::MValueByteArray result = js::JSToRawBytes(arg, resource);
+            if(!ctx.Check(result.get() != nullptr, "Failed to serialize argument at index " + std::to_string(i - 1))) return;
+            val = result;
+        }
+        else if(!ctx.GetArg(i, val))
+            continue;
+
         args.push_back(val);
     }
     alt::ICore::Instance().TriggerClientEvent(player, eventName, args);
@@ -169,6 +180,7 @@ static void EmitUnreliable(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
     if(!ctx.CheckArgCount(1, 32)) return;
+    js::IResource* resource = ctx.GetResource();
 
     alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
 
@@ -180,7 +192,17 @@ static void EmitUnreliable(js::FunctionContext& ctx)
     alt::MValue val;
     for(int i = 1; i < ctx.GetArgCount(); i++)
     {
-        if(!ctx.GetArg(i, val)) continue;
+        if(resource->IsRawEmitEnabled())
+        {
+            v8::Local<v8::Value> arg;
+            if(!ctx.GetArg(i, arg)) continue;
+            alt::MValueByteArray result = js::JSToRawBytes(arg, resource);
+            if(!ctx.Check(result.get() != nullptr, "Failed to serialize argument at index " + std::to_string(i - 1))) return;
+            val = result;
+        }
+        else if(!ctx.GetArg(i, val))
+            continue;
+
         args.push_back(val);
     }
     alt::ICore::Instance().TriggerClientEventUnreliable(player, eventName, args);

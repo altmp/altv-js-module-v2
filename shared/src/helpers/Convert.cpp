@@ -272,7 +272,11 @@ v8::Local<v8::Value> js::MValueToJS(alt::MValueConst val)
             alt::MValueByteArrayConst buffer = std::dynamic_pointer_cast<const alt::IMValueByteArray>(val);
 
             v8::MaybeLocal<v8::Value> jsVal = RawBytesToJS(buffer, resource);
-            if(!jsVal.IsEmpty()) return jsVal.ToLocalChecked();
+            if(!jsVal.IsEmpty())
+            {
+                Logger::Info("Got raw value");
+                return jsVal.ToLocalChecked();
+            }
 
             v8::Local<v8::ArrayBuffer> v8Buffer = v8::ArrayBuffer::New(isolate, buffer->GetSize());
             std::memcpy(v8Buffer->GetBackingStore()->Data(), buffer->GetData(), buffer->GetSize());

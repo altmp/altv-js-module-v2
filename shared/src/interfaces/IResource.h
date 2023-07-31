@@ -31,6 +31,8 @@ namespace js
 
         std::unordered_map<Buffer*, SourceLocation> ownedBuffers;
 
+        bool rawEmitEnabled = false;
+
         void Initialize()
         {
             context.Get(isolate)->SetAlignedPointerInEmbedderData(ContextInternalFieldIdx, this);
@@ -192,6 +194,16 @@ namespace js
         auto& GetOwnedBuffers()
         {
             return ownedBuffers;
+        }
+
+        bool IsRawEmitEnabled() const
+        {
+            return rawEmitEnabled;
+        }
+
+        void ToggleRawEmit(bool toggle)
+        {
+            rawEmitEnabled = toggle;
         }
 
         template<class ResourceType = js::IResource>
