@@ -311,6 +311,13 @@ namespace js
         {
             object->SetIntegrityLevel(context, v8::IntegrityLevel::kSealed);
         }
+
+        template<class T>
+        T* GetExtraInternalFieldValue()
+        {
+            if(Get()->InternalFieldCount() != 2) return nullptr;
+            return static_cast<T*>(Get()->GetAlignedPointerFromInternalField(1));
+        }
     };
 
     class Array : public Value
