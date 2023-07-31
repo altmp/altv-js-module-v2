@@ -28,6 +28,7 @@ namespace js
 
         virtual bool Buffer(void*& data, size_t size) = 0;
         virtual bool Byte(uint8_t& value) = 0;
+        virtual bool Bool(bool& value) = 0;
         virtual bool Type(ValueType& value) = 0;
         virtual bool Int32(int32_t& value) = 0;
         virtual bool UInt32(uint32_t& value) = 0;
@@ -59,6 +60,7 @@ namespace js
 
         bool Buffer(void*& data, size_t size) override;
         bool Byte(uint8_t& value) override;
+        bool Bool(bool& value) override;
         bool Type(ValueType& value) override;
         bool Int32(int32_t& value) override;
         bool UInt32(uint32_t& value) override;
@@ -89,6 +91,7 @@ namespace js
 
         bool Buffer(void*& data, size_t size) override;
         bool Byte(uint8_t& value) override;
+        bool Bool(bool& value) override;
         bool Type(ValueType& value) override;
         bool Int32(int32_t& value) override;
         bool UInt32(uint32_t& value) override;

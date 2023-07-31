@@ -33,6 +33,12 @@ bool js::ValueSerializer::Byte(uint8_t& value)
     return true;
 }
 
+bool js::ValueSerializer::Bool(bool& value)
+{
+    serializer->WriteRawBytes(&value, sizeof(value));
+    return true;
+}
+
 bool js::ValueSerializer::Type(ValueType& value)
 {
     uint8_t type = static_cast<uint8_t>(value);
@@ -88,15 +94,25 @@ bool js::ValueSerializer::Entity(v8::Local<v8::Value>& value)
     if(!scriptObject) return false;
     alt::IBaseObject* object = scriptObject->GetObject();
     if(!object) return false;
+
+    uint32_t id;
     uint8_t type = static_cast<uint8_t>(object->GetType());
+    bool remote;
+
 #ifdef ALT_CLIENT_API
-    uint32_t id = object->GetRemoteID();
+    remote = object->IsRemote();
+    if(remote) id = object->GetRemoteID();
+    else
+        id = object->GetID();
 #else
+    remote = true;
     uint32_t id = object->GetID();
 #endif
 
-    Byte(type);
     UInt32(id);
+    Byte(type);
+    Bool(remote);
+
     return true;
 }
 
@@ -238,6 +254,11 @@ bool js::ValueDeserializer::Byte(uint8_t& value)
     return Read<uint8_t>(value);
 }
 
+bool js::ValueDeserializer::Bool(bool& value)
+{
+    return Read<bool>(value);
+}
+
 bool js::ValueDeserializer::Type(ValueType& type)
 {
     uint8_t typeVal = static_cast<uint8_t>(type);
@@ -287,14 +308,21 @@ bool js::ValueDeserializer::JSValue(v8::Local<v8::Value>& value)
 
 bool js::ValueDeserializer::Entity(v8::Local<v8::Value>& value)
 {
-    uint8_t type;
-    if(!Byte(type)) return false;
     uint32_t id;
     if(!UInt32(id)) return false;
+    uint8_t type;
+    if(!Byte(type)) return false;
+    bool remote;
+    if(!Bool(remote)) return false;
+
+    alt::IBaseObject* entity = nullptr;
 #ifdef ALT_CLIENT_API
-    alt::IBaseObject* entity = alt::ICore::Instance().GetBaseObjectByRemoteID((alt::IBaseObject::Type)type, id);
+    if(remote) entity = alt::ICore::Instance().GetBaseObjectByRemoteID((alt::IBaseObject::Type)type, id);
+    else
+        entity = alt::ICore::Instance().GetBaseObjectByID((alt::IBaseObject::Type)type, id);
 #else
-    alt::IBaseObject* entity = alt::ICore::Instance().GetBaseObjectByID((alt::IBaseObject::Type)type, id);
+    if(type == (uint8_t)alt::IBaseObject::Type::LOCAL_PLAYER) type = (uint8_t)alt::IBaseObject::Type::PLAYER;
+    entity = alt::ICore::Instance().GetBaseObjectByID((alt::IBaseObject::Type)type, id);
 #endif
 
     if(!entity) return false;
