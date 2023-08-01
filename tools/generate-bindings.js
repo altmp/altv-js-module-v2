@@ -19,7 +19,7 @@ const basePath = process.argv[2];
 const paths = [
     { path: "client/js/", scope: "client" },
     { path: "server/js/", scope: "server" },
-    { path: "shared/js/", scope: "shared" },
+    { path: "shared/js/", scope: "shared" }
 ];
 
 // Full output file
@@ -38,7 +38,7 @@ namespace js {
 const bindingTemplate = `{ "{BINDING_NAME}", Binding{ "{BINDING_NAME}", Binding::Scope::{BINDING_SCOPE}, { {BINDING_SRC} } } }`;
 
 // Result bindings output path
-const outputPath = "shared/src/BindingsMap.cpp";
+const outputPath = "build/BindingsMap.cpp";
 
 const hashesOutputPath = "build/bindings-hashes.json";
 
@@ -68,7 +68,7 @@ const hashesOutputPath = "build/bindings-hashes.json";
             bindings.push({
                 name: bindingName,
                 src: getBindingCodeChars(src, name === "bootstrap.js"),
-                scope: pathScope.toUpperCase(),
+                scope: pathScope.toUpperCase()
             });
             // Store hash
             fileHashes[bindingName] = getHash(src);
@@ -98,9 +98,7 @@ const hashesOutputPath = "build/bindings-hashes.json";
     await fs.writeFile(hashesOutputPathResolved, JSON.stringify(fileHashes));
     showLog(`Wrote bindings hashes to file: ${hashesOutputPath}`);
 
-    const outputStr = resultTemplate
-        .replace("{DATE}", `${getDate()} ${getTime()}`)
-        .replace("{BINDINGS_LIST}", bindingsList);
+    const outputStr = resultTemplate.replace("{DATE}", `${getDate()} ${getTime()}`).replace("{BINDINGS_LIST}", bindingsList);
     await fs.writeFile(outputPathResolved, outputStr);
     showLog(`Wrote bindings result to file: ${outputPath}`);
 })();
@@ -123,8 +121,7 @@ function getBindingCodeChars(src, shouldSkipAddingConsts) {
     // These consts have to be added so the bindings work at runtime, as the globals are removed after loading the bindings
     let code = src;
     if (!shouldSkipAddingConsts && !code.includes("const alt =")) code = `const alt = __alt;\n${code}`;
-    if (!shouldSkipAddingConsts && !code.includes("const cppBindings ="))
-        code = `const cppBindings = __cppBindings;\n${code}`;
+    if (!shouldSkipAddingConsts && !code.includes("const cppBindings =")) code = `const cppBindings = __cppBindings;\n${code}`;
     const chars = code.split("").map((char) => char.charCodeAt(0));
     return chars.toString();
 }
@@ -161,9 +158,7 @@ function getTime() {
     const hours = date.getHours(),
         minutes = date.getMinutes(),
         seconds = date.getSeconds();
-    return `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${
-        seconds < 10 ? `0${seconds}` : seconds
-    }`;
+    return `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
 }
 
 function showLog(...args) {

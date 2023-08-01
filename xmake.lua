@@ -41,15 +41,16 @@ option("module-version")
 
 -- Rules
 rule("generate-bindings")
-    on_config(function(target)
+    on_load(function(target)
         local out = os.iorun("node tools/generate-bindings.js ..")
         if out ~= "" and is_mode("debug") then
             print(out)
         end
+        target:add("files", "build/BindingsMap.cpp")
     end)
 
 rule("update-deps")
-    on_config(function(target)
+    on_load(function(target)
         if not has_config("auto-update-deps") then return end
         import("core.project.config")
         os.iorun("node tools/update-deps.js " .. target:name() .. " " .. tostring(config.get("mode")))
