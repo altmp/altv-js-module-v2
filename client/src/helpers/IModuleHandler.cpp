@@ -185,20 +185,23 @@ v8::Local<v8::Module> IModuleHandler::CompileSyntheticModule(const std::string& 
     return module;
 }
 
-static js::ExternalString bytecodeModuleSource{ " ", 1 };
 v8::MaybeLocal<v8::Module> IModuleHandler::CompileBytecode(const std::string& name, const std::vector<uint8_t>& buffer)
 {
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
 
-    // Copy bytecode buffer
-    size_t bytecodeSize = buffer.size() - sizeof(bytecodeMagic);
+    // Read bytecode buffer data
+    int sourceCodeSize = 0;
+    size_t bytecodeSize = buffer.size() - sizeof(bytecodeMagic) - sizeof(int);
     uint8_t* bytecode = new uint8_t[bytecodeSize];
-    memcpy(bytecode, buffer.data() + sizeof(bytecodeMagic), bytecodeSize);
+    memcpy(&sourceCodeSize, buffer.data() + sizeof(bytecodeMagic), sizeof(int));
+    memcpy(bytecode, buffer.data() + sizeof(bytecodeMagic) + sizeof(int), bytecodeSize);
+
+    std::string sourceStr = "'" + std::string(' ', sourceCodeSize - 2) + "'";
 
     v8::ScriptCompiler::CachedData* cachedData = new v8::ScriptCompiler::CachedData(bytecode, bytecodeSize, v8::ScriptCompiler::CachedData::BufferOwned);
     v8::ScriptOrigin origin(isolate, js::JSValue(name), 0, 0, false, GetNextScriptId(), v8::Local<v8::Value>(), false, false, true, v8::Local<v8::PrimitiveArray>());
 
-    v8::ScriptCompiler::Source source{ v8::String::NewExternalOneByte(isolate, &bytecodeModuleSource).ToLocalChecked(), origin, cachedData };
+    v8::ScriptCompiler::Source source{ js::JSValue(sourceStr), origin, cachedData };
     v8::MaybeLocal<v8::Module> module = v8::ScriptCompiler::CompileModule(isolate, &source, v8::ScriptCompiler::kConsumeCodeCache);
     if(cachedData->rejected)
     {
