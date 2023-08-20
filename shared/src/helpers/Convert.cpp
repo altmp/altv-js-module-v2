@@ -240,7 +240,7 @@ v8::Local<v8::Value> js::MValueToJS(alt::MValueConst val)
             alt::MValueDictConst dict = std::dynamic_pointer_cast<const alt::IMValueDict>(val);
             js::Object obj = v8::Object::New(isolate);
 
-            for(auto it = dict->Begin(); it; it = dict->Next()) obj.Set(it->GetKey(), it->GetValue());
+            for(auto it = dict->Begin(); it != dict->End(); ++it) obj.Set(it->first, it->second);
 
             return obj.Get();
         }

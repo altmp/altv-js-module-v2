@@ -74,7 +74,7 @@ static void ExtraHeadersEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
     alt::MValueDict dict = client->GetExtraHeaders();
     js::Array arr(dict->GetSize());
 
-    for(auto it = dict->Begin(); it; it = dict->Next()) arr.Push(it->GetKey());
+    for(auto it = dict->Begin(); it != dict->End(); ++it) arr.Push(it->first);
 
     ctx.Return(arr.Get());
 }
