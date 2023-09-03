@@ -20,6 +20,14 @@ namespace js
         v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(js::JSValue(message)));
     }
 
+    template<typename T>
+    static void WeakHandleCallback(const v8::WeakCallbackInfo<T>& info)
+    {
+        T* val = info.GetParameter();
+        if(!val) return;
+        delete val;
+    }
+
     struct SourceLocation
     {
         bool valid = false;

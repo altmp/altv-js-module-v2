@@ -73,37 +73,3 @@ void js::DumpAllBindingsCommand(const std::vector<std::string>&)
 {
     Binding::DumpAll();
 }
-
-void js::ShowBuffersCommand(const std::vector<std::string>& args)
-{
-    if(!args.size())
-    {
-        Logger::Warn("Usage: showbuffers <resource name>");
-        return;
-    }
-
-    alt::IResource* resource = alt::ICore::Instance().GetResource(args[0]);
-    if(!resource)
-    {
-        Logger::Warn("Resource", args[0], "not found");
-        return;
-    }
-    if(resource->GetType() != "jsv2")
-    {
-        Logger::Warn("Resource", args[0], "is not a JS v2 resource");
-        return;
-    }
-
-    IResource* jsResource = dynamic_cast<IResource*>(resource->GetImpl());
-    auto& ownedBuffers = jsResource->GetOwnedBuffers();
-    if(ownedBuffers.empty()) Logger::Colored("~y~No owned buffers");
-    else
-    {
-        Logger::Warn("Resource", resource->GetName(), "has", ownedBuffers.size(), "buffer instances, buffer locations:");
-        for(auto& [buffer, location] : ownedBuffers)
-        {
-            Logger::Warn("Buffer with size", buffer->GetSize(), "|", location.file + ":" + std::to_string(location.line));
-            delete buffer;
-        }
-    }
-}

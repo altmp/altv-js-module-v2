@@ -7,5 +7,4 @@ namespace js
     void DebugHandlesCommand(const std::vector<std::string>&);
     void DumpBindingCommand(const std::vector<std::string>&);
     void DumpAllBindingsCommand(const std::vector<std::string>&);
-    void ShowBuffersCommand(const std::vector<std::string>&);
 }  // namespace js

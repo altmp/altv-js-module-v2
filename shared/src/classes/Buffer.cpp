@@ -116,7 +116,7 @@ static void Constructor(js::FunctionContext& ctx)
         buffer = new js::Buffer((uint8_t*)((uintptr_t)arrayBufferView->Buffer()->GetBackingStore()->Data() + (uintptr_t)arrayBufferView->ByteOffset()), arrayBufferView->ByteLength());
     }
 
-    ctx.GetResource()->AddOwnedBuffer(buffer);
+    ctx.GetResource()->AddOwnedBuffer(buffer, ctx.GetThis());
     ctx.SetExtraInternalFieldValue(buffer);
 }
 

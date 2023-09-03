@@ -29,7 +29,7 @@ namespace js
 
         std::unordered_map<std::string, Persistent<v8::Value>> bindingExports;
 
-        std::unordered_map<Buffer*, SourceLocation> ownedBuffers;
+        std::unordered_map<Buffer*, Persistent<v8::Object>> ownedBuffers;
 
         bool rawEmitEnabled = false;
 
@@ -50,15 +50,6 @@ namespace js
             context.Reset();
             bindingExports.clear();
 
-            if(!ownedBuffers.empty())
-            {
-                Logger::Warn("Resource", GetName(), "has", ownedBuffers.size(), "leaking buffer instances, unfreed buffer locations:");
-                for(auto& [buffer, location] : ownedBuffers)
-                {
-                    Logger::Warn("Buffer with size", buffer->GetSize(), "|", location.file + ":" + std::to_string(location.line));
-                    delete buffer;
-                }
-            }
             ownedBuffers.clear();
         }
 
@@ -183,10 +174,7 @@ namespace js
         bool IsBaseObject(v8::Local<v8::Value> val);
         bool IsBuffer(v8::Local<v8::Value> val);
 
-        void AddOwnedBuffer(Buffer* buffer)
-        {
-            ownedBuffers.insert({ buffer, SourceLocation::GetCurrent(this) });
-        }
+        void AddOwnedBuffer(Buffer* buffer, v8::Local<v8::Object> obj);
         void RemoveOwnedBuffer(Buffer* buffer)
         {
             ownedBuffers.erase(buffer);
