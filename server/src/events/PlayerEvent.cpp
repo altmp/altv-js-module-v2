@@ -52,6 +52,19 @@ static js::Event playerDeathEvent(alt::CEvent::Type::PLAYER_DEATH, [](const alt:
     args.Set("weaponHash", e->GetWeapon());
 });
 
+static js::Event playerHealEvent(alt::CEvent::Type::PLAYER_HEAL, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CPlayerHealEvent*>(ev);
+
+    args.Set("player", e->GetTarget());
+
+    args.Set("newHealth", e->GetNewHealth());
+    args.Set("oldHealth", e->GetOldHealth());
+
+    args.Set("newArmour", e->GetNewArmour());
+    args.Set("oldArmour", e->GetOldArmour());
+});
+
 static js::Event playerRequestControlEvent(alt::CEvent::Type::PLAYER_REQUEST_CONTROL, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
     auto e = static_cast<const alt::CPlayerRequestControlEvent*>(ev);

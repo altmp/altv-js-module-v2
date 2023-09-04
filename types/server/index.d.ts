@@ -56,6 +56,13 @@ declare module "@altv/server" {
             readonly killer: Entity | null;
             readonly weaponHash: number;
         }
+        interface PlayerHealEventContext extends shared.Events.EventContext {
+            readonly player: Player;
+            readonly newHealth: number;
+            readonly oldHealth: number;
+            readonly newArmour: number;
+            readonly oldArmour: number;
+        }
         /**
          * @remarks The seat indexes start with 1 (driver seat).
          */
@@ -179,6 +186,7 @@ declare module "@altv/server" {
 
         export const onPlayerDamage: shared.Events.Event<PlayerDamageEventContext>;
         export const onPlayerDeath: shared.Events.Event<PlayerDeathEventContext>;
+        export const onPlayerHeal: shared.Events.Event<PlayerHealEventContext>;
 
         export const onPlayerEnteredVehicle: shared.Events.Event<PlayerEnteredVehicleEventContext>;
         export const onPlayerVehicleEntering: shared.Events.Event<PlayerVehicleEnteringEventContext>;

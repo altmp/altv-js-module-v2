@@ -227,6 +227,7 @@ declare module "@altv/shared" {
             PLAYER_DISCONNECT,
             PLAYER_DAMAGE,
             PLAYER_DEATH,
+            PLAYER_HEAL,
             PLAYER_ENTER_VEHICLE,
             PLAYER_ENTERING_VEHICLE,
             PLAYER_LEAVE_VEHICLE,
