@@ -111,6 +111,22 @@ namespace js
             nativeContext->Push(GetBufferFromValue(val));
             return true;
         }
+        template<>
+        bool PushArg<int32_t>(js::FunctionContext& ctx, int index)
+        {
+            int32_t val;
+            if(ctx.GetArgType(index) == js::Type::BASE_OBJECT)
+            {
+                alt::IEntity* entity;
+                if(!ctx.GetArg(index, entity)) return false;
+                val = (int32_t)entity->GetScriptID();
+            }
+            else if(!ctx.GetArg(index, val))
+                return false;
+
+            nativeContext->Push(val);
+            return true;
+        }
 
         bool PushArgs(js::FunctionContext& ctx, alt::INative* native);
 
