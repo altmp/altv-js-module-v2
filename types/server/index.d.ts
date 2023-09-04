@@ -6,13 +6,13 @@ declare module "@altv/server" {
     import * as shared from "@altv/shared";
 
     export const rootDir: string;
-    export const netTime: number;
     export const defaultDimension: number;
     export const globalDimension: number;
 
     export const syncedMeta: Record<string, any>;
     export const serverConfig: Record<string, any>;
 
+    export function getNetTime(): number;
     export function setServerPassword(password: string): void;
     export function hashServerPassword(password: string): number;
     export function stopServer(): void;
