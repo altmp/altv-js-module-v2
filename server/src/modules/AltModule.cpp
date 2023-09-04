@@ -161,6 +161,51 @@ static void SetVoiceExternal(js::FunctionContext& ctx)
     alt::ICore::Instance().SetVoiceExternal(ip, port);
 }
 
+static void GetMaxStreamingPeds(js::FunctionContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetMaxStreamingPeds());
+}
+
+static void GetMaxStreamingObjects(js::FunctionContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetMaxStreamingObjects());
+}
+
+static void GetMaxStreamingVehicles(js::FunctionContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetMaxStreamingVehicles());
+}
+
+static void SetMaxStreamingPeds(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    uint16_t limit;
+    if(!ctx.GetArg(0, limit)) return;
+
+    alt::ICore::Instance().SetMaxStreamingPeds(limit);
+}
+
+static void SetMaxStreamingObjects(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    uint16_t limit;
+    if(!ctx.GetArg(0, limit)) return;
+
+    alt::ICore::Instance().SetMaxStreamingObjects(limit);
+}
+
+static void SetMaxStreamingVehicles(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    uint16_t limit;
+    if(!ctx.GetArg(0, limit)) return;
+
+    alt::ICore::Instance().SetMaxStreamingVehicles(limit);
+}
+
 // clang-format off
 extern js::Class playerClass, vehicleClass, checkpointClass, pedClass, objectClass, voiceChannelClass, blipClass, virtualEntityClass, virtualEntityGroupClass, metricClass;
 extern js::Namespace eventsNamespace, pedModelInfoNamespace, vehicleModelInfoNamespace, weaponModelInfoNamespace;
@@ -186,6 +231,13 @@ static js::Module altModule("@altv/server", "@altv/shared", { &playerClass, &veh
     module.StaticFunction("getClosestEntities", GetClosestEntities);
     module.StaticFunction("setVoiceExternalPublic", SetVoiceExternalPublic);
     module.StaticFunction("setVoiceExternal", SetVoiceExternal);
+
+    module.StaticFunction("getMaxStreamingPeds", GetMaxStreamingPeds);
+    module.StaticFunction("getMaxStreamingObjects", GetMaxStreamingObjects);
+    module.StaticFunction("getMaxStreamingVehicles", GetMaxStreamingVehicles);
+    module.StaticFunction("setMaxStreamingPeds", SetMaxStreamingPeds);
+    module.StaticFunction("setMaxStreamingObjects", SetMaxStreamingObjects);
+    module.StaticFunction("setMaxStreamingVehicles", SetMaxStreamingVehicles);
 
     module.Namespace(eventsNamespace);
     module.Namespace(pedModelInfoNamespace);

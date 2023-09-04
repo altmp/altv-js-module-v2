@@ -22,6 +22,16 @@ declare module "@altv/server" {
     export function getEntitiesInRange(pos: shared.Vector3, range: number, dimension: number, entityTypes: number): ReadonlyArray<Entity>;
     export function getClosestEntities(pos: shared.Vector3, range: number, dimension: number, maxCount: number, entityTypes: number): ReadonlyArray<Entity>;
 
+    export function setVoiceExternalPublic(host: string, port: number);
+    export function setVoiceExternal(host: string, port: number);
+
+    export function getMaxStreamingPeds(): number;
+    export function getMaxStreamingObjects(): number;
+    export function getMaxStreamingVehicles(): number;
+    export function setMaxStreamingPeds(limit: number);
+    export function setMaxStreamingObjects(limit: number);
+    export function setMaxStreamingVehicles(limit: number);
+
     export namespace Events {
         interface ClientScriptEventContext extends shared.Events.ScriptEventContext {
             readonly player: Player;
