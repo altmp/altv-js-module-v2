@@ -853,7 +853,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method<&alt::IPlayer::SetHeadOverlayColor>("setHeadOverlayColor");
     tpl.Method("getHeadOverlay", &GetHeadOverlay);
     tpl.Method<&alt::IPlayer::SetFaceFeature>("setFaceFeature");
-    tpl.Method<&alt::IPlayer::GetFaceFeatureScale>("getFaceFeatureScale");
+    tpl.Method<&alt::IPlayer::GetFaceFeatureScale>("getFaceFeature");
     tpl.Method<&alt::IPlayer::RemoveFaceFeature>("removeFaceFeature");
     tpl.Method("setHeadBlendPaletteColor", &SetHeadBlendPaletteColor);
     tpl.Method<&alt::IPlayer::GetHeadBlendPaletteColor>("getHeadBlendPaletteColor");

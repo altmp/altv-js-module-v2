@@ -39,7 +39,7 @@ extern js::Class webSocketClientClass("WebSocketClient", &baseObjectClass, [](js
     tpl.Method<&alt::IWebSocketClient::Stop>("stop");
     tpl.Method("send", Send);
     tpl.Method<&alt::IWebSocketClient::AddSubProtocol>("addSubProtocol");
-    tpl.Method<&alt::IWebSocketClient::GetSubProtocols>("GetSubProtocols");
+    tpl.Method<&alt::IWebSocketClient::GetSubProtocols>("getSubProtocols");
     tpl.Method<&alt::IWebSocketClient::SetExtraHeader>("setExtraHeader");
     tpl.Method<&alt::IWebSocketClient::GetExtraHeaders>("getExtraHeaders");
 
