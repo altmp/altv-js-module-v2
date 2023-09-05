@@ -126,13 +126,13 @@ declare module "@altv/server" {
 
         kick(reason?: string): void;
 
-        getClothes(componentId: number): altShared.Appearance.Clothing | undefined;
+        getClothes(componentId: number): altShared.Appearance.Clothing;
         setClothes(componentId: number, drawable: number, texture: number, palette: number): boolean;
-        getDlcClothes(): altShared.Appearance.DlcClothing | undefined;
+        getDlcClothes(componentId: number): altShared.Appearance.DlcClothing;
         setDlcClothes(componentId: number, drawable: number, texture: number, palette: number, dlc: number): boolean;
-        getProps(componentId: number): altShared.Appearance.Prop | undefined;
+        getProps(componentId: number): altShared.Appearance.Prop;
         setProps(componentId: number, drawable: number, texture: number): boolean;
-        getDlcProps(componentId: number): altShared.Appearance.DlcProp | undefined;
+        getDlcProps(componentId: number): altShared.Appearance.DlcProp;
         setDlcProps(componentId: number, drawable: number, texture: number, dlc: number): boolean;
         clearProps(componentId: number): void;
 
@@ -166,7 +166,7 @@ declare module "@altv/server" {
         getAmmoSpecialType(ammoHash: number | string): number;
         setAmmoSpecialType(ammoHash: number | string, specialType: altShared.Enum.AmmoSpecialType): void;
 
-        getAmmoFlags(ammoHash: number | string): altShared.AmmoData | undefined;
+        getAmmoFlags(ammoHash: number | string): altShared.AmmoData;
         setAmmoFlags(flags: altShared.AmmoData & { ammoHash: string }): void;
         getAmmoMax(ammoHash: number | string): number | undefined;
         setAmmoMax(ammoHash: number | string, ammo: number): void;
