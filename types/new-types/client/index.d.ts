@@ -171,7 +171,7 @@ declare module "@altv/client" {
         handlingFlags: number;
         damageFlags: number;
 
-        static get(modelHash: number | string): Handling | undefined;
+        static get(modelHash: number | string): HandlingData | undefined;
     }
 
     export type HttpResponse = { statusCode: number; headers: Readonly<Record<string, string>>; body: string };
