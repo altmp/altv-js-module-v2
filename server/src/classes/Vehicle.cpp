@@ -103,7 +103,25 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Property<&alt::IVehicle::GetAttached>("attached");
     tpl.Property<&alt::IVehicle::GetAttachedTo>("attachedTo");
     tpl.Property<&alt::IVehicle::IsDriftMode, &alt::IVehicle::SetDriftMode>("driftMode");
-    // todo: add train stuff
+
+    tpl.Property<&alt::IVehicle::IsTrainMissionTrain, &alt::IVehicle::SetTrainMissionTrain>("isMissionTrain");
+    tpl.Property<&alt::IVehicle::GetTrainTrackId, &alt::IVehicle::SetTrainTrackId>("trainTrackId");
+    tpl.Property<&alt::IVehicle::GetTrainEngineId, &alt::IVehicle::SetTrainEngineId>("trainEngine");
+    tpl.Property<&alt::IVehicle::GetTrainConfigIndex, &alt::IVehicle::SetTrainConfigIndex>("trainConfigIndex");
+    tpl.Property<&alt::IVehicle::GetTrainDistanceFromEngine, &alt::IVehicle::SetTrainDistanceFromEngine>("trainDistanceFromEngine");
+    tpl.Property<&alt::IVehicle::IsTrainEngine, &alt::IVehicle::SetTrainIsEngine>("hasTrainEngine");
+    tpl.Property<&alt::IVehicle::IsTrainCaboose, &alt::IVehicle::SetTrainIsCaboose>("isTrainCaboose");
+    tpl.Property<&alt::IVehicle::GetTrainDirection, &alt::IVehicle::SetTrainDirection>("trainDirection");
+    tpl.Property<&alt::IVehicle::HasTrainPassengerCarriages, &alt::IVehicle::SetTrainHasPassengerCarriages>("hasTrainPassengerCarriages");
+    tpl.Property<&alt::IVehicle::GetTrainForceDoorsOpen, &alt::IVehicle::SetTrainForceDoorsOpen>("trainForceDoorsOpen");
+    tpl.Property<&alt::IVehicle::GetTrainCruiseSpeed, &alt::IVehicle::SetTrainCruiseSpeed>("trainCruiseSpeed");
+    tpl.Property<&alt::IVehicle::GetTrainCarriageConfigIndex, &alt::IVehicle::SetTrainCarriageConfigIndex>("trainCarriageConfigIndex");
+    tpl.Property<&alt::IVehicle::GetTrainLinkedToBackwardId, &alt::IVehicle::SetTrainLinkedToBackwardId>("trainLinkedToBackward");
+    tpl.Property<&alt::IVehicle::GetTrainLinkedToForwardId, &alt::IVehicle::SetTrainLinkedToForwardId>("trainLinkedToForward");
+    tpl.Property<&alt::IVehicle::SetTrainUnk1, &alt::IVehicle::GetTrainUnk1>("trainUnk1");
+    tpl.Property<&alt::IVehicle::SetTrainUnk2, &alt::IVehicle::GetTrainUnk2>("trainUnk2");
+    tpl.Property<&alt::IVehicle::SetTrainUnk3, &alt::IVehicle::GetTrainUnk3>("trainUnk3");
+
     tpl.Property<&alt::IVehicle::IsBoatAnchorActive, &alt::IVehicle::SetBoatAnchorActive>("boatAnchorActive");
     tpl.Property<&alt::IVehicle::GetLightState, &alt::IVehicle::SetLightState>("lightState");
     tpl.Property<&alt::IVehicle::HasTimedExplosion>("hasTimedExplosion");
