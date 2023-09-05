@@ -20,12 +20,12 @@ declare module "@altv/server" {
     }
 
     export abstract class ColShape extends WorldObject {
-        readonly colShapeType: number;
+        readonly colShapeType: altShared.Enum.ColShapeType;
         playersOnly: boolean;
 
         isEntityIn(entity: Entity): boolean;
         isEntityIdIn(id: number): boolean;
-        isPointIn(point: altShared.IVector3): boolean;
+        isPointIn(point: altShared.Vector3): boolean;
     }
 
     export abstract class Entity extends altShared.Entity {
@@ -41,14 +41,8 @@ declare module "@altv/server" {
         setNetOwner(player: Player, disableMigration: boolean): void;
         resetNetOwner(disableMigration: boolean): void;
 
-        // TODO (xLuxy): Maybe use Vector3 instead of IVector3?
-        attachTo(target: Entity, otherBoneId: number | string, boneId: number | string, pos: altShared.IVector3, rot: altShared.IVector3, collision: boolean, noFixedRot: boolean): void;
+        attachTo(target: Entity, otherBoneId: number | string, boneId: number | string, pos: altShared.Vector3, rot: altShared.Vector3, collision: boolean, noFixedRot: boolean): void;
         detach(): void;
-    }
-
-    export const enum MetricType {
-        Gauge,
-        Counter
     }
 
     export class Metric {
@@ -56,7 +50,7 @@ declare module "@altv/server" {
         value: number;
         readonly valid: boolean;
 
-        constructor(name: string, type?: MetricType);
+        constructor(name: string, type?: Enums.MetricType);
 
         begin(): void;
         end(): void;
@@ -102,14 +96,12 @@ declare module "@altv/server" {
         maxHealth: number;
         invincible: boolean;
 
-        // TODO (xLuxy): typings
-        headBlendData: unknown;
+        headBlendData: altShared.Appearance.HeadBlendData;
         eyeColor: number;
         hairColor: number;
         hairHighlightColor: number;
 
-        // TODO (xLuxy): cleaner typing?
-        readonly weapons: ReadonlyArray<{ hash: number; tintIndex: number; components: ReadonlyArray<number> }>;
+        readonly weapons: ReadonlyArray<altShared.WeaponInfo>;
 
         readonly interiorLocation: number;
         readonly lastDamagedBodyPart: number;
@@ -134,13 +126,13 @@ declare module "@altv/server" {
 
         kick(reason?: string): void;
 
-        getClothes(componentId: number): { drawable: number; texture: number; palette: number } | undefined;
+        getClothes(componentId: number): altShared.Appearance.Clothing | undefined;
         setClothes(componentId: number, drawable: number, texture: number, palette: number): boolean;
-        getDlcClothes(): { dlc: number; drawable: number; texture: number; palette: number } | undefined;
+        getDlcClothes(): altShared.Appearance.DlcClothing | undefined;
         setDlcClothes(componentId: number, drawable: number, texture: number, palette: number, dlc: number): boolean;
-        getProps(componentId: number): { drawable: number; texture: number } | undefined;
+        getProps(componentId: number): altShared.Appearance.Prop | undefined;
         setProps(componentId: number, drawable: number, texture: number): boolean;
-        getDlcProps(componentId: number): { dlc: number; drawable: number; texture: number } | undefined;
+        getDlcProps(componentId: number): altShared.Appearance.DlcProp | undefined;
         setDlcProps(componentId: number, drawable: number, texture: number, dlc: number): boolean;
         clearProps(componentId: number): void;
 
@@ -153,8 +145,7 @@ declare module "@altv/server" {
         removeHeadOverlay(overlayId: number): boolean;
         setHeadOverlayColor(overlayId: number, colorType: number, colorIndex: number, secondColorIndex: number): boolean;
 
-        // TODO (xLuxy): Cleanup and Check typing - might be null instead of undefined
-        getHeadOverlay(overlayId: number): { index: number; opacity: number; colorType: number; colorIndex: number; secondColorIndex: number } | undefined;
+        getHeadOverlay(overlayId: number): altShared.Appearance.HeadOverlay | undefined;
 
         setFaceFeature(index: number, scale: number): boolean;
         getFaceFeature(index: number): number;
@@ -173,10 +164,10 @@ declare module "@altv/server" {
         setWeaponAmmo(weaponHash: number | string, ammo: number): void;
 
         getAmmoSpecialType(ammoHash: number | string): number;
-        setAmmoSpecialType(ammoHash: number | string, specialType: AmmoSpecialType): void;
+        setAmmoSpecialType(ammoHash: number | string, specialType: altShared.Enum.AmmoSpecialType): void;
 
-        getAmmoFlags(ammoHash: number | string): { ammoHash: number; infiniteAmmo: boolean; addSmokeOnExplosion: boolean; fuse: boolean; fixedAfterExplosion: boolean } | undefined;
-        setAmmoFlags(flags: { ammoHash: number | string; infiniteAmmo: boolean; addSmokeOnExplosion: boolean; fuse: boolean; fixedAfterExplosion: boolean }): void;
+        getAmmoFlags(ammoHash: number | string): altShared.AmmoData | undefined;
+        setAmmoFlags(flags: altShared.AmmoData & { ammoHash: string }): void;
         getAmmoMax(ammoHash: number | string): number | undefined;
         setAmmoMax(ammoHash: number | string, ammo: number): void;
         getAmmoMax50(ammoHash: number | string): number | undefined;
@@ -192,9 +183,6 @@ declare module "@altv/server" {
 
         readonly localMeta: Record<string, unknown>;
     }
-
-    // TODO (xLuxy): proper typing
-    type AmmoSpecialType = number;
 
     export abstract class Resource extends altShared.Resource {
         readonly clientType: string;
@@ -251,7 +239,6 @@ declare module "@altv/server" {
         attachedTo?: Vehicle;
         driftMode: boolean;
 
-        // todo: add train stuff
         isMissionTrain: boolean;
         trainTrackId: number;
         trainEngine?: Vehicle;
@@ -282,7 +269,7 @@ declare module "@altv/server" {
         hybridExtraActive: boolean;
         hybridExtraState: number;
 
-        // quaternion: altShared.Quaternion; // TODO (xLuxy): Typing?
+        quaternion: altShared.Quaternion;
         readonly isHornActive: boolean;
         readonly accelerationLevel: number;
         readonly brakeLevel: number;
@@ -337,6 +324,13 @@ declare module "@altv/server" {
     export abstract class WorldObject extends altShared.WorldObject {
         dimension: number;
         pos: altShared.Vector3;
+    }
+
+    export namespace Enums {
+        export const enum MetricType {
+            Gauge,
+            Counter
+        }
     }
 
     export * from "@altv/shared";

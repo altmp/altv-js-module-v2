@@ -56,15 +56,13 @@ declare module "@altv/client" {
         readonly category: number;
         readonly owner: altShared.BaseObject;
 
-        // TODO (xLuxy): is filter always present (before setting value)?
-        filter?: AudioFilter;
+        filter: AudioFilter | null;
     }
 
     export abstract class AudioOutputAttached extends AudioOutput {
         entity: altShared.WorldObject;
     }
 
-    // TODO (xLuxy): Implement class / remove it?
     export abstract class AudioOutputFrontend extends AudioOutput {}
 
     export abstract class AudioOutputWorld extends AudioOutput {
@@ -82,7 +80,7 @@ declare module "@altv/client" {
     }
 
     export abstract class ColShape extends WorldObject {
-        readonly colShapeType: number; // TODO (xLuxy) ColShapeType enum ?
+        readonly colShapeType: altShared.Enum.ColShapeType;
         playersOnly: boolean;
 
         isEntityIn(entity: Entity): boolean;
@@ -98,7 +96,6 @@ declare module "@altv/client" {
         static register(path: string): Font | undefined;
     }
 
-    // TODO (xLuxy): Use case?
     export abstract class Handling extends HandlingData {
         readonly isModified: boolean;
 
@@ -174,7 +171,7 @@ declare module "@altv/client" {
         handlingFlags: number;
         damageFlags: number;
 
-        static get(modelHash: number | string): HandlingData | undefined;
+        static get(modelHash: number | string): Handling | undefined;
     }
 
     export type HttpResponse = { statusCode: number; headers: Readonly<Record<string, string>>; body: string };
@@ -202,7 +199,7 @@ declare module "@altv/client" {
         hasGravity: number;
         readonly isCollisionEnabled: boolean;
         positionFrozen: boolean;
-        textureVariation: number; // TODO (xLuxy): TextureVariation enum?
+        textureVariation: number;
         readonly isWorldObject: boolean;
         readonly isWeaponObject: boolean;
         readonly useStreaming: boolean;
@@ -279,8 +276,7 @@ declare module "@altv/client" {
         readonly isVisible: boolean;
         readonly isModal: boolean;
 
-        // TODO (xLuxy): Does body always exist?
-        readonly body: RmlElement | null;
+        readonly body: RmlElement;
 
         show(isModal?: boolean, focused?: boolean): void;
         hide(): void;
@@ -391,7 +387,7 @@ declare module "@altv/client" {
         readonly rpm: number;
         readonly wheelsCount: number;
         readonly speedVector: altShared.Vector3;
-        readonly handling: HandlingData;
+        readonly handling: Handling;
         readonly isHandlingModified: boolean;
         indicatorLights: number;
         seatCount: number;

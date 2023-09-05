@@ -19,7 +19,7 @@ declare module "@altv/shared" {
         readonly global: boolean;
         readonly isAttached: boolean;
         readonly attachedTo?: Entity;
-        blipType: number; // TODO (xLuxy): BlipType enum
+        blipType: Enum.BlipType;
         scale: Vector2;
         display: number;
         sprite: number;
@@ -98,13 +98,13 @@ declare module "@altv/shared" {
         height: number;
         color: RGBA;
         iconColor: RGBA;
-        nextPos: IVector3;
+        nextPos: Vector3;
         readonly streamingDistance: number;
         visible: boolean;
 
         isEntityIn(entity: Entity): boolean;
         isEntityIdIn(id: number): boolean;
-        isPointIn(point: IVector3): boolean;
+        isPointIn(point: Vector3): boolean;
     }
 
     // NOTE (xLuxy): only exists on server and client namespace
@@ -183,7 +183,6 @@ declare module "@altv/shared" {
         readonly name: string;
         readonly main: string;
 
-        // TODO (xLuxy): what's the second fields type?
         readonly exports: Readonly<Record<string, unknown>>;
         readonly dependencies: ReadonlyArray<string>;
         readonly dependants: ReadonlyArray<string>;
@@ -503,12 +502,136 @@ declare module "@altv/shared" {
         static fromObject(xyz: IVector3): Vector3;
     }
 
-    // Vehicle interfaces
+    export interface WeaponInfo {
+        hash: number;
+        tintIndex: number;
+        components: ReadonlyArray<number>;
+    }
+
+    export interface AmmoData {
+        ammoHash: number;
+        infiniteAmmo: boolean;
+        addSmokeOnExplosion: boolean;
+        fuse: boolean;
+        fixedAfterExplosion: boolean;
+    }
+
     export interface NeonState {
         readonly left: boolean;
         readonly right: boolean;
         readonly front: boolean;
         readonly back: boolean;
+    }
+
+    interface IQuaternion {
+        x: number;
+        y: number;
+        z: number;
+        w: number;
+    }
+
+    export class Quaternion {
+        constructor(x: number, y: number, z: number, w: number);
+        constructor(xyzw: [number, number, number, number]);
+        constructor(xyzw: IQuaternion);
+
+        readonly length: number;
+        readonly lengthSquared: number;
+        readonly conjugate: Quaternion;
+        readonly inverse: Quaternion;
+        readonly normalized: Quaternion;
+
+        readonly pitch: number;
+        readonly yaw: number;
+        readonly roll: number;
+
+        readonly eulerAngles: Vector3;
+        readonly axis: Vector3;
+        readonly angle: number;
+        readonly matrix: number[];
+        readonly forward: Vector3;
+        readonly right: Vector3;
+        readonly up: Vector3;
+        readonly left: Vector3;
+        readonly back: Vector3;
+        readonly down: Vector3;
+
+        static fromEuler(x: number, y: number, z: number): Quaternion;
+        static fromAxisAngle(axis: Vector3, angle: number): Quaternion;
+        static fromMatrix(matrix: number[]): Quaternion;
+        static fromArray(xyzw: [number, number, number, number]): Quaternion;
+    }
+
+    export namespace Appearance {
+        interface HeadOverlay {
+            index: number;
+            opacity: number;
+            colorType: number;
+            colorIndex: number;
+            secondColorIndex: number;
+        }
+
+        interface Clothing {
+            drawable: number;
+            texture: number;
+            palette: number;
+        }
+        type DlcClothing = Clothing & { dlc: number };
+
+        interface Prop {
+            drawable: number;
+            texture: number;
+        }
+        type DlcProp = Prop & { dlc: number };
+
+        interface HeadBlendData {
+            shapeFirstID: number;
+            shapeSecondID: number;
+            shapeThirdID: number;
+            skinFirstID: number;
+            skinSecondID: number;
+            skinThirdID: number;
+            shapeMix: number;
+            skinMix: number;
+            thirdMix: number;
+        }
+    }
+
+    export namespace Enum {
+        export const enum AmmoSpecialType {
+            None,
+            ArmorPiercing,
+            Explosive,
+            FullMetalJacket,
+            HollowPoint,
+            Incendiary,
+            Tracer
+        }
+
+        export const enum ColShapeType {
+            Sphere,
+            Cylinder,
+            Circle,
+            Cuboid,
+            Rectangle,
+            CheckpointCylinder,
+            Polygon
+        }
+
+        export const enum BlipType {
+            Vehicle = 1,
+            Ped,
+            Object,
+            Destination,
+            Cont,
+            PickupUnk,
+            Radius,
+            Pickup,
+            Cop,
+            Area,
+            Gallery,
+            PickupObject
+        }
     }
 }
 
