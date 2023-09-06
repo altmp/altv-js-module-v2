@@ -34,7 +34,7 @@ static void Has(js::FunctionContext& ctx)
     ctx.Return(storage->Has(key));
 }
 
-static void Delete(js::FunctionContext& ctx)
+static void Remove(js::FunctionContext& ctx)
 {
     alt::ILocalStorage* storage = ctx.GetResource()->GetResource()->GetLocalStorage();
 
@@ -63,7 +63,7 @@ extern js::Namespace localStorageNamespace("LocalStorage", [](js::NamespaceTempl
     tpl.StaticFunction("get", Get);
     tpl.StaticFunction("set", Set);
     tpl.StaticFunction("has", Has);
-    tpl.StaticFunction("delete", Delete);
+    tpl.StaticFunction("remove", Remove);
     tpl.StaticFunction("clear", Clear);
     tpl.StaticFunction("save", Save);
 });
