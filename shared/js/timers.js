@@ -113,9 +113,6 @@ alt.Timers.Timeout = Timeout;
 alt.Timers.EveryTick = EveryTick;
 alt.Timers.NextTick = NextTick;
 
-alt.Timers.warningThreshold = Timer.warningThreshold
-alt.Timers.sourceLocationFrameSkipCount = Timer.sourceLocationFrameSkipCount
-
 alt.Timers.setInterval = (callback, interval) => new Interval(callback, interval);
 alt.Timers.setTimeout = (callback, interval) => new Timeout(callback, interval);
 alt.Timers.everyTick = (callback) => new EveryTick(callback);
@@ -123,6 +120,16 @@ alt.Timers.nextTick = (callback) => new NextTick(callback);
 
 Object.defineProperty(alt.Timers, "all", {
     get: () => Array.from(timers),
+});
+
+Object.defineProperty(alt.Timers, "warningThreshold", {
+    get: () => Timer.warningThreshold,
+    set: (value) => (Timer.warningThreshold = value),
+});
+
+Object.defineProperty(alt.Timers, "sourceLocationFrameSkipCount", {
+    get: () => Timer.sourceLocationFrameSkipCount,
+    set: (value) => (Timer.sourceLocationFrameSkipCount = value),
 });
 
 globalThis.setInterval = alt.Timers.setInterval;
