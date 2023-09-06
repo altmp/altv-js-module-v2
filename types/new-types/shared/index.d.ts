@@ -674,7 +674,7 @@ declare module "@altv/shared" {
 
         export function wait(ms: number): Promise<void>;
         export function waitForNextTick(): Promise<void>;
-        export function getCurrentSourceLocation(): void;
+        export function getCurrentSourceLocation(): { fileName: string; lineNumber: number };
 
         export abstract class AssertionError extends Error {}
 
@@ -731,38 +731,38 @@ declare module "@altv/shared" {
 
     export namespace Enums {
         export const enum AmmoSpecialType {
-            None,
-            ArmorPiercing,
-            Explosive,
-            FullMetalJacket,
-            HollowPoint,
-            Incendiary,
-            Tracer
+            NONE,
+            ARMOR_PIERCING,
+            EXPLOSIVE,
+            FULL_METAL_JACKET,
+            HOLLOW_POINT,
+            INCENDIARY,
+            TRACER
         }
 
         export const enum ColShapeType {
-            Sphere,
-            Cylinder,
-            Circle,
-            Cuboid,
-            Rectangle,
-            CheckpointCylinder,
-            Polygon
+            SPHERE,
+            CYLINDER,
+            CIRCLE,
+            CUBOID,
+            RECT,
+            CHECKPOINT_CYLINDER,
+            POLYGON
         }
 
         export const enum BlipType {
-            Vehicle = 1,
-            Ped,
-            Object,
-            Destination,
-            Cont,
-            PickupUnk,
-            Radius,
-            Pickup,
-            Cop,
-            Area,
-            Gallery,
-            PickupObject
+            VEHICLE = 1,
+            PED = 2,
+            OBJECT = 3,
+            DESTINATION = 4,
+            CONT = 5,
+            PICKUP_UNK = 6,
+            RADIUS = 7,
+            PICKUP = 8,
+            COP = 9,
+            AREA = 11,
+            GALLERY = 12,
+            PICKUP_OBJECT = 13
         }
 
         export const enum KeyCode {
@@ -894,11 +894,11 @@ declare module "@altv/shared" {
         }
 
         export const enum Permission {
-            None,
-            ScreenCapture,
-            WebRTC,
-            ClipboardAccess,
-            ExtendedVoiceAPI,
+            NONE,
+            SCREEN_CAPTURE,
+            WEBRTC,
+            CLIPBOARD_ACCESS,
+            EXTENDED_VOICE_API,
             All
         }
 
@@ -938,276 +938,289 @@ declare module "@altv/shared" {
         }
 
         export const enum BaseObjectType {
-            Player,
-            Vehicle,
-            Ped,
-            Object,
-            Blip,
-            Webview,
-            VoiceChannel,
-            Colshape,
-            Checkpoint,
-            WebsocketClient,
-            HttpClient,
-            Audio,
-            AudioOutput,
-            AudioOutputWorld,
-            AudioOutputAttached,
-            AudioOutputFrontend,
-            RmlElement,
-            RmlDocument,
-            LocalPlayer,
-            LocalObject,
-            VirtualEntity,
-            VirtualEntityGroup,
-            Marker,
-            TextLabel,
-            LocalPed,
-            LocalVehicle,
-            AudioFilter,
-            ConnectionInfo,
-            CustomTexture,
-            Font
+            PLAYER,
+            VEHICLE,
+            PED,
+            OBJECT,
+            BLIP,
+            WEBVIEW,
+            VOICE_CHANNEL,
+            COLSHAPE,
+            CHECKPOINT,
+            WEBSOCKET_CLIENT,
+            HTTP_CLIENT,
+            AUDIO,
+            AUDIO_OUTPUT,
+            AUDIO_OUTPUT_WORLD,
+            AUDIO_OUTPUT_ATTACHED,
+            AUDIO_OUTPUT_FRONTEND,
+            RML_ELEMENT,
+            RML_DOCUMENT,
+            LOCAL_PLAYER,
+            LOCAL_OBJECT,
+            VIRTUAL_ENTITY,
+            VIRTUAL_ENTITY_GROUP,
+            MARKER,
+            TEXT_LABEL,
+            LOCAL_PED,
+            LOCAL_VEHICLE,
+            AUDIO_FILTER,
+            CONNECTION_INFO,
+            CUSTOM_TEXTURE,
+            FONT,
+            SIZE
         }
 
         export const enum VoiceConnectionState {
-            Disconnected,
-            Connecting,
-            Connected
+            DISCONNECTED,
+            CONNECTING,
+            CONNECTED
         }
 
         export const enum ExplosionType {
-            Unknown = -1,
-            Grenade,
-            GrenadeLauncher,
-            StickyBomb,
-            Molotov,
-            Rocket,
-            TankShell,
-            HiOctane,
-            Car,
-            Plane,
-            PetrolPump,
-            Bike,
-            DirSteam,
-            DirFlame,
-            DirWaterHydrant,
-            DirGasCanister,
-            Boat,
-            ShipDestroy,
-            Truck,
-            Bullet,
-            SmokeGrenadeLauncher,
-            SmokeGrenade,
-            BZGas,
-            Flare,
-            GasCanister,
-            Extinquisher,
-            ProgrammableAR,
-            Train,
-            Barrel,
-            Propane,
-            Blimp,
-            DirFlameExplode,
-            Tanker,
-            PlaneRocket,
-            VehicleBullet,
-            GasTank,
-            Firework,
-            Snowball,
-            ProxMine,
-            ValkyrieCannon
+            GRENADE,
+            GRENADELAUNCHER,
+            STICKYBOMB,
+            MOLOTOV,
+            ROCKET,
+            TANKSHELL,
+            HI_OCTANE,
+            CAR,
+            PLANE,
+            PETROL_PUMP,
+            BIKE,
+            DIR_STEAM,
+            DIR_FLAME,
+            DIR_WATER_HYDRANT,
+            DIR_GAS_CANISTER,
+            BOAT,
+            SHIP_DESTROY,
+            TRUCK,
+            BULLET,
+            SMOKEGRENADELAUNCHER,
+            SMOKEGRENADE,
+            BZGAS,
+            FLARE,
+            GAS_CANISTER,
+            EXTINGUISHER,
+            PROGRAMMABLEAR,
+            TRAIN,
+            BARREL,
+            PROPANE,
+            BLIMP,
+            DIR_FLAME_EXPLODE,
+            TANKER,
+            PLANE_ROCKET,
+            VEHICLE_BULLET,
+            GAS_TANK,
+            FIREWORK,
+            SNOWBALL,
+            PROXMINE,
+            VALKYRIE_CANNON,
+
+            UNKNOWN = -1
         }
 
         export const enum BlipType {
-            Vehicle = 1,
-            Ped = 2,
-            Object = 3,
-            Destination = 4,
-            Cont = 5,
-            PickupUnk = 6,
-            Radius = 7,
-            Pickup = 8,
-            Cop = 9,
-            Area = 11,
-            Gallery = 12,
-            PickupObject = 13
+            VEHICLE = 1,
+            PED = 2,
+            OBJECT = 3,
+            DESTINATION = 4,
+            CONT = 5,
+            PICKUP_UNK = 6,
+            RADIUS = 7,
+            PICKUP = 8,
+            COP = 9,
+            AREA = 11,
+            GALLERY = 12,
+            PICKUP_OBJECT = 13
         }
 
         export const enum ColShapeType {
-            Sphere,
-            Cylinder,
-            Circle,
-            Cuboid,
-            Rect,
-            CheckpointCylinder,
-            Polygon
+            SPHERE,
+            CYLINDER,
+            CIRCLE,
+            CUBOID,
+            RECT,
+            CHECKPOINT_CYLINDER,
+            POLYGON
         }
 
         export const enum VehicleModelType {
-            Invalid,
-            Ped,
-            Automobile,
-            Plane,
-            Trailer,
-            QuadBike,
-            SubmarineCar,
-            AmphibiousAutomobile,
-            AmphibiousQuadBike,
-            Heli,
-            Blimp,
-            Autogyro,
-            Bike,
+            INVALID,
+            PED,
+            AUTOMOBILE,
+            PLANE,
+            TRAILER,
+            QUAD_BIKE,
+            SUBMARINE_CAR,
+            AMPHIBIOUS_AUTOMOBILE,
+            AMPHIBIOUS_QUAD_BIKE,
+            HELI,
+            BLIMP,
+            AUTOGYRO,
+            BIKE,
             BMX,
-            Boat,
-            Train,
-            Submarine,
-            Object
+            BOAT,
+            TRAIN,
+            SUBMARINE,
+            OBJECT
         }
 
         export const enum BodyPart {
-            Unknown = -1,
-            Pelvis,
-            LeftHip,
-            LeftLeg,
-            LeftFoot,
-            RightHip,
-            RightLeg,
-            RightFoot,
-            LowerTorso,
-            UpperTorso,
-            Chest,
-            UnderNeck,
-            LeftShoulder,
-            LeftUpperArm,
-            LeftElbrow,
-            LeftWrist,
-            RightShoulder,
-            RightUpperArm,
-            RightElbrow,
-            RightWrist,
-            Neck,
-            Head
+            PELVIS,
+            LEFT_HIP,
+            LEFT_LEG,
+            LEFT_FOOT,
+            RIGHT_HIP,
+            RIGHT_LEG,
+            RIGHT_FOOT,
+            LOWER_TORSO,
+            UPPER_TORSO,
+            CHEST,
+            UNDER_NECK,
+            LEFT_SHOULDER,
+            LEFT_UPPER_ARM,
+            LEFT_ELBROW,
+            LEFT_WRIST,
+            RIGHT_SHOULDER,
+            RIGHT_UPPER_ARM,
+            RIGHT_ELBROW,
+            RIGHT_WRIST,
+            NECK,
+            HEAD,
+
+            UNKNOWN = -1
         }
 
         export const enum EventType {
+            NONE,
+
             // Server
-            ServerStarted = 1,
-            ClientRequestObjectEvent,
-            ClientDeleteObjectEvent,
+            SERVER_STARTED,
+            CLIENT_REQUEST_OBJECT_EVENT,
+            CLIENT_DELETE_OBJECT_EVENT,
 
             // Shared
-            PlayerConnect,
-            PlayerDisconnect,
-            PlayerConnectDenied,
-            PlayerSpawn,
+            PLAYER_CONNECT,
+            PLAYER_DISCONNECT,
+            PLAYER_CONNECT_DENIED,
+            PLAYER_SPAWN,
 
-            ConnectionQueueAdd,
-            ConnectionQueueRemove,
+            CONNECTION_QUEUE_ADD,
+            CONNECTION_QUEUE_REMOVE,
 
-            ResourceStart,
-            ResourceStop,
-            ResourceError,
+            RESOURCE_START,
+            RESOURCE_STOP,
+            RESOURCE_ERROR,
 
-            ServerScriptEvent,
-            ClientScriptEvent,
+            SERVER_SCRIPT_EVENT,
+            CLIENT_SCRIPT_EVENT,
 
-            MetaChange,
-            SyncedMetaChange,
-            StreamSyncedMetaChange,
-            GlobalMetaChange,
-            GlobalSyncedMetaChange,
-            LocalSyncedMetaChange,
+            META_CHANGE,
+            SYNCED_META_CHANGE,
+            STREAM_SYNCED_META_CHANGE,
+            GLOBAL_META_CHANGE,
+            GLOBAL_SYNCED_META_CHANGE,
+            LOCAL_SYNCED_META_CHANGE,
 
-            PlayerDamage,
-            PlayerDeath,
-            PlayerHeal,
-            FireEvent,
-            ExplosionEvent,
-            StartProjectileEvent,
-            WeaponDamageEvent,
-            VehicleDestroy,
-            VehicleDamage,
+            PLAYER_DAMAGE,
+            PLAYER_DEATH,
+            PLAYER_HEAL,
+            FIRE_EVENT,
+            EXPLOSION_EVENT,
+            START_PROJECTILE_EVENT,
+            WEAPON_DAMAGE_EVENT,
+            VEHICLE_DESTROY,
+            VEHICLE_DAMAGE,
 
-            RequestSyncedScene,
-            StartSyncedScene,
-            StopSyncedScene,
-            UpdateSyncedScene,
+            REQUEST_SYNCED_SCENE,
+            START_SYNCED_SCENE,
+            STOP_SYNCED_SCENE,
+            UPDATE_SYNCED_SCENE,
 
-            CheckpointEvent,
-            ColshapeEvent,
-            PlayerEnterVehicle,
-            PlayerStartEnterVehicle,
-            PlayerEnteringVehicle,
-            PlayerLeaveVehicle,
-            PlayerStartLeaveVehicle,
-            PlayerChangeVehicleSeat,
-            PlayerWeaponChange,
-            PlayerRequestControl,
+            CHECKPOINT_EVENT,
+            COLSHAPE_EVENT,
+            PLAYER_ENTER_VEHICLE,
+            PLAYER_START_ENTER_VEHICLE,
+            PLAYER_ENTERING_VEHICLE,
+            PLAYER_LEAVE_VEHICLE,
+            PLAYER_START_LEAVE_VEHICLE,
+            PLAYER_CHANGE_VEHICLE_SEAT,
+            PLAYER_WEAPON_CHANGE,
+            PLAYER_REQUEST_CONTROL,
 
-            VehicleAttach,
-            VehicleDetach,
-            VehicleHorn,
-            VehicleSiren,
-            NetownerChange,
+            VEHICLE_ATTACH,
+            VEHICLE_DETACH,
+            VEHICLE_HORN,
+            VEHICLE_SIREN,
+            NETOWNER_CHANGE,
 
-            CreateBaseObjectEvent,
-            RemoveBaseObjectEvent,
+            CREATE_BASE_OBJECT_EVENT,
+            REMOVE_BASE_OBJECT_EVENT,
 
-            DataNodeReceivedEvent,
+            DATA_NODE_RECEIVED_EVENT,
 
-            ConsoleCommandEvent,
+            CONSOLE_COMMAND_EVENT,
 
-            PlayerChangeAnimationEvent,
+            PLAYER_CHANGE_ANIMATION_EVENT,
 
-            PlayerChangeInteriorEvent,
+            PLAYER_CHANGE_INTERIOR_EVENT,
 
-            PlayerWeaponShootEvent,
-            PlayerBulletHitEvent,
+            PLAYER_WEAPON_SHOOT_EVENT,
+            PLAYER_BULLET_HIT_EVENT,
 
-            PlayerDimensionChange,
+            PLAYER_DIMENSION_CHANGE,
 
             // Client
-            ConnectionComplete,
-            DisconnectEvent,
-            WebViewEvent,
-            KeyboardEvent,
-            GameEntityCreate,
-            GameEntityDestroy,
-            WebSocketClientEvent,
-            AudioEvent,
-            TaskChange,
-            Spawned,
-            RmlUiEvent,
-            WindowFocusChange,
-            WindowResolutionChange,
-            EntityHitEntity,
+            CONNECTION_COMPLETE,
+            DISCONNECT_EVENT,
+            WEB_VIEW_EVENT,
+            KEYBOARD_EVENT,
+            GAME_ENTITY_CREATE,
+            GAME_ENTITY_DESTROY,
+            WEB_SOCKET_CLIENT_EVENT,
+            AUDIO_EVENT,
+            TASK_CHANGE,
+            SPAWNED,
+            RMLUI_EVENT,
+            WINDOW_FOCUS_CHANGE,
+            WINDOW_RESOLUTION_CHANGE,
+            ENTITY_HIT_ENTITY,
 
-            WorldObjectPositionChange,
-            WorldObjectStreamIn,
-            WorldObjectStreamOut,
+            WORLD_OBJECT_POSITION_CHANGE,
+            WORLD_OBJECT_STREAM_IN,
+            WORLD_OBJECT_STREAM_OUT,
 
-            VoiceConnectionEvent
+            VOICE_CONNECTION_EVENT,
+
+            ALL,
+            SIZE
         }
 
         export const enum CustomEventType {
-            EntityEnterColshape = 1,
-            EntityLeaveColshape,
-            EntityEnterCheckpoint,
-            EntityLeaveCheckpoint,
-            Error,
-            KeyUp,
-            KeyDown
+            NONE,
+
+            ENTITY_ENTER_COLSHAPE,
+            ENTITY_LEAVE_COLSHAPE,
+            ENTITY_ENTER_CHECKPOINT,
+            ENTITY_LEAVE_CHECKPOINT,
+            ERROR,
+            KEY_UP,
+            KEY_DOWN,
+
+            SIZE
         }
 
         export const enum MetricType {
-            Gauge,
-            Counter
+            METRIC_TYPE_GAUGE,
+            METRIC_TYPE_COUNTER,
+            METRIC_TYPE_SIZE
         }
 
         export const enum KeyState {
-            Up,
-            Down
+            UP,
+            DOWN
         }
     }
 
