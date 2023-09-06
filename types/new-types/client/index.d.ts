@@ -7,6 +7,51 @@
 declare module "@altv/client" {
     import altShared from "@altv/shared";
 
+    export const isStreamerModeEnabled: boolean;
+    export const locale: altShared.Enums.Locale;
+    export const licenseHash: string;
+    export const clientConfig: Readonly<Record<string, unknown>>;
+    export const clientPath: string;
+
+    export function isMenuOpen(): boolean;
+    export function isConsoleOpen(): boolean;
+    export function isGameFocused(): boolean;
+    export function getFps(): number;
+    export function getPing(): number;
+    export function getTotalPacketsSent(): number;
+    export function getTotalPacketsLost(): number;
+    export function getServerIp(): string;
+    export function getServerPort(): number;
+    export function getScreenResolution(): altShared.Vector2;
+    export function isFullscreen(): boolean;
+    export function areGameControlsActive(): boolean;
+    export function setGameControlsActive(): boolean;
+    export function getMsPerGameMinute(): number;
+    export function setMsPerGameMinute(ms: number): void;
+    export function areRmlControlsActive(): boolean;
+    export function setRmlControlsActive(state: boolean): void;
+    export function getKeyState(key: altShared.Enums.KeyCode): altShared.KeyStateInfo;
+    export function beginScaleformMovieMethodMinimap(methodName: string): void;
+    export function setWeatherCycle(weathers: altShared.WeatherCycle[]): void;
+    export function setWeatherSyncActive(state: boolean): void;
+    export function getPermissionState(permission: altShared.Enums.Permission): boolean;
+    export function takeScreenshot(gameOnly?: boolean): Promise<string>;
+    export function setAngularVelocity(entity: altShared.Entity, quaternion: altShared.Quaternion): void;
+    export function headshotToBase64(id: number): string;
+    export function setDlcClothes(scriptId: number, component: number, drawable: number, texture: number, palette?: number, dlc?: number): void;
+    export function setDlcProps(scriptId: number, component: number, drawable: number, texture: number, dlc?: number): void;
+    export function clearProps(scriptId: number, component: number): void;
+    export function setWatermarkPosition(position: Enums.WatermarkPosition): void;
+    export function copyToClipboard(str: string): void;
+    export function toggleRmlDebugger(state: boolean): void;
+    export function loadRmlFontFace(path: string, name: string, isItalic?: boolean, isBold?: boolean): void;
+    export function worldToScreen(pos: altShared.Vector3): altShared.Vector3;
+    export function screenToWorld(pos: altShared.Vector2): altShared.Vector3;
+    export function setMinimapComponentPosition(name: string, alignX: string, alignY: string, pos: altShared.Vector2, size: altShared.Vector2): void;
+    export function resetMinimapComponentPosition(name: string): void;
+    export function setMinimapIsRectangle(state: boolean): void;
+    export function getPedBonePos(scriptId: number, boneId: number): altShared.Vector3;
+
     export abstract class AudioCategory {
         readonly name: string;
         volume: number;
@@ -80,7 +125,7 @@ declare module "@altv/client" {
     }
 
     export abstract class ColShape extends WorldObject {
-        readonly colShapeType: altShared.Enum.ColShapeType;
+        readonly colShapeType: altShared.Enums.ColShapeType;
         playersOnly: boolean;
 
         isEntityIn(entity: Entity): boolean;
@@ -494,6 +539,136 @@ declare module "@altv/client" {
     export abstract class WorldObject extends altShared.WorldObject {
         dimension: number;
         pos: altShared.Vector3;
+    }
+
+    export namespace Enum {
+        export const enum WatermarkPosition {
+            BottomRight = 0,
+            TopRight = 1,
+            TopLeft = 2,
+            TopCenter = 3,
+            BottomCenter = 4
+        }
+
+        // TODO (xLuxy): Maybe shared?
+        export const enum StatName {
+            Stamina = "stamina",
+            Strength = "strength",
+            LungCapacity = "lung_capacity",
+            Wheelie = "wheelie_ability",
+            Flying = "flying_ability",
+            Shooting = "shooting_ability",
+            Stealth = "stealth_ability"
+        }
+
+        // TODO (xLuxy): Maybe shared?
+        export const enum ConfigFlag {
+            DisableAutoWeaponSwap = "DISABLE_AUTO_WEAPON_SWAP",
+            DisablePedPropKnockOff = "DISABLE_PED_PROP_KNOCK_OFF",
+            DisableIdleCamera = "DISABLE_IDLE_CAMERA",
+            DisableVehicleEngineShutdownOnLeave = "DISABLE_VEHICLE_ENGINE_SHUTDOWN_ON_LEAVE",
+            /** @beta */
+            DisableSPEnterVehicleClipset = "DISABLE_SP_ENTER_VEHICLE_CLIPSET",
+            /** @beta */
+            ForceRenderSnow = "FORCE_RENDER_SNOW",
+            /** @beta */
+            ForceHideNightProps = "FORCE_HIDE_NIGHT_PROPS",
+            /** @beta */
+            ForceShowNightProps = "FORCE_SHOW_NIGHT_PROPS",
+            /** @beta */
+            DisableEmissiveLightsRendering = "DISABLE_EMISSIVE_LIGHTS_RENDERING"
+        }
+    }
+
+    export namespace Events {
+        export let rawEmitEnabled: boolean;
+        export function emit(eventName: string, ...args: unknown[]): void;
+
+        export function emitServer(eventName: string, ...args: unknown[]): void;
+        export function emitServerUnreliable(eventName: string, ...args: unknown[]): void;
+    }
+
+    export namespace Discord {
+        export const isReady: boolean;
+        export const userID: number;
+        export const userName: string;
+        export const discriminator: string;
+        export const avatar: string;
+
+        export function requestOAuth2Token(appId: string): Promise<string>;
+    }
+
+    export namespace Voice {
+        export let inputMuted: boolean;
+        export let activityInputEnabled: boolean;
+        export let activationLevel: number;
+        export const activationKey: altShared.Enums.KeyCode;
+        export const voiceControlsEnabled: boolean;
+        export let noiseSuppressionEnabled: boolean;
+        export let inputDevice: string | null;
+
+        export const availableInputDevices: ReadonlyArray<{
+            uid: string;
+            name: string;
+        }>;
+
+        export function toggleInput(enabled: boolean): void;
+    }
+
+    export namespace LocalStorage {
+        export function get(key: string): unknown;
+        export function set(key: string, value: unknown): void;
+        export function has(key: string): boolean;
+        export function remove(key: string): void;
+        export function clear(): void;
+        export function save(): void;
+    }
+
+    export namespace Stats {
+        export function set(statName: Enums.StatName, value: number | boolean | string): void;
+        export function get(statName: Enums.StatName): number | boolean | string | undefined;
+        export function reset(statName: Enums.StatName): void;
+    }
+
+    export namespace FocusData {
+        export const isFocusOverriden: boolean;
+        export let focusOverridePos: altShared.Vector3;
+        export let focusOverrideEntity: Entity | null;
+
+        export function clearFocusOverride(): void;
+    }
+
+    export namespace Gxt {
+        export function add(nameOrHash: number | string): void;
+        export function remove(nameOrHash: number | string): void;
+        export function get(nameOrHash: number | string): string;
+    }
+
+    export namespace Cursor {
+        export let visible: boolean;
+        export let pos: altShared.Vector2;
+        export let posNormalized: altShared.Vector2;
+    }
+
+    export namespace Cam {
+        export const pos: altShared.Vector3;
+        export let frozen: boolean;
+    }
+
+    export namespace Streaming {
+        export function doesTextureExistInArchetype(modelNameOrHash: number | string, textureName: string): boolean;
+        export function requestIpl(iplName: string): void;
+        export function removeIpl(iplName: string): void;
+        export function loadDefaultIpls(): void;
+        export function loadModel(modelNameOrHash: number | string, isAsync?: boolean): void;
+        export function loadYtyp(ytyp: string): void;
+        export function unloadYtyp(ytyp: string): void;
+    }
+
+    export namespace ConfigFlag {
+        export function get(flag: Enums.ConfigFlag): boolean;
+        export function set(flag: Enums.ConfigFlag, state: boolean): boolean;
+        export function exists(flag: Enums.ConfigFlag): boolean;
     }
 
     export * from "@altv/shared";

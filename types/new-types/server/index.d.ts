@@ -7,6 +7,46 @@
 declare module "@altv/server" {
     import altShared from "@altv/shared";
 
+    export const rootDir: string;
+    export const defaultDimension: number;
+    export const globalDimension: number;
+
+    export const syncedMeta: Record<string, unknown>;
+    export const serverConfig: Readonly<Record<string, unknown>>;
+
+    export function getNetTime(): number;
+
+    export function setServerPassword(password: string): void;
+    export function hashServerPassword(password: string): number;
+    export function stopServer(): void;
+    export function toggleWorldProfiler(state: boolean): void;
+    export function getEntitiesInDimension(dimension: number, entityType: altShared.Enums.BaseObjectType): ReadonlyArray<altShared.BaseObject>;
+    export function getEntitiesInRange(pos: altShared.Vector3, range: number, dimension: number, entityType: altShared.Enums.BaseObjectType): ReadonlyArray<altShared.BaseObject>;
+    export function getClosestEntities(pos: altShared.Vector3, range: number, dimension: number, maxCount: number, entityType: altShared.Enums.BaseObjectType): ReadonlyArray<altShared.BaseObject>;
+
+    export function setVoiceExternalPublic(host: string, port: number): void;
+    export function setVoiceExternal(host: string, port: number): void;
+
+    export function getMaxStreamingPeds(): number;
+    export function getMaxStreamingObjects(): number;
+    export function getMaxStreamingVehicles(): number;
+
+    export function setMaxStreamingPeds(limit: number): void;
+    export function setMaxStreamingObjects(limit: number): void;
+    export function setMaxStreamingVehicles(limit: number): void;
+    export function getMigrationThreadCount(): number;
+    export function getSyncSendThreadCount(): number;
+    export function getSyncReceiveThreadCount(): number;
+    export function setMigrationThreadCount(count: number): void;
+    export function setSyncSendThreadCount(count: number): void;
+    export function setSyncReceiveThreadCount(count: number): void;
+    export function getMigrationTickRate(): number;
+    export function getColShapeTickRate(): number;
+    export function setMigrationTickRate(rate: number): void;
+    export function setColShapeTickRate(rate: number): void;
+    export function getMigrationDistance(): number;
+    export function setMigrationDistance(distance: number): void;
+
     export abstract class Blip extends altShared.Blip {
         global: boolean;
         readonly targets: ReadonlyArray<Player>;
@@ -20,7 +60,7 @@ declare module "@altv/server" {
     }
 
     export abstract class ColShape extends WorldObject {
-        readonly colShapeType: altShared.Enum.ColShapeType;
+        readonly colShapeType: altShared.Enums.ColShapeType;
         playersOnly: boolean;
 
         isEntityIn(entity: Entity): boolean;
@@ -50,7 +90,7 @@ declare module "@altv/server" {
         value: number;
         readonly valid: boolean;
 
-        constructor(name: string, type?: Enums.MetricType);
+        constructor(name: string, type?: altShared.Enums.MetricType);
 
         begin(): void;
         end(): void;
@@ -164,7 +204,7 @@ declare module "@altv/server" {
         setWeaponAmmo(weaponHash: number | string, ammo: number): void;
 
         getAmmoSpecialType(ammoHash: number | string): number;
-        setAmmoSpecialType(ammoHash: number | string, specialType: altShared.Enum.AmmoSpecialType): void;
+        setAmmoSpecialType(ammoHash: number | string, specialType: altShared.Enums.AmmoSpecialType): void;
 
         getAmmoFlags(ammoHash: number | string): altShared.AmmoData;
         setAmmoFlags(flags: altShared.AmmoData & { ammoHash: string }): void;
@@ -305,7 +345,7 @@ declare module "@altv/server" {
 
     export abstract class VirtualEntityGroup extends altShared.VirtualEntityGroup {}
 
-    export abstract class VoiceChannel extends altShared.BaseObject {
+    export abstract class VoiceChannel extends altShared.VoiceChannel {
         readonly isSpatial: boolean;
         readonly maxDistance: number;
 
@@ -326,11 +366,15 @@ declare module "@altv/server" {
         pos: altShared.Vector3;
     }
 
-    export namespace Enums {
-        export const enum MetricType {
-            Gauge,
-            Counter
-        }
+    export namespace Events {
+        export let rawEmitEnabled: boolean;
+        export function emit(eventName: string, ...args: unknown[]): void;
+
+        export function emitPlayers(players: Player[], eventName: string, ...args: unknown[]): void;
+        export function emitPlayersUnreliable(players: Player[], eventName: string, ...args: unknown[]): void;
+
+        export function emitAllPlayers(eventName: string, ...args: unknown[]): void;
+        export function emitAllPlayersUnreliable(eventName: string, ...args: unknown[]): void;
     }
 
     export * from "@altv/shared";
