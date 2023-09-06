@@ -206,6 +206,96 @@ static void SetMaxStreamingVehicles(js::FunctionContext& ctx)
     alt::ICore::Instance().SetMaxStreamingVehicles(limit);
 }
 
+static void GetMigrationThreadCount(js::FunctionContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetMigrationThreadCount());
+}
+
+static void GetSyncSendThreadCount(js::FunctionContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetSyncSendThreadCount());
+}
+
+static void GetSyncReceiveThreadCount(js::FunctionContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetSyncReceiveThreadCount());
+}
+
+static void SetMigrationThreadCount(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    uint8_t count;
+    if(!ctx.GetArg(0, count)) return;
+
+    alt::ICore::Instance().SetMigrationThreadCount(count);
+}
+
+static void SetSyncSendThreadCount(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    uint8_t count;
+    if(!ctx.GetArg(0, count)) return;
+
+    alt::ICore::Instance().SetSyncSendThreadCount(count);
+}
+
+static void SetSyncReceiveThreadCount(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    uint8_t count;
+    if(!ctx.GetArg(0, count)) return;
+
+    alt::ICore::Instance().SetSyncReceiveThreadCount(count);
+}
+
+static void GetMigrationTickRate(js::FunctionContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetMigrationTickRate());
+}
+
+static void GetColShapeTickRate(js::FunctionContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetColShapeTickRate());
+}
+
+static void SetMigrationTickRate(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    uint32_t tickRate;
+    if(!ctx.GetArg(0, tickRate)) return;
+
+    alt::ICore::Instance().SetMigrationTickRate(tickRate);
+}
+
+static void SetColShapeTickRate(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    uint32_t tickRate;
+    if(!ctx.GetArg(0, tickRate)) return;
+
+    alt::ICore::Instance().SetColShapeTickRate(tickRate);
+}
+
+static void GetMigrationDistance(js::FunctionContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetMigrationDistance());
+}
+
+static void SetMigrationDistance(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    uint32_t distance;
+    if(!ctx.GetArg(0, distance)) return;
+
+    alt::ICore::Instance().SetMigrationDistance(distance);
+}
+
 // clang-format off
 extern js::Class playerClass, vehicleClass, checkpointClass, pedClass, objectClass, voiceChannelClass, blipClass, virtualEntityClass, virtualEntityGroupClass, metricClass;
 extern js::Namespace eventsNamespace, pedModelInfoNamespace, vehicleModelInfoNamespace, weaponModelInfoNamespace;
@@ -238,6 +328,19 @@ static js::Module altModule("@altv/server", "@altv/shared", { &playerClass, &veh
     module.StaticFunction("setMaxStreamingPeds", SetMaxStreamingPeds);
     module.StaticFunction("setMaxStreamingObjects", SetMaxStreamingObjects);
     module.StaticFunction("setMaxStreamingVehicles", SetMaxStreamingVehicles);
+
+    module.StaticFunction("getMigrationThreadCount", GetMigrationThreadCount);
+    module.StaticFunction("getSyncSendThreadCount", GetSyncSendThreadCount);
+    module.StaticFunction("getSyncReceiveThreadCount", GetSyncReceiveThreadCount);
+    module.StaticFunction("setMigrationThreadCount", SetMigrationThreadCount);
+    module.StaticFunction("setSyncSendThreadCount", SetSyncSendThreadCount);
+    module.StaticFunction("setSyncReceiveThreadCount", SetSyncReceiveThreadCount);
+    module.StaticFunction("getMigrationTickRate", GetMigrationTickRate);
+    module.StaticFunction("getColShapeTickRate", GetColShapeTickRate);
+    module.StaticFunction("setMigrationTickRate", SetMigrationTickRate);
+    module.StaticFunction("setColShapeTickRate", SetColShapeTickRate);
+    module.StaticFunction("getMigrationDistance", GetMigrationDistance);
+    module.StaticFunction("setMigrationDistance", SetMigrationDistance);
 
     module.Namespace(eventsNamespace);
     module.Namespace(pedModelInfoNamespace);
