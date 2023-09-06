@@ -5,24 +5,24 @@ const { assert } = requireBinding("shared/utils.js");
 const timers = new Set();
 
 class Timer {
-    static #warningThreshold = 100;
-    static setWarningThreshold(threshold) {
+    static #_warningThreshold = 100;
+    static set warningThreshold(threshold) {
         assert(typeof threshold === "number", "Expected a number as first argument");
-        Timer.#warningThreshold = threshold;
+        Timer.#_warningThreshold = threshold;
     }
 
-    static getWarningThreshold() {
-        return Timer.#warningThreshold;
+    static get warningThreshold() {
+        return Timer.#_warningThreshold;
     }
 
-    static #sourceLocationFrameSkipCount = 0;
-    static setSourceLocationFrameSkipCount(count) {
+    static #_sourceLocationFrameSkipCount = 0;
+    static set sourceLocationFrameSkipCount(count) {
         assert(typeof count === "number", "Expected a number as first argument");
-        Timer.#sourceLocationFrameSkipCount = count;
+        Timer.#_sourceLocationFrameSkipCount = count;
     }
 
-    static getSourceLocationFrameSkipCount() {
-        return Timer.#sourceLocationFrameSkipCount;
+    static get sourceLocationFrameSkipCount() {
+        return Timer.#_sourceLocationFrameSkipCount;
     }
 
     /** @type {number} */
@@ -53,7 +53,7 @@ class Timer {
         this.lastTick = Date.now();
         this.once = once;
         this.#_type = type;
-        this.location = cppBindings.getCurrentSourceLocation(Timer.#sourceLocationFrameSkipCount);
+        this.location = cppBindings.getCurrentSourceLocation(Timer.#_sourceLocationFrameSkipCount);
         timers.add(this);
     }
 
@@ -74,11 +74,10 @@ class Timer {
             if (this.once) this.destroy();
 
             const duration = this.lastTick - start;
-            if (duration > Timer.#warningThreshold) {
+            if (duration > Timer.#_warningThreshold) {
                 alt.logWarning(
-                    `[JS] Timer callback in resource '${cppBindings.resourceName}' (${this.location.fileName}:${
-                        this.location.lineNumber
-                    }) took ${duration}ms to execute (Threshold: ${Timer.#warningThreshold}ms)`
+                    `[JS] Timer callback in resource '${cppBindings.resourceName}' (${this.location.fileName}:${this.location.lineNumber
+                    }) took ${duration}ms to execute (Threshold: ${Timer.#_warningThreshold}ms)`
                 );
             }
         }
@@ -113,10 +112,9 @@ alt.Timers.Interval = Interval;
 alt.Timers.Timeout = Timeout;
 alt.Timers.EveryTick = EveryTick;
 alt.Timers.NextTick = NextTick;
-alt.Timers.setWarningThreshold = Timer.setWarningThreshold;
-alt.Timers.getWarningThreshold = Timer.getWarningThreshold;
-alt.Timers.setSourceLocationFrameSkipCount = Timer.setSourceLocationFrameSkipCount;
-alt.Timers.getSourceLocationFrameSkipCount = Timer.getSourceLocationFrameSkipCount;
+
+alt.Timers.warningThreshold = Timer.warningThreshold
+alt.Timers.sourceLocationFrameSkipCount = Timer.sourceLocationFrameSkipCount
 
 alt.Timers.setInterval = (callback, interval) => new Interval(callback, interval);
 alt.Timers.setTimeout = (callback, interval) => new Timeout(callback, interval);
