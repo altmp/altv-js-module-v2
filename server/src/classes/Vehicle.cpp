@@ -118,9 +118,9 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Property<&alt::IVehicle::GetTrainCarriageConfigIndex, &alt::IVehicle::SetTrainCarriageConfigIndex>("trainCarriageConfigIndex");
     tpl.Property<&alt::IVehicle::GetTrainLinkedToBackwardId, &alt::IVehicle::SetTrainLinkedToBackwardId>("trainLinkedToBackward");
     tpl.Property<&alt::IVehicle::GetTrainLinkedToForwardId, &alt::IVehicle::SetTrainLinkedToForwardId>("trainLinkedToForward");
-    tpl.Property<&alt::IVehicle::SetTrainUnk1, &alt::IVehicle::GetTrainUnk1>("trainUnk1");
-    tpl.Property<&alt::IVehicle::SetTrainUnk2, &alt::IVehicle::GetTrainUnk2>("trainUnk2");
-    tpl.Property<&alt::IVehicle::SetTrainUnk3, &alt::IVehicle::GetTrainUnk3>("trainUnk3");
+    tpl.Property<&alt::IVehicle::GetTrainUnk1, &alt::IVehicle::SetTrainUnk1>("trainUnk1");
+    tpl.Property<&alt::IVehicle::GetTrainUnk2, &alt::IVehicle::SetTrainUnk2>("trainUnk2");
+    tpl.Property<&alt::IVehicle::GetTrainUnk3, &alt::IVehicle::SetTrainUnk3>("trainUnk3");
 
     tpl.Property<&alt::IVehicle::IsBoatAnchorActive, &alt::IVehicle::SetBoatAnchorActive>("boatAnchorActive");
     tpl.Property<&alt::IVehicle::GetLightState, &alt::IVehicle::SetLightState>("lightState");
