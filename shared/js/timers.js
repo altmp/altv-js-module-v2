@@ -11,10 +11,18 @@ class Timer {
         Timer.#warningThreshold = threshold;
     }
 
+    static getWarningThreshold() {
+        return Timer.#warningThreshold;
+    }
+
     static #sourceLocationFrameSkipCount = 0;
     static setSourceLocationFrameSkipCount(count) {
         assert(typeof count === "number", "Expected a number as first argument");
         Timer.#sourceLocationFrameSkipCount = count;
+    }
+
+    static getSourceLocationFrameSkipCount() {
+        return Timer.#sourceLocationFrameSkipCount;
     }
 
     /** @type {number} */
@@ -28,14 +36,23 @@ class Timer {
     /** @type {{ fileName: string, lineNumber: number }} */
     location;
 
-    constructor(callback, interval, once) {
-        assert(typeof callback === "function", "Expected a function as first argument");
-        assert(typeof interval === "number", "Expected a number as second argument");
+    /** @type {string} */
+    #_type = "Timer";
+
+    get type() {
+        return this.#_type;
+    }
+
+    constructor(type, callback, interval, once) {
+        assert(typeof type === "string", "Expected a string as first argument");
+        assert(typeof callback === "function", "Expected a function as second argument");
+        assert(typeof interval === "number", "Expected a number as third argument");
 
         this.interval = interval;
         this.callback = callback.bind(this);
         this.lastTick = Date.now();
         this.once = once;
+        this.#_type = type;
         this.location = cppBindings.getCurrentSourceLocation(Timer.#sourceLocationFrameSkipCount);
         timers.add(this);
     }
@@ -70,25 +87,25 @@ class Timer {
 
 class Interval extends Timer {
     constructor(callback, interval) {
-        super(callback, interval, false);
+        super("Interval", callback, interval, false);
     }
 }
 
 class Timeout extends Timer {
     constructor(callback, interval) {
-        super(callback, interval, true);
+        super("Timeout", callback, interval, true);
     }
 }
 
 class EveryTick extends Timer {
     constructor(callback) {
-        super(callback, 0, false);
+        super("EveryTick", callback, 0, false);
     }
 }
 
 class NextTick extends Timer {
     constructor(callback) {
-        super(callback, 0, true);
+        super("NextTick", callback, 0, true);
     }
 }
 
@@ -97,7 +114,9 @@ alt.Timers.Timeout = Timeout;
 alt.Timers.EveryTick = EveryTick;
 alt.Timers.NextTick = NextTick;
 alt.Timers.setWarningThreshold = Timer.setWarningThreshold;
+alt.Timers.getWarningThreshold = Timer.getWarningThreshold;
 alt.Timers.setSourceLocationFrameSkipCount = Timer.setSourceLocationFrameSkipCount;
+alt.Timers.getSourceLocationFrameSkipCount = Timer.getSourceLocationFrameSkipCount;
 
 alt.Timers.setInterval = (callback, interval) => new Interval(callback, interval);
 alt.Timers.setTimeout = (callback, interval) => new Timeout(callback, interval);
