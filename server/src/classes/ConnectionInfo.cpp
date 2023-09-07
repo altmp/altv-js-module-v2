@@ -37,6 +37,4 @@ extern js::Class connectionInfoClass("ConnectionInfo", nullptr, nullptr, [](js::
     tpl.Method("accept", Accept);
     tpl.Method<&alt::IConnectionInfo::Decline>("decline");
     tpl.Method<&alt::IConnectionInfo::SetText>("setText");
-
-    tpl.GetByID<alt::IBaseObject::Type::CONNECTION_INFO>();
 });
