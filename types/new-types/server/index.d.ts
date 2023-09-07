@@ -158,6 +158,7 @@ declare module "@altv/server" {
         currentWeapon: number;
 
         static create(opts: PedCreateOptions): Ped | null;
+        static getByID(id: number): Ped | null;
     }
 
     export class Player extends altShared.Player {

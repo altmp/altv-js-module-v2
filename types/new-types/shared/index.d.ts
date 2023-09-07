@@ -27,7 +27,7 @@ declare module "@altv/shared" {
 
         readonly meta: Record<string, unknown>;
 
-        static getByID(id: number): BaseObject | null;
+        static getByID(type: Enums.BaseObjectType, id: number): BaseObject | null;
     }
 
     export abstract class VoiceChannel extends BaseObject {}
@@ -77,6 +77,8 @@ declare module "@altv/shared" {
 
         attachTo(entity: Entity): boolean;
         fade(opacity: number, duration: number): void;
+
+        static getByID(id: number): Blip | null;
     }
 
     export class Buffer {
@@ -134,6 +136,7 @@ declare module "@altv/shared" {
         isPointIn(point: Vector3): boolean;
 
         static create(opts: CheckpointCreateOptions): Checkpoint | null;
+        static getByID(id: number): Checkpoint | null;
     }
 
     interface ColShapeSphereCreateOptions {
@@ -190,6 +193,7 @@ declare module "@altv/shared" {
         isPointIn(point: Vector3): boolean;
 
         static create(opts: ColShapeCreateOptions): ColShape | null;
+        static getByID(id: number): ColShape | null;
     }
 
     export abstract class Entity extends WorldObject {
@@ -206,6 +210,8 @@ declare module "@altv/shared" {
         readonly alpha: number;
         readonly textureVariation: number;
         readonly lodDistance: number;
+
+        static getByID(id: number): Object | null;
     }
 
     export abstract class Ped extends Entity {
@@ -256,6 +262,8 @@ declare module "@altv/shared" {
 
         getWeaponTintIndex(weaponHash: number | string): number | undefined;
         hasWeaponComponent(weaponHash: number | string, componentHash: number | string): boolean;
+
+        static getByID(id: number): Player | null;
     }
 
     export abstract class Resource {

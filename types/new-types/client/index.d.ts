@@ -76,6 +76,7 @@ declare module "@altv/client" {
         seek(time: number): void;
 
         static create(options: AudioCreateOptions): Audio | null;
+        static getByID(id: number): Audio | null;
     }
 
     export abstract class AudioCategory {
@@ -125,6 +126,7 @@ declare module "@altv/client" {
         removeEffect(fxHandler: number): boolean;
 
         static create(options: AudioFilterCreateOptions): AudioFilter | null;
+        static getByID(id: number): AudioFilter | null;
     }
 
     export abstract class AudioOutput extends altShared.BaseObject {
@@ -134,6 +136,8 @@ declare module "@altv/client" {
         readonly owner: altShared.BaseObject;
 
         filter: AudioFilter | null;
+
+        static getByID(id: number): AudioOutput | null;
     }
 
     interface AudioOutputAttachedCreateOptions {
@@ -290,6 +294,8 @@ declare module "@altv/client" {
         patch(url: string, body: string): Promise<HttpResponse>;
 
         readonly extraHeaders: Record<string, string>;
+
+        static getByID(id: number): HttpClient | null;
     }
 
     interface LocalObjectCreateOptions {
@@ -328,6 +334,7 @@ declare module "@altv/client" {
         static readonly allWorld: ReadonlyArray<LocalObject>;
 
         static create(options: LocalObjectCreateOptions): LocalObject | null;
+        static getByID(id: number): LocalObject | null;
     }
 
     interface WeaponObjectCreateOptions {
@@ -364,6 +371,7 @@ declare module "@altv/client" {
         readonly isStreamedIn: boolean;
 
         static create(options: LocalPedCreateOptions): LocalPed | null;
+        static getByID(id: number): LocalPed | null;
     }
 
     export abstract class LocalPlayer extends Player {
@@ -397,6 +405,7 @@ declare module "@altv/client" {
         readonly isStreamedIn: boolean;
 
         static create(opts: LocalVehicleCreateOptions): LocalVehicle | null;
+        static getByID(id: number): LocalVehicle | null;
     }
 
     export abstract class MapZoomData {
@@ -442,8 +451,12 @@ declare module "@altv/client" {
         createTextNode(text: string): RmlElement | undefined;
 
         static create(options: RmlDocumentCreateOptions): RmlDocument | null;
+
+        // TODO (xLuxy): Check if RmlDocument has (it's not undefined)
+        static getByID(id: string): RmlDocument | null;
     }
 
+    // @ts-ignore - Suppresses "Class static side incorrectly extends base class static side"
     export abstract class RmlElement extends altShared.BaseObject {
         readonly relativeOffset: altShared.Vector2;
         readonly absoluteOffset: altShared.Vector2;
@@ -524,6 +537,9 @@ declare module "@altv/client" {
         getElementsByClassName(tag: string): ReadonlyArray<RmlElement>;
         querySelector(selector: string): RmlElement | null;
         querySelectorAll(selector: string): ReadonlyArray<RmlElement>;
+
+        // TODO (xLuxy): Check if RmlElement has (it's not undefined)
+        static getByID(id: string): RmlElement | null;
     }
 
     export abstract class TextLabel extends WorldObject {
@@ -536,6 +552,8 @@ declare module "@altv/client" {
         rot: number;
         faceCamera: boolean;
         readonly streamingDistance: number;
+
+        static getByID(id: number): TextLabel | null;
     }
 
     export abstract class Vehicle extends altShared.Vehicle {
@@ -628,6 +646,7 @@ declare module "@altv/client" {
         getExtraHeaders(): Readonly<Record<string, string>>;
 
         static create(options: WebSocketClientCreateOptions): WebSocketClient | null;
+        static getByID(id: number): WebSocketClient | null;
     }
 
     interface _WebViewTextureCreateOptions {
