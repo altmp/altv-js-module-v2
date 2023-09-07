@@ -579,7 +579,7 @@ declare module "@altv/server" {
         export function onResourceStop(callback: GenericEventCallback<ResourceStopEventParameters>): void;
         export function onResourceError(callback: GenericEventCallback<ResourceErrorEventParameters>): void;
 
-        export abstract class QueueConnectionInfo {
+        export abstract class ConnectionInfo {
             readonly name: string;
             readonly socialId: number;
             readonly socialName: string;
@@ -604,7 +604,7 @@ declare module "@altv/server" {
         }
 
         interface ConnectionQueueEventParameters {
-            connectionInfo: QueueConnectionInfo;
+            connectionInfo: ConnectionInfo;
         }
 
         interface PlayerConnectEventParameters {}
