@@ -206,6 +206,21 @@ static void SetMaxStreamingVehicles(js::FunctionContext& ctx)
     alt::ICore::Instance().SetMaxStreamingVehicles(limit);
 }
 
+static void GetStreamerThreadCount(js::FunctionContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetStreamerThreadCount());
+}
+
+static void SetStreamerThreadCount(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    uint8_t count;
+    if(!ctx.GetArg(0, count)) return;
+
+    alt::ICore::Instance().SetStreamerThreadCount(count);
+}
+
 static void GetMigrationThreadCount(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetMigrationThreadCount());
@@ -251,6 +266,11 @@ static void SetSyncReceiveThreadCount(js::FunctionContext& ctx)
     alt::ICore::Instance().SetSyncReceiveThreadCount(count);
 }
 
+static void GetStreamingTickRate(js::FunctionContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetStreamingTickRate());
+}
+
 static void GetMigrationTickRate(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetMigrationTickRate());
@@ -259,6 +279,16 @@ static void GetMigrationTickRate(js::FunctionContext& ctx)
 static void GetColShapeTickRate(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetColShapeTickRate());
+}
+
+static void SetStreamingTickRate(js::FunctionContext& ctx)
+{
+    if (!ctx.CheckArgCount(1)) return;
+
+    uint32_t tickRate;
+    if (!ctx.GetArg(0, tickRate)) return;
+
+    alt::ICore::Instance().SetStreamingTickRate(tickRate);
 }
 
 static void SetMigrationTickRate(js::FunctionContext& ctx)
@@ -281,6 +311,11 @@ static void SetColShapeTickRate(js::FunctionContext& ctx)
     alt::ICore::Instance().SetColShapeTickRate(tickRate);
 }
 
+static void GetStreamingDistance(js::FunctionContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetStreamingDistance());
+}
+
 static void GetMigrationDistance(js::FunctionContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetMigrationDistance());
@@ -294,6 +329,16 @@ static void SetMigrationDistance(js::FunctionContext& ctx)
     if(!ctx.GetArg(0, distance)) return;
 
     alt::ICore::Instance().SetMigrationDistance(distance);
+}
+
+static void SetStreamingDistance(js::FunctionContext& ctx)
+{
+    if (!ctx.CheckArgCount(1)) return;
+
+    uint32_t distance;
+    if (!ctx.GetArg(0, distance)) return;
+
+    alt::ICore::Instance().SetStreamingDistance(distance);
 }
 
 // clang-format off
@@ -328,6 +373,8 @@ static js::Module altModule("@altv/server", "@altv/shared", { &playerClass, &veh
     module.StaticFunction("setMaxStreamingPeds", SetMaxStreamingPeds);
     module.StaticFunction("setMaxStreamingObjects", SetMaxStreamingObjects);
     module.StaticFunction("setMaxStreamingVehicles", SetMaxStreamingVehicles);
+    module.StaticFunction("getStreamerThreadCount", GetStreamerThreadCount);
+    module.StaticFunction("setStreamerThreadCount", SetStreamerThreadCount);
 
     module.StaticFunction("getMigrationThreadCount", GetMigrationThreadCount);
     module.StaticFunction("getSyncSendThreadCount", GetSyncSendThreadCount);
@@ -335,11 +382,15 @@ static js::Module altModule("@altv/server", "@altv/shared", { &playerClass, &veh
     module.StaticFunction("setMigrationThreadCount", SetMigrationThreadCount);
     module.StaticFunction("setSyncSendThreadCount", SetSyncSendThreadCount);
     module.StaticFunction("setSyncReceiveThreadCount", SetSyncReceiveThreadCount);
+    module.StaticFunction("getStreamingTickRate", GetStreamingTickRate);
     module.StaticFunction("getMigrationTickRate", GetMigrationTickRate);
     module.StaticFunction("getColShapeTickRate", GetColShapeTickRate);
+    module.StaticFunction("setStreamingTickRate", SetStreamingTickRate);
     module.StaticFunction("setMigrationTickRate", SetMigrationTickRate);
     module.StaticFunction("setColShapeTickRate", SetColShapeTickRate);
+    module.StaticFunction("getStreamingDistance", GetStreamingDistance);
     module.StaticFunction("getMigrationDistance", GetMigrationDistance);
+    module.StaticFunction("setStreamingDistance", SetStreamingDistance);
     module.StaticFunction("setMigrationDistance", SetMigrationDistance);
 
     module.Namespace(eventsNamespace);
