@@ -20,19 +20,19 @@ declare module "@altv/shared" {
 
     export abstract class BaseObject {
         readonly id: number;
-        readonly type: number;
+        readonly type: Enums.BaseObjectType;
 
         readonly valid: boolean;
         destroy(): void;
 
-        meta: Record<string, unknown>;
+        readonly meta: Record<string, unknown>;
 
         static getByID(id: number): BaseObject | null;
     }
 
     export abstract class VoiceChannel extends BaseObject {}
 
-    export abstract class Blip {
+    export abstract class Blip extends BaseObject {
         readonly global: boolean;
         readonly isAttached: boolean;
         readonly attachedTo?: Entity;
@@ -127,7 +127,14 @@ declare module "@altv/shared" {
         static create(...args: unknown[]): unknown;
     }
 
-    export abstract class ColShape {
+    export abstract class ColShape extends WorldObject {
+        readonly colShapeType: Enums.ColShapeType;
+        playersOnly: boolean;
+
+        isEntityIn(entity: Entity): boolean;
+        isEntityIdIn(id: number): boolean;
+        isPointIn(point: Vector3): boolean;
+
         // TODO (xLuxy): proper typings
         static create(...args: unknown[]): unknown;
     }
@@ -560,7 +567,7 @@ declare module "@altv/shared" {
         multiplier: number;
     }
 
-    export interface TimerLocation {
+    export interface SourceLocation {
         fileName: string;
         lineNumber: number;
     }
@@ -602,6 +609,18 @@ declare module "@altv/shared" {
         static fromAxisAngle(axis: Vector3, angle: number): Quaternion;
         static fromMatrix(matrix: number[]): Quaternion;
         static fromArray(xyzw: [number, number, number, number]): Quaternion;
+    }
+
+    export type PointBlipCreateOptions = { pos: Vector3; entity?: never } | { entity: Entity; pos?: never };
+
+    export interface AreaBlipCreateOptions {
+        pos: Vector3;
+        scale: Vector2;
+    }
+
+    export interface RadiusBlipCreateOptions {
+        pos: Vector3;
+        radius: number;
     }
 
     export namespace Appearance {
@@ -670,51 +689,64 @@ declare module "@altv/shared" {
     }
 
     export namespace Utils {
-        // export function inspect(): void;
+        // boolean = showHidden
+        export function inspect(value: unknown, options?: boolean | Partial<InspectOptions>): void;
 
         export function wait(ms: number): Promise<void>;
         export function waitForNextTick(): Promise<void>;
-        export function getCurrentSourceLocation(): { fileName: string; lineNumber: number };
+        export function getCurrentSourceLocation(): SourceLocation;
 
         export abstract class AssertionError extends Error {}
 
         export function assert(condition: unknown, message?: string): void;
+
+        export interface InspectOptions {
+            showHidden: boolean; // default: false
+            depth: number; // default: 2
+            colors: boolean; // default: false
+            customInspect: boolean; // default: true
+            showProxy: boolean; // default: false
+            maxArrayLength: number; // default: 100
+            maxStringLength: number; // default: 10000
+            breakLength: number; // default: 80
+            compact: number; // default: 3
+            sorted: boolean; // default: false
+            getters: boolean; // default: false
+            numericSeparator: boolean; // default: false
+        }
     }
 
     export namespace Factory {
-        // TODO (xLuxy): types might be wrong?
-        type EntityFactorySetter<T extends Entity> = (factory: new () => T) => void;
-        type EntityFactoryGetter<T extends Entity> = () => new () => T;
+        export function setPlayerFactory(factory: typeof Player): void;
+        export function getPlayerFactory<T extends Player>(): T;
 
-        export function setPlayerFactory(factory: EntityFactorySetter<Player>): void;
-        export function getPlayerFactory(): EntityFactoryGetter<Player>;
+        export function setVehicleFactory(factory: typeof Vehicle): void;
+        export function getVehicleFactory<T extends Vehicle>(): T;
 
-        export function setVehicleFactory(factory: EntityFactorySetter<Vehicle>): unknown;
-        export function getVehicleFactory(): EntityFactoryGetter<Vehicle>;
+        export function setPedFactory(factory: typeof Ped): void;
+        export function getPedFactory<T extends Ped>(): T;
 
-        export function setPedFactory(factory: EntityFactorySetter<Ped>): unknown;
-        export function getPedFactory(): EntityFactoryGetter<Ped>;
+        export function setBlipFactory(factory: typeof Blip): void;
+        export function getBlipFactory<T extends Blip>(): T;
 
-        export function setBlipFactory(factory: EntityFactorySetter<Blip>): unknown;
-        export function getBlipFactory(): EntityFactoryGetter<Blip>;
+        // TODO (xLuxy): Server-only - find a better way to extend namespaces and move this into server typings
+        export function setVoiceChannelFactory(factory: typeof VoiceChannel): void;
+        export function getVoiceChannelFactory<T extends VoiceChannel>(): T;
 
-        export function setVoiceChannelFactory(factory: EntityFactorySetter<VoiceChannel>): unknown;
-        export function getVoiceChannelFactory(): EntityFactoryGetter<VoiceChannel>;
+        export function setColShapeFactory(factory: typeof ColShape): void;
+        export function getColShapeFactory<T extends ColShape>(): T;
 
-        export function setColShapeFactory(factory: EntityFactorySetter<ColShape>): unknown;
-        export function getColShapeFactory(): EntityFactoryGetter<ColShape>;
+        export function setObjectFactory(factory: typeof Object): void;
+        export function getObjectFactory<T extends Object>(): T;
 
-        export function setObjectFactory(factory: EntityFactorySetter<Object>): unknown;
-        export function getObjectFactory(): EntityFactoryGetter<Object>;
+        export function setCheckpointFactory(factory: typeof Checkpoint): void;
+        export function getCheckpointFactory<T extends Checkpoint>(): T;
 
-        export function setCheckpointFactory(factory: EntityFactorySetter<Checkpoint>): unknown;
-        export function getCheckpointFactory(): EntityFactoryGetter<Checkpoint>;
+        export function setVirtualEntityFactory(factory: typeof VirtualEntity): void;
+        export function getVirtualEntityFactory<T extends VirtualEntity>(): T;
 
-        export function setVirtualEntityFactory(factory: EntityFactorySetter<VirtualEntity>): unknown;
-        export function getVirtualEntityFactory(): EntityFactoryGetter<VirtualEntity>;
-
-        export function setVirtualEntityGroupFactory(factory: EntityFactorySetter<VirtualEntityGroup>): unknown;
-        export function getVirtualEntityGroupFactory(): EntityFactoryGetter<VirtualEntityGroup>;
+        export function setVirtualEntityGroupFactory(factory: typeof VirtualEntityGroup): void;
+        export function getVirtualEntityGroupFactory<T extends VirtualEntityGroup>(): T;
     }
 
     export namespace Commands {
@@ -1021,31 +1053,6 @@ declare module "@altv/shared" {
             UNKNOWN = -1
         }
 
-        export const enum BlipType {
-            VEHICLE = 1,
-            PED = 2,
-            OBJECT = 3,
-            DESTINATION = 4,
-            CONT = 5,
-            PICKUP_UNK = 6,
-            RADIUS = 7,
-            PICKUP = 8,
-            COP = 9,
-            AREA = 11,
-            GALLERY = 12,
-            PICKUP_OBJECT = 13
-        }
-
-        export const enum ColShapeType {
-            SPHERE,
-            CYLINDER,
-            CIRCLE,
-            CUBOID,
-            RECT,
-            CHECKPOINT_CYLINDER,
-            POLYGON
-        }
-
         export const enum VehicleModelType {
             INVALID,
             PED,
@@ -1222,21 +1229,41 @@ declare module "@altv/shared" {
             UP,
             DOWN
         }
-    }
 
-    export namespace PointBlip {
-        // TODO (xLuxy): proper typings
-        export function create(...args: unknown[]): unknown;
-    }
+        export const enum WatermarkPosition {
+            BottomRight = 0,
+            TopRight = 1,
+            TopLeft = 2,
+            TopCenter = 3,
+            BottomCenter = 4
+        }
 
-    export namespace AreaBlip {
-        // TODO (xLuxy): proper typings
-        export function create(...args: unknown[]): unknown;
-    }
+        export const enum StatName {
+            Stamina = "stamina",
+            Strength = "strength",
+            LungCapacity = "lung_capacity",
+            Wheelie = "wheelie_ability",
+            Flying = "flying_ability",
+            Shooting = "shooting_ability",
+            Stealth = "stealth_ability"
+        }
 
-    export namespace RadiusBlip {
-        // TODO (xLuxy): proper typings
-        export function create(...args: unknown[]): unknown;
+        export const enum ConfigFlag {
+            DisableAutoWeaponSwap = "DISABLE_AUTO_WEAPON_SWAP",
+            DisablePedPropKnockOff = "DISABLE_PED_PROP_KNOCK_OFF",
+            DisableIdleCamera = "DISABLE_IDLE_CAMERA",
+            DisableVehicleEngineShutdownOnLeave = "DISABLE_VEHICLE_ENGINE_SHUTDOWN_ON_LEAVE",
+            /** @beta */
+            DisableSPEnterVehicleClipset = "DISABLE_SP_ENTER_VEHICLE_CLIPSET",
+            /** @beta */
+            ForceRenderSnow = "FORCE_RENDER_SNOW",
+            /** @beta */
+            ForceHideNightProps = "FORCE_HIDE_NIGHT_PROPS",
+            /** @beta */
+            ForceShowNightProps = "FORCE_SHOW_NIGHT_PROPS",
+            /** @beta */
+            DisableEmissiveLightsRendering = "DISABLE_EMISSIVE_LIGHTS_RENDERING"
+        }
     }
 
     export namespace ColShapeSphere {
@@ -1275,7 +1302,7 @@ declare abstract class Timer {
     public callback: Function;
     public lastTick: number;
     public once?: boolean;
-    public location: TimerLocation;
+    public location: import("@altv/shared").SourceLocation;
 
     public get type(): import("@altv/shared").Timers.TimerType;
 

@@ -34,18 +34,32 @@ declare module "@altv/server" {
     export function setMaxStreamingPeds(limit: number): void;
     export function setMaxStreamingObjects(limit: number): void;
     export function setMaxStreamingVehicles(limit: number): void;
+    export function getStreamerThreadCount(): number;
+    export function setStreamerThreadCount(count: number): void;
     export function getMigrationThreadCount(): number;
     export function getSyncSendThreadCount(): number;
     export function getSyncReceiveThreadCount(): number;
     export function setMigrationThreadCount(count: number): void;
     export function setSyncSendThreadCount(count: number): void;
     export function setSyncReceiveThreadCount(count: number): void;
+    export function getStreamingTickRate(): number;
     export function getMigrationTickRate(): number;
     export function getColShapeTickRate(): number;
+    export function setStreamingTickRate(rate: number): void;
     export function setMigrationTickRate(rate: number): void;
     export function setColShapeTickRate(rate: number): void;
     export function getMigrationDistance(): number;
     export function setMigrationDistance(distance: number): void;
+
+    interface SharedBlipCreateOptions {
+        global: boolean;
+        targets?: Array<Entity>;
+
+        blipType: altShared.Enums.BlipType;
+    }
+
+    type BlipCreateOptions = SharedBlipCreateOptions &
+        (({ blipType: altShared.Enums.BlipType.AREA } & altShared.AreaBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.RADIUS } & altShared.RadiusBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.DESTINATION } & altShared.PointBlipCreateOptions));
 
     export abstract class Blip extends altShared.Blip {
         global: boolean;
@@ -53,6 +67,20 @@ declare module "@altv/server" {
 
         addTarget(target: Player): void;
         removeTarget(target: Player): void;
+
+        static create(opts: BlipCreateOptions): Blip | null;
+    }
+
+    export namespace PointBlip {
+        export function create(opts: altShared.PointBlipCreateOptions & SharedBlipCreateOptions): Blip | null;
+    }
+
+    export namespace AreaBlip {
+        export function create(opts: altShared.AreaBlipCreateOptions & SharedBlipCreateOptions): Blip | null;
+    }
+
+    export namespace RadiusBlip {
+        export function create(opts: altShared.RadiusBlipCreateOptions & SharedBlipCreateOptions): Blip | null;
     }
 
     export abstract class Checkpoint extends altShared.Checkpoint {
@@ -73,7 +101,7 @@ declare module "@altv/server" {
         streamed: boolean;
         frozen: boolean;
         collision: boolean;
-        timestamp: number;
+        readonly timestamp: number;
 
         readonly syncedMeta: Record<string, unknown>;
         readonly streamSyncedMeta: Record<string, unknown>;
@@ -113,7 +141,7 @@ declare module "@altv/server" {
         currentWeapon: number;
     }
 
-    export abstract class Player extends altShared.Player {
+    export class Player extends altShared.Player {
         readonly ip: string;
         readonly socialId: number;
         readonly hwidHash: number;
@@ -364,6 +392,72 @@ declare module "@altv/server" {
     export abstract class WorldObject extends altShared.WorldObject {
         dimension: number;
         pos: altShared.Vector3;
+    }
+
+    export interface BoneInfo {
+        id: number;
+        index: number;
+        name: string;
+    }
+
+    export interface PedModelInfo {
+        hash: number;
+        name: string;
+        type: string;
+        dlcName: string;
+        defaultUnarmedWeapon: string;
+        movementClipSet: string;
+        bones: BoneInfo[];
+    }
+
+    export interface VehicleModelInfo {
+        model: number;
+        title: string;
+        modelType: altShared.Enums.VehicleModelType;
+        wheelsCount: number;
+        hasArmoredWindows: boolean;
+        primaryColor: number;
+        secondaryColor: number;
+        pearlColor: number;
+        wheelsColor: number;
+        interiorColor: number;
+        dashboardColor: number;
+        modkits: number[];
+        extras: number;
+        defaultExtras: number;
+        hasAutoAttachTrailer: boolean;
+        bones: BoneInfo[];
+        canAttachCars: boolean;
+
+        doesExtraExist(extraId: number): boolean | undefined;
+        isExtraDefault(extraId: number): boolean | undefined;
+    }
+
+    export interface WeaponModelInfo {
+        hash: number;
+        name: string;
+        modelName: string;
+        modelHash: number;
+        ammoTypeHash: number;
+        ammoType: string;
+        ammoModelHash: number;
+        ammoModelName: string;
+        defaultMaxAmmoMp: number;
+        skillAbove50MaxAmmoMp: number;
+        maxSkillMaxAmmoMp: number;
+        bonusMaxAmmoMp: number;
+    }
+
+    export namespace PedModelInfo {
+        export function get(modelHash: number | string): PedModelInfo | undefined;
+    }
+
+    export namespace VehicleModelInfo {
+        export function get(modelHash: number | string): VehicleModelInfo | undefined;
+    }
+
+    export namespace WeaponModelInfo {
+        export function get(weaponHash: number | string): WeaponModelInfo | undefined;
     }
 
     export namespace Events {

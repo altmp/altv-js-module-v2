@@ -41,7 +41,7 @@ declare module "@altv/client" {
     export function setDlcClothes(scriptId: number, component: number, drawable: number, texture: number, palette?: number, dlc?: number): void;
     export function setDlcProps(scriptId: number, component: number, drawable: number, texture: number, dlc?: number): void;
     export function clearProps(scriptId: number, component: number): void;
-    export function setWatermarkPosition(position: Enums.WatermarkPosition): void;
+    export function setWatermarkPosition(position: altShared.Enums.WatermarkPosition): void;
     export function copyToClipboard(str: string): void;
     export function toggleRmlDebugger(state: boolean): void;
     export function loadRmlFontFace(path: string, name: string, isItalic?: boolean, isBold?: boolean): void;
@@ -114,9 +114,13 @@ declare module "@altv/client" {
         pos: altShared.Vector3;
     }
 
+    type BlipCreateOptions = ({ blipType: altShared.Enums.BlipType.AREA } & altShared.AreaBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.RADIUS } & altShared.RadiusBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.DESTINATION } & altShared.PointBlipCreateOptions);
+
     export abstract class Blip extends altShared.Blip {
         readonly scriptID: number;
         readonly isStreamedIn: boolean;
+
+        static create(options: BlipCreateOptions): Blip | null;
     }
 
     export abstract class Checkpoint extends altShared.Checkpoint {
@@ -541,43 +545,16 @@ declare module "@altv/client" {
         pos: altShared.Vector3;
     }
 
-    export namespace Enum {
-        export const enum WatermarkPosition {
-            BottomRight = 0,
-            TopRight = 1,
-            TopLeft = 2,
-            TopCenter = 3,
-            BottomCenter = 4
-        }
+    export namespace PointBlip {
+        export function create(opts: altShared.PointBlipCreateOptions): Blip | null;
+    }
 
-        // TODO (xLuxy): Maybe shared?
-        export const enum StatName {
-            Stamina = "stamina",
-            Strength = "strength",
-            LungCapacity = "lung_capacity",
-            Wheelie = "wheelie_ability",
-            Flying = "flying_ability",
-            Shooting = "shooting_ability",
-            Stealth = "stealth_ability"
-        }
+    export namespace AreaBlip {
+        export function create(opts: altShared.AreaBlipCreateOptions): Blip | null;
+    }
 
-        // TODO (xLuxy): Maybe shared?
-        export const enum ConfigFlag {
-            DisableAutoWeaponSwap = "DISABLE_AUTO_WEAPON_SWAP",
-            DisablePedPropKnockOff = "DISABLE_PED_PROP_KNOCK_OFF",
-            DisableIdleCamera = "DISABLE_IDLE_CAMERA",
-            DisableVehicleEngineShutdownOnLeave = "DISABLE_VEHICLE_ENGINE_SHUTDOWN_ON_LEAVE",
-            /** @beta */
-            DisableSPEnterVehicleClipset = "DISABLE_SP_ENTER_VEHICLE_CLIPSET",
-            /** @beta */
-            ForceRenderSnow = "FORCE_RENDER_SNOW",
-            /** @beta */
-            ForceHideNightProps = "FORCE_HIDE_NIGHT_PROPS",
-            /** @beta */
-            ForceShowNightProps = "FORCE_SHOW_NIGHT_PROPS",
-            /** @beta */
-            DisableEmissiveLightsRendering = "DISABLE_EMISSIVE_LIGHTS_RENDERING"
-        }
+    export namespace RadiusBlip {
+        export function create(opts: altShared.RadiusBlipCreateOptions): Blip | null;
     }
 
     export namespace Events {
@@ -625,9 +602,9 @@ declare module "@altv/client" {
     }
 
     export namespace Stats {
-        export function set(statName: Enums.StatName, value: number | boolean | string): void;
-        export function get(statName: Enums.StatName): number | boolean | string | undefined;
-        export function reset(statName: Enums.StatName): void;
+        export function set(statName: altShared.Enums.StatName, value: number | boolean | string): void;
+        export function get(statName: altShared.Enums.StatName): number | boolean | string | undefined;
+        export function reset(statName: altShared.Enums.StatName): void;
     }
 
     export namespace FocusData {
@@ -666,9 +643,9 @@ declare module "@altv/client" {
     }
 
     export namespace ConfigFlag {
-        export function get(flag: Enums.ConfigFlag): boolean;
-        export function set(flag: Enums.ConfigFlag, state: boolean): boolean;
-        export function exists(flag: Enums.ConfigFlag): boolean;
+        export function get(flag: altShared.Enums.ConfigFlag): boolean;
+        export function set(flag: altShared.Enums.ConfigFlag, state: boolean): boolean;
+        export function exists(flag: altShared.Enums.ConfigFlag): boolean;
     }
 
     export * from "@altv/shared";
