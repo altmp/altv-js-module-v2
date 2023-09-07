@@ -52,6 +52,32 @@ declare module "@altv/client" {
     export function setMinimapIsRectangle(state: boolean): void;
     export function getPedBonePos(scriptId: number, boneId: number): altShared.Vector3;
 
+    interface AudioCreateOptions {
+        source: string;
+        volume: number;
+        isRadio?: boolean; // default: false
+    }
+
+    export abstract class Audio {
+        source: string;
+        loop: boolean;
+        volume: number;
+
+        readonly outputs: ReadonlyArray<AudioOutput>;
+        readonly currentTime: number;
+        readonly maxTime: number;
+        readonly isPlaying: boolean;
+
+        addOutput(output: AudioOutput): void;
+        removeOutput(output: AudioOutput): void;
+        play(): void;
+        pause(): void;
+        reset(): void;
+        seek(time: number): void;
+
+        static create(options: AudioCreateOptions): Audio | null;
+    }
+
     export abstract class AudioCategory {
         readonly name: string;
         volume: number;
@@ -74,6 +100,10 @@ declare module "@altv/client" {
         static get(name: string): AudioCategory | undefined;
     }
 
+    interface AudioFilterCreateOptions {
+        hash: number | string;
+    }
+
     export abstract class AudioFilter {
         audioCategory: AudioCategory;
         readonly hash: number;
@@ -93,6 +123,8 @@ declare module "@altv/client" {
         addFreeverbEffect(dryMix: number, wetMix: number, roomSize: number, damp: number, width: number, mode: number, priority: number): number;
 
         removeEffect(fxHandler: number): boolean;
+
+        static create(options: AudioFilterCreateOptions): AudioFilter | null;
     }
 
     export abstract class AudioOutput extends altShared.BaseObject {
@@ -104,14 +136,35 @@ declare module "@altv/client" {
         filter: AudioFilter | null;
     }
 
-    export abstract class AudioOutputAttached extends AudioOutput {
-        entity: altShared.WorldObject;
+    interface AudioOutputAttachedCreateOptions {
+        entity: WorldObject;
+        categoryHash?: number; // default: 'radio' hashed
     }
 
-    export abstract class AudioOutputFrontend extends AudioOutput {}
+    export abstract class AudioOutputAttached extends AudioOutput {
+        entity: altShared.WorldObject;
+
+        static create(options: AudioOutputAttachedCreateOptions): AudioOutputAttached | null;
+    }
+
+    interface AudioOutputFrontendCreateOptions {
+        //
+        categoryHash?: number; // default: 'radio' hashed
+    }
+
+    export abstract class AudioOutputFrontend extends AudioOutput {
+        static create(options: AudioOutputFrontendCreateOptions): AudioOutputFrontendCreateOptions | null;
+    }
+
+    interface AudioOutputWorldCreateOptions {
+        pos: altShared.Vector3;
+        categoryHash?: number; // default: 'radio' hashed
+    }
 
     export abstract class AudioOutputWorld extends AudioOutput {
         pos: altShared.Vector3;
+
+        static create(options: AudioOutputWorldCreateOptions): AudioOutputWorld | null;
     }
 
     type BlipCreateOptions = ({ blipType: altShared.Enums.BlipType.AREA } & altShared.AreaBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.RADIUS } & altShared.RadiusBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.DESTINATION } & altShared.PointBlipCreateOptions);
@@ -239,6 +292,16 @@ declare module "@altv/client" {
         readonly extraHeaders: Record<string, string>;
     }
 
+    interface LocalObjectCreateOptions {
+        model: number | string;
+        pos: altShared.Vector3;
+        rot: altShared.Vector3;
+        noOffset?: boolean; // default: false
+        dynamic?: boolean; // default: false
+        useStreaming?: boolean; // default: false
+        streamingDistance?: number; // default: 0
+    }
+
     export abstract class LocalObject extends altShared.Object {
         get model(): number;
         set model(value: number | string);
@@ -263,6 +326,33 @@ declare module "@altv/client" {
         activatePhysics(): void;
 
         static readonly allWorld: ReadonlyArray<LocalObject>;
+
+        static create(options: LocalObjectCreateOptions): LocalObject | null;
+    }
+
+    interface WeaponObjectCreateOptions {
+        pos: altShared.Vector3;
+        rot: altShared.Vector3;
+        weapon: number | string;
+        model: number | string;
+        ammoCount?: number; // default: 100
+        createDefaultComponents?: boolean; // default: true
+        scale?: number; // default: 1
+        useStreaming?: boolean; // default: false
+        streamingDistance?: number; // default: 0
+    }
+
+    export namespace WeaponObject {
+        export function create(options: WeaponObjectCreateOptions): LocalObject | null;
+    }
+
+    interface LocalPedCreateOptions {
+        model: number | string;
+        dimension: number;
+        pos: altShared.Vector3;
+        heading?: number; // default: 0
+        useStreaming?: boolean; // default: true
+        streamingDistance?: number; // default: 0
     }
 
     export abstract class LocalPed extends altShared.Ped {
@@ -272,6 +362,8 @@ declare module "@altv/client" {
         visible: boolean;
         readonly scriptID: number;
         readonly isStreamedIn: boolean;
+
+        static create(options: LocalPedCreateOptions): LocalPed | null;
     }
 
     export abstract class LocalPlayer extends Player {
@@ -286,6 +378,15 @@ declare module "@altv/client" {
         getWeaponComponents(wepaonHash: number | string): ReadonlyArray<number> | undefined;
     }
 
+    interface LocalVehicleCreateOptions {
+        model: number | string;
+        dimension: number;
+        pos: altShared.Vector3;
+        rot: altShared.Vector3;
+        useStreaming?: boolean; // default: true
+        streamingDistance?: number; // default: 300
+    }
+
     export abstract class LocalVehicle extends Vehicle {
         get model(): number;
         set model(value: number | string);
@@ -294,6 +395,8 @@ declare module "@altv/client" {
         visible: boolean;
         readonly scriptID: number;
         readonly isStreamedIn: boolean;
+
+        static create(opts: LocalVehicleCreateOptions): LocalVehicle | null;
     }
 
     export abstract class MapZoomData {
@@ -319,6 +422,10 @@ declare module "@altv/client" {
         static readonly local: LocalPlayer;
     }
 
+    interface RmlDocumentCreateOptions {
+        url: string;
+    }
+
     export abstract class RmlDocument extends RmlElement {
         title: string;
         readonly sourceUrl: string;
@@ -333,6 +440,8 @@ declare module "@altv/client" {
 
         createElement(tag: string): RmlElement | undefined;
         createTextNode(text: string): RmlElement | undefined;
+
+        static create(options: RmlDocumentCreateOptions): RmlDocument | null;
     }
 
     export abstract class RmlElement extends altShared.BaseObject {
@@ -497,6 +606,10 @@ declare module "@altv/client" {
         static get(weaponHash: number | string): WeaponData | undefined;
     }
 
+    interface WebSocketClientCreateOptions {
+        url: string;
+    }
+
     export abstract class WebSocketClient extends altShared.BaseObject {
         url: string;
         autoReconnect: boolean;
@@ -513,7 +626,23 @@ declare module "@altv/client" {
         getSubProtocols(): ReadonlyArray<string>;
         setExtraHeader(name: string, value: string): void;
         getExtraHeaders(): Readonly<Record<string, string>>;
+
+        static create(options: WebSocketClientCreateOptions): WebSocketClient | null;
     }
+
+    interface _WebViewTextureCreateOptions {
+        drawable: number | string; // default: 0
+        targetTexture: string;
+    }
+
+    interface _WebViewCreateOptions {
+        pos?: altShared.Vector2; // default: { x: 0, y: 0 }
+        size?: altShared.Vector2; // default: { x: 0, y: 0 }
+        isVisible?: boolean; // default: true
+        isOverlay?: boolean; // default: false
+    }
+
+    type WebViewCreateOptions = { url: string } & (({ drawable: number | string } & _WebViewTextureCreateOptions) | ({ drawable: never } & _WebViewCreateOptions));
 
     export abstract class WebView extends altShared.BaseObject {
         focused: boolean;
@@ -538,6 +667,8 @@ declare module "@altv/client" {
         removeOutput(output: AudioOutput): void;
 
         static readonly isGpuAccelerationActive: boolean;
+
+        static create(options: WebViewCreateOptions): WebView | null;
     }
 
     export abstract class WorldObject extends altShared.WorldObject {

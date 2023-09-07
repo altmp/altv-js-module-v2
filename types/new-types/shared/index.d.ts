@@ -109,6 +109,16 @@ declare module "@altv/shared" {
         writeString(offset: number, value: string): void;
     }
 
+    interface CheckpointCreateOptions {
+        type: Enums.CheckpointType;
+        pos: Vector3;
+        radius: number;
+        height: number;
+        color: RGBA;
+        streamingDistance: number;
+    }
+
+    // @ts-ignore - Suppresses "Class static side incorrectly extends base class static side"
     export abstract class Checkpoint extends ColShape {
         checkpointType: number;
         radius: number;
@@ -123,9 +133,53 @@ declare module "@altv/shared" {
         isEntityIdIn(id: number): boolean;
         isPointIn(point: Vector3): boolean;
 
-        // TODO (xLuxy): proper typings
-        static create(...args: unknown[]): unknown;
+        static create(opts: CheckpointCreateOptions): Checkpoint | null;
     }
+
+    interface ColShapeSphereCreateOptions {
+        pos: Vector3;
+        radius: number;
+    }
+
+    interface ColShapeCylinderCreateOptions {
+        pos: Vector3;
+        radius: number;
+        height: number;
+    }
+
+    interface ColShapeCircleCreateOptions {
+        pos: Vector2;
+        radius: number;
+    }
+
+    interface ColShapeCuboidCreateOptions {
+        pos1: Vector2;
+        pos2: Vector3;
+    }
+
+    interface ColShapeRectangleCreateOptions {
+        x1: number;
+        y1: number;
+        x2: number;
+        y2: number;
+    }
+
+    interface ColShapePolygonCreateOptions {
+        minZ: number;
+        maxZ: number;
+        points: Vector2[];
+    }
+
+    type ColShapeCreateOptions = {
+        colShapeType: Enums.ColShapeType;
+    } & (
+        | ({ colShapeType: Enums.ColShapeType.SPHERE } & ColShapeSphereCreateOptions)
+        | ({ colShapeType: Enums.ColShapeType.CYLINDER } & ColShapeCylinderCreateOptions)
+        | ({ colShapeType: Enums.ColShapeType.CIRCLE } & ColShapeCircleCreateOptions)
+        | ({ colShapeType: Enums.ColShapeType.CUBOID } & ColShapeCuboidCreateOptions)
+        | ({ colShapeType: Enums.ColShapeType.RECT } & ColShapeRectangleCreateOptions)
+        | ({ colShapeType: Enums.ColShapeType.POLYGON } & ColShapePolygonCreateOptions)
+    );
 
     export abstract class ColShape extends WorldObject {
         readonly colShapeType: Enums.ColShapeType;
@@ -135,8 +189,7 @@ declare module "@altv/shared" {
         isEntityIdIn(id: number): boolean;
         isPointIn(point: Vector3): boolean;
 
-        // TODO (xLuxy): proper typings
-        static create(...args: unknown[]): unknown;
+        static create(opts: ColShapeCreateOptions): ColShape | null;
     }
 
     export abstract class Entity extends WorldObject {
@@ -306,6 +359,13 @@ declare module "@altv/shared" {
         toggleExtra(extraId: number, state: boolean): void;
     }
 
+    interface VirtualEntityCreateOptions {
+        group: VirtualEntityGroup;
+        pos: Vector3;
+        streamingRange: number;
+        data?: Record<string, unknown>;
+    }
+
     export abstract class VirtualEntity extends WorldObject {
         readonly group: VirtualEntityGroup;
         readonly streamingDistance: number;
@@ -314,15 +374,17 @@ declare module "@altv/shared" {
 
         readonly streamSyncedMeta: Record<string, unknown>;
 
-        // TODO (xLuxy): proper typings
-        static create(...args: unknown[]): VirtualEntity;
+        static create(opts: VirtualEntityCreateOptions): VirtualEntity | null;
+    }
+
+    interface VirtualEntityGroupCreateOptions {
+        streamingRangeLimit: number;
     }
 
     export abstract class VirtualEntityGroup extends BaseObject {
         readonly maxEntitiesInStream: number;
 
-        // TODO (xLuxy): proper typings
-        static create(...args: unknown[]): VirtualEntityGroup;
+        static create(opts: VirtualEntityGroupCreateOptions): VirtualEntityGroup | null;
     }
 
     export abstract class WorldObject extends BaseObject {
@@ -1264,36 +1326,100 @@ declare module "@altv/shared" {
             /** @beta */
             DisableEmissiveLightsRendering = "DISABLE_EMISSIVE_LIGHTS_RENDERING"
         }
+
+        export const enum CheckpointType {
+            CylinderSingleArrow,
+            CylinderDoubleArrow,
+            CylinderTripleArrow,
+            CylinderCycleArrow,
+            CylinderCheckerboard,
+            CylinderWrench,
+            CylinderSingleArrow2,
+            CylinderDoubleArrow2,
+            CylinderTripleArrow2,
+            CylinderCycleArrow2,
+            CylinderCheckerboard2,
+            CylinderWrench2,
+            RingSingleArrow,
+            RingDoubleArrow,
+            RingTripleArrow,
+            RingCycleArrow,
+            RingCheckerboard,
+            SingleArrow,
+            DoubleArrow,
+            TripleArrow,
+            CycleArrow,
+            Checkerboard,
+            CylinderSingleArrow3,
+            CylinderDoubleArrow3,
+            CylinderTripleArrow3,
+            CylinderCycleArrow3,
+            CylinderCheckerboard3,
+            CylinderSingleArrow4,
+            CylinderDoubleArrow4,
+            CylinderTripleArrow4,
+            CylinderCycleArrow4,
+            CylinderCheckerboard4,
+            CylinderSingleArrow5,
+            CylinderDoubleArrow5,
+            CylinderTripleArrow5,
+            CylinderCycleArrow5,
+            CylinderCheckerboard5,
+            RingPlaneUp,
+            RingPlaneLeft,
+            RingPlaneRight,
+            RingPlaneDown,
+            Empty,
+            Ring,
+            Empty2,
+            Cylinder,
+            Cylinder1,
+            Cylinder2,
+            Cylinder3,
+            Cylinder4,
+            Cylinder5,
+            Empty3,
+            Empty4,
+            Empty5,
+            Empty6,
+            RingDollar,
+            RingWolf,
+            RingQuestionMark,
+            RingPlane,
+            RingChopper,
+            RingBoat,
+            RingCar,
+            RingBike,
+            RingBicycle,
+            RingTruck,
+            RingParachute,
+            RingJetpack,
+            RingWhirl
+        }
     }
 
     export namespace ColShapeSphere {
-        // TODO (xLuxy): proper typings
-        export function create(...args: unknown[]): unknown;
+        export function create(opts: ColShapeSphereCreateOptions): ColShape | null;
     }
 
     export namespace ColShapeCylinder {
-        // TODO (xLuxy): proper typings
-        export function create(...args: unknown[]): unknown;
+        export function create(opts: ColShapeCylinderCreateOptions): ColShape | null;
     }
 
     export namespace ColShapeCircle {
-        // TODO (xLuxy): proper typings
-        export function create(...args: unknown[]): unknown;
+        export function create(opts: ColShapeCircleCreateOptions): ColShape | null;
     }
 
     export namespace ColShapeCuboid {
-        // TODO (xLuxy): proper typings
-        export function create(...args: unknown[]): unknown;
+        export function create(opts: ColShapeCuboidCreateOptions): ColShape | null;
     }
 
     export namespace ColShapeRectangle {
-        // TODO (xLuxy): proper typings
-        export function create(...args: unknown[]): unknown;
+        export function create(opts: ColShapeRectangleCreateOptions): ColShape | null;
     }
 
     export namespace ColShapePolygon {
-        // TODO (xLuxy): proper typings
-        export function create(...args: unknown[]): unknown;
+        export function create(opts: ColShapePolygonCreateOptions): ColShape | null;
     }
 }
 

@@ -125,6 +125,15 @@ declare module "@altv/server" {
         destroy(): void;
     }
 
+    interface ObjectCreateOptions {
+        model: number | string;
+        pos: altShared.Vector3;
+        rot?: altShared.Vector3; // default: { x: 0, y: 0, z: 0 }
+        alpha?: number; // default: 255
+        textureVariation?: number; // default: 0
+        lodDistance?: number; // default: 100
+    }
+
     export abstract class Object extends altShared.Object {
         alpha: number;
         textureVariation: number;
@@ -132,6 +141,14 @@ declare module "@altv/server" {
 
         activatePhysics(): void;
         placeOnGroundProperly(): void;
+
+        static create(opts: ObjectCreateOptions): Object | null;
+    }
+
+    interface PedCreateOptions {
+        model: number | string;
+        pos: altShared.Vector3;
+        heading: number;
     }
 
     export abstract class Ped extends altShared.Ped {
@@ -139,6 +156,8 @@ declare module "@altv/server" {
         maxHealth: number;
         armour: number;
         currentWeapon: number;
+
+        static create(opts: PedCreateOptions): Ped | null;
     }
 
     export class Player extends altShared.Player {
@@ -264,6 +283,12 @@ declare module "@altv/server" {
         static restart(resourceName: string): void;
     }
 
+    interface VehicleCreateOptions {
+        model: number | string;
+        pos: altShared.Vector3;
+        rot?: altShared.Vector3; // default: { x: 0, y: 0, z: 0 }
+    }
+
     export abstract class Vehicle extends altShared.Vehicle {
         readonly neon: altShared.NeonState;
 
@@ -365,6 +390,8 @@ declare module "@altv/server" {
         setTimedExplosion(state: boolean, culprit: Player, time: number): void;
         getWeaponCapacity(index: number): number;
         setWeaponCapacity(index: number, state: number): void;
+
+        static create(opts: VehicleCreateOptions): Vehicle | null;
     }
 
     export abstract class VirtualEntity extends altShared.VirtualEntity {
@@ -372,6 +399,11 @@ declare module "@altv/server" {
     }
 
     export abstract class VirtualEntityGroup extends altShared.VirtualEntityGroup {}
+
+    interface VoiceChannelCreateOptions {
+        spatial: boolean;
+        maxDistance?: number;
+    }
 
     export abstract class VoiceChannel extends altShared.VoiceChannel {
         readonly isSpatial: boolean;
@@ -387,6 +419,8 @@ declare module "@altv/server" {
         isPlayerMuted(player: Player): boolean;
         mutePlayer(player: Player): void;
         unmutePlayer(player: Player): void;
+
+        static create(opts: VoiceChannelCreateOptions): VoiceChannel | null;
     }
 
     export abstract class WorldObject extends altShared.WorldObject {
