@@ -835,11 +835,6 @@ declare module "@altv/client" {
         export function onNetOwnerChange(callback: GenericEventCallback<NetOwnerChangeEventParameters>): void;
         export function onWeaponDamage(callback: GenericEventCallback<WeaponDamageEventParameters>): void;
 
-        // SHARED custom events
-        export function onConsoleCommand(callback: GenericEventCallback<ConsoleCommandEventParameters>): void;
-        // TODO (xLuxy): Not implemented?
-        // export function onError(callback: GenericEventCallback): void;
-
         // SHARED meta related events
         export function onLocalMetaChange(callback: GenericPlayerEventCallback<LocalMetaChangeEventParameters>): void;
         export function onSyncedMetaChange(callback: GenericEventCallback<SyncedMetaChangeEventParameters>): void;
@@ -849,8 +844,7 @@ declare module "@altv/client" {
 
         // SHARED custom events
         export function onConsoleCommand(callback: GenericEventCallback<ConsoleCommandEventParameters>): void;
-        // TODO (xLuxy): Not implemented?
-        // export function onError(callback: GenericEventCallback): void;
+        export function onError(callback: GenericEventCallback<ErrorEventParameters>): void;
 
         // SHARED script related events
         export function onServerScriptEvent(callback: GenericPlayerEventCallback<ServerScriptEventParameters>): void;
@@ -960,6 +954,11 @@ declare module "@altv/client" {
         interface ConsoleCommandEventParameters {
             command: string;
             args: string[];
+        }
+
+        interface ErrorEventParameters {
+            error: string;
+            stack: string;
         }
 
         interface ResourceStartEventParameters {

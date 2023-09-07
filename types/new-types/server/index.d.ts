@@ -519,19 +519,19 @@ declare module "@altv/server" {
         export function onPlayerDamage(callback: GenericPlayerEventCallback<PlayerDamageEventParameters>): void;
         export function onPlayerDeath(callback: GenericPlayerEventCallback<PlayerDeathEventParameters>): void;
         export function onPlayerHeal(callback: GenericPlayerEventCallback<PlayerHealEventParameters>): void;
-        export function onPlayerRequestControl(callback: GenericPlayerEventCallback<PlayerRequestControlEventParameters>): void;
+        export function onPlayerControlRequest(callback: GenericPlayerEventCallback<PlayerControlRequestEventParameters>): void;
         export function onPlayerInteriorChange(callback: GenericPlayerEventCallback<PlayerInteriorChangeEventParameters>): void;
         export function onPlayerDimensionChange(callback: GenericPlayerEventCallback<PlayerDimensionChangeEventParameters>): void;
         export function onPlayerWeaponChange(callback: GenericPlayerEventCallback<PlayerWeaponChangeEventParameters>): void;
-        export function onPlayerRequestSyncedScene(callback: GenericEventCallback<PlayerRequestSyncedSceneEventParameters>): void;
-        export function onPlayerStartSyncedScene(callback: GenericPlayerEventCallback<PlayerStartSyncedSceneEventParameters>): void;
-        export function onPlayerStopSyncedScene(callback: GenericPlayerEventCallback<PlayerStopSyncedSceneEventParameters>): void;
-        export function onPlayerUpdateSyncedScene(callback: GenericPlayerEventCallback<PlayerUpdateSyncedSceneEventParameters>): void;
+        export function onPlayerSyncedSceneRequest(callback: GenericEventCallback<PlayerSyncedSceneRequestEventParameters>): void;
+        export function onPlayerSyncedSceneStart(callback: GenericPlayerEventCallback<PlayerSyncedSceneStartEventParameters>): void;
+        export function onPlayerSyncedSceneStop(callback: GenericPlayerEventCallback<PlayerSyncedSceneStopEventParameters>): void;
+        export function onPlayerSyncedSceneUpdate(callback: GenericPlayerEventCallback<PlayerSyncedSceneUpdateEventParameters>): void;
         export function onPlayerAnimationChange(callback: GenericPlayerEventCallback<PlayerAnimationChangeEventParameters>): void;
         export function onPlayerEnteredVehicle(callback: GenericPlayerEventCallback<PlayerEnteredVehicleEventParameters>): void;
         export function onPlayerEnteringVehicle(callback: GenericPlayerEventCallback<PlayerEnteringVehicleEventParameters>): void;
         export function onPlayerLeftVehicle(callback: GenericPlayerEventCallback<PlayerLeftVehicleEventParameters>): void;
-        export function onPlayerChangeVehicleSeat(callback: GenericPlayerEventCallback<PlayerChangeVehicleSeatEventParameters>): void;
+        export function onPlayerVehicleSeatChange(callback: GenericPlayerEventCallback<PlayerVehicleSeatChangeEventParameters>): void;
 
         // Vehicle related events
         export function onVehicleDestroy(callback: GenericEventCallback<VehicleDestroyEventParameters>): void;
@@ -558,8 +558,7 @@ declare module "@altv/server" {
 
         // SHARED custom events
         export function onConsoleCommand(callback: GenericEventCallback<ConsoleCommandEventParameters>): void;
-        // TODO (xLuxy): Not implemented?
-        // export function onError(callback: GenericEventCallback): void;
+        export function onError(callback: GenericEventCallback<ErrorEventParameters>): void;
 
         // Script related events
         export function onColShapeEvent(callback: GenericEventCallback<ColShapeEventParameters>): void;
@@ -617,7 +616,7 @@ declare module "@altv/server" {
             oldArmour: number;
         }
 
-        interface PlayerRequestControlEventParameters {
+        interface PlayerControlRequestEventParameters {
             target: Entity;
         }
 
@@ -636,22 +635,22 @@ declare module "@altv/server" {
             newWeapon: number;
         }
 
-        interface PlayerRequestSyncedSceneEventParameters {
+        interface PlayerSyncedSceneRequestEventParameters {
             sceneID: number;
         }
 
-        interface PlayerStartSyncedSceneEventParameters {
+        interface PlayerSyncedSceneStartEventParameters {
             sceneID: number;
             startPos: altShared.Vector3;
             startRot: altShared.Vector3;
             animDict: string;
         }
 
-        interface PlayerStopSyncedSceneEventParameters {
+        interface PlayerSyncedSceneStopEventParameters {
             sceneID: number;
         }
 
-        interface PlayerUpdateSyncedSceneEventParameters {
+        interface PlayerSyncedSceneUpdateEventParameters {
             sceneID: number;
             startRate: number;
         }
@@ -736,7 +735,7 @@ declare module "@altv/server" {
             seat: number;
         }
 
-        interface PlayerChangeVehicleSeatEventParameters {
+        interface PlayerVehicleSeatChangeEventParameters {
             vehicle: Vehicle;
             oldSeat: number;
             newSeat: number;
@@ -837,7 +836,10 @@ declare module "@altv/server" {
             args: string[];
         }
 
-        interface ErrorEventParameters {}
+        interface ErrorEventParameters {
+            error: string;
+            stack: string;
+        }
 
         interface ResourceStartEventParameters {
             resource: Resource;
