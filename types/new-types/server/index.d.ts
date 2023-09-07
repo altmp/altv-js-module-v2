@@ -508,9 +508,9 @@ declare module "@altv/server" {
         export function onServerStarted(callback: GenericEventCallback): void;
 
         // TODO (xLuxy): Not implemented
-        export function onConnectionQueueAdd(callback: GenericEventCallback): void;
+        export function onConnectionQueueAdd(callback: GenericEventCallback<ConnectionQueueEventParameters>): void;
         // TODO (xLuxy): Not implemented
-        export function onConnectionQueueRemove(callback: GenericEventCallback): void;
+        export function onConnectionQueueRemove(callback: GenericEventCallback<ConnectionQueueEventParameters>): void;
 
         // Player related events
         export function onPlayerConnect(callback: GenericPlayerEventCallback<PlayerConnectEventParameters>): void;
@@ -578,6 +578,34 @@ declare module "@altv/server" {
         export function onResourceStart(callback: GenericEventCallback<ResourceStartEventParameters>): void;
         export function onResourceStop(callback: GenericEventCallback<ResourceStopEventParameters>): void;
         export function onResourceError(callback: GenericEventCallback<ResourceErrorEventParameters>): void;
+
+        export abstract class QueueConnectionInfo {
+            readonly name: string;
+            readonly socialId: number;
+            readonly socialName: string;
+            readonly hwidHash: number;
+            readonly hwidExHash: number;
+            readonly authToken: string;
+            readonly debug: boolean;
+            readonly branch: string;
+            readonly build: number;
+            readonly cdnUrl: string;
+            readonly passwordHash: number;
+            readonly ip: string;
+            readonly discordUserId: number;
+            readonly cloudAuthHash: number;
+
+            readonly isAccepted: boolean;
+            readonly text: string;
+
+            accept(sendNames?: boolean): void;
+            decline(reason: string): void;
+            setText(text: string): void;
+        }
+
+        interface ConnectionQueueEventParameters {
+            connectionInfo: QueueConnectionInfo;
+        }
 
         interface PlayerConnectEventParameters {}
 
