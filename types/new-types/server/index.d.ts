@@ -503,6 +503,356 @@ declare module "@altv/server" {
 
         export function emitAllPlayers(eventName: string, ...args: unknown[]): void;
         export function emitAllPlayersUnreliable(eventName: string, ...args: unknown[]): void;
+
+        // Server related events
+        export function onServerStarted(callback: GenericEventCallback): void;
+
+        // TODO (xLuxy): Not implemented
+        export function onConnectionQueueAdd(callback: GenericEventCallback): void;
+        // TODO (xLuxy): Not implemented
+        export function onConnectionQueueRemove(callback: GenericEventCallback): void;
+
+        // Player related events
+        export function onPlayerConnect(callback: GenericPlayerEventCallback<PlayerConnectEventParameters>): void;
+        export function onPlayerConnectDenied(callback: GenericEventCallback<PlayerConnectDeniedEventParameters>): void;
+        export function onPlayerDisconnect(callback: GenericPlayerEventCallback<PlayerDisconnectEventParameters>): void;
+        export function onPlayerDamage(callback: GenericPlayerEventCallback<PlayerDamageEventParameters>): void;
+        export function onPlayerDeath(callback: GenericPlayerEventCallback<PlayerDeathEventParameters>): void;
+        export function onPlayerHeal(callback: GenericPlayerEventCallback<PlayerHealEventParameters>): void;
+        export function onPlayerRequestControl(callback: GenericPlayerEventCallback<PlayerRequestControlEventParameters>): void;
+        export function onPlayerInteriorChange(callback: GenericPlayerEventCallback<PlayerInteriorChangeEventParameters>): void;
+        export function onPlayerDimensionChange(callback: GenericPlayerEventCallback<PlayerDimensionChangeEventParameters>): void;
+        export function onPlayerWeaponChange(callback: GenericPlayerEventCallback<PlayerWeaponChangeEventParameters>): void;
+        export function onPlayerRequestSyncedScene(callback: GenericEventCallback<PlayerRequestSyncedSceneEventParameters>): void;
+        export function onPlayerStartSyncedScene(callback: GenericPlayerEventCallback<PlayerStartSyncedSceneEventParameters>): void;
+        export function onPlayerStopSyncedScene(callback: GenericPlayerEventCallback<PlayerStopSyncedSceneEventParameters>): void;
+        export function onPlayerUpdateSyncedScene(callback: GenericPlayerEventCallback<PlayerUpdateSyncedSceneEventParameters>): void;
+        export function onPlayerAnimationChange(callback: GenericPlayerEventCallback<PlayerAnimationChangeEventParameters>): void;
+        export function onPlayerEnteredVehicle(callback: GenericPlayerEventCallback<PlayerEnteredVehicleEventParameters>): void;
+        export function onPlayerEnteringVehicle(callback: GenericPlayerEventCallback<PlayerEnteringVehicleEventParameters>): void;
+        export function onPlayerLeftVehicle(callback: GenericPlayerEventCallback<PlayerLeftVehicleEventParameters>): void;
+        export function onPlayerChangeVehicleSeat(callback: GenericPlayerEventCallback<PlayerChangeVehicleSeatEventParameters>): void;
+
+        // Vehicle related events
+        export function onVehicleDestroy(callback: GenericEventCallback<VehicleDestroyEventParameters>): void;
+        export function onVehicleAttach(callback: GenericEventCallback<VehicleAttachEventParameters>): void;
+        export function onVehicleDetach(callback: GenericEventCallback<VehicleDetachEventParameters>): void;
+        export function onVehicleDamage(callback: GenericEventCallback<VehicleDamageEventParameters>): void;
+        export function onVehicleSirenStateChange(callback: GenericEventCallback<VehicleSirenStateChangeEventParameters>): void;
+
+        // Voice related events
+        export function onVoiceConnectionCreate(callback: GenericEventCallback<VoiceConnectionEventParameters>): void;
+
+        // SHARED Entity related events
+        export function onBaseObjectCreate(callback: GenericEventCallback<BaseObjectCreateEventParameters>): void;
+        export function onBaseObjectRemove(callback: GenericEventCallback<BaseObjectRemoveEventParameters>): void;
+        export function onNetOwnerChange(callback: GenericEventCallback<NetOwnerChangeEventParameters>): void;
+        export function onWeaponDamage(callback: GenericEventCallback<WeaponDamageEventParameters>): void;
+
+        // SHARED meta related events
+        export function onLocalMetaChange(callback: GenericPlayerEventCallback<LocalMetaChangeEventParameters>): void;
+        export function onSyncedMetaChange(callback: GenericEventCallback<SyncedMetaChangeEventParameters>): void;
+        export function onStreamSyncedMetaChange(callback: GenericEventCallback<StreamSyncedMetaChangeEventParameters>): void;
+        export function onGlobalMetaChange(callback: GenericEventCallback<GlobalMetaChangeEventParameters>): void;
+        export function onGlobalSyncedMetaChange(callback: GenericEventCallback<GlobalSyncedMetaChangeEventParameters>): void;
+
+        // SHARED custom events
+        export function onConsoleCommand(callback: GenericEventCallback<ConsoleCommandEventParameters>): void;
+        // TODO (xLuxy): Not implemented?
+        // export function onError(callback: GenericEventCallback): void;
+
+        // Script related events
+        export function onColShapeEvent(callback: GenericEventCallback<ColShapeEventParameters>): void;
+        export function onExplosion(callback: GenericEventCallback<ExplosionEventParameters>): void;
+        export function onFireStart(callback: GenericPlayerEventCallback<FireStartEventParameters>): void;
+        export function onProjectileStart(callback: GenericPlayerEventCallback<ProjectileStartEventParameters>): void;
+        export function onEntityColShapeEnter(callback: GenericEventCallback<EntityColShapeEnterEventParameters>): void;
+        export function onEntityColShapeLeave(callback: GenericEventCallback<EntityColShapeLeaveEventParameters>): void;
+        export function onEntityCheckpointEnter(callback: GenericEventCallback<EntityCheckpointEnterEventParameters>): void;
+        export function onEntityCheckpointLeave(callback: GenericEventCallback<EntityCheckpointLeaveEventParameters>): void;
+
+        // SHARED script related events
+        export function onServerScriptEvent(callback: GenericPlayerEventCallback<ServerScriptEventParameters>): void;
+        export function onPlayerScriptEvent(callback: GenericPlayerEventCallback<PlayerScriptEventParameters>): void;
+
+        // SHARED resource events
+        export function onResourceStart(callback: GenericEventCallback<ResourceStartEventParameters>): void;
+        export function onResourceStop(callback: GenericEventCallback<ResourceStopEventParameters>): void;
+        export function onResourceError(callback: GenericEventCallback<ResourceErrorEventParameters>): void;
+
+        interface PlayerConnectEventParameters {}
+
+        interface PlayerConnectDeniedEventParameters {
+            reason: string;
+            name: string;
+            ip: string;
+            passwordHash: number;
+            isDebug: boolean;
+            branch: string;
+            version: string;
+            cdnUrl: string;
+            discordId: number;
+        }
+
+        interface PlayerDisconnectEventParameters {
+            reason: string;
+        }
+
+        interface PlayerDamageEventParameters {
+            attacker?: Entity;
+            healthDamage: number;
+            armourDamage: number;
+            weaponHash: number;
+        }
+
+        interface PlayerDeathEventParameters {
+            killer?: Entity;
+            weaponHash: number;
+        }
+
+        interface PlayerHealEventParameters {
+            newHealth: number;
+            oldHealth: number;
+            newArmour: number;
+            oldArmour: number;
+        }
+
+        interface PlayerRequestControlEventParameters {
+            target: Entity;
+        }
+
+        interface PlayerInteriorChangeEventParameters {
+            oldInterior: number;
+            newInterior: number;
+        }
+
+        interface PlayerDimensionChangeEventParameters {
+            oldDimension: number;
+            newDimension: number;
+        }
+
+        interface PlayerWeaponChangeEventParameters {
+            oldWeapon: number;
+            newWeapon: number;
+        }
+
+        interface PlayerRequestSyncedSceneEventParameters {
+            sceneID: number;
+        }
+
+        interface PlayerStartSyncedSceneEventParameters {
+            sceneID: number;
+            startPos: altShared.Vector3;
+            startRot: altShared.Vector3;
+            animDict: string;
+        }
+
+        interface PlayerStopSyncedSceneEventParameters {
+            sceneID: number;
+        }
+
+        interface PlayerUpdateSyncedSceneEventParameters {
+            sceneID: number;
+            startRate: number;
+        }
+
+        interface ColShapeEventParameters {
+            entity: WorldObject;
+            target: ColShape;
+            state: boolean;
+        }
+
+        interface ExplosionEventParameters {
+            source: Player;
+            type: altShared.Enums.ExplosionType;
+            pos: altShared.Vector3;
+            fx: number;
+            target?: Entity;
+        }
+
+        interface FireStartEventParameters {
+            fires: {
+                pos: altShared.Vector3;
+                weaponHash: number;
+            }[];
+        }
+
+        interface ProjectileStartEventParameters {
+            pos: altShared.Vector3;
+            dir: altShared.Vector3;
+            ammoHash: number;
+            weaponHash: number;
+        }
+
+        interface EntityColShapeEnterEventParameters {
+            entity: WorldObject;
+            colShape: ColShape;
+        }
+
+        interface EntityColShapeLeaveEventParameters {
+            entity: WorldObject;
+            colShape: ColShape;
+        }
+
+        interface EntityCheckpointEnterEventParameters {
+            entity: WorldObject;
+            colShape: ColShape;
+        }
+
+        interface EntityCheckpointLeaveEventParameters {
+            entity: WorldObject;
+            colShape: ColShape;
+        }
+
+        interface ServerScriptEventParameters {
+            eventName: string;
+            args: unknown[];
+        }
+
+        interface PlayerScriptEventParameters {
+            eventName: string;
+            args: unknown[];
+        }
+
+        interface PlayerAnimationChangeEventParameters {
+            oldAnimDict: number;
+            newAnimDict: number;
+            oldAnimName: number;
+            newAnimName: number;
+        }
+
+        interface PlayerEnteredVehicleEventParameters {
+            vehicle: Vehicle;
+            seat: number;
+        }
+
+        interface PlayerEnteringVehicleEventParameters {
+            vehicle: Vehicle;
+            seat: number;
+        }
+
+        interface PlayerLeftVehicleEventParameters {
+            vehicle: Vehicle;
+            seat: number;
+        }
+
+        interface PlayerChangeVehicleSeatEventParameters {
+            vehicle: Vehicle;
+            oldSeat: number;
+            newSeat: number;
+        }
+
+        interface VehicleDestroyEventParameters {
+            vehicle: Vehicle;
+        }
+
+        interface VehicleAttachEventParameters {
+            vehicle: Vehicle;
+            attachedVehicle: Vehicle;
+        }
+
+        interface VehicleDetachEventParameters {
+            vehicle: Vehicle;
+            detachedVehicle: Vehicle;
+        }
+
+        interface VehicleDamageEventParameters {
+            vehicle: Vehicle;
+            attacker: Entity;
+            bodyHealthDamage: number;
+            additionalBodyHealthDamage: number;
+            engineHealthDamage: number;
+            petrolTankDamage: number;
+            weaponHash: number;
+        }
+
+        interface VehicleSirenStateChangeEventParameters {
+            vehicle: Vehicle;
+            state: boolean;
+        }
+
+        interface VoiceConnectionEventParameters {
+            state: altShared.Enums.VoiceConnectionState;
+        }
+
+        interface BaseObjectCreateEventParameters {
+            object: altShared.BaseObject;
+        }
+
+        interface BaseObjectRemoveEventParameters {
+            object: altShared.BaseObject;
+        }
+
+        interface NetOwnerChangeEventParameters {
+            entity: Entity;
+            oldOwner?: Player;
+            newOwner?: Player;
+        }
+
+        interface WeaponDamageEventParameters {
+            source: Player;
+            target: Entity;
+            weaponHash: number;
+            damage: number;
+            offset: number;
+            bodyPart: altShared.Enums.BodyPart;
+
+            setDamageValue(value: number): void;
+        }
+
+        interface LocalMetaChangeEventParameters {
+            key: string;
+            oldValue: unknown;
+            newValue: unknown;
+        }
+
+        interface SyncedMetaChangeEventParameters {
+            entity: Entity;
+            key: string;
+            oldValue: unknown;
+            newValue: unknown;
+        }
+
+        interface StreamSyncedMetaChangeEventParameters {
+            entity: Entity;
+            key: string;
+            oldValue: unknown;
+            newValue: unknown;
+        }
+
+        interface GlobalMetaChangeEventParameters {
+            key: string;
+            oldValue: unknown;
+            newValue: unknown;
+        }
+
+        interface GlobalSyncedMetaChangeEventParameters {
+            key: string;
+            oldValue: unknown;
+            newValue: unknown;
+        }
+
+        interface ConsoleCommandEventParameters {
+            command: string;
+            args: string[];
+        }
+
+        interface ErrorEventParameters {}
+
+        interface ResourceStartEventParameters {
+            resource: Resource;
+        }
+
+        interface ResourceStopEventParameters {
+            resource: Resource;
+        }
+
+        interface ResourceErrorEventParameters {
+            resource: Resource;
+        }
+
+        type GenericPlayerEventCallback<T> = (params: T & { player: Player }) => void | Promise<void>;
+        type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
     }
 
     export * from "@altv/shared";
