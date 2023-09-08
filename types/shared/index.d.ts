@@ -370,7 +370,7 @@ declare module "@altv/shared" {
     interface VirtualEntityCreateOptions {
         group: VirtualEntityGroup;
         pos: Vector3;
-        streamingRange: number;
+        maxEntitiesInStream: number;
         data?: Record<string, unknown>;
     }
 
