@@ -13,3 +13,4 @@ Event.register(alt.Enums.EventType.REQUEST_SYNCED_SCENE, "PlayerSyncedSceneReque
 Event.register(alt.Enums.EventType.START_SYNCED_SCENE, "PlayerSyncedSceneStart");
 Event.register(alt.Enums.EventType.STOP_SYNCED_SCENE, "PlayerSyncedSceneStop");
 Event.register(alt.Enums.EventType.UPDATE_SYNCED_SCENE, "PlayerSyncedSceneUpdate");
+Event.register(alt.Enums.EventType.PLAYER_SPAWN, "PlayerSpawn");

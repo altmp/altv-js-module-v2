@@ -144,3 +144,10 @@ static js::Event updateSyncedSceneEvent(alt::CEvent::Type::UPDATE_SYNCED_SCENE, 
     args.Set("sceneID", e->GetSceneID());
     args.Set("startRate", e->GetStartRate());
 });
+
+static js::Event playerSpawnEvent(alt::CEvent::Type::PLAYER_SPAWN, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CPlayerSpawnEvent*>(ev);
+
+    args.Set("player", e->GetPlayer());
+});

@@ -44,3 +44,12 @@ static js::Event vehicleSirenEvent(alt::CEvent::Type::VEHICLE_SIREN, [](const al
     args.Set("vehicle", e->GetTarget());
     args.Set("state", e->GetToggle());
 });
+
+static js::Event vehicleHornEvent(alt::CEvent::Type::VEHICLE_HORN, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CVehicleHornEvent*>(ev);
+
+    args.Set("player", e->GetReporter());
+    args.Set("vehicle", e->GetTarget());
+    args.Set("state", e->GetToggle());
+});

@@ -528,6 +528,7 @@ declare module "@altv/server" {
         export function onPlayerSyncedSceneStart(callback: GenericPlayerEventCallback<PlayerSyncedSceneStartEventParameters>): void;
         export function onPlayerSyncedSceneStop(callback: GenericPlayerEventCallback<PlayerSyncedSceneStopEventParameters>): void;
         export function onPlayerSyncedSceneUpdate(callback: GenericPlayerEventCallback<PlayerSyncedSceneUpdateEventParameters>): void;
+        export function onPlayerSpawn(callback: GenericPlayerEventCallback): void;
         export function onPlayerAnimationChange(callback: GenericPlayerEventCallback<PlayerAnimationChangeEventParameters>): void;
         export function onPlayerEnteredVehicle(callback: GenericPlayerEventCallback<PlayerEnteredVehicleEventParameters>): void;
         export function onPlayerEnteringVehicle(callback: GenericPlayerEventCallback<PlayerEnteringVehicleEventParameters>): void;
@@ -540,9 +541,14 @@ declare module "@altv/server" {
         export function onVehicleDetach(callback: GenericEventCallback<VehicleDetachEventParameters>): void;
         export function onVehicleDamage(callback: GenericEventCallback<VehicleDamageEventParameters>): void;
         export function onVehicleSirenStateChange(callback: GenericEventCallback<VehicleSirenStateChangeEventParameters>): void;
+        export function onVehicleHornStateChange(callback: GenericPlayerEventCallback<VehicleHornStateChangeEventParameters>): void;
 
         // Voice related events
         export function onVoiceConnectionCreate(callback: GenericEventCallback<VoiceConnectionEventParameters>): void;
+
+        // Object related events
+        export function onClientObjectDelete(callback: GenericPlayerEventCallback): void;
+        export function onClientObjectRequest(callback: GenericPlayerEventCallback<ClientObjectEventParameters>): void;
 
         // SHARED Entity related events
         export function onBaseObjectCreate(callback: GenericEventCallback<BaseObjectCreateEventParameters>): void;
@@ -798,8 +804,18 @@ declare module "@altv/server" {
             state: boolean;
         }
 
+        interface VehicleHornStateChangeEventParameters {
+            vehicle: Vehicle;
+            state: boolean;
+        }
+
         interface VoiceConnectionEventParameters {
             state: altShared.Enums.VoiceConnectionState;
+        }
+
+        interface ClientObjectEventParameters {
+            model: number;
+            pos: altShared.Vector3;
         }
 
         interface BaseObjectCreateEventParameters {
@@ -881,7 +897,7 @@ declare module "@altv/server" {
             resource: Resource;
         }
 
-        type GenericPlayerEventCallback<T> = (params: T & { player: Player }) => void | Promise<void>;
+        type GenericPlayerEventCallback<T = {}> = (params: T & { player: Player }) => void | Promise<void>;
         type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
     }
 
