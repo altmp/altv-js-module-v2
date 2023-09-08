@@ -597,11 +597,10 @@ declare module "@altv/server" {
             readonly cloudAuthHash: number;
 
             readonly isAccepted: boolean;
-            readonly text: string;
+            text: string;
 
             accept(sendNames?: boolean): void;
             decline(reason: string): void;
-            setText(text: string): void;
         }
 
         interface ConnectionQueueEventParameters {
