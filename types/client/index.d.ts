@@ -45,9 +45,9 @@ declare module "@altv/client" {
     export function copyToClipboard(str: string): void;
     export function toggleRmlDebugger(state: boolean): void;
     export function loadRmlFontFace(path: string, name: string, isItalic?: boolean, isBold?: boolean): void;
-    export function worldToScreen(pos: altShared.Vector3): altShared.Vector3;
-    export function screenToWorld(pos: altShared.Vector2): altShared.Vector3;
-    export function setMinimapComponentPosition(name: string, alignX: string, alignY: string, pos: altShared.Vector2, size: altShared.Vector2): void;
+    export function worldToScreen(pos: altShared.IVector3): altShared.Vector3;
+    export function screenToWorld(pos: altShared.IVector2): altShared.Vector3;
+    export function setMinimapComponentPosition(name: string, alignX: string, alignY: string, pos: altShared.IVector2, size: altShared.IVector2): void;
     export function resetMinimapComponentPosition(name: string): void;
     export function setMinimapIsRectangle(state: boolean): void;
     export function getPedBonePos(scriptId: number, boneId: number): altShared.Vector3;
@@ -655,8 +655,8 @@ declare module "@altv/client" {
     }
 
     interface _WebViewCreateOptions {
-        pos?: altShared.Vector2; // default: { x: 0, y: 0 }
-        size?: altShared.Vector2; // default: { x: 0, y: 0 }
+        pos?: altShared.IVector2; // default: { x: 0, y: 0 }
+        size?: altShared.IVector2; // default: { x: 0, y: 0 }
         isVisible?: boolean; // default: true
         isOverlay?: boolean; // default: false
     }

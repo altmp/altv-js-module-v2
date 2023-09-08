@@ -21,8 +21,8 @@ declare module "@altv/server" {
     export function stopServer(): void;
     export function toggleWorldProfiler(state: boolean): void;
     export function getEntitiesInDimension(dimension: number, entityType: altShared.Enums.BaseObjectType): ReadonlyArray<altShared.BaseObject>;
-    export function getEntitiesInRange(pos: altShared.Vector3, range: number, dimension: number, entityType: altShared.Enums.BaseObjectType): ReadonlyArray<altShared.BaseObject>;
-    export function getClosestEntities(pos: altShared.Vector3, range: number, dimension: number, maxCount: number, entityType: altShared.Enums.BaseObjectType): ReadonlyArray<altShared.BaseObject>;
+    export function getEntitiesInRange(pos: altShared.IVector3, range: number, dimension: number, entityType: altShared.Enums.BaseObjectType): ReadonlyArray<altShared.BaseObject>;
+    export function getClosestEntities(pos: altShared.IVector3, range: number, dimension: number, maxCount: number, entityType: altShared.Enums.BaseObjectType): ReadonlyArray<altShared.BaseObject>;
 
     export function setVoiceExternalPublic(host: string, port: number): void;
     export function setVoiceExternal(host: string, port: number): void;
@@ -109,7 +109,7 @@ declare module "@altv/server" {
         setNetOwner(player: Player, disableMigration: boolean): void;
         resetNetOwner(disableMigration: boolean): void;
 
-        attachTo(target: Entity, otherBoneId: number | string, boneId: number | string, pos: altShared.Vector3, rot: altShared.Vector3, collision: boolean, noFixedRot: boolean): void;
+        attachTo(target: Entity, otherBoneId: number | string, boneId: number | string, pos: altShared.IVector3, rot: altShared.IVector3, collision: boolean, noFixedRot: boolean): void;
         detach(): void;
     }
 
@@ -127,8 +127,8 @@ declare module "@altv/server" {
 
     interface ObjectCreateOptions {
         model: number | string;
-        pos: altShared.Vector3;
-        rot?: altShared.Vector3; // default: { x: 0, y: 0, z: 0 }
+        pos: altShared.IVector3;
+        rot?: altShared.IVector3; // default: { x: 0, y: 0, z: 0 }
         alpha?: number; // default: 255
         textureVariation?: number; // default: 0
         lodDistance?: number; // default: 100
@@ -147,7 +147,7 @@ declare module "@altv/server" {
 
     interface PedCreateOptions {
         model: number | string;
-        pos: altShared.Vector3;
+        pos: altShared.IVector3;
         heading: number;
     }
 
@@ -200,7 +200,7 @@ declare module "@altv/server" {
 
         emit(event: string, ...args: unknown[]): void;
         emitUnreliable(event: string, ...args: unknown[]): void;
-        spawn(pos: altShared.Vector3, delay?: number): void;
+        spawn(pos: altShared.IVector3, delay?: number): void;
         despawn(): void;
         setWeaponTintIndex(weaponHash: number | string, tintIndex: number): void;
         addWeaponComponent(weaponHash: number | string, componentHash: number | string): void;
@@ -286,8 +286,8 @@ declare module "@altv/server" {
 
     interface VehicleCreateOptions {
         model: number | string;
-        pos: altShared.Vector3;
-        rot?: altShared.Vector3; // default: { x: 0, y: 0, z: 0 }
+        pos: altShared.IVector3;
+        rot?: altShared.IVector3; // default: { x: 0, y: 0, z: 0 }
     }
 
     export abstract class Vehicle extends altShared.Vehicle {

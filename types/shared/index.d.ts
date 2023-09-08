@@ -113,7 +113,7 @@ declare module "@altv/shared" {
 
     interface CheckpointCreateOptions {
         type: Enums.CheckpointType;
-        pos: Vector3;
+        pos: IVector3;
         radius: number;
         height: number;
         color: RGBA;
@@ -127,7 +127,7 @@ declare module "@altv/shared" {
         height: number;
         color: RGBA;
         iconColor: RGBA;
-        nextPos: Vector3;
+        nextPos: IVector3;
         readonly streamingDistance: number;
         visible: boolean;
 
@@ -140,24 +140,24 @@ declare module "@altv/shared" {
     }
 
     interface ColShapeSphereCreateOptions {
-        pos: Vector3;
+        pos: IVector3;
         radius: number;
     }
 
     interface ColShapeCylinderCreateOptions {
-        pos: Vector3;
+        pos: IVector3;
         radius: number;
         height: number;
     }
 
     interface ColShapeCircleCreateOptions {
-        pos: Vector2;
+        pos: IVector2;
         radius: number;
     }
 
     interface ColShapeCuboidCreateOptions {
-        pos1: Vector2;
-        pos2: Vector3;
+        pos1: IVector2;
+        pos2: IVector3;
     }
 
     interface ColShapeRectangleCreateOptions {
@@ -170,7 +170,7 @@ declare module "@altv/shared" {
     interface ColShapePolygonCreateOptions {
         minZ: number;
         maxZ: number;
-        points: Vector2[];
+        points: IVector2[];
     }
 
     type ColShapeCreateOptions = {
@@ -369,7 +369,7 @@ declare module "@altv/shared" {
 
     interface VirtualEntityCreateOptions {
         group: VirtualEntityGroup;
-        pos: Vector3;
+        pos: IVector3;
         maxEntitiesInStream: number;
         data?: Record<string, unknown>;
     }
@@ -676,20 +676,20 @@ declare module "@altv/shared" {
         readonly down: Vector3;
 
         static fromEuler(x: number, y: number, z: number): Quaternion;
-        static fromAxisAngle(axis: Vector3, angle: number): Quaternion;
+        static fromAxisAngle(axis: IVector3, angle: number): Quaternion;
         static fromMatrix(matrix: number[]): Quaternion;
         static fromArray(xyzw: [number, number, number, number]): Quaternion;
     }
 
-    export type PointBlipCreateOptions = { pos: Vector3; entity?: never } | { entity: Entity; pos?: never };
+    export type PointBlipCreateOptions = { pos: IVector3; entity?: never } | { entity: Entity; pos?: never };
 
     export interface AreaBlipCreateOptions {
-        pos: Vector3;
-        scale: Vector2;
+        pos: IVector3;
+        scale: IVector2;
     }
 
     export interface RadiusBlipCreateOptions {
-        pos: Vector3;
+        pos: IVector3;
         radius: number;
     }
 
