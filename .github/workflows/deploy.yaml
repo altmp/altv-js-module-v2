@@ -1,185 +1,194 @@
 name: Build & deploy module
 on:
-  push:
-    branches-ignore:
-      - '**'
-    tags:
-      - 'dev/*.*-dev*'
-      - 'rc/*.*-rc*'
-      - 'release/*.*'
+    push:
+        branches-ignore:
+            - "**"
+        tags:
+            - "dev/*.*-dev*"
+            - "rc/*.*-rc*"
+            - "release/*.*"
 
 jobs:
-  build-server-windows:
-    name: Build windows server
-    runs-on: windows-2019
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
+    build-server-windows:
+        name: Build windows server
+        runs-on: windows-2022
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  submodules: recursive
 
-      - name: Setup xmake
-        uses: xmake-io/github-action-setup-xmake@v1
-        with:
-          xmake-version: latest
+            - name: Setup xmake
+              uses: xmake-io/github-action-setup-xmake@v1
+              with:
+                  xmake-version: latest
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.x
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18.x
 
-      - name: Extract version
-        id: version
-        shell: bash
-        run: |
-          TAG=${GITHUB_REF/refs\/tags\//}
-          echo "BRANCH=${TAG/\/*}" >> $GITHUB_OUTPUT
-          echo "VERSION=${TAG/*\/}" >> $GITHUB_OUTPUT
+            - name: Extract version
+              id: version
+              shell: bash
+              run: |
+                  TAG=${GITHUB_REF/refs\/tags\//}
+                  echo "BRANCH=${TAG/\/*}" >> $GITHUB_OUTPUT
+                  echo "VERSION=${TAG/*\/}" >> $GITHUB_OUTPUT
 
-      - name: Generate xmake project
-        shell: bash
-        run: xmake config -p windows --toolchain=msvc --module-version="${{ steps.version.outputs.BRANCH }}/${{ steps.version.outputs.VERSION }}"
+            - name: Generate xmake project
+              shell: bash
+              run: xmake config -p windows --toolchain=msvc --module-version="${{ steps.version.outputs.BRANCH }}/${{ steps.version.outputs.VERSION }}"
 
-      - name: Build xmake project
-        shell: bash
-        run: xmake -b server
+            - name: Build xmake project
+              shell: bash
+              run: |
+                  xmake -b server
+                  xmake -b client
 
-      - name: Copy files
-        shell: cmd
-        run: |
-          mkdir upload
-          copy build\windows\x64\release\js-module-v2.dll upload
-          copy build\windows\x64\release\js-module-v2.pdb upload
-          copy server\deps\nodejs\lib\Release\libnodev2.dll upload
+            - name: Copy files
+              shell: cmd
+              run: |
+                  mkdir upload\client\modules\js-module-v2
+                  mkdir upload\types
+                  mkdir upload\server\modules
+                  copy build\windows\x64\release\js-module-v2.dll upload\server\modules
+                  copy build\windows\x64\release\js-module-v2.pdb upload\server\modules
+                  copy server\deps\nodejs\lib\Release\libnodev2.dll upload\server
+                  copy build\windows\x64\release\js-client-v2.dll upload\client\modules\js-module-v2\js-module-v2.dll
+                  copy build\windows\x64\release\js-client-v2.pdb upload\client\modules\js-module-v2\js-module-v2.pdb
+                  xcopy types upload\types /E
+                  rd /s /q upload\types\old
+                  del upload\types\server.ts
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: server-windows
-          path: ./upload
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                  name: server-windows
+                  path: ./upload
 
-  build-server-linux:
-    name: Build linux server
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
+    build-server-linux:
+        name: Build linux server
+        runs-on: ubuntu-20.04
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  submodules: recursive
 
-      - name: Setup xmake
-        uses: xmake-io/github-action-setup-xmake@v1
-        with:
-          xmake-version: latest
+            - name: Setup xmake
+              uses: xmake-io/github-action-setup-xmake@v1
+              with:
+                  xmake-version: latest
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.x
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18.x
 
-      - name: Extract version
-        id: version
-        shell: bash
-        run: |
-          TAG=${GITHUB_REF/refs\/tags\//}
-          echo "BRANCH=${TAG/\/*}" >> $GITHUB_OUTPUT
-          echo "VERSION=${TAG/*\/}" >> $GITHUB_OUTPUT
-          cd deps/cpp-sdk
-          echo "SDK_COMMIT=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+            - name: Extract version
+              id: version
+              shell: bash
+              run: |
+                  TAG=${GITHUB_REF/refs\/tags\//}
+                  echo "BRANCH=${TAG/\/*}" >> $GITHUB_OUTPUT
+                  echo "VERSION=${TAG/*\/}" >> $GITHUB_OUTPUT
+                  cd deps/cpp-sdk
+                  echo "SDK_COMMIT=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Generate xmake project
-        shell: bash
-        run: xmake config --module-version="${{ steps.version.outputs.BRANCH }}/${{ steps.version.outputs.VERSION }}"
+            - name: Generate xmake project
+              shell: bash
+              run: xmake config --module-version="${{ steps.version.outputs.BRANCH }}/${{ steps.version.outputs.VERSION }}"
 
-      - name: Build xmake project
-        shell: bash
-        run: xmake -b server
+            - name: Build xmake project
+              shell: bash
+              run: xmake -b server
 
-      - name: Copy files
-        run: |
-          mkdir upload
-          cp build/linux/x86_64/release/libjs-module-v2.so upload
-          cp server/deps/nodejs/lib/libnodev2.so upload
-          echo ${{ steps.version.outputs.SDK_COMMIT }} >> upload/sdk.version
+            - name: Copy files
+              run: |
+                  mkdir upload
+                  cp build/linux/x86_64/release/libjs-module-v2.so upload
+                  cp server/deps/nodejs/lib/libnodev2.so upload
+                  echo ${{ steps.version.outputs.SDK_COMMIT }} >> upload/sdk.version
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: server-linux
-          path: ./upload
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                  name: server-linux
+                  path: ./upload
 
-  release:
-    name: Upload files to GitHub release
-    runs-on: ubuntu-20.04
-    needs: [ build-server-windows, build-server-linux ]
-    steps:
-      - name: Download windows artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: server-windows
-          path: dist-server-windows
+    release:
+        name: Upload files to GitHub release
+        runs-on: ubuntu-20.04
+        needs: [build-server-windows, build-server-linux]
+        steps:
+            - name: Download windows artifacts
+              uses: actions/download-artifact@v3
+              with:
+                  name: server-windows
+                  path: dist-server-windows
 
-      - name: Download linux artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: server-linux
-          path: dist-server-linux
+            - name: Download linux artifacts
+              uses: actions/download-artifact@v3
+              with:
+                  name: server-linux
+                  path: dist-server-linux
 
-      - name: Extract version
-        id: version
-        shell: bash
-        run: |
-          TAG=${GITHUB_REF/refs\/tags\//}
-          echo "BRANCH=${TAG/\/*}" >> $GITHUB_OUTPUT
-          echo "VERSION=${TAG/*\/}" >> $GITHUB_OUTPUT
-          echo "SDK_COMMIT=$(cat dist-server-linux/sdk.version)" >> $GITHUB_OUTPUT
-          rm dist-server-linux/sdk.version
+            - name: Extract version
+              id: version
+              shell: bash
+              run: |
+                  TAG=${GITHUB_REF/refs\/tags\//}
+                  echo "BRANCH=${TAG/\/*}" >> $GITHUB_OUTPUT
+                  echo "VERSION=${TAG/*\/}" >> $GITHUB_OUTPUT
+                  echo "SDK_COMMIT=$(cat dist-server-linux/sdk.version)" >> $GITHUB_OUTPUT
+                  rm dist-server-linux/sdk.version
 
-      - name: Zip artifacts
-        run: |
-          zip -r -j js-module-v2-windows dist-server-windows
-          zip -r -j js-module-v2-linux dist-server-linux
+            - name: Zip artifacts
+              run: |
+                  zip -r js-module-v2-windows dist-server-windows
+                  zip -r -j js-module-v2-linux dist-server-linux
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ steps.version.outputs.BRANCH }}/${{ steps.version.outputs.VERSION }}
-          body: |
-            SDK version: [${{ steps.version.outputs.SDK_COMMIT }}](https://github.com/altmp/cpp-sdk/commit/${{ steps.version.outputs.SDK_COMMIT }})
+            - name: Create Release
+              id: create_release
+              uses: actions/create-release@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  tag_name: ${{ github.ref }}
+                  release_name: ${{ steps.version.outputs.BRANCH }}/${{ steps.version.outputs.VERSION }}
+                  body: |
+                      SDK version: [${{ steps.version.outputs.SDK_COMMIT }}](https://github.com/altmp/cpp-sdk/commit/${{ steps.version.outputs.SDK_COMMIT }})
 
-      - name: Upload windows artifacts
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./js-module-v2-windows.zip
-          asset_name: js-module-v2-windows.zip
-          asset_content_type: application/zip
+            - name: Upload windows artifacts
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ steps.create_release.outputs.upload_url }}
+                  asset_path: ./js-module-v2-windows.zip
+                  asset_name: js-module-v2-windows.zip
+                  asset_content_type: application/zip
 
-      - name: Upload linux artifacts
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./js-module-v2-linux.zip
-          asset_name: js-module-v2-linux.zip
-          asset_content_type: application/zip
+            - name: Upload linux artifacts
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ steps.create_release.outputs.upload_url }}
+                  asset_path: ./js-module-v2-linux.zip
+                  asset_name: js-module-v2-linux.zip
+                  asset_content_type: application/zip
 
-  delete-artifacts:
-    name: Delete artifacts
-    runs-on: ubuntu-20.04
-    needs: [ release ]
-    if: ${{ always() }}
-    steps:
-      - name: Delete artifacts
-        uses: geekyeggo/delete-artifact@v2
-        with:
-          name: |
-            server-windows
-            server-linux
+    delete-artifacts:
+        name: Delete artifacts
+        runs-on: ubuntu-20.04
+        needs: [release]
+        if: ${{ always() }}
+        steps:
+            - name: Delete artifacts
+              uses: geekyeggo/delete-artifact@v2
+              with:
+                  name: |
+                      server-windows
+                      server-linux
