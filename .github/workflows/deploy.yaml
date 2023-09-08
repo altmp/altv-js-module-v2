@@ -162,8 +162,6 @@ jobs:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
-              with:
-                  submodules: recursive
 
             - name: Copy files
               shell: cmd
@@ -201,6 +199,12 @@ jobs:
               with:
                   name: server-linux
                   path: dist-server-linux
+
+            - name: Download typing artifact
+              uses: actions/download-artifact@v3
+              with:
+                  name: typings
+                  path: dist-typings
 
             - name: Extract version
               id: version
