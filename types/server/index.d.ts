@@ -1,617 +1,888 @@
+/// <reference types="../shared/index.d.ts" />
+
 /**
  * @module @altv/server
  */
 
 declare module "@altv/server" {
-    import * as shared from "@altv/shared";
+    import altShared from "@altv/shared";
 
     export const rootDir: string;
     export const defaultDimension: number;
     export const globalDimension: number;
 
-    export const syncedMeta: Record<string, any>;
-    export const serverConfig: Record<string, any>;
+    export const syncedMeta: Record<string, unknown>;
+    export const serverConfig: Readonly<Record<string, unknown>>;
 
     export function getNetTime(): number;
+
     export function setServerPassword(password: string): void;
     export function hashServerPassword(password: string): number;
     export function stopServer(): void;
-    export function toggleWorldProfiler(enabled: boolean): void;
+    export function toggleWorldProfiler(state: boolean): void;
+    export function getEntitiesInDimension(dimension: number, entityType: altShared.Enums.BaseObjectType): ReadonlyArray<altShared.BaseObject>;
+    export function getEntitiesInRange(pos: altShared.Vector3, range: number, dimension: number, entityType: altShared.Enums.BaseObjectType): ReadonlyArray<altShared.BaseObject>;
+    export function getClosestEntities(pos: altShared.Vector3, range: number, dimension: number, maxCount: number, entityType: altShared.Enums.BaseObjectType): ReadonlyArray<altShared.BaseObject>;
 
-    export function getEntitiesInDimension(dimension: number, entityTypes: number): ReadonlyArray<Entity>;
-    export function getEntitiesInRange(pos: shared.Vector3, range: number, dimension: number, entityTypes: number): ReadonlyArray<Entity>;
-    export function getClosestEntities(pos: shared.Vector3, range: number, dimension: number, maxCount: number, entityTypes: number): ReadonlyArray<Entity>;
-
-    export function setVoiceExternalPublic(host: string, port: number);
-    export function setVoiceExternal(host: string, port: number);
+    export function setVoiceExternalPublic(host: string, port: number): void;
+    export function setVoiceExternal(host: string, port: number): void;
 
     export function getMaxStreamingPeds(): number;
     export function getMaxStreamingObjects(): number;
     export function getMaxStreamingVehicles(): number;
-    export function setMaxStreamingPeds(limit: number);
-    export function setMaxStreamingObjects(limit: number);
-    export function setMaxStreamingVehicles(limit: number);
 
-    export namespace Events {
-        interface ClientScriptEventContext extends shared.Events.ScriptEventContext {
-            readonly player: Player;
-        }
-        interface PlayerConnectEventContext extends shared.Events.EventContext {
-            readonly player: Player;
-        }
-        interface PlayerConnectDeniedEventContext extends shared.Events.EventContext {
-            readonly reason: ConnectDeniedReason;
-            readonly name: string;
-            readonly ip: string;
-            readonly passwordHash: number;
-            readonly isDebug: boolean;
-            readonly branch: string;
-            readonly version: string;
-            readonly cdnUrl: string;
-            readonly discordId: string;
-        }
-        interface PlayerDisconnectEventContext extends shared.Events.EventContext {
-            readonly player: Player;
-            readonly reason: string;
-        }
-        interface PlayerDamageEventContext extends shared.Events.EventContext {
-            readonly player: Player;
-            readonly attacker: Entity | null;
-            readonly healthDamage: number;
-            readonly armourDamage: number;
-            readonly weaponHash: number;
-        }
-        interface PlayerDeathEventContext extends shared.Events.EventContext {
-            readonly player: Player;
-            readonly killer: Entity | null;
-            readonly weaponHash: number;
-        }
-        interface PlayerHealEventContext extends shared.Events.EventContext {
-            readonly player: Player;
-            readonly newHealth: number;
-            readonly oldHealth: number;
-            readonly newArmour: number;
-            readonly oldArmour: number;
-        }
-        /**
-         * @remarks The seat indexes start with 1 (driver seat).
-         */
-        interface PlayerEnteredVehicleEventContext extends shared.Events.EventContext {
-            readonly player: Player;
-            readonly vehicle: Vehicle;
-            readonly seat: number;
-        }
-        /**
-         * @remarks The seat indexes start with 1 (driver seat).
-         */
-        interface PlayerVehicleEnteringEventContext extends shared.Events.EventContext {
-            readonly player: Player;
-            readonly vehicle: Vehicle;
-            readonly seat: number;
-        }
-        /**
-         * @remarks The seat indexes start with 1 (driver seat).
-         */
-        interface PlayerVehicleLeftEventContext extends shared.Events.EventContext {
-            readonly player: Player;
-            readonly vehicle: Vehicle;
-            readonly seat: number;
-        }
-        /**
-         * @remarks The seat indexes start with 1 (driver seat).
-         */
-        interface PlayerVehicleSeatChangeEventContext extends shared.Events.EventContext {
-            readonly player: Player;
-            readonly vehicle: Vehicle;
-            readonly oldSeat: number;
-            readonly newSeat: number;
-        }
-        interface PlayerWeaponChangeEventContext extends shared.Events.EventContext {
-            readonly player: Player;
-            readonly oldWeapon: number;
-            readonly newWeapon: number;
-        }
-        interface PlayerRequestControlEventContext extends shared.Events.EventContext {
-            readonly player: Player;
-            readonly target: Entity | null;
-        }
-        interface PlayerInteriorChangeEventContext extends shared.Events.EventContext {
-            readonly player: Player;
-            readonly oldInterior: number;
-            readonly newInterior: number;
-        }
-        interface PlayerDimensionChangeEventContext extends shared.Events.EventContext {
-            readonly player: Player;
-            readonly oldDimension: number;
-            readonly newDimension: number;
-        }
-        interface ColshapeEventContext extends shared.Events.EventContext {
-            readonly entity: Entity;
-            readonly colShape: ColShape;
-            readonly state: boolean;
-        }
-        interface EntityColShapeEventContext extends shared.Events.EventContext {
-            readonly entity: Entity;
-            readonly colShape: ColShape;
-        }
-        interface EntityCheckpointEventContext extends shared.Events.EventContext {
-            readonly entity: Entity;
-            readonly colShape: Checkpoint;
-        }
-        interface WeaponDamageEventContext extends shared.Events.EventContext {
-            readonly source: Player;
-            readonly target: Entity;
-            readonly weaponHash: number;
-            readonly damage: number;
-            readonly offset: shared.Vector3;
-            readonly bodyPart: shared.Enums.BodyPart;
-            setDamageValue(damage: number): void;
-        }
-        interface ExplosionEventContext extends shared.Events.EventContext {
-            readonly source: Player;
-            readonly type: shared.Enums.ExplosionType;
-            readonly pos: shared.Vector3;
-            readonly fx: number;
-            readonly target: Entity | null;
-        }
-        interface FireEventContext extends shared.Events.EventContext {
-            readonly player: Player;
-            readonly fires: Array<IFireInfo>;
-        }
-        interface StartProjectileEventContext extends shared.Events.EventContext {
-            readonly player: Player;
-            readonly pos: shared.Vector3;
-            readonly dir: shared.Vector3;
-            readonly ammoHash: number;
-            readonly weaponHash: number;
-        }
-        interface VehicleDestroyEventContext extends shared.Events.EventContext {
-            vehicle: Vehicle;
-        }
-        interface VehicleAttachEventContext extends shared.Events.EventContext {
-            vehicle: Vehicle;
-            attachedVehicle: Vehicle;
-        }
-        interface VehicleDetachEventContext extends shared.Events.EventContext {
-            vehicle: Vehicle;
-            detachedVehicle: Vehicle;
-        }
-        interface VehicleDamageEventContext extends shared.Events.EventContext {
-            vehicle: Vehicle;
-            attacker: Entity | null;
-            bodyHealthDamage: number;
-            additionalBodyHealthDamage: number;
-            engineHealthDamage: number;
-            petrolTankDamage: number;
-            weaponHash: number;
-        }
-        interface VehicleSirenEventContext extends shared.Events.EventContext {
-            vehicle: Vehicle;
-            state: boolean;
-        }
+    export function setMaxStreamingPeds(limit: number): void;
+    export function setMaxStreamingObjects(limit: number): void;
+    export function setMaxStreamingVehicles(limit: number): void;
+    export function getStreamerThreadCount(): number;
+    export function setStreamerThreadCount(count: number): void;
+    export function getMigrationThreadCount(): number;
+    export function getSyncSendThreadCount(): number;
+    export function getSyncReceiveThreadCount(): number;
+    export function setMigrationThreadCount(count: number): void;
+    export function setSyncSendThreadCount(count: number): void;
+    export function setSyncReceiveThreadCount(count: number): void;
+    export function getStreamingTickRate(): number;
+    export function getMigrationTickRate(): number;
+    export function getColShapeTickRate(): number;
+    export function setStreamingTickRate(rate: number): void;
+    export function setMigrationTickRate(rate: number): void;
+    export function setColShapeTickRate(rate: number): void;
+    export function getMigrationDistance(): number;
+    export function setMigrationDistance(distance: number): void;
 
-        export const onPlayerConnect: shared.Events.Event<PlayerConnectEventContext>;
-        export const onPlayerConnectDenied: shared.Events.Event<PlayerConnectDeniedEventContext>;
-        export const onPlayerDisconnect: shared.Events.Event<PlayerDisconnectEventContext>;
+    interface SharedBlipCreateOptions {
+        global: boolean;
+        targets?: Array<Entity>;
 
-        export const onPlayerDamage: shared.Events.Event<PlayerDamageEventContext>;
-        export const onPlayerDeath: shared.Events.Event<PlayerDeathEventContext>;
-        export const onPlayerHeal: shared.Events.Event<PlayerHealEventContext>;
-
-        export const onPlayerEnteredVehicle: shared.Events.Event<PlayerEnteredVehicleEventContext>;
-        export const onPlayerVehicleEntering: shared.Events.Event<PlayerVehicleEnteringEventContext>;
-        export const onPlayerVehicleLeft: shared.Events.Event<PlayerVehicleLeftEventContext>;
-        export const onPlayerVehicleSeatChange: shared.Events.Event<PlayerVehicleSeatChangeEventContext>;
-
-        export const onPlayerWeaponChange: shared.Events.Event<PlayerWeaponChangeEventContext>;
-
-        export const onPlayerRequestControl: shared.Events.Event<PlayerRequestControlEventContext>;
-
-        export const onPlayerInteriorChange: shared.Events.Event<PlayerInteriorChangeEventContext>;
-        export const onPlayerDimensionChange: shared.Events.Event<PlayerDimensionChangeEventContext>;
-
-        export const onColshapeEvent: shared.Events.Event<ColshapeEventContext>;
-        export const onEntityColShapeEnter: shared.Events.Event<EntityColShapeEventContext>;
-        export const onEntityColShapeLeave: shared.Events.Event<EntityColShapeEventContext>;
-        export const onEntityCheckpointEnter: shared.Events.Event<EntityCheckpointEventContext>;
-        export const onEntityCheckpointLeave: shared.Events.Event<EntityCheckpointEventContext>;
-
-        export const onWeaponDamage: shared.Events.Event<WeaponDamageEventContext>;
-        export const onExplosion: shared.Events.Event<ExplosionEventContext>;
-        export const onFire: shared.Events.Event<FireEventContext>;
-        export const onStartProjectile: shared.Events.Event<StartProjectileEventContext>;
-
-        export const onServerStarted: shared.Events.Event<shared.Events.EventContext>;
-
-        export const onVehicleDestroy: shared.Events.Event<VehicleDestroyEventContext>;
-        export const onVehicleAttach: shared.Events.Event<VehicleAttachEventContext>;
-        export const onVehicleDetach: shared.Events.Event<VehicleDetachEventContext>;
-        export const onVehicleDamage: shared.Events.Event<VehicleDamageEventContext>;
-        export const onVehicleSiren: shared.Events.Event<VehicleSirenEventContext>;
-
-        export const onPlayerScriptEvent: shared.Events.Event<ClientScriptEventContext>;
-
-        export function onPlayer<Args extends Array<any> = unknown[], PlayerEx extends Player = Player>(eventName: string, callback: (context: { player: PlayerEx; args: Args }) => void): void;
-        export function onPlayer<PlayerEx extends Player = Player, Args extends Array<any> = unknown[]>(eventName: string, callback: (context: { player: PlayerEx; args: Args }) => void): void;
-
-        export const onRemote: shared.Events.ScriptEvent<ClientScriptEventContext>;
-
-        export function emitPlayers(players: Player[], eventName: string, ...args: any[]): void;
-        export function emitPlayersUnreliable(players: Player[], eventName: string, ...args: any[]): void;
-        export function emitAllPlayers(eventName: string, ...args: any[]): void;
-        export function emitAllPlayersUnreliable(eventName: string, ...args: any[]): void;
+        blipType: altShared.Enums.BlipType;
     }
 
-    export interface BoneInfo {
-        get id(): number;
-        get index(): number;
-        get name(): string;
+    type BlipCreateOptions = SharedBlipCreateOptions &
+        (({ blipType: altShared.Enums.BlipType.AREA } & altShared.AreaBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.RADIUS } & altShared.RadiusBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.DESTINATION } & altShared.PointBlipCreateOptions));
+
+    export abstract class Blip extends altShared.Blip {
+        global: boolean;
+        readonly targets: ReadonlyArray<Player>;
+
+        addTarget(target: Player): void;
+        removeTarget(target: Player): void;
+
+        static create(opts: BlipCreateOptions): Blip | null;
     }
 
-    export class PedModelInfo {
-        get hash(): number;
-        get name(): string;
-        get type(): number;
-        get dlcName(): string;
-        get defaultUnarmedWeapon(): string;
-        get movementClipSet(): string;
-        get bones(): ReadonlyArray<BoneInfo>;
-
-        static get(model: string | number): PedModelInfo;
+    export namespace PointBlip {
+        export function create(opts: altShared.PointBlipCreateOptions & SharedBlipCreateOptions): Blip | null;
     }
 
-    export class VehicleModelInfo {
-        get model(): number;
-        get title(): string;
-        get modelType(): shared.Enums.VehicleModelType;
-        get wheelsCount(): number;
-        get hasArmoredWindows(): boolean;
-        get primaryColor(): number;
-        get secondaryColor(): number;
-        get pearlColor(): number;
-        get wheelsColor(): number;
-        get interiorColor(): number;
-        get dashboardColor(): number;
-        get modkits(): ReadonlyArray<number>;
-        get extras(): number;
-        get defaultExtras(): number;
-        get hasAutoAttachTrailer(): boolean;
-        get bones(): ReadonlyArray<BoneInfo>;
-
-        doesExtraExist(extraId: number);
-        isExtraDefault(extraId: number);
-
-        static get(model: string | number): VehicleModelInfo;
+    export namespace AreaBlip {
+        export function create(opts: altShared.AreaBlipCreateOptions & SharedBlipCreateOptions): Blip | null;
     }
 
-    export interface BaseObject extends shared.BaseObject {}
-
-    export class BaseObject {}
-
-    export interface WorldObject extends BaseObject, shared.WorldObject {
-        set pos(pos: shared.Vector3);
-        dimension: number;
+    export namespace RadiusBlip {
+        export function create(opts: altShared.RadiusBlipCreateOptions & SharedBlipCreateOptions): Blip | null;
     }
 
-    export class WorldObject {}
+    export abstract class Checkpoint extends altShared.Checkpoint {
+        readonly streamSyncedMeta: Record<string, unknown>;
+    }
 
-    export interface Entity extends WorldObject, shared.Entity {
-        // Inheritance
-        set pos(pos: shared.Vector3);
-        // Inheritance End
+    export abstract class ColShape extends WorldObject {
+        readonly colShapeType: altShared.Enums.ColShapeType;
+        playersOnly: boolean;
 
-        setNetOwner(player: Player, disableMigration?: boolean): void;
-        resetNetOwner(disableMigration?: boolean): void;
+        isEntityIn(entity: Entity): boolean;
+        isEntityIdIn(id: number): boolean;
+        isPointIn(point: altShared.Vector3): boolean;
+    }
 
-        attachTo(entity: Entity, entityBone: number | string, ownBone: number | string, pos: shared.Vector3, rot: shared.Vector3, enableCollisions: boolean, noFixedRotation: boolean): void;
-        detach(): void;
-
-        set visible(visible: boolean);
+    export abstract class Entity extends altShared.Entity {
+        visible: boolean;
         streamed: boolean;
         frozen: boolean;
         collision: boolean;
+        readonly timestamp: number;
+
+        readonly syncedMeta: Record<string, unknown>;
+        readonly streamSyncedMeta: Record<string, unknown>;
+
+        setNetOwner(player: Player, disableMigration: boolean): void;
+        resetNetOwner(disableMigration: boolean): void;
+
+        attachTo(target: Entity, otherBoneId: number | string, boneId: number | string, pos: altShared.Vector3, rot: altShared.Vector3, collision: boolean, noFixedRot: boolean): void;
+        detach(): void;
     }
 
-    export class Entity {
-        static getByID(id: number): Entity | null;
+    export class Metric {
+        readonly name: string;
+        value: number;
+        readonly valid: boolean;
+
+        constructor(name: string, type?: altShared.Enums.MetricType);
+
+        begin(): void;
+        end(): void;
+        destroy(): void;
     }
 
-    export interface Ped extends Entity, shared.Ped {
-        // Inheritance
-        set pos(pos: shared.Vector3);
-        set visible(visible: boolean);
-        // Inheritance End
-
-        set health(health: number);
-        set maxHealth(maxHealth: number);
-        set armour(armour: number);
-        set currentWeapon(weapon: number);
+    interface ObjectCreateOptions {
+        model: number | string;
+        pos: altShared.Vector3;
+        rot?: altShared.Vector3; // default: { x: 0, y: 0, z: 0 }
+        alpha?: number; // default: 255
+        textureVariation?: number; // default: 0
+        lodDistance?: number; // default: 100
     }
 
-    export class Ped {
-        static create(args: PedCreateArgs): Ped;
+    export abstract class Object extends altShared.Object {
+        alpha: number;
+        textureVariation: number;
+        lodDistance: number;
+
+        activatePhysics(): void;
+        placeOnGroundProperly(): void;
+
+        static create(opts: ObjectCreateOptions): Object | null;
+    }
+
+    interface PedCreateOptions {
+        model: number | string;
+        pos: altShared.Vector3;
+        heading: number;
+    }
+
+    export abstract class Ped extends altShared.Ped {
+        health: number;
+        maxHealth: number;
+        armour: number;
+        currentWeapon: number;
+
+        static create(opts: PedCreateOptions): Ped | null;
         static getByID(id: number): Ped | null;
     }
 
-    export interface Player extends Entity, shared.Player {
-        // Inheritance
-        set pos(pos: shared.Vector3);
-        set visible(visible: boolean);
-        // Inheritance End
+    export class Player extends altShared.Player {
+        readonly ip: string;
+        readonly socialId: number;
+        readonly hwidHash: number;
+        readonly hwidExHash: number;
 
-        get ip(): string;
-        get socialId(): number;
-        get hwidHash(): number;
-        get hwidExHash(): number;
-        get isConnected(): boolean;
-        get ping(): number;
-        get authToken(): string;
-        get discordId(): number;
+        readonly isConnected: boolean;
+        readonly authToken: string;
+        readonly discordId: number;
 
-        set model(model: number | string);
-        set armour(armour: number);
-        set maxArmour(maxArmour: number);
-        set currentWeapon(weapon: number);
-        set health(health: number);
-        set maxHealth(maxHealth: number);
+        get model(): number;
+        set model(value: number | string);
+
+        armour: number;
+        maxArmour: number;
+
+        get currentWeapon(): number;
+        set currentWeapon(value: number | string);
+
+        health: number;
+        maxHealth: number;
         invincible: boolean;
-        headBlendData: shared.Appearance.HeadblendData;
-        eyeColor: number;
-        get weapons(): shared.WeaponInfo;
-        get interiorLocation(): number;
-        get lastDamagedBodyPart(): number;
-        sendNames: boolean;
-        get cloudAuthHash(): string;
 
-        emit(eventName: string, ...args: any[]): void;
-        emitUnreliable(eventName: string, ...args: any[]): void;
-        spawn(position: shared.Vector3, timeout?: number): void;
+        headBlendData: altShared.Appearance.HeadBlendData;
+        eyeColor: number;
+        hairColor: number;
+        hairHighlightColor: number;
+
+        readonly weapons: ReadonlyArray<altShared.WeaponInfo>;
+
+        readonly interiorLocation: number;
+        readonly lastDamagedBodyPart: number;
+        sendNames: boolean;
+
+        readonly cloudAuthHash: string;
+        netOwnershipDisabled: boolean;
+
+        emit(event: string, ...args: unknown[]): void;
+        emitUnreliable(event: string, ...args: unknown[]): void;
+        spawn(pos: altShared.Vector3, delay?: number): void;
         despawn(): void;
-        setWeaponTintIndex(weaponHash: number, tintIndex: number): void;
-        addWeaponComponent(weaponHash: number, componentHash: number): void;
-        removeWeaponComponent(weaponHash: number, componentHash: number): void;
+        setWeaponTintIndex(weaponHash: number | string, tintIndex: number): void;
+        addWeaponComponent(weaponHash: number | string, componentHash: number | string): void;
+        removeWeaponComponent(weaponHash: number | string, componentHash: number | string): void;
         clearBloodDamage(): void;
-        giveWeapon(weaponHash: number, ammo: number, selectWeapon?: boolean): void;
-        removeWeapon(weaponHash: number): void;
+        giveWeapon(weaponHash: number | string, ammo: number, selectWeapon?: boolean): void;
+        removeWeapon(weaponHash: number | string): void;
         removeAllWeapons(): void;
         setDateTime(day: number, month: number, year: number, hour: number, minute: number, second: number): void;
-        setWeather(weatherId: number): void;
-        kick(reason: string): void;
-        getClothes(component: number): shared.Appearance.Clothing;
-        setClothes(component: number, drawable: number, texture: number, palette: number): void;
-        getDlcClothes(component: number): shared.Appearance.DlcClothing;
-        setDlcClothes(component: number, drawable: number, texture: number, palette: number, dlcHash: number): void;
-        getProps(component: number): shared.Appearance.Prop;
-        setProps(component: number, drawable: number, texture: number): void;
-        getDlcProps(component: number): shared.Appearance.DlcProp;
-        setDlcProps(componend: number, drawable: number, texture: number, dlcHash: number): void;
-        clearProps(component: number): void;
-        isEntityInStreamingRange(entityId: number): void;
-        setIntoVehicle(vehicle: shared.Vehicle, seat: number): void;
+        setWeather(weather: number): void;
+
+        kick(reason?: string): void;
+
+        getClothes(componentId: number): altShared.Appearance.Clothing;
+        setClothes(componentId: number, drawable: number, texture: number, palette: number): boolean;
+        getDlcClothes(componentId: number): altShared.Appearance.DlcClothing;
+        setDlcClothes(componentId: number, drawable: number, texture: number, palette: number, dlc: number): boolean;
+        getProps(componentId: number): altShared.Appearance.Prop;
+        setProps(componentId: number, drawable: number, texture: number): boolean;
+        getDlcProps(componentId: number): altShared.Appearance.DlcProp;
+        setDlcProps(componentId: number, drawable: number, texture: number, dlc: number): boolean;
+        clearProps(componentId: number): void;
+
+        // TODO (xLuxy): Add Entity as argument
+        isEntityInStreamingRange(entityId: number): boolean;
+        setIntoVehicle(vehicle: Vehicle, seat: number): void;
         playAmbientSpeech(speechName: string, speechParam: string, speechDictHash: number): void;
-        setHeadOverlay(overlayId: number, index: number, opacity: number): void;
-        removeHeadOverlay(overlay: number): void;
-        setHeadOverlayColor(overlay: number, colorType: number, colorIndex: number, secondColorIndex: number): void;
-        getHeadOverlay(): shared.Appearance.HeadOverlay;
-        setFaceFeature(index: number, scale: number);
-        getFaceFeatureScale(index: number): number;
-        removeFaceFeature(index: number): void;
-        setHeadBlendPaletteColor(color: shared.RGBA): void;
-        setHeadBlendPaletteColor(r: number, g: number, b: number, a: number): void;
-        getHeadBlendPaletteColor(id: number): shared.RGBA;
-        playAnimation(animDict: string, animName: string, blendInSpeed?: number, blendOutSpeed?: number, duration?: number, flag?: number, playbackRate?: number, lockX?: boolean, lockY?: boolean, lockZ?: boolean): void;
+
+        setHeadOverlay(overlayId: number, index: number, opacity: number): boolean;
+        removeHeadOverlay(overlayId: number): boolean;
+        setHeadOverlayColor(overlayId: number, colorType: number, colorIndex: number, secondColorIndex: number): boolean;
+
+        getHeadOverlay(overlayId: number): altShared.Appearance.HeadOverlay | undefined;
+
+        setFaceFeature(index: number, scale: number): boolean;
+        getFaceFeature(index: number): number;
+        removeFaceFeature(index: number): boolean;
+
+        setHeadBlendPaletteColor(id: number, colorOrRed: altShared.RGBA | number, green?: number, blue?: number): boolean;
+        getHeadBlendPaletteColor(id: number): altShared.RGBA;
+
+        playAnimation(animDict: string, animName: string, blendInSpeed?: number, blendOutSpeed?: number, duration?: number, flag?: number, playbackRate?: number, lockX?: boolean, lockY?: boolean, lockZ?: number): void;
         clearTasks(): void;
+
+        hasWeapon(weaponHash: number | string): boolean;
+        getAmmo(ammoHash: number | string): number | undefined;
+        setAmmo(ammoHash: number | string, ammo: number): void;
+        getWeaponAmmo(weaponHash: number | string): number | undefined;
+        setWeaponAmmo(weaponHash: number | string, ammo: number): void;
+
+        getAmmoSpecialType(ammoHash: number | string): number;
+        setAmmoSpecialType(ammoHash: number | string, specialType: altShared.Enums.AmmoSpecialType): void;
+
+        getAmmoFlags(ammoHash: number | string): altShared.AmmoData;
+        setAmmoFlags(flags: altShared.AmmoData & { ammoHash: string }): void;
+        getAmmoMax(ammoHash: number | string): number | undefined;
+        setAmmoMax(ammoHash: number | string, ammo: number): void;
+        getAmmoMax50(ammoHash: number | string): number | undefined;
+        setAmmoMax50(ammoHash: number | string, ammo: number): void;
+        getAmmoMax100(ammoHash: number | string): number | undefined;
+        setAmmoMax100(ammoHash: number | string, ammo: number): void;
+        addDecoration(collection: number | string, overlay: number | string): void;
+        removeDecoration(collection: number | string, overlay: number | string): void;
+        clearDecorations(): void;
+        getDecorations(): ReadonlyArray<{ collection: number; overlay: number }>;
+        playScenario(name: string): void;
+        requestCloudID(): Promise<string>;
+
+        readonly localMeta: Record<string, unknown>;
     }
 
-    export class Player {
-        static getByID(id: number): Player | null;
+    export abstract class Resource extends altShared.Resource {
+        readonly clientType: string;
+        readonly clientMain: string;
+        readonly clientFiles: ReadonlyArray<string>;
+
+        getMatchedFiles(pattern: string): ReadonlyArray<string>;
+
+        static start(resourceName: string): void;
+        static stop(resourceName: string): void;
+        static restart(resourceName: string): void;
     }
 
-    interface VehicleCreateArgs {
+    interface VehicleCreateOptions {
         model: number | string;
-        pos: shared.Vector3;
-        rot?: shared.Vector3;
+        pos: altShared.Vector3;
+        rot?: altShared.Vector3; // default: { x: 0, y: 0, z: 0 }
     }
 
-    export interface Vehicle extends Entity, shared.Vehicle {
-        // Inheritance
-        set pos(pos: shared.Vector3);
-        set visible(visible: boolean);
-        // Inheritance End
+    export abstract class Vehicle extends altShared.Vehicle {
+        readonly neon: altShared.NeonState;
 
-        set modKit(modKit: number);
-        set primaryColor(color: number);
-        set customPrimaryColor(color: shared.RGBA);
-        set secondaryColor(color: number);
-        set customSecondaryColor(color: shared.RGBA);
-        set pearlColor(color: number);
-        set wheelColor(color: number);
-        set interiorColor(color: number);
-        set dashboardColor(color: number);
-        set tireSmokeColor(color: shared.RGBA);
-        set customTires(state: boolean);
-        set specialDarkness(specialDarkness: number);
-        set numberplateIndex(index: number);
-        set numberplateText(text: string);
-        set windowTint(tint: number);
-        set dirtLevel(dirtLevel: number);
-        set neonColor(neonColor: shared.RGBA);
-        set livery(livery: number);
-        set roofLivery(roofLivery: number);
-        set appearanceDataBase64(appearanceData: string);
-        set engineOn(state: boolean);
-        set headlightColor(color: number);
-        set radioStationIndex(radioStation: number);
-        set isSirenActive(state: boolean);
-        set lockState(state: shared.Enums.VehicleLockState);
-        set roofState(state: number);
-        set lightsMultiplier(multiplier: number);
-        set engineHealth(health: number);
-        set petrolTankHealth(health: number);
-        set bodyHealth(health: number);
-        set engineHeabodyAdditionalHealthlth(health: number);
-        set manualEngineControl(state: boolean);
-        set damageDataBase64(damageData: string);
-        set scriptDataBase64(scriptrData: string);
-        set gameStateDataBase64(gameStateData: string);
-        set healthDataBase64(healthData: string);
-        get attached(): Vehicle;
-        get attachedTo(): Vehicle;
+        modKit: number;
+        primaryColor: number;
+        customPrimaryColor: altShared.RGBA;
+        secondaryColor: number;
+        customSecondaryColor: altShared.RGBA;
+        pearlColor: number;
+        wheelColor: number;
+        interiorColor: number;
+        dashboardColor: number;
+        tireSmokeColor: altShared.RGBA;
+        customTires: boolean;
+        specialDarkness: number;
+        numberplateIndex: number;
+        numberplateText: string;
+        windowTint: number;
+        dirtLevel: number;
+        neonColor: altShared.RGBA;
+        livery: number;
+        roofLivery: number;
+        appearanceDataBase64: string;
+        engineOn: boolean;
+        headlightColor: number;
+        radioStationIndex: number;
+        sirenActive: boolean;
+        lockState: number;
+        roofState: number;
+        lightsMultiplier: number;
+        engineHealth: number;
+        petrolTankHealth: number;
+        bodyHealth: number;
+        bodyAdditionalHealth: number;
+        manualEngineControl: number;
+        damageDataBase64: string;
+        scriptDataBase64: string;
+        gameStateDataBase64: string;
+        healthDataBase64: string;
+        attached?: Vehicle;
+        attachedTo?: Vehicle;
         driftMode: boolean;
+
+        isMissionTrain: boolean;
+        trainTrackId: number;
+        trainEngine?: Vehicle;
+        trainConfigIndex: number;
+        hasTrainEngine: boolean;
+        isTrainCaboose: boolean;
+        trainDirection: boolean;
+        hasTrainPassengerCarriages: boolean;
+        trainCruiseSpeed: number;
+        trainCarriageConfigIndex: number;
+        trainLinkedToBackward?: Vehicle;
+        trainLinkedToForward?: Vehicle;
+        trainUnk1: boolean;
+        trainUnk2: boolean;
+        trainUnk3: boolean;
+
         boatAnchorActive: boolean;
         lightState: number;
-        get hasTimedExplosion(): boolean;
-        get timedExplosionCulprit(): Player;
-        get timedExplosionTime(): number;
+
+        readonly hasTimedExplosion: boolean;
+        readonly timedExplosionCulprit?: Player;
+        readonly timedExplosionTime: number;
+
         towingDisabled: boolean;
         rocketRefuelSpeed: number;
         counterMeasureCount: number;
         scriptMaxSpeed: number;
         hybridExtraActive: boolean;
         hybridExtraState: number;
-        quaternion: shared.Quaternion;
+
+        quaternion: altShared.Quaternion;
+        readonly isHornActive: boolean;
+        readonly accelerationLevel: number;
+        readonly brakeLevel: number;
 
         repair(): void;
-        setMod(category: number, id: number): void;
+        setMod(category: number, id: number): boolean;
         setWheels(type: number, variation: number): void;
-        setDoorState(doorId: number, state: boolean): void;
+        setDoorState(doorId: number, state: number): void;
         setWindowOpened(windowId: number, state: boolean): void;
         setWheelBurst(wheelId: number, state: boolean): void;
         setWheelDetached(wheelId: number, state: boolean): void;
         setWheelOnFire(wheelId: number, state: boolean): void;
         setWheelHealth(wheelId: number, health: number): void;
         setWheelFixed(wheelId: number): void;
-        setPartDamageLevel(partId: number, damageLevel: number): void;
+
+        setPartDamageLevel(partId: number, damage: number): void;
         setPartBulletHoles(partId: number, shootsCount: number): void;
         setLightDamaged(lightId: number, isDamaged: boolean): void;
         setWindowDamaged(windowId: number, isDamaged: boolean): void;
-        setSpecialLightDamaged(lightId: number, isDamaged: boolean): void;
-        setArmoredWindowHealth(windowId: number, health: number);
-        setArmoredWindowShootCount(windowId: number, shootsCount: number): void;
+        setSpecialLightDamaged(specialLightId: number, isDamaged: boolean): void;
+        setArmoredWindowHealth(windowId: number, health: number): void;
+        setArmoredWindowShootCount(windowId: number, count: number): void;
         setBumperDamageLevel(bumperId: number, damageLevel: number): void;
-        setSearchLight(state: boolean, spottedEntity: Entity): void;
+        setSearchLight(state: number, spottedEntity: Entity): boolean;
         setTimedExplosion(state: boolean, culprit: Player, time: number): void;
-        getWeaponCapacity(index: number): void;
+        getWeaponCapacity(index: number): number;
         setWeaponCapacity(index: number, state: number): void;
+
+        static create(opts: VehicleCreateOptions): Vehicle | null;
     }
 
-    export class Vehicle extends shared.Vehicle {
-        static create(args: VehicleCreateArgs): Vehicle;
-        static getByID(id: number): Vehicle | null;
+    export abstract class VirtualEntity extends altShared.VirtualEntity {
+        readonly streamSyncedMeta: Record<string, unknown>;
     }
 
-    export interface Blip extends BaseObject, shared.Blip {}
+    export abstract class VirtualEntityGroup extends altShared.VirtualEntityGroup {}
 
-    export class Blip extends shared.Blip {}
-
-    interface PointBlipCreateArgs {
-        pos?: shared.Vector3;
-        entity?: Entity;
-    }
-    export namespace PointBlip {
-        export function create(args: PointBlipCreateArgs): Blip;
+    interface VoiceChannelCreateOptions {
+        spatial: boolean;
+        maxDistance?: number;
     }
 
-    interface AreaBlipCreateArgs {
-        pos: shared.Vector3;
-        scale: shared.Vector2;
-    }
-    export namespace AreaBlip {
-        export function create(args: AreaBlipCreateArgs): Blip;
-    }
+    export abstract class VoiceChannel extends altShared.VoiceChannel {
+        readonly isSpatial: boolean;
+        readonly maxDistance: number;
 
-    interface RadiusBlipCreateArgs {
-        pos: shared.Vector3;
-        radius: number;
-    }
-    export namespace RadiusBlip {
-        export function create(args: RadiusBlipCreateArgs): Blip;
-    }
-
-    interface NetworkObjectCreateArgs {
-        model: number | string;
-        pos: shared.Vector3;
-        rot?: shared.Vector3;
-        alpha?: number;
-        textureVariation?: number;
-        lodDistance?: number;
-    }
-
-    export interface NetworkObject extends Entity, shared.NetworkObject {
-        // Inheritance
-        set pos(pos: shared.Vector3);
-        set visible(visible: boolean);
-        // Inheritance End
-
-        set alpha(alpha: number);
-        set textureVariation(textureVariation: number);
-        set lodDistance(lodDistance: number);
-
-        activatePhysics(): void;
-        placeOnGroundProperly(): void;
-    }
-
-    export class NetworkObject extends shared.NetworkObject {
-        static create(args: NetworkObjectCreateArgs): NetworkObject;
-        static getByID(id: number): NetworkObject | null;
-    }
-
-    interface PedCreateArgs {
-        model: number | string;
-        pos: shared.Vector3;
-        rot: shared.Vector3;
-    }
-
-    export interface IFireInfo {
-        readonly pos: shared.Vector3;
-        readonly weaponHash: number;
-    }
-
-    export interface ColShape extends WorldObject, shared.ColShape {
-        get colshapeType(): shared.Enums.ColShapeType;
-        get playersOnly(): boolean;
-
-        isEntityIn(entity: Entity): boolean;
-        isEntityIdIn(entityID: number): boolean;
-        isPointIn(position: shared.Vector3): boolean;
-    }
-
-    export class ColShape {}
-
-    export interface Checkpoint extends ColShape, shared.Checkpoint {}
-
-    export class Checkpoint {}
-
-    export const enum ConnectDeniedReason {
-        WRONG_VERSION,
-        WRONG_BRANCH,
-        DEBUG_NOT_ALLOWED,
-        WRONG_PASSWORD,
-        WRONG_CDN_URL
-    }
-
-    export interface VirtualEntityGroup extends BaseObject, shared.VirtualEntityGroup {}
-
-    export class VirtualEntityGroup {}
-
-    export interface VirtualEntity extends WorldObject, shared.VirtualEntity {}
-
-    export class VirtualEntity {}
-
-    export class VoiceChannel extends BaseObject {
-        get id(): number;
-        get isSpatial(): boolean;
-        get maxDistance(): number;
-
-        get players(): ReadonlyArray<Player>;
-        get playerCount(): number;
+        readonly players: ReadonlyArray<Player>;
+        readonly playerCount: number;
 
         hasPlayer(player: Player): boolean;
         addPlayer(player: Player): void;
         removePlayer(player: Player): void;
+
         isPlayerMuted(player: Player): boolean;
         mutePlayer(player: Player): void;
         unmutePlayer(player: Player): void;
+
+        static create(opts: VoiceChannelCreateOptions): VoiceChannel | null;
+    }
+
+    export abstract class WorldObject extends altShared.WorldObject {
+        dimension: number;
+        pos: altShared.Vector3;
+    }
+
+    export interface BoneInfo {
+        id: number;
+        index: number;
+        name: string;
+    }
+
+    export interface PedModelInfo {
+        hash: number;
+        name: string;
+        type: string;
+        dlcName: string;
+        defaultUnarmedWeapon: string;
+        movementClipSet: string;
+        bones: BoneInfo[];
+    }
+
+    export interface VehicleModelInfo {
+        model: number;
+        title: string;
+        modelType: altShared.Enums.VehicleModelType;
+        wheelsCount: number;
+        hasArmoredWindows: boolean;
+        primaryColor: number;
+        secondaryColor: number;
+        pearlColor: number;
+        wheelsColor: number;
+        interiorColor: number;
+        dashboardColor: number;
+        modkits: number[];
+        extras: number;
+        defaultExtras: number;
+        hasAutoAttachTrailer: boolean;
+        bones: BoneInfo[];
+        canAttachCars: boolean;
+
+        doesExtraExist(extraId: number): boolean | undefined;
+        isExtraDefault(extraId: number): boolean | undefined;
+    }
+
+    export interface WeaponModelInfo {
+        hash: number;
+        name: string;
+        modelName: string;
+        modelHash: number;
+        ammoTypeHash: number;
+        ammoType: string;
+        ammoModelHash: number;
+        ammoModelName: string;
+        defaultMaxAmmoMp: number;
+        skillAbove50MaxAmmoMp: number;
+        maxSkillMaxAmmoMp: number;
+        bonusMaxAmmoMp: number;
+    }
+
+    export namespace PedModelInfo {
+        export function get(modelHash: number | string): PedModelInfo | undefined;
+    }
+
+    export namespace VehicleModelInfo {
+        export function get(modelHash: number | string): VehicleModelInfo | undefined;
+    }
+
+    export namespace WeaponModelInfo {
+        export function get(weaponHash: number | string): WeaponModelInfo | undefined;
+    }
+
+    export namespace Events {
+        export let rawEmitEnabled: boolean;
+        export function emit(eventName: string, ...args: unknown[]): void;
+
+        export function emitPlayers(players: Player[], eventName: string, ...args: unknown[]): void;
+        export function emitPlayersUnreliable(players: Player[], eventName: string, ...args: unknown[]): void;
+
+        export function emitAllPlayers(eventName: string, ...args: unknown[]): void;
+        export function emitAllPlayersUnreliable(eventName: string, ...args: unknown[]): void;
+
+        // Server related events
+        export function onServerStarted(callback: GenericEventCallback): void;
+
+        // TODO (xLuxy): Not implemented
+        export function onConnectionQueueAdd(callback: GenericEventCallback<ConnectionQueueEventParameters>): void;
+        // TODO (xLuxy): Not implemented
+        export function onConnectionQueueRemove(callback: GenericEventCallback<ConnectionQueueEventParameters>): void;
+
+        // Player related events
+        export function onPlayerConnect(callback: GenericPlayerEventCallback<PlayerConnectEventParameters>): void;
+        export function onPlayerConnectDenied(callback: GenericEventCallback<PlayerConnectDeniedEventParameters>): void;
+        export function onPlayerDisconnect(callback: GenericPlayerEventCallback<PlayerDisconnectEventParameters>): void;
+        export function onPlayerDamage(callback: GenericPlayerEventCallback<PlayerDamageEventParameters>): void;
+        export function onPlayerDeath(callback: GenericPlayerEventCallback<PlayerDeathEventParameters>): void;
+        export function onPlayerHeal(callback: GenericPlayerEventCallback<PlayerHealEventParameters>): void;
+        export function onPlayerControlRequest(callback: GenericPlayerEventCallback<PlayerControlRequestEventParameters>): void;
+        export function onPlayerInteriorChange(callback: GenericPlayerEventCallback<PlayerInteriorChangeEventParameters>): void;
+        export function onPlayerDimensionChange(callback: GenericPlayerEventCallback<PlayerDimensionChangeEventParameters>): void;
+        export function onPlayerWeaponChange(callback: GenericPlayerEventCallback<PlayerWeaponChangeEventParameters>): void;
+        export function onPlayerSyncedSceneRequest(callback: GenericEventCallback<PlayerSyncedSceneRequestEventParameters>): void;
+        export function onPlayerSyncedSceneStart(callback: GenericPlayerEventCallback<PlayerSyncedSceneStartEventParameters>): void;
+        export function onPlayerSyncedSceneStop(callback: GenericPlayerEventCallback<PlayerSyncedSceneStopEventParameters>): void;
+        export function onPlayerSyncedSceneUpdate(callback: GenericPlayerEventCallback<PlayerSyncedSceneUpdateEventParameters>): void;
+        export function onPlayerAnimationChange(callback: GenericPlayerEventCallback<PlayerAnimationChangeEventParameters>): void;
+        export function onPlayerEnteredVehicle(callback: GenericPlayerEventCallback<PlayerEnteredVehicleEventParameters>): void;
+        export function onPlayerEnteringVehicle(callback: GenericPlayerEventCallback<PlayerEnteringVehicleEventParameters>): void;
+        export function onPlayerLeftVehicle(callback: GenericPlayerEventCallback<PlayerLeftVehicleEventParameters>): void;
+        export function onPlayerVehicleSeatChange(callback: GenericPlayerEventCallback<PlayerVehicleSeatChangeEventParameters>): void;
+
+        // Vehicle related events
+        export function onVehicleDestroy(callback: GenericEventCallback<VehicleDestroyEventParameters>): void;
+        export function onVehicleAttach(callback: GenericEventCallback<VehicleAttachEventParameters>): void;
+        export function onVehicleDetach(callback: GenericEventCallback<VehicleDetachEventParameters>): void;
+        export function onVehicleDamage(callback: GenericEventCallback<VehicleDamageEventParameters>): void;
+        export function onVehicleSirenStateChange(callback: GenericEventCallback<VehicleSirenStateChangeEventParameters>): void;
+
+        // Voice related events
+        export function onVoiceConnectionCreate(callback: GenericEventCallback<VoiceConnectionEventParameters>): void;
+
+        // SHARED Entity related events
+        export function onBaseObjectCreate(callback: GenericEventCallback<BaseObjectCreateEventParameters>): void;
+        export function onBaseObjectRemove(callback: GenericEventCallback<BaseObjectRemoveEventParameters>): void;
+        export function onNetOwnerChange(callback: GenericEventCallback<NetOwnerChangeEventParameters>): void;
+        export function onWeaponDamage(callback: GenericEventCallback<WeaponDamageEventParameters>): void;
+
+        // SHARED meta related events
+        export function onLocalMetaChange(callback: GenericPlayerEventCallback<LocalMetaChangeEventParameters>): void;
+        export function onSyncedMetaChange(callback: GenericEventCallback<SyncedMetaChangeEventParameters>): void;
+        export function onStreamSyncedMetaChange(callback: GenericEventCallback<StreamSyncedMetaChangeEventParameters>): void;
+        export function onGlobalMetaChange(callback: GenericEventCallback<GlobalMetaChangeEventParameters>): void;
+        export function onGlobalSyncedMetaChange(callback: GenericEventCallback<GlobalSyncedMetaChangeEventParameters>): void;
+
+        // SHARED custom events
+        export function onConsoleCommand(callback: GenericEventCallback<ConsoleCommandEventParameters>): void;
+        export function onError(callback: GenericEventCallback<ErrorEventParameters>): void;
+
+        // Script related events
+        export function onColShapeEvent(callback: GenericEventCallback<ColShapeEventParameters>): void;
+        export function onExplosion(callback: GenericEventCallback<ExplosionEventParameters>): void;
+        export function onFireStart(callback: GenericPlayerEventCallback<FireStartEventParameters>): void;
+        export function onProjectileStart(callback: GenericPlayerEventCallback<ProjectileStartEventParameters>): void;
+        export function onEntityColShapeEnter(callback: GenericEventCallback<EntityColShapeEnterEventParameters>): void;
+        export function onEntityColShapeLeave(callback: GenericEventCallback<EntityColShapeLeaveEventParameters>): void;
+        export function onEntityCheckpointEnter(callback: GenericEventCallback<EntityCheckpointEnterEventParameters>): void;
+        export function onEntityCheckpointLeave(callback: GenericEventCallback<EntityCheckpointLeaveEventParameters>): void;
+
+        // SHARED script related events
+        export function onServerScriptEvent(callback: GenericPlayerEventCallback<ServerScriptEventParameters>): void;
+        export function onPlayerScriptEvent(callback: GenericPlayerEventCallback<PlayerScriptEventParameters>): void;
+
+        // SHARED resource events
+        export function onResourceStart(callback: GenericEventCallback<ResourceStartEventParameters>): void;
+        export function onResourceStop(callback: GenericEventCallback<ResourceStopEventParameters>): void;
+        export function onResourceError(callback: GenericEventCallback<ResourceErrorEventParameters>): void;
+
+        export abstract class ConnectionInfo {
+            readonly name: string;
+            readonly socialId: number;
+            readonly socialName: string;
+            readonly hwidHash: number;
+            readonly hwidExHash: number;
+            readonly authToken: string;
+            readonly debug: boolean;
+            readonly branch: string;
+            readonly build: number;
+            readonly cdnUrl: string;
+            readonly passwordHash: number;
+            readonly ip: string;
+            readonly discordUserId: number;
+            readonly cloudAuthHash: number;
+
+            readonly isAccepted: boolean;
+            text: string;
+
+            accept(sendNames?: boolean): void;
+            decline(reason: string): void;
+        }
+
+        interface ConnectionQueueEventParameters {
+            connectionInfo: ConnectionInfo;
+        }
+
+        interface PlayerConnectEventParameters {}
+
+        interface PlayerConnectDeniedEventParameters {
+            reason: string;
+            name: string;
+            ip: string;
+            passwordHash: number;
+            isDebug: boolean;
+            branch: string;
+            version: string;
+            cdnUrl: string;
+            discordId: number;
+        }
+
+        interface PlayerDisconnectEventParameters {
+            reason: string;
+        }
+
+        interface PlayerDamageEventParameters {
+            attacker?: Entity;
+            healthDamage: number;
+            armourDamage: number;
+            weaponHash: number;
+        }
+
+        interface PlayerDeathEventParameters {
+            killer?: Entity;
+            weaponHash: number;
+        }
+
+        interface PlayerHealEventParameters {
+            newHealth: number;
+            oldHealth: number;
+            newArmour: number;
+            oldArmour: number;
+        }
+
+        interface PlayerControlRequestEventParameters {
+            target: Entity;
+        }
+
+        interface PlayerInteriorChangeEventParameters {
+            oldInterior: number;
+            newInterior: number;
+        }
+
+        interface PlayerDimensionChangeEventParameters {
+            oldDimension: number;
+            newDimension: number;
+        }
+
+        interface PlayerWeaponChangeEventParameters {
+            oldWeapon: number;
+            newWeapon: number;
+        }
+
+        interface PlayerSyncedSceneRequestEventParameters {
+            sceneID: number;
+        }
+
+        interface PlayerSyncedSceneStartEventParameters {
+            sceneID: number;
+            startPos: altShared.Vector3;
+            startRot: altShared.Vector3;
+            animDict: string;
+        }
+
+        interface PlayerSyncedSceneStopEventParameters {
+            sceneID: number;
+        }
+
+        interface PlayerSyncedSceneUpdateEventParameters {
+            sceneID: number;
+            startRate: number;
+        }
+
+        interface ColShapeEventParameters {
+            entity: WorldObject;
+            target: ColShape;
+            state: boolean;
+        }
+
+        interface ExplosionEventParameters {
+            source: Player;
+            type: altShared.Enums.ExplosionType;
+            pos: altShared.Vector3;
+            fx: number;
+            target?: Entity;
+        }
+
+        interface FireStartEventParameters {
+            fires: {
+                pos: altShared.Vector3;
+                weaponHash: number;
+            }[];
+        }
+
+        interface ProjectileStartEventParameters {
+            pos: altShared.Vector3;
+            dir: altShared.Vector3;
+            ammoHash: number;
+            weaponHash: number;
+        }
+
+        interface EntityColShapeEnterEventParameters {
+            entity: WorldObject;
+            colShape: ColShape;
+        }
+
+        interface EntityColShapeLeaveEventParameters {
+            entity: WorldObject;
+            colShape: ColShape;
+        }
+
+        interface EntityCheckpointEnterEventParameters {
+            entity: WorldObject;
+            colShape: ColShape;
+        }
+
+        interface EntityCheckpointLeaveEventParameters {
+            entity: WorldObject;
+            colShape: ColShape;
+        }
+
+        interface ServerScriptEventParameters {
+            eventName: string;
+            args: unknown[];
+        }
+
+        interface PlayerScriptEventParameters {
+            eventName: string;
+            args: unknown[];
+        }
+
+        interface PlayerAnimationChangeEventParameters {
+            oldAnimDict: number;
+            newAnimDict: number;
+            oldAnimName: number;
+            newAnimName: number;
+        }
+
+        interface PlayerEnteredVehicleEventParameters {
+            vehicle: Vehicle;
+            seat: number;
+        }
+
+        interface PlayerEnteringVehicleEventParameters {
+            vehicle: Vehicle;
+            seat: number;
+        }
+
+        interface PlayerLeftVehicleEventParameters {
+            vehicle: Vehicle;
+            seat: number;
+        }
+
+        interface PlayerVehicleSeatChangeEventParameters {
+            vehicle: Vehicle;
+            oldSeat: number;
+            newSeat: number;
+        }
+
+        interface VehicleDestroyEventParameters {
+            vehicle: Vehicle;
+        }
+
+        interface VehicleAttachEventParameters {
+            vehicle: Vehicle;
+            attachedVehicle: Vehicle;
+        }
+
+        interface VehicleDetachEventParameters {
+            vehicle: Vehicle;
+            detachedVehicle: Vehicle;
+        }
+
+        interface VehicleDamageEventParameters {
+            vehicle: Vehicle;
+            attacker: Entity;
+            bodyHealthDamage: number;
+            additionalBodyHealthDamage: number;
+            engineHealthDamage: number;
+            petrolTankDamage: number;
+            weaponHash: number;
+        }
+
+        interface VehicleSirenStateChangeEventParameters {
+            vehicle: Vehicle;
+            state: boolean;
+        }
+
+        interface VoiceConnectionEventParameters {
+            state: altShared.Enums.VoiceConnectionState;
+        }
+
+        interface BaseObjectCreateEventParameters {
+            object: altShared.BaseObject;
+        }
+
+        interface BaseObjectRemoveEventParameters {
+            object: altShared.BaseObject;
+        }
+
+        interface NetOwnerChangeEventParameters {
+            entity: Entity;
+            oldOwner?: Player;
+            newOwner?: Player;
+        }
+
+        interface WeaponDamageEventParameters {
+            source: Player;
+            target: Entity;
+            weaponHash: number;
+            damage: number;
+            offset: number;
+            bodyPart: altShared.Enums.BodyPart;
+
+            setDamageValue(value: number): void;
+        }
+
+        interface LocalMetaChangeEventParameters {
+            key: string;
+            oldValue: unknown;
+            newValue: unknown;
+        }
+
+        interface SyncedMetaChangeEventParameters {
+            entity: Entity;
+            key: string;
+            oldValue: unknown;
+            newValue: unknown;
+        }
+
+        interface StreamSyncedMetaChangeEventParameters {
+            entity: Entity;
+            key: string;
+            oldValue: unknown;
+            newValue: unknown;
+        }
+
+        interface GlobalMetaChangeEventParameters {
+            key: string;
+            oldValue: unknown;
+            newValue: unknown;
+        }
+
+        interface GlobalSyncedMetaChangeEventParameters {
+            key: string;
+            oldValue: unknown;
+            newValue: unknown;
+        }
+
+        interface ConsoleCommandEventParameters {
+            command: string;
+            args: string[];
+        }
+
+        interface ErrorEventParameters {
+            error: string;
+            stack: string;
+        }
+
+        interface ResourceStartEventParameters {
+            resource: Resource;
+        }
+
+        interface ResourceStopEventParameters {
+            resource: Resource;
+        }
+
+        interface ResourceErrorEventParameters {
+            resource: Resource;
+        }
+
+        type GenericPlayerEventCallback<T> = (params: T & { player: Player }) => void | Promise<void>;
+        type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
     }
 
     export * from "@altv/shared";
