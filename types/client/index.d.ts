@@ -1092,6 +1092,8 @@ declare module "@altv/client" {
 
         export function onPlayerWeaponShoot(callback: GenericEventCallback<PlayerWeaponShootEventParameters>): void;
         export function onPlayerBulletHit(callback: GenericEventCallback<PlayerBulletHitEventParameters>): void;
+        export function onPlayerStartEnterVehicle(callback: GenericPlayerEventCallback<PlayerStartEnterVehicleEventParameters>): void;
+        export function onPlayerStartLeaveVehicle(callback: GenericPlayerEventCallback<PlayerStartLeaveVehicleEventParameters>): void;
         export function onPlayerWeaponChange(callback: GenericEventCallback<PlayerWeaponChangeEventParameters>): void;
         export function onPlayerStartEnterVehicle(callback: GenericPlayerEventCallback<PlayerStartEnterVehicleEventParameters>): void;
         export function onPlayerStartLeaveVehicle(callback: GenericPlayerEventCallback<PlayerStartLeaveVehicleEventParameters>): void;
