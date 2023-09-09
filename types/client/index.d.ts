@@ -921,7 +921,7 @@ declare module "@altv/client" {
 
         interface ClientEvent {}
 
-        export type CustomEventCallback<T extends unknown[]> = (...params: T) => void | Promise<void>;
+        export type CustomEventCallback<T extends unknown[] = unknown[]> = (...params: T) => void | Promise<void>;
         export type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
         export type GenericPlayerEventCallback<T = {}> = (params: T & { player: Player }) => void | Promise<void>;
 
