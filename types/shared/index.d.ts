@@ -211,6 +211,7 @@ declare module "@altv/shared" {
         readonly textureVariation: number;
         readonly lodDistance: number;
 
+        static readonly all: ReadonlyArray<Object>;
         static getByID(id: number): Object | null;
     }
 
@@ -219,6 +220,8 @@ declare module "@altv/shared" {
         readonly maxHealth: number;
         readonly armour: number;
         readonly currentWeapon: number;
+
+        static readonly all: ReadonlyArray<Ped>;
     }
 
     export abstract class Player extends Entity {
@@ -263,6 +266,7 @@ declare module "@altv/shared" {
         getWeaponTintIndex(weaponHash: number | string): number | undefined;
         hasWeaponComponent(weaponHash: number | string, componentHash: number | string): boolean;
 
+        static readonly all: ReadonlyArray<Player>;
         static getByID(id: number): Player | null;
     }
 
@@ -365,6 +369,8 @@ declare module "@altv/shared" {
         getArmoredWindowShootCount(windowId: number): number;
         getBumperDamageLevel(bumperId: number): number;
         toggleExtra(extraId: number, state: boolean): void;
+
+        static all: ReadonlyArray<Vehicle>;
     }
 
     interface VirtualEntityCreateOptions {
