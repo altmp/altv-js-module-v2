@@ -23,6 +23,7 @@ extern js::Class sharedEntityClass("SharedEntity", &worldObjectClass, nullptr, [
     tpl.Property<&alt::IEntity::GetNetworkOwner>("netOwner");
     tpl.Property<&alt::IEntity::GetRotation, &alt::IEntity::SetRotation>("rot");
     tpl.Property<&alt::IEntity::GetVisible>("visible");
+    tpl.Property<&alt::IEntity::IsFrozen, &alt::IEntity::SetFrozen>("frozen");
 
     tpl.DynamicProperty("streamSyncedMeta", StreamSyncedMetaGetter, nullptr, nullptr, StreamSyncedMetaEnumerator);
 });
