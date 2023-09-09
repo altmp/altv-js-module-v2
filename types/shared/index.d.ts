@@ -839,6 +839,12 @@ declare module "@altv/shared" {
         export function read(path: string): string;
     }
 
+    export namespace Events {
+        interface CustomRemoteEvent {}
+        interface CustomPlayerToServerEvent {}
+        interface CustomServerToPlayerEvent {}
+    }
+
     export namespace Enums {
         export const enum AmmoSpecialType {
             NONE,

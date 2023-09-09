@@ -586,19 +586,24 @@ declare module "@altv/server" {
         export function onResourceStop(callback: GenericEventCallback<ResourceStopEventParameters>): void;
         export function onResourceError(callback: GenericEventCallback<ResourceErrorEventParameters>): void;
 
-        export function on<T>(eventName: string, callback: GenericEventCallback<T>): EventSubscription;
-        export function onRemote<T>(eventName: string, callback: GenericEventCallback<T>): EventSubscription;
-        export function remove(eventName: string, callback: GenericEventCallback): void;
+        // Custom events
+        export function on<T extends keyof CustomServerEvent>(eventName: T, callback: CustomEventCallback<Parameters<CustomServerEvent[T]>>): EventSubscription;
+        export function on(eventName: string, callback: CustomEventCallback): EventSubscription;
+        export function onPlayer<T extends keyof altShared.Events.CustomPlayerToServerEvent>(eventName: T, callback: CustomPlayerEventCallback<Parameters<altShared.Events.CustomPlayerToServerEvent[T]>>): EventSubscription;
+        export function onPlayer(eventName: string, callback: CustomPlayerEventCallback): EventSubscription;
+        export function onRemote<T extends keyof altShared.Events.CustomPlayerToServerEvent>(eventName: T, callback: CustomPlayerEventCallback<Parameters<altShared.Events.CustomPlayerToServerEvent[T]>>): EventSubscription;
+        export function onRemote<T extends keyof altShared.Events.CustomRemoteEvent>(eventName: T, callback: CustomPlayerEventCallback<Parameters<altShared.Events.CustomRemoteEvent[T]>>): EventSubscription;
+        export function onRemote(eventName: string, callback: CustomPlayerEventCallback): EventSubscription;
 
-        export function onEvent<T>(callback: GenericOnEventCallback<T>): void;
+        export function onEvent(callback: GenericOnEventCallback): void;
+        export interface onEvent {
+            remove(eventName: string, callback: GenericOnEventCallback): void;
+        }
 
         export function setWarningThreshold(threshold: number): void;
         export function setSourceLocationFrameSkipCount(skipCount: number): void;
 
-        // server only
-        export function onPlayer<T>(eventName: string, callback: GenericPlayerEventCallback<T>): EventSubscription;
-
-        interface GenericOnEventCallback<T> {
+        interface GenericOnEventCallback {
             readonly [key: string]: unknown;
             readonly customEvent: boolean;
         }
@@ -759,6 +764,13 @@ declare module "@altv/server" {
             colShape: ColShape;
         }
 
+        interface CustomServerEvent {}
+
+        export type CustomEventCallback<T extends unknown[]> = (...params: T) => void | Promise<void>;
+        export type CustomPlayerEventCallback<T extends unknown[]> = (player: Player, ...params: T) => void | Promise<void>;
+        export type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
+        export type GenericPlayerEventCallback<T = {}> = (params: T & { player: Player }) => void | Promise<void>;
+
         interface ServerScriptEventParameters<T> {
             eventName: string;
             args: T;
@@ -918,9 +930,6 @@ declare module "@altv/server" {
         interface ResourceErrorEventParameters {
             resource: Resource;
         }
-
-        type GenericPlayerEventCallback<T = {}> = (params: T & { player: Player }) => void | Promise<void>;
-        type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
     }
 
     export * from "@altv/shared";

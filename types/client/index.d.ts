@@ -735,34 +735,14 @@ declare module "@altv/client" {
         export function onPlayerWeaponShoot(callback: GenericEventCallback<PlayerWeaponShootEventParameters>): void;
         export function onPlayerBulletHit(callback: GenericEventCallback<PlayerBulletHitEventParameters>): void;
         export function onPlayerWeaponChange(callback: GenericEventCallback<PlayerWeaponChangeEventParameters>): void;
-        export function onPlayerStartEnterVehicle(callback: GenericPlayerEventCallback<PlayerStartEnterVehicleEventParameters>): void;
-        export function onPlayerStartLeaveVehicle(callback: GenericPlayerEventCallback<PlayerStartLeaveVehicleEventParameters>): void;
         export function onVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): void;
 
         export function onWorldObjectPositionChange(callback: GenericEventCallback<WorldObjectPositionChangeEventParameters>): void;
         export function onWorldObjectStreamIn(callback: GenericEventCallback<WorldObjectStreamInEventParameters>): void;
         export function onWorldObjectStreamOut(callback: GenericEventCallback<WorldObjectStreamOutEventParameters>): void;
 
-        export function on<T>(eventName: string, callback: GenericEventCallback<T>): EventSubscription;
-        export function onRemote<T>(eventName: string, callback: GenericEventCallback<T>): EventSubscription;
-        export function remove(eventName: string, callback: GenericEventCallback): void;
-
-        export function onEvent<T>(callback: GenericOnEventCallback<T>): void;
-
         export function setWarningThreshold(threshold: number): void;
         export function setSourceLocationFrameSkipCount(skipCount: number): void;
-
-        export function onServer<T>(eventName: string, callback: GenericEventCallback<T>): EventSubscription;
-
-        interface GenericOnEventCallback<T> {
-            readonly [key: string]: unknown;
-            readonly customEvent: boolean;
-        }
-
-        interface EventSubscription {
-            readonly listeners: ReadonlyArray<GenericEventCallback>;
-            remove(eventName: string, callback: GenericEventCallback): void;
-        }
 
         interface WorldObjectPositionChangeEventParameters {
             object: WorldObject;
@@ -895,7 +875,20 @@ declare module "@altv/client" {
         export function onResourceStop(callback: GenericEventCallback<ResourceStopEventParameters>): void;
         export function onResourceError(callback: GenericEventCallback<ResourceErrorEventParameters>): void;
 
-        // SHARED Player events
+        // Custom events
+        export function on<T extends keyof ClientEvent>(eventName: T, callback: CustomEventCallback<Parameters<ClientEvent[T]>>): EventSubscription;
+        export function on(eventName: string, callback: CustomEventCallback): EventSubscription;
+        export function onServer<T extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: T, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[T]>>): EventSubscription;
+        export function onServer(eventName: string, callback: CustomEventCallback): EventSubscription;
+        export function onRemote<T extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: T, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[T]>>): EventSubscription;
+        export function onRemote<T extends keyof altShared.Events.CustomRemoteEvent>(eventName: T, callback: CustomEventCallback<Parameters<altShared.Events.CustomRemoteEvent[T]>>): EventSubscription;
+        export function onRemote(eventName: string, callback: CustomEventCallback): EventSubscription;
+
+        export function onEvent(callback: GenericOnEventCallback): void;
+        export interface onEvent {
+            remove(callback: GenericOnEventCallback): void;
+        }
+
         interface PlayerAnimationChangeEventParameters {
             oldAnimDict: number;
             newAnimDict: number;
@@ -924,8 +917,24 @@ declare module "@altv/client" {
             newSeat: number;
         }
 
-        interface ServerScriptEventParameters<T> {
-            eventName: string;
+        interface GenericOnEventCallback {
+            readonly [key: string]: unknown;
+            readonly customEvent: boolean;
+        }
+
+        interface EventSubscription {
+            readonly listeners: ReadonlyArray<GenericEventCallback>;
+            remove(eventName: string, callback: GenericEventCallback): void;
+        }
+
+        interface ClientEvent {}
+
+        export type CustomEventCallback<T extends unknown[]> = (...params: T) => void | Promise<void>;
+        export type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
+        export type GenericPlayerEventCallback<T = {}> = (params: T & { player: Player }) => void | Promise<void>;
+
+        interface GenericScriptEventParameters<E, T> {
+            eventName: E;
             args: T;
         }
 
@@ -1012,9 +1021,6 @@ declare module "@altv/client" {
         interface ResourceErrorEventParameters {
             resource: altShared.Resource;
         }
-
-        type GenericPlayerEventCallback<T = {}> = (params: T & { player: Player }) => void | Promise<void>;
-        type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
     }
 
     export namespace Discord {
