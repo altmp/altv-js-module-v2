@@ -62,7 +62,8 @@ function setupImports() {
         });
     });
     translators.set(altModuleInternalPrefix, async function (url) {
-        const exports = alt; // The alt module has all of the shared module, so we can just use that
+        const name = url.slice(altModuleInternalPrefix.length + 1); // Remove prefix
+        const exports = cppBindings.getBuiltinModule(name);
         const exportKeys = Object.keys(exports);
         return new ModuleWrap(url, undefined, exportKeys, function () {
             for (const exportName in exports) {
@@ -88,9 +89,9 @@ function setupImports() {
                             shortCircuit: true
                         };
 
-                    if (specifier.startsWith(`${altModuleImportPrefix}/`))
+                    if (cppBindings.getBuiltinModule(specifier) !== null)
                         return {
-                            url: `${altModuleInternalPrefix}:${specifier.slice(altModuleImportPrefix.length + 1)}`,
+                            url: `${altModuleInternalPrefix}:${specifier}`,
                             shortCircuit: true
                         };
 
@@ -106,11 +107,6 @@ function setupImports() {
                         };
 
                     if (url.startsWith(`${altModuleInternalPrefix}:`)) {
-                        const name = url.slice(altModuleInternalPrefix.length + 1); // Remove prefix
-                        if (name !== "server" && name !== "shared") {
-                            alt.logError("Invalid alt:V module import:", name);
-                            return defaultLoad(url, context, defaultLoad);
-                        }
                         return {
                             format: "altmodule",
                             source: null,

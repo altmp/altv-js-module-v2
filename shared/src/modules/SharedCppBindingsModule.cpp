@@ -130,6 +130,21 @@ static void RegisterExport(js::FunctionContext& ctx)
     resource->SetBindingExport(name, value);
 }
 
+static void GetBuiltinModule(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    std::string name;
+    if(!ctx.GetArg(0, name)) return;
+
+    if(!js::Module::Exists(name))
+    {
+        ctx.Return(nullptr);
+        return;
+    }
+    ctx.Return(js::Module::Get(name).GetNamespace(ctx.GetResource()));
+}
+
 static void ResourceNameGetter(js::LazyPropertyContext& ctx)
 {
     ctx.Return(ctx.GetResource()->GetResource()->GetName());
@@ -148,6 +163,8 @@ extern js::Module sharedCppBindingsModule("sharedCppBindings", [](js::ModuleTemp
     module.StaticFunction("getCurrentSourceLocation", GetCurrentSourceLocation);
 
     module.StaticFunction("registerExport", RegisterExport);
+
+    module.StaticFunction("getBuiltinModule", GetBuiltinModule);
 
     module.StaticLazyProperty("resourceName", ResourceNameGetter);
 });
