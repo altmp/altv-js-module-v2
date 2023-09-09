@@ -36,7 +36,7 @@ declare module "@altv/client" {
     export function setWeatherSyncActive(state: boolean): void;
     export function getPermissionState(permission: altShared.Enums.Permission): boolean;
     export function takeScreenshot(gameOnly?: boolean): Promise<string>;
-    export function setAngularVelocity(entity: altShared.Entity, quaternion: altShared.Quaternion): void;
+    export function setAngularVelocity(entity: Entity, quaternion: altShared.Quaternion): void;
     export function headshotToBase64(id: number): string;
     export function setDlcClothes(scriptId: number, component: number, drawable: number, texture: number, palette?: number, dlc?: number): void;
     export function setDlcProps(scriptId: number, component: number, drawable: number, texture: number, dlc?: number): void;
@@ -129,11 +129,11 @@ declare module "@altv/client" {
         static getByID(id: number): AudioFilter | null;
     }
 
-    export abstract class AudioOutput extends altShared.BaseObject {
+    export abstract class AudioOutput extends BaseObject {
         muted: boolean;
         volume: number;
         readonly category: number;
-        readonly owner: altShared.BaseObject;
+        readonly owner: BaseObject;
 
         filter: AudioFilter | null;
 
@@ -146,7 +146,7 @@ declare module "@altv/client" {
     }
 
     export abstract class AudioOutputAttached extends AudioOutput {
-        entity: altShared.WorldObject;
+        entity: WorldObject;
 
         static create(options: AudioOutputAttachedCreateOptions): AudioOutputAttached | null;
     }
@@ -171,18 +171,70 @@ declare module "@altv/client" {
         static create(options: AudioOutputWorldCreateOptions): AudioOutputWorld | null;
     }
 
-    type BlipCreateOptions = ({ blipType: altShared.Enums.BlipType.AREA } & altShared.AreaBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.RADIUS } & altShared.RadiusBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.DESTINATION } & altShared.PointBlipCreateOptions);
+    export class BaseObject extends altShared.BaseObject {
+        readonly isRemote: boolean;
+        readonly remoteId: number;
 
-    export abstract class Blip extends altShared.Blip {
-        readonly scriptID: number;
-        readonly isStreamedIn: boolean;
+        static getByID(type: altShared.Enums.BaseObjectType, id: number): BaseObject | null;
 
-        static create(options: BlipCreateOptions): Blip | null;
+        readonly meta: BaseObjectMeta;
+        readonly syncedMeta: Readonly<altShared.BaseObjectSyncedMeta>;
     }
 
-    export abstract class Checkpoint extends altShared.Checkpoint {
+    export type PointBlipCreateOptions = { pos: altShared.IVector3; entity?: never } | { entity: Entity; pos?: never };
+
+    type BlipCreateOptions = ({ blipType: altShared.Enums.BlipType.AREA } & altShared.AreaBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.RADIUS } & altShared.RadiusBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.DESTINATION } & PointBlipCreateOptions);
+
+    export abstract class Blip extends BaseObject {
         readonly scriptID: number;
         readonly isStreamedIn: boolean;
+        readonly global: boolean;
+        readonly isAttached: boolean;
+        readonly attachedTo?: Entity;
+
+        blipType: altShared.Enums.BlipType;
+        scale: altShared.Vector2;
+        display: number;
+        sprite: number;
+        color: number;
+        secondaryColor: number;
+        alpha: number;
+        flashTimer: number;
+        flashInterval: number;
+        friendly: boolean;
+        route: boolean;
+        bright: boolean;
+        number: number;
+        showCone: boolean;
+        flashes: boolean;
+        flashesAlternate: boolean;
+        shortRange: boolean;
+        priority: number;
+        rotation: number;
+        gxtName: string;
+        name: string;
+        routeColor: altShared.RGBA;
+        pulse: boolean;
+        missionCreator: boolean;
+        tickVisible: boolean;
+        headingIndicatorVisible: boolean;
+        outlineIndicatorVisible: boolean;
+        friendIndicatorVisible: boolean;
+        crewIndicatorVisible: boolean;
+        category: number;
+        highDetail: boolean;
+        shrinked: boolean;
+        visible: boolean;
+        hiddenOnLegend: boolean;
+        minimalOnEdge: boolean;
+        useHeightIndicatorOnEdge: boolean;
+        shortHeightThreshold: boolean;
+
+        attachTo(entity: Entity): boolean;
+        fade(opacity: number, duration: number): void;
+
+        static getByID(id: number): Blip | null;
+        static create(options: BlipCreateOptions): Blip | null;
     }
 
     export abstract class ColShape extends WorldObject {
@@ -192,13 +244,49 @@ declare module "@altv/client" {
         isEntityIn(entity: Entity): boolean;
         isEntityIdIn(id: number): boolean;
         isPointIn(pos: altShared.Vector3): boolean;
+
+        static create(opts: altShared.ColShapeCreateOptions): ColShape | null;
+        static getByID(id: number): ColShape | null;
     }
 
-    export abstract class Entity extends altShared.Entity {
+    // @ts-expect-error - Suppresses "Class static side incorrectly extends base class static side"
+    export abstract class Checkpoint extends ColShape {
         readonly scriptID: number;
+        readonly isStreamedIn: boolean;
+
+        checkpointType: number;
+        radius: number;
+        height: number;
+        color: altShared.RGBA;
+        iconColor: altShared.RGBA;
+        nextPos: altShared.IVector3;
+        readonly streamingDistance: number;
+        visible: boolean;
+
+        isEntityIn(entity: Entity): boolean;
+        isEntityIdIn(id: number): boolean;
+        isPointIn(point: altShared.Vector3): boolean;
+
+        static create(opts: altShared.CheckpointCreateOptions): Checkpoint | null;
+        static getByID(id: number): Checkpoint | null;
     }
 
-    export abstract class Font extends altShared.BaseObject {
+    export abstract class Entity extends WorldObject {
+        readonly scriptID: number;
+
+        get model(): number;
+        readonly netOwner?: Player;
+        readonly visible: boolean;
+
+        rot: altShared.Vector3;
+
+        readonly syncedMeta: Readonly<Record<string, unknown>>;
+        readonly streamSyncedMeta: Readonly<Record<string, unknown>>;
+
+        static readonly all: ReadonlyArray<Entity>;
+    }
+
+    export abstract class Font extends BaseObject {
         static register(path: string): Font | undefined;
     }
 
@@ -298,6 +386,15 @@ declare module "@altv/client" {
         static getByID(id: number): HttpClient | null;
     }
 
+    export abstract class Object extends Entity {
+        readonly alpha: number;
+        readonly textureVariation: number;
+        readonly lodDistance: number;
+
+        static readonly all: ReadonlyArray<Object>;
+        static getByID(id: number): Object | null;
+    }
+
     interface LocalObjectCreateOptions {
         model: number | string;
         pos: altShared.Vector3;
@@ -308,7 +405,7 @@ declare module "@altv/client" {
         streamingDistance?: number; // default: 0
     }
 
-    export abstract class LocalObject extends altShared.Object {
+    export abstract class LocalObject extends Object {
         get model(): number;
         set model(value: number | string);
         alpha: number;
@@ -353,6 +450,15 @@ declare module "@altv/client" {
         export function create(options: WeaponObjectCreateOptions): LocalObject | null;
     }
 
+    export abstract class Ped extends Entity {
+        readonly health: number;
+        readonly maxHealth: number;
+        readonly armour: number;
+        readonly currentWeapon: number;
+
+        static readonly all: ReadonlyArray<Ped>;
+    }
+
     interface LocalPedCreateOptions {
         model: number | string;
         dimension: number;
@@ -362,7 +468,7 @@ declare module "@altv/client" {
         streamingDistance?: number; // default: 0
     }
 
-    export abstract class LocalPed extends altShared.Ped {
+    export abstract class LocalPed extends Ped {
         get model(): number;
         set model(value: number | string);
         readonly streamingDistance: number;
@@ -421,14 +527,57 @@ declare module "@altv/client" {
         static resetAll(): void;
     }
 
-    export abstract class Player extends altShared.Player {
+    export abstract class Player extends Entity {
+        readonly name: string;
+
         readonly isTalking: boolean;
         readonly micLevel: number;
         spatialVolume: number;
         nonSpatialVolume: number;
         readonly filter: AudioFilter;
 
+        readonly health: number;
+        readonly maxHealth: number;
+        readonly currentWeaponComponents: ReadonlyArray<number>;
+        readonly currentWeaponTintIndex: number;
+        get currentWeapon(): number;
+        readonly isDead: boolean;
+        readonly isJumping: boolean;
+        readonly isInRagdoll: boolean;
+        readonly isAiming: boolean;
+        readonly isShooting: boolean;
+        readonly isReloading: boolean;
+        readonly isEnteringVehicle: boolean;
+        readonly isLeavingVehicle: boolean;
+        readonly isOnLadder: boolean;
+        readonly isInMelee: boolean;
+        readonly isInCover: boolean;
+        readonly armour: number;
+        readonly maxArmour: number;
+        readonly moveSpeed: number;
+        readonly aimPos: altShared.Vector3;
+        readonly headRotation: altShared.Vector3;
+        readonly isInVehicle: boolean;
+        readonly vehicle?: Vehicle;
+        readonly seat: number;
+        readonly entityAimingAt: Entity;
+        readonly entityAimOffset: altShared.Vector3;
+        readonly isFlashlightActive: boolean;
+        readonly isSuperJumpEnabled: boolean;
+        readonly isCrouching: boolean;
+        readonly isStealthy: boolean;
+        readonly currentAnimationDict: number;
+        readonly currentAnimationName: number;
+        readonly isSpawned: boolean;
+        readonly forwardSpeed: number;
+        readonly strafeSpeed: number;
+
+        getWeaponTintIndex(weaponHash: number | string): number | undefined;
+        hasWeaponComponent(weaponHash: number | string, componentHash: number | string): boolean;
+
         static readonly local: LocalPlayer;
+        static readonly all: ReadonlyArray<Player>;
+        static getByID(id: number): Player | null;
     }
 
     interface RmlDocumentCreateOptions {
@@ -457,7 +606,7 @@ declare module "@altv/client" {
     }
 
     // @ts-ignore - Suppresses "Class static side incorrectly extends base class static side"
-    export abstract class RmlElement extends altShared.BaseObject {
+    export abstract class RmlElement extends BaseObject {
         readonly relativeOffset: altShared.Vector2;
         readonly absoluteOffset: altShared.Vector2;
         readonly baseline: number;
@@ -556,12 +705,67 @@ declare module "@altv/client" {
         static getByID(id: number): TextLabel | null;
     }
 
-    export abstract class Vehicle extends altShared.Vehicle {
+    export abstract class Vehicle extends Entity {
+        readonly neon: Readonly<altShared.NeonState>;
+
+        readonly driver?: Player;
+        readonly isDestroyed: boolean;
+        readonly modKitsCount: number;
+        readonly modKit: number;
+        readonly IsPrimaryColorRGB: boolean;
+        readonly primaryColor: number;
+        readonly primaryColorRGB: altShared.RGBA;
+        readonly isSecondaryColorRGB: boolean;
+        readonly secondaryColor: number;
+        readonly secondaryColorRGB: altShared.RGBA;
+        readonly pearlColor: number;
+        readonly wheelColor: number;
+        readonly interiorColor: number;
+        readonly dashboardColor: number;
+        readonly isTireSmokeColorCustom: boolean;
+        readonly tireSmokeColor: altShared.RGBA;
+        readonly wheelType: number;
+        readonly wheelVariation: number;
+        readonly customTires: boolean;
+        readonly specialDarkness: number;
+        readonly numberplateIndex: number;
+        readonly numberplateText: string;
+        readonly windowTint: number;
+        readonly dirtLevel: number;
+        readonly isNeonActive: boolean;
+        readonly neonColor: altShared.RGBA;
+        readonly livery: number;
+        readonly roofLivery: number;
+        readonly appearanceDataBase64: string;
+        readonly isEngineOn: boolean;
+        readonly isHandbrakeActive: boolean;
+        readonly headlightColor: number;
+        readonly radioStationIndex: number;
+        readonly isSirenActive: boolean;
+        readonly lockState: number;
+        readonly isDaylightOn: boolean;
+        readonly isNightlightOn: boolean;
+        readonly roofState: number;
+        readonly isFlamethrowerActive: boolean;
+        readonly lightsMultiplier: number;
+        readonly gameStateBase64: string;
+        readonly engineHealth: number;
+        readonly petrolTankHealth: number;
+        readonly wheelsCount: number;
+        readonly repairsCount: number;
+        readonly bodyHealth: number;
+        readonly bodyAdditionalHealth: number;
+        readonly hasArmoredWindows: boolean;
+        readonly damageDataBase64: string;
+        readonly isManualEngineControl: boolean;
+        readonly scriptDataBase64: string;
+        readonly velocity: altShared.Vector3;
+        readonly steeringAngle: number;
+
         readonly speed: number;
         readonly gear: number;
         readonly maxGear: number;
         readonly rpm: number;
-        readonly wheelsCount: number;
         readonly speedVector: altShared.Vector3;
         readonly handling: Handling;
         readonly isHandlingModified: boolean;
@@ -578,6 +782,29 @@ declare module "@altv/client" {
         oilLightState: boolean;
         batteryLightState: boolean;
         suspensionHeight: number;
+
+        getMod(category: number): number;
+        getModsCount(category: number): number;
+        isExtraOn(extraId: number): boolean;
+        getDoorState(doorId: number): number;
+        isWindowOpened(windowId: number): boolean;
+        isWheelBurst(wheelId: number): boolean;
+        getWheelHasTire(wheelId: number): boolean;
+        isWheelDetached(wheelId: number): boolean;
+        isWheelOnFire(wheelId: number): boolean;
+        getWheelHealth(wheelId: number): number;
+
+        getPartDamageLevel(partId: number): number;
+        getPartBulletHoles(partId: number): number;
+
+        isLightDamaged(lightId: number): boolean;
+        isWindowDamaged(windowId: number): boolean;
+
+        isSpecialLightDamaged(specialLightId: number): boolean;
+        getArmoredWindowHealth(windowId: number): number;
+        getArmoredWindowShootCount(windowId: number): number;
+        getBumperDamageLevel(bumperId: number): number;
+        toggleExtra(extraId: number, state: boolean): void;
 
         resetHandling(): void;
         replaceHandling(): void;
@@ -596,10 +823,37 @@ declare module "@altv/client" {
         setWheelTyreWidth(wheelId: number, width: number): void;
         getWheelSurfaceMaterial(wheelId: number): number;
         resetDashboardLights(): void;
+
+        static all: ReadonlyArray<Vehicle>;
+        static getByID(id: number): Vehicle | null;
     }
 
-    export abstract class VirtualEntity extends altShared.VirtualEntity {
+    interface VirtualEntityCreateOptions {
+        group: VirtualEntityGroup;
+        pos: altShared.IVector3;
+        maxEntitiesInStream: number;
+        data?: Record<string, unknown>;
+    }
+
+    export abstract class VirtualEntityGroup extends BaseObject {
+        readonly maxEntitiesInStream: number;
+
+        static create(opts: altShared.VirtualEntityGroupCreateOptions): VirtualEntityGroup | null;
+    }
+
+    export abstract class VirtualEntity extends WorldObject {
         readonly isStreamedIn: boolean;
+
+        readonly group: VirtualEntityGroup;
+        readonly streamingDistance: number;
+
+        visible: boolean;
+
+        readonly meta: VirtualEntityMeta;
+        readonly syncedMeta: altShared.VirtualEntitySyncedMeta;
+        readonly streamSyncedMeta: altShared.VirtualEntityStreamSyncedMeta;
+
+        static create(opts: VirtualEntityCreateOptions): VirtualEntity | null;
     }
 
     export abstract class WeaponData {
@@ -628,7 +882,7 @@ declare module "@altv/client" {
         url: string;
     }
 
-    export abstract class WebSocketClient extends altShared.BaseObject {
+    export abstract class WebSocketClient extends BaseObject {
         url: string;
         autoReconnect: boolean;
         perMessageDeflate: boolean;
@@ -663,7 +917,7 @@ declare module "@altv/client" {
 
     type WebViewCreateOptions = { url: string } & (({ drawable: number | string } & _WebViewTextureCreateOptions) | ({ drawable: never } & _WebViewCreateOptions));
 
-    export abstract class WebView extends altShared.BaseObject {
+    export abstract class WebView extends BaseObject {
         focused: boolean;
         url: string;
         visible: boolean;
@@ -691,13 +945,92 @@ declare module "@altv/client" {
         static create(options: WebViewCreateOptions): WebView | null;
     }
 
-    export abstract class WorldObject extends altShared.WorldObject {
+    /**
+     * Extend it by interface merging for use in meta.
+     */
+    export interface GlobalMeta {
+        [key: string]: unknown;
+    }
+
+    /**
+     * Extend it by interface merging for use in BaseObject#meta.
+     */
+    export interface BaseObjectMeta {
+        [key: string]: unknown;
+    }
+
+    /**
+     * Extend it by interface merging for use in Entity#meta.
+     */
+    export interface EntityMeta extends BaseObjectMeta {}
+
+    /**
+     * Extend it by interface merging for use in Player#meta.
+     */
+    export interface PlayerMeta extends EntityMeta {}
+
+    /**
+     * Extend it by interface merging for use in Vehicle#meta.
+     */
+    export interface VehicleMeta extends EntityMeta {}
+
+    /**
+     * Extend it by interface merging for use in Ped#meta.
+     */
+    export interface PedMeta extends EntityMeta {}
+
+    /**
+     * Extend it by interface merging for use in Object#meta.
+     */
+    export interface ObjectMeta extends EntityMeta {}
+
+    /**
+     * Extend it by interface merging for use in VirtualEntity#meta.
+     */
+    export interface VirtualEntityMeta extends BaseObjectMeta {}
+
+    export abstract class WorldObject {
         dimension: number;
         pos: altShared.Vector3;
     }
 
+    export abstract class VoiceChannel extends BaseObject {}
+
+    export namespace Factory {
+        export function setPlayerFactory(factory: typeof Player): void;
+        export function getPlayerFactory<T extends Player>(): T;
+
+        export function setVehicleFactory(factory: typeof Vehicle): void;
+        export function getVehicleFactory<T extends Vehicle>(): T;
+
+        export function setPedFactory(factory: typeof Ped): void;
+        export function getPedFactory<T extends Ped>(): T;
+
+        export function setBlipFactory(factory: typeof Blip): void;
+        export function getBlipFactory<T extends Blip>(): T;
+
+        // TODO (xLuxy): Server-only - find a better way to extend namespaces and move this into server typings
+        export function setVoiceChannelFactory(factory: typeof VoiceChannel): void;
+        export function getVoiceChannelFactory<T extends VoiceChannel>(): T;
+
+        export function setColShapeFactory(factory: typeof ColShape): void;
+        export function getColShapeFactory<T extends ColShape>(): T;
+
+        export function setObjectFactory(factory: typeof Object): void;
+        export function getObjectFactory<T extends Object>(): T;
+
+        export function setCheckpointFactory(factory: typeof Checkpoint): void;
+        export function getCheckpointFactory<T extends Checkpoint>(): T;
+
+        export function setVirtualEntityFactory(factory: typeof VirtualEntity): void;
+        export function getVirtualEntityFactory<T extends VirtualEntity>(): T;
+
+        export function setVirtualEntityGroupFactory(factory: typeof VirtualEntityGroup): void;
+        export function getVirtualEntityGroupFactory<T extends VirtualEntityGroup>(): T;
+    }
+
     export namespace PointBlip {
-        export function create(opts: altShared.PointBlipCreateOptions): Blip | null;
+        export function create(opts: PointBlipCreateOptions): Blip | null;
     }
 
     export namespace AreaBlip {
@@ -706,6 +1039,30 @@ declare module "@altv/client" {
 
     export namespace RadiusBlip {
         export function create(opts: altShared.RadiusBlipCreateOptions): Blip | null;
+    }
+
+    export namespace ColShapeSphere {
+        export function create(opts: altShared.ColShapeSphereCreateOptions): ColShape | null;
+    }
+
+    export namespace ColShapeCylinder {
+        export function create(opts: altShared.ColShapeCylinderCreateOptions): ColShape | null;
+    }
+
+    export namespace ColShapeCircle {
+        export function create(opts: altShared.ColShapeCircleCreateOptions): ColShape | null;
+    }
+
+    export namespace ColShapeCuboid {
+        export function create(opts: altShared.ColShapeCuboidCreateOptions): ColShape | null;
+    }
+
+    export namespace ColShapeRectangle {
+        export function create(opts: altShared.ColShapeRectangleCreateOptions): ColShape | null;
+    }
+
+    export namespace ColShapePolygon {
+        export function create(opts: altShared.ColShapePolygonCreateOptions): ColShape | null;
     }
 
     export namespace Events {
@@ -870,8 +1227,8 @@ declare module "@altv/client" {
         export function onError(callback: GenericEventCallback<ErrorEventParameters>): void;
 
         // SHARED script related events
-        export function onLocalScriptEvent<T = unknown[]>(callback: GenericEventCallback<ServerScriptEventParameters<T>>): void;
-        export function onRemoteScriptEvent<T = unknown[]>(callback: GenericEventCallback<PlayerScriptEventParameters<T>>): void;
+        export function onLocalScriptEvent(callback: GenericEventCallback<LocalScriptEventParameters>): void;
+        export function onRemoteScriptEvent(callback: GenericEventCallback<RemoteScriptEventParameters>): void;
 
         // SHARED resource events
         export function onResourceStart(callback: GenericEventCallback<ResourceStartEventParameters>): void;
@@ -879,7 +1236,7 @@ declare module "@altv/client" {
         export function onResourceError(callback: GenericEventCallback<ResourceErrorEventParameters>): void;
 
         // Custom events
-        export function on<E extends keyof ClientEvent>(eventName: E, callback: CustomEventCallback<E, Parameters<ClientEvent[E]>>): EventSubscription;
+        export function on<E extends keyof CustomClientEvent>(eventName: E, callback: CustomEventCallback<E, Parameters<CustomClientEvent[E]>>): EventSubscription;
         export function on(eventName: string, callback: CustomEventCallback<string, unknown[]>): EventSubscription;
         export function onServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<E, Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
         export function onServer(eventName: string, callback: CustomEventCallback<string, unknown[]>): EventSubscription;
@@ -920,28 +1277,30 @@ declare module "@altv/client" {
             remove(eventName: string, callback: GenericEventCallback): void;
         }
 
-        interface ClientEvent {}
+        interface CustomClientEvent {}
 
         export type CustomEventCallback<E extends string, T extends unknown[]> = (params: { eventName: E; args: T }) => void | Promise<void>;
         export type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
         export type GenericPlayerEventCallback<T = {}> = (params: T & { player: Player }) => void | Promise<void>;
 
-        interface GenericScriptEventParameters<E, T> {
+        type LocalScriptEvents = CustomClientEvent;
+        interface LocalScriptEventParameters<E extends keyof LocalScriptEvents = keyof LocalScriptEvents> {
             eventName: E;
-            args: T;
+            args: Parameters<LocalScriptEvents[E]>;
         }
 
-        interface PlayerScriptEventParameters<T> {
-            eventName: string;
-            args: T;
+        type RemoteScriptEvents = altShared.Events.CustomServerToPlayerEvent & altShared.Events.CustomRemoteEvent;
+        interface RemoteScriptEventParameters<E extends keyof RemoteScriptEvents = keyof RemoteScriptEvents> {
+            eventName: E;
+            args: Parameters<RemoteScriptEvents[E]>;
         }
 
         interface BaseObjectCreateEventParameters {
-            object: altShared.BaseObject;
+            object: BaseObject;
         }
 
         interface BaseObjectRemoveEventParameters {
-            object: altShared.BaseObject;
+            object: BaseObject;
         }
 
         interface NetOwnerChangeEventParameters {

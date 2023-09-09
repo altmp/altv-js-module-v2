@@ -51,6 +51,13 @@ declare module "@altv/server" {
     export function getMigrationDistance(): number;
     export function setMigrationDistance(distance: number): void;
 
+    export class BaseObject extends altShared.BaseObject {
+        readonly meta: BaseObjectMeta;
+        readonly syncedMeta: Readonly<altShared.BaseObjectSyncedMeta>;
+
+        static getByID(type: altShared.Enums.BaseObjectType, id: number): BaseObject | null;
+    }
+
     interface SharedBlipCreateOptions {
         global: boolean;
         targets?: Array<Entity>;
@@ -58,21 +65,73 @@ declare module "@altv/server" {
         blipType: altShared.Enums.BlipType;
     }
 
-    type BlipCreateOptions = SharedBlipCreateOptions &
-        (({ blipType: altShared.Enums.BlipType.AREA } & altShared.AreaBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.RADIUS } & altShared.RadiusBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.DESTINATION } & altShared.PointBlipCreateOptions));
+    export type PointBlipCreateOptions = { pos: altShared.IVector3; entity?: never } | { entity: Entity; pos?: never };
 
-    export abstract class Blip extends altShared.Blip {
-        global: boolean;
+    type BlipCreateOptions = SharedBlipCreateOptions &
+        (({ blipType: altShared.Enums.BlipType.AREA } & altShared.AreaBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.RADIUS } & altShared.RadiusBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.DESTINATION } & PointBlipCreateOptions));
+
+    export abstract class Blip extends BaseObject {
         readonly targets: ReadonlyArray<Player>;
 
+        readonly scriptID: number;
+        readonly isStreamedIn: boolean;
+        readonly isAttached: boolean;
+        readonly attachedTo?: Entity;
+
+        global: boolean;
+
+        blipType: altShared.Enums.BlipType;
+        scale: altShared.Vector2;
+        display: number;
+        sprite: number;
+        color: number;
+        secondaryColor: number;
+        alpha: number;
+        flashTimer: number;
+        flashInterval: number;
+        friendly: boolean;
+        route: boolean;
+        bright: boolean;
+        number: number;
+        showCone: boolean;
+        flashes: boolean;
+        flashesAlternate: boolean;
+        shortRange: boolean;
+        priority: number;
+        rotation: number;
+        gxtName: string;
+        name: string;
+        routeColor: altShared.RGBA;
+        pulse: boolean;
+        missionCreator: boolean;
+        tickVisible: boolean;
+        headingIndicatorVisible: boolean;
+        outlineIndicatorVisible: boolean;
+        friendIndicatorVisible: boolean;
+        crewIndicatorVisible: boolean;
+        category: number;
+        highDetail: boolean;
+        shrinked: boolean;
+        visible: boolean;
+        hiddenOnLegend: boolean;
+        minimalOnEdge: boolean;
+        useHeightIndicatorOnEdge: boolean;
+        shortHeightThreshold: boolean;
+
+        attachTo(entity: Entity): boolean;
+        fade(opacity: number, duration: number): void;
         addTarget(target: Player): void;
         removeTarget(target: Player): void;
 
+        readonly meta: BlipMeta;
+        readonly syncedMeta: altShared.BlipSyncedMeta;
+
+        static getByID(id: number): Blip | null;
         static create(opts: BlipCreateOptions): Blip | null;
     }
 
     export namespace PointBlip {
-        export function create(opts: altShared.PointBlipCreateOptions & SharedBlipCreateOptions): Blip | null;
+        export function create(opts: PointBlipCreateOptions & SharedBlipCreateOptions): Blip | null;
     }
 
     export namespace AreaBlip {
@@ -83,10 +142,6 @@ declare module "@altv/server" {
         export function create(opts: altShared.RadiusBlipCreateOptions & SharedBlipCreateOptions): Blip | null;
     }
 
-    export abstract class Checkpoint extends altShared.Checkpoint {
-        readonly streamSyncedMeta: Record<string, unknown>;
-    }
-
     export abstract class ColShape extends WorldObject {
         readonly colShapeType: altShared.Enums.ColShapeType;
         playersOnly: boolean;
@@ -94,23 +149,58 @@ declare module "@altv/server" {
         isEntityIn(entity: Entity): boolean;
         isEntityIdIn(id: number): boolean;
         isPointIn(point: altShared.Vector3): boolean;
+
+        readonly meta: ColShapeMeta;
+        readonly syncedMeta: altShared.ColShapeSyncedMeta;
     }
 
-    export abstract class Entity extends altShared.Entity {
+    export abstract class Checkpoint extends ColShape {
+        readonly isStreamedIn: boolean;
+
+        checkpointType: number;
+        radius: number;
+        height: number;
+        color: altShared.RGBA;
+        iconColor: altShared.RGBA;
+        nextPos: altShared.IVector3;
+        readonly streamingDistance: number;
+        visible: boolean;
+
+        isEntityIn(entity: Entity): boolean;
+        isEntityIdIn(id: number): boolean;
+        isPointIn(point: altShared.Vector3): boolean;
+
+        readonly meta: CheckpointMeta;
+        readonly syncedMeta: altShared.CheckpointSyncedMeta;
+        readonly streamSyncedMeta: altShared.CheckpointStreamSyncedMeta;
+
+        static create(opts: altShared.CheckpointCreateOptions): Checkpoint | null;
+        static getByID(id: number): Checkpoint | null;
+    }
+
+    export abstract class Entity extends WorldObject {
+        get model(): number;
+        netOwner?: Player;
+
+        rot: altShared.Vector3;
+
         visible: boolean;
         streamed: boolean;
         frozen: boolean;
         collision: boolean;
         readonly timestamp: number;
 
-        readonly syncedMeta: Record<string, unknown>;
-        readonly streamSyncedMeta: Record<string, unknown>;
+        readonly meta: EntityMeta;
+        readonly syncedMeta: altShared.EntitySyncedMeta;
+        readonly streamSyncedMeta: altShared.EntityStreamSyncedMeta;
 
         setNetOwner(player: Player, disableMigration: boolean): void;
         resetNetOwner(disableMigration: boolean): void;
 
         attachTo(target: Entity, otherBoneId: number | string, boneId: number | string, pos: altShared.IVector3, rot: altShared.IVector3, collision: boolean, noFixedRot: boolean): void;
         detach(): void;
+
+        static readonly all: ReadonlyArray<Entity>;
     }
 
     export class Metric {
@@ -134,7 +224,7 @@ declare module "@altv/server" {
         lodDistance?: number; // default: 100
     }
 
-    export abstract class Object extends altShared.Object {
+    export abstract class Object extends Entity {
         alpha: number;
         textureVariation: number;
         lodDistance: number;
@@ -142,7 +232,13 @@ declare module "@altv/server" {
         activatePhysics(): void;
         placeOnGroundProperly(): void;
 
+        readonly meta: ObjectMeta;
+        readonly syncedMeta: altShared.ObjectSyncedMeta;
+        readonly streamSyncedMeta: altShared.ObjectStreamSyncedMeta;
+
+        static getByID(id: number): Object | null;
         static create(opts: ObjectCreateOptions): Object | null;
+        static readonly all: ReadonlyArray<Object>;
     }
 
     interface PedCreateOptions {
@@ -151,17 +247,22 @@ declare module "@altv/server" {
         heading: number;
     }
 
-    export abstract class Ped extends altShared.Ped {
+    export abstract class Ped extends Entity {
         health: number;
         maxHealth: number;
         armour: number;
         currentWeapon: number;
 
-        static create(opts: PedCreateOptions): Ped | null;
+        readonly meta: PedMeta;
+        readonly syncedMeta: altShared.PedSyncedMeta;
+        readonly streamSyncedMeta: altShared.PedStreamSyncedMeta;
+
         static getByID(id: number): Ped | null;
+        static create(opts: PedCreateOptions): Ped | null;
+        static readonly all: ReadonlyArray<Ped>;
     }
 
-    export class Player extends altShared.Player {
+    export class Player extends Entity {
         readonly ip: string;
         readonly socialId: number;
         readonly hwidHash: number;
@@ -177,12 +278,42 @@ declare module "@altv/server" {
         armour: number;
         maxArmour: number;
 
-        get currentWeapon(): number;
-        set currentWeapon(value: number | string);
-
         health: number;
         maxHealth: number;
         invincible: boolean;
+
+        readonly currentWeaponComponents: ReadonlyArray<number>;
+        readonly currentWeaponTintIndex: number;
+        get currentWeapon(): number;
+        set currentWeapon(value: number | string);
+        readonly isDead: boolean;
+        readonly isJumping: boolean;
+        readonly isInRagdoll: boolean;
+        readonly isAiming: boolean;
+        readonly isShooting: boolean;
+        readonly isReloading: boolean;
+        readonly isEnteringVehicle: boolean;
+        readonly isLeavingVehicle: boolean;
+        readonly isOnLadder: boolean;
+        readonly isInMelee: boolean;
+        readonly isInCover: boolean;
+        readonly moveSpeed: number;
+        readonly aimPos: altShared.Vector3;
+        readonly headRotation: altShared.Vector3;
+        readonly isInVehicle: boolean;
+        readonly vehicle?: Vehicle;
+        readonly seat: number;
+        readonly entityAimingAt: Entity;
+        readonly entityAimOffset: altShared.Vector3;
+        readonly isFlashlightActive: boolean;
+        readonly isSuperJumpEnabled: boolean;
+        readonly isCrouching: boolean;
+        readonly isStealthy: boolean;
+        readonly currentAnimationDict: number;
+        readonly currentAnimationName: number;
+        readonly isSpawned: boolean;
+        readonly forwardSpeed: number;
+        readonly strafeSpeed: number;
 
         headBlendData: altShared.Appearance.HeadBlendData;
         eyeColor: number;
@@ -205,6 +336,8 @@ declare module "@altv/server" {
         despawn(): void;
         setWeaponTintIndex(weaponHash: number | string, tintIndex: number): void;
         addWeaponComponent(weaponHash: number | string, componentHash: number | string): void;
+        getWeaponTintIndex(weaponHash: number | string): number | undefined;
+        hasWeaponComponent(weaponHash: number | string, componentHash: number | string): boolean;
         removeWeaponComponent(weaponHash: number | string, componentHash: number | string): void;
         clearBloodDamage(): void;
         giveWeapon(weaponHash: number | string, ammo: number, selectWeapon?: boolean): void;
@@ -270,7 +403,12 @@ declare module "@altv/server" {
         playScenario(name: string): void;
         requestCloudID(): Promise<string>;
 
-        readonly localMeta: Record<string, unknown>;
+        readonly meta: PlayerMeta;
+        readonly syncedMeta: altShared.PlayerSyncedMeta;
+        readonly streamSyncedMeta: altShared.PlayerStreamSyncedMeta;
+
+        static readonly all: ReadonlyArray<Player>;
+        static getByID(id: number): Player | null;
     }
 
     export abstract class Resource extends altShared.Resource {
@@ -291,8 +429,32 @@ declare module "@altv/server" {
         rot?: altShared.IVector3; // default: { x: 0, y: 0, z: 0 }
     }
 
-    export abstract class Vehicle extends altShared.Vehicle {
+    export abstract class Vehicle extends Entity {
         readonly neon: altShared.NeonState;
+        readonly driver?: Player;
+        readonly isDestroyed: boolean;
+        readonly modKitsCount: number;
+        readonly IsPrimaryColorRGB: boolean;
+        readonly primaryColorRGB: altShared.RGBA;
+        readonly isSecondaryColorRGB: boolean;
+        readonly secondaryColorRGB: altShared.RGBA;
+        readonly isTireSmokeColorCustom: boolean;
+        readonly wheelType: number;
+        readonly wheelVariation: number;
+        readonly isNeonActive: boolean;
+        readonly isEngineOn: boolean;
+        readonly isHandbrakeActive: boolean;
+        readonly isSirenActive: boolean;
+        readonly isDaylightOn: boolean;
+        readonly isNightlightOn: boolean;
+        readonly isFlamethrowerActive: boolean;
+        readonly gameStateBase64: string;
+        readonly wheelsCount: number;
+        readonly repairsCount: number;
+        readonly hasArmoredWindows: boolean;
+        readonly isManualEngineControl: boolean;
+        readonly velocity: altShared.Vector3;
+        readonly steeringAngle: number;
 
         modKit: number;
         primaryColor: number;
@@ -369,6 +531,29 @@ declare module "@altv/server" {
         readonly accelerationLevel: number;
         readonly brakeLevel: number;
 
+        getMod(category: number): number;
+        getModsCount(category: number): number;
+        isExtraOn(extraId: number): boolean;
+        getDoorState(doorId: number): number;
+        isWindowOpened(windowId: number): boolean;
+        isWheelBurst(wheelId: number): boolean;
+        getWheelHasTire(wheelId: number): boolean;
+        isWheelDetached(wheelId: number): boolean;
+        isWheelOnFire(wheelId: number): boolean;
+        getWheelHealth(wheelId: number): number;
+
+        getPartDamageLevel(partId: number): number;
+        getPartBulletHoles(partId: number): number;
+
+        isLightDamaged(lightId: number): boolean;
+        isWindowDamaged(windowId: number): boolean;
+
+        isSpecialLightDamaged(specialLightId: number): boolean;
+        getArmoredWindowHealth(windowId: number): number;
+        getArmoredWindowShootCount(windowId: number): number;
+        getBumperDamageLevel(bumperId: number): number;
+        toggleExtra(extraId: number, state: boolean): void;
+
         repair(): void;
         setMod(category: number, id: number): boolean;
         setWheels(type: number, variation: number): void;
@@ -393,21 +578,49 @@ declare module "@altv/server" {
         getWeaponCapacity(index: number): number;
         setWeaponCapacity(index: number, state: number): void;
 
+        readonly meta: VehicleMeta;
+        readonly syncedMeta: altShared.VehicleSyncedMeta;
+        readonly streamSyncedMeta: altShared.VehicleStreamSyncedMeta;
+
+        static getByID(id: number): Vehicle | null;
         static create(opts: VehicleCreateOptions): Vehicle | null;
+        static all: ReadonlyArray<Vehicle>;
     }
 
-    export abstract class VirtualEntity extends altShared.VirtualEntity {
-        readonly streamSyncedMeta: Record<string, unknown>;
+    interface VirtualEntityCreateOptions {
+        group: VirtualEntityGroup;
+        pos: altShared.IVector3;
+        maxEntitiesInStream: number;
+        data?: Record<string, unknown>;
     }
 
-    export abstract class VirtualEntityGroup extends altShared.VirtualEntityGroup {}
+    export abstract class VirtualEntityGroup extends BaseObject {
+        readonly maxEntitiesInStream: number;
+
+        static create(opts: altShared.VirtualEntityGroupCreateOptions): VirtualEntityGroup | null;
+    }
+
+    export abstract class VirtualEntity extends WorldObject {
+        readonly isStreamedIn: boolean;
+
+        readonly group: VirtualEntityGroup;
+        readonly streamingDistance: number;
+
+        visible: boolean;
+
+        readonly meta: VirtualEntityMeta;
+        readonly syncedMeta: altShared.VirtualEntitySyncedMeta;
+        readonly streamSyncedMeta: altShared.VirtualEntityStreamSyncedMeta;
+
+        static create(opts: VirtualEntityCreateOptions): VirtualEntity | null;
+    }
 
     interface VoiceChannelCreateOptions {
         spatial: boolean;
         maxDistance?: number;
     }
 
-    export abstract class VoiceChannel extends altShared.VoiceChannel {
+    export abstract class VoiceChannel extends BaseObject {
         readonly isSpatial: boolean;
         readonly maxDistance: number;
 
@@ -425,7 +638,7 @@ declare module "@altv/server" {
         static create(opts: VoiceChannelCreateOptions): VoiceChannel | null;
     }
 
-    export abstract class WorldObject extends altShared.WorldObject {
+    export abstract class WorldObject {
         dimension: number;
         pos: altShared.Vector3;
     }
@@ -922,6 +1135,65 @@ declare module "@altv/server" {
             resource: Resource;
         }
     }
+
+    /**
+     * Extend it by interface merging for use in meta.
+     */
+    export interface GlobalMeta {
+        [key: string]: unknown;
+    }
+
+    /**
+     * Extend it by interface merging for use in BaseObject#meta.
+     */
+    export interface BaseObjectMeta {
+        [key: string]: unknown;
+    }
+
+    /**
+     * Extend it by interface merging for use in Blip#meta.
+     */
+    export interface BlipMeta extends BaseObjectMeta {}
+
+    /**
+     * Extend it by interface merging for use in ColShape#meta.
+     */
+    export interface ColShapeMeta extends BaseObjectMeta {}
+
+    /**
+     * Extend it by interface merging for use in Checkpoint#meta.
+     */
+    export interface CheckpointMeta extends ColShapeMeta {}
+
+    /**
+     * Extend it by interface merging for use in Entity#meta.
+     */
+    export interface EntityMeta extends BaseObjectMeta {}
+
+    /**
+     * Extend it by interface merging for use in Player#meta.
+     */
+    export interface PlayerMeta extends EntityMeta {}
+
+    /**
+     * Extend it by interface merging for use in Vehicle#meta.
+     */
+    export interface VehicleMeta extends EntityMeta {}
+
+    /**
+     * Extend it by interface merging for use in Ped#meta.
+     */
+    export interface PedMeta extends EntityMeta {}
+
+    /**
+     * Extend it by interface merging for use in Object#meta.
+     */
+    export interface ObjectMeta extends EntityMeta {}
+
+    /**
+     * Extend it by interface merging for use in VirtualEntity#meta.
+     */
+    export interface VirtualEntityMeta extends BaseObjectMeta {}
 
     export * from "@altv/shared";
 }
