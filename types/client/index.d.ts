@@ -878,13 +878,13 @@ declare module "@altv/client" {
         export function onResourceError(callback: GenericEventCallback<ResourceErrorEventParameters>): void;
 
         // Custom events
-        export function on<T extends keyof ClientEvent>(eventName: T, callback: CustomEventCallback<Parameters<ClientEvent[T]>>): EventSubscription;
-        export function on(eventName: string, callback: CustomEventCallback): EventSubscription;
-        export function onServer<T extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: T, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[T]>>): EventSubscription;
-        export function onServer(eventName: string, callback: CustomEventCallback): EventSubscription;
-        export function onRemote<T extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: T, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[T]>>): EventSubscription;
-        export function onRemote<T extends keyof altShared.Events.CustomRemoteEvent>(eventName: T, callback: CustomEventCallback<Parameters<altShared.Events.CustomRemoteEvent[T]>>): EventSubscription;
-        export function onRemote(eventName: string, callback: CustomEventCallback): EventSubscription;
+        export function on<E extends keyof ClientEvent>(eventName: E, callback: CustomEventCallback<E, Parameters<ClientEvent[E]>>): EventSubscription;
+        export function on(eventName: string, callback: CustomEventCallback<string, unknown[]>): EventSubscription;
+        export function onServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<E, Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
+        export function onServer(eventName: string, callback: CustomEventCallback<string, unknown[]>): EventSubscription;
+        export function onRemote<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<E, Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
+        export function onRemote<E extends keyof altShared.Events.CustomRemoteEvent>(eventName: E, callback: CustomEventCallback<E, Parameters<altShared.Events.CustomRemoteEvent[E]>>): EventSubscription;
+        export function onRemote(eventName: string, callback: CustomEventCallback<string, unknown[]>): EventSubscription;
 
         interface PlayerAnimationChangeEventParameters {
             oldAnimDict: number;
@@ -921,7 +921,7 @@ declare module "@altv/client" {
 
         interface ClientEvent {}
 
-        export type CustomEventCallback<T extends unknown[] = unknown[]> = (...params: T) => void | Promise<void>;
+        export type CustomEventCallback<E extends string, T extends unknown[]> = (params: { eventName: E, args: T }) => void | Promise<void>;
         export type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
         export type GenericPlayerEventCallback<T = {}> = (params: T & { player: Player }) => void | Promise<void>;
 
