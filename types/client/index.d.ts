@@ -743,6 +743,27 @@ declare module "@altv/client" {
         export function onWorldObjectStreamIn(callback: GenericEventCallback<WorldObjectStreamInEventParameters>): void;
         export function onWorldObjectStreamOut(callback: GenericEventCallback<WorldObjectStreamOutEventParameters>): void;
 
+        export function on<T>(eventName: string, callback: GenericEventCallback<T>): EventSubscription;
+        export function onRemote<T>(eventName: string, callback: GenericEventCallback<T>): EventSubscription;
+        export function remove(eventName: string, callback: GenericEventCallback): void;
+
+        export function onEvent<T>(callback: GenericOnEventCallback<T>): void;
+
+        export function setWarningThreshold(threshold: number): void;
+        export function setSourceLocationFrameSkipCount(skipCount: number): void;
+
+        export function onServer<T>(eventName: string, callback: GenericEventCallback<T>): EventSubscription;
+
+        interface GenericOnEventCallback<T> {
+            readonly [key: string]: unknown;
+            readonly customEvent: boolean;
+        }
+
+        interface EventSubscription {
+            readonly listeners: ReadonlyArray<GenericEventCallback>;
+            remove(eventName: string, callback: GenericEventCallback): void;
+        }
+
         interface WorldObjectPositionChangeEventParameters {
             object: WorldObject;
             oldPos: altShared.Vector3;
@@ -992,7 +1013,7 @@ declare module "@altv/client" {
             resource: altShared.Resource;
         }
 
-        type GenericPlayerEventCallback<T> = (params: T & { player: Player }) => void | Promise<void>;
+        type GenericPlayerEventCallback<T = {}> = (params: T & { player: Player }) => void | Promise<void>;
         type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
     }
 

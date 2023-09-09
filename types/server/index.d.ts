@@ -586,6 +586,28 @@ declare module "@altv/server" {
         export function onResourceStop(callback: GenericEventCallback<ResourceStopEventParameters>): void;
         export function onResourceError(callback: GenericEventCallback<ResourceErrorEventParameters>): void;
 
+        export function on<T>(eventName: string, callback: GenericEventCallback<T>): EventSubscription;
+        export function onRemote<T>(eventName: string, callback: GenericEventCallback<T>): EventSubscription;
+        export function remove(eventName: string, callback: GenericEventCallback): void;
+
+        export function onEvent<T>(callback: GenericOnEventCallback<T>): void;
+
+        export function setWarningThreshold(threshold: number): void;
+        export function setSourceLocationFrameSkipCount(skipCount: number): void;
+
+        // server only
+        export function onPlayer<T>(eventName: string, callback: GenericPlayerEventCallback<T>): EventSubscription;
+
+        interface GenericOnEventCallback<T> {
+            readonly [key: string]: unknown;
+            readonly customEvent: boolean;
+        }
+
+        interface EventSubscription {
+            readonly listeners: ReadonlyArray<GenericEventCallback>;
+            remove(eventName: string, callback: GenericEventCallback): void;
+        }
+
         export abstract class ConnectionInfo {
             readonly name: string;
             readonly socialId: number;
