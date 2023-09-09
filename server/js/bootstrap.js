@@ -7,6 +7,7 @@ const dns = require("dns");
 const url = require("url");
 
 const alt = __altModule;
+const cppBindings = __cppBindings;
 
 (async () => {
     let _exports = null;
@@ -75,7 +76,7 @@ function setupImports() {
     });
 
     const _warningPackages = {
-        "node-fetch": "Console hangs",
+        "node-fetch": "Console hangs"
     };
     const customLoaders = [
         {
@@ -84,19 +85,16 @@ function setupImports() {
                     if (specifier.startsWith(`${altResourceImportPrefix}/`))
                         return {
                             url: `${altResourceInternalPrefix}:${specifier.slice(altResourceImportPrefix.length + 1)}`,
-                            shortCircuit: true,
+                            shortCircuit: true
                         };
 
                     if (specifier.startsWith(`${altModuleImportPrefix}/`))
                         return {
                             url: `${altModuleInternalPrefix}:${specifier.slice(altModuleImportPrefix.length + 1)}`,
-                            shortCircuit: true,
+                            shortCircuit: true
                         };
 
-                    if (_warningPackages.hasOwnProperty(specifier))
-                        alt.logWarning(
-                            `Using the module "${specifier}" can cause problems. Reason: ${_warningPackages[specifier]}`
-                        );
+                    if (_warningPackages.hasOwnProperty(specifier)) alt.logWarning(`Using the module "${specifier}" can cause problems. Reason: ${_warningPackages[specifier]}`);
                     return defaultResolve(specifier, context, defaultResolve);
                 },
                 load(url, context, defaultLoad) {
@@ -104,7 +102,7 @@ function setupImports() {
                         return {
                             format: "altresource",
                             source: null,
-                            shortCircuit: true,
+                            shortCircuit: true
                         };
 
                     if (url.startsWith(`${altModuleInternalPrefix}:`)) {
@@ -116,13 +114,13 @@ function setupImports() {
                         return {
                             format: "altmodule",
                             source: null,
-                            shortCircuit: true,
+                            shortCircuit: true
                         };
                     }
                     return defaultLoad(url, context, defaultLoad);
-                },
-            },
-        },
+                }
+            }
+        }
     ];
     esmLoader.addCustomLoaders(customLoaders);
 }

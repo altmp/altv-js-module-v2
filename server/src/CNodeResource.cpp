@@ -55,6 +55,7 @@ bool CNodeResource::Start()
 
     js::TemporaryGlobalExtension altModuleExtension(_context, "__altModule", js::Module::Get("@altv/server").GetNamespace(this));
     js::TemporaryGlobalExtension altSharedModuleExtension(_context, "__altSharedModule", js::Module::Get("@altv/shared").GetNamespace(this));
+    js::TemporaryGlobalExtension cppBindingsExtension(_context, "__cppBindings", js::Module::Get("cppBindings").GetNamespace(this));
     js::TemporaryGlobalExtension altServerModuleExtension(_context, "__resourceStarted", ResourceStarted);
     node::LoadEnvironment(env, bootstrapper.GetSource());
 
