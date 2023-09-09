@@ -743,26 +743,8 @@ declare module "@altv/client" {
         export function onWorldObjectStreamIn(callback: GenericEventCallback<WorldObjectStreamInEventParameters>): void;
         export function onWorldObjectStreamOut(callback: GenericEventCallback<WorldObjectStreamOutEventParameters>): void;
 
-        export function on<T>(eventName: string, callback: GenericEventCallback<T>): EventSubscription;
-        export function onRemote<T>(eventName: string, callback: GenericEventCallback<T>): EventSubscription;
-        export function remove(eventName: string, callback: GenericEventCallback): void;
-
-        export function onEvent<T>(callback: GenericOnEventCallback<T>): void;
-
         export function setWarningThreshold(threshold: number): void;
         export function setSourceLocationFrameSkipCount(skipCount: number): void;
-
-        export function onServer<T>(eventName: string, callback: GenericEventCallback<T>): EventSubscription;
-
-        interface GenericOnEventCallback<T> {
-            readonly [key: string]: unknown;
-            readonly customEvent: boolean;
-        }
-
-        interface EventSubscription {
-            readonly listeners: ReadonlyArray<GenericEventCallback>;
-            remove(eventName: string, callback: GenericEventCallback): void;
-        }
 
         interface WorldObjectPositionChangeEventParameters {
             object: WorldObject;
@@ -895,7 +877,15 @@ declare module "@altv/client" {
         export function onResourceStop(callback: GenericEventCallback<ResourceStopEventParameters>): void;
         export function onResourceError(callback: GenericEventCallback<ResourceErrorEventParameters>): void;
 
-        // SHARED Player events
+        // Custom events
+        export function on<E extends keyof ClientEvent>(eventName: E, callback: CustomEventCallback<E, Parameters<ClientEvent[E]>>): EventSubscription;
+        export function on(eventName: string, callback: CustomEventCallback<string, unknown[]>): EventSubscription;
+        export function onServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<E, Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
+        export function onServer(eventName: string, callback: CustomEventCallback<string, unknown[]>): EventSubscription;
+        export function onRemote<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<E, Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
+        export function onRemote<E extends keyof altShared.Events.CustomRemoteEvent>(eventName: E, callback: CustomEventCallback<E, Parameters<altShared.Events.CustomRemoteEvent[E]>>): EventSubscription;
+        export function onRemote(eventName: string, callback: CustomEventCallback<string, unknown[]>): EventSubscription;
+
         interface PlayerAnimationChangeEventParameters {
             oldAnimDict: number;
             newAnimDict: number;
@@ -924,8 +914,19 @@ declare module "@altv/client" {
             newSeat: number;
         }
 
-        interface ServerScriptEventParameters<T> {
-            eventName: string;
+        interface EventSubscription {
+            readonly listeners: ReadonlyArray<GenericEventCallback>;
+            remove(eventName: string, callback: GenericEventCallback): void;
+        }
+
+        interface ClientEvent {}
+
+        export type CustomEventCallback<E extends string, T extends unknown[]> = (params: { eventName: E, args: T }) => void | Promise<void>;
+        export type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
+        export type GenericPlayerEventCallback<T = {}> = (params: T & { player: Player }) => void | Promise<void>;
+
+        interface GenericScriptEventParameters<E, T> {
+            eventName: E;
             args: T;
         }
 
@@ -1012,9 +1013,6 @@ declare module "@altv/client" {
         interface ResourceErrorEventParameters {
             resource: altShared.Resource;
         }
-
-        type GenericPlayerEventCallback<T = {}> = (params: T & { player: Player }) => void | Promise<void>;
-        type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
     }
 
     export namespace Discord {

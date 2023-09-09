@@ -191,11 +191,10 @@ export class Event {
         const handlers = Event.#genericHandlers;
         if (!handlers.size) return;
 
-        const genericCtx = {
+        const genericCtx = Object.freeze({
             ...ctx,
             customEvent: custom
-        };
-        Object.freeze(genericCtx);
+        });
 
         for (let { handler, location } of handlers) {
             try {
