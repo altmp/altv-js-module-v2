@@ -71,13 +71,24 @@ static void CreateEntity(js::FunctionContext& ctx)
     }
 
     js::IResource* resource = ctx.GetResource();
-    js::ScriptObject* scriptObject = resource->GetOrCreateScriptObject(ctx.GetContext(), object);
-    if(!scriptObject)
+    js::ScriptObject* scriptObject = nullptr;
     {
-        if(tryCatch.HasCaught()) tryCatch.ReThrow();
-        else
-            ctx.Throw("Failed to create entity of type " + std::string(magic_enum::enum_name(type)));
-        return;
+        js::TryCatch tryCatch;
+        alt::IBaseObject* object = js::FactoryHandler::Create(type, args);
+        if(!object)
+        {
+            if(!tryCatch.HasCaught()) ctx.Throw("Failed to create entity of type " + std::string(magic_enum::enum_name(type)));
+            tryCatch.ReThrow();
+            return;
+        }
+
+        scriptObject = resource->GetOrCreateScriptObject(ctx.GetContext(), object);
+        if(!scriptObject)
+        {
+            if(!tryCatch.HasCaught()) ctx.Throw("Failed to create entity of type " + std::string(magic_enum::enum_name(type)));
+            tryCatch.ReThrow();
+            return;
+        }
     }
 
     js::Function func = resource->GetBindingExport<v8::Function>("entity:addEntityToAll");
