@@ -6,6 +6,12 @@ static void ValidGetter(js::PropertyContext& ctx)
     ctx.Return(ctx.GetThisObject<alt::IBaseObject>() != nullptr);
 }
 
+static void RemovedGetter(js::PropertyContext& ctx)
+{
+    alt::IBaseObject* obj = ctx.GetThisObject<alt::IBaseObject>();
+    ctx.Return(obj == nullptr || obj->IsRemoved());
+}
+
 static void Destroy(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
@@ -51,6 +57,21 @@ static void MetaEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
     ctx.Return(keys);
 }
 
+static void SyncedMetaGetter(js::DynamicPropertyGetterContext& ctx)
+{
+    if(!ctx.CheckParent()) return;
+    alt::IBaseObject* obj = ctx.GetParent<alt::IBaseObject>();
+    ctx.Return(obj->GetSyncedMetaData(ctx.GetProperty()));
+}
+
+static void SyncedMetaEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
+{
+    if(!ctx.CheckParent()) return;
+    alt::IBaseObject* obj = ctx.GetParent<alt::IBaseObject>();
+    std::vector<std::string> keys = obj->GetSyncedMetaDataKeys();
+    ctx.Return(keys);
+}
+
 static void SetMultipleMetaData(js::FunctionContext& ctx)
 {
     if (!ctx.CheckThis()) return;
@@ -70,6 +91,28 @@ static void SetMultipleMetaData(js::FunctionContext& ctx)
     }
 
     obj->SetMultipleMetaData(values);
+}
+
+static void SetMultipleSyncedMetaData(js::FunctionContext& ctx)
+{
+    if (!ctx.CheckThis()) return;
+    if (!ctx.CheckArgCount(1)) return;
+
+    alt::IEntity* entity = ctx.GetThisObject<alt::IEntity>();
+    if(!entity) return;
+
+    js::Object dict;
+    if(!ctx.GetArg(0, dict)) return;
+
+    std::unordered_map<std::string, alt::MValue> values;
+    for (auto key : dict.GetKeys())
+    {
+        alt::MValue val;
+        if(!dict.Get(key, val)) continue;
+        values[key] = val;
+    }
+
+    entity->SetMultipleSyncedMetaData(values);
 }
 
 static void GetByID(js::FunctionContext& ctx)
@@ -96,7 +139,11 @@ extern js::Class baseObjectClass("BaseObject", [](js::ClassTemplate& tpl)
     tpl.Method("destroy", Destroy);
 
     tpl.DynamicProperty("meta", MetaGetter, MetaSetter, MetaDeleter, MetaEnumerator);
+    tpl.DynamicProperty("syncedMeta", SyncedMetaGetter, nullptr, nullptr, SyncedMetaEnumerator);
     tpl.Method("setMultipleMetaData", SetMultipleMetaData);
+    tpl.Method("setMultipleSyncedMetaData", SetMultipleSyncedMetaData);
 
     tpl.StaticFunction("getByID", GetByID);
+
+    tpl.Property("removed", RemovedGetter);
 });

@@ -70,30 +70,6 @@ static void AttachTo(js::FunctionContext& ctx)
     }
 }
 
-static void SyncedMetaSetter(js::DynamicPropertySetterContext& ctx)
-{
-    if(!ctx.CheckParent()) return;
-    alt::IEntity* obj = ctx.GetParent<alt::IEntity>();
-    alt::MValue value;
-
-    if(!ctx.GetValue(value)) return;
-    obj->SetSyncedMetaData(ctx.GetProperty(), value);
-}
-
-static void SyncedMetaDeleter(js::DynamicPropertyDeleterContext& ctx)
-{
-    if(!ctx.CheckParent()) return;
-    alt::IEntity* obj = ctx.GetParent<alt::IEntity>();
-    if(!obj->HasSyncedMetaData(ctx.GetProperty()))
-    {
-        ctx.Return(false);
-        return;
-    }
-
-    obj->DeleteSyncedMetaData(ctx.GetProperty());
-    ctx.Return(true);
-}
-
 static void StreamSyncedMetaSetter(js::DynamicPropertySetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
@@ -116,28 +92,6 @@ static void StreamSyncedMetaDeleter(js::DynamicPropertyDeleterContext& ctx)
 
     obj->DeleteStreamSyncedMetaData(ctx.GetProperty());
     ctx.Return(true);
-}
-
-static void SetMultipleSyncedMetaData(js::FunctionContext& ctx)
-{
-    if (!ctx.CheckThis()) return;
-    if (!ctx.CheckArgCount(1)) return;
-
-    alt::IEntity* entity = ctx.GetThisObject<alt::IEntity>();
-    if(!entity) return;
-
-    js::Object dict;
-    if(!ctx.GetArg(0, dict)) return;
-
-    std::unordered_map<std::string, alt::MValue> values;
-    for (auto key : dict.GetKeys())
-    {
-        alt::MValue val;
-        if(!dict.Get(key, val)) continue;
-        values[key] = val;
-    }
-
-    entity->SetMultipleSyncedMetaData(values);
 }
 
 static void SetMultipleStreamSyncedMetaData(js::FunctionContext& ctx)
@@ -177,9 +131,7 @@ extern js::Class entityClass("Entity", &sharedEntityClass, nullptr, [](js::Class
     tpl.Property<&alt::IEntity::HasCollision, &alt::IEntity::SetCollision>("collision");
     tpl.Property<&alt::IEntity::GetTimestamp>("timestamp");
 
-    tpl.DynamicProperty("syncedMeta", nullptr, SyncedMetaSetter, SyncedMetaDeleter, nullptr);
     tpl.DynamicProperty("streamSyncedMeta", nullptr, StreamSyncedMetaSetter, StreamSyncedMetaDeleter, nullptr);
 
-    tpl.Method("setMultipleSyncedMetaData", SetMultipleSyncedMetaData);
     tpl.Method("setMultipleStreamSyncedMetaData", SetMultipleStreamSyncedMetaData);
 });
