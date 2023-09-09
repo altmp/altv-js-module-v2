@@ -204,6 +204,8 @@ declare module "@altv/shared" {
 
         readonly syncedMeta: Readonly<Record<string, unknown>>;
         readonly streamSyncedMeta: Readonly<Record<string, unknown>>;
+
+        static readonly all: ReadonlyArray<Entity>;
     }
 
     export abstract class Object extends Entity {
