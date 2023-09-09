@@ -578,8 +578,8 @@ declare module "@altv/server" {
         export function onEntityCheckpointLeave(callback: GenericEventCallback<EntityCheckpointLeaveEventParameters>): void;
 
         // SHARED script related events
-        export function onServerScriptEvent<T = unknown[]>(callback: GenericPlayerEventCallback<ServerScriptEventParameters<T>>): void;
-        export function onPlayerScriptEvent<T = unknown[]>(callback: GenericPlayerEventCallback<PlayerScriptEventParameters<T>>): void;
+        export function onLocalScriptEvent<T = unknown[]>(callback: GenericEventCallback<ServerScriptEventParameters<T>>): void;
+        export function onRemoteScriptEvent<T = unknown[]>(callback: GenericPlayerEventCallback<PlayerScriptEventParameters<T>>): void;
 
         // SHARED resource events
         export function onResourceStart(callback: GenericEventCallback<ResourceStartEventParameters>): void;
