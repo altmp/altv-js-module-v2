@@ -10,6 +10,7 @@
 #include "Class.h"
 #include "Module.h"
 #include "IScriptObjectHandler.h"
+#include "ICompatibilityHandler.h"
 #include "Event.h"
 #include "Logger.h"
 #include "helpers/ClassInstanceCache.h"
@@ -17,7 +18,7 @@
 
 namespace js
 {
-    class IResource : public IScriptObjectHandler
+    class IResource : public IScriptObjectHandler, public ICompatibilityHandler
     {
     protected:
         static constexpr int ContextInternalFieldIdx = 1;
@@ -36,6 +37,7 @@ namespace js
         void Initialize()
         {
             context.Get(isolate)->SetAlignedPointerInEmbedderData(ContextInternalFieldIdx, this);
+            ICompatibilityHandler::Initialize();
         }
 
         virtual void Reset()
@@ -44,6 +46,7 @@ namespace js
             Module::CleanupForResource(this);
             ClassInstanceCache::ClearForResource(this);
             IScriptObjectHandler::Reset();
+            ICompatibilityHandler::Reset();
 
             isolate = nullptr;
 

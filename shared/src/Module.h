@@ -25,11 +25,13 @@ namespace js
 
     public:
         using ModuleInitializationCallback = std::function<void(ModuleTemplate&)>;
+        using CustomGetNamespaceCallback = std::function<v8::Local<v8::Object>(IResource*)>;
 
     private:
         std::string name;
         std::string parentModule;
         ModuleInitializationCallback initCb;
+        CustomGetNamespaceCallback customGetNamespaceCb;
         std::unordered_map<v8::Isolate*, ModuleTemplate> templateMap;
         std::unordered_map<IResource*, Persistent<v8::Object>> instanceMap;
         std::vector<Class*> classes;
@@ -51,6 +53,10 @@ namespace js
         }
         Module(const std::string& _name, const std::string& _parent, const std::vector<Class*>& _classes, ModuleInitializationCallback _cb)
             : name(_name), parentModule(_parent), classes(_classes), initCb(_cb)
+        {
+            GetAll().insert({ name, this });
+        }
+        Module(const std::string& _name, CustomGetNamespaceCallback _customGetNamespaceCb) : name(_name), customGetNamespaceCb(_customGetNamespaceCb)
         {
             GetAll().insert({ name, this });
         }

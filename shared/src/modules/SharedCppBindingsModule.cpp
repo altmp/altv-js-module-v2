@@ -163,6 +163,7 @@ extern js::Module sharedCppBindingsModule("sharedCppBindings", [](js::ModuleTemp
     module.StaticFunction("getCurrentSourceLocation", GetCurrentSourceLocation);
 
     module.StaticFunction("registerExport", RegisterExport);
+    module.StaticFunction("registerCompatibilityExport", js::ICompatibilityHandler::RegisterCompatibilityExportFunc);
 
     module.StaticFunction("getBuiltinModule", GetBuiltinModule);
 

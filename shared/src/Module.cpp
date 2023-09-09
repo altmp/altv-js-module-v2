@@ -14,11 +14,13 @@ void js::Module::Register(ModuleTemplate& tpl)
     {
         tpl.StaticProperty(class_->GetName(), class_->GetTemplate(isolate).Get());
     }
-    initCb(tpl);
+    if(initCb) initCb(tpl);
 }
 
 v8::Local<v8::Object> js::Module::GetNamespace(IResource* resource)
 {
+    if(customGetNamespaceCb) return customGetNamespaceCb(resource);
+
     if(!instanceMap.contains(resource))
     {
         v8::Local<v8::Object> obj = templateMap.at(resource->GetIsolate()).Get()->NewInstance(resource->GetContext()).ToLocalChecked();
