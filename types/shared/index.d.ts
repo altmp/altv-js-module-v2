@@ -850,9 +850,8 @@ declare module "@altv/shared" {
         }
 
         interface GenericOnEventCallback {
-            readonly ctx: Readonly<Record<string, unknown>>;
-            readonly eventType: number;
-            readonly isCustom: boolean;
+            readonly [key: string]: unknown;
+            readonly customEvent: boolean;
         }
     }
 
