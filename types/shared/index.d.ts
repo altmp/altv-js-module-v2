@@ -843,6 +843,17 @@ declare module "@altv/shared" {
         interface CustomRemoteEvent {}
         interface CustomPlayerToServerEvent {}
         interface CustomServerToPlayerEvent {}
+
+        export function onEvent(callback: GenericOnEventCallback): void;
+        export interface onEvent {
+            remove(callback: GenericOnEventCallback): void;
+        }
+
+        interface GenericOnEventCallback {
+            readonly ctx: Readonly<Record<string, unknown>>;
+            readonly eventType: number;
+            readonly isCustom: boolean;
+        }
     }
 
     export namespace Enums {

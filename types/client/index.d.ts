@@ -886,11 +886,6 @@ declare module "@altv/client" {
         export function onRemote<T extends keyof altShared.Events.CustomRemoteEvent>(eventName: T, callback: CustomEventCallback<Parameters<altShared.Events.CustomRemoteEvent[T]>>): EventSubscription;
         export function onRemote(eventName: string, callback: CustomEventCallback): EventSubscription;
 
-        export function onEvent(callback: GenericOnEventCallback): void;
-        export interface onEvent {
-            remove(callback: GenericOnEventCallback): void;
-        }
-
         interface PlayerAnimationChangeEventParameters {
             oldAnimDict: number;
             newAnimDict: number;
@@ -917,11 +912,6 @@ declare module "@altv/client" {
             vehicle: Vehicle;
             oldSeat: number;
             newSeat: number;
-        }
-
-        interface GenericOnEventCallback {
-            readonly [key: string]: unknown;
-            readonly customEvent: boolean;
         }
 
         interface EventSubscription {

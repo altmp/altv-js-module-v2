@@ -595,18 +595,8 @@ declare module "@altv/server" {
         export function onRemote<T extends keyof altShared.Events.CustomRemoteEvent>(eventName: T, callback: CustomPlayerEventCallback<Parameters<altShared.Events.CustomRemoteEvent[T]>>): EventSubscription;
         export function onRemote(eventName: string, callback: CustomPlayerEventCallback): EventSubscription;
 
-        export function onEvent(callback: GenericOnEventCallback): void;
-        export interface onEvent {
-            remove(eventName: string, callback: GenericOnEventCallback): void;
-        }
-
         export function setWarningThreshold(threshold: number): void;
         export function setSourceLocationFrameSkipCount(skipCount: number): void;
-
-        interface GenericOnEventCallback {
-            readonly [key: string]: unknown;
-            readonly customEvent: boolean;
-        }
 
         interface EventSubscription {
             readonly listeners: ReadonlyArray<GenericEventCallback>;
@@ -766,8 +756,8 @@ declare module "@altv/server" {
 
         interface CustomServerEvent {}
 
-        export type CustomEventCallback<T extends unknown[]> = (...params: T) => void | Promise<void>;
-        export type CustomPlayerEventCallback<T extends unknown[]> = (player: Player, ...params: T) => void | Promise<void>;
+        export type CustomEventCallback<T extends unknown[] = unknown[]> = (...params: T) => void | Promise<void>;
+        export type CustomPlayerEventCallback<T extends unknown[] = unknown[]> = (player: Player, ...params: T) => void | Promise<void>;
         export type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
         export type GenericPlayerEventCallback<T = {}> = (params: T & { player: Player }) => void | Promise<void>;
 
