@@ -142,6 +142,30 @@ declare module "@altv/server" {
         export function create(opts: altShared.RadiusBlipCreateOptions & SharedBlipCreateOptions): Blip | null;
     }
 
+    export namespace ColShapeSphere {
+        export function create(opts: altShared.ColShapeSphereCreateOptions): ColShape | null;
+    }
+
+    export namespace ColShapeCylinder {
+        export function create(opts: altShared.ColShapeCylinderCreateOptions): ColShape | null;
+    }
+
+    export namespace ColShapeCircle {
+        export function create(opts: altShared.ColShapeCircleCreateOptions): ColShape | null;
+    }
+
+    export namespace ColShapeCuboid {
+        export function create(opts: altShared.ColShapeCuboidCreateOptions): ColShape | null;
+    }
+
+    export namespace ColShapeRectangle {
+        export function create(opts: altShared.ColShapeRectangleCreateOptions): ColShape | null;
+    }
+
+    export namespace ColShapePolygon {
+        export function create(opts: altShared.ColShapePolygonCreateOptions): ColShape | null;
+    }
+
     export abstract class ColShape extends WorldObject {
         readonly colShapeType: altShared.Enums.ColShapeType;
         playersOnly: boolean;
