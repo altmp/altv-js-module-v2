@@ -93,7 +93,9 @@ static void SyncedMetaEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
 }
 
 // clang-format off
-extern js::Class baseObjectClass, worldObjectClass, entityClass, colShapeClass, resourceClass, bufferClass;
+extern js::Class baseObjectClass, worldObjectClass, entityClass, resourceClass, bufferClass;
+// TODO (xLuxy): bind colshape classes except colShapeClass
+extern js::Class colShapeClass, colShapeCircleClass, colShapeCuboidClass, colShapeCylinderClass, colShapePolyClass, colShapeRectClass, colShapeSphereClass;
 extern js::Namespace enumsNamespace, sharedEventsNamespace, fileNamespace;
 static js::Module sharedModule("@altv/shared", "", { &baseObjectClass, &worldObjectClass, &entityClass, &colShapeClass, &resourceClass, &bufferClass }, [](js::ModuleTemplate& module)
 {
