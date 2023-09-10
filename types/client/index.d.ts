@@ -598,8 +598,8 @@ declare module "@altv/client" {
         hide(): void;
         update(): void;
 
-        createElement(tag: string): RmlElement | undefined;
-        createTextNode(text: string): RmlElement | undefined;
+        createElement(tag: string): RmlElement;
+        createTextNode(text: string): RmlElement;
 
         static create(options: RmlDocumentCreateOptions): RmlDocument;
 
