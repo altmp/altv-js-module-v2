@@ -192,3 +192,24 @@ TODO
 
 ### `DynamicPropertyContext`
 TODO
+
+## Deprecations
+
+To deprecate a function, property or any other API, use the `ctx.Deprecate(...)` function.
+Inside the message explain why it is deprecated and/or which API should be used instead.
+
+Example:
+```cpp
+static void MyFunction(js::FunctionContext& ctx)
+{
+    ctx.Deprecate("MyFunction is deprecated due to being unsafe. Consider using MyOtherFunction.");
+
+    if(!ctx.CheckArgCount(1)) return;
+    // ... and so on
+}
+```
+
+Which will result with this warning when calling the function:
+```
+This API is deprecated: MyFunction is deprecated due to being unsafe. Consider using MyOtherFunction.
+```

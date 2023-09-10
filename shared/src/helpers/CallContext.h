@@ -170,6 +170,11 @@ namespace js
                 info.GetReturnValue().Set(JSValue((Type)value));
             }
         }
+
+        void Deprecate(const std::string& message)
+        {
+            Logger::Warn("This API is deprecated: " + message);
+        }
     };
 
     class FunctionContext : public CallContext<v8::FunctionCallbackInfo<v8::Value>>
