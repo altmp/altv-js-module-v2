@@ -1277,7 +1277,7 @@ declare module "@altv/client" {
         }
 
         interface CustomClientEvent {
-            [key: string]: (...args: unknown[]) => void | Promise<void>;
+            [key: string]: (...args: any[]) => void | Promise<void>;
         }
 
         export type CustomEventCallback<T extends unknown[]> = (...params: T ) => void | Promise<void>;

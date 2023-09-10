@@ -991,7 +991,7 @@ declare module "@altv/server" {
         }
 
         interface CustomServerEvent {
-            [key: string]: (...args: unknown[]) => void | Promise<void>;
+            [key: string]: (...args: any[]) => void | Promise<void>;
         }
 
         export type EventContext = {
