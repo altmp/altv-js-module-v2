@@ -804,7 +804,7 @@ declare module "@altv/server" {
 
         // Custom events
         export function on<E extends keyof CustomServerEvent>(eventName: E, callback: CustomEventCallback<Parameters<CustomServerEvent[E]>>): EventSubscription;
-        export function on(callback: CustomEventCallback<string, unknown[]>): EventSubscription;
+        export function on(callback: CustomEventCallback<unknown[]>): EventSubscription;
         export function onPlayer<E extends keyof altShared.Events.CustomPlayerToServerEvent>(eventName: E, callback: CustomPlayerEventCallback<Parameters<altShared.Events.CustomPlayerToServerEvent[E]>>): EventSubscription;
         export function onPlayer(eventName: string, callback: CustomPlayerEventCallback<unknown[]>): EventSubscription;
         export function onRemote<E extends keyof altShared.Events.CustomPlayerToServerEvent>(eventName: E, callback: CustomPlayerEventCallback<Parameters<altShared.Events.CustomPlayerToServerEvent[E]>>): EventSubscription;
