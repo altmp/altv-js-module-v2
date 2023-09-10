@@ -972,8 +972,8 @@ declare module "@altv/server" {
 
         interface CustomServerEvent {}
 
-        export type CustomEventCallback<E extends string, T extends []> = (params: { eventName: E; args: T }) => void | Promise<void>;
-        export type CustomPlayerEventCallback<E extends string, T extends []> = (params: { eventName: E; player: Player; args: T }) => void | Promise<void>;
+        export type CustomEventCallback<E extends string, T extends unknown[]> = (params: { eventName: E; args: T }) => void | Promise<void>;
+        export type CustomPlayerEventCallback<E extends string, T extends unknown[]> = (params: { eventName: E; player: Player; args: T }) => void | Promise<void>;
         export type GenericEventCallback<T extends {} = {}> = (params: T) => void | Promise<void>;
         export type GenericPlayerEventCallback<T extends {} = {}> = (params: T & { player: Player }) => void | Promise<void>;
 
