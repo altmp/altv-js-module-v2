@@ -131,39 +131,39 @@ declare module "@altv/server" {
     }
 
     export namespace PointBlip {
-        export function create(opts: PointBlipCreateOptions & SharedBlipCreateOptions): Blip | null;
+        export function create(opts: PointBlipCreateOptions & SharedBlipCreateOptions): Blip;
     }
 
     export namespace AreaBlip {
-        export function create(opts: altShared.AreaBlipCreateOptions & SharedBlipCreateOptions): Blip | null;
+        export function create(opts: altShared.AreaBlipCreateOptions & SharedBlipCreateOptions): Blip;
     }
 
     export namespace RadiusBlip {
-        export function create(opts: altShared.RadiusBlipCreateOptions & SharedBlipCreateOptions): Blip | null;
+        export function create(opts: altShared.RadiusBlipCreateOptions & SharedBlipCreateOptions): Blip;
     }
 
     export namespace ColShapeSphere {
-        export function create(opts: altShared.ColShapeSphereCreateOptions): ColShape | null;
+        export function create(opts: altShared.ColShapeSphereCreateOptions): ColShape;
     }
 
     export namespace ColShapeCylinder {
-        export function create(opts: altShared.ColShapeCylinderCreateOptions): ColShape | null;
+        export function create(opts: altShared.ColShapeCylinderCreateOptions): ColShape;
     }
 
     export namespace ColShapeCircle {
-        export function create(opts: altShared.ColShapeCircleCreateOptions): ColShape | null;
+        export function create(opts: altShared.ColShapeCircleCreateOptions): ColShape;
     }
 
     export namespace ColShapeCuboid {
-        export function create(opts: altShared.ColShapeCuboidCreateOptions): ColShape | null;
+        export function create(opts: altShared.ColShapeCuboidCreateOptions): ColShape;
     }
 
     export namespace ColShapeRectangle {
-        export function create(opts: altShared.ColShapeRectangleCreateOptions): ColShape | null;
+        export function create(opts: altShared.ColShapeRectangleCreateOptions): ColShape;
     }
 
     export namespace ColShapePolygon {
-        export function create(opts: altShared.ColShapePolygonCreateOptions): ColShape | null;
+        export function create(opts: altShared.ColShapePolygonCreateOptions): ColShape;
     }
 
     export abstract class ColShape extends WorldObject {
