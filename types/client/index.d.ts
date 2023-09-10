@@ -394,6 +394,7 @@ declare module "@altv/client" {
         readonly lodDistance: number;
 
         static readonly all: ReadonlyArray<Object>;
+        static readonly streamedIn: ReadonlyArray<Object>;
         static getByID(id: number): Object | null;
     }
 
@@ -459,6 +460,7 @@ declare module "@altv/client" {
         readonly currentWeapon: number;
 
         static readonly all: ReadonlyArray<Ped>;
+        static readonly streamedIn: ReadonlyArray<Ped>;
     }
 
     interface LocalPedCreateOptions {
@@ -579,6 +581,7 @@ declare module "@altv/client" {
 
         static readonly local: LocalPlayer;
         static readonly all: ReadonlyArray<Player>;
+        static readonly streamedIn: ReadonlyArray<Player>;
         static getByID(id: number): Player | null;
     }
 
@@ -826,7 +829,8 @@ declare module "@altv/client" {
         getWheelSurfaceMaterial(wheelId: number): number;
         resetDashboardLights(): void;
 
-        static all: ReadonlyArray<Vehicle>;
+        static readonly all: ReadonlyArray<Vehicle>;
+        static readonly streamedIn: ReadonlyArray<Vehicle>;
         static getByID(id: number): Vehicle | null;
     }
 
