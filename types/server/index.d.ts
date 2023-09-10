@@ -972,10 +972,27 @@ declare module "@altv/server" {
 
         interface CustomServerEvent {}
 
+        export type EventContext = {
+            readonly type: altShared.Enums.EventType;
+        };
+
+        export type PlayerEventContext = EventContext & {
+            readonly player: Player;
+        };
+
+        export type CancellableEventContext = {
+            cancel(): void;
+            readonly isCancelled: boolean;
+        };
+
         export type CustomEventCallback<T extends unknown[]> = (...params: T ) => void | Promise<void>;
         export type CustomPlayerEventCallback<T extends unknown[]> = (player: Player, ...params: T ) => void | Promise<void>;
-        export type GenericEventCallback<T extends {} = {}> = (params: T) => void | Promise<void>;
-        export type GenericPlayerEventCallback<T extends {} = {}> = (params: T & { player: Player }) => void | Promise<void>;
+
+        export type GenericEventCallback<T extends {} = {}> = (params: T & EventContext) => void | Promise<void>;
+        export type GenericPlayerEventCallback<T extends {} = {}> = (params: T & PlayerEventContext) => void | Promise<void>;
+
+        export type GenericCancellableEventCallback<T = {}> = (params: T & EventContext & CancellableEventContext) => void | Promise<void>;
+        export type GenericCancellablePlayerEventCallback<T = {}> = (params: T & PlayerEventContext & CancellableEventContext) => void | Promise<void>;
 
         interface ServerScriptEventParameters<T> {
             eventName: string;
