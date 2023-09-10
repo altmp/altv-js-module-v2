@@ -932,8 +932,8 @@ declare module "@altv/client" {
 
         readonly outputs: ReadonlyArray<AudioOutput>;
 
-        emit(eventName: string, ...args: unknown[]): void;
-        emitRaw(eventName: string, ...args: unknown[]): void;
+        emit<E extends altShared.Events.CustomClientToWebViewEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomClientToWebViewEvent[E]>): void;
+        emitRaw<E extends altShared.Events.CustomClientToWebViewEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomClientToWebViewEvent[E]>): void;
         setExtraHeader(name: string, value: string): void;
         setZoomLevel(value: number): void;
         reload(ignoreCache: boolean): void;
@@ -1068,10 +1068,10 @@ declare module "@altv/client" {
 
     export namespace Events {
         export let rawEmitEnabled: boolean;
-        export function emit(eventName: string, ...args: unknown[]): void;
+        export function emit<E extends CustomClientEvent>(eventName: E, ...args: Parameters<CustomClientEvent[E]>): void;
 
-        export function emitServer(eventName: string, ...args: unknown[]): void;
-        export function emitServerUnreliable(eventName: string, ...args: unknown[]): void;
+        export function emitServer<E extends altShared.Events.CustomPlayerToServerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomPlayerToServerEvent[E]>): void;
+        export function emitServerUnreliable<E extends altShared.Events.CustomPlayerToServerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomPlayerToServerEvent[E]>): void;
 
         export function onKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): void;
         export function onKeyUp(callback: GenericEventCallback<KeyUpDownEventParameters>): void;

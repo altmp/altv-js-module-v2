@@ -331,9 +331,9 @@ declare module "@altv/server" {
         readonly cloudAuthHash: string;
         netOwnershipDisabled: boolean;
 
-        emit(event: string, ...args: unknown[]): void;
-        emitRaw(event: string, ...args: unknown[]): void;
-        emitUnreliable(event: string, ...args: unknown[]): void;
+        emit<E extends keyof altShared.Events.CustomServerToPlayerEvent>(event: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
+        emitRaw<E extends keyof altShared.Events.CustomServerToPlayerEvent>(event: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
+        emitUnreliable<E extends keyof altShared.Events.CustomServerToPlayerEvent>(event: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
         spawn(pos: altShared.IVector3, delay?: number): void;
         despawn(): void;
         setWeaponTintIndex(weaponHash: number | string, tintIndex: number): void;
@@ -713,13 +713,13 @@ declare module "@altv/server" {
 
     export namespace Events {
         export let rawEmitEnabled: boolean;
-        export function emit(eventName: string, ...args: unknown[]): void;
+        export function emit<E extends keyof CustomServerEvent>(event: E, ...args: Parameters<CustomServerEvent[E]>): void;
 
-        export function emitPlayers(players: Player[], eventName: string, ...args: unknown[]): void;
-        export function emitPlayersUnreliable(players: Player[], eventName: string, ...args: unknown[]): void;
+        export function emitPlayers<E extends keyof altShared.Events.CustomServerToPlayerEvent>(players: Player[], eventName: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
+        export function emitPlayersUnreliable<E extends keyof altShared.Events.CustomServerToPlayerEvent>(players: Player[], eventName: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
 
-        export function emitAllPlayers(eventName: string, ...args: unknown[]): void;
-        export function emitAllPlayersUnreliable(eventName: string, ...args: unknown[]): void;
+        export function emitAllPlayers<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
+        export function emitAllPlayersUnreliable<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
 
         // Server related events
         export function onServerStarted(callback: GenericEventCallback): void;

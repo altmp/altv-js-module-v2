@@ -646,6 +646,8 @@ declare module "@altv/shared" {
         interface CustomRemoteEvent {}
         interface CustomPlayerToServerEvent {}
         interface CustomServerToPlayerEvent {}
+        interface CustomClientToWebViewEvent {}
+        interface CustomWebViewToClientEvent {}
 
         export function onEvent(callback: GenericOnEventCallback): void;
         export interface onEvent {
