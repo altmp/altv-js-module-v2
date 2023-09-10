@@ -11,6 +11,7 @@ declare module "@altv/shared" {
     export const branch: string;
 
     export const meta: Record<string, unknown>;
+    export const syncedMeta: Readonly<Record<string, unknown>>;
 
     export function log(...args: unknown[]): void;
     export function logWarning(...args: unknown[]): void;

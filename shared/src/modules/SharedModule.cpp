@@ -82,6 +82,16 @@ static void MetaEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
     ctx.Return(alt::ICore::Instance().GetMetaDataKeys());
 }
 
+static void SyncedMetaGetter(js::DynamicPropertyGetterContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetSyncedMetaData(ctx.GetProperty()));
+}
+
+static void SyncedMetaEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetSyncedMetaDataKeys());
+}
+
 // clang-format off
 extern js::Class baseObjectClass, worldObjectClass, entityClass, colShapeClass, resourceClass, bufferClass;
 extern js::Namespace enumsNamespace, sharedEventsNamespace, fileNamespace;
@@ -99,6 +109,7 @@ static js::Module sharedModule("@altv/shared", "", { &baseObjectClass, &worldObj
     module.StaticFunction("getVoiceConnectionState", GetVoiceConnectionState);
 
     module.StaticDynamicProperty("meta", MetaGetter, MetaSetter, MetaDeleter, MetaEnumerator);
+    module.StaticDynamicProperty("syncedMeta", SyncedMetaGetter, nullptr, nullptr, SyncedMetaEnumerator);
 
     module.Namespace("Timers");
     module.Namespace("Utils");
