@@ -51,6 +51,21 @@ static void MetaEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
     ctx.Return(keys);
 }
 
+static void SyncedMetaGetter(js::DynamicPropertyGetterContext& ctx)
+{
+    if(!ctx.CheckParent()) return;
+    alt::IBaseObject* obj = ctx.GetParent<alt::IBaseObject>();
+    ctx.Return(obj->GetSyncedMetaData(ctx.GetProperty()));
+}
+
+static void SyncedMetaEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
+{
+    if(!ctx.CheckParent()) return;
+    alt::IBaseObject* obj = ctx.GetParent<alt::IBaseObject>();
+    std::vector<std::string> keys = obj->GetSyncedMetaDataKeys();
+    ctx.Return(keys);
+}
+
 static void SetMultipleMetaData(js::FunctionContext& ctx)
 {
     if (!ctx.CheckThis()) return;
@@ -91,11 +106,15 @@ extern js::Class baseObjectClass("BaseObject", [](js::ClassTemplate& tpl)
 {
     tpl.LazyProperty<&alt::IBaseObject::GetID>("id");
     tpl.LazyProperty<&alt::IBaseObject::GetType>("type");
+
     tpl.Property("valid", ValidGetter);
+    tpl.Property<&alt::IBaseObject::IsRemoved>("removed");
 
     tpl.Method("destroy", Destroy);
 
     tpl.DynamicProperty("meta", MetaGetter, MetaSetter, MetaDeleter, MetaEnumerator);
+    tpl.DynamicProperty("syncedMeta", SyncedMetaGetter, nullptr, nullptr, SyncedMetaEnumerator);
+
     tpl.Method("setMultipleMetaData", SetMultipleMetaData);
 
     tpl.StaticFunction("getByID", GetByID);

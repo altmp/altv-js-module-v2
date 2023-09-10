@@ -10,8 +10,8 @@ declare module "@altv/shared" {
     export const sdkVersion: string;
     export const branch: string;
 
-    export const meta: Record<string, unknown>;
-    export const syncedMeta: Readonly<Record<string, unknown>>;
+    export const meta: GlobalMeta;
+    export const syncedMeta: GlobalSyncedMeta;
 
     export function log(...args: unknown[]): void;
     export function logWarning(...args: unknown[]): void;
@@ -27,60 +27,7 @@ declare module "@altv/shared" {
         readonly valid: boolean;
         destroy(): void;
 
-        readonly meta: Record<string, unknown>;
-
         static getByID(type: Enums.BaseObjectType, id: number): BaseObject | null;
-    }
-
-    export abstract class VoiceChannel extends BaseObject {}
-
-    export abstract class Blip extends BaseObject {
-        readonly global: boolean;
-        readonly isAttached: boolean;
-        readonly attachedTo?: Entity;
-        blipType: Enums.BlipType;
-        scale: Vector2;
-        display: number;
-        sprite: number;
-        color: number;
-        secondaryColor: number;
-        alpha: number;
-        flashTimer: number;
-        flashInterval: number;
-        friendly: boolean;
-
-        route: boolean;
-        bright: boolean;
-        number: number;
-        showCone: boolean;
-        flashes: boolean;
-        flashesAlternate: boolean;
-        shortRange: boolean;
-        priority: number;
-        rotation: number;
-        gxtName: string;
-        name: string;
-        routeColor: RGBA;
-        pulse: boolean;
-        missionCreator: boolean;
-        tickVisible: boolean;
-        headingIndicatorVisible: boolean;
-        outlineIndicatorVisible: boolean;
-        friendIndicatorVisible: boolean;
-        crewIndicatorVisible: boolean;
-        category: number;
-        highDetail: boolean;
-        shrinked: boolean;
-        visible: boolean;
-        hiddenOnLegend: boolean;
-        minimalOnEdge: boolean;
-        useHeightIndicatorOnEdge: boolean;
-        shortHeightThreshold: boolean;
-
-        attachTo(entity: Entity): boolean;
-        fade(opacity: number, duration: number): void;
-
-        static getByID(id: number): Blip | null;
     }
 
     export class Buffer {
@@ -120,25 +67,6 @@ declare module "@altv/shared" {
         height: number;
         color: RGBA;
         streamingDistance: number;
-    }
-
-    // @ts-ignore - Suppresses "Class static side incorrectly extends base class static side"
-    export abstract class Checkpoint extends ColShape {
-        checkpointType: number;
-        radius: number;
-        height: number;
-        color: RGBA;
-        iconColor: RGBA;
-        nextPos: IVector3;
-        readonly streamingDistance: number;
-        visible: boolean;
-
-        isEntityIn(entity: Entity): boolean;
-        isEntityIdIn(id: number): boolean;
-        isPointIn(point: Vector3): boolean;
-
-        static create(opts: CheckpointCreateOptions): Checkpoint | null;
-        static getByID(id: number): Checkpoint | null;
     }
 
     interface ColShapeSphereCreateOptions {
@@ -186,94 +114,6 @@ declare module "@altv/shared" {
         | ({ colShapeType: Enums.ColShapeType.POLYGON } & ColShapePolygonCreateOptions)
     );
 
-    export abstract class ColShape extends WorldObject {
-        readonly colShapeType: Enums.ColShapeType;
-        playersOnly: boolean;
-
-        isEntityIn(entity: Entity): boolean;
-        isEntityIdIn(id: number): boolean;
-        isPointIn(point: Vector3): boolean;
-
-        static create(opts: ColShapeCreateOptions): ColShape | null;
-        static getByID(id: number): ColShape | null;
-    }
-
-    export abstract class Entity extends WorldObject {
-        get model(): number;
-        readonly netOwner?: Player;
-        rot: Vector3;
-        readonly visible: boolean;
-
-        readonly syncedMeta: Readonly<Record<string, unknown>>;
-        readonly streamSyncedMeta: Readonly<Record<string, unknown>>;
-
-        static readonly all: ReadonlyArray<Entity>;
-    }
-
-    export abstract class Object extends Entity {
-        readonly alpha: number;
-        readonly textureVariation: number;
-        readonly lodDistance: number;
-
-        static readonly all: ReadonlyArray<Object>;
-        static getByID(id: number): Object | null;
-    }
-
-    export abstract class Ped extends Entity {
-        readonly health: number;
-        readonly maxHealth: number;
-        readonly armour: number;
-        readonly currentWeapon: number;
-
-        static readonly all: ReadonlyArray<Ped>;
-    }
-
-    export abstract class Player extends Entity {
-        readonly name: string;
-
-        readonly health: number;
-        readonly maxHealth: number;
-        readonly currentWeaponComponents: ReadonlyArray<number>;
-        readonly currentWeaponTintIndex: number;
-        get currentWeapon(): number;
-        readonly isDead: boolean;
-        readonly isJumping: boolean;
-        readonly isInRagdoll: boolean;
-        readonly isAiming: boolean;
-        readonly isShooting: boolean;
-        readonly isReloading: boolean;
-        readonly isEnteringVehicle: boolean;
-        readonly isLeavingVehicle: boolean;
-        readonly isOnLadder: boolean;
-        readonly isInMelee: boolean;
-        readonly isInCover: boolean;
-        readonly armour: number;
-        readonly maxArmour: number;
-        readonly moveSpeed: number;
-        readonly aimPos: Vector3;
-        readonly headRotation: Vector3;
-        readonly isInVehicle: boolean;
-        readonly vehicle?: Vehicle;
-        readonly seat: number;
-        readonly entityAimingAt: Entity;
-        readonly entityAimOffset: Vector3;
-        readonly isFlashlightActive: boolean;
-        readonly isSuperJumpEnabled: boolean;
-        readonly isCrouching: boolean;
-        readonly isStealthy: boolean;
-        readonly currentAnimationDict: number;
-        readonly currentAnimationName: number;
-        readonly isSpawned: boolean;
-        readonly forwardSpeed: number;
-        readonly strafeSpeed: number;
-
-        getWeaponTintIndex(weaponHash: number | string): number | undefined;
-        hasWeaponComponent(weaponHash: number | string, componentHash: number | string): boolean;
-
-        static readonly all: ReadonlyArray<Player>;
-        static getByID(id: number): Player | null;
-    }
-
     export abstract class Resource {
         readonly type: string;
         readonly path: string;
@@ -294,119 +134,8 @@ declare module "@altv/shared" {
         static exists(resourceName: string): boolean;
     }
 
-    export abstract class Vehicle extends Entity {
-        readonly neon: Readonly<NeonState>;
-
-        readonly driver?: Player;
-        readonly isDestroyed: boolean;
-        readonly modKitsCount: number;
-        readonly modKit: number;
-        readonly IsPrimaryColorRGB: boolean;
-        readonly primaryColor: number;
-        readonly primaryColorRGB: RGBA;
-        readonly isSecondaryColorRGB: boolean;
-        readonly secondaryColor: number;
-        readonly secondaryColorRGB: RGBA;
-        readonly pearlColor: number;
-        readonly wheelColor: number;
-        readonly interiorColor: number;
-        readonly dashboardColor: number;
-        readonly isTireSmokeColorCustom: boolean;
-        readonly tireSmokeColor: RGBA;
-        readonly wheelType: number;
-        readonly wheelVariation: number;
-        readonly customTires: boolean;
-        readonly specialDarkness: number;
-        readonly numberplateIndex: number;
-        readonly numberplateText: string;
-        readonly windowTint: number;
-        readonly dirtLevel: number;
-        readonly isNeonActive: boolean;
-        readonly neonColor: RGBA;
-        readonly livery: number;
-        readonly roofLivery: number;
-        readonly appearanceDataBase64: string;
-        readonly isEngineOn: boolean;
-        readonly isHandbrakeActive: boolean;
-        readonly headlightColor: number;
-        readonly radioStationIndex: number;
-        readonly isSirenActive: boolean;
-        readonly lockState: number;
-        readonly isDaylightOn: boolean;
-        readonly isNightlightOn: boolean;
-        readonly roofState: number;
-        readonly isFlamethrowerActive: boolean;
-        readonly lightsMultiplier: number;
-        readonly gameStateBase64: string;
-        readonly engineHealth: number;
-        readonly petrolTankHealth: number;
-        readonly wheelsCount: number;
-        readonly repairsCount: number;
-        readonly bodyHealth: number;
-        readonly bodyAdditionalHealth: number;
-        readonly hasArmoredWindows: boolean;
-        readonly damageDataBase64: string;
-        readonly isManualEngineControl: boolean;
-        readonly scriptDataBase64: string;
-        readonly velocity: Vector3;
-        readonly steeringAngle: number;
-
-        getMod(category: number): number;
-        getModsCount(category: number): number;
-        isExtraOn(extraId: number): boolean;
-        getDoorState(doorId: number): number;
-        isWindowOpened(windowId: number): boolean;
-        isWheelBurst(wheelId: number): boolean;
-        getWheelHasTire(wheelId: number): boolean;
-        isWheelDetached(wheelId: number): boolean;
-        isWheelOnFire(wheelId: number): boolean;
-        getWheelHealth(wheelId: number): number;
-
-        getPartDamageLevel(partId: number): number;
-        getPartBulletHoles(partId: number): number;
-
-        isLightDamaged(lightId: number): boolean;
-        isWindowDamaged(windowId: number): boolean;
-
-        isSpecialLightDamaged(specialLightId: number): boolean;
-        getArmoredWindowHealth(windowId: number): number;
-        getArmoredWindowShootCount(windowId: number): number;
-        getBumperDamageLevel(bumperId: number): number;
-        toggleExtra(extraId: number, state: boolean): void;
-
-        static all: ReadonlyArray<Vehicle>;
-    }
-
-    interface VirtualEntityCreateOptions {
-        group: VirtualEntityGroup;
-        pos: IVector3;
-        maxEntitiesInStream: number;
-        data?: Record<string, unknown>;
-    }
-
-    export abstract class VirtualEntity extends WorldObject {
-        readonly group: VirtualEntityGroup;
-        readonly streamingDistance: number;
-
-        visible: boolean;
-
-        readonly streamSyncedMeta: Record<string, unknown>;
-
-        static create(opts: VirtualEntityCreateOptions): VirtualEntity | null;
-    }
-
     interface VirtualEntityGroupCreateOptions {
-        streamingRangeLimit: number;
-    }
-
-    export abstract class VirtualEntityGroup extends BaseObject {
-        readonly maxEntitiesInStream: number;
-
-        static create(opts: VirtualEntityGroupCreateOptions): VirtualEntityGroup | null;
-    }
-
-    export abstract class WorldObject extends BaseObject {
-        readonly pos: Vector3;
+        maxEntitiesInStream: number;
     }
 
     export interface IRGBA {
@@ -466,26 +195,31 @@ declare module "@altv/shared" {
         add(other: Vector2): Vector2;
         add(xy: [number, number]): Vector2;
         add(xy: IVector2): Vector2;
+        add(xy: number): Vector2;
 
         sub(x: number, y: number): Vector2;
         sub(other: Vector2): Vector2;
         sub(xy: [number, number]): Vector2;
         sub(xy: IVector2): Vector2;
+        sub(xy: number): Vector2;
 
         mul(x: number, y: number): Vector2;
         mul(other: Vector2): Vector2;
         mul(xy: [number, number]): Vector2;
         mul(xy: IVector2): Vector2;
+        mul(xy: number): Vector2;
 
         div(x: number, y: number): Vector2;
         div(other: Vector2): Vector2;
         div(xy: [number, number]): Vector2;
         div(xy: IVector2): Vector2;
+        div(xy: number): Vector2;
 
         dot(x: number, y: number): Vector2;
         dot(other: Vector2): Vector2;
         dot(xy: [number, number]): Vector2;
         dot(xy: IVector2): Vector2;
+        dot(xy: number): Vector2;
 
         distanceTo(x: number, y: number): number;
         distanceTo(other: Vector2): number;
@@ -550,26 +284,31 @@ declare module "@altv/shared" {
         add(other: Vector3): Vector3;
         add(xyz: [number, number, number]): Vector3;
         add(xyz: IVector3): Vector3;
+        add(xyz: number): Vector3;
 
         sub(x: number, y: number, z: number): Vector3;
         sub(other: Vector3): Vector3;
         sub(xyz: [number, number]): Vector3;
         sub(xyz: IVector3): Vector3;
+        sub(xyz: number): Vector3;
 
         mul(x: number, y: number, z: number): Vector3;
         mul(other: Vector3): Vector3;
         mul(xyz: [number, number, number]): Vector3;
         mul(xyz: IVector3): Vector3;
+        mul(xyz: number): Vector3;
 
         div(x: number, y: number, z: number): Vector3;
         div(other: Vector3): Vector3;
         div(xyz: [number, number, number]): Vector3;
         div(xyz: IVector3): Vector3;
+        div(xyz: number): Vector3;
 
         dot(x: number, y: number, z: number): Vector3;
         dot(other: Vector3): Vector3;
         dot(xyz: [number, number, number]): Vector3;
         dot(xyz: IVector3): Vector3;
+        dot(xyz: number): Vector3;
 
         distanceTo(x: number, y: number, z: number): number;
         distanceTo(other: Vector3): number;
@@ -691,8 +430,6 @@ declare module "@altv/shared" {
         static fromArray(xyzw: [number, number, number, number]): Quaternion;
     }
 
-    export type PointBlipCreateOptions = { pos: IVector3; entity?: never } | { entity: Entity; pos?: never };
-
     export interface AreaBlipCreateOptions {
         pos: IVector3;
         scale: IVector2;
@@ -702,6 +439,111 @@ declare module "@altv/shared" {
         pos: IVector3;
         radius: number;
     }
+
+    /**
+     * Extend it by interface merging for use in {@link meta alt.meta}.
+     */
+    export interface GlobalMeta {
+        [key: string]: unknown;
+    }
+
+    /**
+     * Extend it by interface merging for use in {@link syncedMeta alt.syncedMeta}.
+     */
+    export interface GlobalSyncedMeta {
+        [key: string]: unknown
+    }
+
+    /**
+     * Extend it by interface merging for use in BaseObject#syncedMeta.
+     */
+    export interface BaseObjectSyncedMeta {
+        [key: string]: unknown
+    }
+
+    /**
+     * Extend it by interface merging for use in Blip#syncedMeta.
+     */
+    export interface BlipSyncedMeta extends BaseObjectSyncedMeta {}
+
+    /**
+     * Extend it by interface merging for use in ColShape#syncedMeta.
+     */
+    export interface ColShapeSyncedMeta extends BaseObjectSyncedMeta {}
+
+    /**
+     * Extend it by interface merging for use in Checkpoint#syncedMeta.
+     */
+    export interface CheckpointSyncedMeta extends ColShapeSyncedMeta {}
+
+    /**
+     * Extend it by interface merging for use in Checkpoint#streamSyncedMeta.
+     */
+    export interface CheckpointStreamSyncedMeta {
+        [key: string]: unknown;
+    }
+
+    /**
+     * Extend it by interface merging for use in Entity#syncedMeta.
+     */
+    export interface EntitySyncedMeta extends BaseObjectSyncedMeta {}
+
+    /**
+     * Extend it by interface merging for use in Entity#streamSyncedMeta.
+     */
+    export interface EntityStreamSyncedMeta {
+        [key: string]: unknown;
+    }
+
+    /**
+     * Extend it by interface merging for use in Player#syncedMeta.
+     */
+    export interface PlayerSyncedMeta extends EntitySyncedMeta {}
+
+    /**
+     * Extend it by interface merging for use in Player#streamSyncedMeta.
+     */
+    export interface PlayerStreamSyncedMeta extends EntityStreamSyncedMeta {}
+
+    /**
+     * Extend it by interface merging for use in Vehicle#syncedMeta.
+     */
+    export interface VehicleSyncedMeta extends EntitySyncedMeta {}
+
+    /**
+     * Extend it by interface merging for use in Vehicle#streamSyncedMeta.
+     */
+    export interface VehicleStreamSyncedMeta extends EntityStreamSyncedMeta {}
+
+    /**
+     * Extend it by interface merging for use in Object#syncedMeta.
+     */
+    export interface ObjectSyncedMeta extends EntitySyncedMeta {}
+
+    /**
+     * Extend it by interface merging for use in Object#streamSyncedMeta.
+     */
+    export interface ObjectStreamSyncedMeta extends EntityStreamSyncedMeta {}
+
+    /**
+     * Extend it by interface merging for use in VirtualEntity#streamSyncedMeta.
+     */
+    export interface VirtualEntitySyncedMeta extends BaseObjectSyncedMeta {}
+
+    /**
+     * Extend it by interface merging for use in VirtualEntity#syncedMeta.
+     */
+    export interface VirtualEntityStreamSyncedMeta extends BaseObjectSyncedMeta {}
+
+    /**
+     * Extend it by interface merging for use in Ped#syncedMeta.
+     */
+    export interface PedSyncedMeta extends EntitySyncedMeta {}
+
+    /**
+     * Extend it by interface merging for use in ped stream synced meta (class `Ped` on client & server, e.g. `ped.getStreamSyncedMeta`)
+     */
+    export interface PedStreamSyncedMeta extends EntityStreamSyncedMeta {}
 
     export namespace Appearance {
         interface HeadOverlay {
@@ -776,6 +618,7 @@ declare module "@altv/shared" {
 
         export function wait(ms: number): Promise<void>;
         export function waitForNextTick(): Promise<void>;
+        export function waitFor(callback: () => boolean, timeout?: number): Promise<void>;
         export function getCurrentSourceLocation(): SourceLocation;
 
         export abstract class AssertionError extends Error {}
@@ -798,39 +641,6 @@ declare module "@altv/shared" {
         }
     }
 
-    export namespace Factory {
-        export function setPlayerFactory(factory: typeof Player): void;
-        export function getPlayerFactory<T extends Player>(): T;
-
-        export function setVehicleFactory(factory: typeof Vehicle): void;
-        export function getVehicleFactory<T extends Vehicle>(): T;
-
-        export function setPedFactory(factory: typeof Ped): void;
-        export function getPedFactory<T extends Ped>(): T;
-
-        export function setBlipFactory(factory: typeof Blip): void;
-        export function getBlipFactory<T extends Blip>(): T;
-
-        // TODO (xLuxy): Server-only - find a better way to extend namespaces and move this into server typings
-        export function setVoiceChannelFactory(factory: typeof VoiceChannel): void;
-        export function getVoiceChannelFactory<T extends VoiceChannel>(): T;
-
-        export function setColShapeFactory(factory: typeof ColShape): void;
-        export function getColShapeFactory<T extends ColShape>(): T;
-
-        export function setObjectFactory(factory: typeof Object): void;
-        export function getObjectFactory<T extends Object>(): T;
-
-        export function setCheckpointFactory(factory: typeof Checkpoint): void;
-        export function getCheckpointFactory<T extends Checkpoint>(): T;
-
-        export function setVirtualEntityFactory(factory: typeof VirtualEntity): void;
-        export function getVirtualEntityFactory<T extends VirtualEntity>(): T;
-
-        export function setVirtualEntityGroupFactory(factory: typeof VirtualEntityGroup): void;
-        export function getVirtualEntityGroupFactory<T extends VirtualEntityGroup>(): T;
-    }
-
     export namespace Commands {
         export type CommandCallback = (args: string[]) => void;
 
@@ -844,9 +654,24 @@ declare module "@altv/shared" {
     }
 
     export namespace Events {
-        interface CustomRemoteEvent {}
-        interface CustomPlayerToServerEvent {}
-        interface CustomServerToPlayerEvent {}
+        interface CustomRemoteEvent {
+            [key: string]: (...args: any[]) => void | Promise<void>;
+        }
+        interface CustomPlayerToServerEvent {
+            [key: string]: (...args: any[]) => void | Promise<void>;
+        }
+        interface CustomServerToPlayerEvent {
+            [key: string]: (...args: any[]) => void | Promise<void>;
+        }
+        interface CustomClientToWebViewEvent {
+            [key: string]: (...args: any[]) => void | Promise<void>;
+        }
+        interface WebViewToClientEvent {
+            load(): void;
+        }
+        interface CustomWebViewToClientEvent extends WebViewToClientEvent {
+            [key: string]: (...args: any[]) => void | Promise<void>;
+        }
 
         export function onEvent(callback: GenericOnEventCallback): void;
         export interface onEvent {
@@ -1432,30 +1257,6 @@ declare module "@altv/shared" {
             RingJetpack,
             RingWhirl
         }
-    }
-
-    export namespace ColShapeSphere {
-        export function create(opts: ColShapeSphereCreateOptions): ColShape | null;
-    }
-
-    export namespace ColShapeCylinder {
-        export function create(opts: ColShapeCylinderCreateOptions): ColShape | null;
-    }
-
-    export namespace ColShapeCircle {
-        export function create(opts: ColShapeCircleCreateOptions): ColShape | null;
-    }
-
-    export namespace ColShapeCuboid {
-        export function create(opts: ColShapeCuboidCreateOptions): ColShape | null;
-    }
-
-    export namespace ColShapeRectangle {
-        export function create(opts: ColShapeRectangleCreateOptions): ColShape | null;
-    }
-
-    export namespace ColShapePolygon {
-        export function create(opts: ColShapePolygonCreateOptions): ColShape | null;
     }
 }
 
