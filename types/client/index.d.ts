@@ -459,6 +459,10 @@ declare module "@altv/client" {
         readonly armour: number;
         readonly currentWeapon: number;
 
+        readonly meta: PedMeta;
+        readonly syncedMeta: Readonly<altShared.PedSyncedMeta>;
+        readonly streamSyncedMeta: Readonly<altShared.PedStreamSyncedMeta>;
+
         static readonly all: ReadonlyArray<Ped>;
         static readonly streamedIn: ReadonlyArray<Ped>;
     }
