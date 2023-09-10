@@ -942,6 +942,11 @@ declare module "@altv/client" {
         addOutput(output: AudioOutput): void;
         removeOutput(output: AudioOutput): void;
 
+        // Not implemented yet
+        on<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
+        // Not implemented yet
+        once<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
+
         static readonly isGpuAccelerationActive: boolean;
 
         static create(options: WebViewCreateOptions): WebView;

@@ -665,7 +665,10 @@ declare module "@altv/shared" {
         interface CustomClientToWebViewEvent {
             [key: string]: (...args: any[]) => void | Promise<void>;
         }
-        interface CustomWebViewToClientEvent {
+        interface WebViewToClientEvent {
+            load(): void;
+        }
+        interface CustomWebViewToClientEvent extends WebViewToClientEvent {
             [key: string]: (...args: any[]) => void | Promise<void>;
         }
 
