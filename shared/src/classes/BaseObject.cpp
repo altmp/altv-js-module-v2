@@ -128,16 +128,17 @@ extern js::Class baseObjectClass("BaseObject", [](js::ClassTemplate& tpl)
 {
     tpl.LazyProperty<&alt::IBaseObject::GetID>("id");
     tpl.LazyProperty<&alt::IBaseObject::GetType>("type");
+
     tpl.Property("valid", ValidGetter);
+    tpl.Property<&alt::IBaseObject::IsRemoved>("removed");
 
     tpl.Method("destroy", Destroy);
 
     tpl.DynamicProperty("meta", MetaGetter, MetaSetter, MetaDeleter, MetaEnumerator);
     tpl.DynamicProperty("syncedMeta", SyncedMetaGetter, nullptr, nullptr, SyncedMetaEnumerator);
+
     tpl.Method("setMultipleMetaData", SetMultipleMetaData);
     tpl.Method("setMultipleSyncedMetaData", SetMultipleSyncedMetaData);
 
     tpl.StaticFunction("getByID", GetByID);
-
-    tpl.Property<&alt::IBaseObject::IsRemoved>("removed");
 });
