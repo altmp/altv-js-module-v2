@@ -263,6 +263,8 @@ declare module "@altv/server" {
     }
 
     export class Player extends Entity {
+        readonly name: string;
+
         readonly ip: string;
         readonly socialId: number;
         readonly hwidHash: number;
