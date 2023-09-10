@@ -195,26 +195,31 @@ declare module "@altv/shared" {
         add(other: Vector2): Vector2;
         add(xy: [number, number]): Vector2;
         add(xy: IVector2): Vector2;
+        dot(xy: number): Vector2;
 
         sub(x: number, y: number): Vector2;
         sub(other: Vector2): Vector2;
         sub(xy: [number, number]): Vector2;
         sub(xy: IVector2): Vector2;
+        dot(xy: number): Vector2;
 
         mul(x: number, y: number): Vector2;
         mul(other: Vector2): Vector2;
         mul(xy: [number, number]): Vector2;
         mul(xy: IVector2): Vector2;
+        dot(xy: number): Vector2;
 
         div(x: number, y: number): Vector2;
         div(other: Vector2): Vector2;
         div(xy: [number, number]): Vector2;
         div(xy: IVector2): Vector2;
+        dot(xy: number): Vector2;
 
         dot(x: number, y: number): Vector2;
         dot(other: Vector2): Vector2;
         dot(xy: [number, number]): Vector2;
         dot(xy: IVector2): Vector2;
+        dot(xy: number): Vector2;
 
         distanceTo(x: number, y: number): number;
         distanceTo(other: Vector2): number;
@@ -279,26 +284,31 @@ declare module "@altv/shared" {
         add(other: Vector3): Vector3;
         add(xyz: [number, number, number]): Vector3;
         add(xyz: IVector3): Vector3;
+        add(xyz: number): Vector3;
 
         sub(x: number, y: number, z: number): Vector3;
         sub(other: Vector3): Vector3;
         sub(xyz: [number, number]): Vector3;
         sub(xyz: IVector3): Vector3;
+        sub(xyz: number): Vector3;
 
         mul(x: number, y: number, z: number): Vector3;
         mul(other: Vector3): Vector3;
         mul(xyz: [number, number, number]): Vector3;
         mul(xyz: IVector3): Vector3;
+        mul(xyz: number): Vector3;
 
         div(x: number, y: number, z: number): Vector3;
         div(other: Vector3): Vector3;
         div(xyz: [number, number, number]): Vector3;
         div(xyz: IVector3): Vector3;
+        div(xyz: number): Vector3;
 
         dot(x: number, y: number, z: number): Vector3;
         dot(other: Vector3): Vector3;
         dot(xyz: [number, number, number]): Vector3;
         dot(xyz: IVector3): Vector3;
+        dot(xyz: number): Vector3;
 
         distanceTo(x: number, y: number, z: number): number;
         distanceTo(other: Vector3): number;
