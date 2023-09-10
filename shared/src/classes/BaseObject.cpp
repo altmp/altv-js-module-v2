@@ -6,12 +6,6 @@ static void ValidGetter(js::PropertyContext& ctx)
     ctx.Return(ctx.GetThisObject<alt::IBaseObject>() != nullptr);
 }
 
-static void RemovedGetter(js::PropertyContext& ctx)
-{
-    alt::IBaseObject* obj = ctx.GetThisObject<alt::IBaseObject>();
-    ctx.Return(obj == nullptr || obj->IsRemoved());
-}
-
 static void Destroy(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
@@ -145,5 +139,5 @@ extern js::Class baseObjectClass("BaseObject", [](js::ClassTemplate& tpl)
 
     tpl.StaticFunction("getByID", GetByID);
 
-    tpl.Property("removed", RemovedGetter);
+    tpl.Property<&alt::IBaseObject::IsRemoved>("removed");
 });
