@@ -803,12 +803,9 @@ declare module "@altv/server" {
 
         // Custom events
         export function on<E extends keyof CustomServerEvent>(eventName: E, callback: CustomEventCallback<Parameters<CustomServerEvent[E]>>): EventSubscription;
-        export function on(callback: CustomEventCallback<unknown[]>): EventSubscription;
         export function onPlayer<E extends keyof altShared.Events.CustomPlayerToServerEvent>(eventName: E, callback: CustomPlayerEventCallback<Parameters<altShared.Events.CustomPlayerToServerEvent[E]>>): EventSubscription;
-        export function onPlayer(eventName: string, callback: CustomPlayerEventCallback<unknown[]>): EventSubscription;
         export function onRemote<E extends keyof altShared.Events.CustomPlayerToServerEvent>(eventName: E, callback: CustomPlayerEventCallback<Parameters<altShared.Events.CustomPlayerToServerEvent[E]>>): EventSubscription;
         export function onRemote<E extends keyof altShared.Events.CustomRemoteEvent>(eventName: E, callback: CustomPlayerEventCallback<Parameters<altShared.Events.CustomRemoteEvent[E]>>): EventSubscription;
-        export function onRemote(eventName: string, callback: CustomPlayerEventCallback<unknown[]>): EventSubscription;
 
         export function setWarningThreshold(threshold: number): void;
         export function setSourceLocationFrameSkipCount(skipCount: number): void;
@@ -969,7 +966,9 @@ declare module "@altv/server" {
             colShape: ColShape;
         }
 
-        interface CustomServerEvent {}
+        interface CustomServerEvent {
+            [key: string]: (...args: unknown[]) => void | Promise<void>;
+        }
 
         export type EventContext = {
             readonly type: altShared.Enums.EventType;

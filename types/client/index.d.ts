@@ -52,7 +52,6 @@ declare module "@altv/client" {
     export function setMinimapIsRectangle(state: boolean): void;
     export function getPedBonePos(scriptId: number, boneId: number): altShared.Vector3;
     export function isPointOnScreen(pos: altShared.IVector3): boolean;
-    export function getCamPos(): altShared.Vector3;
 
     interface AudioCreateOptions {
         source: string;
@@ -1240,12 +1239,9 @@ declare module "@altv/client" {
 
         // Custom events
         export function on<E extends keyof CustomClientEvent>(eventName: E, callback: CustomEventCallback<Parameters<CustomClientEvent[E]>>): EventSubscription;
-        export function on(eventName: string, callback: CustomEventCallback<unknown[]>): EventSubscription;
         export function onServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
-        export function onServer(eventName: string, callback: CustomEventCallback<unknown[]>): EventSubscription;
         export function onRemote<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
         export function onRemote<E extends keyof altShared.Events.CustomRemoteEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomRemoteEvent[E]>>): EventSubscription;
-        export function onRemote(eventName: string, callback: CustomEventCallback<unknown[]>): EventSubscription;
 
         interface PlayerAnimationChangeEventParameters {
             oldAnimDict: number;
@@ -1280,7 +1276,9 @@ declare module "@altv/client" {
             remove(eventName: string, callback: GenericEventCallback): void;
         }
 
-        interface CustomClientEvent {}
+        interface CustomClientEvent {
+            [key: string]: (...args: unknown[]) => void | Promise<void>;
+        }
 
         export type CustomEventCallback<T extends unknown[]> = (...params: T ) => void | Promise<void>;
         export type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
