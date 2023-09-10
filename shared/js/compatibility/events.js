@@ -9,7 +9,20 @@
  * @param {Function} callback
  */
 function on(eventName, callback) {
-    alt.Events.on(eventName, callback);
+    async function wrapper(ctx) {
+        const callbackRet = callback(ctx);
+
+        let processedResult = callbackRet;
+        if (callbackRet instanceof Promise) {
+            processedResult = await callbackRet;
+        }
+
+        if (processedResult === false) {
+            ctx.cancel();
+        }
+    }
+
+    alt.Events.on(eventName, wrapper);
 }
 
 function once(eventName, callback) {
@@ -25,9 +38,13 @@ function once(eventName, callback) {
     alt.Events.on(eventName, wrapper);
 }
 
-// TODO (xLuxy): Implement this
+/**
+ *
+ * @param {string | undefined} eventName
+ */
 function getEventListeners(eventName) {
-    throw new Error("getEventListeners is not implemented");
+    const listeners = typeof eventName == "string" ? alt.Events.on.listeners[eventName] : alt.Events.on.listeners;
+    return listeners ?? [];
 }
 
 cppBindings.registerCompatibilityExport("on", on);
