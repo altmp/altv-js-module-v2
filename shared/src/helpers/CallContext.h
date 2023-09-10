@@ -4,6 +4,7 @@
 #include "cpp-sdk/SDK.h"
 
 #include "Convert.h"
+#include "Logger.h"
 #include "Type.h"
 
 namespace js
