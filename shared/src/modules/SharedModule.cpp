@@ -1,6 +1,7 @@
 #include "Module.h"
 #include "Namespace.h"
 #include "interfaces/IResource.h"
+#include "version/version.h"
 
 enum class LogType
 {
@@ -88,6 +89,7 @@ static js::Module sharedModule("@altv/shared", "", { &baseObjectClass, &worldObj
 {
     module.StaticProperty("isDebug", alt::ICore::Instance().IsDebug());
     module.StaticProperty("version", alt::ICore::Instance().GetVersion());
+    module.StaticProperty("sdkVersion", ALT_SDK_VERSION);
     module.StaticProperty("branch", alt::ICore::Instance().GetBranch());
 
     module.StaticFunction("log", Log<LogType::INFO>);

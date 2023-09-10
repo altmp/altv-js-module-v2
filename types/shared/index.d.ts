@@ -7,6 +7,7 @@ declare module "@altv/shared" {
     export const isServer: boolean;
     export const isDebug: boolean;
     export const version: string;
+    export const sdkVersion: string;
     export const branch: string;
 
     export const meta: Record<string, unknown>;
