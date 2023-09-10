@@ -270,9 +270,10 @@ export class Event {
      * @param {...unknown} args
      */
     static emitRaw(eventName, ...args) {
+        const oldValue = alt.Events.rawEmitEnabled;
         alt.Events.rawEmitEnabled = true;
         alt.emit(eventName, ...args);
-        alt.Events.rawEmitEnabled = false;
+        alt.Events.rawEmitEnabled = oldValue;
     }
 }
 
