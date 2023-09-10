@@ -378,7 +378,7 @@ declare module "@altv/server" {
         setHeadBlendPaletteColor(id: number, colorOrRed: altShared.RGBA | number, green?: number, blue?: number): boolean;
         getHeadBlendPaletteColor(id: number): altShared.RGBA;
 
-        playAnimation(animDict: string, animName: string, blendInSpeed?: number, blendOutSpeed?: number, duration?: number, flag?: number, playbackRate?: number, lockX?: boolean, lockY?: boolean, lockZ?: number): void;
+        playAnimation(animDict: string, animName: string, blendInSpeed?: number, blendOutSpeed?: number, duration?: number, flag?: number, playbackRate?: number, lockX?: boolean, lockY?: boolean, lockZ?: boolean): void;
         clearTasks(): void;
 
         hasWeapon(weaponHash: number | string): boolean;
