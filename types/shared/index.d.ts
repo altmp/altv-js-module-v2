@@ -195,25 +195,25 @@ declare module "@altv/shared" {
         add(other: Vector2): Vector2;
         add(xy: [number, number]): Vector2;
         add(xy: IVector2): Vector2;
-        dot(xy: number): Vector2;
+        add(xy: number): Vector2;
 
         sub(x: number, y: number): Vector2;
         sub(other: Vector2): Vector2;
         sub(xy: [number, number]): Vector2;
         sub(xy: IVector2): Vector2;
-        dot(xy: number): Vector2;
+        sub(xy: number): Vector2;
 
         mul(x: number, y: number): Vector2;
         mul(other: Vector2): Vector2;
         mul(xy: [number, number]): Vector2;
         mul(xy: IVector2): Vector2;
-        dot(xy: number): Vector2;
+        mul(xy: number): Vector2;
 
         div(x: number, y: number): Vector2;
         div(other: Vector2): Vector2;
         div(xy: [number, number]): Vector2;
         div(xy: IVector2): Vector2;
-        dot(xy: number): Vector2;
+        div(xy: number): Vector2;
 
         dot(x: number, y: number): Vector2;
         dot(other: Vector2): Vector2;
