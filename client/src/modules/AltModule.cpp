@@ -438,7 +438,7 @@ static void IsPointOnScreen(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
 
-    alt::Vector3 point;
+    alt::Vector3f point;
     if(!ctx.GetArg(0, point)) return;
 
     ctx.Return(alt::ICore::Instance().IsPointOnScreen(point));
