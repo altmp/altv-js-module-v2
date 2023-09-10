@@ -98,8 +98,8 @@ static void SetMultipleSyncedMetaData(js::FunctionContext& ctx)
     if (!ctx.CheckThis()) return;
     if (!ctx.CheckArgCount(1)) return;
 
-    alt::IEntity* entity = ctx.GetThisObject<alt::IEntity>();
-    if(!entity) return;
+    alt::IBaseObject* obj = ctx.GetThisObject<alt::IBaseObject>();
+    if(!obj) return;
 
     js::Object dict;
     if(!ctx.GetArg(0, dict)) return;
@@ -112,7 +112,7 @@ static void SetMultipleSyncedMetaData(js::FunctionContext& ctx)
         values[key] = val;
     }
 
-    entity->SetMultipleSyncedMetaData(values);
+    obj->SetMultipleSyncedMetaData(values);
 }
 
 static void GetByID(js::FunctionContext& ctx)
