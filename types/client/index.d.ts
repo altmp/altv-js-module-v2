@@ -76,7 +76,7 @@ declare module "@altv/client" {
         reset(): void;
         seek(time: number): void;
 
-        static create(options: AudioCreateOptions): Audio | null;
+        static create(options: AudioCreateOptions): Audio;
         static getByID(id: number): Audio | null;
     }
 
@@ -126,7 +126,7 @@ declare module "@altv/client" {
 
         removeEffect(fxHandler: number): boolean;
 
-        static create(options: AudioFilterCreateOptions): AudioFilter | null;
+        static create(options: AudioFilterCreateOptions): AudioFilter;
         static getByID(id: number): AudioFilter | null;
     }
 
@@ -149,7 +149,7 @@ declare module "@altv/client" {
     export abstract class AudioOutputAttached extends AudioOutput {
         entity: WorldObject;
 
-        static create(options: AudioOutputAttachedCreateOptions): AudioOutputAttached | null;
+        static create(options: AudioOutputAttachedCreateOptions): AudioOutputAttached;
     }
 
     interface AudioOutputFrontendCreateOptions {
@@ -158,7 +158,7 @@ declare module "@altv/client" {
     }
 
     export abstract class AudioOutputFrontend extends AudioOutput {
-        static create(options: AudioOutputFrontendCreateOptions): AudioOutputFrontendCreateOptions | null;
+        static create(options: AudioOutputFrontendCreateOptions): AudioOutputFrontendCreateOptions;
     }
 
     interface AudioOutputWorldCreateOptions {
@@ -169,7 +169,7 @@ declare module "@altv/client" {
     export abstract class AudioOutputWorld extends AudioOutput {
         pos: altShared.Vector3;
 
-        static create(options: AudioOutputWorldCreateOptions): AudioOutputWorld | null;
+        static create(options: AudioOutputWorldCreateOptions): AudioOutputWorld;
     }
 
     export class BaseObject extends altShared.BaseObject {
@@ -235,7 +235,7 @@ declare module "@altv/client" {
         fade(opacity: number, duration: number): void;
 
         static getByID(id: number): Blip | null;
-        static create(options: BlipCreateOptions): Blip | null;
+        static create(options: BlipCreateOptions): Blip;
     }
 
     export abstract class ColShape extends WorldObject {
@@ -246,7 +246,7 @@ declare module "@altv/client" {
         isEntityIdIn(id: number): boolean;
         isPointIn(pos: altShared.Vector3): boolean;
 
-        static create(opts: altShared.ColShapeCreateOptions): ColShape | null;
+        static create(opts: altShared.ColShapeCreateOptions): ColShape;
         static getByID(id: number): ColShape | null;
     }
 
@@ -268,7 +268,7 @@ declare module "@altv/client" {
         isEntityIdIn(id: number): boolean;
         isPointIn(point: altShared.Vector3): boolean;
 
-        static create(opts: altShared.CheckpointCreateOptions): Checkpoint | null;
+        static create(opts: altShared.CheckpointCreateOptions): Checkpoint;
         static getByID(id: number): Checkpoint | null;
     }
 
@@ -432,7 +432,7 @@ declare module "@altv/client" {
 
         static readonly allWorld: ReadonlyArray<LocalObject>;
 
-        static create(options: LocalObjectCreateOptions): LocalObject | null;
+        static create(options: LocalObjectCreateOptions): LocalObject;
         static getByID(id: number): LocalObject | null;
     }
 
@@ -478,7 +478,7 @@ declare module "@altv/client" {
         readonly scriptID: number;
         readonly isStreamedIn: boolean;
 
-        static create(options: LocalPedCreateOptions): LocalPed | null;
+        static create(options: LocalPedCreateOptions): LocalPed;
         static getByID(id: number): LocalPed | null;
     }
 
@@ -512,7 +512,7 @@ declare module "@altv/client" {
         readonly scriptID: number;
         readonly isStreamedIn: boolean;
 
-        static create(opts: LocalVehicleCreateOptions): LocalVehicle | null;
+        static create(opts: LocalVehicleCreateOptions): LocalVehicle;
         static getByID(id: number): LocalVehicle | null;
     }
 
@@ -601,7 +601,7 @@ declare module "@altv/client" {
         createElement(tag: string): RmlElement | undefined;
         createTextNode(text: string): RmlElement | undefined;
 
-        static create(options: RmlDocumentCreateOptions): RmlDocument | null;
+        static create(options: RmlDocumentCreateOptions): RmlDocument;
 
         // TODO (xLuxy): Check if RmlDocument has (it's not undefined)
         static getByID(id: string): RmlDocument | null;
@@ -840,7 +840,7 @@ declare module "@altv/client" {
     export abstract class VirtualEntityGroup extends BaseObject {
         readonly maxEntitiesInStream: number;
 
-        static create(opts: altShared.VirtualEntityGroupCreateOptions): VirtualEntityGroup | null;
+        static create(opts: altShared.VirtualEntityGroupCreateOptions): VirtualEntityGroup;
     }
 
     export abstract class VirtualEntity extends WorldObject {
@@ -855,7 +855,7 @@ declare module "@altv/client" {
         readonly syncedMeta: altShared.VirtualEntitySyncedMeta;
         readonly streamSyncedMeta: altShared.VirtualEntityStreamSyncedMeta;
 
-        static create(opts: VirtualEntityCreateOptions): VirtualEntity | null;
+        static create(opts: VirtualEntityCreateOptions): VirtualEntity;
     }
 
     export abstract class WeaponData {
@@ -901,7 +901,7 @@ declare module "@altv/client" {
         setExtraHeader(name: string, value: string): void;
         getExtraHeaders(): Readonly<Record<string, string>>;
 
-        static create(options: WebSocketClientCreateOptions): WebSocketClient | null;
+        static create(options: WebSocketClientCreateOptions): WebSocketClient;
         static getByID(id: number): WebSocketClient | null;
     }
 
@@ -944,7 +944,7 @@ declare module "@altv/client" {
 
         static readonly isGpuAccelerationActive: boolean;
 
-        static create(options: WebViewCreateOptions): WebView | null;
+        static create(options: WebViewCreateOptions): WebView;
     }
 
     /**

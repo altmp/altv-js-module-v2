@@ -127,7 +127,7 @@ declare module "@altv/server" {
         readonly syncedMeta: altShared.BlipSyncedMeta;
 
         static getByID(id: number): Blip | null;
-        static create(opts: BlipCreateOptions): Blip | null;
+        static create(opts: BlipCreateOptions): Blip;
     }
 
     export namespace PointBlip {
@@ -174,7 +174,7 @@ declare module "@altv/server" {
         readonly syncedMeta: altShared.CheckpointSyncedMeta;
         readonly streamSyncedMeta: altShared.CheckpointStreamSyncedMeta;
 
-        static create(opts: altShared.CheckpointCreateOptions): Checkpoint | null;
+        static create(opts: altShared.CheckpointCreateOptions): Checkpoint;
         static getByID(id: number): Checkpoint | null;
     }
 
@@ -237,7 +237,7 @@ declare module "@altv/server" {
         readonly streamSyncedMeta: altShared.ObjectStreamSyncedMeta;
 
         static getByID(id: number): Object | null;
-        static create(opts: ObjectCreateOptions): Object | null;
+        static create(opts: ObjectCreateOptions): Object;
         static readonly all: ReadonlyArray<Object>;
     }
 
@@ -258,7 +258,7 @@ declare module "@altv/server" {
         readonly streamSyncedMeta: altShared.PedStreamSyncedMeta;
 
         static getByID(id: number): Ped | null;
-        static create(opts: PedCreateOptions): Ped | null;
+        static create(opts: PedCreateOptions): Ped;
         static readonly all: ReadonlyArray<Ped>;
     }
 
@@ -585,7 +585,7 @@ declare module "@altv/server" {
         readonly streamSyncedMeta: altShared.VehicleStreamSyncedMeta;
 
         static getByID(id: number): Vehicle | null;
-        static create(opts: VehicleCreateOptions): Vehicle | null;
+        static create(opts: VehicleCreateOptions): Vehicle;
         static all: ReadonlyArray<Vehicle>;
     }
 
@@ -599,7 +599,7 @@ declare module "@altv/server" {
     export abstract class VirtualEntityGroup extends BaseObject {
         readonly maxEntitiesInStream: number;
 
-        static create(opts: altShared.VirtualEntityGroupCreateOptions): VirtualEntityGroup | null;
+        static create(opts: altShared.VirtualEntityGroupCreateOptions): VirtualEntityGroup;
     }
 
     export abstract class VirtualEntity extends WorldObject {
@@ -614,7 +614,7 @@ declare module "@altv/server" {
         readonly syncedMeta: altShared.VirtualEntitySyncedMeta;
         readonly streamSyncedMeta: altShared.VirtualEntityStreamSyncedMeta;
 
-        static create(opts: VirtualEntityCreateOptions): VirtualEntity | null;
+        static create(opts: VirtualEntityCreateOptions): VirtualEntity;
     }
 
     interface VoiceChannelCreateOptions {
@@ -637,7 +637,7 @@ declare module "@altv/server" {
         mutePlayer(player: Player): void;
         unmutePlayer(player: Player): void;
 
-        static create(opts: VoiceChannelCreateOptions): VoiceChannel | null;
+        static create(opts: VoiceChannelCreateOptions): VoiceChannel;
     }
 
     export abstract class WorldObject extends BaseObject {
