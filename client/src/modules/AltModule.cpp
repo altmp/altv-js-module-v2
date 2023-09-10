@@ -434,6 +434,16 @@ static void LocalMetaGetter(js::DynamicPropertyGetterContext& ctx)
     ctx.Return(val);
 }
 
+static void IsPointOnScreen(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    alt::Vector3 point;
+    if(!ctx.GetArg(0, point)) return;
+
+    ctx.Return(alt::ICore::Instance().IsPointOnScreen(point));
+}
+
 // clang-format off
 extern js::Class playerClass, localPlayerClass, vehicleClass, pedClass, objectClass,
                 audioClass, audioFilterClass, blipClass, textLabelClass, checkpointClass, webViewClass, fontClass,
@@ -496,6 +506,7 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.StaticFunction("resetMinimapComponentPosition", ResetMinimapComponentPosition);
     module.StaticFunction("setMinimapIsRectangle", SetMinimapIsRectangle);
     module.StaticFunction("getPedBonePos", GetPedBonePos);
+    module.StaticFunction("isPointOnScreen", IsPointOnScreen);
 
     module.Namespace(eventsNamespace);
     module.Namespace(discordNamespace);
