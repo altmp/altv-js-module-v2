@@ -66,6 +66,8 @@ static void TypeGetter(js::LazyPropertyContext& ctx)
 
 static void IsCancellableGetter(js::LazyPropertyContext& ctx)
 {
+    if(!ctx.CheckExtraInternalFieldValue()) return;
+    
     alt::CEvent* ev = ctx.GetExtraInternalFieldValue<alt::CEvent>();
     ctx.Return(ev->IsCancellable());
 }
