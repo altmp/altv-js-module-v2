@@ -618,6 +618,7 @@ declare module "@altv/shared" {
 
         export function wait(ms: number): Promise<void>;
         export function waitForNextTick(): Promise<void>;
+        export function waitFor(callback: () => boolean, timeout?: number): Promise<void>;
         export function getCurrentSourceLocation(): SourceLocation;
 
         export abstract class AssertionError extends Error {}
