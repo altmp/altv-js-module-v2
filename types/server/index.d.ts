@@ -638,7 +638,7 @@ declare module "@altv/server" {
         static create(opts: VoiceChannelCreateOptions): VoiceChannel | null;
     }
 
-    export abstract class WorldObject {
+    export abstract class WorldObject extends BaseObject {
         dimension: number;
         pos: altShared.Vector3;
     }
