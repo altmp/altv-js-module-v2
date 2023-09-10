@@ -1,8 +1,8 @@
 /** @type {typeof import("./utils.js")} */
 const { assert } = requireBinding("shared/utils.js");
 
-/** @type {Set<Timer>} */
-const timers = new Set();
+/** @type {Map<number, Timer>} */
+const timers = new Map();
 
 class Timer {
     static #_warningThreshold = 100;
@@ -39,8 +39,27 @@ class Timer {
     /** @type {string} */
     #_type = "Timer";
 
+    /** @type {number} */
+    #_id = 0;
+
     get type() {
         return this.#_type;
+    }
+
+    get id() {
+        return this.#_id;
+    }
+
+    /**
+     * @type {number}
+     */
+    static #timerIncrementer = 1;
+
+    /**
+     * @param {number} id
+     */
+    static getByID(id) {
+        return timers.get(id) || null;
     }
 
     constructor(type, callback, interval, once) {
@@ -53,12 +72,13 @@ class Timer {
         this.lastTick = Date.now();
         this.once = once;
         this.#_type = type;
+        this.#_id = Timer.#timerIncrementer++;
         this.location = cppBindings.getCurrentSourceLocation(Timer.#_sourceLocationFrameSkipCount);
-        timers.add(this);
+        timers.set(this.#_id, this);
     }
 
     destroy() {
-        timers.delete(this);
+        timers.delete(this.#_id);
     }
 
     tick() {
@@ -75,10 +95,7 @@ class Timer {
 
             const duration = this.lastTick - start;
             if (duration > Timer.#_warningThreshold) {
-                alt.logWarning(
-                    `[JS] Timer callback in resource '${cppBindings.resourceName}' (${this.location.fileName}:${this.location.lineNumber
-                    }) took ${duration}ms to execute (Threshold: ${Timer.#_warningThreshold}ms)`
-                );
+                alt.logWarning(`[JS] Timer callback in resource '${cppBindings.resourceName}' (${this.location.fileName}:${this.location.lineNumber}) took ${duration}ms to execute (Threshold: ${Timer.#_warningThreshold}ms)`);
             }
         }
     }
@@ -113,23 +130,25 @@ alt.Timers.Timeout = Timeout;
 alt.Timers.EveryTick = EveryTick;
 alt.Timers.NextTick = NextTick;
 
+alt.Timers.getByID = Timer.getByID;
+
 alt.Timers.setInterval = (callback, interval) => new Interval(callback, interval);
 alt.Timers.setTimeout = (callback, interval) => new Timeout(callback, interval);
 alt.Timers.everyTick = (callback) => new EveryTick(callback);
 alt.Timers.nextTick = (callback) => new NextTick(callback);
 
 Object.defineProperty(alt.Timers, "all", {
-    get: () => Array.from(timers),
+    get: () => Array.from(timers.values())
 });
 
 Object.defineProperty(alt.Timers, "warningThreshold", {
     get: () => Timer.warningThreshold,
-    set: (value) => (Timer.warningThreshold = value),
+    set: (value) => (Timer.warningThreshold = value)
 });
 
 Object.defineProperty(alt.Timers, "sourceLocationFrameSkipCount", {
     get: () => Timer.sourceLocationFrameSkipCount,
-    set: (value) => (Timer.sourceLocationFrameSkipCount = value),
+    set: (value) => (Timer.sourceLocationFrameSkipCount = value)
 });
 
 globalThis.setInterval = alt.Timers.setInterval;
@@ -145,7 +164,7 @@ globalThis.clearTimeout = (timeout) => {
 };
 
 function tick() {
-    for (const timer of timers) {
+    for (const [_, timer] of timers) {
         timer.tick();
     }
 }

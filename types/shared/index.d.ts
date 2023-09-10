@@ -766,6 +766,8 @@ declare module "@altv/shared" {
         export function nextTick(callback: Function): NextTick;
 
         export type TimerType = "Interval" | "Timeout" | "EveryTick" | "NextTick";
+
+        export function getByID(id: number): Timer | null;
     }
 
     export namespace Utils {
@@ -1465,6 +1467,7 @@ declare abstract class Timer {
     public location: import("@altv/shared").SourceLocation;
 
     public get type(): import("@altv/shared").Timers.TimerType;
+    public get id(): number;
 
     public destroy(): void;
 }
