@@ -2,7 +2,7 @@
 #include "interfaces/IResource.h"
 #include "magic_enum/include/magic_enum.hpp"
 
-extern js::Class eventContextClass;
+extern js::Class eventContextClass, cancelableEventContextClass;
 
 js::Promise js::Event::CallEventBinding(bool custom, int type, EventArgs& args, IResource* resource)
 {
@@ -20,7 +20,12 @@ void js::Event::SendEvent(const alt::CEvent* ev, IResource* resource)
     Event* eventHandler = GetEventHandler(ev->GetType());
     if(!eventHandler) return;
 
-    EventArgs eventArgs = eventContextClass.Create(resource->GetContext(), (void*)ev);
+    EventArgs eventArgs;
+    if (ev->IsCancellable())
+        eventArgs = cancelableEventContextClass.Create(resource->GetContext(), (void*)ev);
+    else
+        eventArgs = eventContextClass.Create(resource->GetContext(), (void*)ev);
+
     eventHandler->argsCb(ev, eventArgs);
 
     js::Promise promise = CallEventBinding(false, (int)ev->GetType(), eventArgs, resource);
@@ -40,7 +45,7 @@ static void CancelEventCallback(js::FunctionContext& ctx)
 {
     if(!ctx.CheckExtraInternalFieldValue()) return;
 
-    alt::CEvent* ev = ctx.GetExtraInternalFieldValue<alt::CEvent>();
+    alt::CCancellableEvent* ev = ctx.GetExtraInternalFieldValue<alt::CCancellableEvent>();
     if(ev->WasCancelled()) return;
     ev->Cancel();
 }
@@ -48,7 +53,7 @@ static void IsCancelledGetter(js::PropertyContext& ctx)
 {
     if(!ctx.CheckExtraInternalFieldValue()) return;
 
-    alt::CEvent* ev = ctx.GetExtraInternalFieldValue<alt::CEvent>();
+    alt::CCancellableEvent* ev = ctx.GetExtraInternalFieldValue<alt::CCancellableEvent>();
     ctx.Return(ev->WasCancelled());
 }
 static void TypeGetter(js::LazyPropertyContext& ctx)
@@ -61,7 +66,11 @@ static void TypeGetter(js::LazyPropertyContext& ctx)
 
 // clang-format off
 extern js::Class eventContextClass("EventContext", [](js::ClassTemplate& tpl) {
+    tpl.LazyProperty("type", TypeGetter);
+}, true);
+
+// clang-format off
+extern class js::Class cancelableEventContextClass("CancelableEventContext", &eventContextClass, [](js::ClassTemplate& tpl) {
     tpl.Method("cancel", CancelEventCallback);
     tpl.Property("isCancelled", IsCancelledGetter);
-    tpl.LazyProperty("type", TypeGetter);
 }, true);

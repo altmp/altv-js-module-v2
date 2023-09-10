@@ -15,12 +15,9 @@ function on(eventName, callback) {
 function once(eventName, callback) {
     if (typeof callback != "function") throw new Error("callback is not a function");
 
-    // TODO (xLuxy): Fix this - handler wont be removed
-    alt.logWarning("alt.once does currently not work as expected.");
-
-    async function wrapper({ args }) {
+    async function wrapper(...args) {
         const ret = callback(...args);
-        alt.Events.onEvent.remove(wrapper);
+        alt.Events.on.remove(eventName, wrapper);
 
         if (ret instanceof Promise) await ret;
     }
