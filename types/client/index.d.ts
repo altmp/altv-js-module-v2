@@ -51,6 +51,7 @@ declare module "@altv/client" {
     export function resetMinimapComponentPosition(name: string): void;
     export function setMinimapIsRectangle(state: boolean): void;
     export function getPedBonePos(scriptId: number, boneId: number): altShared.Vector3;
+    export function isPointOnScreen(pos: altShared.IVector3): boolean;
 
     interface AudioCreateOptions {
         source: string;
