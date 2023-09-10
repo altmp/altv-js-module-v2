@@ -168,8 +168,6 @@ jobs:
               run: |
                   mkdir upload
                   xcopy types upload /E
-                  rd /s /q upload\old
-                  del upload\server.ts
 
             - name: Upload artifacts
               uses: actions/upload-artifact@v3
