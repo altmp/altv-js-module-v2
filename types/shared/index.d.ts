@@ -135,7 +135,7 @@ declare module "@altv/shared" {
     }
 
     interface VirtualEntityGroupCreateOptions {
-        streamingRangeLimit: number;
+        maxEntitiesInStream: number;
     }
 
     export interface IRGBA {

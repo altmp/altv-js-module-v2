@@ -833,7 +833,7 @@ declare module "@altv/client" {
     interface VirtualEntityCreateOptions {
         group: VirtualEntityGroup;
         pos: altShared.IVector3;
-        maxEntitiesInStream: number;
+        streamingDistance: number;
         data?: Record<string, unknown>;
     }
 
