@@ -75,11 +75,12 @@ export class Event {
         const name = ctx.eventName;
         const handlers = local ? Event.#localScriptEventHandlers.get(name) : Event.#remoteScriptEventHandlers.get(name);
         if (!handlers) return;
+        const isPlayerScriptEvent = alt.isServer && !local;
 
         for (let { handler, location } of handlers) {
             try {
                 const startTime = Date.now();
-                const result = handler(ctx);
+                const result = isPlayerScriptEvent ? handler(ctx.player, ...ctx.args) : handler(...ctx.args);
                 const duration = Date.now() - startTime;
                 if (duration > Event.#warningThreshold) {
                     alt.logWarning(`[JS] Event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${location.lineNumber}) for script event '${name}' took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`);
