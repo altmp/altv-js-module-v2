@@ -859,6 +859,9 @@ declare module "@altv/client" {
         readonly syncedMeta: altShared.VirtualEntitySyncedMeta;
         readonly streamSyncedMeta: altShared.VirtualEntityStreamSyncedMeta;
 
+        static readonly all: ReadonlyArray<VirtualEntity>;
+        static readonly streamedIn: ReadonlyArray<VirtualEntity>;
+
         static create(opts: VirtualEntityCreateOptions): VirtualEntity;
     }
 
