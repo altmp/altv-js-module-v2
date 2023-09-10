@@ -125,6 +125,39 @@ class NextTick extends Timer {
     }
 }
 
+const timeMap = new Map();
+
+/**
+ *
+ * @param {string | undefined} name
+ */
+function time(name) {
+    const key = typeof name == "string" ? name : "";
+
+    if (timeMap.has(key)) {
+        throw new Error(`Benchmark timer ${timer} already exists`);
+    }
+
+    timeMap.set(key, Date.now());
+}
+
+/**
+ *
+ * @param {string | undefined} name
+ */
+function timeEnd(name) {
+    const key = typeof name == "string" ? name : "";
+
+    if (!timeMap.has(key)) {
+        throw new Error(`Benchmark timer ${timer} not found`);
+    }
+
+    const diff = Date.now() - timeMap.get(key);
+    timeMap.delete(key);
+
+    alt.log(`Timer ${key}: ${diff}ms`);
+}
+
 alt.Timers.Interval = Interval;
 alt.Timers.Timeout = Timeout;
 alt.Timers.EveryTick = EveryTick;
@@ -136,6 +169,9 @@ alt.Timers.setInterval = (callback, interval) => new Interval(callback, interval
 alt.Timers.setTimeout = (callback, interval) => new Timeout(callback, interval);
 alt.Timers.everyTick = (callback) => new EveryTick(callback);
 alt.Timers.nextTick = (callback) => new NextTick(callback);
+
+alt.Timers.time = time;
+alt.Timers.timeEnd = timeEnd;
 
 Object.defineProperty(alt.Timers, "all", {
     get: () => Array.from(timers.values())
@@ -153,6 +189,9 @@ Object.defineProperty(alt.Timers, "sourceLocationFrameSkipCount", {
 
 globalThis.setInterval = alt.Timers.setInterval;
 globalThis.setTimeout = alt.Timers.setTimeout;
+
+globalThis.time = alt.Timers.time;
+globalThis.timeEnd = alt.Timers.timeEnd;
 
 globalThis.clearInterval = (interval) => {
     if (!(interval instanceof Interval)) throw new Error("Expected an Interval as first argument");

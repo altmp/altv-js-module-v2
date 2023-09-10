@@ -451,14 +451,14 @@ declare module "@altv/shared" {
      * Extend it by interface merging for use in {@link syncedMeta alt.syncedMeta}.
      */
     export interface GlobalSyncedMeta {
-        [key: string]: unknown
+        [key: string]: unknown;
     }
 
     /**
      * Extend it by interface merging for use in BaseObject#syncedMeta.
      */
     export interface BaseObjectSyncedMeta {
-        [key: string]: unknown
+        [key: string]: unknown;
     }
 
     /**
@@ -606,6 +606,9 @@ declare module "@altv/shared" {
         export function setTimeout(callback: Function, interval: number): Timeout;
         export function everyTick(callback: Function): EveryTick;
         export function nextTick(callback: Function): NextTick;
+
+        export function time(name?: string): void;
+        export function timeEnd(name?: string): void;
 
         export type TimerType = "Interval" | "Timeout" | "EveryTick" | "NextTick";
 

@@ -44,39 +44,6 @@ function setTimeout(callback, timeout) {
     return timer.id;
 }
 
-const timeMap = new Map();
-
-/**
- *
- * @param {string | undefined} name
- */
-function time(name) {
-    const key = typeof name == "string" ? name : "";
-
-    if (timeMap.has(key)) {
-        throw new Error(`Benchmark timer ${timer} already exists`);
-    }
-
-    timeMap.set(key, Date.now());
-}
-
-/**
- *
- * @param {string | undefined} name
- */
-function timeEnd(name) {
-    const key = typeof name == "string" ? name : "";
-
-    if (!timeMap.has(key)) {
-        throw new Error(`Benchmark timer ${timer} not found`);
-    }
-
-    const diff = Date.now() - timeMap.get(key);
-    timeMap.delete(key);
-
-    alt.log(`Timer ${key}: ${diff}ms`);
-}
-
 /**
  *
  * @param {number} id
@@ -90,8 +57,8 @@ cppBindings.registerCompatibilityExport("everyTick", everyTick);
 cppBindings.registerCompatibilityExport("nextTick", nextTick);
 cppBindings.registerCompatibilityExport("setInterval", setInterval);
 cppBindings.registerCompatibilityExport("setTimeout", setTimeout);
-cppBindings.registerCompatibilityExport("time", time);
-cppBindings.registerCompatibilityExport("timeEnd", timeEnd);
+cppBindings.registerCompatibilityExport("time", alt.Timers.time);
+cppBindings.registerCompatibilityExport("timeEnd", alt.Timers.timeEnd);
 
 cppBindings.registerCompatibilityExport("clearEveryTick", removeTimer);
 cppBindings.registerCompatibilityExport("clearInterval", removeTimer);
