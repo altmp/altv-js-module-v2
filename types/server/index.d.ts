@@ -724,9 +724,8 @@ declare module "@altv/server" {
         // Server related events
         export function onServerStarted(callback: GenericEventCallback): void;
 
-        // TODO (xLuxy): Not implemented
+        // Connection queue related events
         export function onConnectionQueueAdd(callback: GenericEventCallback<ConnectionQueueEventParameters>): void;
-        // TODO (xLuxy): Not implemented
         export function onConnectionQueueRemove(callback: GenericEventCallback<ConnectionQueueEventParameters>): void;
 
         // Player related events
