@@ -736,14 +736,14 @@ declare module "@altv/server" {
         export function onPlayerDamage(callback: GenericPlayerEventCallback<PlayerDamageEventParameters>): void;
         export function onPlayerDeath(callback: GenericPlayerEventCallback<PlayerDeathEventParameters>): void;
         export function onPlayerHeal(callback: GenericPlayerEventCallback<PlayerHealEventParameters>): void;
-        export function onPlayerControlRequest(callback: GenericPlayerEventCallback<PlayerControlRequestEventParameters>): void;
+        export function onPlayerControlRequest(callback: GenericCancellablePlayerEventCallback<PlayerControlRequestEventParameters>): void;
         export function onPlayerInteriorChange(callback: GenericPlayerEventCallback<PlayerInteriorChangeEventParameters>): void;
         export function onPlayerDimensionChange(callback: GenericPlayerEventCallback<PlayerDimensionChangeEventParameters>): void;
         export function onPlayerWeaponChange(callback: GenericPlayerEventCallback<PlayerWeaponChangeEventParameters>): void;
-        export function onPlayerSyncedSceneRequest(callback: GenericEventCallback<PlayerSyncedSceneRequestEventParameters>): void;
-        export function onPlayerSyncedSceneStart(callback: GenericPlayerEventCallback<PlayerSyncedSceneStartEventParameters>): void;
-        export function onPlayerSyncedSceneStop(callback: GenericPlayerEventCallback<PlayerSyncedSceneStopEventParameters>): void;
-        export function onPlayerSyncedSceneUpdate(callback: GenericPlayerEventCallback<PlayerSyncedSceneUpdateEventParameters>): void;
+        export function onPlayerSyncedSceneRequest(callback: GenericCancellableEventCallback<PlayerSyncedSceneRequestEventParameters>): void;
+        export function onPlayerSyncedSceneStart(callback: GenericCancellablePlayerEventCallback<PlayerSyncedSceneStartEventParameters>): void;
+        export function onPlayerSyncedSceneStop(callback: GenericCancellablePlayerEventCallback<PlayerSyncedSceneStopEventParameters>): void;
+        export function onPlayerSyncedSceneUpdate(callback: GenericCancellablePlayerEventCallback<PlayerSyncedSceneUpdateEventParameters>): void;
         export function onPlayerSpawn(callback: GenericPlayerEventCallback): void;
         export function onPlayerAnimationChange(callback: GenericPlayerEventCallback<PlayerAnimationChangeEventParameters>): void;
         export function onPlayerEnteredVehicle(callback: GenericPlayerEventCallback<PlayerEnteredVehicleEventParameters>): void;
@@ -757,20 +757,20 @@ declare module "@altv/server" {
         export function onVehicleDetach(callback: GenericEventCallback<VehicleDetachEventParameters>): void;
         export function onVehicleDamage(callback: GenericEventCallback<VehicleDamageEventParameters>): void;
         export function onVehicleSirenStateChange(callback: GenericEventCallback<VehicleSirenStateChangeEventParameters>): void;
-        export function onVehicleHornStateChange(callback: GenericPlayerEventCallback<VehicleHornStateChangeEventParameters>): void;
+        export function onVehicleHornStateChange(callback: GenericCancellablePlayerEventCallback<VehicleHornStateChangeEventParameters>): void;
 
         // Voice related events
         export function onVoiceConnectionCreate(callback: GenericEventCallback<VoiceConnectionEventParameters>): void;
 
         // Object related events
-        export function onClientObjectDelete(callback: GenericPlayerEventCallback): void;
-        export function onClientObjectRequest(callback: GenericPlayerEventCallback<ClientObjectEventParameters>): void;
+        export function onClientObjectDelete(callback: GenericCancellablePlayerEventCallback): void;
+        export function onClientObjectRequest(callback: GenericCancellablePlayerEventCallback<ClientObjectEventParameters>): void;
 
         // SHARED Entity related events
         export function onBaseObjectCreate(callback: GenericEventCallback<BaseObjectCreateEventParameters>): void;
         export function onBaseObjectRemove(callback: GenericEventCallback<BaseObjectRemoveEventParameters>): void;
         export function onNetOwnerChange(callback: GenericEventCallback<NetOwnerChangeEventParameters>): void;
-        export function onWeaponDamage(callback: GenericEventCallback<WeaponDamageEventParameters>): void;
+        export function onWeaponDamage(callback: GenericCancellableEventCallback<WeaponDamageEventParameters>): void;
 
         // SHARED meta related events
         export function onLocalMetaChange(callback: GenericPlayerEventCallback<LocalMetaChangeEventParameters>): void;
@@ -785,9 +785,9 @@ declare module "@altv/server" {
 
         // Script related events
         export function onColShapeEvent(callback: GenericEventCallback<ColShapeEventParameters>): void;
-        export function onExplosion(callback: GenericEventCallback<ExplosionEventParameters>): void;
-        export function onFireStart(callback: GenericPlayerEventCallback<FireStartEventParameters>): void;
-        export function onProjectileStart(callback: GenericPlayerEventCallback<ProjectileStartEventParameters>): void;
+        export function onExplosion(callback: GenericCancellableEventCallback<ExplosionEventParameters>): void;
+        export function onFireStart(callback: GenericCancellablePlayerEventCallback<FireStartEventParameters>): void;
+        export function onProjectileStart(callback: GenericCancellablePlayerEventCallback<ProjectileStartEventParameters>): void;
         export function onEntityColShapeEnter(callback: GenericEventCallback<EntityColShapeEnterEventParameters>): void;
         export function onEntityColShapeLeave(callback: GenericEventCallback<EntityColShapeLeaveEventParameters>): void;
         export function onEntityCheckpointEnter(callback: GenericEventCallback<EntityCheckpointEnterEventParameters>): void;
