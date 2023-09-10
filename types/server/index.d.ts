@@ -973,6 +973,7 @@ declare module "@altv/server" {
 
         export type EventContext = {
             readonly type: altShared.Enums.EventType;
+            readonly isCancellable: boolean;
         };
 
         export type PlayerEventContext = EventContext & {
