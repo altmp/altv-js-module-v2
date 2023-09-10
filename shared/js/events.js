@@ -263,7 +263,19 @@ export class Event {
             }
         }
     }
+
+    /**
+     * @param {string} eventName
+     * @param {...unknown} args
+     */
+    static emitRaw(eventName, ...args) {
+        alt.Events.rawEmitEnabled = true;
+        alt.emit(eventName, ...args);
+        alt.Events.rawEmitEnabled = false;
+    }
 }
+
+alt.Events.emitRaw = Event.emitRaw;
 
 alt.Events.on = Event.getScriptEventFunc(true);
 alt.Events.onRemote = Event.getScriptEventFunc(false);

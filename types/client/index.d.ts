@@ -678,6 +678,7 @@ declare module "@altv/client" {
         readonly outputs: ReadonlyArray<AudioOutput>;
 
         emit(eventName: string, ...args: unknown[]): void;
+        emitRaw(eventName: string, ...args: unknown[]): void;
         setExtraHeader(name: string, value: string): void;
         setZoomLevel(value: number): void;
         reload(ignoreCache: boolean): void;
@@ -921,7 +922,7 @@ declare module "@altv/client" {
 
         interface ClientEvent {}
 
-        export type CustomEventCallback<E extends string, T extends unknown[]> = (params: { eventName: E, args: T }) => void | Promise<void>;
+        export type CustomEventCallback<E extends string, T extends unknown[]> = (params: { eventName: E; args: T }) => void | Promise<void>;
         export type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
         export type GenericPlayerEventCallback<T = {}> = (params: T & { player: Player }) => void | Promise<void>;
 

@@ -199,6 +199,7 @@ declare module "@altv/server" {
         netOwnershipDisabled: boolean;
 
         emit(event: string, ...args: unknown[]): void;
+        emitRaw(event: string, ...args: unknown[]): void;
         emitUnreliable(event: string, ...args: unknown[]): void;
         spawn(pos: altShared.IVector3, delay?: number): void;
         despawn(): void;
@@ -756,8 +757,8 @@ declare module "@altv/server" {
 
         interface CustomServerEvent {}
 
-        export type CustomEventCallback<E extends string, T extends []> = (params: { eventName: E, args: T }) => void | Promise<void>;
-        export type CustomPlayerEventCallback<E extends string, T extends []> = (params: { eventName: E, player: Player, args: T }) => void | Promise<void>;
+        export type CustomEventCallback<E extends string, T extends []> = (params: { eventName: E; args: T }) => void | Promise<void>;
+        export type CustomPlayerEventCallback<E extends string, T extends []> = (params: { eventName: E; player: Player; args: T }) => void | Promise<void>;
         export type GenericEventCallback<T extends {} = {}> = (params: T) => void | Promise<void>;
         export type GenericPlayerEventCallback<T extends {} = {}> = (params: T & { player: Player }) => void | Promise<void>;
 
