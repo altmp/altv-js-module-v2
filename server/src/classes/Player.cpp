@@ -176,31 +176,6 @@ static void Emit(js::FunctionContext& ctx)
     alt::ICore::Instance().TriggerClientEvent(player, eventName, args);
 }
 
-static void EmitRaw(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(1, 32)) return;
-    js::IResource* resource = ctx.GetResource();
-
-    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
-
-    std::string eventName;
-    if(!ctx.GetArg(0, eventName)) return;
-
-    alt::MValueArgs args;
-    args.reserve(ctx.GetArgCount() - 1);
-    for(int i = 1; i < ctx.GetArgCount(); i++)
-    {
-        v8::Local<v8::Value> arg;
-        if(!ctx.GetArg(i, arg)) continue;
-        alt::MValueByteArray result = js::JSToRawBytes(arg, resource);
-        if(!ctx.Check(result.get() != nullptr, "Failed to serialize argument at index " + std::to_string(i - 1))) return;
-
-        args.push_back(result);
-    }
-    alt::ICore::Instance().TriggerClientEvent(player, eventName, args);
-}
-
 static void EmitUnreliable(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
@@ -848,7 +823,6 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Property<&alt::IPlayer::IsNetworkOwnershipDisabled, &alt::IPlayer::SetNetworkOwnershipDisabled>("netOwnershipDisabled");
 
     tpl.Method("emit", &Emit);
-    tpl.Method("emitRaw", &EmitRaw);
     tpl.Method("emitUnreliable", &EmitUnreliable);
     tpl.Method("spawn", &Spawn);
     tpl.Method<&alt::IPlayer::Despawn>("despawn");
