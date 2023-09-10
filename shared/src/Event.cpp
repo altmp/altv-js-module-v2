@@ -2,7 +2,7 @@
 #include "interfaces/IResource.h"
 #include "magic_enum/include/magic_enum.hpp"
 
-extern js::Class eventContextClass, cancelableEventContextClass;
+extern js::Class eventContextClass, cancellableEventContextClass;
 
 js::Promise js::Event::CallEventBinding(bool custom, int type, EventArgs& args, IResource* resource)
 {
@@ -22,7 +22,7 @@ void js::Event::SendEvent(const alt::CEvent* ev, IResource* resource)
 
     EventArgs eventArgs;
     if (ev->IsCancellable())
-        eventArgs = cancelableEventContextClass.Create(resource->GetContext(), (void*)ev);
+        eventArgs = cancellableEventContextClass.Create(resource->GetContext(), (void*)ev);
     else
         eventArgs = eventContextClass.Create(resource->GetContext(), (void*)ev);
 
@@ -64,13 +64,19 @@ static void TypeGetter(js::LazyPropertyContext& ctx)
     ctx.Return(ev->GetType());
 }
 
+static void IsCancellableGetter(js::LazyPropertyContext& ctx)
+{
+    alt::CEvent* ev = ctx.GetExtraInternalFieldValue<alt::CEvent>();
+    ctx.Return(ev->IsCancellable());
+}
+
 // clang-format off
 extern js::Class eventContextClass("EventContext", [](js::ClassTemplate& tpl) {
     tpl.LazyProperty("type", TypeGetter);
+    tpl.LazyProperty("isCancellable", IsCancellableGetter);
 }, true);
 
-// clang-format off
-extern class js::Class cancelableEventContextClass("CancelableEventContext", &eventContextClass, [](js::ClassTemplate& tpl) {
+extern class js::Class cancellableEventContextClass("CancellableEventContext", &eventContextClass, [](js::ClassTemplate& tpl) {
     tpl.Method("cancel", CancelEventCallback);
     tpl.Property("isCancelled", IsCancelledGetter);
 }, true);
