@@ -40,6 +40,8 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Property<&alt::IVehicle::GetBatteryLightState, &alt::IVehicle::SetBatteryLightState>("batteryLightState");
     tpl.Property<&alt::IVehicle::GetSuspensionHeight, &alt::IVehicle::SetSuspensionHeight>("suspensionHeight");
 
+    tpl.Property<&alt::IVehicle::GetSteeringAngle, &alt::IVehicle::SetSteeringAngle>("steeringAngle");
+
     tpl.Method<&alt::IVehicle::ResetHandling>("resetHandling");
     tpl.Method<&alt::IVehicle::ReplaceHandling>("replaceHandling");
     tpl.Method<&alt::IVehicle::ToggleTaxiLight>("toggleTaxiLight");
