@@ -17,7 +17,7 @@ function on(eventName, callback) {
             processedResult = await callbackRet;
         }
 
-        if (processedResult === false) {
+        if (processedResult === false && ctx.isCancellable) {
             ctx.cancel();
         }
     }
