@@ -969,8 +969,8 @@ declare module "@altv/client" {
         on<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
 
         // Not implemented yet
-        once<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
-        once<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
+        // once<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
+        // once<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
 
         off<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
         off<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
