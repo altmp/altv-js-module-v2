@@ -6,13 +6,6 @@ static void RadiusGetter(js::LazyPropertyContext& ctx)
     if (!ctx.CheckThis()) return;
     alt::IColShape* colShape = ctx.GetThisObject<alt::IColShape>();
 
-    if (!ctx.Check(
-        colShape->GetColshapeType() == alt::IColShape::ColShapeType::SPHERE
-        || colShape->GetColshapeType() == alt::IColShape::ColShapeType::CYLINDER
-        || colShape->GetColshapeType() == alt::IColShape::ColShapeType::CIRCLE,
-        "radius property only work on the following types: sphere, cylinder, circle"))
-        return;
-
     if (colShape->GetColshapeType() == alt::IColShape::ColShapeType::SPHERE)
     {
         auto* sphere = dynamic_cast<alt::IColShapeSphere*>(colShape);
@@ -35,23 +28,17 @@ static void HeightGetter(js::LazyPropertyContext& ctx)
     if (!ctx.CheckThis()) return;
     alt::IColShape* colShape = ctx.GetThisObject<alt::IColShape>();
 
-    if (!ctx.Check(colShape->GetColshapeType() == alt::IColShape::ColShapeType::CYLINDER,
-                   "height property only work on the following types: cylinder"))
-        return;
-
-    auto* cylinder = dynamic_cast<alt::IColShapeCylinder*>(colShape);
-    ctx.Return(cylinder->GetHeight());
+    if (colShape->GetColshapeType() == alt::IColShape::ColShapeType::CYLINDER)
+    {
+        auto* cylinder = dynamic_cast<alt::IColShapeCylinder*>(colShape);
+        ctx.Return(cylinder->GetHeight());
+    }
 }
 
 static void MinGetter(js::LazyPropertyContext& ctx)
 {
     if (!ctx.CheckThis()) return;
     alt::IColShape* colShape = ctx.GetThisObject<alt::IColShape>();
-
-    if (!ctx.Check(
-        colShape->GetColshapeType() == alt::IColShape::ColShapeType::CUBOID || colShape->GetColshapeType() ==
-        alt::IColShape::ColShapeType::RECT, "min property only work on the following types: sphere, cuboid, rect"))
-        return;
 
     if (colShape->GetColshapeType() == alt::IColShape::ColShapeType::CUBOID)
     {
@@ -70,11 +57,6 @@ static void MaxGetter(js::LazyPropertyContext& ctx)
     if (!ctx.CheckThis()) return;
     alt::IColShape* colShape = ctx.GetThisObject<alt::IColShape>();
 
-    if (!ctx.Check(
-        colShape->GetColshapeType() == alt::IColShape::ColShapeType::CUBOID || colShape->GetColshapeType() ==
-        alt::IColShape::ColShapeType::RECT, "max property only work on the following types: sphere, cuboid, rect"))
-        return;
-
     if (colShape->GetColshapeType() == alt::IColShape::ColShapeType::CUBOID)
     {
         auto* cuboid = dynamic_cast<alt::IColShapeCuboid*>(colShape);
@@ -92,12 +74,11 @@ static void MinZGetter(js::LazyPropertyContext& ctx)
     if (!ctx.CheckThis()) return;
     alt::IColShape* colShape = ctx.GetThisObject<alt::IColShape>();
 
-    if (!ctx.Check(colShape->GetColshapeType() == alt::IColShape::ColShapeType::POLYGON,
-                   "minZ property only work on the following types: polygon"))
-        return;
-
-    auto* poly = dynamic_cast<alt::IColShapePoly*>(colShape);
-    ctx.Return(poly->GetMinZ());
+    if (colShape->GetColshapeType() == alt::IColShape::ColShapeType::POLYGON)
+    {
+        auto* poly = dynamic_cast<alt::IColShapePoly*>(colShape);
+        ctx.Return(poly->GetMinZ());
+    }
 }
 
 static void MaxZGetter(js::LazyPropertyContext& ctx)
@@ -105,12 +86,11 @@ static void MaxZGetter(js::LazyPropertyContext& ctx)
     if (!ctx.CheckThis()) return;
     alt::IColShape* colShape = ctx.GetThisObject<alt::IColShape>();
 
-    if (!ctx.Check(colShape->GetColshapeType() == alt::IColShape::ColShapeType::POLYGON,
-                   "maxZ property only work on the following types: polygon"))
-        return;
-
-    auto* poly = dynamic_cast<alt::IColShapePoly*>(colShape);
-    ctx.Return(poly->GetMaxZ());
+    if (colShape->GetColshapeType() == alt::IColShape::ColShapeType::POLYGON)
+    {
+        auto* poly = dynamic_cast<alt::IColShapePoly*>(colShape);
+        ctx.Return(poly->GetMaxZ());
+    }
 }
 
 static void PointsGetter(js::LazyPropertyContext& ctx)
@@ -118,12 +98,11 @@ static void PointsGetter(js::LazyPropertyContext& ctx)
     if (!ctx.CheckThis()) return;
     alt::IColShape* colShape = ctx.GetThisObject<alt::IColShape>();
 
-    if (!ctx.Check(colShape->GetColshapeType() == alt::IColShape::ColShapeType::POLYGON,
-                   "points property only work on the following types: polygon"))
-        return;
-
-    auto* poly = dynamic_cast<alt::IColShapePoly*>(colShape);
-    ctx.Return(poly->GetPoints());
+    if (colShape->GetColshapeType() == alt::IColShape::ColShapeType::POLYGON)
+    {
+        auto* poly = dynamic_cast<alt::IColShapePoly*>(colShape);
+        ctx.Return(poly->GetPoints());
+    }
 }
 
 // clang-format off
