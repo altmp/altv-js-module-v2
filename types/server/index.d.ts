@@ -356,8 +356,14 @@ declare module "@altv/server" {
         netOwnershipDisabled: boolean;
 
         emit<E extends keyof altShared.Events.CustomServerToPlayerEvent>(event: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
+        emit<E extends string>(event: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: Parameters<unknown[]>): void;
+
         emitRaw<E extends keyof altShared.Events.CustomServerToPlayerEvent>(event: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
+        emitRaw<E extends string>(event: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: Parameters<unknown[]>): void;
+
         emitUnreliable<E extends keyof altShared.Events.CustomServerToPlayerEvent>(event: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
+        emitUnreliable<E extends string>(event: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: Parameters<unknown[]>): void;
+
         spawn(pos: altShared.IVector3, delay?: number): void;
         despawn(): void;
         setWeaponTintIndex(weaponHash: number | string, tintIndex: number): void;
