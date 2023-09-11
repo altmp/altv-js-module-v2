@@ -78,7 +78,7 @@ declare module "@altv/client" {
 
         on(eventName: string, func: (...args: unknown[]) => void): void;
         off(eventName: string, func: (...args: unknown[]) => void): void;
-        readonly listeners: ReadonlyMap<string, (...args: unknown[]) => void>;
+        readonly listeners: Readonly<{ [eventName: string]: ReadonlyArray<(...args: unknown[]) => void> }>;
 
         static create(options: AudioCreateOptions): Audio;
         static getByID(id: number): Audio | null;
@@ -702,7 +702,7 @@ declare module "@altv/client" {
 
         on(eventName: string, func: (...args: unknown[]) => void): void;
         off(eventName: string, func: (...args: unknown[]) => void): void;
-        readonly listeners: ReadonlyMap<string, (...args: unknown[]) => void>;
+        readonly listeners: Readonly<{ [eventName: string]: ReadonlyArray<(...args: unknown[]) => void> }>;
 
         // TODO (xLuxy): Check if RmlElement has (it's not undefined)
         static getByID(id: string): RmlElement | null;
@@ -978,7 +978,7 @@ declare module "@altv/client" {
         off<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
         off<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
 
-        readonly listeners: ReadonlyMap<string, (...args: unknown[]) => void>;
+        readonly listeners: Readonly<{ [eventName: string]: ReadonlyArray<(...args: unknown[]) => void> }>;
 
         static readonly isGpuAccelerationActive: boolean;
 
