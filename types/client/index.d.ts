@@ -1250,6 +1250,10 @@ declare module "@altv/client" {
         export function onGlobalMetaChange(callback: GenericEventCallback<GlobalMetaChangeEventParameters>): void;
         export function onGlobalSyncedMetaChange(callback: GenericEventCallback<GlobalSyncedMetaChangeEventParameters>): void;
 
+        // Script related events
+        export function onEntityColShapeEnter(callback: GenericEventCallback<EntityColShapeEnterEventParameters>): void;
+        export function onEntityColShapeLeave(callback: GenericEventCallback<EntityColShapeLeaveEventParameters>): void;
+
         // SHARED custom events
         export function onConsoleCommand(callback: GenericEventCallback<ConsoleCommandEventParameters>): void;
         export function onError(callback: GenericEventCallback<ErrorEventParameters>): void;
@@ -1305,6 +1309,16 @@ declare module "@altv/client" {
         interface EventSubscription {
             readonly listeners: ReadonlyArray<GenericEventCallback>;
             remove(eventName: string, callback: GenericEventCallback): void;
+        }
+
+        interface EntityColShapeEnterEventParameters {
+            entity: WorldObject;
+            colShape: ColShape;
+        }
+
+        interface EntityColShapeLeaveEventParameters {
+            entity: WorldObject;
+            colShape: ColShape;
         }
 
         interface CustomClientEvent {}
