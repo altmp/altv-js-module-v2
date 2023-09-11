@@ -60,15 +60,6 @@ declare module "@altv/shared" {
         writeString(offset: number, value: string): void;
     }
 
-    interface CheckpointCreateOptions {
-        type: Enums.CheckpointType;
-        pos: IVector3;
-        radius: number;
-        height: number;
-        color: RGBA;
-        streamingDistance: number;
-    }
-
     interface ColShapeSphereCreateOptions {
         pos: IVector3;
         radius: number;

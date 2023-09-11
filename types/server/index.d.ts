@@ -196,6 +196,15 @@ declare module "@altv/server" {
         readonly syncedMeta: altShared.ColShapeSyncedMeta;
     }
 
+    interface CheckpointCreateOptions {
+        type: altShared.Enums.CheckpointType;
+        pos: altShared.IVector3;
+        radius: number;
+        height: number;
+        color: altShared.RGBA;
+        streamingDistance: number;
+    }
+
     export abstract class Checkpoint extends ColShape {
         readonly isStreamedIn: boolean;
 
@@ -216,7 +225,7 @@ declare module "@altv/server" {
         readonly syncedMeta: altShared.CheckpointSyncedMeta;
         readonly streamSyncedMeta: altShared.CheckpointStreamSyncedMeta;
 
-        static create(opts: altShared.CheckpointCreateOptions): Checkpoint;
+        static create(opts: CheckpointCreateOptions): Checkpoint;
         static getByID(id: number): Checkpoint | null;
     }
 

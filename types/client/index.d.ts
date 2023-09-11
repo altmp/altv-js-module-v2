@@ -254,6 +254,17 @@ declare module "@altv/client" {
         static getByID(id: number): ColShape | null;
     }
 
+    interface CheckpointCreateOptions {
+        type: altShared.Enums.CheckpointType;
+        pos: altShared.IVector3;
+        radius: number;
+        height: number;
+        color: altShared.RGBA;
+        iconColor: altShared.RGBA;
+        nextPos: altShared.IVector3;
+        streamingDistance: number;
+    }
+
     // @ts-expect-error - Suppresses "Class static side incorrectly extends base class static side"
     export abstract class Checkpoint extends ColShape {
         readonly scriptID: number;
@@ -272,7 +283,7 @@ declare module "@altv/client" {
         isEntityIdIn(id: number): boolean;
         isPointIn(point: altShared.Vector3): boolean;
 
-        static create(opts: altShared.CheckpointCreateOptions): Checkpoint;
+        static create(opts: CheckpointCreateOptions): Checkpoint;
         static getByID(id: number): Checkpoint | null;
     }
 
