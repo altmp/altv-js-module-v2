@@ -928,7 +928,10 @@ declare module "@altv/client" {
         isOverlay?: boolean; // default: false
     }
 
-    type WebViewCreateOptions = { url: string } & (({ drawable: number | string } & _WebViewTextureCreateOptions) | ({ drawable: never } & _WebViewCreateOptions));
+    type WebViewCreateOptions = { url: string } & (
+        | ({ drawable: number | string } & _WebViewTextureCreateOptions)
+        | ({ drawable?: never } & _WebViewCreateOptions)
+    );
 
     export abstract class WebView extends BaseObject {
         focused: boolean;
@@ -960,6 +963,7 @@ declare module "@altv/client" {
         // Not implemented yet
         on<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
         on<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
+
         // Not implemented yet
         once<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
         once<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
@@ -1270,8 +1274,10 @@ declare module "@altv/client" {
         // Custom events
         export function on<E extends keyof CustomClientEvent>(eventName: E, callback: CustomEventCallback<Parameters<CustomClientEvent[E]>>): EventSubscription;
         export function on<E extends string>(eventName: Exclude<E, keyof CustomClientEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
+
         export function onServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
         export function onServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
+
         export function onRemote<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
         export function onRemote<E extends keyof altShared.Events.CustomRemoteEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomRemoteEvent[E]>>): EventSubscription;
         export function onRemote<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent | keyof altShared.Events.CustomRemoteEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
@@ -1326,7 +1332,7 @@ declare module "@altv/client" {
 
         interface CustomClientEvent {}
 
-        export type CustomEventCallback<T extends unknown[]> = (...params: T ) => void | Promise<void>;
+        export type CustomEventCallback<T extends unknown[]> = (...params: T) => void | Promise<void>;
         export type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
         export type GenericPlayerEventCallback<T = {}> = (params: T & { player: Player }) => void | Promise<void>;
 
@@ -1450,10 +1456,18 @@ declare module "@altv/client" {
     }
 
     export namespace LocalStorage {
-        export function get(key: string): unknown;
-        export function set(key: string, value: unknown): void;
-        export function has(key: string): boolean;
-        export function remove(key: string): void;
+        interface LocalStorage {}
+
+        // Not setting undefined as possible return value because it's annoying to specify ! everytime you get a value
+        // but if you want to get undefined, you can specify that as possible value in LocalStorage interface.
+        export function get<K extends keyof LocalStorage>(key: K): LocalStorage[K];
+        export function get<K extends string>(key: Exclude<K, keyof LocalStorage>): unknown;
+        export function set<K extends keyof LocalStorage>(key: K, value: LocalStorage[K]): void;
+        export function set<K extends string>(key: Exclude<K, keyof LocalStorage>, value: unknown): void;
+        export function has<K extends keyof LocalStorage>(key: K): boolean;
+        export function has<K extends string>(key: Exclude<K, keyof LocalStorage>): boolean;
+        export function remove<K extends keyof LocalStorage>(key: K): void;
+        export function remove<K extends string>(key: Exclude<K, keyof LocalStorage>): void;
         export function clear(): void;
         export function save(): void;
     }

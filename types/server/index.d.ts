@@ -1023,8 +1023,8 @@ declare module "@altv/server" {
             readonly isCancelled: boolean;
         };
 
-        export type CustomEventCallback<T extends unknown[]> = (...params: T ) => void | Promise<void>;
-        export type CustomPlayerEventCallback<T extends unknown[]> = (player: Player, ...params: T ) => void | Promise<void>;
+        export type CustomEventCallback<T extends unknown[]> = (...params: T) => void | Promise<void>;
+        export type CustomPlayerEventCallback<T extends unknown[]> = (player: Player, ...params: T) => void | Promise<void>;
 
         export type GenericEventCallback<T extends {} = {}> = (params: T & EventContext) => void | Promise<void>;
         export type GenericPlayerEventCallback<T extends {} = {}> = (params: T & PlayerEventContext) => void | Promise<void>;
