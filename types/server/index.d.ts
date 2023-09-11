@@ -889,7 +889,7 @@ declare module "@altv/server" {
             connectionInfo: ConnectionInfo;
         }
 
-        interface PlayerConnectEventParameters { }
+        interface PlayerConnectEventParameters {}
 
         interface PlayerConnectDeniedEventParameters {
             reason: string;
@@ -1013,7 +1013,7 @@ declare module "@altv/server" {
             colShape: ColShape;
         }
 
-        interface CustomServerEvent { }
+        interface CustomServerEvent {}
 
         export type EventContext = {
             readonly type: altShared.Enums.EventType;
@@ -1216,47 +1216,47 @@ declare module "@altv/server" {
     /**
      * Extend it by interface merging for use in Blip#meta.
      */
-    export interface BlipMeta extends BaseObjectMeta { }
+    export interface BlipMeta extends BaseObjectMeta {}
 
     /**
      * Extend it by interface merging for use in ColShape#meta.
      */
-    export interface ColShapeMeta extends BaseObjectMeta { }
+    export interface ColShapeMeta extends BaseObjectMeta {}
 
     /**
      * Extend it by interface merging for use in Checkpoint#meta.
      */
-    export interface CheckpointMeta extends ColShapeMeta { }
+    export interface CheckpointMeta extends ColShapeMeta {}
 
     /**
      * Extend it by interface merging for use in Entity#meta.
      */
-    export interface EntityMeta extends BaseObjectMeta { }
+    export interface EntityMeta extends BaseObjectMeta {}
 
     /**
      * Extend it by interface merging for use in Player#meta.
      */
-    export interface PlayerMeta extends EntityMeta { }
+    export interface PlayerMeta extends EntityMeta {}
 
     /**
      * Extend it by interface merging for use in Vehicle#meta.
      */
-    export interface VehicleMeta extends EntityMeta { }
+    export interface VehicleMeta extends EntityMeta {}
 
     /**
      * Extend it by interface merging for use in Ped#meta.
      */
-    export interface PedMeta extends EntityMeta { }
+    export interface PedMeta extends EntityMeta {}
 
     /**
      * Extend it by interface merging for use in Object#meta.
      */
-    export interface ObjectMeta extends EntityMeta { }
+    export interface ObjectMeta extends EntityMeta {}
 
     /**
      * Extend it by interface merging for use in VirtualEntity#meta.
      */
-    export interface VirtualEntityMeta extends BaseObjectMeta { }
+    export interface VirtualEntityMeta extends BaseObjectMeta {}
 
     export * from "@altv/shared";
 }
