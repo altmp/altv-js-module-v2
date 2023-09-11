@@ -696,6 +696,11 @@ declare module "@altv/client" {
         querySelector(selector: string): RmlElement | null;
         querySelectorAll(selector: string): ReadonlyArray<RmlElement>;
 
+        // TODO: Not implemented yet
+        on(eventName: string, func: (senderElement: RmlElement, ...args: any[]) => void): void;
+        off(eventName: string, func: (...args: any[]) => void): void;
+        getEventListeners(eventName: string): ((senderElement: RmlElement, ...args: any[]) => void)[];
+
         // TODO (xLuxy): Check if RmlElement has (it's not undefined)
         static getByID(id: string): RmlElement | null;
     }
@@ -990,39 +995,39 @@ declare module "@altv/client" {
     /**
      * Extend it by interface merging for use in Entity#meta.
      */
-    export interface EntityMeta extends BaseObjectMeta {}
+    export interface EntityMeta extends BaseObjectMeta { }
 
     /**
      * Extend it by interface merging for use in Player#meta.
      */
-    export interface PlayerMeta extends EntityMeta {}
+    export interface PlayerMeta extends EntityMeta { }
 
     /**
      * Extend it by interface merging for use in Vehicle#meta.
      */
-    export interface VehicleMeta extends EntityMeta {}
+    export interface VehicleMeta extends EntityMeta { }
 
     /**
      * Extend it by interface merging for use in Ped#meta.
      */
-    export interface PedMeta extends EntityMeta {}
+    export interface PedMeta extends EntityMeta { }
 
     /**
      * Extend it by interface merging for use in Object#meta.
      */
-    export interface ObjectMeta extends EntityMeta {}
+    export interface ObjectMeta extends EntityMeta { }
 
     /**
      * Extend it by interface merging for use in VirtualEntity#meta.
      */
-    export interface VirtualEntityMeta extends BaseObjectMeta {}
+    export interface VirtualEntityMeta extends BaseObjectMeta { }
 
     export abstract class WorldObject extends BaseObject {
         dimension: number;
         pos: altShared.Vector3;
     }
 
-    export abstract class VoiceChannel extends BaseObject {}
+    export abstract class VoiceChannel extends BaseObject { }
 
     export namespace Factory {
         export function setPlayerFactory(factory: typeof Player): void;
@@ -1330,7 +1335,7 @@ declare module "@altv/client" {
             colShape: ColShape;
         }
 
-        interface CustomClientEvent {}
+        interface CustomClientEvent { }
 
         export type CustomEventCallback<T extends unknown[]> = (...params: T) => void | Promise<void>;
         export type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
@@ -1456,7 +1461,7 @@ declare module "@altv/client" {
     }
 
     export namespace LocalStorage {
-        interface LocalStorage {}
+        interface LocalStorage { }
 
         // Not setting undefined as possible return value because it's annoying to specify ! everytime you get a value
         // but if you want to get undefined, you can specify that as possible value in LocalStorage interface.
