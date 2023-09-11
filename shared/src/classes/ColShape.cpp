@@ -1,8 +1,6 @@
 #include "Class.h"
 #include "cpp-sdk/ICore.h"
 
-// TODO (xLuxy): wait for new build (https://github.com/altmp/cpp-sdk/commit/ab604174853306108976057a6c1e9c5f0b54c27c)
-//               then uncomment the commented out lines and remove placeholders
 static void RadiusGetter(js::LazyPropertyContext& ctx)
 {
     if (!ctx.CheckThis()) return;
@@ -18,20 +16,17 @@ static void RadiusGetter(js::LazyPropertyContext& ctx)
     if (colShape->GetColshapeType() == alt::IColShape::ColShapeType::SPHERE)
     {
         auto* sphere = dynamic_cast<alt::IColShapeSphere*>(colShape);
-        // ctx.Return(sphere->GetRadius());
-        ctx.Return(0);
+        ctx.Return(sphere->GetRadius());
     }
     else if (colShape->GetColshapeType() == alt::IColShape::ColShapeType::CYLINDER)
     {
         auto* cylinder = dynamic_cast<alt::IColShapeCylinder*>(colShape);
-        // ctx.Return(cylinder->GetRadius());
-        ctx.Return(0);
+        ctx.Return(cylinder->GetRadius());
     }
     else if (colShape->GetColshapeType() == alt::IColShape::ColShapeType::CIRCLE)
     {
         auto* circle = dynamic_cast<alt::IColShapeCircle*>(colShape);
-        // ctx.Return(circle->GetRadius());
-        ctx.Return(0);
+        ctx.Return(circle->GetRadius());
     }
 }
 
@@ -45,8 +40,7 @@ static void HeightGetter(js::LazyPropertyContext& ctx)
         return;
 
     auto* cylinder = dynamic_cast<alt::IColShapeCylinder*>(colShape);
-    // ctx.Return(cylinder->GetHeight());
-    ctx.Return(0);
+    ctx.Return(cylinder->GetHeight());
 }
 
 static void MinGetter(js::LazyPropertyContext& ctx)
@@ -62,14 +56,12 @@ static void MinGetter(js::LazyPropertyContext& ctx)
     if (colShape->GetColshapeType() == alt::IColShape::ColShapeType::CUBOID)
     {
         auto* cuboid = dynamic_cast<alt::IColShapeCuboid*>(colShape);
-        // ctx.Return(cuboid->GetMin());
-        ctx.Return(0);
+        ctx.Return(cuboid->GetMin());
     }
     else if (colShape->GetColshapeType() == alt::IColShape::ColShapeType::RECT)
     {
         auto* rect = dynamic_cast<alt::IColShapeRect*>(colShape);
-        // ctx.Return(rect->GetMin());
-        ctx.Return(0);
+        ctx.Return(rect->GetMin());
     }
 }
 
@@ -86,14 +78,12 @@ static void MaxGetter(js::LazyPropertyContext& ctx)
     if (colShape->GetColshapeType() == alt::IColShape::ColShapeType::CUBOID)
     {
         auto* cuboid = dynamic_cast<alt::IColShapeCuboid*>(colShape);
-        // ctx.Return(cuboid->GetMax());
-        ctx.Return(0);
+        ctx.Return(cuboid->GetMax());
     }
     else if (colShape->GetColshapeType() == alt::IColShape::ColShapeType::RECT)
     {
         auto* rect = dynamic_cast<alt::IColShapeRect*>(colShape);
-        // ctx.Return(rect->GetMax());
-        ctx.Return(0);
+        ctx.Return(rect->GetMax());
     }
 }
 
@@ -107,8 +97,7 @@ static void MinZGetter(js::LazyPropertyContext& ctx)
         return;
 
     auto* poly = dynamic_cast<alt::IColShapePoly*>(colShape);
-    // ctx.Return(poly->GetMinZ());
-    ctx.Return(0);
+    ctx.Return(poly->GetMinZ());
 }
 
 static void MaxZGetter(js::LazyPropertyContext& ctx)
@@ -121,8 +110,7 @@ static void MaxZGetter(js::LazyPropertyContext& ctx)
         return;
 
     auto* poly = dynamic_cast<alt::IColShapePoly*>(colShape);
-    // ctx.Return(poly->GetMaxZ());
-    ctx.Return(0);
+    ctx.Return(poly->GetMaxZ());
 }
 
 static void PointsGetter(js::LazyPropertyContext& ctx)
@@ -135,9 +123,7 @@ static void PointsGetter(js::LazyPropertyContext& ctx)
         return;
 
     auto* poly = dynamic_cast<alt::IColShapePoly*>(colShape);
-    // ctx.Return(poly->GetPoints());
-    auto tmp = std::vector<alt::Vector3f>();
-    ctx.Return(tmp);
+    ctx.Return(poly->GetPoints());
 }
 
 // clang-format off
