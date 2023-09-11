@@ -945,7 +945,11 @@ declare module "@altv/client" {
         readonly outputs: ReadonlyArray<AudioOutput>;
 
         emit<E extends keyof altShared.Events.CustomClientToWebViewEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomClientToWebViewEvent[E]>): void;
+        emit<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomClientToWebViewEvent>, ...args: unknown[]): void;
+
         emitRaw<E extends keyof altShared.Events.CustomClientToWebViewEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomClientToWebViewEvent[E]>): void;
+        emitRaw<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomClientToWebViewEvent>, ...args: unknown[]): void;
+
         setExtraHeader(name: string, value: string): void;
         setZoomLevel(value: number): void;
         reload(ignoreCache: boolean): void;
@@ -955,8 +959,10 @@ declare module "@altv/client" {
 
         // Not implemented yet
         on<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
+        on<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
         // Not implemented yet
         once<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
+        once<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
 
         static readonly isGpuAccelerationActive: boolean;
 
@@ -1086,9 +1092,13 @@ declare module "@altv/client" {
     export namespace Events {
         export let rawEmitEnabled: boolean;
         export function emit<E extends keyof CustomClientEvent>(eventName: E, ...args: Parameters<CustomClientEvent[E]>): void;
+        export function emit<E extends string>(eventName: Exclude<E, keyof CustomClientEvent>, ...args: unknown[]): void;
 
         export function emitServer<E extends keyof altShared.Events.CustomPlayerToServerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomPlayerToServerEvent[E]>): void;
+        export function emitServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>, ...args: unknown[]): void;
+
         export function emitServerUnreliable<E extends keyof altShared.Events.CustomPlayerToServerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomPlayerToServerEvent[E]>): void;
+        export function emitServerUnreliable<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>, ...args: unknown[]): void;
 
         export function onKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): void;
         export function onKeyUp(callback: GenericEventCallback<KeyUpDownEventParameters>): void;
@@ -1297,9 +1307,7 @@ declare module "@altv/client" {
             remove(eventName: string, callback: GenericEventCallback): void;
         }
 
-        interface CustomClientEvent {
-            [key: string]: (...args: any[]) => void | Promise<void>;
-        }
+        interface CustomClientEvent {}
 
         export type CustomEventCallback<T extends unknown[]> = (...params: T ) => void | Promise<void>;
         export type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
