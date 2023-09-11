@@ -76,6 +76,10 @@ declare module "@altv/client" {
         reset(): void;
         seek(time: number): void;
 
+        on(eventName: string, func: (...args: unknown[]) => void): void;
+        off(eventName: string, func: (...args: unknown[]) => void): void;
+        readonly listeners: ReadonlyMap<string, (...args: unknown[]) => void>;
+
         static create(options: AudioCreateOptions): Audio;
         static getByID(id: number): Audio | null;
     }
@@ -696,10 +700,9 @@ declare module "@altv/client" {
         querySelector(selector: string): RmlElement | null;
         querySelectorAll(selector: string): ReadonlyArray<RmlElement>;
 
-        // TODO: Not implemented yet
-        on(eventName: string, func: (senderElement: RmlElement, ...args: any[]) => void): void;
-        off(eventName: string, func: (...args: any[]) => void): void;
-        getEventListeners(eventName: string): ((senderElement: RmlElement, ...args: any[]) => void)[];
+        on(eventName: string, func: (...args: unknown[]) => void): void;
+        off(eventName: string, func: (...args: unknown[]) => void): void;
+        readonly listeners: ReadonlyMap<string, (...args: unknown[]) => void>;
 
         // TODO (xLuxy): Check if RmlElement has (it's not undefined)
         static getByID(id: string): RmlElement | null;
@@ -965,13 +968,17 @@ declare module "@altv/client" {
         addOutput(output: AudioOutput): void;
         removeOutput(output: AudioOutput): void;
 
-        // Not implemented yet
         on<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
         on<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
 
         // Not implemented yet
         once<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
         once<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
+
+        off<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
+        off<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
+
+        readonly listeners: ReadonlyMap<string, (...args: unknown[]) => void>;
 
         static readonly isGpuAccelerationActive: boolean;
 
