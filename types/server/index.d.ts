@@ -356,8 +356,14 @@ declare module "@altv/server" {
         netOwnershipDisabled: boolean;
 
         emit<E extends keyof altShared.Events.CustomServerToPlayerEvent>(event: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
+        emit<E extends string>(event: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: unknown[]): void;
+
         emitRaw<E extends keyof altShared.Events.CustomServerToPlayerEvent>(event: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
+        emitRaw<E extends string>(event: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: unknown[]): void;
+
         emitUnreliable<E extends keyof altShared.Events.CustomServerToPlayerEvent>(event: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
+        emitUnreliable<E extends string>(event: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: unknown[]): void;
+
         spawn(pos: altShared.IVector3, delay?: number): void;
         despawn(): void;
         setWeaponTintIndex(weaponHash: number | string, tintIndex: number): void;
@@ -738,12 +744,19 @@ declare module "@altv/server" {
     export namespace Events {
         export let rawEmitEnabled: boolean;
         export function emit<E extends keyof CustomServerEvent>(event: E, ...args: Parameters<CustomServerEvent[E]>): void;
+        export function emit<E extends string>(event: Exclude<E, keyof CustomServerEvent>, ...args: unknown[]): void;
 
         export function emitPlayers<E extends keyof altShared.Events.CustomServerToPlayerEvent>(players: Player[], eventName: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
+        export function emitPlayers<E extends string>(players: Player[], eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: unknown[]): void;
+
         export function emitPlayersUnreliable<E extends keyof altShared.Events.CustomServerToPlayerEvent>(players: Player[], eventName: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
+        export function emitPlayersUnreliable<E extends string>(players: Player[], eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: unknown[]): void;
 
         export function emitAllPlayers<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
+        export function emitAllPlayers<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: unknown[]): void;
+
         export function emitAllPlayersUnreliable<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
+        export function emitAllPlayersUnreliable<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: unknown[]): void;
 
         // Server related events
         export function onServerStarted(callback: GenericEventCallback): void;
@@ -827,12 +840,22 @@ declare module "@altv/server" {
 
         // Custom events
         export function on<E extends keyof CustomServerEvent>(eventName: E, callback: CustomEventCallback<Parameters<CustomServerEvent[E]>>): EventSubscription;
+        export function on<E extends string>(eventName: Exclude<E, keyof CustomServerEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
+
         export function onPlayer<E extends keyof altShared.Events.CustomPlayerToServerEvent>(eventName: E, callback: CustomPlayerEventCallback<Parameters<altShared.Events.CustomPlayerToServerEvent[E]>>): EventSubscription;
+        export function onPlayer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>, callback: CustomPlayerEventCallback<unknown[]>): EventSubscription;
+
         export function onRemote<E extends keyof altShared.Events.CustomPlayerToServerEvent>(eventName: E, callback: CustomPlayerEventCallback<Parameters<altShared.Events.CustomPlayerToServerEvent[E]>>): EventSubscription;
         export function onRemote<E extends keyof altShared.Events.CustomRemoteEvent>(eventName: E, callback: CustomPlayerEventCallback<Parameters<altShared.Events.CustomRemoteEvent[E]>>): EventSubscription;
+        export function onRemote<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent | keyof altShared.Events.CustomRemoteEvent>, callback: CustomPlayerEventCallback<unknown[]>): EventSubscription;
 
         export function setWarningThreshold(threshold: number): void;
         export function setSourceLocationFrameSkipCount(skipCount: number): void;
+
+        export interface onEvent {
+            (callback: altShared.Events.GenericOnEventCallback): void;
+            remove(callback: altShared.Events.GenericOnEventCallback): void;
+        }
 
         interface EventSubscription {
             readonly listeners: ReadonlyArray<GenericEventCallback>;
@@ -990,9 +1013,7 @@ declare module "@altv/server" {
             colShape: ColShape;
         }
 
-        interface CustomServerEvent {
-            [key: string]: (...args: any[]) => void | Promise<void>;
-        }
+        interface CustomServerEvent {}
 
         export type EventContext = {
             readonly type: altShared.Enums.EventType;
@@ -1008,8 +1029,8 @@ declare module "@altv/server" {
             readonly isCancelled: boolean;
         };
 
-        export type CustomEventCallback<T extends unknown[]> = (...params: T ) => void | Promise<void>;
-        export type CustomPlayerEventCallback<T extends unknown[]> = (player: Player, ...params: T ) => void | Promise<void>;
+        export type CustomEventCallback<T extends unknown[]> = (...params: T) => void | Promise<void>;
+        export type CustomPlayerEventCallback<T extends unknown[]> = (player: Player, ...params: T) => void | Promise<void>;
 
         export type GenericEventCallback<T extends {} = {}> = (params: T & EventContext) => void | Promise<void>;
         export type GenericPlayerEventCallback<T extends {} = {}> = (params: T & PlayerEventContext) => void | Promise<void>;

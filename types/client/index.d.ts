@@ -25,7 +25,7 @@ declare module "@altv/client" {
     export function getScreenResolution(): altShared.Vector2;
     export function isFullscreen(): boolean;
     export function areGameControlsActive(): boolean;
-    export function setGameControlsActive(): boolean;
+    export function setGameControlsActive(state: boolean): boolean;
     export function getMsPerGameMinute(): number;
     export function setMsPerGameMinute(ms: number): void;
     export function areRmlControlsActive(): boolean;
@@ -75,6 +75,10 @@ declare module "@altv/client" {
         pause(): void;
         reset(): void;
         seek(time: number): void;
+
+        on(eventName: string, func: (...args: unknown[]) => void): void;
+        off(eventName: string, func: (...args: unknown[]) => void): void;
+        readonly listeners: Readonly<{ [eventName: string]: ReadonlyArray<(...args: unknown[]) => void> }>;
 
         static create(options: AudioCreateOptions): Audio;
         static getByID(id: number): Audio | null;
@@ -696,6 +700,10 @@ declare module "@altv/client" {
         querySelector(selector: string): RmlElement | null;
         querySelectorAll(selector: string): ReadonlyArray<RmlElement>;
 
+        on(eventName: string, func: (...args: unknown[]) => void): void;
+        off(eventName: string, func: (...args: unknown[]) => void): void;
+        readonly listeners: Readonly<{ [eventName: string]: ReadonlyArray<(...args: unknown[]) => void> }>;
+
         // TODO (xLuxy): Check if RmlElement has (it's not undefined)
         static getByID(id: string): RmlElement | null;
     }
@@ -928,7 +936,7 @@ declare module "@altv/client" {
         isOverlay?: boolean; // default: false
     }
 
-    type WebViewCreateOptions = { url: string } & (({ drawable: number | string } & _WebViewTextureCreateOptions) | ({ drawable: never } & _WebViewCreateOptions));
+    type WebViewCreateOptions = { url: string } & (({ drawable: number | string } & _WebViewTextureCreateOptions) | ({ drawable?: never } & _WebViewCreateOptions));
 
     export abstract class WebView extends BaseObject {
         focused: boolean;
@@ -945,7 +953,11 @@ declare module "@altv/client" {
         readonly outputs: ReadonlyArray<AudioOutput>;
 
         emit<E extends keyof altShared.Events.CustomClientToWebViewEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomClientToWebViewEvent[E]>): void;
+        emit<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomClientToWebViewEvent>, ...args: unknown[]): void;
+
         emitRaw<E extends keyof altShared.Events.CustomClientToWebViewEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomClientToWebViewEvent[E]>): void;
+        emitRaw<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomClientToWebViewEvent>, ...args: unknown[]): void;
+
         setExtraHeader(name: string, value: string): void;
         setZoomLevel(value: number): void;
         reload(ignoreCache: boolean): void;
@@ -953,10 +965,17 @@ declare module "@altv/client" {
         addOutput(output: AudioOutput): void;
         removeOutput(output: AudioOutput): void;
 
-        // Not implemented yet
         on<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
+        on<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
+
         // Not implemented yet
-        once<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
+        // once<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
+        // once<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
+
+        off<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
+        off<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
+
+        readonly listeners: Readonly<{ [eventName: string]: ReadonlyArray<(...args: unknown[]) => void> }>;
 
         static readonly isGpuAccelerationActive: boolean;
 
@@ -1086,9 +1105,13 @@ declare module "@altv/client" {
     export namespace Events {
         export let rawEmitEnabled: boolean;
         export function emit<E extends keyof CustomClientEvent>(eventName: E, ...args: Parameters<CustomClientEvent[E]>): void;
+        export function emit<E extends string>(eventName: Exclude<E, keyof CustomClientEvent>, ...args: unknown[]): void;
 
         export function emitServer<E extends keyof altShared.Events.CustomPlayerToServerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomPlayerToServerEvent[E]>): void;
+        export function emitServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>, ...args: unknown[]): void;
+
         export function emitServerUnreliable<E extends keyof altShared.Events.CustomPlayerToServerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomPlayerToServerEvent[E]>): void;
+        export function emitServerUnreliable<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>, ...args: unknown[]): void;
 
         export function onKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): void;
         export function onKeyUp(callback: GenericEventCallback<KeyUpDownEventParameters>): void;
@@ -1240,6 +1263,14 @@ declare module "@altv/client" {
         export function onGlobalMetaChange(callback: GenericEventCallback<GlobalMetaChangeEventParameters>): void;
         export function onGlobalSyncedMetaChange(callback: GenericEventCallback<GlobalSyncedMetaChangeEventParameters>): void;
 
+        // Script related events
+        // TODO (xLuxy): Only available on server-side
+        // export function onEntityColShapeEnter(callback: GenericEventCallback<EntityColShapeEnterEventParameters>): void;
+        // export function onEntityColShapeLeave(callback: GenericEventCallback<EntityColShapeLeaveEventParameters>): void;
+        // export function onEntityCheckpointEnter(callback: GenericEventCallback<EntityCheckpointEnterEventParameters>): void;
+        // export function onEntityCheckpointLeave(callback: GenericEventCallback<EntityCheckpointLeaveEventParameters>): void;
+        export function onColShapeEvent(callback: GenericEventCallback<ColShapeEventParameters>): void;
+
         // SHARED custom events
         export function onConsoleCommand(callback: GenericEventCallback<ConsoleCommandEventParameters>): void;
         export function onError(callback: GenericEventCallback<ErrorEventParameters>): void;
@@ -1255,9 +1286,14 @@ declare module "@altv/client" {
 
         // Custom events
         export function on<E extends keyof CustomClientEvent>(eventName: E, callback: CustomEventCallback<Parameters<CustomClientEvent[E]>>): EventSubscription;
+        export function on<E extends string>(eventName: Exclude<E, keyof CustomClientEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
+
         export function onServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
+        export function onServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
+
         export function onRemote<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
         export function onRemote<E extends keyof altShared.Events.CustomRemoteEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomRemoteEvent[E]>>): EventSubscription;
+        export function onRemote<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent | keyof altShared.Events.CustomRemoteEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
 
         interface PlayerAnimationChangeEventParameters {
             oldAnimDict: number;
@@ -1287,16 +1323,29 @@ declare module "@altv/client" {
             newSeat: number;
         }
 
+        export interface onEvent {
+            (callback: altShared.Events.GenericOnEventCallback): void;
+            remove(callback: altShared.Events.GenericOnEventCallback): void;
+        }
+
         interface EventSubscription {
             readonly listeners: ReadonlyArray<GenericEventCallback>;
             remove(eventName: string, callback: GenericEventCallback): void;
         }
 
-        interface CustomClientEvent {
-            [key: string]: (...args: any[]) => void | Promise<void>;
+        interface EntityColShapeEnterEventParameters {
+            entity: WorldObject;
+            colShape: ColShape;
         }
 
-        export type CustomEventCallback<T extends unknown[]> = (...params: T ) => void | Promise<void>;
+        interface EntityColShapeLeaveEventParameters {
+            entity: WorldObject;
+            colShape: ColShape;
+        }
+
+        interface CustomClientEvent {}
+
+        export type CustomEventCallback<T extends unknown[]> = (...params: T) => void | Promise<void>;
         export type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
         export type GenericPlayerEventCallback<T = {}> = (params: T & { player: Player }) => void | Promise<void>;
 
@@ -1335,6 +1384,22 @@ declare module "@altv/client" {
             bodyPart: altShared.Enums.BodyPart;
 
             setDamageValue(value: number): void;
+        }
+
+        interface EntityCheckpointEnterEventParameters {
+            entity: WorldObject;
+            colShape: ColShape;
+        }
+
+        interface EntityCheckpointLeaveEventParameters {
+            entity: WorldObject;
+            colShape: ColShape;
+        }
+
+        interface ColShapeEventParameters {
+            entity: WorldObject;
+            target: ColShape;
+            state: boolean;
         }
 
         interface LocalMetaChangeEventParameters {
@@ -1420,10 +1485,18 @@ declare module "@altv/client" {
     }
 
     export namespace LocalStorage {
-        export function get(key: string): unknown;
-        export function set(key: string, value: unknown): void;
-        export function has(key: string): boolean;
-        export function remove(key: string): void;
+        interface LocalStorage {}
+
+        // Not setting undefined as possible return value because it's annoying to specify ! everytime you get a value
+        // but if you want to get undefined, you can specify that as possible value in LocalStorage interface.
+        export function get<K extends keyof LocalStorage>(key: K): LocalStorage[K];
+        export function get<K extends string>(key: Exclude<K, keyof LocalStorage>): unknown;
+        export function set<K extends keyof LocalStorage>(key: K, value: LocalStorage[K]): void;
+        export function set<K extends string>(key: Exclude<K, keyof LocalStorage>, value: unknown): void;
+        export function has<K extends keyof LocalStorage>(key: K): boolean;
+        export function has<K extends string>(key: Exclude<K, keyof LocalStorage>): boolean;
+        export function remove<K extends keyof LocalStorage>(key: K): void;
+        export function remove<K extends string>(key: Exclude<K, keyof LocalStorage>): void;
         export function clear(): void;
         export function save(): void;
     }
