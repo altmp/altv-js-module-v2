@@ -142,28 +142,46 @@ declare module "@altv/server" {
         export function create(opts: altShared.RadiusBlipCreateOptions & SharedBlipCreateOptions): Blip;
     }
 
-    export namespace ColShapeSphere {
-        export function create(opts: altShared.ColShapeSphereCreateOptions): ColShape;
+    export abstract class ColShapeSphere extends ColShape {
+        readonly radius: number;
+
+        static create(opts: altShared.ColShapeSphereCreateOptions): ColShapeSphere;
     }
 
-    export namespace ColShapeCylinder {
-        export function create(opts: altShared.ColShapeCylinderCreateOptions): ColShape;
+    export abstract class ColShapeCylinder extends ColShape {
+        readonly radius: number;
+        readonly height: number;
+
+        static create(opts: altShared.ColShapeCylinderCreateOptions): ColShapeCylinder;
     }
 
-    export namespace ColShapeCircle {
-        export function create(opts: altShared.ColShapeCircleCreateOptions): ColShape;
+    export abstract class ColShapeCircle extends ColShape {
+        readonly radius: number;
+
+        static create(opts: altShared.ColShapeCircleCreateOptions): ColShapeCircle;
     }
 
-    export namespace ColShapeCuboid {
-        export function create(opts: altShared.ColShapeCuboidCreateOptions): ColShape;
+    export abstract class ColShapeCuboid extends ColShape {
+        readonly min: altShared.Vector3;
+        readonly max: altShared.Vector3;
+
+        static create(opts: altShared.ColShapeCuboidCreateOptions): ColShapeCuboid;
     }
 
-    export namespace ColShapeRectangle {
-        export function create(opts: altShared.ColShapeRectangleCreateOptions): ColShape;
+    export abstract class ColShapeRectangle extends ColShape {
+        readonly min: altShared.Vector2;
+        readonly max: altShared.Vector2;
+
+        static create(opts: altShared.ColShapeRectangleCreateOptions): ColShapeRectangle;
     }
 
-    export namespace ColShapePolygon {
-        export function create(opts: altShared.ColShapePolygonCreateOptions): ColShape;
+    export abstract class ColShapePolygon extends ColShape {
+        readonly minZ: number;
+        readonly maxZ: number;
+
+        readonly points: ReadonlyArray<altShared.Vector2>;
+
+        static create(opts: altShared.ColShapePolygonCreateOptions): ColShapePolygon;
     }
 
     export abstract class ColShape extends WorldObject {
