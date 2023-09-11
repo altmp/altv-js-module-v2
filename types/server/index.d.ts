@@ -834,6 +834,11 @@ declare module "@altv/server" {
         export function setWarningThreshold(threshold: number): void;
         export function setSourceLocationFrameSkipCount(skipCount: number): void;
 
+        export interface onEvent {
+            (callback: altShared.Events.GenericOnEventCallback): void;
+            remove(callback: altShared.Events.GenericOnEventCallback): void;
+        }
+
         interface EventSubscription {
             readonly listeners: ReadonlyArray<GenericEventCallback>;
             remove(eventName: string, callback: GenericEventCallback): void;

@@ -676,11 +676,6 @@ declare module "@altv/shared" {
             [key: string]: (...args: any[]) => void | Promise<void>;
         }
 
-        export function onEvent(callback: GenericOnEventCallback): void;
-        export interface onEvent {
-            remove(callback: GenericOnEventCallback): void;
-        }
-
         interface GenericOnEventCallback {
             readonly [key: string]: unknown;
             readonly customEvent: boolean;

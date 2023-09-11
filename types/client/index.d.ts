@@ -25,7 +25,7 @@ declare module "@altv/client" {
     export function getScreenResolution(): altShared.Vector2;
     export function isFullscreen(): boolean;
     export function areGameControlsActive(): boolean;
-    export function setGameControlsActive(): boolean;
+    export function setGameControlsActive(state: boolean): boolean;
     export function getMsPerGameMinute(): number;
     export function setMsPerGameMinute(ms: number): void;
     export function areRmlControlsActive(): boolean;
@@ -1285,6 +1285,11 @@ declare module "@altv/client" {
             vehicle: Vehicle;
             oldSeat: number;
             newSeat: number;
+        }
+
+        export interface onEvent {
+            (callback: altShared.Events.GenericOnEventCallback): void;
+            remove(callback: altShared.Events.GenericOnEventCallback): void;
         }
 
         interface EventSubscription {
