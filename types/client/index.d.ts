@@ -1264,8 +1264,12 @@ declare module "@altv/client" {
         export function onGlobalSyncedMetaChange(callback: GenericEventCallback<GlobalSyncedMetaChangeEventParameters>): void;
 
         // Script related events
-        export function onEntityColShapeEnter(callback: GenericEventCallback<EntityColShapeEnterEventParameters>): void;
-        export function onEntityColShapeLeave(callback: GenericEventCallback<EntityColShapeLeaveEventParameters>): void;
+        // TODO (xLuxy): Only available on server-side
+        // export function onEntityColShapeEnter(callback: GenericEventCallback<EntityColShapeEnterEventParameters>): void;
+        // export function onEntityColShapeLeave(callback: GenericEventCallback<EntityColShapeLeaveEventParameters>): void;
+        // export function onEntityCheckpointEnter(callback: GenericEventCallback<EntityCheckpointEnterEventParameters>): void;
+        // export function onEntityCheckpointLeave(callback: GenericEventCallback<EntityCheckpointLeaveEventParameters>): void;
+        export function onColShapeEvent(callback: GenericEventCallback<ColShapeEventParameters>): void;
 
         // SHARED custom events
         export function onConsoleCommand(callback: GenericEventCallback<ConsoleCommandEventParameters>): void;
@@ -1380,6 +1384,22 @@ declare module "@altv/client" {
             bodyPart: altShared.Enums.BodyPart;
 
             setDamageValue(value: number): void;
+        }
+
+        interface EntityCheckpointEnterEventParameters {
+            entity: WorldObject;
+            colShape: ColShape;
+        }
+
+        interface EntityCheckpointLeaveEventParameters {
+            entity: WorldObject;
+            colShape: ColShape;
+        }
+
+        interface ColShapeEventParameters {
+            entity: WorldObject;
+            target: ColShape;
+            state: boolean;
         }
 
         interface LocalMetaChangeEventParameters {
