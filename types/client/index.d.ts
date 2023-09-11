@@ -1269,9 +1269,12 @@ declare module "@altv/client" {
 
         // Custom events
         export function on<E extends keyof CustomClientEvent>(eventName: E, callback: CustomEventCallback<Parameters<CustomClientEvent[E]>>): EventSubscription;
+        export function on<E extends string>(eventName: Exclude<E, keyof CustomClientEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
         export function onServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
+        export function onServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
         export function onRemote<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
         export function onRemote<E extends keyof altShared.Events.CustomRemoteEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomRemoteEvent[E]>>): EventSubscription;
+        export function onRemote<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent | keyof altShared.Events.CustomRemoteEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
 
         interface PlayerAnimationChangeEventParameters {
             oldAnimDict: number;
