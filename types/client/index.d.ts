@@ -1264,11 +1264,10 @@ declare module "@altv/client" {
         export function onGlobalSyncedMetaChange(callback: GenericEventCallback<GlobalSyncedMetaChangeEventParameters>): void;
 
         // Script related events
-        // TODO (xLuxy): Only available on server-side
-        // export function onEntityColShapeEnter(callback: GenericEventCallback<EntityColShapeEnterEventParameters>): void;
-        // export function onEntityColShapeLeave(callback: GenericEventCallback<EntityColShapeLeaveEventParameters>): void;
-        // export function onEntityCheckpointEnter(callback: GenericEventCallback<EntityCheckpointEnterEventParameters>): void;
-        // export function onEntityCheckpointLeave(callback: GenericEventCallback<EntityCheckpointLeaveEventParameters>): void;
+        export function onEntityColShapeEnter(callback: GenericEventCallback<EntityColShapeEnterEventParameters>): void;
+        export function onEntityColShapeLeave(callback: GenericEventCallback<EntityColShapeLeaveEventParameters>): void;
+        export function onEntityCheckpointEnter(callback: GenericEventCallback<EntityCheckpointEnterEventParameters>): void;
+        export function onEntityCheckpointLeave(callback: GenericEventCallback<EntityCheckpointLeaveEventParameters>): void;
         export function onColShapeEvent(callback: GenericEventCallback<ColShapeEventParameters>): void;
 
         // SHARED custom events
