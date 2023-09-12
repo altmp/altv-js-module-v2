@@ -2,16 +2,16 @@
 const { assert } = requireBinding("shared/utils.js");
 
 export class Event {
-    /** @type {Map<number, ({ handler: Function, location: { fileName: string, lineNumber: number } })[]>} */
+    /** @type {Map<number, EventHandler[]>} */
     static #handlers = new Map();
-    /** @type {Map<number, ({ handler: Function, location: { fileName: string, lineNumber: number } })[]>} */
+    /** @type {Map<number, EventHandler[]>} */
     static #customHandlers = new Map();
-    /** @type {Set<({ handler: Function, location: { fileName: string, lineNumber: number } })>} */
+    /** @type {Set<GenericEventHandler>} */
     static #genericHandlers = new Set();
 
-    /** @type {Map<string, ({ handler: Function, location: { fileName: string, lineNumber: number } })[]>} */
+    /** @type {Map<string, ScriptEventHandler[]>} */
     static #localScriptEventHandlers = new Map();
-    /** @type {Map<string, ({ handler: Function, location: { fileName: string, lineNumber: number } })[]>} */
+    /** @type {Map<string, ScriptEventHandler[]>} */
     static #remoteScriptEventHandlers = new Map();
 
     /** Warning threshold in ms */
@@ -28,24 +28,13 @@ export class Event {
     }
 
     /**
-     * @param {string} name
+     * Gets the name of the event type enum value.
      * @param {number} type
      * @param {boolean} custom
-     * @param {Function} handler
      */
-    static async #registerCallback(name, type, custom, handler) {
-        assert(typeof handler === "function", `Handler for event '${name}' is not a function`);
-
-        const location = cppBindings.getCurrentSourceLocation(Event.#sourceLocationFrameSkipCount);
-        const handlerObj = {
-            handler,
-            location
-        };
-        const map = custom ? Event.#customHandlers : Event.#handlers;
-        if (!map.has(type)) map.set(type, [handlerObj]);
-        else map.get(type).push(handlerObj);
-
-        if (!custom) cppBindings.toggleEvent(type, true);
+    static getEventName(type, custom) {
+        const enumObj = custom ? alt.Enums.CustomEventType : alt.Enums.EventType;
+        return Object.keys(enumObj).find((key) => enumObj[key] === type);
     }
 
     /**
@@ -54,9 +43,28 @@ export class Event {
      * @param {boolean} custom
      * @param {Function} handler
      */
-    static #unregisterCallback(name, type, custom, handler) {
+    static #subscribe(name, type, custom, handler) {
         assert(typeof handler === "function", `Handler for event '${name}' is not a function`);
 
+        const location = cppBindings.getCurrentSourceLocation(Event.#sourceLocationFrameSkipCount);
+        const eventHandler = new EventHandler(type, handler, location, custom);
+
+        const map = custom ? Event.#customHandlers : Event.#handlers;
+        if (!map.has(type)) map.set(type, [eventHandler]);
+        else map.get(type).push(eventHandler);
+
+        if (!custom) cppBindings.toggleEvent(type, true);
+
+        return eventHandler;
+    }
+
+    /**
+     * @param {string} name
+     * @param {number} type
+     * @param {boolean} custom
+     * @param {Function} handler
+     */
+    static unsubscribe(type, custom, handler) {
         const map = custom ? Event.#customHandlers : Event.#handlers;
         const handlers = map.get(type);
         if (!handlers) return;
@@ -93,13 +101,11 @@ export class Event {
         }
     }
 
-    /**
-     * @param {number} type
-     * @param {boolean} custom
-     */
-    static #getEventHandlers(type, custom) {
-        const map = custom ? Event.#customHandlers : Event.#handlers;
-        return map.get(type).map((value) => value.handler);
+    static getEventHandlers() {
+        const obj = {};
+        for (const [key, value] of Event.#handlers) obj[key] = value.filter((val) => val.location.fileName !== "");
+        for (const [key, value] of Event.#customHandlers) obj[key] = value.filter((val) => val.location.fileName !== "");
+        return obj;
     }
 
     /**
@@ -108,23 +114,17 @@ export class Event {
      * @param {boolean} custom
      */
     static #getEventFunc(name, type, custom) {
-        const func = Event.#registerCallback.bind(undefined, name, type, custom);
-        Object.defineProperties(func, {
-            listeners: {
-                get: Event.#getEventHandlers.bind(undefined, type, custom)
-            }
-        });
-        func.remove = Event.#unregisterCallback.bind(undefined, name, type, custom);
+        const func = Event.#subscribe.bind(undefined, name, type, custom);
         return func;
     }
 
     /**
      * @param {boolean} local
      */
-    static #getScriptEventHandlers(local) {
+    static getScriptEventHandlers(local) {
         const map = local ? Event.#localScriptEventHandlers : Event.#remoteScriptEventHandlers;
         const obj = {};
-        for (let [key, value] of map.entries()) obj[key] = value.map((value) => value.handler);
+        for (let [key, value] of map) obj[key] = value.filter((val) => val.location.fileName !== "");
         return obj;
     }
 
@@ -133,12 +133,6 @@ export class Event {
      */
     static getScriptEventFunc(local) {
         const func = Event.#subscribeScriptEvent.bind(undefined, local);
-        Object.defineProperties(func, {
-            listeners: {
-                get: Event.#getScriptEventHandlers.bind(undefined, local)
-            }
-        });
-        func.remove = Event.#unsubscribeScriptEvent.bind(undefined, local);
         return func;
     }
 
@@ -152,35 +146,22 @@ export class Event {
         assert(typeof handler === "function", `Handler for ${local ? "local" : "remote"} script event '${name}' is not a function`);
 
         const location = cppBindings.getCurrentSourceLocation(Event.#sourceLocationFrameSkipCount);
-        const handlerObj = {
-            handler,
-            location
-        };
+        const eventHandler = new ScriptEventHandler(name, local, handler, location);
+
         const map = local ? Event.#localScriptEventHandlers : Event.#remoteScriptEventHandlers;
-        if (!map.has(name)) map.set(name, [handlerObj]);
-        else map.get(name).push(handlerObj);
+        if (!map.has(name)) map.set(name, [eventHandler]);
+        else map.get(name).push(eventHandler);
+
+        return eventHandler;
     }
 
-    static #unsubscribeScriptEvent(local, name, handler) {
-        assert(typeof name === "string", `Event name is not a string`);
-        assert(typeof handler === "function", `Handler for ${local ? "local" : "remote"} script event '${name}' is not a function`);
-
+    static unsubscribeScriptEvent(local, name, handler) {
         const map = local ? Event.#localScriptEventHandlers : Event.#remoteScriptEventHandlers;
         const handlers = map.get(name);
         if (!handlers) return;
         const idx = handlers.findIndex((value) => value.handler === handler);
         if (idx === -1) return;
         handlers.splice(idx, 1);
-    }
-
-    /**
-     * Gets the name of the event type enum value.
-     * @param {number} type
-     * @param {boolean} custom
-     */
-    static #getEventName(type, custom) {
-        const enumObj = custom ? alt.Enums.CustomEventType : alt.Enums.EventType;
-        return Object.keys(enumObj).find((key) => enumObj[key] === type);
     }
 
     /**
@@ -203,7 +184,7 @@ export class Event {
                 const result = handler(genericCtx);
                 const duration = Date.now() - startTime;
                 if (duration > Event.#warningThreshold) {
-                    alt.logWarning(`[JS] Generic event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${location.lineNumber}) for event '${Event.#getEventName(eventType, custom)}' took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`);
+                    alt.logWarning(`[JS] Generic event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${location.lineNumber}) for event '${Event.getEventName(eventType, custom)}' took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`);
                 }
                 if (result instanceof Promise) await result;
             } catch (e) {
@@ -213,15 +194,24 @@ export class Event {
         }
     }
 
+    /**
+     * @param {Function} handler
+     */
     static subscribeGeneric(handler) {
         assert(typeof handler === "function", `Handler for generic event is not a function`);
 
         const location = cppBindings.getCurrentSourceLocation(Event.#sourceLocationFrameSkipCount);
-        Event.#genericHandlers.add({ handler, location });
-    }
-    static unsubscribeGeneric(handler) {
-        assert(typeof handler === "function", `Handler for generic event is not a function`);
+        const eventHandler = new GenericEventHandler(handler, location);
 
+        Event.#genericHandlers.add(eventHandler);
+
+        return eventHandler;
+    }
+
+    /**
+     * @param {Function} handler
+     */
+    static unsubscribeGeneric(handler) {
         Event.#genericHandlers.forEach((value) => {
             if (value.handler === handler) Event.#genericHandlers.delete(value);
         });
@@ -255,7 +245,7 @@ export class Event {
                 const result = handler(ctx);
                 const duration = Date.now() - startTime;
                 if (duration > Event.#warningThreshold) {
-                    alt.logWarning(`[JS] Event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${location.lineNumber}) for event '${Event.#getEventName(eventType, custom)}' took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`);
+                    alt.logWarning(`[JS] Event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${location.lineNumber}) for event '${Event.getEventName(eventType, custom)}' took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`);
                 }
                 if (result instanceof Promise) await result;
             } catch (e) {
@@ -277,6 +267,90 @@ export class Event {
     }
 }
 
+class EventHandler {
+    #eventType;
+    #handler;
+    #location;
+    #custom;
+    #valid = true;
+
+    constructor(eventType, handler, location, custom) {
+        this.#eventType = eventType;
+        this.#handler = handler;
+        this.#location = location;
+        this.#custom = custom;
+    }
+
+    // Don't expose this in the public API
+    unregister() {
+        Event.unsubscribe(this.#eventType, this.#custom, this.#handler);
+    }
+
+    destroy() {
+        if (!this.#valid) return;
+        this.unregister();
+        this.#valid = false;
+    }
+
+    get eventType() {
+        return this.#eventType;
+    }
+    get eventTypeName() {
+        return Event.getEventName(this.#eventType, this.#custom);
+    }
+    get handler() {
+        return this.#handler;
+    }
+    get location() {
+        return this.#location;
+    }
+    get valid() {
+        return this.#valid;
+    }
+}
+
+class ScriptEventHandler extends EventHandler {
+    #eventName;
+    #local;
+
+    constructor(eventName, local, handler, location) {
+        super(ScriptEventHandler.#getEventType(local), handler, location, false);
+        this.#eventName = eventName;
+        this.#local = local;
+    }
+
+    unregister() {
+        Event.unsubscribeScriptEvent(this.#local, this.#eventName, this.handler);
+    }
+
+    get eventName() {
+        return this.#eventName;
+    }
+    get local() {
+        return this.#local;
+    }
+    get remote() {
+        return !this.#local;
+    }
+
+    static #getEventType(local) {
+        if (local && alt.isClient) return alt.Enums.EventType.CLIENT_SCRIPT_EVENT;
+        else if (!local && alt.isClient) return alt.Enums.EventType.SERVER_SCRIPT_EVENT;
+        else if (local && alt.isServer) return alt.Enums.EventType.SERVER_SCRIPT_EVENT;
+        else if (!local && alt.isServer) return alt.Enums.EventType.CLIENT_SCRIPT_EVENT;
+    }
+}
+
+class GenericEventHandler extends EventHandler {
+    constructor(handler, location) {
+        super(alt.Enums.EventType.ALL, handler, location, false);
+    }
+
+    unregister() {
+        Event.unsubscribeGeneric(this.handler);
+    }
+}
+
 alt.Events.emitRaw = Event.emitRaw;
 
 alt.Events.on = Event.getScriptEventFunc(true);
@@ -286,9 +360,13 @@ if (alt.isClient) {
 } else {
     alt.Events.onPlayer = Event.getScriptEventFunc(false);
 }
-
 alt.Events.onEvent = Event.subscribeGeneric;
-alt.Events.onEvent.remove = Event.unsubscribeGeneric;
+
+Object.defineProperties(alt.Events, {
+    listeners: { get: Event.getEventHandlers },
+    localListeners: { get: Event.getScriptEventHandlers.bind(undefined, true) },
+    remoteListeners: { get: Event.getScriptEventHandlers.bind(undefined, false) }
+});
 
 alt.Events.setWarningThreshold = Event.setWarningThreshold;
 alt.Events.setSourceLocationFrameSkipCount = Event.setSourceLocationFrameSkipCount;

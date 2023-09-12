@@ -50,6 +50,6 @@ interface Alt {
 
 interface Window {
     alt: Alt;
-  }
+}
 
-  declare var alt: Alt;
+declare var alt: Alt;
