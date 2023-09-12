@@ -697,6 +697,38 @@ declare module "@altv/server" {
         static create(opts: VoiceChannelCreateOptions): VoiceChannel;
     }
 
+    export namespace Factory {
+        export function setPlayerFactory(factory: typeof Player): void;
+        export function getPlayerFactory<T extends Player>(): T;
+
+        export function setVehicleFactory(factory: typeof Vehicle): void;
+        export function getVehicleFactory<T extends Vehicle>(): T;
+
+        export function setPedFactory(factory: typeof Ped): void;
+        export function getPedFactory<T extends Ped>(): T;
+
+        export function setBlipFactory(factory: typeof Blip): void;
+        export function getBlipFactory<T extends Blip>(): T;
+
+        export function setVoiceChannelFactory(factory: typeof VoiceChannel): void;
+        export function getVoiceChannelFactory<T extends VoiceChannel>(): T;
+
+        export function setColShapeFactory(factory: typeof ColShape): void;
+        export function getColShapeFactory<T extends ColShape>(): T;
+
+        export function setObjectFactory(factory: typeof Object): void;
+        export function getObjectFactory<T extends Object>(): T;
+
+        export function setCheckpointFactory(factory: typeof Checkpoint): void;
+        export function getCheckpointFactory<T extends Checkpoint>(): T;
+
+        export function setVirtualEntityFactory(factory: typeof VirtualEntity): void;
+        export function getVirtualEntityFactory<T extends VirtualEntity>(): T;
+
+        export function setVirtualEntityGroupFactory(factory: typeof VirtualEntityGroup): void;
+        export function getVirtualEntityGroupFactory<T extends VirtualEntityGroup>(): T;
+    }
+
     export abstract class WorldObject extends BaseObject {
         dimension: number;
         pos: altShared.Vector3;

@@ -1057,10 +1057,6 @@ declare module "@altv/client" {
         export function setBlipFactory(factory: typeof Blip): void;
         export function getBlipFactory<T extends Blip>(): T;
 
-        // TODO (xLuxy): Server-only - find a better way to extend namespaces and move this into server typings
-        export function setVoiceChannelFactory(factory: typeof VoiceChannel): void;
-        export function getVoiceChannelFactory<T extends VoiceChannel>(): T;
-
         export function setColShapeFactory(factory: typeof ColShape): void;
         export function getColShapeFactory<T extends ColShape>(): T;
 
