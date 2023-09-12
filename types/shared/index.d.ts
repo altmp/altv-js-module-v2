@@ -1162,15 +1162,10 @@ declare module "@altv/shared" {
             DisablePedPropKnockOff = "DISABLE_PED_PROP_KNOCK_OFF",
             DisableIdleCamera = "DISABLE_IDLE_CAMERA",
             DisableVehicleEngineShutdownOnLeave = "DISABLE_VEHICLE_ENGINE_SHUTDOWN_ON_LEAVE",
-            /** @beta */
             DisableSPEnterVehicleClipset = "DISABLE_SP_ENTER_VEHICLE_CLIPSET",
-            /** @beta */
             ForceRenderSnow = "FORCE_RENDER_SNOW",
-            /** @beta */
             ForceHideNightProps = "FORCE_HIDE_NIGHT_PROPS",
-            /** @beta */
             ForceShowNightProps = "FORCE_SHOW_NIGHT_PROPS",
-            /** @beta */
             DisableEmissiveLightsRendering = "DISABLE_EMISSIVE_LIGHTS_RENDERING"
         }
 
