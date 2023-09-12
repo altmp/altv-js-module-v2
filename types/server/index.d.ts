@@ -772,7 +772,7 @@ declare module "@altv/server" {
         readonly eventType: altShared.Enums.EventType | altShared.Enums.CustomEventType;
         readonly eventTypeName: string;
         readonly handler: Function;
-        readonlylocation: altShared.SourceLocation;
+        readonly location: altShared.SourceLocation;
         readonly valid: boolean;
 
         destroy(): void;
