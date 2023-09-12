@@ -39,7 +39,6 @@ bool CNodeResource::Start()
     context.Reset(isolate, _context);
 
     IResource::Initialize();
-    IResource::InitializeBindings(js::Binding::Scope::SERVER, js::Module::Get("@altv/server"));
 
     uvLoop = new uv_loop_t;
     uv_loop_init(uvLoop);
@@ -49,6 +48,8 @@ bool CNodeResource::Start()
     std::vector<std::string> argv = { "altv-resource" };
     node::EnvironmentFlags::Flags flags = (node::EnvironmentFlags::Flags)(node::EnvironmentFlags::kOwnsProcessState & node::EnvironmentFlags::kNoCreateInspector);
     env = node::CreateEnvironment(nodeData, _context, argv, argv, flags);
+
+    IResource::InitializeBindings(js::Binding::Scope::SERVER, js::Module::Get("@altv/server"));
 
     const js::Binding& bootstrapper = js::Binding::Get("server/bootstrap.js");
     if(!bootstrapper.IsValid()) return false;
