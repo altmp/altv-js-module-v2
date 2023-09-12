@@ -11,10 +11,6 @@ registerFactory("Checkpoint", alt.Checkpoint, alt.Enums.BaseObjectType.CHECKPOIN
 registerFactory("VirtualEntity", alt.VirtualEntity, alt.Enums.BaseObjectType.VIRTUAL_ENTITY);
 registerFactory("VirtualEntityGroup", alt.VirtualEntityGroup, alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP);
 
-if (alt.isServer) {
-    registerFactory("VoiceChannel", alt.VoiceChannel, alt.Enums.BaseObjectType.VOICE_CHANNEL);
-}
-
 // Factory ctors
 alt.PointBlip.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.BLIP, (ctx) => (ctx.blipType = alt.Enums.BlipType.DESTINATION));
 
@@ -41,10 +37,6 @@ alt.ColShapeRectangle.create = getFactoryCreateFunction(alt.Enums.BaseObjectType
 alt.ColShapePolygon.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => (ctx.colShapeType = alt.Enums.ColShapeType.POLYGON));
 
 alt.Checkpoint.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.CHECKPOINT);
-
-if (alt.isServer) {
-    alt.VoiceChannel.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.VOICE_CHANNEL);
-}
 
 // Helpers
 function setEntityFactory(altClass, type) {
