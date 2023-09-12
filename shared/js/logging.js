@@ -599,14 +599,14 @@ let {
     // v8::External shit
     isExternal = () => false,
     isMap = (obj) => obj instanceof Map,
-    isMapIterator = (obj) => obj?.toString() === "[object Map Iterator]",
+    isMapIterator = (obj) => obj?.toString?.() === "[object Map Iterator]",
     isModuleNamespaceObject,
 
     // idk how to add it, maybe `instanceof Error` would be ok?
     isNativeError = (e) => false,
     isPromise = (obj) => obj instanceof Promise,
     isSet = (obj) => obj instanceof Set,
-    isSetIterator = (obj) => obj?.toString() === "[object Set Iterator]",
+    isSetIterator = (obj) => obj?.toString?.() === "[object Set Iterator]",
     isWeakMap = (obj) => obj instanceof WeakMap,
     isWeakSet = (obj) => obj instanceof WeakSet,
     isRegExp = (obj) => obj instanceof RegExp,
