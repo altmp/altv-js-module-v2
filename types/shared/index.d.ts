@@ -665,7 +665,7 @@ declare module "@altv/shared" {
     }
 
     export namespace Enums {
-        export const enum AmmoSpecialType {
+        export enum AmmoSpecialType {
             NONE,
             ARMOR_PIERCING,
             EXPLOSIVE,
@@ -675,7 +675,7 @@ declare module "@altv/shared" {
             TRACER
         }
 
-        export const enum ColShapeType {
+        export enum ColShapeType {
             SPHERE,
             CYLINDER,
             CIRCLE,
@@ -685,7 +685,7 @@ declare module "@altv/shared" {
             POLYGON
         }
 
-        export const enum BlipType {
+        export enum BlipType {
             VEHICLE = 1,
             PED = 2,
             OBJECT = 3,
@@ -700,7 +700,8 @@ declare module "@altv/shared" {
             PICKUP_OBJECT = 13
         }
 
-        export const enum KeyCode {
+        // When changing, update shared/js/enums/keyCode.js aswell
+        export enum KeyCode {
             Key0 = 48,
             Key1 = 49,
             Key2 = 50,
@@ -810,7 +811,8 @@ declare module "@altv/shared" {
             MouseMiddle = 4
         }
 
-        export const enum Weather {
+        // When changing, update shared/js/enums/weather.js aswell
+        export enum Weather {
             ExtraSunny = 0,
             Clear = 1,
             Clouds = 2,
@@ -828,7 +830,7 @@ declare module "@altv/shared" {
             Halloween = 14
         }
 
-        export const enum Permission {
+        export enum Permission {
             NONE,
             SCREEN_CAPTURE,
             WEBRTC,
@@ -837,7 +839,8 @@ declare module "@altv/shared" {
             All
         }
 
-        export const enum Locale {
+        // When changing, update shared/js/enums/locale.js aswell
+        export enum Locale {
             Arabic = "ar",
             Belarusian = "by",
             Czech = "cz",
@@ -872,7 +875,7 @@ declare module "@altv/shared" {
             ChineseTraditional = "zh_tw"
         }
 
-        export const enum BaseObjectType {
+        export enum BaseObjectType {
             PLAYER,
             VEHICLE,
             PED,
@@ -906,13 +909,13 @@ declare module "@altv/shared" {
             SIZE
         }
 
-        export const enum VoiceConnectionState {
+        export enum VoiceConnectionState {
             DISCONNECTED,
             CONNECTING,
             CONNECTED
         }
 
-        export const enum ExplosionType {
+        export enum ExplosionType {
             GRENADE,
             GRENADELAUNCHER,
             STICKYBOMB,
@@ -956,7 +959,7 @@ declare module "@altv/shared" {
             UNKNOWN = -1
         }
 
-        export const enum VehicleModelType {
+        export enum VehicleModelType {
             INVALID,
             PED,
             AUTOMOBILE,
@@ -977,7 +980,7 @@ declare module "@altv/shared" {
             OBJECT
         }
 
-        export const enum BodyPart {
+        export enum BodyPart {
             PELVIS,
             LEFT_HIP,
             LEFT_LEG,
@@ -1003,7 +1006,7 @@ declare module "@altv/shared" {
             UNKNOWN = -1
         }
 
-        export const enum EventType {
+        export enum EventType {
             NONE,
 
             // Server
@@ -1108,7 +1111,7 @@ declare module "@altv/shared" {
             SIZE
         }
 
-        export const enum CustomEventType {
+        export enum CustomEventType {
             NONE,
 
             ENTITY_ENTER_COLSHAPE,
@@ -1122,18 +1125,19 @@ declare module "@altv/shared" {
             SIZE
         }
 
-        export const enum MetricType {
+        export enum MetricType {
             METRIC_TYPE_GAUGE,
             METRIC_TYPE_COUNTER,
             METRIC_TYPE_SIZE
         }
 
-        export const enum KeyState {
+        export enum KeyState {
             UP,
             DOWN
         }
 
-        export const enum WatermarkPosition {
+        // When changing, update shared/js/enums/watermarkPosition.js aswell
+        export enum WatermarkPosition {
             BottomRight = 0,
             TopRight = 1,
             TopLeft = 2,
@@ -1141,7 +1145,8 @@ declare module "@altv/shared" {
             BottomCenter = 4
         }
 
-        export const enum StatName {
+        // When changing, update shared/js/enums/statName.js aswell
+        export enum StatName {
             Stamina = "stamina",
             Strength = "strength",
             LungCapacity = "lung_capacity",
@@ -1151,24 +1156,21 @@ declare module "@altv/shared" {
             Stealth = "stealth_ability"
         }
 
-        export const enum ConfigFlag {
+        // When changing, update shared/js/enums/configFlag.js aswell
+        export enum ConfigFlag {
             DisableAutoWeaponSwap = "DISABLE_AUTO_WEAPON_SWAP",
             DisablePedPropKnockOff = "DISABLE_PED_PROP_KNOCK_OFF",
             DisableIdleCamera = "DISABLE_IDLE_CAMERA",
             DisableVehicleEngineShutdownOnLeave = "DISABLE_VEHICLE_ENGINE_SHUTDOWN_ON_LEAVE",
-            /** @beta */
             DisableSPEnterVehicleClipset = "DISABLE_SP_ENTER_VEHICLE_CLIPSET",
-            /** @beta */
             ForceRenderSnow = "FORCE_RENDER_SNOW",
-            /** @beta */
             ForceHideNightProps = "FORCE_HIDE_NIGHT_PROPS",
-            /** @beta */
             ForceShowNightProps = "FORCE_SHOW_NIGHT_PROPS",
-            /** @beta */
             DisableEmissiveLightsRendering = "DISABLE_EMISSIVE_LIGHTS_RENDERING"
         }
 
-        export const enum CheckpointType {
+        // When changing, update shared/js/enums/checkpointType.js aswell
+        export enum CheckpointType {
             CylinderSingleArrow,
             CylinderDoubleArrow,
             CylinderTripleArrow,

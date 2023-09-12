@@ -5,7 +5,6 @@ registerFactory("Player", alt.Player, alt.Enums.BaseObjectType.PLAYER);
 registerFactory("Vehicle", alt.Vehicle, alt.Enums.BaseObjectType.VEHICLE);
 registerFactory("Ped", alt.Ped, alt.Enums.BaseObjectType.PED);
 registerFactory("Blip", alt.Blip, alt.Enums.BaseObjectType.BLIP);
-registerFactory("VoiceChannel", alt.VoiceChannel, alt.Enums.BaseObjectType.VOICE_CHANNEL);
 registerFactory("ColShape", alt.ColShape, alt.Enums.BaseObjectType.COLSHAPE);
 registerFactory("Object", alt.Object, alt.Enums.BaseObjectType.OBJECT);
 registerFactory("Checkpoint", alt.Checkpoint, alt.Enums.BaseObjectType.CHECKPOINT);

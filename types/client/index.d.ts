@@ -1057,10 +1057,6 @@ declare module "@altv/client" {
         export function setBlipFactory(factory: typeof Blip): void;
         export function getBlipFactory<T extends Blip>(): T;
 
-        // TODO (xLuxy): Server-only - find a better way to extend namespaces and move this into server typings
-        export function setVoiceChannelFactory(factory: typeof VoiceChannel): void;
-        export function getVoiceChannelFactory<T extends VoiceChannel>(): T;
-
         export function setColShapeFactory(factory: typeof ColShape): void;
         export function getColShapeFactory<T extends ColShape>(): T;
 
@@ -1089,12 +1085,14 @@ declare module "@altv/client" {
         export function create(opts: altShared.RadiusBlipCreateOptions): Blip;
     }
 
+    // @ts-expect-error - Suppresses "Class static side incorrectly extends base class static side"
     export abstract class ColShapeSphere extends ColShape {
         readonly radius: number;
 
         static create(opts: altShared.ColShapeSphereCreateOptions): ColShapeSphere;
     }
 
+    // @ts-expect-error - Suppresses "Class static side incorrectly extends base class static side"
     export abstract class ColShapeCylinder extends ColShape {
         readonly radius: number;
         readonly height: number;
@@ -1102,12 +1100,14 @@ declare module "@altv/client" {
         static create(opts: altShared.ColShapeCylinderCreateOptions): ColShapeCylinder;
     }
 
+    // @ts-expect-error - Suppresses "Class static side incorrectly extends base class static side"
     export abstract class ColShapeCircle extends ColShape {
         readonly radius: number;
 
         static create(opts: altShared.ColShapeCircleCreateOptions): ColShapeCircle;
     }
 
+    // @ts-expect-error - Suppresses "Class static side incorrectly extends base class static side"
     export abstract class ColShapeCuboid extends ColShape {
         readonly min: altShared.Vector3;
         readonly max: altShared.Vector3;
@@ -1115,6 +1115,7 @@ declare module "@altv/client" {
         static create(opts: altShared.ColShapeCuboidCreateOptions): ColShapeCuboid;
     }
 
+    // @ts-expect-error - Suppresses "Class static side incorrectly extends base class static side"
     export abstract class ColShapeRectangle extends ColShape {
         readonly min: altShared.Vector2;
         readonly max: altShared.Vector2;
@@ -1122,6 +1123,7 @@ declare module "@altv/client" {
         static create(opts: altShared.ColShapeRectangleCreateOptions): ColShapeRectangle;
     }
 
+    // @ts-expect-error - Suppresses "Class static side incorrectly extends base class static side"
     export abstract class ColShapePolygon extends ColShape {
         readonly minZ: number;
         readonly maxZ: number;
