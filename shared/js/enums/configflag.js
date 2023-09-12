@@ -1,3 +1,4 @@
+// When changing, update types/shared/index.d.ts aswell
 export const ConfigFlag = Object.freeze({
     DisableAutoWeaponSwap: "DISABLE_AUTO_WEAPON_SWAP",
     DisablePedPropKnockOff: "DISABLE_PED_PROP_KNOCK_OFF",

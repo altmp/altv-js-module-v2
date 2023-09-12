@@ -700,6 +700,7 @@ declare module "@altv/shared" {
             PICKUP_OBJECT = 13
         }
 
+        // When changing, update shared/js/enums/keyCode.js aswell
         export enum KeyCode {
             Key0 = 48,
             Key1 = 49,
@@ -810,6 +811,7 @@ declare module "@altv/shared" {
             MouseMiddle = 4
         }
 
+        // When changing, update shared/js/enums/weather.js aswell
         export enum Weather {
             ExtraSunny = 0,
             Clear = 1,
@@ -837,6 +839,7 @@ declare module "@altv/shared" {
             All
         }
 
+        // When changing, update shared/js/enums/locale.js aswell
         export enum Locale {
             Arabic = "ar",
             Belarusian = "by",
@@ -1133,6 +1136,7 @@ declare module "@altv/shared" {
             DOWN
         }
 
+        // When changing, update shared/js/enums/watermarkPosition.js aswell
         export enum WatermarkPosition {
             BottomRight = 0,
             TopRight = 1,
@@ -1141,6 +1145,7 @@ declare module "@altv/shared" {
             BottomCenter = 4
         }
 
+        // When changing, update shared/js/enums/statName.js aswell
         export enum StatName {
             Stamina = "stamina",
             Strength = "strength",
@@ -1151,6 +1156,7 @@ declare module "@altv/shared" {
             Stealth = "stealth_ability"
         }
 
+        // When changing, update shared/js/enums/configFlag.js aswell
         export enum ConfigFlag {
             DisableAutoWeaponSwap = "DISABLE_AUTO_WEAPON_SWAP",
             DisablePedPropKnockOff = "DISABLE_PED_PROP_KNOCK_OFF",
@@ -1168,6 +1174,7 @@ declare module "@altv/shared" {
             DisableEmissiveLightsRendering = "DISABLE_EMISSIVE_LIGHTS_RENDERING"
         }
 
+        // When changing, update shared/js/enums/checkpointType.js aswell
         export enum CheckpointType {
             CylinderSingleArrow,
             CylinderDoubleArrow,

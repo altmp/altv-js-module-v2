@@ -1,3 +1,4 @@
+// When changing, update types/shared/index.d.ts aswell
 export const StatName = Object.freeze({
     Stamina: "stamina",
     Strength: "strength",
