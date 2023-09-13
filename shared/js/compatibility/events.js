@@ -33,14 +33,17 @@ function on(eventName, callback) {
 function once(eventName, callback) {
     if (typeof callback != "function") throw new Error("callback is not a function");
 
+    let removeFn;
     async function wrapper(...args) {
         const ret = callback(...args);
-        alt.Events.on.remove(eventName, wrapper);
 
-        if (ret instanceof Promise) await ret;
+        if (typeof removeFn == "function") {
+            removeFn();
+        }
     }
 
-    alt.Events.on(eventName, wrapper);
+    const eventHandler = alt.Events.on(eventName, wrapper);
+    removeFn = eventHandler.destroy;
 }
 
 /**
