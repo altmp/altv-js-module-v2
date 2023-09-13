@@ -25,6 +25,11 @@ function on(eventName, callback) {
     alt.Events.on(eventName, wrapper);
 }
 
+/**
+ *
+ * @param {string} eventName
+ * @param {Function} callback
+ */
 function once(eventName, callback) {
     if (typeof callback != "function") throw new Error("callback is not a function");
 

@@ -350,7 +350,7 @@ static void GetDlcClothes(js::FunctionContext& ctx)
     ctx.Return(obj);
 }
 
-static void GetProps(js::FunctionContext& ctx)
+static void GetProp(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
     if(!ctx.CheckArgCount(1)) return;
@@ -797,6 +797,8 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
 
     tpl.LazyProperty<&alt::IPlayer::GetIP>("ip");
     tpl.LazyProperty<&alt::IPlayer::GetSocialID>("socialId");
+    // TODO (xLuxy): typings
+    tpl.LazyProperty<&alt::IPlayer::GetSocialClubName>("socialClubName");
     tpl.LazyProperty<&alt::IPlayer::GetHwidHash>("hwidHash");
     tpl.LazyProperty<&alt::IPlayer::GetHwidExHash>("hwidExHash");
 
@@ -840,11 +842,11 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method<&alt::IPlayer::SetClothes>("setClothes");
     tpl.Method("getDlcClothes", &GetDlcClothes);
     tpl.Method<&alt::IPlayer::SetDlcClothes>("setDlcClothes");
-    tpl.Method("getProps", &GetProps);
-    tpl.Method<&alt::IPlayer::SetProps>("setProps");
-    tpl.Method("getDlcProps", &GetDlcProps);
-    tpl.Method<&alt::IPlayer::SetDlcProps>("setDlcProps");
-    tpl.Method<&alt::IPlayer::ClearProps>("clearProps");
+    tpl.Method("getProp", &GetProp);
+    tpl.Method<&alt::IPlayer::SetProps>("setProp");
+    tpl.Method("getDlcProp", &GetDlcProps);
+    tpl.Method<&alt::IPlayer::SetDlcProps>("setDlcProp");
+    tpl.Method<&alt::IPlayer::ClearProps>("clearProp");
     tpl.Method<&alt::IPlayer::IsEntityInStreamingRange>("isEntityInStreamingRange");
     tpl.Method<&alt::IPlayer::SetIntoVehicle>("setIntoVehicle");
     tpl.Method<&alt::IPlayer::PlayAmbientSpeech>("playAmbientSpeech");

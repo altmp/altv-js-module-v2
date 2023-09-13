@@ -50,6 +50,7 @@ extern js::Class sharedPlayerClass("SharedPlayer", &entityClass, nullptr, [](js:
     tpl.Property<&alt::IPlayer::IsOnLadder>("isOnLadder");
     tpl.Property<&alt::IPlayer::IsInMelee>("isInMelee");
     tpl.Property<&alt::IPlayer::IsInCover>("isInCover");
+    tpl.Property<&alt::IPlayer::IsParachuting>("isParachuting");
     tpl.Property<&alt::IPlayer::GetArmour>("armour");
     tpl.Property<&alt::IPlayer::GetMaxArmour>("maxArmour");
     tpl.Property<&alt::IPlayer::GetMoveSpeed>("moveSpeed");

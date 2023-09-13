@@ -575,6 +575,7 @@ declare module "@altv/client" {
         readonly isOnLadder: boolean;
         readonly isInMelee: boolean;
         readonly isInCover: boolean;
+        readonly isParachuting: boolean;
         readonly armour: number;
         readonly maxArmour: number;
         readonly moveSpeed: number;

@@ -318,6 +318,7 @@ declare module "@altv/server" {
 
         readonly ip: string;
         readonly socialId: number;
+        readonly socialClubName: string;
         readonly hwidHash: number;
         readonly hwidExHash: number;
 
@@ -350,6 +351,7 @@ declare module "@altv/server" {
         readonly isOnLadder: boolean;
         readonly isInMelee: boolean;
         readonly isInCover: boolean;
+        readonly isParachuting: boolean;
         readonly moveSpeed: number;
         readonly aimPos: altShared.Vector3;
         readonly headRotation: altShared.Vector3;
@@ -411,10 +413,10 @@ declare module "@altv/server" {
         setClothes(componentId: number, drawable: number, texture: number, palette: number): boolean;
         getDlcClothes(componentId: number): altShared.Appearance.DlcClothing;
         setDlcClothes(componentId: number, drawable: number, texture: number, palette: number, dlc: number): boolean;
-        getProps(componentId: number): altShared.Appearance.Prop;
-        setProps(componentId: number, drawable: number, texture: number): boolean;
-        getDlcProps(componentId: number): altShared.Appearance.DlcProp;
-        setDlcProps(componentId: number, drawable: number, texture: number, dlc: number): boolean;
+        getProp(componentId: number): altShared.Appearance.Prop;
+        setProp(componentId: number, drawable: number, texture: number): boolean;
+        getDlcProp(componentId: number): altShared.Appearance.DlcProp;
+        setDlcProp(componentId: number, drawable: number, texture: number, dlc: number): boolean;
         clearProps(componentId: number): void;
 
         // TODO (xLuxy): Add Entity as argument
