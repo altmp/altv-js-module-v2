@@ -159,7 +159,7 @@ static void StreamedEntitiesGetter(js::PropertyContext& ctx)
     {
         js::Object entityObj;
 
-        entityObj.Set("entity", entity;
+        entityObj.Set("entity", entity);
         entityObj.Set("distance", distance);
 
         streamedInEntities.Push(entityObj);
