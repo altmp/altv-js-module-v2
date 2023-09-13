@@ -6,12 +6,6 @@
 requireBinding("shared/factory.js");
 
 class Player extends alt.Player {
-    // https://github.com/altmp/altv-js-module/blob/132b88b9c347b7122eaa82349a63992b6ac4b33d/server/src/bindings/Player.cpp#L891
-    get streamedEntities() {
-        // TODO (xLuxy): Needs checking
-        throw new Error("Not implemented");
-    }
-
     static get count() {
         return alt.Player.all.length;
     }

@@ -380,6 +380,7 @@ declare module "@altv/server" {
         readonly interiorLocation: number;
         readonly lastDamagedBodyPart: number;
         sendNames: boolean;
+        readonly streamedEntities: ReadonlyArray<StreamedInPlayerEntities>;
 
         readonly cloudAuthHash: string;
         netOwnershipDisabled: boolean;
@@ -954,6 +955,11 @@ declare module "@altv/server" {
 
             accept(sendNames?: boolean): void;
             decline(reason: string): void;
+        }
+
+        interface StreamedInPlayerEntity {
+            entity: Entity;
+            distance: number;
         }
 
         interface ConnectionQueueEventParameters {

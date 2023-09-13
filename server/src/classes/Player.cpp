@@ -144,6 +144,30 @@ static void SendNamesSetter(js::PropertyContext& ctx)
     player->SetSendNames(state);
 }
 
+static void StreamedEntitiesGetter(js::PropertyContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    auto isolate = ctx.GetIsolate();
+    auto _ctx = ctx.GetContext();
+
+    const std::vector<std::pair<alt::IEntity*, int32_t>> list = player->GetStreamedEntities();
+    js::Array streamedInEntities(list.size());
+
+    for (auto& [entity, distance] : list)
+    {
+        js::Object entityObj;
+
+        entityObj.Set("entity", entity;
+        entityObj.Set("distance", distance);
+
+        streamedInEntities.Push(entityObj);
+    }
+
+    ctx.Return(streamedInEntities);
+}
+
 static void Emit(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
@@ -821,6 +845,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Property<&alt::IPlayer::GetInteriorLocation>("interiorLocation");
     tpl.Property<&alt::IPlayer::GetLastDamagedBodyPart>("lastDamagedBodyPart");
     tpl.Property("sendNames", &SendNamesGetter, &SendNamesSetter);
+    tpl.Property("streamedEntities", StreamedEntitiesGetter);
     tpl.Property<&alt::IPlayer::GetCloudAuthHash>("cloudAuthHash");
     tpl.Property<&alt::IPlayer::IsNetworkOwnershipDisabled, &alt::IPlayer::SetNetworkOwnershipDisabled>("netOwnershipDisabled");
 
