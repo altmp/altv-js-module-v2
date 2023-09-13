@@ -3,10 +3,9 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/server";
 
-/** @type {typeof import("./Entity.js")} */
-const { Entity } = requireBinding("server/compatibility/classes/Entity.js");
+requireBinding("shared/factory.js");
 
-class Player extends Entity {
+class Player extends alt.Player {
     constructor() {
         if (this.constructor === Player) {
             throw new Error("Cannot construct Player class");
