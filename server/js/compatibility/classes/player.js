@@ -6,12 +6,6 @@
 requireBinding("shared/factory.js");
 
 class Player extends alt.Player {
-    constructor() {
-        if (this.constructor === Player) {
-            throw new Error("Cannot construct Player class");
-        }
-    }
-
     // https://github.com/altmp/altv-js-module/blob/132b88b9c347b7122eaa82349a63992b6ac4b33d/server/src/bindings/Player.cpp#L891
     get streamedEntities() {
         // TODO (xLuxy): Needs checking
@@ -51,7 +45,7 @@ class Player extends alt.Player {
             pos = args[1];
         }
 
-        if (info.Length() == 1 || info.Length() == 2) {
+        if (args.length == 1 || args.length == 2) {
             // (model: number | string, pos: IVector3) overload
             if (typeof args[0] == "number" || typeof args[0] == "string") {
                 super.model = args[0];
