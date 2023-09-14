@@ -56,11 +56,23 @@ bool IModuleHandler::IsBytecodeBuffer(const std::vector<uint8_t>& buffer)
     return buffer.size() >= sizeof(bytecodeMagic) && std::memcmp(buffer.data(), bytecodeMagic, sizeof(bytecodeMagic)) == 0;
 }
 
+bool IModuleHandler::IsValidBuiltinModule(js::IResource* resource, const std::string& moduleName)
+{
+    if(!js::Module::Exists(moduleName)) return false;
+    js::Module& mod = js::Module::Get(moduleName);
+
+    bool compatibilityModeEnabled = resource->IsCompatibilityModeEnabled();
+    if(mod.IsCompatibilityModule() && !compatibilityModeEnabled) return false;
+
+    return true;
+}
+
 v8::MaybeLocal<v8::Module>
   IModuleHandler::Resolve(v8::Local<v8::Context> context, const std::string& specifier, v8::Local<v8::Module> referrer, std::unordered_map<std::string, std::string>& assertions)
 {
     v8::Isolate* isolate = context->GetIsolate();
     if(modules.contains(specifier)) return modules.at(specifier).module.Get(isolate);
+    js::IResource* resource = js::IResource::GetFromContext(context);
 
     std::string name = specifier;
     v8::MaybeLocal<v8::Module> module;
@@ -75,7 +87,7 @@ v8::MaybeLocal<v8::Module>
             type = Module::Type::JSON;
         }
     }
-    else if(js::Module::Exists(specifier))
+    else if(IsValidBuiltinModule(resource, specifier))
     {
         module = ResolveBuiltin(context, specifier);
         type = Module::Type::Builtin;

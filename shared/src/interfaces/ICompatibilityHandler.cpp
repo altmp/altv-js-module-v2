@@ -3,6 +3,7 @@
 
 void js::ICompatibilityHandler::RegisterCompatibilityExport(const std::string& name, v8::Local<v8::Value> value)
 {
+    if(!enabled) return;
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
     v8::Local<v8::Context> context = isolate->GetEnteredOrMicrotaskContext();
     js::Object obj = moduleNamespace.Get(isolate);

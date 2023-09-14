@@ -3,6 +3,18 @@
 #include "Bindings.h"
 #include "Event.h"
 
+void CNodeResource::LoadConfig()
+{
+    Config::Value::ValuePtr config = resource->GetConfig();
+    if(!config->IsDict()) return;
+
+    Config::Value::ValuePtr jsConfig = config["js-module-v2"];
+    if(!jsConfig->IsDict()) return;
+
+    bool compatibilityEnabled = jsConfig["compatibilityEnabled"]->AsBool(false);
+    ToggleCompatibilityMode(compatibilityEnabled);
+}
+
 std::unordered_map<std::string, std::string> CNodeResource::GetMetricAttributes()
 {
     return { { "resource", GetResource()->GetName() } };
@@ -38,6 +50,7 @@ bool CNodeResource::Start()
     v8::Context::Scope scope(_context);
     context.Reset(isolate, _context);
 
+    LoadConfig();
     IResource::Initialize();
 
     uvLoop = new uv_loop_t;

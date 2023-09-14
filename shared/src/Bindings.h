@@ -60,6 +60,15 @@ namespace js
         }
         v8::Local<v8::Module> GetCompiledModule(IResource* resource);
 
+        bool IsBootstrapBinding()
+        {
+            return name.ends_with("bootstrap.js");
+        }
+        bool IsCompatibilityBinding()
+        {
+            return name.find("compatibility/") != std::string::npos;
+        }
+
         // For debugging
         void Dump();
 

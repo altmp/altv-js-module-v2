@@ -15,6 +15,8 @@ class CNodeResource : public js::IAltResource, public js::IMetricHandler
     bool envStarted = false;
     bool startError = false;
 
+    void LoadConfig();
+
     virtual std::unordered_map<std::string, std::string> GetMetricAttributes() override;
 
 public:

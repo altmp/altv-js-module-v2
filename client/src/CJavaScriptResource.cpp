@@ -38,6 +38,18 @@ v8::Local<v8::Module> CJavaScriptResource::CompileAndRun(const std::string& path
     return mod;
 }
 
+void CJavaScriptResource::LoadConfig()
+{
+    Config::Value::ValuePtr config = resource->GetConfig();
+    if(!config->IsDict()) return;
+
+    Config::Value::ValuePtr jsConfig = config["js-module-v2"];
+    if(!jsConfig->IsDict()) return;
+
+    bool compatibilityEnabled = jsConfig["compatibilityEnabled"]->AsBool(false);
+    ToggleCompatibilityMode(compatibilityEnabled);
+}
+
 bool CJavaScriptResource::Start()
 {
     v8::Locker locker(isolate);

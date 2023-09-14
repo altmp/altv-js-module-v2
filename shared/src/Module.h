@@ -35,6 +35,7 @@ namespace js
         std::unordered_map<v8::Isolate*, ModuleTemplate> templateMap;
         std::unordered_map<IResource*, Persistent<v8::Object>> instanceMap;
         std::vector<Class*> classes;
+        bool isCompatibilityModule = false;
 
         void Register(ModuleTemplate& tpl);
 
@@ -56,7 +57,8 @@ namespace js
         {
             GetAll().insert({ name, this });
         }
-        Module(const std::string& _name, CustomGetNamespaceCallback _customGetNamespaceCb) : name(_name), customGetNamespaceCb(_customGetNamespaceCb)
+        Module(const std::string& _name, CustomGetNamespaceCallback _customGetNamespaceCb, bool _isCompatibilityModule = false)
+            : name(_name), customGetNamespaceCb(_customGetNamespaceCb), isCompatibilityModule(_isCompatibilityModule)
         {
             GetAll().insert({ name, this });
         }
@@ -70,6 +72,10 @@ namespace js
             return templateMap.at(isolate).Get();
         }
         v8::Local<v8::Object> GetNamespace(IResource* resource);
+        bool IsCompatibilityModule()
+        {
+            return isCompatibilityModule;
+        }
 
         static bool Exists(const std::string& name)
         {

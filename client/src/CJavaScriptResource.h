@@ -15,6 +15,8 @@ class CJavaScriptResource : public js::IAltResource, public IModuleHandler, publ
 
     v8::Local<v8::Module> CompileAndRun(const std::string& path, const std::string& source);
 
+    void LoadConfig();
+
 public:
     CJavaScriptResource(alt::IResource* resource, v8::Isolate* isolate) : IAltResource(resource, isolate) {}
 

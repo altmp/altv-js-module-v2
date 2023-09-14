@@ -133,6 +133,7 @@ static void RegisterExport(js::FunctionContext& ctx)
 static void GetBuiltinModule(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
+    js::IResource* resource = ctx.GetResource();
 
     std::string name;
     if(!ctx.GetArg(0, name)) return;
@@ -142,7 +143,13 @@ static void GetBuiltinModule(js::FunctionContext& ctx)
         ctx.Return(nullptr);
         return;
     }
-    ctx.Return(js::Module::Get(name).GetNamespace(ctx.GetResource()));
+    js::Module& mod = js::Module::Get(name);
+    if(mod.IsCompatibilityModule() && !resource->IsCompatibilityModeEnabled())
+    {
+        ctx.Return(nullptr);
+        return;
+    }
+    ctx.Return(mod.GetNamespace(resource));
 }
 
 static void ResourceNameGetter(js::LazyPropertyContext& ctx)

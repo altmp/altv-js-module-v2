@@ -19,7 +19,8 @@ void js::IResource::RequireBindingNamespaceWrapper(js::FunctionContext& ctx)
 
 void js::IResource::InitializeBinding(js::Binding* binding)
 {
-    if(binding->GetName().ends_with("bootstrap.js")) return;  // Skip bootstrap bindings, those are handled separately
+    if(binding->IsBootstrapBinding()) return;                                       // Skip bootstrap bindings, those are handled separately
+    if(binding->IsCompatibilityBinding() && !IsCompatibilityModeEnabled()) return;  // Don't load compatibility bindings if not enabled
 
     v8::Local<v8::Module> module = binding->GetCompiledModule(this);
     if(module.IsEmpty())

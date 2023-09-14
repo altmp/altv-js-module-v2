@@ -43,6 +43,8 @@ protected:
 
     bool IsBytecodeBuffer(const std::vector<uint8_t>& buffer);
 
+    bool IsValidBuiltinModule(js::IResource* resource, const std::string& moduleName);
+
     v8::MaybeLocal<v8::Module>
       Resolve(v8::Local<v8::Context> context, const std::string& specifier, v8::Local<v8::Module> referrer, std::unordered_map<std::string, std::string>& importAssertions);
     v8::MaybeLocal<v8::Module> ResolveBuiltin(v8::Local<v8::Context> context, const std::string& specifier);
