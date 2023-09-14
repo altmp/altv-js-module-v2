@@ -65,7 +65,7 @@ namespace js
 
         void SetCustomFactory(alt::IBaseObject::Type type, v8::Local<v8::Function> factory)
         {
-            customFactoryMap.insert({ type, Persistent<v8::Function>(factory->GetIsolate(), factory) });
+            customFactoryMap[type] = Persistent<v8::Function>(factory->GetIsolate(), factory);
         }
         v8::Local<v8::Function> GetCustomFactory(alt::IBaseObject::Type type)
         {

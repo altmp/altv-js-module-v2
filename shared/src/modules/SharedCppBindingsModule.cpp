@@ -28,8 +28,6 @@ static void SetEntityFactory(js::FunctionContext& ctx)
     if(!ctx.GetArg(1, factory)) return;
 
     js::IResource* resource = ctx.GetResource();
-    if(!ctx.Check(!resource->HasCustomFactory(type), "Entity factory already set")) return;
-
     resource->SetCustomFactory(type, factory.As<v8::Function>());
 }
 
