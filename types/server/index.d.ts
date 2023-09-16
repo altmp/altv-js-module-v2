@@ -27,30 +27,6 @@ declare module "@altv/server" {
     export function setVoiceExternalPublic(host: string, port: number): void;
     export function setVoiceExternal(host: string, port: number): void;
 
-    export function getMaxStreamingPeds(): number;
-    export function getMaxStreamingObjects(): number;
-    export function getMaxStreamingVehicles(): number;
-
-    export function setMaxStreamingPeds(limit: number): void;
-    export function setMaxStreamingObjects(limit: number): void;
-    export function setMaxStreamingVehicles(limit: number): void;
-    export function getStreamerThreadCount(): number;
-    export function setStreamerThreadCount(count: number): void;
-    export function getMigrationThreadCount(): number;
-    export function getSyncSendThreadCount(): number;
-    export function getSyncReceiveThreadCount(): number;
-    export function setMigrationThreadCount(count: number): void;
-    export function setSyncSendThreadCount(count: number): void;
-    export function setSyncReceiveThreadCount(count: number): void;
-    export function getStreamingTickRate(): number;
-    export function getMigrationTickRate(): number;
-    export function getColShapeTickRate(): number;
-    export function setStreamingTickRate(rate: number): void;
-    export function setMigrationTickRate(rate: number): void;
-    export function setColShapeTickRate(rate: number): void;
-    export function getMigrationDistance(): number;
-    export function setMigrationDistance(distance: number): void;
-
     export class BaseObject extends altShared.BaseObject {
         readonly meta: BaseObjectMeta;
         readonly syncedMeta: Readonly<altShared.BaseObjectSyncedMeta>;
@@ -791,6 +767,24 @@ declare module "@altv/server" {
         bonusMaxAmmoMp: number;
     }
 
+    export namespace Streaming {
+        export let maxStreamingPeds: number;
+        export let maxStreamingObjects: number;
+        export let maxStreamingVehicles: number;
+
+        export let streamerThreadCount: number;
+        export let streamingTickRate: number;
+        export let streamingDistance: number;
+
+        export let migrationThreadCount: number;
+        export let migrationTickRate: number;
+        export let migrationDistance: number;
+        export let colShapeTickRate: number;
+
+        export let syncReceiveThreadCount: number;
+        export let syncSendThreadCount: number;
+    }
+
     export namespace PedModelInfo {
         export function get(modelHash: number | string): PedModelInfo | undefined;
     }
@@ -1334,6 +1328,18 @@ declare module "@altv/server" {
      * Extend it by interface merging for use in VirtualEntity#meta.
      */
     export interface VirtualEntityMeta extends BaseObjectMeta {}
+
+    interface StreamedInPlayerEntities {
+        entity: Entity;
+
+        /**
+         * The squared and rounded-up distance to the entity.
+         *
+         * To obtain an approximation of the actual distance, you can calculate
+         * the square root of this value.
+         */
+        distance: number;
+    }
 
     export * from "@altv/shared";
 }
