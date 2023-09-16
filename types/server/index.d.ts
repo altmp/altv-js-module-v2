@@ -942,11 +942,11 @@ declare module "@altv/server" {
             readonly passwordHash: number;
             readonly ip: string;
             readonly discordUserId: number;
-            readonly cloudAuthHash: number;
 
             readonly isAccepted: boolean;
             text: string;
 
+            requestCloudID(): Promise<string>;
             accept(sendNames?: boolean): void;
             decline(reason: string): void;
         }

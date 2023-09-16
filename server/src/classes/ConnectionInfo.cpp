@@ -1,6 +1,33 @@
 ﻿#include "Class.h"
 #include "interfaces/IResource.h"
 #include "cpp-sdk/ICore.h"
+#include "interfaces/IAltResource.h"
+
+static void RequestCloudID(js::FunctionContext& ctx)
+{
+    if (!ctx.CheckThis()) return;
+
+    auto* connectionInfo = ctx.GetThisObject<alt::IConnectionInfo>();
+
+    auto promise = new js::Promise;
+    auto* resource = ctx.GetResource<js::IAltResource>();
+
+    connectionInfo->RequestCloudID([=](bool ok, const std::string& result)
+    {
+        resource->PushNextTickCallback(
+            [=]()
+            {
+                if (ok)
+                    promise->Resolve(result);
+                else
+                    promise->Reject(result);
+
+                delete promise;
+            });
+    });
+
+    ctx.Return(promise->Get());
+}
 
 static void Accept(js::FunctionContext& ctx)
 {
@@ -30,11 +57,11 @@ extern js::Class connectionInfoClass("ConnectionInfo", nullptr, nullptr, [](js::
     tpl.LazyProperty<&alt::IConnectionInfo::GetPasswordHash>("passwordHash");
     tpl.LazyProperty<&alt::IConnectionInfo::GetIp>("ip");
     tpl.LazyProperty<&alt::IConnectionInfo::GetDiscordUserID>("discordUserId");
-    tpl.LazyProperty<&alt::IConnectionInfo::GetCloudAuthHash>("cloudAuthHash");
 
     tpl.Property<&alt::IConnectionInfo::IsAccepted>("isAccepted");
     tpl.Property<&alt::IConnectionInfo::GetText, &alt::IConnectionInfo::SetText>("text");
 
+    tpl.Method("requestCloudID", RequestCloudID);
     tpl.Method("accept", Accept);
     tpl.Method<&alt::IConnectionInfo::Decline>("decline");
 });
