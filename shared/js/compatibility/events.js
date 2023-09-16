@@ -1,7 +1,7 @@
 /// <reference path="../../../types/shared/index.d.ts" />
 /// <reference path="../../../types/server/index.d.ts" />
 /// <reference path="../../../types/client/index.d.ts" />
-import * as alt from "@altv/shared";
+// import * as alt from "@altv/shared";
 
 /** @type {typeof import("./utils/events.js")} */
 const { getEventTypeFromEventName } = requireBinding("shared/compatibility/utils/events.js");

@@ -98,10 +98,20 @@ const eventNameToEventType = {
     voiceConnection: alt.Enums.EventType.VOICE_CONNECTION_EVENT
 };
 
+/**
+ *
+ * @param {alt.Enums.EventType} eventType
+ * @returns {string | undefined}
+ */
 export function getEventNameFromEventType(eventType) {
     return Object.keys(eventNameToEventType).find((key) => eventNameToEventType[key] === eventType);
 }
 
+/**
+ *
+ * @param {string} eventName
+ * @returns {alt.Enums.EventType}
+ */
 export function getEventTypeFromEventName(eventName) {
     return eventNameToEventType[eventName] ?? alt.Enums.EventType.NONE;
 }
