@@ -1,7 +1,10 @@
 /// <reference path="../../../types/shared/index.d.ts" />
 /// <reference path="../../../types/server/index.d.ts" />
 /// <reference path="../../../types/client/index.d.ts" />
-// import * as alt from "@altv/shared";
+import * as alt from "@altv/shared";
+
+/** @type {typeof import("./utils/events.js")} */
+const { getEventTypeFromEventName } = requireBinding("shared/compatibility/utils/events.js");
 
 /**
  *
@@ -9,6 +12,15 @@
  * @param {Function} callback
  */
 function on(eventName, callback) {
+    const eventType = getEventTypeFromEventName(eventName);
+
+    if (eventType != alt.Enums.EventType.NONE) {
+        // When the eventType is not NONE we have to deal with an API event
+        return;
+    }
+
+    // Otherwise we have to deal with a custom user event
+
     async function wrapper(ctx) {
         const callbackRet = callback(ctx);
 
