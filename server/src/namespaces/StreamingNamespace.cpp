@@ -1,12 +1,12 @@
 ﻿#include "Namespace.h"
 #include "interfaces/IResource.h"
 
-static void GetMaxStreamingPeds(js::DynamicPropertyGetterContext& ctx)
+static void GetMaxStreamingPeds(js::PropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetMaxStreamingPeds());
 }
 
-static void SetMaxStreamingPeds(js::DynamicPropertySetterContext& ctx)
+static void SetMaxStreamingPeds(js::PropertyContext& ctx)
 {
     uint16_t limit;
     if (!ctx.GetValue(limit)) return;
@@ -14,12 +14,12 @@ static void SetMaxStreamingPeds(js::DynamicPropertySetterContext& ctx)
     alt::ICore::Instance().SetMaxStreamingPeds(limit);
 }
 
-static void GetMaxStreamingObjects(js::DynamicPropertyGetterContext& ctx)
+static void GetMaxStreamingObjects(js::PropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetMaxStreamingObjects());
 }
 
-static void SetMaxStreamingObjects(js::DynamicPropertySetterContext& ctx)
+static void SetMaxStreamingObjects(js::PropertyContext& ctx)
 {
     uint16_t limit;
     if(!ctx.GetValue(limit)) return;
@@ -27,12 +27,12 @@ static void SetMaxStreamingObjects(js::DynamicPropertySetterContext& ctx)
     alt::ICore::Instance().SetMaxStreamingObjects(limit);
 }
 
-static void GetMaxStreamingVehicles(js::DynamicPropertyGetterContext& ctx)
+static void GetMaxStreamingVehicles(js::PropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetMaxStreamingVehicles());
 }
 
-static void SetMaxStreamingVehicles(js::DynamicPropertySetterContext& ctx)
+static void SetMaxStreamingVehicles(js::PropertyContext& ctx)
 {
     uint16_t limit;
     if(!ctx.GetValue(limit)) return;
@@ -41,12 +41,12 @@ static void SetMaxStreamingVehicles(js::DynamicPropertySetterContext& ctx)
 }
 
 
-static void GetStreamerThreadCount(js::DynamicPropertyGetterContext& ctx)
+static void GetStreamerThreadCount(js::PropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetStreamerThreadCount());
 }
 
-static void SetStreamerThreadCount(js::DynamicPropertySetterContext& ctx)
+static void SetStreamerThreadCount(js::PropertyContext& ctx)
 {
     uint8_t count;
     if(!ctx.GetValue(count)) return;
@@ -54,12 +54,12 @@ static void SetStreamerThreadCount(js::DynamicPropertySetterContext& ctx)
     alt::ICore::Instance().SetStreamerThreadCount(count);
 }
 
-static void GetStreamingTickRate(js::DynamicPropertyGetterContext& ctx)
+static void GetStreamingTickRate(js::PropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetStreamingTickRate());
 }
 
-static void SetStreamingTickRate(js::DynamicPropertySetterContext& ctx)
+static void SetStreamingTickRate(js::PropertyContext& ctx)
 {
     uint32_t tickRate;
     if (!ctx.GetValue(tickRate)) return;
@@ -67,12 +67,12 @@ static void SetStreamingTickRate(js::DynamicPropertySetterContext& ctx)
     alt::ICore::Instance().SetStreamingTickRate(tickRate);
 }
 
-static void GetStreamingDistance(js::DynamicPropertyGetterContext& ctx)
+static void GetStreamingDistance(js::PropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetStreamingDistance());
 }
 
-static void SetStreamingDistance(js::DynamicPropertySetterContext& ctx)
+static void SetStreamingDistance(js::PropertyContext& ctx)
 {
     uint32_t distance;
     if (!ctx.GetValue(distance)) return;
@@ -81,12 +81,12 @@ static void SetStreamingDistance(js::DynamicPropertySetterContext& ctx)
 }
 
 
-static void GetMigrationThreadCount(js::DynamicPropertyGetterContext& ctx)
+static void GetMigrationThreadCount(js::PropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetMigrationThreadCount());
 }
 
-static void SetMigrationThreadCount(js::DynamicPropertySetterContext& ctx)
+static void SetMigrationThreadCount(js::PropertyContext& ctx)
 {
     uint8_t count;
     if(!ctx.GetValue(count)) return;
@@ -94,12 +94,12 @@ static void SetMigrationThreadCount(js::DynamicPropertySetterContext& ctx)
     alt::ICore::Instance().SetMigrationThreadCount(count);
 }
 
-static void GetMigrationTickRate(js::DynamicPropertyGetterContext& ctx)
+static void GetMigrationTickRate(js::PropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetMigrationTickRate());
 }
 
-static void SetMigrationTickRate(js::DynamicPropertySetterContext& ctx)
+static void SetMigrationTickRate(js::PropertyContext& ctx)
 {
     uint32_t tickRate;
     if(!ctx.GetValue(tickRate)) return;
@@ -107,12 +107,12 @@ static void SetMigrationTickRate(js::DynamicPropertySetterContext& ctx)
     alt::ICore::Instance().SetMigrationTickRate(tickRate);
 }
 
-static void GetMigrationDistance(js::DynamicPropertyGetterContext& ctx)
+static void GetMigrationDistance(js::PropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetMigrationDistance());
 }
 
-static void SetMigrationDistance(js::DynamicPropertySetterContext& ctx)
+static void SetMigrationDistance(js::PropertyContext& ctx)
 {
     uint32_t distance;
     if(!ctx.GetValue(distance)) return;
@@ -120,12 +120,12 @@ static void SetMigrationDistance(js::DynamicPropertySetterContext& ctx)
     alt::ICore::Instance().SetMigrationDistance(distance);
 }
 
-static void GetColShapeTickRate(js::DynamicPropertyGetterContext& ctx)
+static void GetColShapeTickRate(js::PropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetColShapeTickRate());
 }
 
-static void SetColShapeTickRate(js::DynamicPropertySetterContext& ctx)
+static void SetColShapeTickRate(js::PropertyContext& ctx)
 {
     uint32_t tickRate;
     if(!ctx.GetValue(tickRate)) return;
@@ -134,12 +134,12 @@ static void SetColShapeTickRate(js::DynamicPropertySetterContext& ctx)
 }
 
 
-static void GetSyncReceiveThreadCount(js::DynamicPropertyGetterContext& ctx)
+static void GetSyncReceiveThreadCount(js::PropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetSyncReceiveThreadCount());
 }
 
-static void SetSyncReceiveThreadCount(js::DynamicPropertySetterContext& ctx)
+static void SetSyncReceiveThreadCount(js::PropertyContext& ctx)
 {
     uint8_t count;
     if(!ctx.GetValue(count)) return;
@@ -147,12 +147,12 @@ static void SetSyncReceiveThreadCount(js::DynamicPropertySetterContext& ctx)
     alt::ICore::Instance().SetSyncReceiveThreadCount(count);
 }
 
-static void GetSyncSendThreadCount(js::DynamicPropertyGetterContext& ctx)
+static void GetSyncSendThreadCount(js::PropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetSyncSendThreadCount());
 }
 
-static void SetSyncSendThreadCount(js::DynamicPropertySetterContext& ctx)
+static void SetSyncSendThreadCount(js::PropertyContext& ctx)
 {
     uint8_t count;
     if(!ctx.GetValue(count)) return;
@@ -163,19 +163,19 @@ static void SetSyncSendThreadCount(js::DynamicPropertySetterContext& ctx)
 
 // clang-format off
 extern js::Namespace streamingNamespace("Streaming", [](js::NamespaceTemplate& tpl) {
-    tpl.StaticDynamicProperty("maxStreamingPeds", GetMaxStreamingPeds, SetMaxStreamingPeds);
-    tpl.StaticDynamicProperty("maxStreamingObjects", GetMaxStreamingObjects, SetMaxStreamingObjects);
-    tpl.StaticDynamicProperty("maxStreamingVehicles", GetMaxStreamingVehicles, SetMaxStreamingVehicles);
+    tpl.StaticProperty("maxStreamingPeds", GetMaxStreamingPeds, SetMaxStreamingPeds);
+    tpl.StaticProperty("maxStreamingObjects", GetMaxStreamingObjects, SetMaxStreamingObjects);
+    tpl.StaticProperty("maxStreamingVehicles", GetMaxStreamingVehicles, SetMaxStreamingVehicles);
 
-    tpl.StaticDynamicProperty("streamerThreadCount", GetStreamerThreadCount, SetStreamerThreadCount);
-    tpl.StaticDynamicProperty("streamingTickRate", GetStreamingTickRate, SetStreamingTickRate);
-    tpl.StaticDynamicProperty("streamingDistance", GetStreamingDistance, SetStreamingDistance);
+    tpl.StaticProperty("streamerThreadCount", GetStreamerThreadCount, SetStreamerThreadCount);
+    tpl.StaticProperty("streamingTickRate", GetStreamingTickRate, SetStreamingTickRate);
+    tpl.StaticProperty("streamingDistance", GetStreamingDistance, SetStreamingDistance);
 
-    tpl.StaticDynamicProperty("migrationThreadCount", GetMigrationThreadCount, SetMigrationThreadCount);
-    tpl.StaticDynamicProperty("migrationTickRate", GetMigrationTickRate, SetMigrationTickRate);
-    tpl.StaticDynamicProperty("migrationDistance", GetMigrationDistance, SetMigrationDistance);
-    tpl.StaticDynamicProperty("colShapeTickRate", GetColShapeTickRate, SetColShapeTickRate);
+    tpl.StaticProperty("migrationThreadCount", GetMigrationThreadCount, SetMigrationThreadCount);
+    tpl.StaticProperty("migrationTickRate", GetMigrationTickRate, SetMigrationTickRate);
+    tpl.StaticProperty("migrationDistance", GetMigrationDistance, SetMigrationDistance);
+    tpl.StaticProperty("colShapeTickRate", GetColShapeTickRate, SetColShapeTickRate);
 
-    tpl.StaticDynamicProperty("syncReceiveThreadCount", GetSyncReceiveThreadCount, SetSyncReceiveThreadCount);
-    tpl.StaticDynamicProperty("syncSendThreadCount", GetSyncSendThreadCount, SetSyncSendThreadCount);
+    tpl.StaticProperty("syncReceiveThreadCount", GetSyncReceiveThreadCount, SetSyncReceiveThreadCount);
+    tpl.StaticProperty("syncSendThreadCount", GetSyncSendThreadCount, SetSyncSendThreadCount);
 });
