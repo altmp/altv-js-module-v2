@@ -902,6 +902,7 @@ declare module "@altv/server" {
         export function onEntityColShapeLeave(callback: GenericEventCallback<EntityColShapeLeaveEventParameters>): EventHandler;
         export function onEntityCheckpointEnter(callback: GenericEventCallback<EntityCheckpointEnterEventParameters>): EventHandler;
         export function onEntityCheckpointLeave(callback: GenericEventCallback<EntityCheckpointLeaveEventParameters>): EventHandler;
+        export function onGivePedScriptedTask(callback: GenericEventCallback<GivePedScriptedTaskEventParameters>): EventHandler;
 
         // SHARED script related events
         export function onLocalScriptEvent<T = unknown[]>(callback: GenericEventCallback<ServerScriptEventParameters<T>>): EventHandler;
@@ -1082,6 +1083,12 @@ declare module "@altv/server" {
         interface EntityCheckpointLeaveEventParameters {
             entity: WorldObject;
             colShape: ColShape;
+        }
+
+        interface GivePedScriptedTaskEventParameters {
+            source: Player;
+            target: Ped;
+            taskType: number;
         }
 
         interface CustomServerEvent {}
