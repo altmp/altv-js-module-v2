@@ -39,3 +39,12 @@ static js::Event startProjectileEvent(alt::CEvent::Type::START_PROJECTILE_EVENT,
     args.Set("ammoHash", e->GetAmmoHash());
     args.Set("weaponHash", e->GetWeaponHash());
 });
+
+static js::Event givePedScriptedTaskEvent(alt::CEvent::Type::GIVE_PED_SCRIPTED_TASK, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CGivePedScriptedTaskEvent*>(ev);
+
+    args.Set("source", e->GetSource());
+    args.Set("target", e->GetTarget());
+    args.Set("taskType", e->GetTaskType());
+});
