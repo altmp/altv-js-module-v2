@@ -747,6 +747,7 @@ declare module "@altv/server" {
         hasAutoAttachTrailer: boolean;
         bones: BoneInfo[];
         canAttachCars: boolean;
+        handlingNameHash: number;
 
         doesExtraExist(extraId: number): boolean | undefined;
         isExtraDefault(extraId: number): boolean | undefined;
