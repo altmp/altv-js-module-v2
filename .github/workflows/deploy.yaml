@@ -272,10 +272,81 @@ jobs:
                   asset_name: js-module-v2-typings.zip
                   asset_content_type: application/zip
 
+    deploy-cdn:
+        name: Deploy to CDN
+        runs-on: ubuntu-20.04
+        needs: [build-server-windows, build-server-linux, build-client-windows, build-typings]
+        steps:
+          - name: Set up Node.js
+            uses: actions/setup-node@v3
+            with:
+              node-version: 18.x
+
+          - name: Cache node_modules
+            uses: actions/cache@v3
+            with:
+              path: '**/node_modules'
+              key: ${{ runner.os }}
+
+          - name: Download windows server artifact
+            uses: actions/download-artifact@v3
+            with:
+              name: server-windows
+              path: dist-server-windows
+
+          - name: Download linux artifacts
+            uses: actions/download-artifact@v3
+            with:
+              name: server-linux
+              path: dist-server-linux
+
+          - name: Extract version
+            id: version
+            shell: bash
+            run: |
+              TAG=${GITHUB_REF/refs\/tags\//}
+              # TODO: change this when we dont work on dev only anymore lole
+              # echo "BRANCH=${TAG/\/*}" >> $GITHUB_OUTPUT
+              echo "BRANCH=dev" >> $GITHUB_OUTPUT
+              echo "VERSION=${TAG/*\/}" >> $GITHUB_OUTPUT
+              echo "SDK_COMMIT=$(cat dist-server-linux/sdk.version)" >> $GITHUB_OUTPUT
+              rm dist-server-linux/sdk.version
+
+          - name: Install upload tool
+            run: npm i @altmp/upload-tool@latest
+
+          - name: Deploy windows server artifacts to CDN
+            run: npx alt-upload dist-server-windows js-module-v2/$BRANCH/x64_win32 $VERSION $SDK_VERSION
+            env:
+              AWS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
+              AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
+              AWS_ENDPOINT: ${{ secrets.AWS_ENDPOINT }}
+              CF_CACHE_PURGE_TOKEN: ${{ secrets.CF_CACHE_PURGE_TOKEN }}
+              CF_CACHE_ZONE_ID: ${{ secrets.CF_CACHE_ZONE_ID }}
+              CF_CACHE_PURGE_URL: ${{ secrets.CF_CACHE_PURGE_URL }}
+              BRANCH: ${{ steps.version.outputs.BRANCH }}
+              VERSION: ${{ steps.version.outputs.VERSION }}
+              SDK_VERSION: ${{ steps.version.outputs.SDK_VERSION }}
+
+          - name: Deploy linux server artifacts to CDN
+            run: npx alt-upload dist-server-linux js-module-v2/$BRANCH/x64_linux $VERSION $SDK_VERSION
+            env:
+              AWS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
+              AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
+              AWS_ENDPOINT: ${{ secrets.AWS_ENDPOINT }}
+              CF_CACHE_PURGE_TOKEN: ${{ secrets.CF_CACHE_PURGE_TOKEN }}
+              CF_CACHE_ZONE_ID: ${{ secrets.CF_CACHE_ZONE_ID }}
+              CF_CACHE_PURGE_URL: ${{ secrets.CF_CACHE_PURGE_URL }}
+              BRANCH: ${{ steps.version.outputs.BRANCH }}
+              VERSION: ${{ steps.version.outputs.VERSION }}
+              SDK_VERSION: ${{ steps.version.outputs.SDK_VERSION }}
+
     delete-artifacts:
         name: Delete artifacts
         runs-on: ubuntu-20.04
-        needs: [release]
+        needs: [release, deploy-cdn]
         if: ${{ always() }}
         steps:
             - name: Delete artifacts
