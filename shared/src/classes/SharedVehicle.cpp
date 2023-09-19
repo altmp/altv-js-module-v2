@@ -55,6 +55,7 @@ extern js::Class sharedVehicleClass("SharedVehicle", &entityClass, nullptr, [](j
     tpl.Property<&alt::IVehicle::GetTireSmokeColor>("tireSmokeColor");
     tpl.Property<&alt::IVehicle::GetWheelType>("wheelType");
     tpl.Property<&alt::IVehicle::GetWheelVariation>("wheelVariation");
+    tpl.Property<&alt::IVehicle::GetRearWheelVariation>("rearWheelVariation");
     tpl.Property<&alt::IVehicle::GetCustomTires>("customTires");
     tpl.Property<&alt::IVehicle::GetSpecialDarkness>("specialDarkness");
     tpl.Property<&alt::IVehicle::GetNumberplateIndex>("numberplateIndex");
@@ -90,6 +91,7 @@ extern js::Class sharedVehicleClass("SharedVehicle", &entityClass, nullptr, [](j
     tpl.Property<&alt::IVehicle::GetScriptDataBase64>("scriptDataBase64");
     tpl.Property<&alt::IVehicle::GetVelocity>("velocity");
     tpl.Property<&alt::IVehicle::GetSteeringAngle>("steeringAngle");
+    tpl.Property<&alt::IVehicle::GetRearWheelVariation>("rearWheelVariation");
 
     tpl.Method<&alt::IVehicle::GetMod>("getMod");
     tpl.Method<&alt::IVehicle::GetModsCount>("getModsCount");
@@ -97,7 +99,7 @@ extern js::Class sharedVehicleClass("SharedVehicle", &entityClass, nullptr, [](j
     tpl.Method<&alt::IVehicle::GetDoorState>("getDoorState");
     tpl.Method<&alt::IVehicle::IsWindowOpened>("isWindowOpened");
     tpl.Method<&alt::IVehicle::IsWheelBurst>("isWheelBurst");
-    tpl.Method<&alt::IVehicle::DoesWheelHasTire>("getWheelHasTire");
+    tpl.Method<&alt::IVehicle::DoesWheelHasTire>("doesWheelHasTire");
     tpl.Method<&alt::IVehicle::IsWheelDetached>("isWheelDetached");
     tpl.Method<&alt::IVehicle::IsWheelOnFire>("isWheelOnFire");
     tpl.Method<&alt::IVehicle::GetWheelHealth>("getWheelHealth");

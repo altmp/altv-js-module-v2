@@ -109,10 +109,11 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Property<&alt::IVehicle::GetTrainEngineId, &alt::IVehicle::SetTrainEngineId>("trainEngine");
     tpl.Property<&alt::IVehicle::GetTrainConfigIndex, &alt::IVehicle::SetTrainConfigIndex>("trainConfigIndex");
     tpl.Property<&alt::IVehicle::GetTrainDistanceFromEngine, &alt::IVehicle::SetTrainDistanceFromEngine>("trainDistanceFromEngine");
-    tpl.Property<&alt::IVehicle::IsTrainEngine, &alt::IVehicle::SetTrainIsEngine>("hasTrainEngine");
+    tpl.Property<&alt::IVehicle::IsTrainEngine, &alt::IVehicle::SetTrainIsEngine>("isTrainEngine");
     tpl.Property<&alt::IVehicle::IsTrainCaboose, &alt::IVehicle::SetTrainIsCaboose>("isTrainCaboose");
     tpl.Property<&alt::IVehicle::GetTrainDirection, &alt::IVehicle::SetTrainDirection>("trainDirection");
-    tpl.Property<&alt::IVehicle::HasTrainPassengerCarriages, &alt::IVehicle::SetTrainHasPassengerCarriages>("hasTrainPassengerCarriages");
+    tpl.Property<&alt::IVehicle::HasTrainPassengerCarriages, &alt::IVehicle::SetTrainHasPassengerCarriages>("trainPassengerCarriages");
+    tpl.Property<&alt::IVehicle::GetTrainRenderDerailed, &alt::IVehicle::SetTrainRenderDerailed>("trainRenderDerailed");
     tpl.Property<&alt::IVehicle::GetTrainForceDoorsOpen, &alt::IVehicle::SetTrainForceDoorsOpen>("trainForceDoorsOpen");
     tpl.Property<&alt::IVehicle::GetTrainCruiseSpeed, &alt::IVehicle::SetTrainCruiseSpeed>("trainCruiseSpeed");
     tpl.Property<&alt::IVehicle::GetTrainCarriageConfigIndex, &alt::IVehicle::SetTrainCarriageConfigIndex>("trainCarriageConfigIndex");
@@ -122,7 +123,7 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Property<&alt::IVehicle::GetTrainUnk2, &alt::IVehicle::SetTrainUnk2>("trainUnk2");
     tpl.Property<&alt::IVehicle::GetTrainUnk3, &alt::IVehicle::SetTrainUnk3>("trainUnk3");
 
-    tpl.Property<&alt::IVehicle::IsBoatAnchorActive, &alt::IVehicle::SetBoatAnchorActive>("boatAnchorActive");
+    tpl.Property<&alt::IVehicle::IsBoatAnchorActive, &alt::IVehicle::SetBoatAnchorActive>("isBoatAnchorActive");
     tpl.Property<&alt::IVehicle::GetLightState, &alt::IVehicle::SetLightState>("lightState");
     tpl.Property<&alt::IVehicle::HasTimedExplosion>("hasTimedExplosion");
     tpl.Property<&alt::IVehicle::GetTimedExplosionCulprit>("timedExplosionCulprit");
@@ -141,6 +142,7 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Method<&alt::IVehicle::SetFixed>("repair");
     tpl.Method("setMod", &SetMod);
     tpl.Method<&alt::IVehicle::SetWheels>("setWheels");
+    tpl.Method<&alt::IVehicle::SetRearWheels>("setRearWheels");
     tpl.Method<&alt::IVehicle::SetDoorState>("setDoorState");
     tpl.Method<&alt::IVehicle::SetWindowOpened>("setWindowOpened");
     tpl.Method<&alt::IVehicle::SetWheelBurst>("setWheelBurst");
@@ -148,7 +150,9 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Method<&alt::IVehicle::SetWheelOnFire>("setWheelOnFire");
     tpl.Method<&alt::IVehicle::SetWheelHealth>("setWheelHealth");
     tpl.Method<&alt::IVehicle::SetWheelFixed>("setWheelFixed");
+    tpl.Method<&alt::IVehicle::SetWheelHasTire>("setWheelHasTire");
     tpl.Method<&alt::IVehicle::SetPartDamageLevel>("setPartDamageLevel");
+    tpl.Method<&alt::IVehicle::GetPartBulletHoles>("getPartBulletHoles");
     tpl.Method<&alt::IVehicle::SetPartBulletHoles>("setPartBulletHoles");
     tpl.Method<&alt::IVehicle::SetLightDamaged>("setLightDamaged");
     tpl.Method<&alt::IVehicle::SetWindowDamaged>("setWindowDamaged");

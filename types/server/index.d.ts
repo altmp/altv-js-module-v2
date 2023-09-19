@@ -512,7 +512,6 @@ declare module "@altv/server" {
     }
 
     export abstract class Vehicle extends Entity {
-        readonly neon: altShared.NeonState;
         readonly driver?: Player;
         readonly isDestroyed: boolean;
         readonly modKitsCount: number;
@@ -554,6 +553,7 @@ declare module "@altv/server" {
         numberplateText: string;
         windowTint: number;
         dirtLevel: number;
+        neon: altShared.NeonState;
         neonColor: altShared.RGBA;
         livery: number;
         roofLivery: number;
