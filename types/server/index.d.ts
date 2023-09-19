@@ -512,16 +512,26 @@ declare module "@altv/server" {
     }
 
     export abstract class Vehicle extends Entity {
+        readonly attached?: Vehicle;
+        readonly attachedTo?: Vehicle;
+        readonly hasTimedExplosion: boolean;
+        readonly timedExplosionCulprit?: Player;
+        readonly timedExplosionTime: number;
+        readonly isHornActive: boolean;
+        readonly accelerationLevel: number;
+        readonly brakeLevel: number;
         readonly driver?: Player;
         readonly isDestroyed: boolean;
         readonly modKitsCount: number;
-        readonly IsPrimaryColorRGB: boolean;
+        readonly modKit: number;
+        readonly isPrimaryColorRGB: boolean;
         readonly primaryColorRGB: altShared.RGBA;
         readonly isSecondaryColorRGB: boolean;
         readonly secondaryColorRGB: altShared.RGBA;
         readonly isTireSmokeColorCustom: boolean;
         readonly wheelType: number;
         readonly wheelVariation: number;
+        readonly rearWheelVariation: number;
         readonly isNeonActive: boolean;
         readonly isEngineOn: boolean;
         readonly isHandbrakeActive: boolean;
@@ -537,30 +547,9 @@ declare module "@altv/server" {
         readonly velocity: altShared.Vector3;
         readonly steeringAngle: number;
 
-        modKit: number;
-        primaryColor: number;
         customPrimaryColor: altShared.RGBA;
-        secondaryColor: number;
         customSecondaryColor: altShared.RGBA;
-        pearlColor: number;
-        wheelColor: number;
-        interiorColor: number;
-        dashboardColor: number;
-        tireSmokeColor: altShared.RGBA;
-        customTires: boolean;
-        specialDarkness: number;
-        numberplateIndex: number;
-        numberplateText: string;
-        windowTint: number;
-        dirtLevel: number;
-        neon: altShared.NeonState;
-        neonColor: altShared.RGBA;
-        livery: number;
-        roofLivery: number;
-        appearanceDataBase64: string;
         engineOn: boolean;
-        headlightColor: number;
-        radioStationIndex: number;
         sirenActive: boolean;
         lockState: number;
         roofState: number;
@@ -574,18 +563,18 @@ declare module "@altv/server" {
         scriptDataBase64: string;
         gameStateDataBase64: string;
         healthDataBase64: string;
-        attached?: Vehicle;
-        attachedTo?: Vehicle;
         driftMode: boolean;
-
         isMissionTrain: boolean;
         trainTrackId: number;
         trainEngine?: Vehicle;
         trainConfigIndex: number;
-        hasTrainEngine: boolean;
+        trainDistanceFromEngine: number;
+        isTrainEngine: boolean;
         isTrainCaboose: boolean;
         trainDirection: boolean;
-        hasTrainPassengerCarriages: boolean;
+        trainPassengerCarriages: number;
+        trainRenderDerailed: boolean;
+        trainForceDoorsOpen: boolean;
         trainCruiseSpeed: number;
         trainCarriageConfigIndex: number;
         trainLinkedToBackward?: Vehicle;
@@ -593,52 +582,20 @@ declare module "@altv/server" {
         trainUnk1: boolean;
         trainUnk2: boolean;
         trainUnk3: boolean;
-
-        boatAnchorActive: boolean;
+        isBoatAnchorActive: boolean;
         lightState: number;
-
-        readonly hasTimedExplosion: boolean;
-        readonly timedExplosionCulprit?: Player;
-        readonly timedExplosionTime: number;
-
         towingDisabled: boolean;
         rocketRefuelSpeed: number;
         counterMeasureCount: number;
         scriptMaxSpeed: number;
         hybridExtraActive: boolean;
         hybridExtraState: number;
-
         quaternion: altShared.Quaternion;
-        readonly isHornActive: boolean;
-        readonly accelerationLevel: number;
-        readonly brakeLevel: number;
-
-        getMod(category: number): number;
-        getModsCount(category: number): number;
-        isExtraOn(extraId: number): boolean;
-        getDoorState(doorId: number): number;
-        isWindowOpened(windowId: number): boolean;
-        isWheelBurst(wheelId: number): boolean;
-        getWheelHasTire(wheelId: number): boolean;
-        isWheelDetached(wheelId: number): boolean;
-        isWheelOnFire(wheelId: number): boolean;
-        getWheelHealth(wheelId: number): number;
-
-        getPartDamageLevel(partId: number): number;
-        getPartBulletHoles(partId: number): number;
-
-        isLightDamaged(lightId: number): boolean;
-        isWindowDamaged(windowId: number): boolean;
-
-        isSpecialLightDamaged(specialLightId: number): boolean;
-        getArmoredWindowHealth(windowId: number): number;
-        getArmoredWindowShootCount(windowId: number): number;
-        getBumperDamageLevel(bumperId: number): number;
-        toggleExtra(extraId: number, state: boolean): void;
 
         repair(): void;
         setMod(category: number, id: number): boolean;
         setWheels(type: number, variation: number): void;
+        setRearWheels(variation: number): void;
         setDoorState(doorId: number, state: number): void;
         setWindowOpened(windowId: number, state: boolean): void;
         setWheelBurst(wheelId: number, state: boolean): void;
@@ -646,8 +603,9 @@ declare module "@altv/server" {
         setWheelOnFire(wheelId: number, state: boolean): void;
         setWheelHealth(wheelId: number, health: number): void;
         setWheelFixed(wheelId: number): void;
-
+        setWheelHasTire(wheelId: number, state: boolean): void;
         setPartDamageLevel(partId: number, damage: number): void;
+        getPartBulletHoles(partId: number): number;
         setPartBulletHoles(partId: number, shootsCount: number): void;
         setLightDamaged(lightId: number, isDamaged: boolean): void;
         setWindowDamaged(windowId: number, isDamaged: boolean): void;
@@ -659,6 +617,24 @@ declare module "@altv/server" {
         setTimedExplosion(state: boolean, culprit: Player, time: number): void;
         getWeaponCapacity(index: number): number;
         setWeaponCapacity(index: number, state: number): void;
+        getMod(category: number): number;
+        getModsCount(category: number): number;
+        isExtraOn(extraId: number): boolean;
+        getDoorState(doorId: number): number;
+        isWindowOpened(windowId: number): boolean;
+        isWheelBurst(wheelId: number): boolean;
+        doesWheelHasTire(whellId: number): boolean;
+        isWheelDetached(wheelId: number): boolean;
+        isWheelOnFire(wheelId: number): boolean;
+        getWheelHealth(wheelId: number): number;
+        getPartDamageLevel(partId: number): number;
+        isLightDamaged(lightId: number): boolean;
+        isWindowDamaged(windowId: number): boolean;
+        isSpecialLightDamaged(specialLightId: number): boolean;
+        getArmoredWindowHealth(windowId: number): number;
+        getArmoredWindowShootCount(windowId: number): number;
+        getBumperDamageLevel(bumperId: number): number;
+        toggleExtra(extraId: number, state: boolean): void;
 
         readonly meta: VehicleMeta;
         readonly syncedMeta: altShared.VehicleSyncedMeta;
