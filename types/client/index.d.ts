@@ -77,6 +77,7 @@ declare module "@altv/client" {
         seek(time: number): void;
 
         on(eventName: string, func: (...args: unknown[]) => void): void;
+        once(eventName: string, func: (...args: unknown[]) => void): void;
         off(eventName: string, func: (...args: unknown[]) => void): void;
         readonly listeners: Readonly<{ [eventName: string]: ReadonlyArray<(...args: unknown[]) => void> }>;
 
@@ -713,6 +714,7 @@ declare module "@altv/client" {
         querySelectorAll(selector: string): ReadonlyArray<RmlElement>;
 
         on(eventName: string, func: (...args: unknown[]) => void): void;
+        once(eventName: string, func: (...args: unknown[]) => void): void;
         off(eventName: string, func: (...args: unknown[]) => void): void;
         readonly listeners: Readonly<{ [eventName: string]: ReadonlyArray<(...args: unknown[]) => void> }>;
 
@@ -980,9 +982,8 @@ declare module "@altv/client" {
         on<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
         on<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
 
-        // Not implemented yet
-        // once<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
-        // once<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
+        once<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
+        once<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
 
         off<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
         off<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
