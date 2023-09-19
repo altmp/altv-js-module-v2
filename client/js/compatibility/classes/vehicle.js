@@ -1,12 +1,68 @@
 /// <reference path="../../../../types/shared/index.d.ts" />
-/// <reference path="../../../../types/server/index.d.ts" />
-// import * as alt from "@altv/server";
+/// <reference path="../../../../types/client/index.d.ts" />
+// import * as alt from "@altv/client";
 
 requireBinding("shared/factory.js");
 
 class Vehicle extends alt.Vehicle {
     static get count() {
         return alt.Vehicle.all.length;
+    }
+
+    get engineOn() {
+        return super.isEngineOn;
+    }
+
+    get handbrakeActive() {
+        return super.isHandbrakeActive;
+    }
+
+    get sirenActive() {
+        return super.isSirenActive;
+    }
+
+    get manualEngineControl() {
+        return super.isManulEngineControl;
+    }
+
+    get engineLight() {
+        return super.engineLightState;
+    }
+
+    set engineLight(value) {
+        super.engineLightState = value;
+    }
+
+    get absLight() {
+        return super.absLightState;
+    }
+
+    set absLight(value) {
+        super.absLightState = value;
+    }
+
+    get petrolLight() {
+        return super.petrolLightState;
+    }
+
+    set petrolLight(value) {
+        super.petrolLightState = value;
+    }
+
+    get oilLight() {
+        return super.oilLightState;
+    }
+
+    set oilLight(value) {
+        super.oilLightState = value;
+    }
+
+    get batteryLight() {
+        return super.batteryLightState;
+    }
+
+    set batteryLight(value) {
+        super.batteryLightState = value;
     }
 
     get activeRadioStation() {
@@ -206,28 +262,12 @@ class Vehicle extends alt.Vehicle {
         return key in super.meta;
     }
 
-    setSyncedMeta(key, value) {
-        super.syncedMeta[key] = value;
-    }
-
-    deleteSyncedMeta(key) {
-        delete super.syncedMeta[key];
-    }
-
     getSyncedMeta(key) {
         return super.syncedMeta[key];
     }
 
     hasSyncedMeta(key) {
         return key in super.syncedMeta;
-    }
-
-    setStreamSyncedMeta(key, value) {
-        super.streamSyncedMeta[key] = value;
-    }
-
-    deleteStreamSyncedMeta(key) {
-        delete super.streamSyncedMeta[key];
     }
 
     getStreamSyncedMeta(key) {
