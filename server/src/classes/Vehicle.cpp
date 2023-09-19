@@ -152,7 +152,6 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Method<&alt::IVehicle::SetWheelFixed>("setWheelFixed");
     tpl.Method<&alt::IVehicle::SetWheelHasTire>("setWheelHasTire");
     tpl.Method<&alt::IVehicle::SetPartDamageLevel>("setPartDamageLevel");
-    tpl.Method<&alt::IVehicle::GetPartBulletHoles>("getPartBulletHoles");
     tpl.Method<&alt::IVehicle::SetPartBulletHoles>("setPartBulletHoles");
     tpl.Method<&alt::IVehicle::SetLightDamaged>("setLightDamaged");
     tpl.Method<&alt::IVehicle::SetWindowDamaged>("setWindowDamaged");
