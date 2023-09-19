@@ -31,7 +31,7 @@ static inline std::unordered_map<std::string, std::string> TransformImportAssert
     v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
     std::unordered_map<std::string, std::string> result;
 
-    for(int i = 0; i < assertions->Length(); i += 2)
+    for(int i = 0; i < assertions->Length() / 2; i += 2)
     {
         std::string key = js::CppValue(assertions->Get(ctx, i).As<v8::String>());
         std::string value = js::CppValue(assertions->Get(ctx, i + 1).As<v8::String>());
