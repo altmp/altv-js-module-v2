@@ -53,6 +53,11 @@ static void GetVoiceConnectionState(js::FunctionContext& ctx)
     ctx.Return(alt::ICore::Instance().GetVoiceConnectionState());
 }
 
+static void GetNetTime(js::FunctionContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetNetTime());
+}
+
 static void MetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetMetaData(ctx.GetProperty()));
@@ -109,6 +114,7 @@ static js::Module sharedModule("@altv/shared", "", { &baseObjectClass, &worldObj
     module.StaticFunction("logError", Log<LogType::ERR>);
     module.StaticFunction("sha256", &SHA256);
     module.StaticFunction("getVoiceConnectionState", GetVoiceConnectionState);
+    module.StaticFunction("getNetTime", GetNetTime);
 
     module.StaticDynamicProperty("meta", MetaGetter, MetaSetter, MetaDeleter, MetaEnumerator);
     module.StaticDynamicProperty("syncedMeta", SyncedMetaGetter, nullptr, nullptr, SyncedMetaEnumerator);

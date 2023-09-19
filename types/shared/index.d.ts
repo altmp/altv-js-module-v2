@@ -18,6 +18,7 @@ declare module "@altv/shared" {
     export function logError(...args: unknown[]): void;
     export function sha256(str: string): string;
     export function getVoiceConnectionState(): Enums.VoiceConnectionState;
+    export function getNetTime(): number;
     export function hash(value: string): number;
 
     export abstract class BaseObject {

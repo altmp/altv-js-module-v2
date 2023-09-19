@@ -1,11 +1,6 @@
 #include "Module.h"
 #include "Namespace.h"
 
-static void GetNetTime(js::FunctionContext& ctx)
-{
-    ctx.Return(alt::ICore::Instance().GetNetTime());
-}
-
 static void SyncedMetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetSyncedMetaData(ctx.GetProperty()));
@@ -176,7 +171,6 @@ static js::Module altModule("@altv/server", "@altv/shared", { &playerClass, &veh
 
     module.StaticLazyProperty("serverConfig", GetServerConfig);
 
-    module.StaticFunction("getNetTime", GetNetTime);
     module.StaticFunction("setServerPassword", SetServerPassword);
     module.StaticFunction("hashServerPassword", HashServerPassword);
     module.StaticFunction("stopServer", StopServer);
