@@ -194,10 +194,12 @@ globalThis.time = alt.Timers.time;
 globalThis.timeEnd = alt.Timers.timeEnd;
 
 globalThis.clearInterval = (interval) => {
+    if (interval === null || interval === undefined) return;
     if (!(interval instanceof Interval)) throw new Error("Expected an Interval as first argument");
     interval.destroy();
 };
 globalThis.clearTimeout = (timeout) => {
+    if (timeout === null || timeout === undefined) return;
     if (!(timeout instanceof Timeout)) throw new Error("Expected a Timeout as first argument");
     timeout.destroy();
 };
