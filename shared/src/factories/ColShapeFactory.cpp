@@ -33,13 +33,13 @@ static js::FactoryHandler colShapeFactory(alt::IBaseObject::Type::COLSHAPE, [](j
 
         case alt::IColShape::ColShapeType::CIRCLE:
         {
-            alt::Vector3f pos;
+            alt::Vector2f pos;
             float radius;
 
             if(!args.Get("pos", pos)) return nullptr;
             if(!args.Get("radius", radius)) return nullptr;
 
-            return alt::ICore::Instance().CreateColShapeCircle(pos, radius);
+            return alt::ICore::Instance().CreateColShapeCircle(alt::Vector3f(pos[0], pos[1], 0), radius);
         }
 
         case alt::IColShape::ColShapeType::CUBOID:
