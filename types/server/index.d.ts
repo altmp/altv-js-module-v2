@@ -917,6 +917,11 @@ declare module "@altv/server" {
         export function onError(callback: GenericEventCallback<ErrorEventParameters>): altShared.Events.EventHandler;
         export function onceError(callback: GenericEventCallback<ErrorEventParameters>): altShared.Events.EventHandler;
 
+        export function addLocalMetaListener(key: string, callback: GenericPlayerEventCallback<LocalMetaChangeEventParameters>): altShared.Events.EventHandler;
+        export function addSyncedMetaListener(key: string, callback: GenericEventCallback<SyncedMetaChangeEventParameters>): altShared.Events.EventHandler;
+        export function onceSyncedMetaChange(callback: GenericEventCallback<SyncedMetaChangeEventParameters>): altShared.Events.EventHandler;
+        export function addStreamSyncedMetaListener(key: string, callback: GenericEventCallback<StreamSyncedMetaChangeEventParameters>): altShared.Events.EventHandler;
+
         // Script related events
         export function onColShapeEvent(callback: GenericEventCallback<ColShapeEventParameters>): altShared.Events.EventHandler;
         export function onceColShapeEvent(callback: GenericEventCallback<ColShapeEventParameters>): altShared.Events.EventHandler;
