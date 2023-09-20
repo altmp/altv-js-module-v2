@@ -41,13 +41,14 @@ export class Event {
      * @param {string} name
      * @param {number} type
      * @param {boolean} custom
+     * @param {boolean} once
      * @param {Function} handler
      */
-    static #subscribe(name, type, custom, handler) {
+    static #subscribe(name, type, custom, once, handler) {
         assert(typeof handler === "function", `Handler for event '${name}' is not a function`);
 
         const location = cppBindings.getCurrentSourceLocation(Event.#sourceLocationFrameSkipCount);
-        const eventHandler = new EventHandler(type, handler, location, custom);
+        const eventHandler = new EventHandler(type, handler, location, custom, once);
 
         const map = custom ? Event.#customHandlers : Event.#handlers;
         if (!map.has(type)) map.set(type, [eventHandler]);
@@ -85,7 +86,9 @@ export class Event {
         if (!handlers) return;
         const isPlayerScriptEvent = alt.isServer && !local;
 
-        for (let { handler, location } of handlers) {
+        for (let eventHandler of handlers) {
+            const { handler, location, onlyOnce, eventName } = eventHandler;
+
             try {
                 const startTime = Date.now();
                 const result = isPlayerScriptEvent ? handler(ctx.player, ...ctx.args) : handler(...ctx.args);
@@ -94,6 +97,8 @@ export class Event {
                     alt.logWarning(`[JS] Event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${location.lineNumber}) for script event '${name}' took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`);
                 }
                 if (result instanceof Promise) await result;
+
+                if (onlyOnce) eventHandler.destroy();
             } catch (e) {
                 alt.logError(`[JS] Exception caught while invoking script event '${name}' handler`);
                 alt.logError(e);
@@ -112,9 +117,10 @@ export class Event {
      * @param {string} name
      * @param {number} type
      * @param {boolean} custom
+     * @param {boolean} custom
      */
-    static #getEventFunc(name, type, custom) {
-        const func = Event.#subscribe.bind(undefined, name, type, custom);
+    static #getEventFunc(name, type, custom, once = false) {
+        const func = Event.#subscribe.bind(undefined, name, type, custom, once);
         return func;
     }
 
@@ -130,23 +136,25 @@ export class Event {
 
     /**
      * @param {boolean} local
+     * @param {boolean?} once
      */
-    static getScriptEventFunc(local) {
-        const func = Event.#subscribeScriptEvent.bind(undefined, local);
+    static getScriptEventFunc(local, once = false) {
+        const func = Event.#subscribeScriptEvent.bind(undefined, local, once);
         return func;
     }
 
     /**
      * @param {boolean} local
+     * @param {boolean} once
      * @param {string} name
      * @param {Function} handler
      */
-    static #subscribeScriptEvent(local, name, handler) {
+    static #subscribeScriptEvent(local, once, name, handler) {
         assert(typeof name === "string", `Event name is not a string`);
         assert(typeof handler === "function", `Handler for ${local ? "local" : "remote"} script event '${name}' is not a function`);
 
         const location = cppBindings.getCurrentSourceLocation(Event.#sourceLocationFrameSkipCount);
-        const eventHandler = new ScriptEventHandler(name, local, handler, location);
+        const eventHandler = new ScriptEventHandler(name, local, handler, location, once);
 
         const map = local ? Event.#localScriptEventHandlers : Event.#remoteScriptEventHandlers;
         if (!map.has(name)) map.set(name, [eventHandler]);
@@ -224,6 +232,7 @@ export class Event {
      */
     static register(type, name, custom = false) {
         alt.Events[`on${name}`] = Event.#getEventFunc(name, type, custom);
+        alt.Events[`once${name}`] = Event.#getEventFunc(name, type, custom, true);
     }
 
     /**
@@ -239,7 +248,9 @@ export class Event {
         const map = custom ? Event.#customHandlers : Event.#handlers;
         const handlers = map.get(eventType);
         if (!handlers) return;
-        for (const { handler, location } of handlers) {
+        for (const eventHandler of handlers) {
+            const { handler, location, onlyOnce } = eventHandler;
+
             try {
                 const startTime = Date.now();
                 const result = handler(ctx);
@@ -248,6 +259,8 @@ export class Event {
                     alt.logWarning(`[JS] Event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${location.lineNumber}) for event '${Event.getEventName(eventType, custom)}' took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`);
                 }
                 if (result instanceof Promise) await result;
+
+                if (onlyOnce) eventHandler.destroy();
             } catch (e) {
                 alt.logError(`[JS] Exception caught while invoking event handler`);
                 alt.logError(e);
@@ -272,13 +285,15 @@ class EventHandler {
     #handler;
     #location;
     #custom;
+    #once;
     #valid = true;
 
-    constructor(eventType, handler, location, custom) {
+    constructor(eventType, handler, location, custom, once) {
         this.#eventType = eventType;
         this.#handler = handler;
         this.#location = location;
         this.#custom = custom;
+        this.#once = once;
     }
 
     // Don't expose this in the public API
@@ -304,6 +319,9 @@ class EventHandler {
     get location() {
         return this.#location;
     }
+    get onlyOnce() {
+        return this.#once;
+    }
     get valid() {
         return this.#valid;
     }
@@ -313,8 +331,8 @@ class ScriptEventHandler extends EventHandler {
     #eventName;
     #local;
 
-    constructor(eventName, local, handler, location) {
-        super(ScriptEventHandler.#getEventType(local), handler, location, false);
+    constructor(eventName, local, handler, location, once) {
+        super(ScriptEventHandler.#getEventType(local), handler, location, false, once);
         this.#eventName = eventName;
         this.#local = local;
     }
@@ -354,11 +372,17 @@ class GenericEventHandler extends EventHandler {
 alt.Events.emitRaw = Event.emitRaw;
 
 alt.Events.on = Event.getScriptEventFunc(true);
+alt.Events.once = Event.getScriptEventFunc(true, true);
+
 alt.Events.onRemote = Event.getScriptEventFunc(false);
+alt.Events.onceRemote = Event.getScriptEventFunc(false, true);
+
 if (alt.isClient) {
     alt.Events.onServer = Event.getScriptEventFunc(false);
+    alt.Events.onceServer = Event.getScriptEventFunc(false, true);
 } else {
     alt.Events.onPlayer = Event.getScriptEventFunc(false);
+    alt.Events.oncePlayer = Event.getScriptEventFunc(false, true);
 }
 alt.Events.onEvent = Event.subscribeGeneric;
 
