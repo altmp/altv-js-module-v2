@@ -1146,33 +1146,58 @@ declare module "@altv/client" {
         export function emitServerUnreliable<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>, ...args: unknown[]): void;
 
         export function onKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): void;
+        export function onceKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): void;
         export function onKeyUp(callback: GenericEventCallback<KeyUpDownEventParameters>): void;
+        export function onceKeyUp(callback: GenericEventCallback<KeyUpDownEventParameters>): void;
         export function onKeyDown(callback: GenericEventCallback<KeyUpDownEventParameters>): void;
+        export function onceKeyDown(callback: GenericEventCallback<KeyUpDownEventParameters>): void;
         export function onWebViewEvent(callback: GenericEventCallback<WebViewEventParameters>): void;
+        export function onceWebViewEvent(callback: GenericEventCallback<WebViewEventParameters>): void;
         export function onWebSocketEvent(callback: GenericEventCallback<WebSocketEventParameters>): void;
+        export function onceWebSocketEvent(callback: GenericEventCallback<WebSocketEventParameters>): void;
         export function onAudioEvent(callback: GenericEventCallback<AudioEventParameters>): void;
+        export function onceAudioEvent(callback: GenericEventCallback<AudioEventParameters>): void;
         export function onRmluiEvent(callback: GenericEventCallback<RmluiEventParameters>): void;
+        export function onceRmluiEvent(callback: GenericEventCallback<RmluiEventParameters>): void;
         export function onWindowFocusChange(callback: GenericEventCallback<WindowFocusChangeEventParameters>): void;
+        export function onceWindowFocusChange(callback: GenericEventCallback<WindowFocusChangeEventParameters>): void;
         export function onWindowResolutionChange(callback: GenericEventCallback<WindowResolutionChangeEventParameters>): void;
+        export function onceWindowResolutionChange(callback: GenericEventCallback<WindowResolutionChangeEventParameters>): void;
         export function onConnectionComplete(callback: GenericEventCallback): void;
+        export function onceConnectionComplete(callback: GenericEventCallback): void;
         export function onDisconnect(callback: GenericEventCallback): void;
+        export function onceDisconnect(callback: GenericEventCallback): void;
         export function onSpawned(callback: GenericEventCallback): void;
+        export function onceSpawned(callback: GenericEventCallback): void;
 
         export function onGameEntityCreate(callback: GenericEventCallback<GameEntityCreateEventParameters>): void;
+        export function onceGameEntityCreate(callback: GenericEventCallback<GameEntityCreateEventParameters>): void;
         export function onGameEntityDestroy(callback: GenericEventCallback<GameEntityDestroyEventParameters>): void;
+        export function onceGameEntityDestroy(callback: GenericEventCallback<GameEntityDestroyEventParameters>): void;
         export function onEntityHitEntity(callback: GenericEventCallback<EntityHitEntityEventParameters>): void;
+        export function onceEntityHitEntity(callback: GenericEventCallback<EntityHitEntityEventParameters>): void;
         export function onTaskChange(callback: GenericEventCallback<TaskChangeEventParameters>): void;
+        export function onceTaskChange(callback: GenericEventCallback<TaskChangeEventParameters>): void;
 
         export function onPlayerWeaponShoot(callback: GenericEventCallback<PlayerWeaponShootEventParameters>): void;
+        export function oncePlayerWeaponShoot(callback: GenericEventCallback<PlayerWeaponShootEventParameters>): void;
         export function onPlayerBulletHit(callback: GenericEventCallback<PlayerBulletHitEventParameters>): void;
+        export function oncePlayerBulletHit(callback: GenericEventCallback<PlayerBulletHitEventParameters>): void;
         export function onPlayerWeaponChange(callback: GenericEventCallback<PlayerWeaponChangeEventParameters>): void;
+        export function oncePlayerWeaponChange(callback: GenericEventCallback<PlayerWeaponChangeEventParameters>): void;
         export function onPlayerStartEnterVehicle(callback: GenericPlayerEventCallback<PlayerStartEnterVehicleEventParameters>): void;
+        export function oncePlayerStartEnterVehicle(callback: GenericPlayerEventCallback<PlayerStartEnterVehicleEventParameters>): void;
         export function onPlayerStartLeaveVehicle(callback: GenericPlayerEventCallback<PlayerStartLeaveVehicleEventParameters>): void;
+        export function oncePlayerStartLeaveVehicle(callback: GenericPlayerEventCallback<PlayerStartLeaveVehicleEventParameters>): void;
         export function onVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): void;
+        export function onceVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): void;
 
         export function onWorldObjectPositionChange(callback: GenericEventCallback<WorldObjectPositionChangeEventParameters>): void;
+        export function onceWorldObjectPositionChange(callback: GenericEventCallback<WorldObjectPositionChangeEventParameters>): void;
         export function onWorldObjectStreamIn(callback: GenericEventCallback<WorldObjectStreamInEventParameters>): void;
+        export function onceWorldObjectStreamIn(callback: GenericEventCallback<WorldObjectStreamInEventParameters>): void;
         export function onWorldObjectStreamOut(callback: GenericEventCallback<WorldObjectStreamOutEventParameters>): void;
+        export function onceWorldObjectStreamOut(callback: GenericEventCallback<WorldObjectStreamOutEventParameters>): void;
 
         export function setWarningThreshold(threshold: number): void;
         export function setSourceLocationFrameSkipCount(skipCount: number): void;
@@ -1318,13 +1343,20 @@ declare module "@altv/client" {
         // Custom events
         export function on<E extends keyof CustomClientEvent>(eventName: E, callback: CustomEventCallback<Parameters<CustomClientEvent[E]>>): EventSubscription;
         export function on<E extends string>(eventName: Exclude<E, keyof CustomClientEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
+        export function once<E extends keyof CustomClientEvent>(eventName: E, callback: CustomEventCallback<Parameters<CustomClientEvent[E]>>): EventSubscription;
+        export function once<E extends string>(eventName: Exclude<E, keyof CustomClientEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
 
         export function onServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
         export function onServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
+        export function onceServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
+        export function onceServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
 
         export function onRemote<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
         export function onRemote<E extends keyof altShared.Events.CustomRemoteEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomRemoteEvent[E]>>): EventSubscription;
         export function onRemote<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent | keyof altShared.Events.CustomRemoteEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
+        export function onceRemote<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
+        export function onceRemote<E extends keyof altShared.Events.CustomRemoteEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomRemoteEvent[E]>>): EventSubscription;
+        export function onceRemote<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent | keyof altShared.Events.CustomRemoteEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
 
         interface PlayerAnimationChangeEventParameters {
             oldAnimDict: number;
