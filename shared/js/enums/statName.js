@@ -1,5 +1,5 @@
 // When changing, update types/shared/index.d.ts aswell
-export const StatName = Object.freeze({
+alt.Enums.StatName = Object.freeze({
     Stamina: "stamina",
     Strength: "strength",
     LungCapacity: "lung_capacity",

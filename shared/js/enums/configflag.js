@@ -1,5 +1,5 @@
 // When changing, update types/shared/index.d.ts aswell
-export const ConfigFlag = Object.freeze({
+alt.Enums.ConfigFlag = Object.freeze({
     DisableAutoWeaponSwap: "DISABLE_AUTO_WEAPON_SWAP",
     DisablePedPropKnockOff: "DISABLE_PED_PROP_KNOCK_OFF",
     DisableIdleCamera: "DISABLE_IDLE_CAMERA",
