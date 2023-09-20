@@ -1146,59 +1146,59 @@ declare module "@altv/client" {
         export function emitServerUnreliable<E extends keyof altShared.Events.CustomPlayerToServerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomPlayerToServerEvent[E]>): void;
         export function emitServerUnreliable<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>, ...args: unknown[]): void;
 
-        export function onKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): void;
-        export function onceKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): void;
-        export function onKeyUp(callback: GenericEventCallback<KeyUpDownEventParameters>): void;
-        export function onceKeyUp(callback: GenericEventCallback<KeyUpDownEventParameters>): void;
-        export function onKeyDown(callback: GenericEventCallback<KeyUpDownEventParameters>): void;
-        export function onceKeyDown(callback: GenericEventCallback<KeyUpDownEventParameters>): void;
-        export function onWebViewEvent(callback: GenericEventCallback<WebViewEventParameters>): void;
-        export function onceWebViewEvent(callback: GenericEventCallback<WebViewEventParameters>): void;
-        export function onWebSocketEvent(callback: GenericEventCallback<WebSocketEventParameters>): void;
-        export function onceWebSocketEvent(callback: GenericEventCallback<WebSocketEventParameters>): void;
-        export function onAudioEvent(callback: GenericEventCallback<AudioEventParameters>): void;
-        export function onceAudioEvent(callback: GenericEventCallback<AudioEventParameters>): void;
-        export function onRmluiEvent(callback: GenericEventCallback<RmluiEventParameters>): void;
-        export function onceRmluiEvent(callback: GenericEventCallback<RmluiEventParameters>): void;
-        export function onWindowFocusChange(callback: GenericEventCallback<WindowFocusChangeEventParameters>): void;
-        export function onceWindowFocusChange(callback: GenericEventCallback<WindowFocusChangeEventParameters>): void;
-        export function onWindowResolutionChange(callback: GenericEventCallback<WindowResolutionChangeEventParameters>): void;
-        export function onceWindowResolutionChange(callback: GenericEventCallback<WindowResolutionChangeEventParameters>): void;
-        export function onConnectionComplete(callback: GenericEventCallback): void;
-        export function onceConnectionComplete(callback: GenericEventCallback): void;
-        export function onDisconnect(callback: GenericEventCallback): void;
-        export function onceDisconnect(callback: GenericEventCallback): void;
-        export function onSpawned(callback: GenericEventCallback): void;
-        export function onceSpawned(callback: GenericEventCallback): void;
+        export function onKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): altShared.Events.EventHandler;
+        export function onceKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): altShared.Events.EventHandler;
+        export function onKeyUp(callback: GenericEventCallback<KeyUpDownEventParameters>): altShared.Events.EventHandler;
+        export function onceKeyUp(callback: GenericEventCallback<KeyUpDownEventParameters>): altShared.Events.EventHandler;
+        export function onKeyDown(callback: GenericEventCallback<KeyUpDownEventParameters>): altShared.Events.EventHandler;
+        export function onceKeyDown(callback: GenericEventCallback<KeyUpDownEventParameters>): altShared.Events.EventHandler;
+        export function onWebViewEvent(callback: GenericEventCallback<WebViewEventParameters>): altShared.Events.EventHandler;
+        export function onceWebViewEvent(callback: GenericEventCallback<WebViewEventParameters>): altShared.Events.EventHandler;
+        export function onWebSocketEvent(callback: GenericEventCallback<WebSocketEventParameters>): altShared.Events.EventHandler;
+        export function onceWebSocketEvent(callback: GenericEventCallback<WebSocketEventParameters>): altShared.Events.EventHandler;
+        export function onAudioEvent(callback: GenericEventCallback<AudioEventParameters>): altShared.Events.EventHandler;
+        export function onceAudioEvent(callback: GenericEventCallback<AudioEventParameters>): altShared.Events.EventHandler;
+        export function onRmluiEvent(callback: GenericEventCallback<RmluiEventParameters>): altShared.Events.EventHandler;
+        export function onceRmluiEvent(callback: GenericEventCallback<RmluiEventParameters>): altShared.Events.EventHandler;
+        export function onWindowFocusChange(callback: GenericEventCallback<WindowFocusChangeEventParameters>): altShared.Events.EventHandler;
+        export function onceWindowFocusChange(callback: GenericEventCallback<WindowFocusChangeEventParameters>): altShared.Events.EventHandler;
+        export function onWindowResolutionChange(callback: GenericEventCallback<WindowResolutionChangeEventParameters>): altShared.Events.EventHandler;
+        export function onceWindowResolutionChange(callback: GenericEventCallback<WindowResolutionChangeEventParameters>): altShared.Events.EventHandler;
+        export function onConnectionComplete(callback: GenericEventCallback): altShared.Events.EventHandler;
+        export function onceConnectionComplete(callback: GenericEventCallback): altShared.Events.EventHandler;
+        export function onDisconnect(callback: GenericEventCallback): altShared.Events.EventHandler;
+        export function onceDisconnect(callback: GenericEventCallback): altShared.Events.EventHandler;
+        export function onSpawned(callback: GenericEventCallback): altShared.Events.EventHandler;
+        export function onceSpawned(callback: GenericEventCallback): altShared.Events.EventHandler;
 
-        export function onGameEntityCreate(callback: GenericEventCallback<GameEntityCreateEventParameters>): void;
-        export function onceGameEntityCreate(callback: GenericEventCallback<GameEntityCreateEventParameters>): void;
-        export function onGameEntityDestroy(callback: GenericEventCallback<GameEntityDestroyEventParameters>): void;
-        export function onceGameEntityDestroy(callback: GenericEventCallback<GameEntityDestroyEventParameters>): void;
-        export function onEntityHitEntity(callback: GenericEventCallback<EntityHitEntityEventParameters>): void;
-        export function onceEntityHitEntity(callback: GenericEventCallback<EntityHitEntityEventParameters>): void;
-        export function onTaskChange(callback: GenericEventCallback<TaskChangeEventParameters>): void;
-        export function onceTaskChange(callback: GenericEventCallback<TaskChangeEventParameters>): void;
+        export function onGameEntityCreate(callback: GenericEventCallback<GameEntityCreateEventParameters>): altShared.Events.EventHandler;
+        export function onceGameEntityCreate(callback: GenericEventCallback<GameEntityCreateEventParameters>): altShared.Events.EventHandler;
+        export function onGameEntityDestroy(callback: GenericEventCallback<GameEntityDestroyEventParameters>): altShared.Events.EventHandler;
+        export function onceGameEntityDestroy(callback: GenericEventCallback<GameEntityDestroyEventParameters>): altShared.Events.EventHandler;
+        export function onEntityHitEntity(callback: GenericEventCallback<EntityHitEntityEventParameters>): altShared.Events.EventHandler;
+        export function onceEntityHitEntity(callback: GenericEventCallback<EntityHitEntityEventParameters>): altShared.Events.EventHandler;
+        export function onTaskChange(callback: GenericEventCallback<TaskChangeEventParameters>): altShared.Events.EventHandler;
+        export function onceTaskChange(callback: GenericEventCallback<TaskChangeEventParameters>): altShared.Events.EventHandler;
 
-        export function onPlayerWeaponShoot(callback: GenericEventCallback<PlayerWeaponShootEventParameters>): void;
-        export function oncePlayerWeaponShoot(callback: GenericEventCallback<PlayerWeaponShootEventParameters>): void;
-        export function onPlayerBulletHit(callback: GenericEventCallback<PlayerBulletHitEventParameters>): void;
-        export function oncePlayerBulletHit(callback: GenericEventCallback<PlayerBulletHitEventParameters>): void;
-        export function onPlayerWeaponChange(callback: GenericEventCallback<PlayerWeaponChangeEventParameters>): void;
-        export function oncePlayerWeaponChange(callback: GenericEventCallback<PlayerWeaponChangeEventParameters>): void;
-        export function onPlayerStartEnterVehicle(callback: GenericPlayerEventCallback<PlayerStartEnterVehicleEventParameters>): void;
-        export function oncePlayerStartEnterVehicle(callback: GenericPlayerEventCallback<PlayerStartEnterVehicleEventParameters>): void;
-        export function onPlayerStartLeaveVehicle(callback: GenericPlayerEventCallback<PlayerStartLeaveVehicleEventParameters>): void;
-        export function oncePlayerStartLeaveVehicle(callback: GenericPlayerEventCallback<PlayerStartLeaveVehicleEventParameters>): void;
-        export function onVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): void;
-        export function onceVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): void;
+        export function onPlayerWeaponShoot(callback: GenericEventCallback<PlayerWeaponShootEventParameters>): altShared.Events.EventHandler;
+        export function oncePlayerWeaponShoot(callback: GenericEventCallback<PlayerWeaponShootEventParameters>): altShared.Events.EventHandler;
+        export function onPlayerBulletHit(callback: GenericEventCallback<PlayerBulletHitEventParameters>): altShared.Events.EventHandler;
+        export function oncePlayerBulletHit(callback: GenericEventCallback<PlayerBulletHitEventParameters>): altShared.Events.EventHandler;
+        export function onPlayerWeaponChange(callback: GenericEventCallback<PlayerWeaponChangeEventParameters>): altShared.Events.EventHandler;
+        export function oncePlayerWeaponChange(callback: GenericEventCallback<PlayerWeaponChangeEventParameters>): altShared.Events.EventHandler;
+        export function onPlayerStartEnterVehicle(callback: GenericPlayerEventCallback<PlayerStartEnterVehicleEventParameters>): altShared.Events.EventHandler;
+        export function oncePlayerStartEnterVehicle(callback: GenericPlayerEventCallback<PlayerStartEnterVehicleEventParameters>): altShared.Events.EventHandler;
+        export function onPlayerStartLeaveVehicle(callback: GenericPlayerEventCallback<PlayerStartLeaveVehicleEventParameters>): altShared.Events.EventHandler;
+        export function oncePlayerStartLeaveVehicle(callback: GenericPlayerEventCallback<PlayerStartLeaveVehicleEventParameters>): altShared.Events.EventHandler;
+        export function onVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): altShared.Events.EventHandler;
+        export function onceVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): altShared.Events.EventHandler;
 
-        export function onWorldObjectPositionChange(callback: GenericEventCallback<WorldObjectPositionChangeEventParameters>): void;
-        export function onceWorldObjectPositionChange(callback: GenericEventCallback<WorldObjectPositionChangeEventParameters>): void;
-        export function onWorldObjectStreamIn(callback: GenericEventCallback<WorldObjectStreamInEventParameters>): void;
-        export function onceWorldObjectStreamIn(callback: GenericEventCallback<WorldObjectStreamInEventParameters>): void;
-        export function onWorldObjectStreamOut(callback: GenericEventCallback<WorldObjectStreamOutEventParameters>): void;
-        export function onceWorldObjectStreamOut(callback: GenericEventCallback<WorldObjectStreamOutEventParameters>): void;
+        export function onWorldObjectPositionChange(callback: GenericEventCallback<WorldObjectPositionChangeEventParameters>): altShared.Events.EventHandler;
+        export function onceWorldObjectPositionChange(callback: GenericEventCallback<WorldObjectPositionChangeEventParameters>): altShared.Events.EventHandler;
+        export function onWorldObjectStreamIn(callback: GenericEventCallback<WorldObjectStreamInEventParameters>): altShared.Events.EventHandler;
+        export function onceWorldObjectStreamIn(callback: GenericEventCallback<WorldObjectStreamInEventParameters>): altShared.Events.EventHandler;
+        export function onWorldObjectStreamOut(callback: GenericEventCallback<WorldObjectStreamOutEventParameters>): altShared.Events.EventHandler;
+        export function onceWorldObjectStreamOut(callback: GenericEventCallback<WorldObjectStreamOutEventParameters>): altShared.Events.EventHandler;
 
         export function setWarningThreshold(threshold: number): void;
         export function setSourceLocationFrameSkipCount(skipCount: number): void;
@@ -1309,55 +1309,55 @@ declare module "@altv/client" {
         }
 
         // SHARED Entity related events
-        export function onBaseObjectCreate(callback: GenericEventCallback<BaseObjectCreateEventParameters>): void;
-        export function onBaseObjectRemove(callback: GenericEventCallback<BaseObjectRemoveEventParameters>): void;
-        export function onNetOwnerChange(callback: GenericEventCallback<NetOwnerChangeEventParameters>): void;
-        export function onWeaponDamage(callback: GenericEventCallback<WeaponDamageEventParameters>): void;
+        export function onBaseObjectCreate(callback: GenericEventCallback<BaseObjectCreateEventParameters>): altShared.Events.EventHandler;
+        export function onBaseObjectRemove(callback: GenericEventCallback<BaseObjectRemoveEventParameters>): altShared.Events.EventHandler;
+        export function onNetOwnerChange(callback: GenericEventCallback<NetOwnerChangeEventParameters>): altShared.Events.EventHandler;
+        export function onWeaponDamage(callback: GenericEventCallback<WeaponDamageEventParameters>): altShared.Events.EventHandler;
 
         // SHARED meta related events
-        export function onLocalMetaChange(callback: GenericPlayerEventCallback<LocalMetaChangeEventParameters>): void;
-        export function onSyncedMetaChange(callback: GenericEventCallback<SyncedMetaChangeEventParameters>): void;
-        export function onStreamSyncedMetaChange(callback: GenericEventCallback<StreamSyncedMetaChangeEventParameters>): void;
-        export function onGlobalMetaChange(callback: GenericEventCallback<GlobalMetaChangeEventParameters>): void;
-        export function onGlobalSyncedMetaChange(callback: GenericEventCallback<GlobalSyncedMetaChangeEventParameters>): void;
+        export function onLocalMetaChange(callback: GenericPlayerEventCallback<LocalMetaChangeEventParameters>): altShared.Events.EventHandler;
+        export function onSyncedMetaChange(callback: GenericEventCallback<SyncedMetaChangeEventParameters>): altShared.Events.EventHandler;
+        export function onStreamSyncedMetaChange(callback: GenericEventCallback<StreamSyncedMetaChangeEventParameters>): altShared.Events.EventHandler;
+        export function onGlobalMetaChange(callback: GenericEventCallback<GlobalMetaChangeEventParameters>): altShared.Events.EventHandler;
+        export function onGlobalSyncedMetaChange(callback: GenericEventCallback<GlobalSyncedMetaChangeEventParameters>): altShared.Events.EventHandler;
 
         // Script related events
-        export function onEntityColShapeEnter(callback: GenericEventCallback<EntityColShapeEnterEventParameters>): void;
-        export function onEntityColShapeLeave(callback: GenericEventCallback<EntityColShapeLeaveEventParameters>): void;
-        export function onEntityCheckpointEnter(callback: GenericEventCallback<EntityCheckpointEnterEventParameters>): void;
-        export function onEntityCheckpointLeave(callback: GenericEventCallback<EntityCheckpointLeaveEventParameters>): void;
-        export function onColShapeEvent(callback: GenericEventCallback<ColShapeEventParameters>): void;
+        export function onEntityColShapeEnter(callback: GenericEventCallback<EntityColShapeEnterEventParameters>): altShared.Events.EventHandler;
+        export function onEntityColShapeLeave(callback: GenericEventCallback<EntityColShapeLeaveEventParameters>): altShared.Events.EventHandler;
+        export function onEntityCheckpointEnter(callback: GenericEventCallback<EntityCheckpointEnterEventParameters>): altShared.Events.EventHandler;
+        export function onEntityCheckpointLeave(callback: GenericEventCallback<EntityCheckpointLeaveEventParameters>): altShared.Events.EventHandler;
+        export function onColShapeEvent(callback: GenericEventCallback<ColShapeEventParameters>): altShared.Events.EventHandler;
 
         // SHARED custom events
-        export function onConsoleCommand(callback: GenericEventCallback<ConsoleCommandEventParameters>): void;
-        export function onError(callback: GenericEventCallback<ErrorEventParameters>): void;
+        export function onConsoleCommand(callback: GenericEventCallback<ConsoleCommandEventParameters>): altShared.Events.EventHandler;
+        export function onError(callback: GenericEventCallback<ErrorEventParameters>): altShared.Events.EventHandler;
 
         // SHARED script related events
-        export function onLocalScriptEvent(callback: GenericEventCallback<LocalScriptEventParameters>): void;
-        export function onRemoteScriptEvent(callback: GenericEventCallback<RemoteScriptEventParameters>): void;
+        export function onLocalScriptEvent(callback: GenericEventCallback<LocalScriptEventParameters>): altShared.Events.ScriptEventHandler;
+        export function onRemoteScriptEvent(callback: GenericEventCallback<RemoteScriptEventParameters>): altShared.Events.ScriptEventHandler;
 
         // SHARED resource events
-        export function onResourceStart(callback: GenericEventCallback<ResourceStartEventParameters>): void;
-        export function onResourceStop(callback: GenericEventCallback<ResourceStopEventParameters>): void;
-        export function onResourceError(callback: GenericEventCallback<ResourceErrorEventParameters>): void;
+        export function onResourceStart(callback: GenericEventCallback<ResourceStartEventParameters>): altShared.Events.EventHandler;
+        export function onResourceStop(callback: GenericEventCallback<ResourceStopEventParameters>): altShared.Events.EventHandler;
+        export function onResourceError(callback: GenericEventCallback<ResourceErrorEventParameters>): altShared.Events.EventHandler;
 
         // Custom events
-        export function on<E extends keyof CustomClientEvent>(eventName: E, callback: CustomEventCallback<Parameters<CustomClientEvent[E]>>): EventSubscription;
-        export function on<E extends string>(eventName: Exclude<E, keyof CustomClientEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
-        export function once<E extends keyof CustomClientEvent>(eventName: E, callback: CustomEventCallback<Parameters<CustomClientEvent[E]>>): EventSubscription;
-        export function once<E extends string>(eventName: Exclude<E, keyof CustomClientEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
+        export function on<E extends keyof CustomClientEvent>(eventName: E, callback: CustomEventCallback<Parameters<CustomClientEvent[E]>>): altShared.Events.ScriptEventHandler;
+        export function on<E extends string>(eventName: Exclude<E, keyof CustomClientEvent>, callback: CustomEventCallback<unknown[]>): altShared.Events.ScriptEventHandler;
+        export function once<E extends keyof CustomClientEvent>(eventName: E, callback: CustomEventCallback<Parameters<CustomClientEvent[E]>>): altShared.Events.ScriptEventHandler;
+        export function once<E extends string>(eventName: Exclude<E, keyof CustomClientEvent>, callback: CustomEventCallback<unknown[]>): altShared.Events.ScriptEventHandler;
 
-        export function onServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
-        export function onServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
-        export function onceServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
-        export function onceServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
+        export function onServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): altShared.Events.ScriptEventHandler;
+        export function onServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, callback: CustomEventCallback<unknown[]>): altShared.Events.ScriptEventHandler;
+        export function onceServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): altShared.Events.ScriptEventHandler;
+        export function onceServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, callback: CustomEventCallback<unknown[]>): altShared.Events.ScriptEventHandler;
 
-        export function onRemote<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
-        export function onRemote<E extends keyof altShared.Events.CustomRemoteEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomRemoteEvent[E]>>): EventSubscription;
-        export function onRemote<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent | keyof altShared.Events.CustomRemoteEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
-        export function onceRemote<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): EventSubscription;
-        export function onceRemote<E extends keyof altShared.Events.CustomRemoteEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomRemoteEvent[E]>>): EventSubscription;
-        export function onceRemote<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent | keyof altShared.Events.CustomRemoteEvent>, callback: CustomEventCallback<unknown[]>): EventSubscription;
+        export function onRemote<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): altShared.Events.ScriptEventHandler;
+        export function onRemote<E extends keyof altShared.Events.CustomRemoteEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomRemoteEvent[E]>>): altShared.Events.ScriptEventHandler;
+        export function onRemote<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent | keyof altShared.Events.CustomRemoteEvent>, callback: CustomEventCallback<unknown[]>): altShared.Events.ScriptEventHandler;
+        export function onceRemote<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): altShared.Events.ScriptEventHandler;
+        export function onceRemote<E extends keyof altShared.Events.CustomRemoteEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomRemoteEvent[E]>>): altShared.Events.ScriptEventHandler;
+        export function onceRemote<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent | keyof altShared.Events.CustomRemoteEvent>, callback: CustomEventCallback<unknown[]>): altShared.Events.ScriptEventHandler;
 
         interface PlayerAnimationChangeEventParameters {
             oldAnimDict: number;
@@ -1390,11 +1390,6 @@ declare module "@altv/client" {
         export interface onEvent {
             (callback: altShared.Events.GenericOnEventCallback): void;
             remove(callback: altShared.Events.GenericOnEventCallback): void;
-        }
-
-        interface EventSubscription {
-            readonly listeners: ReadonlyArray<GenericEventCallback>;
-            remove(eventName: string, callback: GenericEventCallback): void;
         }
 
         interface EntityColShapeEnterEventParameters {
