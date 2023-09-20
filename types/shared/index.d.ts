@@ -574,19 +574,19 @@ declare module "@altv/shared" {
 
     export namespace Timers {
         export class Interval extends Timer {
-            constructor(callback: Function, interval: number);
+            constructor(callback: Function, interval: number, ...args: unknown[]);
         }
 
         export class Timeout extends Timer {
-            constructor(callback: Function, interval: number);
+            constructor(callback: Function, interval: number, ...args: unknown[]);
         }
 
         export class EveryTick extends Timer {
-            constructor(callback: Function);
+            constructor(callback: Function, ...args: unknown[]);
         }
 
         export class NextTick extends Timer {
-            constructor(callback: Function);
+            constructor(callback: Function, ...args: unknown[]);
         }
 
         export const all: ReadonlyArray<Timer>;
@@ -594,10 +594,10 @@ declare module "@altv/shared" {
         export let warningThreshold: number;
         export let sourceLocationFrameSkipCount: number;
 
-        export function setInterval(callback: Function, interval: number): Interval;
-        export function setTimeout(callback: Function, interval: number): Timeout;
-        export function everyTick(callback: Function): EveryTick;
-        export function nextTick(callback: Function): NextTick;
+        export function setInterval(callback: Function, interval: number, ...args: unknown[]): Interval;
+        export function setTimeout(callback: Function, interval: number, ...args: unknown[]): Timeout;
+        export function everyTick(callback: Function, ...args: unknown[]): EveryTick;
+        export function nextTick(callback: Function, ...args: unknown[]): NextTick;
 
         export function time(name?: string): void;
         export function timeEnd(name?: string): void;
