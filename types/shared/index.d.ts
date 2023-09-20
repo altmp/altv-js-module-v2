@@ -616,6 +616,11 @@ declare module "@altv/shared" {
         export function waitFor(callback: () => boolean, timeout?: number): Promise<void>;
         export function getCurrentSourceLocation(): SourceLocation;
 
+        // TODO (xLuxy): Shared type fuckery
+        export function addLocalMetaListener(key: string, callback: Function): Events.EventHandler;
+        export function addSyncedMetaListener(key: string, callback: Function): Events.EventHandler;
+        export function addStreamSyncedMetaListener(key: string, callback: Function): Events.EventHandler;
+
         export abstract class AssertionError extends Error {}
 
         export type JSType = "string" | "number" | "object" | "function" | "undefined" | "boolean" | "symbol" | "bigint";

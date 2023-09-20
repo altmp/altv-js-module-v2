@@ -1336,11 +1336,6 @@ declare module "@altv/client" {
         export function onLocalScriptEvent(callback: GenericEventCallback<LocalScriptEventParameters>): altShared.Events.ScriptEventHandler;
         export function onRemoteScriptEvent(callback: GenericEventCallback<RemoteScriptEventParameters>): altShared.Events.ScriptEventHandler;
 
-        export function addLocalMetaListener(key: string, callback: GenericPlayerEventCallback<LocalMetaChangeEventParameters>): altShared.Events.EventHandler;
-        export function addSyncedMetaListener(key: string, callback: GenericEventCallback<SyncedMetaChangeEventParameters>): altShared.Events.EventHandler;
-        export function onceSyncedMetaChange(callback: GenericEventCallback<SyncedMetaChangeEventParameters>): altShared.Events.EventHandler;
-        export function addStreamSyncedMetaListener(key: string, callback: GenericEventCallback<StreamSyncedMetaChangeEventParameters>): altShared.Events.EventHandler;
-
         // SHARED resource events
         export function onResourceStart(callback: GenericEventCallback<ResourceStartEventParameters>): altShared.Events.EventHandler;
         export function onResourceStop(callback: GenericEventCallback<ResourceStopEventParameters>): altShared.Events.EventHandler;
