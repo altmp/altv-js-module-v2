@@ -28,7 +28,13 @@ v8::Local<v8::Module> CJavaScriptResource::CompileAndRun(const std::string& path
     if(maybeResult.IsEmpty() || maybeResult.ToLocalChecked().As<v8::Promise>()->State() == v8::Promise::PromiseState::kRejected)
     {
         js::Logger::Error("[JS] Failed to start file", path);
-        if(mod->GetStatus() == v8::Module::kErrored) js::Logger::Error("[JS]", *v8::String::Utf8Value(isolate, mod->GetException()));
+        if(mod->GetStatus() == v8::Module::kErrored)
+        {
+            js::Object exceptionObj = mod->GetException().As<v8::Object>();
+            js::Logger::Error("[JS]", exceptionObj.Get<std::string>("message"));
+            std::string stack = exceptionObj.Get<std::string>("stack");
+            if(!stack.empty()) js::Logger::Error(stack);
+        }
         tryCatch.Check(true, true);
         return v8::Local<v8::Module>();
     }
