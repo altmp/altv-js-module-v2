@@ -31,8 +31,14 @@ export function assert(condition, message) {
 export function assertIsObject(value, message) {
     assert(value !== null && typeof value === "object", message);
 }
+export function assertIsType(value, type, message) {
+    assert(typeof value === type, message);
+}
+
 alt.Utils.AssertionError = AssertionError;
 alt.Utils.assert = assert;
+alt.Utils.assertIsObject = assertIsObject;
+alt.Utils.assertIsType = assertIsType;
 
 export function hash(str) {
     if (typeof str !== "string") throw new Error("Expected a string as first argument");

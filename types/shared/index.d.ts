@@ -618,7 +618,11 @@ declare module "@altv/shared" {
 
         export abstract class AssertionError extends Error {}
 
+        export type JSType = "string" | "number" | "object" | "function" | "undefined" | "boolean" | "symbol" | "bigint";
+
         export function assert(condition: unknown, message?: string): void;
+        export function assertIsObject(value: unknown, message?: string): void;
+        export function assertIsType(value: unknown, type: JSType, message?: string): void;
 
         export interface InspectOptions {
             showHidden: boolean; // default: false

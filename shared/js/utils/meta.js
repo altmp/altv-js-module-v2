@@ -1,6 +1,9 @@
+/** @type {typeof import("./../utils.js")} */
+const { assertIsType } = requireBinding("shared/utils.js");
+
 function addLocalMetaListener(key, handler) {
-    if (typeof key != "string") throw new Error("key must be a string");
-    if (typeof handler != "function") throw new Error("handler must be a function");
+    assertIsType(key, "string", "key must be a string");
+    assertIsType(handler, "function", "handler must be a function");
 
     const wrapper = (ctx) => {
         if (ctx.key !== key) return;
@@ -11,8 +14,8 @@ function addLocalMetaListener(key, handler) {
 }
 
 function addSyncedMetaListener(key, handler) {
-    if (typeof key != "string") throw new Error("key must be a string");
-    if (typeof handler != "function") throw new Error("handler must be a function");
+    assertIsType(key, "string", "key must be a string");
+    assertIsType(handler, "function", "handler must be a function");
 
     const wrapper = (ctx) => {
         if (ctx.key !== key) return;
@@ -23,8 +26,8 @@ function addSyncedMetaListener(key, handler) {
 }
 
 function addStreamSyncedMetaListener(key, handler) {
-    if (typeof key != "string") throw new Error("key must be a string");
-    if (typeof handler != "function") throw new Error("handler must be a function");
+    assertIsType(key, "string", "key must be a string");
+    assertIsType(handler, "function", "handler must be a function");
 
     const wrapper = (ctx) => {
         if (ctx.key !== key) return;
