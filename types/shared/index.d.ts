@@ -665,19 +665,20 @@ declare module "@altv/shared" {
         }
 
         export class EventHandler {
-            eventType: Enums.EventType | Enums.CustomEventType;
-            eventTypeName: string;
-            handler: Function;
-            location: SourceLocation;
-            valid: boolean;
+            readonly eventType: Enums.EventType | Enums.CustomEventType;
+            readonly eventTypeName: string;
+            readonly handler: Function;
+            readonly location: SourceLocation;
+            readonly onlyOnce: boolean;
+            readonly valid: boolean;
 
             destroy(): void;
         }
 
         export class ScriptEventHandler extends EventHandler {
-            eventName: string;
-            local: boolean;
-            remote: boolean;
+            readonly eventName: string;
+            readonly local: boolean;
+            readonly remote: boolean;
         }
 
         export class GenericEventHandler extends EventHandler {}
