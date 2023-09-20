@@ -45,6 +45,18 @@ function addEventsToClass(class_) {
         if (!this.__eventHandlers.has(eventName)) this.__eventHandlers.set(eventName, new Set());
         this.__eventHandlers.get(eventName).add(listener);
     };
+    class_.prototype.once = function (eventName, listener) {
+        assert(eventName && typeof eventName === "string", `Invalid event name: ${eventName}`);
+        assert(listener && typeof listener === "function", `Invalid listener: ${listener}`);
+
+        const onceListener = (...args) => {
+            this.off(eventName, onceListener);
+            listener(...args);
+        };
+
+        if (!this.__eventHandlers.has(eventName)) this.__eventHandlers.set(eventName, new Set());
+        this.__eventHandlers.get(eventName).add(onceListener);
+    };
     class_.prototype.off = function (eventName, listener) {
         assert(eventName && typeof eventName === "string", `Invalid event name: ${eventName}`);
         assert(listener && typeof listener === "function", `Invalid listener: ${listener}`);
