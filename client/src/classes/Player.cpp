@@ -41,6 +41,8 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Property<&alt::IPlayer::GetNonSpatialVolume, &alt::IPlayer::SetNonSpatialVolume>("nonSpatialVolume");
     tpl.Property("filter", FilterGetter, FilterSetter);
 
+    tpl.Property<&alt::IPlayer::GetTaskData>("taskData");
+
     tpl.StaticLazyProperty("local", LocalGetter);
 
     tpl.GetByID<alt::IBaseObject::Type::PLAYER>();

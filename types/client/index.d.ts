@@ -559,6 +559,7 @@ declare module "@altv/client" {
         spatialVolume: number;
         nonSpatialVolume: number;
         readonly filter: AudioFilter;
+        readonly taskData: string;
 
         readonly health: number;
         readonly maxHealth: number;
