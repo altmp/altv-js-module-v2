@@ -176,11 +176,10 @@ namespace js
     static std::optional<alt::Vector3f> ToVector3(v8::Local<v8::Value> val)
     {
         if(!val->IsObject()) return std::nullopt;
+        v8::Isolate* isolate = v8::Isolate::GetCurrent();
+        v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
 
         v8::Local<v8::Object> obj = val.As<v8::Object>();
-        v8::Local<v8::Context> ctx = obj->CreationContext();
-        v8::Isolate* isolate = ctx->GetIsolate();
-
         v8::Local<v8::Value> xVal;
         v8::Local<v8::Value> yVal;
         v8::Local<v8::Value> zVal;
@@ -191,16 +190,15 @@ namespace js
 
         if(!xVal->IsNumber() || !yVal->IsNumber() || !zVal->IsNumber()) return std::nullopt;
 
-        return alt::Vector3f(xVal->NumberValue(ctx).ToChecked(), yVal->NumberValue(ctx).ToChecked(), zVal->NumberValue(ctx).ToChecked());
+        return alt::Vector3f(xVal.As<v8::Number>()->Value(), yVal.As<v8::Number>()->Value(), zVal.As<v8::Number>()->Value());
     }
     static std::optional<alt::Vector2f> ToVector2(v8::Local<v8::Value> val)
     {
         if(!val->IsObject()) return std::nullopt;
+        v8::Isolate* isolate = v8::Isolate::GetCurrent();
+        v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
 
         v8::Local<v8::Object> obj = val.As<v8::Object>();
-        v8::Local<v8::Context> ctx = obj->CreationContext();
-        v8::Isolate* isolate = ctx->GetIsolate();
-
         v8::Local<v8::Value> xVal;
         v8::Local<v8::Value> yVal;
 
@@ -209,16 +207,15 @@ namespace js
 
         if(!xVal->IsNumber() || !yVal->IsNumber()) return std::nullopt;
 
-        return alt::Vector2f(xVal->NumberValue(ctx).ToChecked(), yVal->NumberValue(ctx).ToChecked());
+        return alt::Vector2f(xVal.As<v8::Number>()->Value(), yVal.As<v8::Number>()->Value());
     }
     static std::optional<alt::RGBA> ToRGBA(v8::Local<v8::Value> val)
     {
         if(!val->IsObject()) return std::nullopt;
+        v8::Isolate* isolate = v8::Isolate::GetCurrent();
+        v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
 
         v8::Local<v8::Object> obj = val.As<v8::Object>();
-        v8::Local<v8::Context> ctx = obj->CreationContext();
-        v8::Isolate* isolate = ctx->GetIsolate();
-
         v8::Local<v8::Value> rVal;
         v8::Local<v8::Value> gVal;
         v8::Local<v8::Value> bVal;
@@ -231,16 +228,15 @@ namespace js
 
         if(!rVal->IsNumber() || !gVal->IsNumber() || !bVal->IsNumber() || !aVal->IsNumber()) return std::nullopt;
 
-        return alt::RGBA(rVal->NumberValue(ctx).ToChecked(), gVal->NumberValue(ctx).ToChecked(), bVal->NumberValue(ctx).ToChecked(), aVal->NumberValue(ctx).ToChecked());
+        return alt::RGBA(rVal.As<v8::Number>()->Value(), gVal.As<v8::Number>()->Value(), bVal.As<v8::Number>()->Value(), aVal.As<v8::Number>()->Value());
     }
     static std::optional<alt::Quaternion> ToQuaternion(v8::Local<v8::Value> val)
     {
         if(!val->IsObject()) return std::nullopt;
+        v8::Isolate* isolate = v8::Isolate::GetCurrent();
+        v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
 
         v8::Local<v8::Object> obj = val.As<v8::Object>();
-        v8::Local<v8::Context> ctx = obj->CreationContext();
-        v8::Isolate* isolate = ctx->GetIsolate();
-
         v8::Local<v8::Value> xVal;
         v8::Local<v8::Value> yVal;
         v8::Local<v8::Value> zVal;
@@ -253,7 +249,7 @@ namespace js
 
         if(!xVal->IsNumber() || !yVal->IsNumber() || !zVal->IsNumber() || !wVal->IsNumber()) return std::nullopt;
 
-        return alt::Quaternion(xVal->NumberValue(ctx).ToChecked(), yVal->NumberValue(ctx).ToChecked(), zVal->NumberValue(ctx).ToChecked(), wVal->NumberValue(ctx).ToChecked());
+        return alt::Quaternion(xVal.As<v8::Number>()->Value(), yVal.As<v8::Number>()->Value(), zVal.As<v8::Number>()->Value(), wVal.As<v8::Number>()->Value());
     }
     std::optional<alt::IBaseObject*> ToBaseObject(v8::Local<v8::Value> val);
     template<typename T>
