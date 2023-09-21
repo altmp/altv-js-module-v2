@@ -16,6 +16,9 @@ EXPORT alt::IScriptRuntime* CreateScriptRuntime(alt::ICore* core)
     core->SubscribeCommand("dumpbinding", js::DumpBindingCommand);
     core->SubscribeCommand("dumpallbindings", js::DumpAllBindingsCommand);
     core->SubscribeCommand("dumpmodulescache", js::DumpModulesCacheCommand);
+    core->SubscribeCommand("dumpsample", js::DumpSampleCommand);
+    core->SubscribeCommand("dumpallsamples", js::DumpAllSamplesCommand);
+    core->SubscribeCommand("resetsamples", js::ResetSamplesCommand);
 
     return &runtime;
 }

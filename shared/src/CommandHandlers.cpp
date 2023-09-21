@@ -2,6 +2,7 @@
 #include "interfaces/IAltResource.h"
 #include "Class.h"
 #include "Logger.h"
+#include "helpers/Profiler.h"
 #include "cpp-sdk/ICore.h"
 
 class HandleVisitor : public v8::PersistentHandleVisitor
@@ -34,7 +35,7 @@ public:
     }
 };
 
-void js::DebugHandlesCommand(const std::vector<std::string>&)
+void js::DebugHandlesCommand(js::CommandArgs&)
 {
     auto resources = alt::ICore::Instance().GetAllResources();
     for(alt::IResource* altResource : resources)
@@ -53,7 +54,7 @@ void js::DebugHandlesCommand(const std::vector<std::string>&)
     }
 }
 
-void js::DumpBindingCommand(const std::vector<std::string>& args)
+void js::DumpBindingCommand(js::CommandArgs& args)
 {
     if(!args.size())
     {
@@ -69,7 +70,27 @@ void js::DumpBindingCommand(const std::vector<std::string>& args)
     binding.Dump();
 }
 
-void js::DumpAllBindingsCommand(const std::vector<std::string>&)
+void js::DumpAllBindingsCommand(js::CommandArgs&)
 {
     Binding::DumpAll();
+}
+
+void js::DumpSampleCommand(js::CommandArgs& args)
+{
+    if(!args.size())
+    {
+        Logger::Warn("Usage: dumpsample <sample name>");
+        return;
+    }
+    Profiler::DumpSample(args[0]);
+}
+
+void js::DumpAllSamplesCommand(js::CommandArgs&)
+{
+    Profiler::DumpAllSamples();
+}
+
+void js::ResetSamplesCommand(js::CommandArgs&)
+{
+    Profiler::ResetSamples();
 }
