@@ -1200,17 +1200,17 @@ declare module "@altv/client" {
         export function oncePlayerBulletHit(callback: GenericEventCallback<PlayerBulletHitEventParameters>): altShared.Events.EventHandler;
         export function onPlayerWeaponChange(callback: GenericEventCallback<PlayerWeaponChangeEventParameters>): altShared.Events.EventHandler;
         export function oncePlayerWeaponChange(callback: GenericEventCallback<PlayerWeaponChangeEventParameters>): altShared.Events.EventHandler;
-        export function onPlayerStartEnterVehicle(callback: GenericPlayerEventCallback<PlayerStartEnterVehicleEventParameters>): altShared.Events.EventHandler;
-        export function oncePlayerStartEnterVehicle(callback: GenericPlayerEventCallback<PlayerStartEnterVehicleEventParameters>): altShared.Events.EventHandler;
-        export function onPlayerStartLeaveVehicle(callback: GenericPlayerEventCallback<PlayerStartLeaveVehicleEventParameters>): altShared.Events.EventHandler;
-        export function oncePlayerStartLeaveVehicle(callback: GenericPlayerEventCallback<PlayerStartLeaveVehicleEventParameters>): altShared.Events.EventHandler;
+        export function onPlayerStartEnterVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartEnterVehicleEventParameters, T>): altShared.Events.EventHandler;
+        export function oncePlayerStartEnterVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartEnterVehicleEventParameters, T>): altShared.Events.EventHandler;
+        export function onPlayerStartLeaveVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartLeaveVehicleEventParameters, T>): altShared.Events.EventHandler;
+        export function oncePlayerStartLeaveVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartLeaveVehicleEventParameters, T>): altShared.Events.EventHandler;
         export function onVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): altShared.Events.EventHandler;
         export function onceVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): altShared.Events.EventHandler;
 
-        export function onPlayerStartTalking(callback: GenericPlayerEventCallback): altShared.Events.EventHandler;
-        export function oncePlayerStartTalking(callback: GenericPlayerEventCallback): altShared.Events.EventHandler;
-        export function onPlayerStopTalking(callback: GenericPlayerEventCallback): altShared.Events.EventHandler;
-        export function oncePlayerStopTalking(callback: GenericPlayerEventCallback): altShared.Events.EventHandler;
+        export function onPlayerStartTalking<T extends Player>(callback: GenericPlayerEventCallback<{}, T>): altShared.Events.EventHandler;
+        export function oncePlayerStartTalking<T extends Player>(callback: GenericPlayerEventCallback<{}, T>): altShared.Events.EventHandler;
+        export function onPlayerStopTalking<T extends Player>(callback: GenericPlayerEventCallback<{}, T>): altShared.Events.EventHandler;
+        export function oncePlayerStopTalking<T extends Player>(callback: GenericPlayerEventCallback<{}, T>): altShared.Events.EventHandler;
 
         // Ped related events
         export function onPedDeath(callback: GenericEventCallback<PedDeathEventParameters>): altShared.Events.EventHandler;
@@ -1447,7 +1447,7 @@ declare module "@altv/client" {
 
         export type CustomEventCallback<T extends unknown[]> = (...params: T) => void | Promise<void>;
         export type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
-        export type GenericPlayerEventCallback<T = {}> = (params: T & { player: Player }) => void | Promise<void>;
+        export type GenericPlayerEventCallback<T = {}, U extends Player = Player> = (params: T & { player: U }) => void | Promise<void>;
 
         type LocalScriptEvents = CustomClientEvent;
         interface LocalScriptEventParameters<E extends keyof LocalScriptEvents = keyof LocalScriptEvents> {
