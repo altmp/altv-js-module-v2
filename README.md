@@ -47,6 +47,8 @@ If there are any questions or you would like to discuss a feature, contact the _
 
 4. Load the module by adding `'js-module-v2'` to the array of modules in your `server.toml` file.
 
+5. Create a resource with ``type = "jsv2"`` and ``client-type = "jsv2"`` in ``resource.toml`` file.
+
 Alternatively, you can also download the server module from the official alt:V CDN server:
 
 -   **Windows:** [https://cdn.alt-mp.com/js-module-v2/dev/x64_win32/update.json](https://cdn.alt-mp.com/js-module-v2/dev/x64_win32/update.json)
