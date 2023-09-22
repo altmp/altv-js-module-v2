@@ -43,15 +43,18 @@ js::ScriptObject* js::IScriptObjectHandler::GetOrCreateScriptObject(v8::Local<v8
 void js::IScriptObjectHandler::DestroyScriptObject(alt::IBaseObject* object)
 {
     ObjectIdentifier identifier = GetObjectIdentifier(object);
-    objectMap.erase(identifier);
+    auto it = objectMap.find(identifier);
+    if(it == objectMap.end()) return;
+    ScriptObject::Destroy(it->second);
+    objectMap.erase(it);
 }
 
 js::ScriptObject* js::IScriptObjectHandler::GetScriptObject(alt::IBaseObject* object)
 {
     ObjectIdentifier identifier = GetObjectIdentifier(object);
-    auto result = objectMap.find(identifier);
-    if(result == objectMap.end()) return nullptr;
-    return result->second;
+    auto it = objectMap.find(identifier);
+    if(it == objectMap.end()) return nullptr;
+    return it->second;
 }
 
 void js::IScriptObjectHandler::BindClassToType(alt::IBaseObject::Type type, Class* class_)
