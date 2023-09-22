@@ -821,7 +821,6 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
 
     tpl.LazyProperty<&alt::IPlayer::GetIP>("ip");
     tpl.LazyProperty<&alt::IPlayer::GetSocialID>("socialId");
-    // TODO (xLuxy): typings
     tpl.LazyProperty<&alt::IPlayer::GetSocialClubName>("socialClubName");
     tpl.LazyProperty<&alt::IPlayer::GetHwidHash>("hwidHash");
     tpl.LazyProperty<&alt::IPlayer::GetHwidExHash>("hwidExHash");
