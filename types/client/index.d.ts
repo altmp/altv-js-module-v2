@@ -1207,6 +1207,11 @@ declare module "@altv/client" {
         export function onVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): altShared.Events.EventHandler;
         export function onceVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): altShared.Events.EventHandler;
 
+        export function onPlayerStartTalking(callback: GenericPlayerEventCallback): altShared.Events.EventHandler;
+        export function oncePlayerStartTalking(callback: GenericPlayerEventCallback): altShared.Events.EventHandler;
+        export function onPlayerStopTalking(callback: GenericPlayerEventCallback): altShared.Events.EventHandler;
+        export function oncePlayerStopTalking(callback: GenericPlayerEventCallback): altShared.Events.EventHandler;
+
         // Ped related events
         export function onPedDeath(callback: GenericEventCallback<PedDeathEventParameters>): altShared.Events.EventHandler;
         export function oncePedDeath(callback: GenericEventCallback<PedDeathEventParameters>): altShared.Events.EventHandler;

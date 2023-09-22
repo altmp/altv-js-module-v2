@@ -865,6 +865,11 @@ declare module "@altv/server" {
         export function onPlayerVehicleSeatChange(callback: GenericPlayerEventCallback<PlayerVehicleSeatChangeEventParameters>): altShared.Events.EventHandler;
         export function oncePlayerVehicleSeatChange(callback: GenericPlayerEventCallback<PlayerVehicleSeatChangeEventParameters>): altShared.Events.EventHandler;
 
+        export function onPlayerStartTalking(callback: GenericPlayerEventCallback): altShared.Events.EventHandler;
+        export function oncePlayerStartTalking(callback: GenericPlayerEventCallback): altShared.Events.EventHandler;
+        export function onPlayerStopTalking(callback: GenericPlayerEventCallback): altShared.Events.EventHandler;
+        export function oncePlayerStopTalking(callback: GenericPlayerEventCallback): altShared.Events.EventHandler;
+
         // Ped related events
         export function onPedHeal(callback: GenericEventCallback<PedHealEventParameters>): altShared.Events.EventHandler;
         export function oncePedHeal(callback: GenericEventCallback<PedHealEventParameters>): altShared.Events.EventHandler;

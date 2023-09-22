@@ -48,3 +48,17 @@ static js::Event playerVehicleSeatChangeEvent(alt::CEvent::Type::PLAYER_CHANGE_V
     args.Set("oldSeat", e->GetOldSeat());
     args.Set("newSeat", e->GetNewSeat());
 });
+
+static js::Event playerStartTalkingEvent(alt::CEvent::Type::PLAYER_START_TALKING, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CPlayerStartTalkingEvent*>(ev);
+
+    args.Set("player", e->GetPlayer());
+});
+
+static js::Event playerStopTalkingEvent(alt::CEvent::Type::PLAYER_STOP_TALKING, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CPlayerStopTalkingEvent*>(ev);
+
+    args.Set("player", e->GetPlayer());
+});

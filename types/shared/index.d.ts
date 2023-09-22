@@ -1890,6 +1890,8 @@ declare module "@altv/shared" {
             PLAYER_CHANGE_VEHICLE_SEAT,
             PLAYER_WEAPON_CHANGE,
             PLAYER_REQUEST_CONTROL,
+            PLAYER_START_TALKING,
+            PLAYER_STOP_TALKING,
 
             VEHICLE_ATTACH,
             VEHICLE_DETACH,

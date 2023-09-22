@@ -6,3 +6,6 @@ Event.register(alt.Enums.EventType.PLAYER_ENTER_VEHICLE, "PlayerEnteredVehicle")
 Event.register(alt.Enums.EventType.PLAYER_ENTERING_VEHICLE, "PlayerEnteringVehicle");
 Event.register(alt.Enums.EventType.PLAYER_LEAVE_VEHICLE, "PlayerLeftVehicle");
 Event.register(alt.Enums.EventType.PLAYER_CHANGE_VEHICLE_SEAT, "PlayerVehicleSeatChange");
+
+Event.register(alt.Enums.EventType.PLAYER_START_TALKING, "PlayerStartTalking");
+Event.register(alt.Enums.EventType.PLAYER_STOP_TALKING, "PlayerStopTalking");
