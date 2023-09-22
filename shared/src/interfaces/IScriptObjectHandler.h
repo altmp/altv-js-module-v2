@@ -12,8 +12,12 @@ namespace js
 
     class IScriptObjectHandler
     {
-        std::unordered_multimap<alt::IBaseObject::Type, ScriptObject*> objectMap;
+        using ObjectIdentifier = uint64_t;
+
+        std::unordered_map<ObjectIdentifier, ScriptObject*> objectMap;
         std::unordered_map<alt::IBaseObject::Type, Persistent<v8::Function>> customFactoryMap;
+
+        ObjectIdentifier GetObjectIdentifier(alt::IBaseObject* object);
 
         static std::unordered_map<alt::IBaseObject::Type, Class*>& GetClassMap()
         {
@@ -44,18 +48,7 @@ namespace js
         ScriptObject* GetOrCreateScriptObject(v8::Local<v8::Context> context, alt::IBaseObject* object);
         void DestroyScriptObject(alt::IBaseObject* object);
 
-        ScriptObject* GetScriptObject(alt::IBaseObject* object)
-        {
-            auto range = objectMap.equal_range(object->GetType());
-            for(auto it = range.first; it != range.second; ++it)
-            {
-                if(it->second->GetObject() == object)
-                {
-                    return it->second;
-                }
-            }
-            return nullptr;
-        }
+        ScriptObject* GetScriptObject(alt::IBaseObject* object);
         ScriptObject* GetScriptObject(v8::Local<v8::Value> value)
         {
             if(!value->IsObject()) return nullptr;
