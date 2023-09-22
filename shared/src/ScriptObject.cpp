@@ -42,6 +42,14 @@ js::ScriptObject* js::ScriptObject::Get(v8::Local<v8::Object> obj)
 
 void js::ScriptObject::Destroy(ScriptObject* scriptObject)
 {
+    js::Object scriptObjectObj = scriptObject->Get();
+    if(scriptObjectObj.GetType("onDestroy") == js::Type::FUNCTION)
+    {
+        js::TryCatch tryCatch;
+        js::Function onDestroyFunc = scriptObjectObj.Get<v8::Local<v8::Value>>("onDestroy").As<v8::Function>();
+        onDestroyFunc.Call(scriptObjectObj);
+        tryCatch.Check(true);
+    }
     scriptObject->Get()->SetAlignedPointerInInternalField(0, nullptr);
     delete scriptObject;
 }
