@@ -744,8 +744,10 @@ declare module "@altv/client" {
         faceCamera: boolean;
         readonly streamingDistance: number;
 
+        static create(opts: TextLabelCreateOptions): TextLabel | null;
+
         static getByID(id: number): TextLabel | null;
-        static getByRemoteID(id: number): TextLabel | null;
+        // static getByRemoteID(id: number): TextLabel | null;
     }
 
     export abstract class Vehicle extends Entity {
@@ -872,6 +874,20 @@ declare module "@altv/client" {
 
         static getByID(id: number): Vehicle | null;
         static getByRemoteID(id: number): Vehicle | null;
+    }
+
+    interface TextLabelCreateOptions {
+        text: string;
+        fontName: string;
+        fontSize: number;
+        pos: altShared.IVector3;
+        rot?: altShared.IVector3; // default: { x: 0, y: 0, z: 0 }
+        color?: altShared.RGBA; // default: { r: 255, g: 255, b: 255, a: 255 }
+        outlineColor?: altShared.RGBA; // default: { r: 0, g: 0, b: 0, a: 255 }
+        outlineWidth?: number; // default: 0
+        fontScale?: number; // default: 1
+        useStreaming?: boolean; // default: false
+        streamingDistance?: number; // default: 0
     }
 
     interface VirtualEntityCreateOptions {
@@ -1081,6 +1097,9 @@ declare module "@altv/client" {
 
         export function setCheckpointFactory(factory: typeof Checkpoint): void;
         export function getCheckpointFactory<T extends Checkpoint>(): T;
+
+        export function setTextLabelFactory(factory: typeof TextLabel): void;
+        export function getTextLabelFactory<T extends TextLabel>(): T;
 
         export function setVirtualEntityFactory(factory: typeof VirtualEntity): void;
         export function getVirtualEntityFactory<T extends VirtualEntity>(): T;

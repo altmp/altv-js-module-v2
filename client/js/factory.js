@@ -3,6 +3,7 @@ const { registerFactory, getFactoryCreateFunction } = requireBinding("shared/fac
 
 registerFactory("Audio", alt.Audio, alt.Enums.BaseObjectType.AUDIO);
 registerFactory("WebView", alt.WebView, alt.Enums.BaseObjectType.WEBVIEW);
+registerFactory("TextLabel", alt.TextLabel, alt.Enums.BaseObjectType.TEXT_LABEL);
 
 // Factory ctors
 
@@ -29,3 +30,5 @@ alt.WeaponObject.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.LOCA
 alt.WebSocketClient.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.WEBSOCKET_CLIENT);
 
 alt.WebView.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.WEBVIEW);
+
+alt.TextLabel.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.TEXT_LABEL);
