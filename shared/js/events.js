@@ -80,7 +80,7 @@ export class Event {
      * @param {{ eventName: string }} ctx
      * @param {boolean} local
      */
-    static async #handleScriptEvent(ctx, local) {
+    static #handleScriptEvent(ctx, local) {
         const name = ctx.eventName;
         const handlers = local ? Event.#localScriptEventHandlers.get(name) : Event.#remoteScriptEventHandlers.get(name);
         if (!handlers) return;
@@ -91,12 +91,12 @@ export class Event {
 
             try {
                 const startTime = Date.now();
-                const result = isPlayerScriptEvent ? handler(ctx.player, ...ctx.args) : handler(...ctx.args);
+                if (isPlayerScriptEvent) handler(ctx.player, ...ctx.args);
+                else handler(...ctx.args);
                 const duration = Date.now() - startTime;
                 if (duration > Event.#warningThreshold) {
                     alt.logWarning(`[JS] Event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${location.lineNumber}) for script event '${name}' took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`);
                 }
-                if (result instanceof Promise) await result;
 
                 if (onlyOnce) eventHandler.destroy();
             } catch (e) {
@@ -177,7 +177,7 @@ export class Event {
      * @param {Record<string, any>} ctx
      * @param {boolean} custom
      */
-    static async #invokeGeneric(eventType, ctx, custom) {
+    static #invokeGeneric(eventType, ctx, custom) {
         const handlers = Event.#genericHandlers;
         if (!handlers.size) return;
 
@@ -189,12 +189,11 @@ export class Event {
         for (let { handler, location } of handlers) {
             try {
                 const startTime = Date.now();
-                const result = handler(genericCtx);
+                handler(genericCtx);
                 const duration = Date.now() - startTime;
                 if (duration > Event.#warningThreshold) {
                     alt.logWarning(`[JS] Generic event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${location.lineNumber}) for event '${Event.getEventName(eventType, custom)}' took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`);
                 }
-                if (result instanceof Promise) await result;
             } catch (e) {
                 alt.logError(`[JS] Exception caught while invoking generic event handler`);
                 alt.logError(e);
@@ -240,8 +239,8 @@ export class Event {
      * @param {Record<string, unknown>} ctx
      * @param {boolean} custom
      */
-    static async invoke(eventType, ctx, custom) {
-        await Event.#invokeGeneric(eventType, ctx, custom);
+    static invoke(eventType, ctx, custom) {
+        Event.#invokeGeneric(eventType, ctx, custom);
         if (eventType === alt.Enums.EventType.CLIENT_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isClient);
         else if (eventType === alt.Enums.EventType.SERVER_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isServer);
 
@@ -253,13 +252,10 @@ export class Event {
 
             try {
                 const startTime = Date.now();
-                const result = handler(ctx);
+                handler(ctx);
                 const duration = Date.now() - startTime;
-                if (duration > Event.#warningThreshold) {
+                if (duration > Event.#warningThreshold)
                     alt.logWarning(`[JS] Event handler in resource '${cppBindings.resourceName}' (${location.fileName}:${location.lineNumber}) for event '${Event.getEventName(eventType, custom)}' took ${duration}ms to execute (Threshold: ${Event.#warningThreshold}ms)`);
-                }
-                if (result instanceof Promise) await result;
-
                 if (onlyOnce) eventHandler.destroy();
             } catch (e) {
                 alt.logError(`[JS] Exception caught while invoking event handler`);
