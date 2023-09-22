@@ -82,7 +82,7 @@ static void CreateEntity(js::FunctionContext& ctx)
         if(scriptObjectObj.GetType("onCreate") == js::Type::FUNCTION)
         {
             js::Function onCreateFunc = scriptObjectObj.Get<v8::Local<v8::Value>>("onCreate").As<v8::Function>();
-            onCreateFunc.Call(args.Get());
+            onCreateFunc.Call(scriptObjectObj, args.Get());
             if(tryCatch.HasCaught()) tryCatch.ReThrow();
         }
     }
