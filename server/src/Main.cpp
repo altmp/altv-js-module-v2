@@ -8,38 +8,6 @@
 
 #include <iostream>
 
-namespace server
-{
-    static void Initialize(v8::Local<v8::Object> exports, v8::Local<v8::Value>, v8::Local<v8::Context> context, void*)
-    {
-        if(!js::Module::Exists("@altv/server"))
-        {
-            js::Logger::Error("INTERNAL ERROR: @altv/server module not found");
-            return;
-        }
-
-        js::Module& mod = js::Module::Get("@altv/server");
-        exports->SetPrototype(context, mod.GetNamespace(js::IResource::GetFromContext(context)));
-    }
-    NODE_MODULE_LINKED(alt, Initialize)
-}  // namespace server
-
-namespace shared
-{
-    static void InitializeShared(v8::Local<v8::Object> exports, v8::Local<v8::Value>, v8::Local<v8::Context> context, void*)
-    {
-        if(!js::Module::Exists("@altv/shared"))
-        {
-            js::Logger::Error("INTERNAL ERROR: @altv/shared module not found");
-            return;
-        }
-
-        js::Module& mod = js::Module::Get("@altv/shared");
-        exports->SetPrototype(context, mod.GetNamespace(js::IResource::GetFromContext(context)));
-    }
-    NODE_MODULE_LINKED(altShared, InitializeShared)
-}  // namespace shared
-
 static void ModuleCommand(const std::vector<std::string>& args)
 {
     if(args.size() == 0)
