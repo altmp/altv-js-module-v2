@@ -2,6 +2,7 @@
 #include "Logger.h"
 
 #include <sstream>
+#include <iomanip>
 
 void Profiler::DumpAllSamples()
 {
