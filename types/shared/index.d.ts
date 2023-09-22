@@ -1881,7 +1881,6 @@ declare module "@altv/shared" {
             STOP_SYNCED_SCENE,
             UPDATE_SYNCED_SCENE,
 
-            CHECKPOINT_EVENT,
             COLSHAPE_EVENT,
             PLAYER_ENTER_VEHICLE,
             PLAYER_START_ENTER_VEHICLE,
@@ -1900,8 +1899,6 @@ declare module "@altv/shared" {
 
             CREATE_BASE_OBJECT_EVENT,
             REMOVE_BASE_OBJECT_EVENT,
-
-            DATA_NODE_RECEIVED_EVENT,
 
             CONSOLE_COMMAND_EVENT,
 
@@ -1937,6 +1934,10 @@ declare module "@altv/shared" {
             WORLD_OBJECT_STREAM_OUT,
 
             VOICE_CONNECTION_EVENT,
+
+            PED_DAMAGE,
+            PED_DEATH,
+            PED_HEAL,
 
             ALL,
             SIZE

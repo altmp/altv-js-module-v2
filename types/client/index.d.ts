@@ -1193,6 +1193,14 @@ declare module "@altv/client" {
         export function onVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): altShared.Events.EventHandler;
         export function onceVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): altShared.Events.EventHandler;
 
+        // Ped related events
+        export function onPedDeath(callback: GenericEventCallback<PedDeathEventParameters>): altShared.Events.EventHandler;
+        export function oncePedDeath(callback: GenericEventCallback<PedDeathEventParameters>): altShared.Events.EventHandler;
+
+        export function onPedDamage(callback: GenericEventCallback<PedDamageEventParameters>): altShared.Events.EventHandler;
+        export function oncePedDamage(callback: GenericEventCallback<PedDamageEventParameters>): altShared.Events.EventHandler;
+
+        // World object related
         export function onWorldObjectPositionChange(callback: GenericEventCallback<WorldObjectPositionChangeEventParameters>): altShared.Events.EventHandler;
         export function onceWorldObjectPositionChange(callback: GenericEventCallback<WorldObjectPositionChangeEventParameters>): altShared.Events.EventHandler;
         export function onWorldObjectStreamIn(callback: GenericEventCallback<WorldObjectStreamInEventParameters>): altShared.Events.EventHandler;
@@ -1218,6 +1226,20 @@ declare module "@altv/client" {
 
         interface VoiceConnectionEventParameters {
             state: altShared.Enums.VoiceConnectionState;
+        }
+
+        interface PedDeathEventParameters {
+            ped: Ped;
+            killer: Entity;
+            weapon: number;
+        }
+
+        interface PedDamageEventParameters {
+            ped: Ped;
+            attacker: Entity;
+            healthDamage: number;
+            armourDamage: number;
+            weapon: number;
         }
 
         interface PlayerWeaponShootEventParameters {

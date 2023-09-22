@@ -865,6 +865,16 @@ declare module "@altv/server" {
         export function onPlayerVehicleSeatChange(callback: GenericPlayerEventCallback<PlayerVehicleSeatChangeEventParameters>): altShared.Events.EventHandler;
         export function oncePlayerVehicleSeatChange(callback: GenericPlayerEventCallback<PlayerVehicleSeatChangeEventParameters>): altShared.Events.EventHandler;
 
+        // Ped related events
+        export function onPedHeal(callback: GenericEventCallback<PedHealEventParameters>): altShared.Events.EventHandler;
+        export function oncePedHeal(callback: GenericEventCallback<PedHealEventParameters>): altShared.Events.EventHandler;
+
+        export function onPedDeath(callback: GenericEventCallback<PedDeathEventParameters>): altShared.Events.EventHandler;
+        export function oncePedDeath(callback: GenericEventCallback<PedDeathEventParameters>): altShared.Events.EventHandler;
+
+        export function onPedDamage(callback: GenericEventCallback<PedDamageEventParameters>): altShared.Events.EventHandler;
+        export function oncePedDamage(callback: GenericEventCallback<PedDamageEventParameters>): altShared.Events.EventHandler;
+
         // Vehicle related events
         export function onVehicleDestroy(callback: GenericEventCallback<VehicleDestroyEventParameters>): altShared.Events.EventHandler;
         export function onceVehicleDestroy(callback: GenericEventCallback<VehicleDestroyEventParameters>): altShared.Events.EventHandler;
@@ -1197,6 +1207,30 @@ declare module "@altv/server" {
             vehicle: Vehicle;
             oldSeat: number;
             newSeat: number;
+        }
+
+        interface PedHealEventParameters {
+            readonly ped: Ped;
+
+            newHealth: number;
+            oldHealth: number;
+
+            newArmour: number;
+            oldArmour: number;
+        }
+
+        interface PedDeathEventParameters {
+            ped: Ped;
+            killer: Entity;
+            weapon: number;
+        }
+
+        interface PedDamageEventParameters {
+            ped: Ped;
+            attacker: Entity;
+            healthDamage: number;
+            armourDamage: number;
+            weapon: number;
         }
 
         interface VehicleDestroyEventParameters {
