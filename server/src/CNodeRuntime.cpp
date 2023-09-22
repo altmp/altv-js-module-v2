@@ -49,7 +49,7 @@ void CNodeRuntime::OnTick()
 std::vector<std::string> CNodeRuntime::GetNodeArgs()
 {
     // https://nodejs.org/docs/latest-v18.x/api/cli.html#options
-    std::vector<std::string> args = { "alt-server", "--trace-warnings" };
+    std::vector<std::string> args = { "--trace-warnings" };
 
     Config::Value::ValuePtr moduleConfig = alt::ICore::Instance().GetServerConfig()["js-module-v2"];
     if(!moduleConfig->IsDict()) return args;
