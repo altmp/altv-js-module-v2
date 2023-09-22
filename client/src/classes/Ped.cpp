@@ -9,4 +9,5 @@ extern js::Class pedClass("Ped", &sharedPedClass, nullptr, [](js::ClassTemplate&
     tpl.BindToType(alt::IBaseObject::Type::PED);
 
     tpl.GetByID<alt::IBaseObject::Type::PED>();
+    tpl.GetByRemoteID<alt::IBaseObject::Type::PED>();
 });

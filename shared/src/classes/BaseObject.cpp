@@ -101,6 +101,22 @@ static void GetByID(js::FunctionContext& ctx)
     ctx.Return(obj);
 }
 
+#ifdef ALT_CLIENT_API
+static void GetByRemoteID(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(2)) return;
+
+    alt::IBaseObject::Type type;
+    if(!ctx.GetArg(0, type)) return;
+
+    uint32_t id;
+    if(!ctx.GetArg(1, id)) return;
+
+    alt::IBaseObject* obj = alt::ICore::Instance().GetBaseObjectByRemoteID(type, id);
+    ctx.Return(obj);
+}
+#endif
+
 // clang-format off
 extern js::Class baseObjectClass("BaseObject", [](js::ClassTemplate& tpl)
 {
@@ -110,6 +126,11 @@ extern js::Class baseObjectClass("BaseObject", [](js::ClassTemplate& tpl)
     tpl.Property("valid", ValidGetter);
     tpl.Property<&alt::IBaseObject::IsRemoved>("removed");
 
+#ifdef ALT_CLIENT_API
+    tpl.LazyProperty<&alt::IBaseObject::GetRemoteID>("remoteID");
+    tpl.LazyProperty<&alt::IBaseObject::IsRemote>("isRemote");
+#endif
+
     tpl.Method("destroy", Destroy);
 
     tpl.DynamicProperty("meta", MetaGetter, MetaSetter, MetaDeleter, MetaEnumerator);
@@ -118,4 +139,7 @@ extern js::Class baseObjectClass("BaseObject", [](js::ClassTemplate& tpl)
     tpl.Method("setMultipleMetaData", SetMultipleMetaData);
 
     tpl.StaticFunction("getByID", GetByID);
+#ifdef ALT_CLIENT_API
+    tpl.StaticFunction("getByRemoteID", GetByRemoteID);
+#endif
 });

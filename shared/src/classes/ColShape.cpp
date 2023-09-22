@@ -128,4 +128,8 @@ extern js::Class colShapeClass("ColShape", &worldObjectClass, nullptr, [](js::Cl
     tpl.Method<&alt::IColShape::IsPointIn>("isPointIn");
 
     tpl.GetByID<alt::IBaseObject::Type::COLSHAPE>();
+
+#ifdef ALT_CLIENT_API
+    tpl.GetByRemoteID<alt::IBaseObject::Type::COLSHAPE>();
+#endif
 });

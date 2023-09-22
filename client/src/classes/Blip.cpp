@@ -10,4 +10,5 @@ extern js::Class blipClass("Blip", &sharedBlipClass, nullptr, [](js::ClassTempla
     tpl.Property<&alt::IBlip::IsStreamedIn>("isStreamedIn");
 
     tpl.GetByID<alt::IBaseObject::Type::BLIP>();
+    tpl.GetByRemoteID<alt::IBaseObject::Type::BLIP>();
 });

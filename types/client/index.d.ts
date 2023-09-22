@@ -179,9 +179,10 @@ declare module "@altv/client" {
 
     export class BaseObject extends altShared.BaseObject {
         readonly isRemote: boolean;
-        readonly remoteId: number;
+        readonly remoteID: number;
 
         static getByID(type: altShared.Enums.BaseObjectType, id: number): BaseObject | null;
+        static getByRemoteID(type: altShared.Enums.BaseObjectType, id: number): BaseObject | null;
 
         readonly meta: BaseObjectMeta;
         readonly syncedMeta: Readonly<altShared.BaseObjectSyncedMeta>;
@@ -239,8 +240,9 @@ declare module "@altv/client" {
         attachTo(entity: Entity): boolean;
         fade(opacity: number, duration: number): void;
 
-        static getByID(id: number): Blip | null;
         static create(options: BlipCreateOptions): Blip;
+        static getByID(id: number): Blip | null;
+        static getByRemoteID(id: number): Blip | null;
     }
 
     export abstract class ColShape extends WorldObject {
@@ -253,6 +255,7 @@ declare module "@altv/client" {
 
         static create(opts: altShared.ColShapeCreateOptions): ColShape;
         static getByID(id: number): ColShape | null;
+        static getByRemoteID(id: number): ColShape | null;
     }
 
     interface CheckpointCreateOptions {
@@ -286,6 +289,7 @@ declare module "@altv/client" {
 
         static create(opts: CheckpointCreateOptions): Checkpoint;
         static getByID(id: number): Checkpoint | null;
+        static getByRemoteID(id: number): Checkpoint | null;
     }
 
     export abstract class Entity extends WorldObject {
@@ -411,7 +415,9 @@ declare module "@altv/client" {
 
         static readonly all: ReadonlyArray<Object>;
         static readonly streamedIn: ReadonlyArray<Object>;
+
         static getByID(id: number): Object | null;
+        static getByRemoteID(id: number): Object | null;
     }
 
     interface LocalObjectCreateOptions {
@@ -481,6 +487,9 @@ declare module "@altv/client" {
 
         static readonly all: ReadonlyArray<Ped>;
         static readonly streamedIn: ReadonlyArray<Ped>;
+
+        static getByID(id: number): Ped | null;
+        static getByRemoteID(id: number): Ped | null;
     }
 
     interface LocalPedCreateOptions {
@@ -603,7 +612,9 @@ declare module "@altv/client" {
         static readonly local: LocalPlayer;
         static readonly all: ReadonlyArray<Player>;
         static readonly streamedIn: ReadonlyArray<Player>;
+
         static getByID(id: number): Player | null;
+        static getByRemoteID(id: number): Player | null;
     }
 
     interface RmlDocumentCreateOptions {
@@ -734,6 +745,7 @@ declare module "@altv/client" {
         readonly streamingDistance: number;
 
         static getByID(id: number): TextLabel | null;
+        static getByRemoteID(id: number): TextLabel | null;
     }
 
     export abstract class Vehicle extends Entity {
@@ -857,7 +869,9 @@ declare module "@altv/client" {
 
         static readonly all: ReadonlyArray<Vehicle>;
         static readonly streamedIn: ReadonlyArray<Vehicle>;
+
         static getByID(id: number): Vehicle | null;
+        static getByRemoteID(id: number): Vehicle | null;
     }
 
     interface VirtualEntityCreateOptions {

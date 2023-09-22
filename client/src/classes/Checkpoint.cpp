@@ -10,4 +10,5 @@ extern js::Class checkpointClass("Checkpoint", &sharedCheckpointClass, nullptr, 
     tpl.Property<&alt::ICheckpoint::IsStreamedIn>("isStreamedIn");
 
     tpl.GetByID<alt::IBaseObject::Type::CHECKPOINT>();
+    tpl.GetByRemoteID<alt::IBaseObject::Type::CHECKPOINT>();
 });

@@ -59,4 +59,5 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Method<&alt::IVehicle::ResetDashboardLights>("resetDashboardLights");
 
     tpl.GetByID<alt::IBaseObject::Type::VEHICLE>();
+    tpl.GetByRemoteID<alt::IBaseObject::Type::VEHICLE>();
 });

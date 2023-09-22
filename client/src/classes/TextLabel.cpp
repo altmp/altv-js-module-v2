@@ -19,4 +19,5 @@ extern js::Class textLabelClass("TextLabel", &worldObjectClass, nullptr, [](js::
     tpl.Property<&alt::ITextLabel::GetStreamingDistance>("streamingDistance");
 
     tpl.GetByID<alt::IBaseObject::Type::TEXT_LABEL>();
+    tpl.GetByRemoteID<alt::IBaseObject::Type::TEXT_LABEL>();
 });

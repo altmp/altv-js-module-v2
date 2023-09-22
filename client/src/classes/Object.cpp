@@ -8,4 +8,5 @@ extern js::Class objectClass("Object", &sharedObjectClass, nullptr, [](js::Class
     tpl.BindToType(alt::IBaseObject::Type::OBJECT);
 
     tpl.GetByID<alt::IBaseObject::Type::OBJECT>();
+    tpl.GetByRemoteID<alt::IBaseObject::Type::OBJECT>();
 });

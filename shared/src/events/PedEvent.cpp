@@ -20,5 +20,3 @@ static js::Event pedDamageEvent(alt::CEvent::Type::PED_DAMAGE, [](const alt::CEv
     args.Set("armourDamage", e->GetArmourDamage());
     args.Set("weapon", e->GetWeapon());
 });
-
-

@@ -44,4 +44,5 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.StaticLazyProperty("local", LocalGetter);
 
     tpl.GetByID<alt::IBaseObject::Type::PLAYER>();
+    tpl.GetByRemoteID<alt::IBaseObject::Type::PLAYER>();
 });

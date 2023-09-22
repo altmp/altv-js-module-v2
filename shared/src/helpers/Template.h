@@ -180,6 +180,19 @@ namespace js
             ctx.Return(entity);
         }
 
+#ifdef ALT_CLIENT_API
+        template<alt::IBaseObject::Type Type>
+        void GetByRemoteIDHandler(FunctionContext& ctx)
+        {
+            if(!ctx.CheckArgCount(1)) return;
+
+            uint32_t id;
+            if(!ctx.GetArg(0, id)) return;
+
+            alt::IBaseObject* entity = alt::ICore::Instance().GetBaseObjectByRemoteID(Type, id);
+            ctx.Return(entity);
+        }
+#endif
     }  // namespace Wrapper
 
     static v8::Local<v8::FunctionTemplate> WrapFunction(FunctionCallback cb)
@@ -479,6 +492,14 @@ namespace js
         {
             StaticFunction("getByID", Wrapper::GetByIDHandler<Type>);
         }
+
+#ifdef ALT_CLIENT_API
+        template<alt::IBaseObject::Type Type>
+        void GetByRemoteID()
+        {
+            StaticFunction("getByRemoteID", Wrapper::GetByRemoteIDHandler<Type>);
+        }
+#endif
 
         // Allows instances of this class to be called as a function
         void CallHandler(FunctionCallback cb)
