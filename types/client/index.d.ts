@@ -638,7 +638,6 @@ declare module "@altv/client" {
 
         static create(options: RmlDocumentCreateOptions): RmlDocument;
 
-        // TODO (xLuxy): Check if RmlDocument has (it's not undefined)
         static getByID(id: string): RmlDocument | null;
     }
 
@@ -729,7 +728,6 @@ declare module "@altv/client" {
         off(eventName: string, func: (...args: unknown[]) => void): void;
         readonly listeners: Readonly<{ [eventName: string]: ReadonlyArray<(...args: unknown[]) => void> }>;
 
-        // TODO (xLuxy): Check if RmlElement has (it's not undefined)
         static getByID(id: string): RmlElement | null;
     }
 

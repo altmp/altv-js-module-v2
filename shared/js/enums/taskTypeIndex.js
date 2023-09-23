@@ -2,7 +2,6 @@
 // if R* adds in the middle!
 // This is up-to-date for b2372
 
-// TODO (xLuxy): Typings missing
 // When changing, update types/client/index.d.ts aswell
 alt.Enums.TaskTypeIndex = Object.freeze({
     HANDS_UP: 0,
