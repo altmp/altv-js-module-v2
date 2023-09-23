@@ -13,15 +13,3 @@ registerEventHandler(alt.Enums.CustomEventType.ENTITY_ENTER_COLSHAPE, "entityEnt
 registerEventHandler(alt.Enums.CustomEventType.ENTITY_LEAVE_COLSHAPE, "entityLeaveColshape", ({ entity, colShape }) => {
     return [colShape, entity];
 });
-
-// TODO (xLuxy): Implement this properly
-// NOTE (xLuxy): alt.onClient / alt.onServer - player is only available on server
-registerEventHandler(alt.Enums.EventType.CLIENT_SCRIPT_EVENT, "", ({ player, eventName, args }) => {
-    return [player, eventName, ...args];
-});
-
-// TODO (xLuxy): Implement this properly
-// NOTE (xLuxy): alt.on / alt.once
-registerEventHandler(alt.Enums.EventType.SERVER_SCRIPT_EVENT, "", ({ eventName, args }) => {
-    return [eventName, ...args];
-});
