@@ -40,20 +40,27 @@ namespace js
         void Register(ModuleTemplate& tpl);
 
     public:
-        Module(const std::string& _name, ModuleInitializationCallback _cb) : name(_name), initCb(_cb)
+        Module(const std::string& _name, ModuleInitializationCallback _cb, CustomGetNamespaceCallback _customGetNamespaceCb = nullptr)
+            : name(_name), initCb(_cb), customGetNamespaceCb(_customGetNamespaceCb)
         {
             GetAll().insert({ name, this });
         }
-        Module(const std::string& _name, const std::vector<Class*>& _classes, ModuleInitializationCallback _cb) : name(_name), classes(_classes), initCb(_cb)
+        Module(const std::string& _name, const std::vector<Class*>& _classes, ModuleInitializationCallback _cb, CustomGetNamespaceCallback _customGetNamespaceCb = nullptr)
+            : name(_name), classes(_classes), initCb(_cb), customGetNamespaceCb(_customGetNamespaceCb)
         {
             GetAll().insert({ name, this });
         }
-        Module(const std::string& _name, const std::string& _parent, ModuleInitializationCallback _cb) : name(_name), parentModule(_parent), initCb(_cb)
+        Module(const std::string& _name, const std::string& _parent, ModuleInitializationCallback _cb, CustomGetNamespaceCallback _customGetNamespaceCb = nullptr)
+            : name(_name), parentModule(_parent), initCb(_cb), customGetNamespaceCb(_customGetNamespaceCb)
         {
             GetAll().insert({ name, this });
         }
-        Module(const std::string& _name, const std::string& _parent, const std::vector<Class*>& _classes, ModuleInitializationCallback _cb)
-            : name(_name), parentModule(_parent), classes(_classes), initCb(_cb)
+        Module(const std::string& _name,
+               const std::string& _parent,
+               const std::vector<Class*>& _classes,
+               ModuleInitializationCallback _cb,
+               CustomGetNamespaceCallback _customGetNamespaceCb = nullptr)
+            : name(_name), parentModule(_parent), classes(_classes), initCb(_cb), customGetNamespaceCb(_customGetNamespaceCb)
         {
             GetAll().insert({ name, this });
         }

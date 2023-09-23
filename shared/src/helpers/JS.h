@@ -17,7 +17,6 @@ namespace js
 
     namespace internal
     {
-
         template<typename T>
         static void WeakHandleCallback(const v8::WeakCallbackInfo<T>& info)
         {

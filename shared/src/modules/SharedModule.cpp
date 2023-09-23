@@ -142,4 +142,11 @@ static js::Module sharedModule("@altv/shared", "", { &baseObjectClass, &worldObj
     module.StaticBindingExport("Vector2", "classes:vector2");
     module.StaticBindingExport("RGBA", "classes:rgba");
     module.StaticBindingExport("Quaternion", "classes:quaternion");
+}, [](js::IResource* resource) {
+    #ifdef ALT_SERVER_API
+    std::string name = "@altv/server";
+    #else
+    std::string name = "@altv/client";
+    #endif
+    return js::Module::Get(name).GetNamespace(resource);
 });
