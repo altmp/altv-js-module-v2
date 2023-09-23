@@ -64,7 +64,7 @@ class Timer {
     }
 
     constructor(type, callback, interval, once, args) {
-        assertIsType(type, "string", "Expected a string as first argument");
+        assertIsType(type, "number", "Expected a number as first argument");
         assertIsType(callback, "function", "Expected a function as second argument");
         assertIsType(interval, "number", "Expected a number as third argument");
 
