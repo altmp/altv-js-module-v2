@@ -394,8 +394,7 @@ declare module "@altv/server" {
         setDlcProp(componentId: number, drawable: number, texture: number, dlc: number): boolean;
         clearProps(componentId: number): void;
 
-        // TODO (xLuxy): Add Entity as argument
-        isEntityInStreamingRange(entityId: number): boolean;
+        isEntityInStreamingRange(entity: Entity | number): boolean;
         setIntoVehicle(vehicle: Vehicle, seat: number): void;
         playAmbientSpeech(speechName: string, speechParam: string, speechDictHash: number): void;
 

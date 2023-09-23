@@ -407,6 +407,19 @@ static void GetDlcProps(js::FunctionContext& ctx)
     ctx.Return(obj);
 }
 
+static void IsEntityInStreamingRange(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    ctx.CheckArgType(0, { js::Type::BASE_OBJECT, js::Type::NUMBER });
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    uint16_t entityId = 0;
+    if(ctx.GetArgType(0) == js::Type::BASE_OBJECT) entityId = static_cast<uint16_t>(ctx.GetArg<alt::IEntity*>(0)->GetID());
+    else entityId = ctx.GetArg<uint16_t>(0);
+
+    ctx.Return(player->IsEntityInStreamingRange(entityId));
+}
+
 static void GetHeadOverlay(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
@@ -870,7 +883,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method("getDlcProp", &GetDlcProps);
     tpl.Method<&alt::IPlayer::SetDlcProps>("setDlcProp");
     tpl.Method<&alt::IPlayer::ClearProps>("clearProp");
-    tpl.Method<&alt::IPlayer::IsEntityInStreamingRange>("isEntityInStreamingRange");
+    tpl.Method("isEntityInStreamingRange", &IsEntityInStreamingRange);
     tpl.Method<&alt::IPlayer::SetIntoVehicle>("setIntoVehicle");
     tpl.Method<&alt::IPlayer::PlayAmbientSpeech>("playAmbientSpeech");
     tpl.Method<&alt::IPlayer::SetHeadOverlay>("setHeadOverlay");
