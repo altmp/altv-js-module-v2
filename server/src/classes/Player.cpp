@@ -155,7 +155,7 @@ static void StreamedEntitiesGetter(js::PropertyContext& ctx)
     const std::vector<std::pair<alt::IEntity*, int32_t>> list = player->GetStreamedEntities();
     js::Array streamedInEntities(list.size());
 
-    for (auto& [entity, distance] : list)
+    for(auto& [entity, distance] : list)
     {
         js::Object entityObj;
 
@@ -410,12 +410,22 @@ static void GetDlcProps(js::FunctionContext& ctx)
 static void IsEntityInStreamingRange(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
-    ctx.CheckArgType(0, { js::Type::BASE_OBJECT, js::Type::NUMBER });
+    if(!ctx.CheckArgType(0, { js::Type::BASE_OBJECT, js::Type::NUMBER })) return;
     alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
 
-    uint16_t entityId = 0;
-    if(ctx.GetArgType(0) == js::Type::BASE_OBJECT) entityId = static_cast<uint16_t>(ctx.GetArg<alt::IEntity*>(0)->GetID());
-    else entityId = ctx.GetArg<uint16_t>(0);
+    uint32_t entityId = 0;
+    if(ctx.GetArgType(0) == js::Type::BASE_OBJECT)
+    {
+        alt::IBaseObject* object;
+        if(!ctx.GetArg(0, object)) return;
+        entityId = object->GetID();
+    }
+    else
+    {
+        uint32_t id;
+        if(!ctx.GetArg(0, id)) return;
+        entityId = id;
+    }
 
     ctx.Return(player->IsEntityInStreamingRange(entityId));
 }
