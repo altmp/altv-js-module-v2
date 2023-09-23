@@ -1,4 +1,5 @@
 requireBinding("shared/entity.js");
+requireBinding("client/events/entity.js");
 
 // Entity streamed-in stores
 /**
