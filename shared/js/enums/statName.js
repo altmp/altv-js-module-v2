@@ -1,10 +1,10 @@
 // When changing, update types/shared/index.d.ts aswell
 alt.Enums.StatName = Object.freeze({
-    Stamina: "stamina",
-    Strength: "strength",
-    LungCapacity: "lung_capacity",
-    Wheelie: "wheelie_ability",
-    Flying: "flying_ability",
-    Shooting: "shooting_ability",
-    Stealth: "stealth_ability"
+    STAMINA: "stamina",
+    STRENGTH: "strength",
+    LUNG_CAPACITY: "lung_capacity",
+    WHEELIE: "wheelie_ability",
+    FLYING: "flying_ability",
+    SHOOTING: "shooting_ability",
+    STEALTH: "stealth_ability"
 });
