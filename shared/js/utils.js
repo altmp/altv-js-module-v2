@@ -15,9 +15,14 @@ export function waitFor(cb, timeout) {
 
     return new Promise((resolve, reject) => {
         alt.Timers.everyTick(function () {
-            if (Date.now() > checkUntil) return reject(new Error("Timeout"));
-            if (cb()) return resolve();
-            this.destroy();
+            if (Date.now() > checkUntil) {
+                this.destroy();
+                return reject(new Error("Timeout"));
+            }
+            if (cb()) {
+                this.destroy();
+                return resolve();
+            }
         });
     });
 }
