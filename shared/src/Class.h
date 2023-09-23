@@ -34,7 +34,7 @@ namespace js
     private:
         std::string name;
         Class* parentClass = nullptr;
-        FunctionCallback ctor = nullptr;
+        internal::FunctionCallback ctor = nullptr;
         ClassInitializationCallback initCb;
         std::unordered_map<v8::Isolate*, ClassTemplate> templateMap;
         int internalFieldCount = 0;
@@ -43,12 +43,12 @@ namespace js
         void Register(v8::Isolate* isolate);
 
     public:
-        Class(const std::string& _name, FunctionCallback _ctor, ClassInitializationCallback _cb, bool hasExtraExternalField = false)
+        Class(const std::string& _name, internal::FunctionCallback _ctor, ClassInitializationCallback _cb, bool hasExtraExternalField = false)
             : name(_name), ctor(_ctor), initCb(_cb), internalFieldCount(hasExtraExternalField ? 2 : 0)
         {
             GetAll().push_back(this);
         }
-        Class(const std::string& _name, Class* _parent, FunctionCallback _ctor, ClassInitializationCallback _cb, bool hasExtraExternalField = false)
+        Class(const std::string& _name, Class* _parent, internal::FunctionCallback _ctor, ClassInitializationCallback _cb, bool hasExtraExternalField = false)
             : name(_name), parentClass(_parent), ctor(_ctor), initCb(_cb), internalFieldCount(hasExtraExternalField ? 2 : 0)
         {
             GetAll().push_back(this);

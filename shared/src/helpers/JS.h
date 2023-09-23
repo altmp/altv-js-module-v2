@@ -15,17 +15,23 @@ namespace js
 
     class IResource;
 
+    namespace internal
+    {
+
+        template<typename T>
+        static void WeakHandleCallback(const v8::WeakCallbackInfo<T>& info)
+        {
+            T* val = info.GetParameter();
+            if(!val) return;
+            delete val;
+        }
+
+        void RunEventLoop();
+    }  // namespace internal
+
     static void Throw(const std::string& message)
     {
         v8::Isolate::GetCurrent()->ThrowException(v8::Exception::Error(js::JSValue(message)));
-    }
-
-    template<typename T>
-    static void WeakHandleCallback(const v8::WeakCallbackInfo<T>& info)
-    {
-        T* val = info.GetParameter();
-        if(!val) return;
-        delete val;
     }
 
     struct SourceLocation
@@ -64,8 +70,6 @@ namespace js
         static StackTrace GetCurrent(v8::Isolate* isolate, IResource* resource = nullptr, int framesToSkip = 0);
         static void Print(v8::Isolate* isolate);
     };
-
-    void RunEventLoop();
 
     class TryCatch
     {
@@ -191,7 +195,7 @@ namespace js
             object->Set(context, js::JSValue(key), js::JSValue((Type)val));
         }
 
-        void SetMethod(const std::string& key, FunctionCallback func);
+        void SetMethod(const std::string& key, internal::FunctionCallback func);
 
         // Falls back to default value if the value is not found or the type doesn't match
         template<typename T>
@@ -584,7 +588,7 @@ namespace js
                 v8::Promise::PromiseState state = promise->State();
                 switch(state)
                 {
-                    case v8::Promise::PromiseState::kPending: RunEventLoop(); break;
+                    case v8::Promise::PromiseState::kPending: internal::RunEventLoop(); break;
                     case v8::Promise::PromiseState::kFulfilled: return true;
                     case v8::Promise::PromiseState::kRejected: return false;
                 }
@@ -623,7 +627,7 @@ namespace js
         {
             ctx->Global()->Set(ctx, js::JSValue(_name), value);
         }
-        TemporaryGlobalExtension(v8::Local<v8::Context> _ctx, const std::string& _name, FunctionCallback _callback);
+        TemporaryGlobalExtension(v8::Local<v8::Context> _ctx, const std::string& _name, internal::FunctionCallback _callback);
         ~TemporaryGlobalExtension()
         {
             ctx->Global()->Delete(ctx, js::JSValue(name));

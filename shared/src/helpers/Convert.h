@@ -15,6 +15,114 @@ namespace js
     class Object;
     class Array;
 
+    namespace internal
+    {
+        inline std::optional<alt::Vector3f> ToVector3(v8::Local<v8::Value> val)
+        {
+            if(!val->IsObject()) return std::nullopt;
+            v8::Isolate* isolate = v8::Isolate::GetCurrent();
+            v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
+
+            v8::Local<v8::Object> obj = val.As<v8::Object>();
+            v8::Local<v8::Value> xVal;
+            v8::Local<v8::Value> yVal;
+            v8::Local<v8::Value> zVal;
+
+            if(!obj->Get(ctx, v8::String::NewFromUtf8(isolate, "x").ToLocalChecked()).ToLocal(&xVal)) return std::nullopt;
+            if(!obj->Get(ctx, v8::String::NewFromUtf8(isolate, "y").ToLocalChecked()).ToLocal(&yVal)) return std::nullopt;
+            if(!obj->Get(ctx, v8::String::NewFromUtf8(isolate, "z").ToLocalChecked()).ToLocal(&zVal)) return std::nullopt;
+
+            if(!xVal->IsNumber() || !yVal->IsNumber() || !zVal->IsNumber()) return std::nullopt;
+
+            return alt::Vector3f(xVal.As<v8::Number>()->Value(), yVal.As<v8::Number>()->Value(), zVal.As<v8::Number>()->Value());
+        }
+        inline std::optional<alt::Vector2f> ToVector2(v8::Local<v8::Value> val)
+        {
+            if(!val->IsObject()) return std::nullopt;
+            v8::Isolate* isolate = v8::Isolate::GetCurrent();
+            v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
+
+            v8::Local<v8::Object> obj = val.As<v8::Object>();
+            v8::Local<v8::Value> xVal;
+            v8::Local<v8::Value> yVal;
+
+            if(!obj->Get(ctx, v8::String::NewFromUtf8(isolate, "x").ToLocalChecked()).ToLocal(&xVal)) return std::nullopt;
+            if(!obj->Get(ctx, v8::String::NewFromUtf8(isolate, "y").ToLocalChecked()).ToLocal(&yVal)) return std::nullopt;
+
+            if(!xVal->IsNumber() || !yVal->IsNumber()) return std::nullopt;
+
+            return alt::Vector2f(xVal.As<v8::Number>()->Value(), yVal.As<v8::Number>()->Value());
+        }
+        inline std::optional<alt::RGBA> ToRGBA(v8::Local<v8::Value> val)
+        {
+            if(!val->IsObject()) return std::nullopt;
+            v8::Isolate* isolate = v8::Isolate::GetCurrent();
+            v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
+
+            v8::Local<v8::Object> obj = val.As<v8::Object>();
+            v8::Local<v8::Value> rVal;
+            v8::Local<v8::Value> gVal;
+            v8::Local<v8::Value> bVal;
+            v8::Local<v8::Value> aVal;
+
+            if(!obj->Get(ctx, v8::String::NewFromUtf8(isolate, "r").ToLocalChecked()).ToLocal(&rVal)) return std::nullopt;
+            if(!obj->Get(ctx, v8::String::NewFromUtf8(isolate, "g").ToLocalChecked()).ToLocal(&gVal)) return std::nullopt;
+            if(!obj->Get(ctx, v8::String::NewFromUtf8(isolate, "b").ToLocalChecked()).ToLocal(&bVal)) return std::nullopt;
+            if(!obj->Get(ctx, v8::String::NewFromUtf8(isolate, "a").ToLocalChecked()).ToLocal(&aVal)) return std::nullopt;
+
+            if(!rVal->IsNumber() || !gVal->IsNumber() || !bVal->IsNumber() || !aVal->IsNumber()) return std::nullopt;
+
+            return alt::RGBA(rVal.As<v8::Number>()->Value(), gVal.As<v8::Number>()->Value(), bVal.As<v8::Number>()->Value(), aVal.As<v8::Number>()->Value());
+        }
+        inline std::optional<alt::Quaternion> ToQuaternion(v8::Local<v8::Value> val)
+        {
+            if(!val->IsObject()) return std::nullopt;
+            v8::Isolate* isolate = v8::Isolate::GetCurrent();
+            v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
+
+            v8::Local<v8::Object> obj = val.As<v8::Object>();
+            v8::Local<v8::Value> xVal;
+            v8::Local<v8::Value> yVal;
+            v8::Local<v8::Value> zVal;
+            v8::Local<v8::Value> wVal;
+
+            if(!obj->Get(ctx, v8::String::NewFromUtf8(isolate, "x").ToLocalChecked()).ToLocal(&xVal)) return std::nullopt;
+            if(!obj->Get(ctx, v8::String::NewFromUtf8(isolate, "y").ToLocalChecked()).ToLocal(&yVal)) return std::nullopt;
+            if(!obj->Get(ctx, v8::String::NewFromUtf8(isolate, "z").ToLocalChecked()).ToLocal(&zVal)) return std::nullopt;
+            if(!obj->Get(ctx, v8::String::NewFromUtf8(isolate, "w").ToLocalChecked()).ToLocal(&wVal)) return std::nullopt;
+
+            if(!xVal->IsNumber() || !yVal->IsNumber() || !zVal->IsNumber() || !wVal->IsNumber()) return std::nullopt;
+
+            return alt::Quaternion(xVal.As<v8::Number>()->Value(), yVal.As<v8::Number>()->Value(), zVal.As<v8::Number>()->Value(), wVal.As<v8::Number>()->Value());
+        }
+        std::optional<alt::IBaseObject*> ToBaseObject(v8::Local<v8::Value> val);
+        template<typename T>
+        std::optional<T*> ToExtraInternalFieldValue(v8::Local<v8::Value> val)
+        {
+            if(!val->IsObject() || val.As<v8::Object>()->InternalFieldCount() != 2) return std::nullopt;
+            T* ptr = static_cast<T*>(val.As<v8::Object>()->GetAlignedPointerFromInternalField(1));
+            return ptr ? std::optional<T*>(ptr) : std::nullopt;
+        }
+
+        // https://stackoverflow.com/a/16337657/19498259
+        template<typename>
+        struct IsStdVector : std::false_type
+        {
+        };
+        template<typename T, typename A>
+        struct IsStdVector<std::vector<T, A>> : std::true_type
+        {
+        };
+        template<typename>
+        struct IsStdUnorderedMap : std::false_type
+        {
+        };
+        template<typename T, typename A>
+        struct IsStdUnorderedMap<std::unordered_map<T, A>> : std::true_type
+        {
+        };
+    }  // namespace internal
+
     static constexpr int64_t JS_MAX_SAFE_INTEGER = 9007199254740991;
     static constexpr int64_t JS_MIN_SAFE_INTEGER = JS_MAX_SAFE_INTEGER * -1;
 
@@ -173,110 +281,6 @@ namespace js
     {
         return val->Value();
     }
-    static std::optional<alt::Vector3f> ToVector3(v8::Local<v8::Value> val)
-    {
-        if(!val->IsObject()) return std::nullopt;
-        v8::Isolate* isolate = v8::Isolate::GetCurrent();
-        v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
-
-        v8::Local<v8::Object> obj = val.As<v8::Object>();
-        v8::Local<v8::Value> xVal;
-        v8::Local<v8::Value> yVal;
-        v8::Local<v8::Value> zVal;
-
-        if(!obj->Get(ctx, js::JSValue("x")).ToLocal(&xVal)) return std::nullopt;
-        if(!obj->Get(ctx, js::JSValue("y")).ToLocal(&yVal)) return std::nullopt;
-        if(!obj->Get(ctx, js::JSValue("z")).ToLocal(&zVal)) return std::nullopt;
-
-        if(!xVal->IsNumber() || !yVal->IsNumber() || !zVal->IsNumber()) return std::nullopt;
-
-        return alt::Vector3f(xVal.As<v8::Number>()->Value(), yVal.As<v8::Number>()->Value(), zVal.As<v8::Number>()->Value());
-    }
-    static std::optional<alt::Vector2f> ToVector2(v8::Local<v8::Value> val)
-    {
-        if(!val->IsObject()) return std::nullopt;
-        v8::Isolate* isolate = v8::Isolate::GetCurrent();
-        v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
-
-        v8::Local<v8::Object> obj = val.As<v8::Object>();
-        v8::Local<v8::Value> xVal;
-        v8::Local<v8::Value> yVal;
-
-        if(!obj->Get(ctx, js::JSValue("x")).ToLocal(&xVal)) return std::nullopt;
-        if(!obj->Get(ctx, js::JSValue("y")).ToLocal(&yVal)) return std::nullopt;
-
-        if(!xVal->IsNumber() || !yVal->IsNumber()) return std::nullopt;
-
-        return alt::Vector2f(xVal.As<v8::Number>()->Value(), yVal.As<v8::Number>()->Value());
-    }
-    static std::optional<alt::RGBA> ToRGBA(v8::Local<v8::Value> val)
-    {
-        if(!val->IsObject()) return std::nullopt;
-        v8::Isolate* isolate = v8::Isolate::GetCurrent();
-        v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
-
-        v8::Local<v8::Object> obj = val.As<v8::Object>();
-        v8::Local<v8::Value> rVal;
-        v8::Local<v8::Value> gVal;
-        v8::Local<v8::Value> bVal;
-        v8::Local<v8::Value> aVal;
-
-        if(!obj->Get(ctx, js::JSValue("r")).ToLocal(&rVal)) return std::nullopt;
-        if(!obj->Get(ctx, js::JSValue("g")).ToLocal(&gVal)) return std::nullopt;
-        if(!obj->Get(ctx, js::JSValue("b")).ToLocal(&bVal)) return std::nullopt;
-        if(!obj->Get(ctx, js::JSValue("a")).ToLocal(&aVal)) return std::nullopt;
-
-        if(!rVal->IsNumber() || !gVal->IsNumber() || !bVal->IsNumber() || !aVal->IsNumber()) return std::nullopt;
-
-        return alt::RGBA(rVal.As<v8::Number>()->Value(), gVal.As<v8::Number>()->Value(), bVal.As<v8::Number>()->Value(), aVal.As<v8::Number>()->Value());
-    }
-    static std::optional<alt::Quaternion> ToQuaternion(v8::Local<v8::Value> val)
-    {
-        if(!val->IsObject()) return std::nullopt;
-        v8::Isolate* isolate = v8::Isolate::GetCurrent();
-        v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
-
-        v8::Local<v8::Object> obj = val.As<v8::Object>();
-        v8::Local<v8::Value> xVal;
-        v8::Local<v8::Value> yVal;
-        v8::Local<v8::Value> zVal;
-        v8::Local<v8::Value> wVal;
-
-        if(!obj->Get(ctx, js::JSValue("x")).ToLocal(&xVal)) return std::nullopt;
-        if(!obj->Get(ctx, js::JSValue("y")).ToLocal(&yVal)) return std::nullopt;
-        if(!obj->Get(ctx, js::JSValue("z")).ToLocal(&zVal)) return std::nullopt;
-        if(!obj->Get(ctx, js::JSValue("w")).ToLocal(&wVal)) return std::nullopt;
-
-        if(!xVal->IsNumber() || !yVal->IsNumber() || !zVal->IsNumber() || !wVal->IsNumber()) return std::nullopt;
-
-        return alt::Quaternion(xVal.As<v8::Number>()->Value(), yVal.As<v8::Number>()->Value(), zVal.As<v8::Number>()->Value(), wVal.As<v8::Number>()->Value());
-    }
-    std::optional<alt::IBaseObject*> ToBaseObject(v8::Local<v8::Value> val);
-    template<typename T>
-    std::optional<T*> ToExtraInternalFieldValue(v8::Local<v8::Value> val)
-    {
-        if(!val->IsObject() || val.As<v8::Object>()->InternalFieldCount() != 2) return std::nullopt;
-        T* ptr = static_cast<T*>(val.As<v8::Object>()->GetAlignedPointerFromInternalField(1));
-        return ptr ? std::optional<T*>(ptr) : std::nullopt;
-    }
-
-    // https://stackoverflow.com/a/16337657/19498259
-    template<typename>
-    struct IsStdVector : std::false_type
-    {
-    };
-    template<typename T, typename A>
-    struct IsStdVector<std::vector<T, A>> : std::true_type
-    {
-    };
-    template<typename>
-    struct IsStdUnorderedMap : std::false_type
-    {
-    };
-    template<typename T, typename A>
-    struct IsStdUnorderedMap<std::unordered_map<T, A>> : std::true_type
-    {
-    };
 
     template<typename T>
     std::optional<T> CppValue(v8::Local<v8::Value> val)
@@ -311,29 +315,29 @@ namespace js
         }
         else if constexpr(std::is_same_v<T, alt::MValue> || std::is_same_v<T, alt::MValueConst>)
         {
-            alt::MValue mvalue = js::JSToMValue(val);
+            alt::MValue mvalue = JSToMValue(val);
             if(!mvalue) return std::nullopt;
             return mvalue;
         }
         else if constexpr(std::is_same_v<T, alt::Vector3f> || std::is_same_v<T, alt::Position> || std::is_same_v<T, alt::Rotation>)
         {
-            return ToVector3(val);
+            return internal::ToVector3(val);
         }
         else if constexpr(std::is_same_v<T, alt::Vector2f>)
         {
-            return ToVector2(val);
+            return internal::ToVector2(val);
         }
         else if constexpr(std::is_same_v<T, alt::RGBA>)
         {
-            return ToRGBA(val);
+            return internal::ToRGBA(val);
         }
         else if constexpr(std::is_same_v<T, alt::Quaternion>)
         {
-            return ToQuaternion(val);
+            return internal::ToQuaternion(val);
         }
         else if constexpr(std::is_same_v<T, alt::IBaseObject*> || std::is_base_of_v<alt::IBaseObject, std::remove_pointer_t<T>>)
         {
-            std::optional<alt::IBaseObject*> obj = ToBaseObject(val);
+            std::optional<alt::IBaseObject*> obj = internal::ToBaseObject(val);
             if(!obj.has_value()) return std::nullopt;
             T object = dynamic_cast<T>(obj.value());
             return object ? std::optional<T>(object) : std::nullopt;
@@ -346,13 +350,15 @@ namespace js
         {
             return js::Array(val.As<v8::Array>());
         }
-        else if constexpr(IsStdVector<T>::value)
+        else if constexpr(internal::IsStdVector<T>::value)
         {
             if(!val->IsArray()) return std::nullopt;
+
             v8::Local<v8::Context> context = v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext();
             std::vector<typename T::value_type> vec;
             v8::Local<v8::Array> arr = val.As<v8::Array>();
             vec.reserve(arr->Length());
+
             for(uint32_t i = 0; i < arr->Length(); i++)
             {
                 auto maybeVal = arr->Get(context, i);
@@ -364,18 +370,22 @@ namespace js
             }
             return vec;
         }
-        else if constexpr(IsStdUnorderedMap<T>::value)
+        else if constexpr(internal::IsStdUnorderedMap<T>::value)
         {
             if(!val->IsObject()) return std::nullopt;
+
             v8::Local<v8::Context> context = v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext();
             std::unordered_map<std::string, typename T::value_type::second_type> map;
             v8::Local<v8::Object> obj = val.As<v8::Object>();
+
             auto maybeKeys = obj->GetOwnPropertyNames(context);
             v8::Local<v8::Array> keysArr;
             if(!maybeKeys.ToLocal(&keysArr)) return std::nullopt;
+
             std::optional<std::vector<std::string>> keysOpt = CppValue<std::vector<std::string>>(keysArr);
             if(!keysOpt.has_value()) return std::nullopt;
             const std::vector<std::string>& keys = keysOpt.value();
+
             for(std::string& key : keys)
             {
                 auto maybeVal = obj->Get(context, js::JSValue(key));
@@ -389,7 +399,7 @@ namespace js
         }
         else if constexpr(std::is_pointer_v<T>)
         {
-            std::optional<T> value = ToExtraInternalFieldValue<typename std::remove_pointer_t<T>>(val);
+            std::optional<T> value = internal::ToExtraInternalFieldValue<typename std::remove_pointer_t<T>>(val);
             return value;
         }
 

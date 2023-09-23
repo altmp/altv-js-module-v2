@@ -3,7 +3,7 @@
 #include "v8.h"
 #include "CallContext.h"
 
-namespace js
+namespace js::internal
 {
     using FunctionCallback = void (*)(FunctionContext&);
     using PropertyCallback = void (*)(PropertyContext&);
@@ -13,4 +13,4 @@ namespace js
     using DynamicPropertySetter = void (*)(DynamicPropertySetterContext&);
     using DynamicPropertyDeleter = void (*)(DynamicPropertyDeleterContext&);
     using DynamicPropertyEnumerator = void (*)(DynamicPropertyEnumeratorContext&);
-}  // namespace js
+}  // namespace js::internal

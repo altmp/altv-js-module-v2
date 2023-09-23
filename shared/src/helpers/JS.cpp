@@ -4,6 +4,11 @@
 #include <filesystem>
 #include <sstream>
 
+void js::internal::RunEventLoop()
+{
+    GetCurrentResource()->RunEventLoop();
+}
+
 static std::string PrettifyFilePath(js::IResource* resource, std::string path)
 {
     if(path.starts_with("file:///")) path = path.substr(8);
@@ -80,11 +85,6 @@ void js::StackTrace::Print(v8::Isolate* isolate)
     Logger::Error(GetCurrent(isolate).ToString());
 }
 
-void js::RunEventLoop()
-{
-    GetCurrentResource()->RunEventLoop();
-}
-
 void js::TryCatch::PrintError(bool skipLocation)
 {
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
@@ -133,7 +133,7 @@ js::IResource* js::PersistentValue::GetResource()
     return resource;
 }
 
-void js::Object::SetMethod(const std::string& key, js::FunctionCallback callback)
+void js::Object::SetMethod(const std::string& key, js::internal::FunctionCallback callback)
 {
     object->Set(context, JSValue(key), WrapFunction(callback)->GetFunction(context).ToLocalChecked());
 }
@@ -149,7 +149,7 @@ js::Type js::Object::GetType(const std::string& key)
     return type;
 }
 
-js::TemporaryGlobalExtension::TemporaryGlobalExtension(v8::Local<v8::Context> _ctx, const std::string& _name, js::FunctionCallback _callback) : ctx(_ctx), name(_name)
+js::TemporaryGlobalExtension::TemporaryGlobalExtension(v8::Local<v8::Context> _ctx, const std::string& _name, js::internal::FunctionCallback _callback) : ctx(_ctx), name(_name)
 {
     ctx->Global()->Set(ctx, JSValue(_name), WrapFunction(_callback)->GetFunction(ctx).ToLocalChecked());
 }

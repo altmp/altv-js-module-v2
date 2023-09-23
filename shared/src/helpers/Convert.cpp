@@ -355,7 +355,7 @@ v8::MaybeLocal<v8::Value> js::RawBytesToJS(alt::MValueByteArrayConst val, IResou
     return result.value();
 }
 
-std::optional<alt::IBaseObject*> js::ToBaseObject(v8::Local<v8::Value> val)
+std::optional<alt::IBaseObject*> js::internal::ToBaseObject(v8::Local<v8::Value> val)
 {
     IResource* resource = GetCurrentResource();
     ScriptObject* scriptObject = resource->GetScriptObject(val);
