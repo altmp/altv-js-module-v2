@@ -3,7 +3,7 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/server";
 
-requireBinding("shared/factory.js");
+requireBinding("shared/entity.js");
 
 class Player extends alt.Player {
     static get count() {

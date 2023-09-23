@@ -602,8 +602,6 @@ declare module "@altv/shared" {
         export function time(name?: string): void;
         export function timeEnd(name?: string): void;
 
-        export type TimerType = "Interval" | "Timeout" | "EveryTick" | "NextTick";
-
         export function getByID(id: number): Timer | null;
     }
 
@@ -2073,6 +2071,14 @@ declare module "@altv/shared" {
             RingJetpack,
             RingWhirl
         }
+
+        export enum TimerType {
+            TIMER,
+            INTERVAL,
+            TIMEOUT,
+            EVERY_TICK,
+            NEXT_TICK
+        }
     }
 }
 
@@ -2083,7 +2089,7 @@ declare abstract class Timer {
     public once?: boolean;
     public location: import("@altv/shared").SourceLocation;
 
-    public get type(): import("@altv/shared").Timers.TimerType;
+    public get type(): import("@altv/shared").Enums.TimerType;
     public get id(): number;
 
     public destroy(): void;

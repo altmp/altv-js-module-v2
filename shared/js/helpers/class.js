@@ -8,6 +8,7 @@
  */
 export function addGetterSetter(class_, prop, getter, setter) {
     if (!class_) return;
+
     Object.defineProperty(class_.prototype, prop, {
         get: getter,
         set: setter

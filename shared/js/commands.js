@@ -1,22 +1,22 @@
 requireBinding("shared/events.js");
 /** @type {typeof import("./utils.js")} */
-const { assert } = requireBinding("shared/utils.js");
+const { assertIsType } = requireBinding("shared/utils.js");
 
 class Command {
     /** @type {Map<string, Function[]} */
     static #commands = new Map();
 
     static register(command, callback) {
-        assert(typeof command === "string", "Command name must be a string");
-        assert(typeof callback === "function", "Command callback must be a function");
+        assertIsType(command, "string", "Command name must be a string");
+        assertIsType(callback, "function", "Command callback must be a function");
 
         if (Command.#commands.has(command)) Command.#commands.get(command).push(callback);
         else Command.#commands.set(command, [callback]);
     }
 
     static unregister(command, callback) {
-        assert(typeof command === "string", "Command name must be a string");
-        assert(typeof callback === "function", "Command callback must be a function");
+        assertIsType(command, "string", "Command name must be a string");
+        assertIsType(callback, "function", "Command callback must be a function");
 
         const callbacks = Command.#commands.get(command);
         if (!callbacks) return;

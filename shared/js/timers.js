@@ -1,5 +1,5 @@
 /** @type {typeof import("./utils.js")} */
-const { assert } = requireBinding("shared/utils.js");
+const { assert, assertIsType } = requireBinding("shared/utils.js");
 
 /** @type {Map<number, Timer>} */
 const timers = new Map();
@@ -7,7 +7,8 @@ const timers = new Map();
 class Timer {
     static #_warningThreshold = 100;
     static set warningThreshold(threshold) {
-        assert(typeof threshold === "number", "Expected a number as first argument");
+        assertIsType(threshold, "number", "Expected a number as first argument");
+
         Timer.#_warningThreshold = threshold;
     }
 
@@ -17,7 +18,8 @@ class Timer {
 
     static #_sourceLocationFrameSkipCount = 0;
     static set sourceLocationFrameSkipCount(count) {
-        assert(typeof count === "number", "Expected a number as first argument");
+        assertIsType(count, "number", "Expected a number as first argument");
+
         Timer.#_sourceLocationFrameSkipCount = count;
     }
 
@@ -36,8 +38,7 @@ class Timer {
     /** @type {{ fileName: string, lineNumber: number }} */
     location;
 
-    /** @type {string} */
-    #_type = "Timer";
+    #_type = alt.Enums.TimerType.TIMER;
 
     /** @type {number} */
     #_id = 0;
@@ -63,9 +64,9 @@ class Timer {
     }
 
     constructor(type, callback, interval, once, args) {
-        assert(typeof type === "string", "Expected a string as first argument");
-        assert(typeof callback === "function", "Expected a function as second argument");
-        assert(typeof interval === "number", "Expected a number as third argument");
+        assertIsType(type, "string", "Expected a string as first argument");
+        assertIsType(callback, "function", "Expected a function as second argument");
+        assertIsType(interval, "number", "Expected a number as third argument");
 
         this.interval = interval;
         this.callback = callback.bind(this, ...(Array.isArray(args) ? args : []));
@@ -103,25 +104,25 @@ class Timer {
 
 class Interval extends Timer {
     constructor(callback, interval, ...args) {
-        super("Interval", callback, interval, false, args);
+        super(alt.Enums.TimerType.INTERVAL, callback, interval, false, args);
     }
 }
 
 class Timeout extends Timer {
     constructor(callback, interval, ...args) {
-        super("Timeout", callback, interval, true, args);
+        super(alt.Enums.TimerType.TIMEOUT, callback, interval, true, args);
     }
 }
 
 class EveryTick extends Timer {
     constructor(callback, ...args) {
-        super("EveryTick", callback, 0, false, args);
+        super(alt.Enums.TimerType.EVERY_TICK, callback, 0, false, args);
     }
 }
 
 class NextTick extends Timer {
     constructor(callback, ...args) {
-        super("NextTick", callback, 0, true, args);
+        super(alt.Enums.TimerType.NEXT_TICK, callback, 0, true, args);
     }
 }
 

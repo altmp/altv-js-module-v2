@@ -1,5 +1,5 @@
 /** @type {typeof import("./utils.js")} */
-const { assert } = requireBinding("shared/utils.js");
+const { assert, assertIsType } = requireBinding("shared/utils.js");
 
 export class Event {
     /** @type {Map<number, EventHandler[]>} */
@@ -17,13 +17,15 @@ export class Event {
     /** Warning threshold in ms */
     static #warningThreshold = 100;
     static setWarningThreshold(threshold) {
-        assert(typeof threshold === "number", "Expected a number as first argument");
+        assertIsType(threshold, "number", "Expected a number as first argument");
+
         Event.#warningThreshold = threshold;
     }
 
     static #sourceLocationFrameSkipCount = 0;
     static setSourceLocationFrameSkipCount(count) {
-        assert(typeof count === "number", "Expected a number as first argument");
+        assertIsType(count, "number", "Expected a number as first argument");
+
         Event.#sourceLocationFrameSkipCount = count;
     }
 
@@ -45,7 +47,7 @@ export class Event {
      * @param {Function} handler
      */
     static #subscribe(name, type, custom, once, handler) {
-        assert(typeof handler === "function", `Handler for event '${name}' is not a function`);
+        assertIsType(handler, "function", `Handler for event '${name}' is not a function`);
 
         const location = cppBindings.getCurrentSourceLocation(Event.#sourceLocationFrameSkipCount);
         const eventHandler = new EventHandler(type, handler, location, custom, once);
@@ -150,8 +152,8 @@ export class Event {
      * @param {Function} handler
      */
     static #subscribeScriptEvent(local, once, name, handler) {
-        assert(typeof name === "string", `Event name is not a string`);
-        assert(typeof handler === "function", `Handler for ${local ? "local" : "remote"} script event '${name}' is not a function`);
+        assertIsType(name, "string", `Event name is not a string`);
+        assertIsType(handler, "function", `Handler for ${local ? "local" : "remote"} script event '${name}' is not a function`);
 
         const location = cppBindings.getCurrentSourceLocation(Event.#sourceLocationFrameSkipCount);
         const eventHandler = new ScriptEventHandler(name, local, handler, location, once);
@@ -205,7 +207,7 @@ export class Event {
      * @param {Function} handler
      */
     static subscribeGeneric(handler) {
-        assert(typeof handler === "function", `Handler for generic event is not a function`);
+        assertIsType(handler, "function", `Handler for generic event is not a function`);
 
         const location = cppBindings.getCurrentSourceLocation(Event.#sourceLocationFrameSkipCount);
         const eventHandler = new GenericEventHandler(handler, location);
