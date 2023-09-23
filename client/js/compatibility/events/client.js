@@ -6,13 +6,23 @@
 /** @type {typeof import("../../../../shared/js/compatibility/utils/events.js")} */
 const { registerEventHandler } = requireBinding("shared/compatibility/utils/events.js");
 
-registerEventHandler(alt.Enums.CustomEventType.KEY_UP, "keyUp", ({ key }) => {
-    return [key];
-});
+registerEventHandler(
+    alt.Enums.CustomEventType.KEY_UP,
+    "keyUp",
+    ({ key }) => {
+        return [key];
+    },
+    true
+);
 
-registerEventHandler(alt.Enums.CustomEventType.KEY_DOWN, "keyDown", ({ key }) => {
-    return [key];
-});
+registerEventHandler(
+    alt.Enums.CustomEventType.KEY_DOWN,
+    "keyDown",
+    ({ key }) => {
+        return [key];
+    },
+    true
+);
 
 // alt.Enums.EventType.WEB_VIEW_EVENT;             // Unimplemented in v1
 // alt.Enums.EventType.WEB_SOCKET_CLIENT_EVENT;    // Unimplemented in v1

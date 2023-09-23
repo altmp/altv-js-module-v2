@@ -12,21 +12,26 @@ requireBinding("shared/events.js");
 const eventMap = new Map();
 
 /**
+ * A Map that stores event type mappings for custom events.
+ * @type {Map<alt.Enums.CustomEventType, { oldEventName: string, contextToArgsFunc: Function }>}
+ */
+const customEventMap = new Map();
+
+/**
  *
  * @param {alt.Enums.EventType} eventType
  * @param {string} oldEventName
  * @param {Function} contextToArgsFunc
  */
-export function registerEventHandler(eventType, oldEventName, contextToArgsFunc) {
-    eventMap.set(eventType, { oldEventName, contextToArgsFunc });
+export function registerEventHandler(eventType, oldEventName, contextToArgsFunc, custom = false) {
+    const map = custom ? customEventMap : eventMap;
+    map.set(eventType, { oldEventName, contextToArgsFunc });
 }
 
 alt.Events.onEvent((ctx) => {
-    const compatHandler = eventMap.get(ctx.eventType);
-
-    if (!compatHandler) {
-        alt.logWarning("Missing compatibility event handler for event type " + eventType);
-    }
+    const map = ctx.customEvent ? customEventMap : eventMap;
+    const compatHandler = map.get(ctx.eventType);
+    if (!compatHandler) return;
 
     const args = compatHandler.contextToArgsFunc(ctx);
 

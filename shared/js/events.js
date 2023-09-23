@@ -185,6 +185,7 @@ export class Event {
 
         const genericCtx = Object.freeze({
             ...ctx,
+            eventType,
             customEvent: custom
         });
 
