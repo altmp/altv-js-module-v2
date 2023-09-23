@@ -109,9 +109,10 @@ namespace js
         v8::Local<T> GetBindingExport(const std::string& name)
         {
             static_assert(std::is_base_of_v<v8::Value, T>, "T must inherit from v8::Value");
-            if(!bindingExports.contains(name)) return v8::Local<T>();
-            v8::Local<v8::Value> val = bindingExports.at(name).Get(isolate);
-            return val.As<T>();
+            auto it = bindingExports.find(name);
+            if (it == bindingExports.end()) return v8::Local<T>();
+
+            return it->second.Get(isolate).As<T>();
         }
 
         v8::Local<v8::Object> CreateVector3(alt::Vector3f vec)
