@@ -107,6 +107,14 @@ bool CJavaScriptResource::Stop()
     return true;
 }
 
+void CJavaScriptResource::OnEvent(const alt::CEvent* ev)
+{
+    if(context.IsEmpty()) return;
+
+    auto nativeScope = GetResource()->PushNativesScope();
+    IAltResource::OnEvent(ev);
+}
+
 void CJavaScriptResource::OnTick()
 {
     if(context.IsEmpty()) return;
