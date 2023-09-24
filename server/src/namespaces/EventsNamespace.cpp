@@ -1,6 +1,38 @@
 #include "Namespace.h"
 #include "interfaces/IResource.h"
 
+static void TriggerPlayerRPCAnswer(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(2, 4)) return;
+
+    alt::IPlayer* player;
+    if(!ctx.GetArg(0, player)) return;
+
+    uint16_t answerId;
+    if(!ctx.GetArg(1, answerId)) return;
+
+    alt::MValueArgs args;
+    std::string errorMessage;
+    if (ctx.GetArgType(2) == js::Type::ARRAY)
+    {
+        js::Array arr;
+        if (!ctx.GetArg(2, arr)) return;
+
+        for(int i = 0; i < arr.Length(); ++i)
+        {
+            alt::MValue val;
+            if (!arr.Get(i, val)) continue;
+            args.push_back(val);
+        }
+    }
+    else if (ctx.GetArgType(2) == js::Type::STRING)
+    {
+        if (!ctx.GetArg(2, errorMessage)) return;
+    }
+
+    alt::ICore::Instance().TriggerClientRPCAnswer(player, answerId, args, errorMessage);
+}
+
 static void EmitPlayers(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(2, 32)) return;
@@ -142,6 +174,8 @@ static void EmitAllPlayersUnreliable(js::FunctionContext& ctx)
 // clang-format off
 extern js::Namespace sharedEventsNamespace;
 extern js::Namespace eventsNamespace("Events", &sharedEventsNamespace, [](js::NamespaceTemplate& tpl) {
+    tpl.StaticFunction("triggerPlayerRPCAnswer", TriggerPlayerRPCAnswer);
+
     tpl.StaticFunction("emitPlayers", &EmitPlayers);
     tpl.StaticFunction("emitPlayersUnreliable", &EmitPlayersUnreliable);
     tpl.StaticFunction("emitAllPlayers", &EmitAllPlayers);
