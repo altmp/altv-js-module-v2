@@ -71,7 +71,7 @@ static void EmitServerRPC(js::FunctionContext& ctx)
 
 
     alt::MValueArgs args;
-    for(int i = 0; i < arr.Length; ++i)
+    for(int i = 0; i < arr.Length(); ++i)
     {
         alt::MValue val;
         if(!arr.Get(i, val)) continue;
