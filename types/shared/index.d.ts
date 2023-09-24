@@ -1947,12 +1947,6 @@ declare module "@altv/shared" {
             SIZE
         }
 
-        export enum RPCEventState {
-            NOT_ANSWERED,
-            WILL_BE_ANSWERED,
-            ANSWERED
-        }
-
         export enum CustomEventType {
             NONE,
 
