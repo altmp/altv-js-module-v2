@@ -1177,11 +1177,11 @@ declare module "@altv/client" {
         export function emitServerUnreliable<E extends keyof altShared.Events.CustomPlayerToServerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomPlayerToServerEvent[E]>): void;
         export function emitServerUnreliable<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>, ...args: unknown[]): void;
 
-        export function emitServerRPC(eventName: string, ...args: unknown[]): void;
+        export function callServerRPC(eventName: string, ...args: unknown[]): void;
 
         // RPC related
-        export function onServerScriptRPCAnswer(callback: GenericEventCallback<ServerScriptRPCAnswer>): altShared.Events.EventHandler;
-        export function onceServerScriptRPCAnswer(callback: GenericEventCallback<ServerScriptRPCAnswer>): altShared.Events.EventHandler;
+        export function onServerScriptRPC(callback: GenericEventCallback<ServerScriptRPC>): altShared.Events.EventHandler;
+        export function onceServerScriptRPC(callback: GenericEventCallback<ServerScriptRPC>): altShared.Events.EventHandler;
 
         export function onKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): altShared.Events.EventHandler;
         export function onceKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): altShared.Events.EventHandler;
@@ -1468,7 +1468,7 @@ declare module "@altv/client" {
 
         interface CustomClientEvent {}
 
-        interface ServerScriptRPCAnswer {
+        interface ServerScriptRPC {
             readonly answerID: number;
             readonly answer: ReadonlyArray<unknown>;
             readonly answerError: string;

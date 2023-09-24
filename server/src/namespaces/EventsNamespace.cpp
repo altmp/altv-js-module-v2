@@ -1,9 +1,9 @@
 #include "Namespace.h"
 #include "interfaces/IResource.h"
 
-static void TriggerPlayerRPCAnswer(js::FunctionContext& ctx)
+static void AnswerPlayerRPC(js::FunctionContext& ctx)
 {
-    if(!ctx.CheckArgCount(2, 4)) return;
+    if(!ctx.CheckArgCount(2, 32)) return;
 
     alt::IPlayer* player;
     if(!ctx.GetArg(0, player)) return;
@@ -11,25 +11,47 @@ static void TriggerPlayerRPCAnswer(js::FunctionContext& ctx)
     uint16_t answerId;
     if(!ctx.GetArg(1, answerId)) return;
 
+    auto resource = ctx.GetResource();
+
     alt::MValueArgs args;
-    std::string errorMessage;
-    if (ctx.GetArgType(2) == js::Type::ARRAY)
+    args.reserve(ctx.GetArgCount() - 1);
+    alt::MValue val;
+    for(int i = 2; i < ctx.GetArgCount(); i++)
     {
-        js::Array arr;
-        if (!ctx.GetArg(2, arr)) return;
-
-        for(int i = 0; i < arr.Length(); ++i)
+        if(resource->IsRawEmitEnabled())
         {
-            alt::MValue val;
-            if (!arr.Get(i, val)) continue;
-            args.push_back(val);
+            v8::Local<v8::Value> arg;
+            if(!ctx.GetArg(i, arg)) continue;
+            alt::MValueByteArray result = js::JSToRawBytes(arg, resource);
+            if(!ctx.Check(result.get() != nullptr, "Failed to serialize argument at index " + std::to_string(i))) return;
+            val = result;
         }
-    }
-    else if (ctx.GetArgType(2) == js::Type::STRING)
-    {
-        if (!ctx.GetArg(2, errorMessage)) return;
+        else if(!ctx.GetArg(i, val))
+            continue;
+
+        args.push_back(val);
     }
 
+    std::string errorMessage;
+    alt::ICore::Instance().TriggerClientRPCAnswer(player, answerId, args, errorMessage);
+}
+
+static void AnswerPlayerRPCWithError(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(3)) return;
+
+    alt::IPlayer* player;
+    if(!ctx.GetArg(0, player)) return;
+
+    uint16_t answerId;
+    if(!ctx.GetArg(1, answerId)) return;
+
+    std::string errorMessage;
+    if(!ctx.GetArg(2, errorMessage)) return;
+
+    auto resource = ctx.GetResource();
+
+    alt::MValueArgs args;
     alt::ICore::Instance().TriggerClientRPCAnswer(player, answerId, args, errorMessage);
 }
 
@@ -174,7 +196,8 @@ static void EmitAllPlayersUnreliable(js::FunctionContext& ctx)
 // clang-format off
 extern js::Namespace sharedEventsNamespace;
 extern js::Namespace eventsNamespace("Events", &sharedEventsNamespace, [](js::NamespaceTemplate& tpl) {
-    tpl.StaticFunction("triggerPlayerRPCAnswer", TriggerPlayerRPCAnswer);
+    tpl.StaticFunction("answerPlayerRPC", &AnswerPlayerRPC);
+    tpl.StaticFunction("answerPlayerRPCWithError", &AnswerPlayerRPCWithError);
 
     tpl.StaticFunction("emitPlayers", &EmitPlayers);
     tpl.StaticFunction("emitPlayersUnreliable", &EmitPlayersUnreliable);
