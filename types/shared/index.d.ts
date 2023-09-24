@@ -1841,6 +1841,8 @@ declare module "@altv/shared" {
             CLIENT_REQUEST_OBJECT_EVENT,
             CLIENT_DELETE_OBJECT_EVENT,
 
+            CLIENT_SCRIPT_RPC_EVENT,
+
             // Shared
             PLAYER_CONNECT,
             PLAYER_DISCONNECT,
@@ -1938,6 +1940,8 @@ declare module "@altv/shared" {
             PED_DAMAGE,
             PED_DEATH,
             PED_HEAL,
+
+            SERVER_SCRIPT_RPC_ANSWER_EVENT,
 
             ALL,
             SIZE
