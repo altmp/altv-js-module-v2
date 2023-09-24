@@ -59,9 +59,34 @@ static void EmitServerUnreliable(js::FunctionContext& ctx)
     alt::ICore::Instance().TriggerServerEventUnreliable(eventName, args);
 }
 
+static void EmitServerRPC(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1, 32)) return;
+
+    std::string eventName;
+    if(!ctx.GetArg(0, eventName)) return;
+
+    js::Array arr;
+    if (!ctx.GetArg(1, arr)) return;
+
+
+    alt::MValueArgs args;
+    for(int i = 0; i < arr.Length; ++i)
+    {
+        alt::MValue val;
+        if(!arr.Get(i, val)) continue;
+
+        args.push_back(val);
+    }
+
+    ctx.Return(alt::ICore::Instance().TriggerServerRPCEvent(eventName, args));
+}
+
 // clang-format off
 extern js::Namespace sharedEventsNamespace;
 extern js::Namespace eventsNamespace("Events", &sharedEventsNamespace, [](js::NamespaceTemplate& tpl) {
     tpl.StaticFunction("emitServer", &EmitServer);
     tpl.StaticFunction("emitServerUnreliable", &EmitServerUnreliable);
+
+    tpl.StaticFunction("emitServerRPC", &EmitServerRPC);
 });

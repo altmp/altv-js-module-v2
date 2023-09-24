@@ -1177,6 +1177,8 @@ declare module "@altv/client" {
         export function emitServerUnreliable<E extends keyof altShared.Events.CustomPlayerToServerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomPlayerToServerEvent[E]>): void;
         export function emitServerUnreliable<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>, ...args: unknown[]): void;
 
+        export function emitServerRPC(eventName: string, ...args: unknown[]): void;
+
         export function onKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): altShared.Events.EventHandler;
         export function onceKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): altShared.Events.EventHandler;
         export function onKeyUp(callback: GenericEventCallback<KeyUpDownEventParameters>): altShared.Events.EventHandler;
