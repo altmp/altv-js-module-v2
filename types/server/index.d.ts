@@ -815,6 +815,10 @@ declare module "@altv/server" {
         export function emitAllPlayersUnreliable<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
         export function emitAllPlayersUnreliable<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: unknown[]): void;
 
+        // RPC related events
+        export function onPlayerScriptRPC<T extends Player>(callback: GenericPlayerEventCallback<PlayerScriptRPCEvent, T>): altShared.Events.EventHandler;
+        export function oncePlayerScriptRPC<T extends Player>(callback: GenericPlayerEventCallback<PlayerScriptRPCEvent, T>): altShared.Events.EventHandler;
+
         // Server related events
         export function onServerStarted(callback: GenericEventCallback): altShared.Events.EventHandler;
         export function onceServerStarted(callback: GenericEventCallback): altShared.Events.EventHandler;
@@ -1154,6 +1158,19 @@ declare module "@altv/server" {
         }
 
         interface CustomServerEvent {}
+
+        interface PlayerScriptRPCEvent {
+            readonly name: string;
+            readonly args: ReadonlyArray<unknown>;
+            readonly answerID: number;
+            readonly state: Enums.RPCEventState;
+
+            willAnswer(): boolean;
+            answer(...args: unknown[]): void;
+            answerWithError(errorMessage: string): boolean;
+            getAnswer(): ReadonlyArray<unknown>;
+            getAnswerError(): string;
+        }
 
         export type EventContext = {
             readonly type: altShared.Enums.EventType;

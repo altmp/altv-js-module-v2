@@ -1179,6 +1179,10 @@ declare module "@altv/client" {
 
         export function emitServerRPC(eventName: string, ...args: unknown[]): void;
 
+        // RPC related
+        export function onServerScriptRPCAnswer(callback: GenericEventCallback<ServerScriptRPCAnswer>): altShared.Events.EventHandler;
+        export function onceServerScriptRPCAnswer(callback: GenericEventCallback<ServerScriptRPCAnswer>): altShared.Events.EventHandler;
+
         export function onKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): altShared.Events.EventHandler;
         export function onceKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): altShared.Events.EventHandler;
         export function onKeyUp(callback: GenericEventCallback<KeyUpDownEventParameters>): altShared.Events.EventHandler;
@@ -1463,6 +1467,12 @@ declare module "@altv/client" {
         }
 
         interface CustomClientEvent {}
+
+        interface ServerScriptRPCAnswer {
+            readonly answerID: number;
+            readonly answer: ReadonlyArray<unknown>;
+            readonly answerError: string;
+        }
 
         export type CustomEventCallback<T extends unknown[]> = (...params: T) => void | Promise<void>;
         export type GenericEventCallback<T = {}> = (params: T) => void | Promise<void>;
