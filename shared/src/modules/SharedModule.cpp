@@ -123,6 +123,7 @@ static js::Module sharedModule("@altv/shared", "", { &baseObjectClass, &worldObj
     module.Namespace("Utils");
     module.Namespace("Factory");
     module.Namespace("Commands");
+    module.Namespace("RPC");
     module.Namespace(enumsNamespace);
     module.Namespace(fileNamespace);
     // Blip namespaces

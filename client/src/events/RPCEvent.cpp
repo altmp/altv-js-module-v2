@@ -7,9 +7,6 @@ static js::Event serverScriptRpcEvent(alt::CEvent::Type::SERVER_SCRIPT_RPC_ANSWE
     auto e = static_cast<const alt::CServerScriptRPCAnswerEvent*>(ev);
 
     args.Set("answerID", e->GetAnswerID());
-
-    const alt::MValueArgs& answerArgs = e->GetAnswer();
-    args.Set("answer", answerArgs);
-
+    args.Set("answer", e->GetAnswer());
     args.Set("answerError", e->GetAnswerError());
 });

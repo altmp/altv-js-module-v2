@@ -13,17 +13,13 @@ static void WillAnswer(js::FunctionContext& ctx)
 static void Answer(js::FunctionContext& ctx)
 {
     if(!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckArgCount(1)) return;
     auto* ev = ctx.GetExtraInternalFieldValue<alt::CClientScriptRPCEvent>();
 
-    alt::MValueArgs args;
-    for(int i = 1; i < ctx.GetArgCount(); i++)
-    {
-        alt::MValue val;
-        if(!ctx.GetArg(i, val)) continue;
-        args.push_back(val);
-    }
+    alt::MValue answer;
+    if(!ctx.GetArg(0, answer)) return;
 
-    ctx.Return(ev->Answer(args));
+    ctx.Return(ev->Answer(answer));
 }
 
 static void AnswerWithError(js::FunctionContext& ctx)

@@ -59,42 +59,9 @@ static void EmitServerUnreliable(js::FunctionContext& ctx)
     alt::ICore::Instance().TriggerServerEventUnreliable(eventName, args);
 }
 
-static void CallServerRPC(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckArgCount(1, 32)) return;
-
-    std::string eventName;
-    if(!ctx.GetArg(0, eventName)) return;
-
-    auto resource = ctx.GetResource();
-
-    alt::MValueArgs args;
-    args.reserve(ctx.GetArgCount() - 1);
-    alt::MValue val;
-    for(int i = 1; i < ctx.GetArgCount(); i++)
-    {
-        if(resource->IsRawEmitEnabled())
-        {
-            v8::Local<v8::Value> arg;
-            if(!ctx.GetArg(i, arg)) continue;
-            alt::MValueByteArray result = js::JSToRawBytes(arg, resource);
-            if(!ctx.Check(result.get() != nullptr, "Failed to serialize argument at index " + std::to_string(i))) return;
-            val = result;
-        }
-        else if(!ctx.GetArg(i, val))
-            continue;
-
-        args.push_back(val);
-    }
-
-    ctx.Return(alt::ICore::Instance().TriggerServerRPCEvent(eventName, args));
-}
-
 // clang-format off
 extern js::Namespace sharedEventsNamespace;
 extern js::Namespace eventsNamespace("Events", &sharedEventsNamespace, [](js::NamespaceTemplate& tpl) {
     tpl.StaticFunction("emitServer", &EmitServer);
     tpl.StaticFunction("emitServerUnreliable", &EmitServerUnreliable);
-
-    tpl.StaticFunction("callServerRPC", &CallServerRPC);
 });
