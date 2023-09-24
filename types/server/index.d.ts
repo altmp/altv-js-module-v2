@@ -368,6 +368,9 @@ declare module "@altv/server" {
         emitUnreliable<E extends keyof altShared.Events.CustomServerToPlayerEvent>(event: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
         emitUnreliable<E extends string>(event: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: unknown[]): void;
 
+        emitUnreliableRaw<E extends keyof altShared.Events.CustomServerToPlayerEvent>(event: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
+        emitUnreliableRaw<E extends string>(event: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: unknown[]): void;
+
         spawn(pos: altShared.IVector3, delay?: number): void;
         despawn(): void;
         setWeaponTintIndex(weaponHash: number | string, tintIndex: number): void;
@@ -812,8 +815,14 @@ declare module "@altv/server" {
         export function emitAllPlayers<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
         export function emitAllPlayers<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: unknown[]): void;
 
+        export function emitAllPlayersRaw<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
+        export function emitAllPlayersRaw<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: unknown[]): void;
+
         export function emitAllPlayersUnreliable<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
         export function emitAllPlayersUnreliable<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: unknown[]): void;
+
+        export function emitAllPlayersUnreliableRaw<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
+        export function emitAllPlayersUnreliableRaw<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: unknown[]): void;
 
         // RPC related events
         export function onPlayerScriptRPC<T extends Player>(callback: GenericPlayerEventCallback<PlayerScriptRPCEvent, T>): altShared.Events.EventHandler;

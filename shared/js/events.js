@@ -1,3 +1,5 @@
+import { emitRaw } from "./helpers/scriptEvents.js";
+
 /** @type {typeof import("./utils.js")} */
 const { assert, assertIsType } = requireBinding("shared/utils.js");
 
@@ -266,17 +268,6 @@ export class Event {
             }
         }
     }
-
-    /**
-     * @param {string} eventName
-     * @param {...unknown} args
-     */
-    static emitRaw(eventName, ...args) {
-        const oldValue = alt.Events.rawEmitEnabled;
-        alt.Events.rawEmitEnabled = true;
-        alt.emit(eventName, ...args);
-        alt.Events.rawEmitEnabled = oldValue;
-    }
 }
 
 class EventHandler {
@@ -368,7 +359,8 @@ class GenericEventHandler extends EventHandler {
     }
 }
 
-alt.Events.emitRaw = Event.emitRaw;
+alt.Events.emitRaw = emitRaw();
+alt.Events.emitUnreliableRaw = emitRaw("emitUnreliable");
 
 alt.Events.on = Event.getScriptEventFunc(true);
 alt.Events.once = Event.getScriptEventFunc(true, true);
@@ -379,9 +371,15 @@ alt.Events.onceRemote = Event.getScriptEventFunc(false, true);
 if (alt.isClient) {
     alt.Events.onServer = Event.getScriptEventFunc(false);
     alt.Events.onceServer = Event.getScriptEventFunc(false, true);
+    alt.Events.emitServerRaw = emitRaw("emitServer");
+    alt.Events.emitServerUnreliableRaw = emitRaw("emitServerUnreliable");
 } else {
     alt.Events.onPlayer = Event.getScriptEventFunc(false);
     alt.Events.oncePlayer = Event.getScriptEventFunc(false, true);
+    alt.Events.emitPlayersRaw = emitRaw("emitPlayers");
+    alt.Events.emitPlayersUnreliableRaw = emitRaw("emitPlayersUnreliable");
+    alt.Events.emitAllPlayersRaw = emitRaw("emitAllPlayers");
+    alt.Events.emitAllPlayersUnreliableRaw = emitRaw("emitAllPlayersUnreliable");
 }
 alt.Events.onEvent = Event.subscribeGeneric;
 
