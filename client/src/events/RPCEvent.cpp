@@ -6,7 +6,6 @@ static js::Event serverScriptRpcAnswer(alt::CEvent::Type::SERVER_SCRIPT_RPC_ANSW
 {
     auto e = static_cast<const alt::CServerScriptRPCAnswerEvent*>(ev);
 
-    args.Set("player", e->GetTarget());
     args.Set("answerID", e->GetAnswerID());
 
     const alt::MValueArgs& answerArgs = e->GetAnswer();
