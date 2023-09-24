@@ -28,6 +28,7 @@ export function registerEventHandler(eventType, oldEventName, contextToArgsFunc,
     map.set(eventType, { oldEventName, contextToArgsFunc });
 }
 
+/*
 alt.Events.onEvent((ctx) => {
     const map = ctx.customEvent ? customEventMap : eventMap;
     const compatHandler = map.get(ctx.eventType);
@@ -38,6 +39,7 @@ alt.Events.onEvent((ctx) => {
     const handlers = getHandlersFromOn(compatHandler.oldEventName); // imaginary function
     for (const handler of handlers) handler(...args);
 });
+*/
 
 // TODO (xLuxy): Implement logic
 /*
