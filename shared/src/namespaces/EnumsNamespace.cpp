@@ -40,10 +40,13 @@ extern js::Namespace enumsNamespace("Enums", [](js::NamespaceTemplate& tpl) {
     tpl.StaticLazyProperty("VehicleModelType", GetEnumObject<alt::VehicleModelInfo::Type>);
     tpl.StaticLazyProperty("BodyPart", GetEnumObject<alt::CWeaponDamageEvent::BodyPart>);
     tpl.StaticLazyProperty("EventType", GetEnumObjectWithStartEnd<alt::CEvent::Type, alt::CEvent::Type::NONE, alt::CEvent::Type::ALL>);
-    tpl.StaticLazyProperty("RPCEventState", GetEnumObject<alt::CClientScriptRPCEvent::State>);
     tpl.StaticLazyProperty("CustomEventType", GetEnumObjectWithStartEnd<js::EventType, js::EventType::NONE, js::EventType::SIZE>);
     tpl.StaticLazyProperty("MetricType", GetEnumObject<alt::Metric::Type>);
     tpl.StaticLazyProperty("AmmoSpecialType", GetEnumObject<alt::AmmoSpecialType>);
     tpl.StaticLazyProperty("KeyState", GetEnumObject<alt::CKeyboardEvent::KeyState>);
     tpl.StaticLazyProperty("VoiceConnectionState", GetEnumObject<alt::CVoiceConnectionEvent::State>);
+
+#ifdef ALT_SERVER_API
+    tpl.StaticLazyProperty("RPCEventState", GetEnumObject<alt::CClientScriptRPCEvent::State>);
+#endif
 });
