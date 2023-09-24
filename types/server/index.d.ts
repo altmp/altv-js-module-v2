@@ -1164,6 +1164,8 @@ declare module "@altv/server" {
             readonly args: ReadonlyArray<unknown>;
             readonly answerID: number;
 
+            willAnswer(): boolean;
+
             answer(...args: unknown[]): void;
             answerWithError(errorMessage: string): boolean;
         }

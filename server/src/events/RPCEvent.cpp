@@ -1,5 +1,15 @@
 ﻿#include "Event.h"
 
+// clang-format off
+
+static void WillAnswer(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckExtraInternalFieldValue()) return;
+    auto* ev = ctx.GetExtraInternalFieldValue<alt::CClientScriptRPCEvent>();
+
+    ctx.Return(ev->WillAnswer());
+}
+
 static void Answer(js::FunctionContext& ctx)
 {
     if(!ctx.CheckExtraInternalFieldValue()) return;
@@ -28,18 +38,19 @@ static void AnswerWithError(js::FunctionContext& ctx)
     ctx.Return(ev->AnswerWithError(errorMessage));
 }
 
-// clang-format off
-static js::Event clientRpcEvent(alt::CEvent::Type::CLIENT_SCRIPT_RPC_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+static js::Event clientScriptRpcEvent(alt::CEvent::Type::CLIENT_SCRIPT_RPC_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
     auto e = static_cast<const alt::CClientScriptRPCEvent*>(ev);
 
     args.Set("player", e->GetTarget());
     args.Set("name", e->GetName());
-    args.Set("answerID", e->GetAnswerID());
 
     const alt::MValueArgs& eventArgs = e->GetArgs();
     args.Set("args", eventArgs);
 
+    args.Set("answerID", e->GetAnswerID());
+
+    args.SetMethod("willAnswer", WillAnswer);
     args.SetMethod("answer", Answer);
     args.SetMethod("answerWithError", AnswerWithError);
 });
