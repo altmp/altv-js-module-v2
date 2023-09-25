@@ -158,8 +158,7 @@ export class Vector3 extends Vector {
         else if (args.length === 1) {
             const arg = args[0];
             if (Array.isArray(arg)) values = [valueToNumber(arg[0]), valueToNumber(arg[1]), valueToNumber(arg[2])];
-            else if (typeof arg === "object")
-                values = [valueToNumber(arg.x), valueToNumber(arg.y), valueToNumber(arg.z)];
+            else if (typeof arg === "object") values = [valueToNumber(arg.x), valueToNumber(arg.y), valueToNumber(arg.z)];
             else values = [valueToNumber(arg), valueToNumber(arg), valueToNumber(arg)];
         } else throw new Error("Invalid arguments");
         super(3, values);
@@ -235,5 +234,5 @@ cppBindings.registerExport("classes:vector2", Vector2);
 
 function valueToNumber(val) {
     if (val === Infinity || val === -Infinity) return val;
-    return parseInt(val);
+    return parseFloat(val);
 }
