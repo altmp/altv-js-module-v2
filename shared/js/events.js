@@ -1,7 +1,8 @@
-import { emitRaw } from "./helpers/scriptEvents.js";
-
 /** @type {typeof import("./utils.js")} */
 const { assert, assertIsType } = requireBinding("shared/utils.js");
+
+/** @type {typeof import("../../shared/js/helpers/events.js")} */
+const { emitRaw } = requireBinding("shared/helpers/events.js");
 
 export class Event {
     /** @type {Map<number, EventHandler[]>} */
