@@ -139,7 +139,6 @@ static inline std::pair<std::string, std::vector<uint8_t>> ReadFile(v8::Local<v8
     if(!path.pkg) return {};
 
     std::string fileName = path.fileName;
-    if(!path.pkg->FileExists(fileName)) return {};
     if(!js::DoesFileExist(path.pkg, fileName)) return {};
 
     std::string name = path.prefix + fileName;
@@ -151,8 +150,10 @@ v8::MaybeLocal<v8::Module> IModuleHandler::ResolveFile(v8::Local<v8::Context> co
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
 
     auto [resolvedName, buffer] = ReadFile(context, specifier, referrer);
+    if(resolvedName.empty()) return v8::MaybeLocal<v8::Module>{};
     if(modules.contains(resolvedName)) return modules.at(resolvedName).module.Get(isolate);
 
+    name = resolvedName;
     isBytecode = IsBytecodeBuffer(buffer);
     if(isBytecode) return CompileBytecode(name, buffer);
     return CompileModule(name, std::string{ (char*)buffer.data(), buffer.size() });
