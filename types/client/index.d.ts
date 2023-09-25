@@ -1475,7 +1475,7 @@ declare module "@altv/client" {
             colShape: ColShape;
         }
 
-        interface CustomClientEvent {}
+        export interface CustomClientEvent {}
 
         interface ServerScriptRPC {
             readonly answerID: number;

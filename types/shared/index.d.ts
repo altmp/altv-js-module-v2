@@ -656,15 +656,15 @@ declare module "@altv/shared" {
     }
 
     export namespace Events {
-        interface CustomRemoteEvent {}
-        interface CustomPlayerToServerEvent {}
-        interface CustomServerToPlayerEvent {}
-        interface CustomClientToWebViewEvent {}
+        export interface CustomRemoteEvent {}
+        export interface CustomPlayerToServerEvent {}
+        export interface CustomServerToPlayerEvent {}
+        export interface CustomClientToWebViewEvent {}
 
         interface WebViewToClientEvent {
             load(): void;
         }
-        interface CustomWebViewToClientEvent extends WebViewToClientEvent {}
+        export interface CustomWebViewToClientEvent extends WebViewToClientEvent {}
 
         interface GenericOnEventCallback {
             readonly [key: string]: unknown;

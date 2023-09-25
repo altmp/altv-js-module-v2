@@ -1169,7 +1169,7 @@ declare module "@altv/server" {
             taskType: number;
         }
 
-        interface CustomServerEvent {}
+        export interface CustomServerEvent {}
 
         interface PlayerScriptRPCEvent {
             readonly name: string;
