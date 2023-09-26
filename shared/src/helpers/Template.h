@@ -481,7 +481,8 @@ namespace js
                 if(deleter) data->deleter = deleter;
                 if(enumerator) data->enumerator = enumerator;
             }
-            Get()->InstanceTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::DynamicPropertyLazyHandler, v8::External::New(GetIsolate(), data), v8::ReadOnly);
+            Get()->InstanceTemplate()->SetLazyDataProperty(
+              js::JSValue(name), Wrapper::DynamicPropertyLazyHandler, v8::External::New(GetIsolate(), data), (v8::PropertyAttribute)(v8::ReadOnly | v8::DontEnum));
         }
 
         void StaticFunction(const std::string& name, internal::FunctionCallback callback) override
