@@ -41,13 +41,29 @@ v8::MaybeLocal<v8::Promise> CJavaScriptRuntime::ImportModuleDynamically(
     return v8::MaybeLocal<v8::Promise>();
 }
 
-void CJavaScriptRuntime::InitializeImportMetaObject(v8::Local<v8::Context> context, v8::Local<v8::Module>, v8::Local<v8::Object> meta)
+static void Resolve(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    std::string path;
+    if(!ctx.GetArg(0, path)) return;
+
+    js::IAltResource* resource = ctx.GetResource<js::IAltResource>();
+    std::string currentFile = js::SourceLocation::GetCurrent(resource).file;
+    alt::IPackage::PathInfo pathInfo = alt::ICore::Instance().Resolve(resource->GetResource(), path, currentFile);
+    if(!ctx.Check(pathInfo.pkg, "Invalid path")) return;
+
+    ctx.Return(pathInfo.prefix + pathInfo.fileName);
+}
+
+void CJavaScriptRuntime::InitializeImportMetaObject(v8::Local<v8::Context> context, v8::Local<v8::Module> mod, v8::Local<v8::Object> meta)
 {
     CJavaScriptResource* resource = js::IResource::GetFromContext<CJavaScriptResource>(context);
     if(!resource) return;
 
     js::Object metaObj(meta);
-    metaObj.Set("url", js::SourceLocation::GetCurrent(resource).file);
+    metaObj.Set("url", resource->GetModulePath(mod));
+    metaObj.SetMethod("resolve", Resolve);
 }
 
 void CJavaScriptRuntime::MessageListener(v8::Local<v8::Message> message, v8::Local<v8::Value> error)

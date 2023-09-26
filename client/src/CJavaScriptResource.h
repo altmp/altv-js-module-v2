@@ -7,8 +7,12 @@
 
 #include "v8.h"
 
+class CJavaScriptRuntime;
+
 class CJavaScriptResource : public js::IAltResource, public IModuleHandler, public IExceptionHandler
 {
+    friend class CJavaScriptRuntime;
+
     std::unique_ptr<v8::MicrotaskQueue> microtaskQueue;
     bool started = false;
     std::shared_ptr<alt::INative::Context> nativeContext;
