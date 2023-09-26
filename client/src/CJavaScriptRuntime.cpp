@@ -37,8 +37,43 @@ void CJavaScriptRuntime::OnPromiseRejected(v8::PromiseRejectMessage message)
 v8::MaybeLocal<v8::Promise> CJavaScriptRuntime::ImportModuleDynamically(
   v8::Local<v8::Context> context, v8::Local<v8::Data> hostDefinedOptions, v8::Local<v8::Value> resourceName, v8::Local<v8::String> specifier, v8::Local<v8::FixedArray> importAssertions)
 {
-    // todo
-    return v8::MaybeLocal<v8::Promise>();
+    CJavaScriptResource* resource = js::IResource::GetFromContext<CJavaScriptResource>(context);
+    js::Promise promise;
+    std::string referrer = js::CppValue(resourceName.As<v8::String>());
+    v8::Local<v8::Module> referrerModule = resource->GetModuleFromPath(referrer);
+    if(referrerModule.IsEmpty())
+    {
+        promise.Reject("Could not find referrer module");
+        return promise.Get();
+    }
+
+    std::unordered_map<std::string, std::string> assertions = IModuleHandler::TransformImportAssertions(importAssertions);
+    v8::MaybeLocal<v8::Module> maybeModule = resource->Resolve(context, js::CppValue(specifier), referrerModule, assertions);
+    if(maybeModule.IsEmpty())
+    {
+        promise.Reject("Could not resolve module");
+        return promise.Get();
+    }
+
+    v8::Local<v8::Module> module = maybeModule.ToLocalChecked();
+    if(module->GetStatus() == v8::Module::Status::kUninstantiated && !resource->InstantiateModule(context, module))
+    {
+        promise.Reject("Failed to instantiate module");
+        return promise.Get();
+    }
+
+    if(module->GetStatus() != v8::Module::Status::kEvaluated)
+    {
+        resource->EvaluateModule(context, module);
+        if(module->GetStatus() == v8::Module::Status::kErrored)
+        {
+            promise.Reject("Failed to evaluate module");
+            return promise.Get();
+        }
+    }
+
+    promise.Resolve(module->GetModuleNamespace());
+    return promise.Get();
 }
 
 static void Resolve(js::FunctionContext& ctx)

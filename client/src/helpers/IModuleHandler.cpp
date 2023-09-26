@@ -25,7 +25,17 @@ v8::MaybeLocal<v8::Value> IModuleHandler::SyntheticModuleEvaluateCallback(v8::Lo
     return promise;
 }
 
-static inline std::unordered_map<std::string, std::string> TransformImportAssertions(v8::Local<v8::FixedArray> assertions)
+v8::MaybeLocal<v8::Module>
+  IModuleHandler::ResolveModuleCallback(v8::Local<v8::Context> context, v8::Local<v8::String> specifier, v8::Local<v8::FixedArray> importAssertions, v8::Local<v8::Module> referrer)
+{
+    CJavaScriptResource* resource = js::IResource::GetFromContext<CJavaScriptResource>(context);
+    if(!resource) return v8::MaybeLocal<v8::Module>();
+
+    std::unordered_map<std::string, std::string> assertions = TransformImportAssertions(importAssertions);
+    return resource->Resolve(context, js::CppValue(specifier), referrer, assertions);
+}
+
+std::unordered_map<std::string, std::string> IModuleHandler::TransformImportAssertions(v8::Local<v8::FixedArray> assertions)
 {
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
     v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
@@ -39,16 +49,6 @@ static inline std::unordered_map<std::string, std::string> TransformImportAssert
     }
 
     return result;
-}
-
-v8::MaybeLocal<v8::Module>
-  IModuleHandler::ResolveModuleCallback(v8::Local<v8::Context> context, v8::Local<v8::String> specifier, v8::Local<v8::FixedArray> importAssertions, v8::Local<v8::Module> referrer)
-{
-    CJavaScriptResource* resource = js::IResource::GetFromContext<CJavaScriptResource>(context);
-    if(!resource) return v8::MaybeLocal<v8::Module>();
-
-    std::unordered_map<std::string, std::string> assertions = TransformImportAssertions(importAssertions);
-    return resource->Resolve(context, js::CppValue(specifier), referrer, assertions);
 }
 
 bool IModuleHandler::IsBytecodeBuffer(const std::vector<uint8_t>& buffer)
