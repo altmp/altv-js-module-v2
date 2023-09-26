@@ -525,7 +525,7 @@ declare module "@altv/server" {
         petrolTankHealth: number;
         bodyHealth: number;
         bodyAdditionalHealth: number;
-        manualEngineControl: number;
+        manualEngineControl: boolean;
         damageDataBase64: string;
         scriptDataBase64: string;
         gameStateDataBase64: string;
