@@ -1186,8 +1186,6 @@ declare module "@altv/client" {
         export function emitServerUnreliableRaw<E extends keyof altShared.Events.CustomPlayerToServerEvent>(eventName: E, ...args: Parameters<altShared.Events.CustomPlayerToServerEvent[E]>): void;
         export function emitServerUnreliableRaw<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>, ...args: unknown[]): void;
 
-        export function callServerRPC(eventName: string, ...args: unknown[]): void;
-
         // RPC related
         export function onServerScriptRPC(callback: GenericEventCallback<ServerScriptRPC>): altShared.Events.EventHandler;
         export function onceServerScriptRPC(callback: GenericEventCallback<ServerScriptRPC>): altShared.Events.EventHandler;

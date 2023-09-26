@@ -806,9 +806,6 @@ declare module "@altv/server" {
         export function emitRaw<E extends keyof CustomServerEvent>(event: E, ...args: Parameters<CustomServerEvent[E]>): void;
         export function emitRaw<E extends string>(event: Exclude<E, keyof CustomServerEvent>, ...args: unknown[]): void;
 
-        export function answerPlayerRPC(player: Player, answerId: number, ...args: unknown[]): void;
-        export function answerPlayerRPCWithError(player: Player, answerId: number, errorMessage: string): void;
-
         export function emitPlayers<E extends keyof altShared.Events.CustomServerToPlayerEvent>(players: Player[], eventName: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
         export function emitPlayers<E extends string>(players: Player[], eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: unknown[]): void;
 
