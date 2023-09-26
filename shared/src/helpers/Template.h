@@ -371,6 +371,11 @@ namespace js
             GetPropertyGetterMap().erase(isolate);
         }
 
+        void RegisterStaticMethods()
+        {
+            for(auto& [name, callback] : staticMethods) Template::StaticFunction(name, callback);
+        }
+
     public:
         ClassTemplate(v8::Isolate* isolate, Class* _class, v8::Local<v8::FunctionTemplate> tpl) : Template(isolate, tpl), class_(_class) {}
 
@@ -488,7 +493,6 @@ namespace js
         void StaticFunction(const std::string& name, internal::FunctionCallback callback) override
         {
             staticMethods[name] = callback;
-            Template::StaticFunction(name, callback);
         }
 
         template<alt::IBaseObject::Type Type>

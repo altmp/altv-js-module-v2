@@ -15,6 +15,7 @@ void js::Class::Register(v8::Isolate* isolate)
         tpl.Inherit(parentClass->templateMap.at(isolate));
     }
     initCb(tpl);
+    tpl.RegisterStaticMethods();
     tpl.Get()->SetClassName(js::JSValue(name));
     tpl.Get()->InstanceTemplate()->SetInternalFieldCount(internalFieldCount);
     templateMap.insert({ isolate, tpl });
