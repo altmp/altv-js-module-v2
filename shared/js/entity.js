@@ -61,13 +61,19 @@ function addEntityToAll(entity) {
     entityAllSet.add(entity);
     const all = entityAllMap.get(entity.type);
     all?.add(entity);
-    entity.constructor.__allDirty = true;
+    // Check if this is an extended class (for factory)
+    const superClass = Object.getPrototypeOf(entity.constructor);
+    if ("__allDirty" in superClass) superClass.__allDirty = true;
+    else entity.constructor.__allDirty = true;
 }
 function removeEntityFromAll(entity) {
     entityAllSet.delete(entity);
     const all = entityAllMap.get(entity.type);
     all?.delete(entity);
-    entity.constructor.__allDirty = true;
+    // Check if this is an extended class (for factory)
+    const superClass = Object.getPrototypeOf(entity.constructor);
+    if ("__allDirty" in superClass) superClass.__allDirty = true;
+    else entity.constructor.__allDirty = true;
 }
 cppBindings.registerExport("entity:addEntityToAll", addEntityToAll);
 
