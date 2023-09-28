@@ -61,35 +61,35 @@ declare module "@altv/shared" {
         writeString(offset: number, value: string): void;
     }
 
-    interface ColShapeSphereCreateOptions {
+    export interface ColShapeSphereCreateOptions {
         pos: IVector3;
         radius: number;
     }
 
-    interface ColShapeCylinderCreateOptions {
+    export interface ColShapeCylinderCreateOptions {
         pos: IVector3;
         radius: number;
         height: number;
     }
 
-    interface ColShapeCircleCreateOptions {
+    export interface ColShapeCircleCreateOptions {
         pos: IVector2;
         radius: number;
     }
 
-    interface ColShapeCuboidCreateOptions {
+    export interface ColShapeCuboidCreateOptions {
         pos1: IVector2;
         pos2: IVector3;
     }
 
-    interface ColShapeRectangleCreateOptions {
+    export interface ColShapeRectangleCreateOptions {
         x1: number;
         y1: number;
         x2: number;
         y2: number;
     }
 
-    interface ColShapePolygonCreateOptions {
+    export interface ColShapePolygonCreateOptions {
         minZ: number;
         maxZ: number;
         points: IVector2[];
@@ -126,7 +126,7 @@ declare module "@altv/shared" {
         static exists(resourceName: string): boolean;
     }
 
-    interface VirtualEntityGroupCreateOptions {
+    export interface VirtualEntityGroupCreateOptions {
         maxEntitiesInStream: number;
     }
 
