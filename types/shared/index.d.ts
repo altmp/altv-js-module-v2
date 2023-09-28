@@ -1990,6 +1990,13 @@ declare module "@altv/shared" {
             PRICEDOWN = 7
         }
 
+        // When changing, update shared/js/enums/textAlign.js aswell
+        export enum TextAlign {
+            CENTER = 0,
+            LEFT = 1,
+            RIGHT = 2
+        }
+
         // When changing, update shared/js/enums/statName.js aswell
         export enum StatName {
             STAMINA = "stamina",
