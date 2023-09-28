@@ -53,7 +53,7 @@ declare module "@altv/client" {
     export function getPedBonePos(scriptId: number, boneId: number): altShared.Vector3;
     export function isPointOnScreen(pos: altShared.IVector3): boolean;
 
-    interface AudioCreateOptions {
+    export interface AudioCreateOptions {
         source: string;
         volume: number;
         isRadio?: boolean; // default: false
@@ -107,7 +107,7 @@ declare module "@altv/client" {
         static get(name: string): AudioCategory | undefined;
     }
 
-    interface AudioFilterCreateOptions {
+    export interface AudioFilterCreateOptions {
         hash: number | string;
     }
 
@@ -146,7 +146,7 @@ declare module "@altv/client" {
         static getByID(id: number): AudioOutput | null;
     }
 
-    interface AudioOutputAttachedCreateOptions {
+    export interface AudioOutputAttachedCreateOptions {
         entity: WorldObject;
         categoryHash?: number; // default: 'radio' hashed
     }
@@ -157,7 +157,7 @@ declare module "@altv/client" {
         static create(options: AudioOutputAttachedCreateOptions): AudioOutputAttached;
     }
 
-    interface AudioOutputFrontendCreateOptions {
+    export interface AudioOutputFrontendCreateOptions {
         //
         categoryHash?: number; // default: 'radio' hashed
     }
@@ -166,7 +166,7 @@ declare module "@altv/client" {
         static create(options: AudioOutputFrontendCreateOptions): AudioOutputFrontendCreateOptions;
     }
 
-    interface AudioOutputWorldCreateOptions {
+    export interface AudioOutputWorldCreateOptions {
         pos: altShared.Vector3;
         categoryHash?: number; // default: 'radio' hashed
     }
@@ -258,7 +258,7 @@ declare module "@altv/client" {
         static getByRemoteID(id: number): ColShape | null;
     }
 
-    interface CheckpointCreateOptions {
+    export interface CheckpointCreateOptions {
         type: altShared.Enums.CheckpointType;
         pos: altShared.IVector3;
         radius: number;
@@ -420,7 +420,7 @@ declare module "@altv/client" {
         static getByRemoteID(id: number): Object | null;
     }
 
-    interface LocalObjectCreateOptions {
+    export interface LocalObjectCreateOptions {
         model: number | string;
         pos: altShared.Vector3;
         rot: altShared.Vector3;
@@ -459,7 +459,7 @@ declare module "@altv/client" {
         static getByID(id: number): LocalObject | null;
     }
 
-    interface WeaponObjectCreateOptions {
+    export interface WeaponObjectCreateOptions {
         pos: altShared.Vector3;
         rot: altShared.Vector3;
         weapon: number | string;
@@ -492,7 +492,7 @@ declare module "@altv/client" {
         static getByRemoteID(id: number): Ped | null;
     }
 
-    interface LocalPedCreateOptions {
+    export interface LocalPedCreateOptions {
         model: number | string;
         dimension: number;
         pos: altShared.Vector3;
@@ -525,7 +525,7 @@ declare module "@altv/client" {
         getWeaponComponents(wepaonHash: number | string): ReadonlyArray<number> | undefined;
     }
 
-    interface LocalVehicleCreateOptions {
+    export interface LocalVehicleCreateOptions {
         model: number | string;
         dimension: number;
         pos: altShared.Vector3;
@@ -617,7 +617,7 @@ declare module "@altv/client" {
         static getByRemoteID(id: number): Player | null;
     }
 
-    interface RmlDocumentCreateOptions {
+    export interface RmlDocumentCreateOptions {
         url: string;
     }
 
@@ -874,7 +874,7 @@ declare module "@altv/client" {
         static getByRemoteID(id: number): Vehicle | null;
     }
 
-    interface TextLabelCreateOptions {
+    export interface TextLabelCreateOptions {
         text: string;
         fontName: string;
         fontSize: number;
@@ -888,7 +888,7 @@ declare module "@altv/client" {
         streamingDistance?: number; // default: 0
     }
 
-    interface VirtualEntityCreateOptions {
+    export interface VirtualEntityCreateOptions {
         group: VirtualEntityGroup;
         pos: altShared.IVector3;
         streamingDistance: number;
@@ -941,7 +941,7 @@ declare module "@altv/client" {
         static get(weaponHash: number | string): WeaponData | undefined;
     }
 
-    interface WebSocketClientCreateOptions {
+    export interface WebSocketClientCreateOptions {
         url: string;
     }
 
@@ -966,12 +966,12 @@ declare module "@altv/client" {
         static getByID(id: number): WebSocketClient | null;
     }
 
-    interface _WebViewTextureCreateOptions {
+    export interface _WebViewTextureCreateOptions {
         drawable: number | string; // default: 0
         targetTexture: string;
     }
 
-    interface _WebViewCreateOptions {
+    export interface _WebViewCreateOptions {
         pos?: altShared.IVector2; // default: { x: 0, y: 0 }
         size?: altShared.IVector2; // default: { x: 0, y: 0 }
         isVisible?: boolean; // default: true
