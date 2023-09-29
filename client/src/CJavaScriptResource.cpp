@@ -120,7 +120,6 @@ void CJavaScriptResource::OnTick()
     if(context.IsEmpty()) return;
 
     IResource::Scope scope(this);
-    auto nativeScope = GetResource()->PushNativesScope();
 
     microtaskQueue->PerformCheckpoint(isolate);
 
