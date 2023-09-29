@@ -520,6 +520,7 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.Namespace(streamingNamespace);
     module.Namespace(configFlagNamespace);
     module.Namespace("WeaponObject");
+    module.Namespace("Drawing");
 
     module.StaticDynamicProperty("localMeta", LocalMetaGetter);
 });

@@ -1235,6 +1235,14 @@ declare module "@altv/client" {
         static create(opts: altShared.ColShapePolygonCreateOptions): ColShapePolygon;
     }
 
+    export namespace Drawing {
+        export function drawText2dThisFrame(text: String, pos2d?: altShared.IVector2, font?: Number, scale?: Number, color?: altShared.IRGBA, outline?: boolean, dropShadow?: boolean, textAlign?: number): void;
+        export function drawText2d(text: String, pos2d?: altShared.IVector2, font?: Number, scale?: Number, color?: altShared.IRGBA, outline?: boolean, dropShadow?: boolean, textAlign?: number): altShared.Timers.EveryTick;
+
+        export function drawText3dThisFrame(text: string, pos3d: altShared.IVector2, font?: number, scale?: number, color?: altShared.IRGBA, outline?: boolean, dropShadow?: boolean, textAlign?: number): void;
+        export function drawText3d(text: string, pos3d: altShared.IVector2, font?: number, scale?: number, color?: altShared.IRGBA, outline?: boolean, dropShadow?: boolean, textAlign?: number): altShared.Timers.EveryTick;
+    }
+
     export namespace RPC {
         export function send(rpcName: string, ...args: unknown[]): Promise<unknown>;
     }
