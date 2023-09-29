@@ -1986,6 +1986,22 @@ declare module "@altv/shared" {
             BOTTOM_CENTER = 4
         }
 
+        // When changing, update shared/js/enums/gameFont.js aswell
+        export enum GameFont {
+            CHALET_LONDON = 0,
+            HOUSE_SCRIPT = 1,
+            MONOSPACE = 2,
+            CHARLET_COMPRIME_COLONGE = 4,
+            PRICEDOWN = 7
+        }
+
+        // When changing, update shared/js/enums/textAlign.js aswell
+        export enum TextAlign {
+            CENTER = 0,
+            LEFT = 1,
+            RIGHT = 2
+        }
+
         // When changing, update shared/js/enums/statName.js aswell
         export enum StatName {
             STAMINA = "stamina",
