@@ -628,6 +628,10 @@ declare module "@altv/shared" {
         export function assertIsType(value: unknown, type: JSType, message?: string): void;
         export function assertNotNaN(value: number, message?: string): void;
 
+        export function assertRGBA(val: IRGBA, message?: string): void;
+        export function assertVector2(val: IVector2, message?: string): void;
+        export function assertVector3(val: IVector3, message?: string): void;
+
         export interface InspectOptions {
             showHidden: boolean; // default: false
             depth: number; // default: 2
