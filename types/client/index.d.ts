@@ -648,6 +648,9 @@ declare module "@altv/client" {
 
         static getByID(id: number): Player | null;
         static getByRemoteID(id: number): Player | null;
+
+        readonly syncedMeta: Readonly<altShared.PlayerSyncedMeta>;
+        readonly streamSyncedMeta: Readonly<altShared.PlayerStreamSyncedMeta>;
     }
 
     export interface RmlDocumentCreateOptions {
