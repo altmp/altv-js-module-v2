@@ -81,6 +81,9 @@ declare module "@altv/client" {
         off(eventName: string, func: (...args: unknown[]) => void): void;
         readonly listeners: Readonly<{ [eventName: string]: ReadonlyArray<(...args: unknown[]) => void> }>;
 
+        public onCreate?: (opts: AudioCreateOptions) => void;
+        public onDestroy?: () => void;
+
         static create(options: AudioCreateOptions): Audio;
         static getByID(id: number): Audio | null;
     }
@@ -131,6 +134,9 @@ declare module "@altv/client" {
 
         removeEffect(fxHandler: number): boolean;
 
+        public onCreate?: (opts: AudioFilterCreateOptions) => void;
+        public onDestroy?: () => void;
+
         static create(options: AudioFilterCreateOptions): AudioFilter;
         static getByID(id: number): AudioFilter | null;
     }
@@ -154,6 +160,9 @@ declare module "@altv/client" {
     export abstract class AudioOutputAttached extends AudioOutput {
         entity: WorldObject;
 
+        public onCreate?: (opts: AudioOutputAttachedCreateOptions) => void;
+        public onDestroy?: () => void;
+
         static create(options: AudioOutputAttachedCreateOptions): AudioOutputAttached;
     }
 
@@ -163,6 +172,9 @@ declare module "@altv/client" {
     }
 
     export abstract class AudioOutputFrontend extends AudioOutput {
+        public onCreate?: (opts: AudioOutputFrontendCreateOptions) => void;
+        public onDestroy?: () => void;
+
         static create(options: AudioOutputFrontendCreateOptions): AudioOutputFrontendCreateOptions;
     }
 
@@ -173,6 +185,9 @@ declare module "@altv/client" {
 
     export abstract class AudioOutputWorld extends AudioOutput {
         pos: altShared.Vector3;
+
+        public onCreate?: (opts: AudioOutputWorldCreateOptions) => void;
+        public onDestroy?: () => void;
 
         static create(options: AudioOutputWorldCreateOptions): AudioOutputWorld;
     }
@@ -240,6 +255,9 @@ declare module "@altv/client" {
         attachTo(entity: Entity): boolean;
         fade(opacity: number, duration: number): void;
 
+        public onCreate?: (opts: BlipCreateOptions) => void;
+        public onDestroy?: () => void;
+
         static create(options: BlipCreateOptions): Blip;
         static getByID(id: number): Blip | null;
         static getByRemoteID(id: number): Blip | null;
@@ -252,6 +270,9 @@ declare module "@altv/client" {
         isEntityIn(entity: Entity): boolean;
         isEntityIdIn(id: number): boolean;
         isPointIn(pos: altShared.Vector3): boolean;
+
+        public onCreate?: (opts: altShared.ColShapeCreateOptions) => void;
+        public onDestroy?: () => void;
 
         static create(opts: altShared.ColShapeCreateOptions): ColShape;
         static getByID(id: number): ColShape | null;
@@ -286,6 +307,9 @@ declare module "@altv/client" {
         isEntityIn(entity: Entity): boolean;
         isEntityIdIn(id: number): boolean;
         isPointIn(point: altShared.Vector3): boolean;
+
+        public onCreate?: (opts: CheckpointCreateOptions) => void;
+        public onDestroy?: () => void;
 
         static create(opts: CheckpointCreateOptions): Checkpoint;
         static getByID(id: number): Checkpoint | null;
@@ -455,6 +479,9 @@ declare module "@altv/client" {
 
         static readonly allWorld: ReadonlyArray<LocalObject>;
 
+        public onCreate?: (opts: LocalObjectCreateOptions) => void;
+        public onDestroy?: () => void;
+
         static create(options: LocalObjectCreateOptions): LocalObject;
         static getByID(id: number): LocalObject | null;
     }
@@ -509,6 +536,9 @@ declare module "@altv/client" {
         readonly scriptID: number;
         readonly isStreamedIn: boolean;
 
+        public onCreate?: (opts: LocalPedCreateOptions) => void;
+        public onDestroy?: () => void;
+
         static create(options: LocalPedCreateOptions): LocalPed;
         static getByID(id: number): LocalPed | null;
     }
@@ -542,6 +572,9 @@ declare module "@altv/client" {
         visible: boolean;
         readonly scriptID: number;
         readonly isStreamedIn: boolean;
+
+        public onCreate?: (opts: LocalVehicleCreateOptions) => void;
+        public onDestroy?: () => void;
 
         static create(opts: LocalVehicleCreateOptions): LocalVehicle;
         static getByID(id: number): LocalVehicle | null;
@@ -635,6 +668,9 @@ declare module "@altv/client" {
 
         createElement(tag: string): RmlElement;
         createTextNode(text: string): RmlElement;
+
+        public onCreate?: (opts: RmlDocumentCreateOptions) => void;
+        public onDestroy?: () => void;
 
         static create(options: RmlDocumentCreateOptions): RmlDocument;
 
@@ -741,6 +777,9 @@ declare module "@altv/client" {
         rot: number;
         faceCamera: boolean;
         readonly streamingDistance: number;
+
+        public onCreate?: (opts: TextLabelCreateOptions) => void;
+        public onDestroy?: () => void;
 
         static create(opts: TextLabelCreateOptions): TextLabel | null;
 
@@ -898,6 +937,9 @@ declare module "@altv/client" {
     export abstract class VirtualEntityGroup extends BaseObject {
         readonly maxEntitiesInStream: number;
 
+        public onCreate?: (opts: altShared.VirtualEntityGroupCreateOptions) => void;
+        public onDestroy?: () => void;
+
         static create(opts: altShared.VirtualEntityGroupCreateOptions): VirtualEntityGroup;
     }
 
@@ -915,6 +957,9 @@ declare module "@altv/client" {
 
         static readonly all: ReadonlyArray<VirtualEntity>;
         static readonly streamedIn: ReadonlyArray<VirtualEntity>;
+
+        public onCreate?: (opts: VirtualEntityCreateOptions) => void;
+        public onDestroy?: () => void;
 
         static create(opts: VirtualEntityCreateOptions): VirtualEntity;
     }
@@ -961,6 +1006,9 @@ declare module "@altv/client" {
         getSubProtocols(): ReadonlyArray<string>;
         setExtraHeader(name: string, value: string): void;
         getExtraHeaders(): Readonly<Record<string, string>>;
+
+        public onCreate?: (opts: WebSocketClientCreateOptions) => void;
+        public onDestroy?: () => void;
 
         static create(options: WebSocketClientCreateOptions): WebSocketClient;
         static getByID(id: number): WebSocketClient | null;
@@ -1017,6 +1065,9 @@ declare module "@altv/client" {
         off<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
 
         readonly listeners: Readonly<{ [eventName: string]: ReadonlyArray<(...args: unknown[]) => void> }>;
+
+        public onCreate?: (opts: WebViewCreateOptions) => void;
+        public onDestroy?: () => void;
 
         static readonly isGpuAccelerationActive: boolean;
 
@@ -1122,6 +1173,9 @@ declare module "@altv/client" {
     export abstract class ColShapeSphere extends ColShape {
         readonly radius: number;
 
+        public onCreate?: (opts: altShared.ColShapeSphereCreateOptions) => void;
+        public onDestroy?: () => void;
+
         static create(opts: altShared.ColShapeSphereCreateOptions): ColShapeSphere;
     }
 
@@ -1130,12 +1184,18 @@ declare module "@altv/client" {
         readonly radius: number;
         readonly height: number;
 
+        public onCreate?: (opts: altShared.ColShapeCylinderCreateOptions) => void;
+        public onDestroy?: () => void;
+
         static create(opts: altShared.ColShapeCylinderCreateOptions): ColShapeCylinder;
     }
 
     // @ts-expect-error - Suppresses "Class static side incorrectly extends base class static side"
     export abstract class ColShapeCircle extends ColShape {
         readonly radius: number;
+
+        public onCreate?: (opts: altShared.ColShapeCircleCreateOptions) => void;
+        public onDestroy?: () => void;
 
         static create(opts: altShared.ColShapeCircleCreateOptions): ColShapeCircle;
     }
@@ -1145,6 +1205,9 @@ declare module "@altv/client" {
         readonly min: altShared.Vector3;
         readonly max: altShared.Vector3;
 
+        public onCreate?: (opts: altShared.ColShapeCuboidCreateOptions) => void;
+        public onDestroy?: () => void;
+
         static create(opts: altShared.ColShapeCuboidCreateOptions): ColShapeCuboid;
     }
 
@@ -1152,6 +1215,9 @@ declare module "@altv/client" {
     export abstract class ColShapeRectangle extends ColShape {
         readonly min: altShared.Vector2;
         readonly max: altShared.Vector2;
+
+        public onCreate?: (opts: altShared.ColShapeRectangleCreateOptions) => void;
+        public onDestroy?: () => void;
 
         static create(opts: altShared.ColShapeRectangleCreateOptions): ColShapeRectangle;
     }
@@ -1162,6 +1228,9 @@ declare module "@altv/client" {
         readonly maxZ: number;
 
         readonly points: ReadonlyArray<altShared.Vector2>;
+
+        public onCreate?: (opts: altShared.ColShapePolygonCreateOptions) => void;
+        public onDestroy?: () => void;
 
         static create(opts: altShared.ColShapePolygonCreateOptions): ColShapePolygon;
     }
