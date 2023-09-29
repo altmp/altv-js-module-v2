@@ -46,10 +46,15 @@ export function assertIsType(value, type, message) {
     assert(typeof value === type, message);
 }
 
+export function assertNotNaN(val, message = "Expected number") {
+    assert(!isNaN(val), message);
+}
+
 alt.Utils.AssertionError = AssertionError;
 alt.Utils.assert = assert;
 alt.Utils.assertIsObject = assertIsObject;
 alt.Utils.assertIsType = assertIsType;
+alt.Utils.assertNotNaN = assertNotNaN;
 
 export function hash(str) {
     assertIsType(str, "string", "Expected a string as first argument");

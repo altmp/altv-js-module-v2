@@ -626,6 +626,7 @@ declare module "@altv/shared" {
         export function assert(condition: unknown, message?: string): void;
         export function assertIsObject(value: unknown, message?: string): void;
         export function assertIsType(value: unknown, type: JSType, message?: string): void;
+        export function assertNotNaN(value: number, message?: string): void;
 
         export interface InspectOptions {
             showHidden: boolean; // default: false
