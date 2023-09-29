@@ -14,12 +14,10 @@ registerEventHandler(alt.Enums.EventType.PLAYER_BULLET_HIT_EVENT, "playerBulletH
     return [weapon, victim, pos];
 });
 
-// TODO (xLuxy): player argument doesn't exist in v1 yet - PR is out
 registerEventHandler(alt.Enums.EventType.PLAYER_START_ENTER_VEHICLE, "startEnteringVehicle", ({ player, vehicle, seat }) => {
     return [vehicle, seat, player];
 });
 
-// TODO (xLuxy): player argument doesn't exist in v1 yet - PR is out
 registerEventHandler(alt.Enums.EventType.PLAYER_START_LEAVE_VEHICLE, "startLeavingVehicle", ({ player, vehicle, seat }) => {
     return [vehicle, seat, player];
 });

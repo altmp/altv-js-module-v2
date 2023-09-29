@@ -100,8 +100,8 @@ declare module "@altv/server" {
         readonly meta: BlipMeta;
         readonly syncedMeta: altShared.BlipSyncedMeta;
 
-        public onCreate?: (opts: BlipCreateOptions) => void;
-        public onDestroy?: () => void;
+        public onCreate?(opts: BlipCreateOptions): void;
+        public onDestroy?(): void;
 
         static getByID(id: number): Blip | null;
         static create(opts: BlipCreateOptions): Blip;
@@ -122,8 +122,8 @@ declare module "@altv/server" {
     export abstract class ColShapeSphere extends ColShape {
         readonly radius: number;
 
-        public onCreate?: (opts: altShared.ColShapeSphereCreateOptions) => void;
-        public onDestroy?: () => void;
+        public onCreate?(opts: altShared.ColShapeSphereCreateOptions): void;
+        public onDestroy?(): void;
 
         static create(opts: altShared.ColShapeSphereCreateOptions): ColShapeSphere;
     }
@@ -132,8 +132,8 @@ declare module "@altv/server" {
         readonly radius: number;
         readonly height: number;
 
-        public onCreate?: (opts: altShared.ColShapeCylinderCreateOptions) => void;
-        public onDestroy?: () => void;
+        public onCreate?(opts: altShared.ColShapeCylinderCreateOptions): void;
+        public onDestroy?(): void;
 
         static create(opts: altShared.ColShapeCylinderCreateOptions): ColShapeCylinder;
     }
@@ -141,8 +141,8 @@ declare module "@altv/server" {
     export abstract class ColShapeCircle extends ColShape {
         readonly radius: number;
 
-        public onCreate?: (opts: altShared.ColShapeCircleCreateOptions) => void;
-        public onDestroy?: () => void;
+        public onCreate?(opts: altShared.ColShapeCircleCreateOptions): void;
+        public onDestroy?(): void;
 
         static create(opts: altShared.ColShapeCircleCreateOptions): ColShapeCircle;
     }
@@ -151,8 +151,8 @@ declare module "@altv/server" {
         readonly min: altShared.Vector3;
         readonly max: altShared.Vector3;
 
-        public onCreate?: (opts: altShared.ColShapeCuboidCreateOptions) => void;
-        public onDestroy?: () => void;
+        public onCreate?(opts: altShared.ColShapeCuboidCreateOptions): void;
+        public onDestroy?(): void;
 
         static create(opts: altShared.ColShapeCuboidCreateOptions): ColShapeCuboid;
     }
@@ -161,8 +161,8 @@ declare module "@altv/server" {
         readonly min: altShared.Vector2;
         readonly max: altShared.Vector2;
 
-        public onCreate?: (opts: altShared.ColShapeRectangleCreateOptions) => void;
-        public onDestroy?: () => void;
+        public onCreate?(opts: altShared.ColShapeRectangleCreateOptions): void;
+        public onDestroy?(): void;
 
         static create(opts: altShared.ColShapeRectangleCreateOptions): ColShapeRectangle;
     }
@@ -173,8 +173,8 @@ declare module "@altv/server" {
 
         readonly points: ReadonlyArray<altShared.Vector2>;
 
-        public onCreate?: (opts: altShared.ColShapePolygonCreateOptions) => void;
-        public onDestroy?: () => void;
+        public onCreate?(opts: altShared.ColShapePolygonCreateOptions): void;
+        public onDestroy?(): void;
 
         static create(opts: altShared.ColShapePolygonCreateOptions): ColShapePolygon;
     }
@@ -220,8 +220,8 @@ declare module "@altv/server" {
         readonly syncedMeta: altShared.CheckpointSyncedMeta;
         readonly streamSyncedMeta: altShared.CheckpointStreamSyncedMeta;
 
-        public onCreate?: (opts: CheckpointCreateOptions) => void;
-        public onDestroy?: () => void;
+        public onCreate?(opts: CheckpointCreateOptions): void;
+        public onDestroy?(): void;
 
         static create(opts: CheckpointCreateOptions): Checkpoint;
         static getByID(id: number): Checkpoint | null;
@@ -285,8 +285,8 @@ declare module "@altv/server" {
         readonly syncedMeta: altShared.ObjectSyncedMeta;
         readonly streamSyncedMeta: altShared.ObjectStreamSyncedMeta;
 
-        public onCreate?: (opts: ObjectCreateOptions) => void;
-        public onDestroy?: () => void;
+        public onCreate?(opts: ObjectCreateOptions): void;
+        public onDestroy?(): void;
 
         static getByID(id: number): Object | null;
         static create(opts: ObjectCreateOptions): Object;
@@ -309,8 +309,8 @@ declare module "@altv/server" {
         readonly syncedMeta: altShared.PedSyncedMeta;
         readonly streamSyncedMeta: altShared.PedStreamSyncedMeta;
 
-        public onCreate?: (opts: PedCreateOptions) => void;
-        public onDestroy?: () => void;
+        public onCreate?(opts: PedCreateOptions): void;
+        public onDestroy?(): void;
 
         static getByID(id: number): Ped | null;
         static create(opts: PedCreateOptions): Ped;
@@ -650,8 +650,8 @@ declare module "@altv/server" {
         readonly syncedMeta: altShared.VehicleSyncedMeta;
         readonly streamSyncedMeta: altShared.VehicleStreamSyncedMeta;
 
-        public onCreate?: (opts: VehicleCreateOptions) => void;
-        public onDestroy?: () => void;
+        public onCreate?(opts: VehicleCreateOptions): void;
+        public onDestroy?(): void;
 
         static getByID(id: number): Vehicle | null;
         static create(opts: VehicleCreateOptions): Vehicle;
@@ -668,8 +668,8 @@ declare module "@altv/server" {
     export abstract class VirtualEntityGroup extends BaseObject {
         readonly maxEntitiesInStream: number;
 
-        public onCreate?: (opts: altShared.VirtualEntityGroupCreateOptions) => void;
-        public onDestroy?: () => void;
+        public onCreate?(opts: altShared.VirtualEntityGroupCreateOptions): void;
+        public onDestroy?(): void;
 
         static create(opts: altShared.VirtualEntityGroupCreateOptions): VirtualEntityGroup;
     }
@@ -686,8 +686,8 @@ declare module "@altv/server" {
         readonly syncedMeta: altShared.VirtualEntitySyncedMeta;
         readonly streamSyncedMeta: altShared.VirtualEntityStreamSyncedMeta;
 
-        public onCreate?: (opts: VirtualEntityCreateOptions) => void;
-        public onDestroy?: () => void;
+        public onCreate?(opts: VirtualEntityCreateOptions): void;
+        public onDestroy?(): void;
 
         static create(opts: VirtualEntityCreateOptions): VirtualEntity;
     }
@@ -712,8 +712,8 @@ declare module "@altv/server" {
         mutePlayer(player: Player): void;
         unmutePlayer(player: Player): void;
 
-        public onCreate?: (opts: VoiceChannelCreateOptions) => void;
-        public onDestroy?: () => void;
+        public onCreate?(opts: VoiceChannelCreateOptions): void;
+        public onDestroy?(): void;
 
         static create(opts: VoiceChannelCreateOptions): VoiceChannel;
     }
