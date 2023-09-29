@@ -840,6 +840,18 @@ declare module "@altv/server" {
         export function get(weaponHash: number | string): WeaponModelInfo | undefined;
     }
 
+    export abstract class RPCHandler {
+        public readonly name: string;
+        public readonly handler: (player: Player, ...args: unknown[]) => Promise<void> | void;
+        public readonly valid: boolean;
+
+        public destroy(): void;
+    }
+
+    export namespace RPC {
+        export function register(rpcName: string, handler: (player: Player, ...args: unknown[]) => Promise<void> | void): RPCHandler;
+    }
+
     export namespace Events {
         export let rawEmitEnabled: boolean;
         export function emit<E extends keyof CustomServerEvent>(event: E, ...args: Parameters<CustomServerEvent[E]>): void;

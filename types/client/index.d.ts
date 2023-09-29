@@ -1235,6 +1235,10 @@ declare module "@altv/client" {
         static create(opts: altShared.ColShapePolygonCreateOptions): ColShapePolygon;
     }
 
+    export namespace RPC {
+        export function send(rpcName: string, ...args: unknown[]): Promise<unknown>;
+    }
+
     export namespace Events {
         export let rawEmitEnabled: boolean;
         export function emit<E extends keyof CustomClientEvent>(eventName: E, ...args: Parameters<CustomClientEvent[E]>): void;
