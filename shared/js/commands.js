@@ -1,6 +1,7 @@
 requireBinding("shared/events.js");
 /** @type {typeof import("./utils.js")} */
 const { assertIsType } = requireBinding("shared/utils.js");
+requireBinding("shared/events/console.js");
 
 class Command {
     /** @type {Map<string, Function[]} */
