@@ -83,8 +83,9 @@ class Timer {
     }
 
     tick() {
-        if (this.interval === 0 || Date.now() - this.lastTick > this.interval) {
-            const start = Date.now();
+        const now = Date.now();
+        if (this.interval === 0 || now - this.lastTick > this.interval) {
+            const start = now;
             try {
                 this.callback();
             } catch (e) {
@@ -206,7 +207,7 @@ globalThis.clearTimeout = (timeout) => {
 };
 
 function tick() {
-    for (const [_, timer] of timers) {
+    for (const timer of timers.values()) {
         timer.tick();
     }
 }
