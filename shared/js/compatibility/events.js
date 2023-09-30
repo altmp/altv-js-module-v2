@@ -114,7 +114,7 @@ alt.Events.onEvent(async (ctx) => {
 });
 
 function emitClient(player, eventName, ...args) {
-    if (!player instanceof alt.Player || !Array.isArray(player)) return;
+    if (!(player instanceof alt.Player) || !Array.isArray(player)) return;
 
     if (Array.isArray(player)) {
         alt.Events.emitPlayers(player, eventName, ...args);
@@ -125,7 +125,7 @@ function emitClient(player, eventName, ...args) {
 }
 
 function emitClientRaw(player, eventName, ...args) {
-    if (!player instanceof alt.Player || !Array.isArray(player)) return;
+    if (!(player instanceof alt.Player) || !Array.isArray(player)) return;
 
     if (Array.isArray(player)) {
         alt.Events.emitPlayersRaw(player, eventName, ...args);
@@ -136,7 +136,7 @@ function emitClientRaw(player, eventName, ...args) {
 }
 
 function emitClientUnreliable(player, eventName, ...args) {
-    if (!player instanceof alt.Player || !Array.isArray(player)) return;
+    if (!(player instanceof alt.Player) || !Array.isArray(player)) return;
 
     if (Array.isArray(player)) {
         alt.Events.emitPlayersUnreliable(player, eventName, ...args);
