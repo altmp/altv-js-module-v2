@@ -142,9 +142,7 @@ js::NativeInvoker::NativeInvoker(CJavaScriptResource* resource, alt::INative* na
 js::NativeInvoker::~NativeInvoker()
 {
     for(int i = 0; i < 32; ++i)
-    {
         if(stringValues[i] != NULL) free(stringValues[i]);
-    }
 }
 
 bool js::NativeInvoker::Invoke(js::FunctionContext& ctx, alt::INative* native)
@@ -171,14 +169,11 @@ bool js::NativeInvoker::Invoke(js::FunctionContext& ctx, alt::INative* native)
         invoker.pointersCount = 0;
 
         // First element is always the return value
-        arr.Push(invoker.GetReturnValue());
+        if(native->GetRetnType() != alt::INative::Type::ARG_VOID) arr.Push(invoker.GetReturnValue());
 
         // Then push the pointer arguments into the array
-        for (auto& arg : args)
-        {
-            if (auto val = invoker.GetPointerReturnValue(arg); !val->IsUndefined())
-                arr.Push(val);
-        }
+        for(auto& arg : args)
+            if(auto val = invoker.GetPointerReturnValue(arg); !val->IsUndefined()) arr.Push(val);
 
         ctx.Return(arr);
     }
