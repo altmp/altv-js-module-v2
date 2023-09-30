@@ -326,8 +326,8 @@ declare module "@altv/client" {
 
         rot: altShared.Vector3;
 
-        readonly syncedMeta: Readonly<Record<string, unknown>>;
-        readonly streamSyncedMeta: Readonly<Record<string, unknown>>;
+        readonly syncedMeta: Readonly<altShared.EntitySyncedMeta>;
+        readonly streamSyncedMeta: Readonly<altShared.EntityStreamSyncedMeta>;
 
         static readonly all: ReadonlyArray<Entity>;
     }
@@ -648,6 +648,9 @@ declare module "@altv/client" {
 
         static getByID(id: number): Player | null;
         static getByRemoteID(id: number): Player | null;
+
+        readonly syncedMeta: Readonly<altShared.PlayerSyncedMeta>;
+        readonly streamSyncedMeta: Readonly<altShared.PlayerStreamSyncedMeta>;
     }
 
     export interface RmlDocumentCreateOptions {
