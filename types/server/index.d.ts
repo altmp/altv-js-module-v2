@@ -842,14 +842,14 @@ declare module "@altv/server" {
 
     export abstract class RPCHandler {
         public readonly name: string;
-        public readonly handler: (player: Player, ...args: unknown[]) => Promise<void> | void;
+        public readonly handler: (player: Player, ...args: unknown[]) => Promise<unknown> | unknown;
         public readonly valid: boolean;
 
         public destroy(): void;
     }
 
     export namespace RPC {
-        export function register(rpcName: string, handler: (player: Player, ...args: unknown[]) => Promise<void> | void): RPCHandler;
+        export function register(rpcName: string, handler: (player: Player, ...args: unknown[]) => Promise<unknown> | unknown): RPCHandler;
     }
 
     export namespace Events {
