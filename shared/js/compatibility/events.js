@@ -52,6 +52,25 @@ function once(eventName, callback) {
 
 /**
  *
+ * @param {string} eventName
+ * @param {Function} callback
+ */
+function off(eventName, callback) {
+    const eventType = getEventTypeFromName(eventName) ?? alt.Enums.EventType.SERVER_SCRIPT_EVENT;
+    const custom = isCustomEvent(eventType);
+
+    if (!custom) {
+        cppBindings.toggleEvent(eventType, false);
+    }
+
+    const handlers = (eventMap.get(eventType) ?? []).filter((info) => info.callback !== callback && info.eventName !== eventName);
+
+    if (handlers.length == 0) eventMap.delete(eventType);
+    else eventMap.set(eventType, handlers);
+}
+
+/**
+ *
  * @param {string | undefined} eventName
  */
 function getEventListeners(eventName) {
@@ -96,5 +115,5 @@ alt.Events.onEvent(async (ctx) => {
 
 cppBindings.registerCompatibilityExport("on", on);
 cppBindings.registerCompatibilityExport("once", once);
-cppBindings.registerCompatibilityExport("off", alt.Events.onEvent.remove);
+cppBindings.registerCompatibilityExport("off", off);
 cppBindings.registerCompatibilityExport("getEventListeners", getEventListeners);
