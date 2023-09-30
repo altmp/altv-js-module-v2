@@ -43,7 +43,7 @@ alt.RPC.register = function (rpcName, handler) {
     return rpcHandler;
 };
 
-alt.Events.onPlayerScriptRPC(async (ctx) => {
+alt.Events.onScriptRPC(async (ctx) => {
     if (!rpcHandlersMap.has(ctx.name)) return;
     const handler = rpcHandlersMap.get(ctx.name);
 

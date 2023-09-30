@@ -5,7 +5,7 @@
 static void WillAnswer(js::FunctionContext& ctx)
 {
     if(!ctx.CheckExtraInternalFieldValue()) return;
-    auto* ev = ctx.GetExtraInternalFieldValue<alt::CClientScriptRPCEvent>();
+    auto* ev = ctx.GetExtraInternalFieldValue<alt::CScriptRPCEvent>();
 
     ctx.Return(ev->WillAnswer());
 }
@@ -14,7 +14,7 @@ static void Answer(js::FunctionContext& ctx)
 {
     if(!ctx.CheckExtraInternalFieldValue()) return;
     if(!ctx.CheckArgCount(1)) return;
-    auto* ev = ctx.GetExtraInternalFieldValue<alt::CClientScriptRPCEvent>();
+    auto* ev = ctx.GetExtraInternalFieldValue<alt::CScriptRPCEvent>();
 
     alt::MValue answer;
     if(!ctx.GetArg(0, answer)) return;
@@ -26,7 +26,7 @@ static void AnswerWithError(js::FunctionContext& ctx)
 {
     if (!ctx.CheckArgCount(1)) return;
     if(!ctx.CheckExtraInternalFieldValue()) return;
-    auto* ev = ctx.GetExtraInternalFieldValue<alt::CClientScriptRPCEvent>();
+    auto* ev = ctx.GetExtraInternalFieldValue<alt::CScriptRPCEvent>();
 
     std::string errorMessage;
     if (!ctx.GetArg(0, errorMessage)) return;
@@ -34,9 +34,9 @@ static void AnswerWithError(js::FunctionContext& ctx)
     ctx.Return(ev->AnswerWithError(errorMessage));
 }
 
-static js::Event clientScriptRpcEvent(alt::CEvent::Type::CLIENT_SCRIPT_RPC_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+static js::Event scriptRpcEvent(alt::CEvent::Type::SCRIPT_RPC_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
-    auto e = static_cast<const alt::CClientScriptRPCEvent*>(ev);
+    auto e = static_cast<const alt::CScriptRPCEvent*>(ev);
 
     args.Set("player", e->GetTarget());
     args.Set("name", e->GetName());

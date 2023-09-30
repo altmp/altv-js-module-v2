@@ -16,7 +16,7 @@ alt.RPC.send = function (rpcName, ...args) {
     return result;
 };
 
-alt.Events.onServerScriptRPCAnswer(async ({ answerID, answer, answerError }) => {
+alt.Events.ScriptRPCAnswer(async ({ answerID, answer, answerError }) => {
     if (!pendingRpcMap.has(answerID)) return;
     const { resolve, reject } = pendingRpcMap.get(answerID);
     if (answerError.length !== 0) reject(answerError);

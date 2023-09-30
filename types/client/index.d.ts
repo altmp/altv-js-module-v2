@@ -1326,6 +1326,9 @@ declare module "@altv/client" {
         export function onPlayerStopTalking<T extends Player>(callback: GenericPlayerEventCallback<{}, T>): altShared.Events.EventHandler;
         export function oncePlayerStopTalking<T extends Player>(callback: GenericPlayerEventCallback<{}, T>): altShared.Events.EventHandler;
 
+        export function onScriptRPCAnswer(callback: GenericEventCallback<ScriptRPCAnswerEventParameters>): altShared.Events.EventHandler;
+        export function onceScriptRPCAnswer(callback: GenericEventCallback<ScriptRPCAnswerEventParameters>): altShared.Events.EventHandler;
+
         // Ped related events
         export function onPedDeath(callback: GenericEventCallback<PedDeathEventParameters>): altShared.Events.EventHandler;
         export function oncePedDeath(callback: GenericEventCallback<PedDeathEventParameters>): altShared.Events.EventHandler;
@@ -1359,6 +1362,12 @@ declare module "@altv/client" {
 
         interface VoiceConnectionEventParameters {
             state: altShared.Enums.VoiceConnectionState;
+        }
+
+        interface ScriptRPCAnswerEventParameters {
+            answerID: number;
+            answer: unknown;
+            answerError: string;
         }
 
         interface PedDeathEventParameters {

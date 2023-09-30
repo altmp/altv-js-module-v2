@@ -879,8 +879,8 @@ declare module "@altv/server" {
         export function emitAllPlayersUnreliableRaw<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: unknown[]): void;
 
         // RPC related events
-        export function onPlayerScriptRPC<T extends Player>(callback: GenericPlayerEventCallback<PlayerScriptRPCEvent, T>): altShared.Events.EventHandler;
-        export function oncePlayerScriptRPC<T extends Player>(callback: GenericPlayerEventCallback<PlayerScriptRPCEvent, T>): altShared.Events.EventHandler;
+        export function onScriptRPC<T extends Player>(callback: GenericPlayerEventCallback<ScriptRPCEvent, T>): altShared.Events.EventHandler;
+        export function onceScriptRPC<T extends Player>(callback: GenericPlayerEventCallback<ScriptRPCEvent, T>): altShared.Events.EventHandler;
 
         // Server related events
         export function onServerStarted(callback: GenericEventCallback): altShared.Events.EventHandler;
@@ -1222,7 +1222,7 @@ declare module "@altv/server" {
 
         interface CustomServerEvent {}
 
-        interface PlayerScriptRPCEvent {
+        interface ScriptRPCEvent {
             readonly name: string;
             readonly args: ReadonlyArray<unknown>;
             readonly answerID: number;
