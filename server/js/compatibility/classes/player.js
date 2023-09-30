@@ -59,6 +59,7 @@ class Player extends alt.Player {
             const [x, y, z] = args;
             if (args.length == 4) {
                 delay = args[3];
+                pos = new alt.Vector3(x, y, z);
             }
         }
 
