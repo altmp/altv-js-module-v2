@@ -28,30 +28,22 @@ export function registerEventHandler(eventType, oldEventName, contextToArgsFunc,
     map.set(eventType, { oldEventName, contextToArgsFunc });
 }
 
-/*
-alt.Events.onEvent((ctx) => {
-    const map = ctx.customEvent ? customEventMap : eventMap;
-    const compatHandler = map.get(ctx.eventType);
-    if (!compatHandler) return;
-
-    const args = compatHandler.contextToArgsFunc(ctx);
-
-    const handlers = getHandlersFromOn(compatHandler.oldEventName); // imaginary function
-    for (const handler of handlers) handler(...args);
-});
-*/
-
-// TODO (xLuxy): Implement logic
-/*
-registerEventHandler(alt.Enums.EventType.CLIENT_SCRIPT_EVENT, "", ({ player, eventName, args }) => {
-    if (alt.isServer) {
-        return [player, eventName, ...args];
+export function getEventTypeFromName(eventName) {
+    for (const [eventType, { oldEventName }] of eventMap) {
+        if (oldEventName === eventName) return eventType;
     }
 
-    return [eventName, ...args];
-});
+    for (const [eventType, { oldEventName }] of customEventMap) {
+        if (oldEventName === eventName) return eventType;
+    }
+}
 
-registerEventHandler(alt.Enums.EventType.SERVER_SCRIPT_EVENT, "", ({ eventName, args }) => {
-    return [eventName, ...args];
-});
-*/
+export function getEventArgumentConverter(eventType, custom = false) {
+    const map = custom ? customEventMap : eventMap;
+
+    return map.get(eventType)?.contextToArgsFunc;
+}
+
+export function isCustomEvent(eventType) {
+    return customEventMap.has(eventType);
+}

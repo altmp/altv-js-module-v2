@@ -4,7 +4,9 @@
 // import * as alt from "@altv/shared";
 
 /** @type {typeof import("./utils/events.js")} */
-const { getEventTypeFromEventName } = requireBinding("shared/compatibility/utils/events.js");
+const { getEventTypeFromName, getEventArgumentConverter, isCustomEvent } = requireBinding("shared/compatibility/utils/events.js");
+
+const eventMap = new Map();
 
 /**
  *
@@ -12,29 +14,19 @@ const { getEventTypeFromEventName } = requireBinding("shared/compatibility/utils
  * @param {Function} callback
  */
 function on(eventName, callback) {
-    const eventType = getEventTypeFromEventName(eventName);
+    const eventType = getEventTypeFromName(eventName) ?? alt.Enums.EventType.SERVER_SCRIPT_EVENT;
+    const custom = isCustomEvent(eventType);
 
-    if (eventType != alt.Enums.EventType.NONE) {
-        // When the eventType is not NONE we have to deal with an API event
-        return;
+    // console.log(`[compatibility] Registering event handler for ${eventName} (${eventType} - ${custom ? "custom" : "generic"})`);
+
+    if (!custom) {
+        cppBindings.toggleEvent(eventType, true);
     }
 
-    // Otherwise we have to deal with a custom user event
+    const handlers = eventMap.get(eventType) ?? [];
+    handlers.push({ callback, eventName, once: false });
 
-    async function wrapper(ctx) {
-        const callbackRet = callback(ctx);
-
-        let processedResult = callbackRet;
-        if (callbackRet instanceof Promise) {
-            processedResult = await callbackRet;
-        }
-
-        if (processedResult === false && ctx.isCancellable) {
-            ctx.cancel();
-        }
-    }
-
-    alt.Events.on(eventName, wrapper);
+    eventMap.set(eventType, handlers);
 }
 
 /**
@@ -43,19 +35,19 @@ function on(eventName, callback) {
  * @param {Function} callback
  */
 function once(eventName, callback) {
-    if (typeof callback != "function") throw new Error("callback is not a function");
+    const eventType = getEventTypeFromName(eventName) ?? alt.Enums.EventType.SERVER_SCRIPT_EVENT;
+    const custom = isCustomEvent(eventType);
 
-    let removeFn;
-    async function wrapper(...args) {
-        const ret = callback(...args);
+    // console.log(`[compatibility] Registering event handler for ${eventName} (${eventType} - ${custom ? "custom" : "generic"})`);
 
-        if (typeof removeFn == "function") {
-            removeFn();
-        }
+    if (!custom) {
+        cppBindings.toggleEvent(eventType, true);
     }
 
-    const eventHandler = alt.Events.on(eventName, wrapper);
-    removeFn = eventHandler.destroy;
+    const handlers = eventMap.get(eventType) ?? [];
+    handlers.push({ callback, eventName, once: true });
+
+    eventMap.set(eventType, handlers);
 }
 
 /**
@@ -63,9 +55,44 @@ function once(eventName, callback) {
  * @param {string | undefined} eventName
  */
 function getEventListeners(eventName) {
-    const listeners = typeof eventName == "string" ? alt.Events.on.listeners[eventName] : alt.Events.on.listeners;
-    return listeners ?? [];
+    const eventType = getEventTypeFromName(eventName) ?? alt.Enums.EventType.SERVER_SCRIPT_EVENT;
+
+    let handlers = eventMap.get(eventType);
+    if (handlers) handlers = [...handlers];
+
+    return handlers ?? [];
 }
+
+alt.Events.onEvent(async (ctx) => {
+    const converter = getEventArgumentConverter(ctx.eventType, ctx.customEvent);
+    const args = converter?.(ctx) ?? ctx.args;
+
+    // alt.log(`[compatibility] Received event ${ctx.eventType} (${ctx.customEvent ? "custom" : "generic"})`);
+
+    let handlers = eventMap.get(ctx.eventType);
+
+    if ((handlers && ctx.eventType == alt.Enums.EventType.CLIENT_SCRIPT_EVENT) || ctx.eventType == alt.Enums.EventType.SERVER_SCRIPT_EVENT) {
+        handlers = handlers.filter((handler) => handler.eventName == ctx.eventName);
+    }
+
+    if (!handlers) return;
+
+    for (const { callback, once } of handlers) {
+        let ret = callback(...args);
+
+        if (ret instanceof Promise) ret = await ret;
+
+        if (ret === false && ctx.isCancellable) {
+            ctx.cancel();
+            return;
+        }
+
+        if (once) {
+            handlers.splice(handlers.indexOf(callback), 1);
+            eventMap.set(ctx.eventType, handlers);
+        }
+    }
+});
 
 cppBindings.registerCompatibilityExport("on", on);
 cppBindings.registerCompatibilityExport("once", once);

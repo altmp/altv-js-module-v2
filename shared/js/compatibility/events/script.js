@@ -23,3 +23,11 @@ registerEventHandler(
     },
     true
 );
+
+registerEventHandler(alt.Enums.EventType.CLIENT_SCRIPT_EVENT, "__CLIENT_SCRIPT_EVENT__", ({ player, args }) => {
+    return alt.isServer ? [player, ...args] : args;
+});
+
+registerEventHandler(alt.Enums.EventType.SERVER_SCRIPT_EVENT, "__SERVER_SCRIPT_EVENT__", ({ args }) => {
+    return args;
+});
