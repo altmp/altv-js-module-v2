@@ -326,7 +326,7 @@ declare module "@altv/client" {
 
         rot: altShared.Vector3;
 
-        readonly syncedMeta: altShared.EntitySyncedMeta;
+        readonly syncedMeta: Readonly<altShared.EntitySyncedMeta>;
         readonly streamSyncedMeta: Readonly<altShared.EntityStreamSyncedMeta>;
 
         static readonly all: ReadonlyArray<Entity>;
