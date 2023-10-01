@@ -474,6 +474,8 @@ declare module "@altv/server" {
         playScenario(name: string): void;
         requestCloudID(): Promise<string>;
 
+        sendRPC(rpcName: string, ...args: unknown[]): Promise<unknown>;
+
         readonly meta: PlayerMeta;
         readonly syncedMeta: altShared.PlayerSyncedMeta;
         readonly streamSyncedMeta: altShared.PlayerStreamSyncedMeta;
@@ -883,8 +885,10 @@ declare module "@altv/server" {
         export function emitAllPlayersUnreliableRaw<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: unknown[]): void;
 
         // RPC related events
-        export function onScriptRPC<T extends Player>(callback: GenericPlayerEventCallback<ScriptRPCEvent, T>): altShared.Events.EventHandler;
-        export function onceScriptRPC<T extends Player>(callback: GenericPlayerEventCallback<ScriptRPCEvent, T>): altShared.Events.EventHandler;
+        export function onScriptRPC<T extends Player>(callback: GenericPlayerEventCallback<ScriptRPCEventParameters, T>): altShared.Events.EventHandler;
+        export function onceScriptRPC<T extends Player>(callback: GenericPlayerEventCallback<ScriptRPCEventParameters, T>): altShared.Events.EventHandler;
+        export function onScriptRPCAnswer<T extends Player>(callback: GenericPlayerEventCallback<ScriptRPCAnswerEventParameters, T>): altShared.Events.EventHandler;
+        export function onceScriptRPCAnswer<T extends Player>(callback: GenericPlayerEventCallback<ScriptRPCAnswerEventParameters, T>): altShared.Events.EventHandler;
 
         // Server related events
         export function onServerStarted(callback: GenericEventCallback): altShared.Events.EventHandler;
@@ -1226,7 +1230,7 @@ declare module "@altv/server" {
 
         interface CustomServerEvent {}
 
-        interface ScriptRPCEvent {
+        interface ScriptRPCEventParameters {
             readonly name: string;
             readonly args: ReadonlyArray<unknown>;
             readonly answerID: number;
@@ -1235,6 +1239,12 @@ declare module "@altv/server" {
 
             answer(...args: unknown[]): void;
             answerWithError(errorMessage: string): boolean;
+        }
+
+        interface ScriptRPCAnswerEventParameters {
+            readonly answerID: number;
+            readonly answer: unknown;
+            readonly answerError: string;
         }
 
         export type EventContext = {

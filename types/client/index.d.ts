@@ -1246,8 +1246,17 @@ declare module "@altv/client" {
         export function drawText3d(text: string, pos3d: altShared.IVector2, font?: number, scale?: number, color?: altShared.IRGBA, outline?: boolean, dropShadow?: boolean, textAlign?: number): altShared.Timers.EveryTick;
     }
 
+    export abstract class RPCHandler {
+        public readonly name: string;
+        public readonly handler: (...args: unknown[]) => Promise<unknown> | unknown;
+        public readonly valid: boolean;
+
+        public destroy(): void;
+    }
+
     export namespace RPC {
         export function send(rpcName: string, ...args: unknown[]): Promise<unknown>;
+        export function register(rpcName: string, handler: (...args: unknown[]) => Promise<unknown> | unknown): RPCHandler;
     }
 
     export namespace Events {
@@ -1271,8 +1280,10 @@ declare module "@altv/client" {
         export function emitServerUnreliableRaw<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>, ...args: unknown[]): void;
 
         // RPC related
-        export function onServerScriptRPC(callback: GenericEventCallback<ServerScriptRPC>): altShared.Events.EventHandler;
-        export function onceServerScriptRPC(callback: GenericEventCallback<ServerScriptRPC>): altShared.Events.EventHandler;
+        export function onScriptRPC(callback: GenericEventCallback<ScriptRPCEventParameters>): altShared.Events.EventHandler;
+        export function onceScriptRPC(callback: GenericEventCallback<ScriptRPCEventParameters>): altShared.Events.EventHandler;
+        export function onScriptRPCAnswer(callback: GenericEventCallback<ScriptRPCAnswerEventParameters>): altShared.Events.EventHandler;
+        export function onceScriptRPCAnswer(callback: GenericEventCallback<ScriptRPCAnswerEventParameters>): altShared.Events.EventHandler;
 
         export function onKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): altShared.Events.EventHandler;
         export function onceKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): altShared.Events.EventHandler;
@@ -1326,9 +1337,6 @@ declare module "@altv/client" {
         export function onPlayerStopTalking<T extends Player>(callback: GenericPlayerEventCallback<{}, T>): altShared.Events.EventHandler;
         export function oncePlayerStopTalking<T extends Player>(callback: GenericPlayerEventCallback<{}, T>): altShared.Events.EventHandler;
 
-        export function onScriptRPCAnswer(callback: GenericEventCallback<ScriptRPCAnswerEventParameters>): altShared.Events.EventHandler;
-        export function onceScriptRPCAnswer(callback: GenericEventCallback<ScriptRPCAnswerEventParameters>): altShared.Events.EventHandler;
-
         // Ped related events
         export function onPedDeath(callback: GenericEventCallback<PedDeathEventParameters>): altShared.Events.EventHandler;
         export function oncePedDeath(callback: GenericEventCallback<PedDeathEventParameters>): altShared.Events.EventHandler;
@@ -1362,12 +1370,6 @@ declare module "@altv/client" {
 
         interface VoiceConnectionEventParameters {
             state: altShared.Enums.VoiceConnectionState;
-        }
-
-        interface ScriptRPCAnswerEventParameters {
-            answerID: number;
-            answer: unknown;
-            answerError: string;
         }
 
         interface PedDeathEventParameters {
@@ -1568,9 +1570,20 @@ declare module "@altv/client" {
 
         interface CustomClientEvent {}
 
-        interface ServerScriptRPC {
+        interface ScriptRPCEventParameters {
+            readonly name: string;
+            readonly args: ReadonlyArray<unknown>;
             readonly answerID: number;
-            readonly answer: ReadonlyArray<unknown>;
+
+            willAnswer(): boolean;
+
+            answer(...args: unknown[]): void;
+            answerWithError(errorMessage: string): boolean;
+        }
+
+        interface ScriptRPCAnswerEventParameters {
+            readonly answerID: number;
+            readonlyanswer: unknown;
             readonly answerError: string;
         }
 
