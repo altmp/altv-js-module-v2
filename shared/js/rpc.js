@@ -46,8 +46,9 @@ alt.RPC.register = function (rpcName, handler) {
 };
 
 // Receive RPC event
-async function onReceiveRpc({ answerID, willAnswer, name, player, args }) {
-    willAnswer();
+async function onReceiveRpc(ctx) {
+    const { answerID, name, player, args } = ctx;
+    ctx.willAnswer();
 
     const rpcHandler = rpcHandlersMap.get(name);
     if (!rpcHandler) {
@@ -60,7 +61,7 @@ async function onReceiveRpc({ answerID, willAnswer, name, player, args }) {
         if (alt.isServer) funcArgs = [player, ...args];
         else funcArgs = args;
 
-        let result = rpcHandler.handler(funcArgs);
+        let result = rpcHandler.handler(...funcArgs);
         if (result instanceof Promise) result = await result;
 
         cppBindings.answerRPC(answerID, result, "", player);
@@ -78,7 +79,7 @@ export function answerRpc(ctx, rpcMap) {
     const sentRpc = rpcMap.get(ctx.answerID);
     if (!sentRpc) return;
 
-    if (answerError.length !== 0) sentRpc.reject(ctx.answerError);
+    if (ctx.answerError.length !== 0) sentRpc.reject(ctx.answerError);
     else sentRpc.resolve(ctx.answer);
 
     rpcMap.delete(ctx.answerID);
