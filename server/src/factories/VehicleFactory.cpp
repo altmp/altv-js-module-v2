@@ -7,5 +7,7 @@ static js::FactoryHandler vehicleFactory(alt::IBaseObject::Type::VEHICLE, [](js:
     alt::Vector3f pos;
     if(!args.Get("pos", pos)) return nullptr;
     alt::Vector3f rot = args.Get<alt::Vector3f>("rot");
-    return alt::ICore::Instance().CreateVehicle(model, pos, rot);
+    uint32_t streamingDistance = args.Get<uint32_t>("streamingDistance", 0);
+
+    return alt::ICore::Instance().CreateVehicle(model, pos, rot, streamingDistance);
 });

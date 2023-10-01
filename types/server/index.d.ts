@@ -237,6 +237,7 @@ declare module "@altv/server" {
         streamed: boolean;
         frozen: boolean;
         collision: boolean;
+        streamingDistance: number;
         readonly timestamp: number;
 
         readonly meta: EntityMeta;
@@ -271,6 +272,7 @@ declare module "@altv/server" {
         alpha?: number; // default: 255
         textureVariation?: number; // default: 0
         lodDistance?: number; // default: 100
+        streamingDistance?: number; // default: 0
     }
 
     export abstract class Object extends Entity {
@@ -297,6 +299,7 @@ declare module "@altv/server" {
         model: number | string;
         pos: altShared.IVector3;
         heading: number;
+        streamingDistance?: number; // default: 0
     }
 
     export abstract class Ped extends Entity {
@@ -495,6 +498,7 @@ declare module "@altv/server" {
         model: number | string;
         pos: altShared.IVector3;
         rot?: altShared.IVector3; // default: { x: 0, y: 0, z: 0 }
+        streamingDistance?: number; // default: 0
     }
 
     export abstract class Vehicle extends Entity {

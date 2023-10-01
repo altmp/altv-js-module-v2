@@ -11,5 +11,7 @@ static js::FactoryHandler objectFactory(alt::IBaseObject::Type::OBJECT, [](js::O
     uint8_t alpha = args.Get<uint8_t>("alpha", 255);
     uint8_t textureVariation = args.Get<uint8_t>("textureVariation", 0);
     uint16_t lodDistance = args.Get<uint16_t>("lodDistance", 100);
-    return alt::ICore::Instance().CreateObject(model, pos, rot, alpha, textureVariation, lodDistance);
+    uint32_t streamingDistance = args.Get<uint32_t>("streamingDistance", 0);
+
+    return alt::ICore::Instance().CreateObject(model, pos, rot, alpha, textureVariation, lodDistance, streamingDistance);
 });

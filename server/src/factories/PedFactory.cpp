@@ -7,5 +7,7 @@ static js::FactoryHandler pedFactory(alt::IBaseObject::Type::PED, [](js::Object&
     alt::Vector3f pos;
     if(!args.Get("pos", pos)) return nullptr;
     float heading = args.Get<float>("heading");
-    return alt::ICore::Instance().CreatePed(model, pos, { 0, 0, heading });
+    uint32_t streamingDistance = args.Get<uint32_t>("streamingDistance", 0);
+
+    return alt::ICore::Instance().CreatePed(model, pos, { 0, 0, heading }, streamingDistance);
 });
