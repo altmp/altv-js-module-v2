@@ -10,6 +10,8 @@ static void WillAnswer(js::FunctionContext& ctx)
     ctx.Return(ev->WillAnswer());
 }
 
+#ifdef 0
+
 static void Answer(js::FunctionContext& ctx)
 {
     if(!ctx.CheckExtraInternalFieldValue()) return;
@@ -34,6 +36,8 @@ static void AnswerWithError(js::FunctionContext& ctx)
     ctx.Return(ev->AnswerWithError(errorMessage));
 }
 
+#endif
+
 static js::Event scriptRpcEvent(alt::CEvent::Type::SCRIPT_RPC_EVENT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
     auto e = static_cast<const alt::CScriptRPCEvent*>(ev);
@@ -47,6 +51,6 @@ static js::Event scriptRpcEvent(alt::CEvent::Type::SCRIPT_RPC_EVENT, [](const al
     args.Set("answerID", e->GetAnswerID());
 
     args.SetMethod("willAnswer", WillAnswer);
-    args.SetMethod("answer", Answer);
-    args.SetMethod("answerWithError", AnswerWithError);
+    // args.SetMethod("answer", Answer);
+    // args.SetMethod("answerWithError", AnswerWithError);
 });

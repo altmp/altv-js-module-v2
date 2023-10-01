@@ -13,13 +13,17 @@ alt.RPC.send = function (rpcName, ...args) {
     const result = new Promise((resolve, reject) => {
         pendingRpcMap.set(answerID, { resolve, reject });
     });
+
     return result;
 };
 
 alt.Events.onScriptRPCAnswer(async ({ answerID, answer, answerError }) => {
     if (!pendingRpcMap.has(answerID)) return;
+
     const { resolve, reject } = pendingRpcMap.get(answerID);
+
     if (answerError.length !== 0) reject(answerError);
     else resolve(answer);
+
     pendingRpcMap.delete(answerID);
 });

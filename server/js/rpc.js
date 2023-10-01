@@ -44,28 +44,28 @@ alt.RPC.register = function (rpcName, handler) {
 };
 
 alt.Events.onScriptRPC(async (ctx) => {
-    if (!rpcHandlersMap.has(ctx.name)) return;
-    const handler = rpcHandlersMap.get(ctx.name);
+    const answerID = ctx.answerID;
 
-    let result;
-    try {
-        const args = [ctx.player, ...ctx.args];
-        result = handler(args);
-    } catch (e) {
-        ctx.answerWithError(e.message);
+    ctx.willAnswer();
+
+    if (!rpcHandlersMap.has(ctx.name)) {
+        cppBindings.answerRPC(ctx.player, answerID, undefined, `No handler for RPC '${ctx.name}' registered`);
         return;
     }
 
-    if (result instanceof Promise) {
-        const answerID = ctx.answerID;
-        ctx.willAnswer();
-        let asyncAnswer;
-        try {
-            asyncAnswer = await result;
-        } catch (e) {
-            cppBindings.answerRPC(ctx.player, answerID, undefined, e.message);
-            return;
+    const { handler } = rpcHandlersMap.get(ctx.name);
+
+    try {
+        const args = [ctx.player, ...ctx.args];
+
+        let result = handler(args);
+
+        if (result instanceof Promise) {
+            result = await result;
         }
-        cppBindings.answerRPC(ctx.player, answerID, asyncAnswer);
-    } else ctx.answer(result);
+
+        cppBindings.answerRPC(ctx.player, answerID, result);
+    } catch (e) {
+        cppBindings.answerRPC(ctx.player, answerID, undefined, e.message);
+    }
 });
