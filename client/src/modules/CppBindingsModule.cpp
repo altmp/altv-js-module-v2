@@ -1,6 +1,22 @@
 #include "Module.h"
 #include "interfaces/IResource.h"
 
+static void AnswerRPC(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(3, 4)) return;
+
+    uint16_t answerID;
+    if(!ctx.GetArg(0, answerID)) return;
+
+    alt::MValue answer;
+    if(!ctx.GetArg(1, answer)) return;
+
+    std::string error;
+    if(!ctx.GetArg(2, error)) return;
+
+    alt::ICore::Instance().TriggerServerRPCAnswer(answerID, answer, error);
+}
+
 static void SendRPC(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1, 32)) return;
@@ -37,5 +53,6 @@ extern js::Module sharedCppBindingsModule;
 // !!! Make sure to keep the name as cppBindings
 extern js::Module cppBindingsModule("cppBindings", "sharedCppBindings", [](js::ModuleTemplate& module)
 {
+    module.StaticFunction("answerRPC", AnswerRPC);
     module.StaticFunction("sendRPC", SendRPC);
 });

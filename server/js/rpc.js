@@ -1,71 +1,28 @@
 /** @type {typeof import("./utils.js")} */
 const { assert, assertIsType } = requireBinding("shared/utils.js");
+/** @type {typeof import("../../shared/js/rpc.js")} */
+const { answerRpc, sendRpc } = requireBinding("shared/rpc.js");
 
 /**
- * @type {Map<string, RPCHandler>}
+ * @type {Map<alt.Player, Map<number, { resolve: Function, reject: Function }>>}
  */
-const rpcHandlersMap = new Map();
+const pendingRpcMap = new Map();
 
-class RPCHandler {
-    #name;
-    #handler;
-    #valid = true;
-
-    constructor(name, handler) {
-        this.#name = name;
-        this.#handler = handler;
-    }
-
-    destroy() {
-        if (!this.#valid) return;
-        this.#valid = false;
-        rpcHandlersMap.delete(this.#name);
-    }
-
-    get name() {
-        return this.#name;
-    }
-    get handler() {
-        return this.#handler;
-    }
-    get valid() {
-        return this.#valid;
-    }
-}
-
-alt.RPC.register = function (rpcName, handler) {
+alt.Player.prototype.sendRPC = function (rpcName, ...args) {
     assertIsType(rpcName, "string", "rpcName has to be a string");
-    assertIsType(handler, "function", "handler has to be a function");
-    assert(!rpcHandlersMap.has(rpcName), `Handler for rpc '${rpcName}' already registered`);
 
-    const rpcHandler = new RPCHandler(rpcName, handler);
-    rpcHandlersMap.set(rpcName, rpcHandler);
-    return rpcHandler;
+    const result = sendRpc(rpcName, this, ...args);
+    let map = pendingRpcMap.get(this);
+    if (!map) {
+        map = new Map();
+        pendingRpcMap.set(this, map);
+    }
+    map.set(result.answerID, { resolve: result.resolve, reject: result.reject });
+    return result.promise;
 };
 
-alt.Events.onScriptRPC(async (ctx) => {
-    const answerID = ctx.answerID;
-
-    ctx.willAnswer();
-
-    if (!rpcHandlersMap.has(ctx.name)) {
-        cppBindings.answerRPC(ctx.player, answerID, undefined, `No handler for RPC '${ctx.name}' registered`);
-        return;
-    }
-
-    const { handler } = rpcHandlersMap.get(ctx.name);
-
-    try {
-        const args = [ctx.player, ...ctx.args];
-
-        let result = handler(args);
-
-        if (result instanceof Promise) {
-            result = await result;
-        }
-
-        cppBindings.answerRPC(ctx.player, answerID, result);
-    } catch (e) {
-        cppBindings.answerRPC(ctx.player, answerID, undefined, e.message);
-    }
+alt.Events.onScriptRPCAnswer((ctx) => {
+    const map = pendingRpcMap.get(ctx.player);
+    if (!map) return;
+    answerRpc(ctx, map);
 });
