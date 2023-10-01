@@ -48,25 +48,26 @@ alt.RPC.register = function (rpcName, handler) {
 // Receive RPC event
 async function onReceiveRpc(ctx) {
     const { answerID, name, player, args } = ctx;
-    ctx.willAnswer();
 
     const rpcHandler = rpcHandlersMap.get(name);
-    if (!rpcHandler) {
-        cppBindings.answerRPC(answerID, undefined, `No handler for RPC '${ctx.name}' registered`, player);
-        return;
-    }
+    if (!rpcHandler) return;
 
+    let isAsync = false;
     try {
         let funcArgs;
         if (alt.isServer) funcArgs = [player, ...args];
         else funcArgs = args;
 
         let result = rpcHandler.handler(...funcArgs);
-        if (result instanceof Promise) result = await result;
-
-        cppBindings.answerRPC(answerID, result, "", player);
+        if (result instanceof Promise) {
+            ctx.willAnswer();
+            isAsync = true;
+            result = await result;
+            cppBindings.answerRPC(answerID, result, "", player);
+        } else ctx.answer(result);
     } catch (e) {
-        cppBindings.answerRPC(answerID, undefined, e.message, player);
+        if (isAsync) cppBindings.answerRPC(answerID, undefined, e.message, player);
+        else ctx.answerWithError(e.message);
     }
 }
 alt.Events.onScriptRPC(onReceiveRpc);
