@@ -135,9 +135,7 @@ const timeMap = new Map();
 function time(name) {
     const key = typeof name == "string" ? name : "";
 
-    if (timeMap.has(key)) {
-        throw new Error(`Benchmark timer ${timer} already exists`);
-    }
+    if (timeMap.has(key)) throw new Error(`Benchmark timer ${key} already exists`);
 
     timeMap.set(key, Date.now());
 }
@@ -149,9 +147,7 @@ function time(name) {
 function timeEnd(name) {
     const key = typeof name == "string" ? name : "";
 
-    if (!timeMap.has(key)) {
-        throw new Error(`Benchmark timer ${timer} not found`);
-    }
+    if (!timeMap.has(key)) throw new Error(`Benchmark timer ${key} not found`);
 
     const diff = Date.now() - timeMap.get(key);
     timeMap.delete(key);

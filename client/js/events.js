@@ -42,8 +42,12 @@ function addEventsToClass(class_) {
         assert(eventName && typeof eventName === "string", `Invalid event name: ${eventName}`);
         assert(listener && typeof listener === "function", `Invalid listener: ${listener}`);
 
-        if (!this.__eventHandlers.has(eventName)) this.__eventHandlers.set(eventName, new Set());
-        this.__eventHandlers.get(eventName).add(listener);
+        let eventHandlers = this.__eventHandlers.get(eventName);
+        if (!eventHandlers) {
+            eventHandlers = new Set();
+            this.__eventHandlers.set(eventName, eventHandlers);
+        }
+        eventHandlers.add(listener);
     };
     class_.prototype.once = function (eventName, listener) {
         assert(eventName && typeof eventName === "string", `Invalid event name: ${eventName}`);
@@ -54,15 +58,18 @@ function addEventsToClass(class_) {
             listener(...args);
         };
 
-        if (!this.__eventHandlers.has(eventName)) this.__eventHandlers.set(eventName, new Set());
-        this.__eventHandlers.get(eventName).add(onceListener);
+        let eventHandlers = this.__eventHandlers.get(eventName);
+        if (!eventHandlers) {
+            eventHandlers = new Set();
+            this.__eventHandlers.set(eventName, eventHandlers);
+        }
+        eventHandlers.add(listener);
     };
     class_.prototype.off = function (eventName, listener) {
         assert(eventName && typeof eventName === "string", `Invalid event name: ${eventName}`);
         assert(listener && typeof listener === "function", `Invalid listener: ${listener}`);
 
-        if (!this.__eventHandlers.has(eventName)) return;
-        this.__eventHandlers.get(eventName).delete(listener);
+        this.__eventHandlers.get(eventName)?.delete(listener);
     };
 }
 
