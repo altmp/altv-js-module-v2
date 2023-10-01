@@ -10,7 +10,7 @@ static void WillAnswer(js::FunctionContext& ctx)
     ctx.Return(ev->WillAnswer());
 }
 
-#ifdef 0
+#if 0
 
 static void Answer(js::FunctionContext& ctx)
 {
