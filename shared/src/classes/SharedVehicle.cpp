@@ -55,7 +55,6 @@ extern js::Class sharedVehicleClass("SharedVehicle", &entityClass, nullptr, [](j
     tpl.Property<&alt::IVehicle::GetTireSmokeColor>("tireSmokeColor");
     tpl.Property<&alt::IVehicle::GetWheelType>("wheelType");
     tpl.Property<&alt::IVehicle::GetWheelVariation>("wheelVariation");
-    tpl.Property<&alt::IVehicle::GetRearWheelVariation>("rearWheelVariation");
     tpl.Property<&alt::IVehicle::GetCustomTires>("customTires");
     tpl.Property<&alt::IVehicle::GetSpecialDarkness>("specialDarkness");
     tpl.Property<&alt::IVehicle::GetNumberplateIndex>("numberplateIndex");

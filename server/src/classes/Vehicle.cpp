@@ -84,10 +84,10 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Property<&alt::IVehicle::GetLivery, &alt::IVehicle::SetLivery>("livery");
     tpl.Property<&alt::IVehicle::GetRoofLivery, &alt::IVehicle::SetRoofLivery>("roofLivery");
     tpl.Property<&alt::IVehicle::GetAppearanceDataBase64, &alt::IVehicle::LoadAppearanceDataFromBase64>("appearanceDataBase64");
-    tpl.Property<&alt::IVehicle::IsEngineOn, &alt::IVehicle::SetEngineOn>("engineOn");
+    tpl.Property<&alt::IVehicle::IsEngineOn, &alt::IVehicle::SetEngineOn>("isEngineOn");
     tpl.Property<&alt::IVehicle::GetHeadlightColor, &alt::IVehicle::SetHeadlightColor>("headlightColor");
     tpl.Property<&alt::IVehicle::GetRadioStationIndex, &alt::IVehicle::SetRadioStationIndex>("radioStationIndex");
-    tpl.Property<&alt::IVehicle::IsSirenActive, &alt::IVehicle::SetSirenActive>("sirenActive");
+    tpl.Property<&alt::IVehicle::IsSirenActive, &alt::IVehicle::SetSirenActive>("isSirenActive");
     tpl.Property<&alt::IVehicle::GetLockState, &alt::IVehicle::SetLockState>("lockState");
     tpl.Property<&alt::IVehicle::GetRoofState, &alt::IVehicle::SetRoofState>("roofState");
     tpl.Property<&alt::IVehicle::GetLightsMultiplier, &alt::IVehicle::SetLightsMultiplier>("lightsMultiplier");
@@ -95,14 +95,14 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Property<&alt::IVehicle::GetPetrolTankHealth, &alt::IVehicle::SetPetrolTankHealth>("petrolTankHealth");
     tpl.Property<&alt::IVehicle::GetBodyHealth, &alt::IVehicle::SetBodyHealth>("bodyHealth");
     tpl.Property<&alt::IVehicle::GetBodyAdditionalHealth, &alt::IVehicle::SetBodyAdditionalHealth>("bodyAdditionalHealth");
-    tpl.Property<&alt::IVehicle::IsManualEngineControl, &alt::IVehicle::SetManualEngineControl>("manualEngineControl");
+    tpl.Property<&alt::IVehicle::IsManualEngineControl, &alt::IVehicle::SetManualEngineControl>("isManualEngineControl");
     tpl.Property<&alt::IVehicle::GetDamageDataBase64, &alt::IVehicle::LoadDamageDataFromBase64>("damageDataBase64");
     tpl.Property<&alt::IVehicle::GetScriptDataBase64, &alt::IVehicle::LoadScriptDataFromBase64>("scriptDataBase64");
     tpl.Property<&alt::IVehicle::GetGameStateBase64, &alt::IVehicle::LoadGameStateFromBase64>("gameStateDataBase64");
     tpl.Property<&alt::IVehicle::GetHealthDataBase64, &alt::IVehicle::LoadHealthDataFromBase64>("healthDataBase64");
     tpl.Property<&alt::IVehicle::GetAttached>("attached");
     tpl.Property<&alt::IVehicle::GetAttachedTo>("attachedTo");
-    tpl.Property<&alt::IVehicle::IsDriftMode, &alt::IVehicle::SetDriftMode>("driftMode");
+    tpl.Property<&alt::IVehicle::IsDriftMode, &alt::IVehicle::SetDriftMode>("isDriftMode");
 
     tpl.Property<&alt::IVehicle::IsTrainMissionTrain, &alt::IVehicle::SetTrainMissionTrain>("isMissionTrain");
     tpl.Property<&alt::IVehicle::GetTrainTrackId, &alt::IVehicle::SetTrainTrackId>("trainTrackId");
@@ -128,7 +128,7 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Property<&alt::IVehicle::HasTimedExplosion>("hasTimedExplosion");
     tpl.Property<&alt::IVehicle::GetTimedExplosionCulprit>("timedExplosionCulprit");
     tpl.Property<&alt::IVehicle::GetTimedExplosionTime>("timedExplosionTime");
-    tpl.Property<&alt::IVehicle::IsTowingDisabled, &alt::IVehicle::SetDisableTowing>("towingDisabled");
+    tpl.Property<&alt::IVehicle::IsTowingDisabled, &alt::IVehicle::SetDisableTowing>("isTowingDisabled");
     tpl.Property<&alt::IVehicle::GetRocketRefuelSpeed, &alt::IVehicle::SetRocketRefuelSpeed>("rocketRefuelSpeed");
     tpl.Property<&alt::IVehicle::GetCounterMeasureCount, &alt::IVehicle::SetCounterMeasureCount>("counterMeasureCount");
     tpl.Property<&alt::IVehicle::GetScriptMaxSpeed, &alt::IVehicle::SetScriptMaxSpeed>("scriptMaxSpeed");
