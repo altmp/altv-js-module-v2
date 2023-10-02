@@ -1,8 +1,10 @@
 /// <reference path="../../types/client/index.d.ts"/>
 /// <reference path="../../types/shared/index.d.ts"/>
 /// <reference path="../../types/natives/index.d.ts"/>
-// clang-format off
+// import * as alt from "@altv/client";
+// import * as native from "@altv/natives";
 
+// clang-format off
 /** @type {typeof import("./../../shared/js/utils.js")} */
 const { assert, assertRGBA, assertVector2, assertVector3 } = requireBinding("shared/utils.js");
 requireBinding("shared/timers.js");
