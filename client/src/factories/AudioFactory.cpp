@@ -10,7 +10,8 @@ static js::FactoryHandler audioFactory(alt::IBaseObject::Type::AUDIO, [](js::Obj
     if(!args.Get("volume", volume)) return nullptr;
 
     bool isRadio = args.Get<bool>("isRadio", false);
+    bool clearCache = args.Get<bool>("clearCache", true);
 
     js::IResource* resource = args.GetResource();
-    return alt::ICore::Instance().CreateAudio(source, volume, isRadio, js::SourceLocation::GetCurrent(resource).file, resource->GetResource());
+    return alt::ICore::Instance().CreateAudio(source, volume, isRadio, clearCache, js::SourceLocation::GetCurrent(resource).file, resource->GetResource());
 });

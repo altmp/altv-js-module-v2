@@ -57,6 +57,7 @@ declare module "@altv/client" {
         source: string;
         volume: number;
         isRadio?: boolean; // default: false
+        clearCache?: boolean; // default: true
     }
 
     export abstract class Audio {
