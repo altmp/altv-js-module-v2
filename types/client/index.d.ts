@@ -522,8 +522,6 @@ declare module "@altv/client" {
 
         static getByID(id: number): Ped | null;
         static getByRemoteID(id: number): Ped | null;
-
-        static readonly all: ReadonlyArray<Ped>;
     }
 
     export interface LocalPedCreateOptions {
