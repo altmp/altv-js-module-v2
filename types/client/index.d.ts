@@ -1264,7 +1264,7 @@ declare module "@altv/client" {
     export namespace RPC {
         export type GenericRpcEventHandler<T extends unknown[]> = (...args: T) => Promise<unknown> | unknown;
 
-        export function send<E extends keyof altShared.RPC.CustomPlayerToServerRpcEvent>(rpcName: E, ...args: Parameters<altShared.RPC.CustomPlayerToServerRpcEvent[E]>): Promise<unknown>;
+        export function send<E extends keyof altShared.RPC.CustomPlayerToServerRpcEvent>(rpcName: E, ...args: Parameters<altShared.RPC.CustomPlayerToServerRpcEvent[E]>): Promise<ReturnType<altShared.RPC.CustomPlayerToServerRpcEvent[E]>>;
         export function register<E extends keyof altShared.RPC.CustomServerToPlayerRpcEvent>(rpcName: E, handler: GenericRpcEventHandler<Parameters<altShared.RPC.CustomServerToPlayerRpcEvent[E]>>): RPCHandler;
     }
 
