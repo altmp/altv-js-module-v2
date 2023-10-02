@@ -5,6 +5,20 @@
 requireBinding("shared/factory.js");
 
 class Vehicle extends alt.Vehicle {
+    // constructor(model | number, x, y, z, rx, ry, rz, streamingDistance?: number);
+    // constructor(model | number, pos: shared.IVector3, rot: shared.IVector3, streamingDistance?: number);
+    constructor(...args) {
+        // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
+        if (!args.length) return super();
+
+        const [model, ...rest] = args;
+        const pos = rest.length <= 3 ? rest[0] : { x: rest[0], y: rest[1], z: rest[2] };
+        const rot = rest.length <= 3 ? rest[1] : { x: rest[3], y: rest[4], z: rest[5] };
+        const streamingDistance = rest.length === 3 ? rest[2] : rest[6];
+
+        return alt.Vehicle.create({ model, pos, rot, streamingDistance });
+    }
+
     static get count() {
         return alt.Vehicle.all.length;
     }
@@ -87,20 +101,6 @@ class Vehicle extends alt.Vehicle {
 
     set driftModeEnabled(value) {
         super.driftMode = value;
-    }
-
-    // constructor(model | number, x, y, z, rx, ry, rz, streamingDistance?: number);
-    // constructor(model | number, pos: shared.IVector3, rot: shared.IVector3, streamingDistance?: number);
-    constructor(...args) {
-        // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) return super();
-
-        const [model, ...rest] = args;
-        const pos = rest.length <= 3 ? rest[0] : { x: rest[0], y: rest[1], z: rest[2] };
-        const rot = rest.length <= 3 ? rest[1] : { x: rest[3], y: rest[4], z: rest[5] };
-        const streamingDistance = rest.length === 3 ? rest[2] : rest[6];
-
-        return alt.Vehicle.create({ model, pos, rot, streamingDistance });
     }
 
     getAppearanceDataBase64() {
