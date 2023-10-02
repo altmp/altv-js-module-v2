@@ -533,9 +533,7 @@ declare module "@altv/server" {
         readonly wheelVariation: number;
         readonly rearWheelVariation: number;
         readonly isNeonActive: boolean;
-        readonly isEngineOn: boolean;
         readonly isHandbrakeActive: boolean;
-        readonly isSirenActive: boolean;
         readonly isDaylightOn: boolean;
         readonly isNightlightOn: boolean;
         readonly isFlamethrowerActive: boolean;
@@ -543,14 +541,13 @@ declare module "@altv/server" {
         readonly wheelsCount: number;
         readonly repairsCount: number;
         readonly hasArmoredWindows: boolean;
-        readonly isManualEngineControl: boolean;
         readonly velocity: altShared.Vector3;
         readonly steeringAngle: number;
 
         customPrimaryColor: altShared.RGBA;
         customSecondaryColor: altShared.RGBA;
-        engineOn: boolean;
-        sirenActive: boolean;
+        isEngineOn: boolean;
+        isSirenActive: boolean;
         lockState: number;
         roofState: number;
         lightsMultiplier: number;
@@ -558,12 +555,12 @@ declare module "@altv/server" {
         petrolTankHealth: number;
         bodyHealth: number;
         bodyAdditionalHealth: number;
-        manualEngineControl: boolean;
+        isManualEngineControl: boolean;
         damageDataBase64: string;
         scriptDataBase64: string;
         gameStateDataBase64: string;
         healthDataBase64: string;
-        driftMode: boolean;
+        isDriftMode: boolean;
         isMissionTrain: boolean;
         trainTrackId: number;
         trainEngine?: Vehicle;
@@ -584,13 +581,18 @@ declare module "@altv/server" {
         trainUnk3: boolean;
         isBoatAnchorActive: boolean;
         lightState: number;
-        towingDisabled: boolean;
+        isTowingDisabled: boolean;
         rocketRefuelSpeed: number;
         counterMeasureCount: number;
         scriptMaxSpeed: number;
         hybridExtraActive: boolean;
         hybridExtraState: number;
         quaternion: altShared.Quaternion;
+        radioStationIndex: number;
+        specialDarkness: number;
+        numberplateIndex: number;
+        numberplateText: string;
+        appearanceDataBase64: string;
 
         repair(): void;
         setMod(category: number, id: number): boolean;

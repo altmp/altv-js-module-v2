@@ -89,16 +89,8 @@ class Vehicle extends alt.Vehicle {
         return super.isDestroyed;
     }
 
-    get engineOn() {
-        return super.isEngineOn;
-    }
-
     get flamethrowerActive() {
         return super.isFlamethrowerActive;
-    }
-
-    get handbrakeActive() {
-        return super.isHandbrakeActive;
     }
 
     get nightlightOn() {
