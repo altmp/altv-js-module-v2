@@ -706,6 +706,9 @@ declare module "@altv/server" {
     export interface VoiceChannelCreateOptions {
         spatial: boolean;
         maxDistance?: number;
+
+        priority: number;
+        filter: number;
     }
 
     export abstract class VoiceChannel extends BaseObject {

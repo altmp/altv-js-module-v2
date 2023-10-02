@@ -10,6 +10,9 @@ extern js::Class voiceChannelClass("VoiceChannel", &baseObjectClass, nullptr, []
     tpl.LazyProperty<&alt::IVoiceChannel::IsSpatial>("isSpatial");
     tpl.LazyProperty<&alt::IVoiceChannel::GetMaxDistance>("maxDistance");
 
+    tpl.Property<&alt::IVoiceChannel::GetPriority, &alt::IVoiceChannel::SetPriority>("priority");
+    tpl.Property<&alt::IVoiceChannel::GetFilter, &alt::IVoiceChannel::SetFilter>("filter");
+
     tpl.Property<&alt::IVoiceChannel::GetPlayers>("players");
     tpl.Property<&alt::IVoiceChannel::GetPlayerCount>("playerCount");
 
