@@ -64,4 +64,6 @@ extern js::Class connectionInfoClass("ConnectionInfo", nullptr, nullptr, [](js::
     tpl.Method("requestCloudID", RequestCloudID);
     tpl.Method("accept", Accept);
     tpl.Method<&alt::IConnectionInfo::Decline>("decline");
+
+    tpl.GetByID<alt::IBaseObject::Type::CONNECTION_INFO>();
 });

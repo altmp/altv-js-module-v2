@@ -1087,6 +1087,8 @@ declare module "@altv/server" {
             requestCloudID(): Promise<string>;
             accept(sendNames?: boolean): void;
             decline(reason: string): void;
+
+            static getByID(id: number): ConnectionInfo | undefined;
         }
 
         interface StreamedInPlayerEntity {
