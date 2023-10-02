@@ -155,25 +155,25 @@ alt::MValue js::JSToMValue(v8::Local<v8::Value> val, bool allowFunction)
             if(resource->IsVector3(v8Obj))
             {
                 alt::Vector3f vec;
-                vec[0] = obj.Get<float>("x");
-                vec[1] = obj.Get<float>("y");
-                vec[2] = obj.Get<float>("z");
+                vec[0] = obj.Get<float, true>("x");
+                vec[1] = obj.Get<float, true>("y");
+                vec[2] = obj.Get<float, true>("z");
                 return core.CreateMValueVector3(vec);
             }
             else if(resource->IsVector2(v8Obj))
             {
                 alt::Vector2f vec;
-                vec[0] = obj.Get<float>("x");
-                vec[1] = obj.Get<float>("y");
+                vec[0] = obj.Get<float, true>("x");
+                vec[1] = obj.Get<float, true>("y");
                 return core.CreateMValueVector2(vec);
             }
             else if(resource->IsRGBA(v8Obj))
             {
                 alt::RGBA rgba;
-                rgba.r = obj.Get<uint8_t>("r");
-                rgba.g = obj.Get<uint8_t>("g");
-                rgba.b = obj.Get<uint8_t>("b");
-                rgba.a = obj.Get<uint8_t>("a");
+                rgba.r = obj.Get<uint8_t, true>("r");
+                rgba.g = obj.Get<uint8_t, true>("g");
+                rgba.b = obj.Get<uint8_t, true>("b");
+                rgba.a = obj.Get<uint8_t, true>("a");
                 return core.CreateMValueRGBA(rgba);
             }
             else if(resource->IsBaseObject(v8Obj))

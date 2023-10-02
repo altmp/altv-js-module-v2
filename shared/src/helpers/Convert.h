@@ -133,6 +133,23 @@ namespace js
     alt::MValueByteArray JSToRawBytes(v8::Local<v8::Value> val, IResource* resource);
     v8::MaybeLocal<v8::Value> RawBytesToJS(alt::MValueByteArrayConst val, IResource* resource);
 
+    // Creates a string that's cached by V8, only use this for constant strings which are commonly used, otherwise it explodes RAM usage!
+    template<int N>
+    inline v8::Local<v8::String> CachedString(const char (&val)[N])
+    {
+        return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), val, v8::NewStringType::kInternalized, N - 1).ToLocalChecked();
+    }
+    inline v8::Local<v8::String> CachedString(const std::string& val)
+    {
+        return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), val.data(), v8::NewStringType::kInternalized, (int)val.size()).ToLocalChecked();
+    }
+
+    template<int N>
+    inline v8::Local<v8::String> JSValue(const char (&val)[N])
+    {
+        if constexpr(N == 1) return v8::String::Empty(v8::Isolate::GetCurrent());
+        return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), val, v8::NewStringType::kNormal, N - 1).ToLocalChecked();
+    }
     inline v8::Local<v8::String> JSValue(const char* val)
     {
         if(val == nullptr) return v8::String::Empty(v8::Isolate::GetCurrent());

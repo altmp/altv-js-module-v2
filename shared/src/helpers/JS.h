@@ -197,10 +197,10 @@ namespace js
         void SetMethod(const std::string& key, internal::FunctionCallback func);
 
         // Falls back to default value if the value is not found or the type doesn't match
-        template<typename T>
+        template<typename T, bool InternalizedString = false>
         T Get(const std::string& key, const T& defaultValue = T()) const
         {
-            v8::MaybeLocal<v8::Value> maybeVal = object->Get(context, js::JSValue(key));
+            v8::MaybeLocal<v8::Value> maybeVal = object->Get(context, InternalizedString ? js::CachedString(key) : js::JSValue(key));
             v8::Local<v8::Value> val;
             if(!maybeVal.ToLocal(&val)) return defaultValue;
             std::optional<T> result = js::CppValue<T>(val);
@@ -208,11 +208,11 @@ namespace js
         }
 
         // Throws an error and returns false if the value is not found or the type doesn't match
-        template<typename T>
+        template<bool InternalizedString = false, typename T>
         bool Get(const std::string& key, T& out, bool throwOnError = true)
         {
             using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
-            v8::MaybeLocal<v8::Value> maybeVal = object->Get(context, js::JSValue(key));
+            v8::MaybeLocal<v8::Value> maybeVal = object->Get(context, InternalizedString ? js::CachedString(key) : js::JSValue(key));
             v8::Local<v8::Value> val;
             if(!maybeVal.ToLocal(&val))
             {
@@ -229,18 +229,19 @@ namespace js
             return true;
         }
 
+        template<bool InternalizedString = false>
         bool GetAsHash(const std::string& key, uint32_t& outValue)
         {
             Type argType = GetType(key);
             if(argType == Type::STRING)
             {
-                std::string val = Get<std::string>(key);
+                std::string val = Get<std::string, InternalizedString>(key);
                 outValue = alt::ICore::Instance().Hash(val);
                 return true;
             }
             else if(argType == Type::NUMBER)
             {
-                uint32_t val = Get<uint32_t>(key);
+                uint32_t val = Get<uint32_t, InternalizedString>(key);
                 outValue = val;
                 return true;
             }
