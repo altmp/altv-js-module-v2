@@ -277,6 +277,8 @@ declare module "@altv/client" {
         static create(opts: altShared.ColShapeCreateOptions): ColShape;
         static getByID(id: number): ColShape | null;
         static getByRemoteID(id: number): ColShape | null;
+
+        static readonly all: ReadonlyArray<ColShape>;
     }
 
     export interface CheckpointCreateOptions {
@@ -314,6 +316,8 @@ declare module "@altv/client" {
         static create(opts: CheckpointCreateOptions): Checkpoint;
         static getByID(id: number): Checkpoint | null;
         static getByRemoteID(id: number): Checkpoint | null;
+
+        static readonly all: ReadonlyArray<Checkpoint>;
     }
 
     export abstract class Entity extends WorldObject {
@@ -517,6 +521,8 @@ declare module "@altv/client" {
 
         static getByID(id: number): Ped | null;
         static getByRemoteID(id: number): Ped | null;
+
+        static readonly all: ReadonlyArray<Ped>;
     }
 
     export interface LocalPedCreateOptions {
@@ -541,6 +547,8 @@ declare module "@altv/client" {
 
         static create(options: LocalPedCreateOptions): LocalPed;
         static getByID(id: number): LocalPed | null;
+
+        static readonly all: ReadonlyArray<Ped>;
     }
 
     export abstract class LocalPlayer extends Player {

@@ -189,6 +189,8 @@ declare module "@altv/server" {
 
         readonly meta: ColShapeMeta;
         readonly syncedMeta: altShared.ColShapeSyncedMeta;
+
+        static readonly all: ReadonlyArray<ColShape>;
     }
 
     export interface CheckpointCreateOptions {
@@ -225,6 +227,8 @@ declare module "@altv/server" {
 
         static create(opts: CheckpointCreateOptions): Checkpoint;
         static getByID(id: number): Checkpoint | null;
+
+        static readonly all: ReadonlyArray<Checkpoint>;
     }
 
     export abstract class Entity extends WorldObject {
@@ -317,6 +321,7 @@ declare module "@altv/server" {
 
         static getByID(id: number): Ped | null;
         static create(opts: PedCreateOptions): Ped;
+
         static readonly all: ReadonlyArray<Ped>;
     }
 

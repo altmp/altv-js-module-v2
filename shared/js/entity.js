@@ -87,6 +87,9 @@ addAllGetter(alt.Vehicle, [alt.Enums.BaseObjectType.VEHICLE, alt.Enums.BaseObjec
 addAllGetter(alt.Ped, [alt.Enums.BaseObjectType.PED, alt.Enums.BaseObjectType.LOCAL_PED]);
 addAllGetter(alt.Object, [alt.Enums.BaseObjectType.OBJECT, alt.Enums.BaseObjectType.LOCAL_OBJECT]);
 
+addAllGetter(alt.Checkpoint, alt.Enums.BaseObjectType.CHECKPOINT);
+addAllGetter(alt.ColShape, alt.Enums.BaseObjectType.COLSHAPE);
+
 // Register all entities that were created before this resource was loaded
 const entities = cppBindings.getAllEntities();
 for (const entity of entities) addEntityToAll(entity);

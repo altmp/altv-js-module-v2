@@ -19,7 +19,7 @@ class Ped extends alt.Ped {
         });
     }
 
-    get count() {
+    static get count() {
         return alt.Ped.all.length;
     }
 }
