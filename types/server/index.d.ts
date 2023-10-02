@@ -494,6 +494,9 @@ declare module "@altv/server" {
         readonly clientMain: string;
         readonly clientFiles: ReadonlyArray<string>;
 
+        readonly requiredPermissions: ReadonlyArray<altShared.Enums.Permission>;
+        readonly optionalPermissions: ReadonlyArray<altShared.Enums.Permission>;
+
         getMatchedFiles(pattern: string): ReadonlyArray<string>;
 
         static start(resourceName: string): void;

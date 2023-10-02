@@ -85,6 +85,30 @@ static void ConfigGetter(js::PropertyContext& ctx)
     ctx.Return(config);
 }
 
+static void RequiredPermissionsGetter(js::PropertyContext& ctx)
+{
+    if(!ctx.CheckExtraInternalFieldValue()) return;
+    alt::IResource* resource = ctx.GetExtraInternalFieldValue<alt::IResource>();
+
+    js::Array arr;
+    for (auto& perm : resource->GetRequiredPermissions())
+        arr.Push(alt::GetStringFromPermission(perm));
+
+    ctx.Return(arr);
+}
+
+static void OptionalPermissionsGetter(js::PropertyContext& ctx)
+{
+    if(!ctx.CheckExtraInternalFieldValue()) return;
+    alt::IResource* resource = ctx.GetExtraInternalFieldValue<alt::IResource>();
+
+    js::Array arr;
+    for (auto& perm : resource->GetOptionalPermissions())
+        arr.Push(alt::GetStringFromPermission(perm));
+
+    ctx.Return(arr);
+}
+
 static void Get(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
@@ -126,6 +150,9 @@ extern js::Class sharedResourceClass("SharedResource", [](js::ClassTemplate& tpl
     tpl.Property("dependants", DependantsGetter);
     tpl.Property("isStarted", IsStartedGetter);
     tpl.Property("config", ConfigGetter);
+
+    tpl.Property("requiredPermissions", RequiredPermissionsGetter);
+    tpl.Property("optionalPermissions", OptionalPermissionsGetter);
 
     tpl.StaticFunction("get", Get);
     tpl.StaticFunction("exists", Exists);
