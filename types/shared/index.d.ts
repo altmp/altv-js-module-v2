@@ -660,6 +660,11 @@ declare module "@altv/shared" {
         export function read(path: string): string;
     }
 
+    export namespace RPC {
+        interface CustomPlayerToServerRpcEvent {}
+        interface CustomServerToPlayerRpcEvent {}
+    }
+
     export namespace Events {
         interface CustomRemoteEvent {}
         interface CustomPlayerToServerEvent {}

@@ -479,7 +479,7 @@ declare module "@altv/server" {
         playScenario(name: string): void;
         requestCloudID(): Promise<string>;
 
-        sendRPC(rpcName: string, ...args: unknown[]): Promise<unknown>;
+        sendRPC<E extends keyof altShared.RPC.CustomServerToPlayerRpcEvent>(rpcName: E, ...args: Parameters<altShared.RPC.CustomServerToPlayerRpcEvent[E]>): Promise<unknown>;
 
         readonly meta: PlayerMeta;
         readonly syncedMeta: altShared.PlayerSyncedMeta;
@@ -866,7 +866,9 @@ declare module "@altv/server" {
     }
 
     export namespace RPC {
-        export function register(rpcName: string, handler: (player: Player, ...args: unknown[]) => Promise<unknown> | unknown): RPCHandler;
+        export type CustomPlayerRpcEventHandler<T extends unknown[], U extends Player = Player> = (player: U, ...args: T) => unknown | Promise<unknown>;
+
+        export function register<E extends keyof altShared.RPC.CustomPlayerToServerRpcEvent, T extends Player>(rpcName: E, handler: CustomPlayerRpcEventHandler<Parameters<altShared.RPC.CustomPlayerToServerRpcEvent[E]>, T>): RPCHandler;
     }
 
     export namespace Events {
