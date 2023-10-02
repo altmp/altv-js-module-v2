@@ -2,7 +2,7 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-requireBinding("shared/factory.js");
+requireBinding("shared/entity.js");
 
 class Vehicle extends alt.Vehicle {
     // constructor(model | number, x, y, z, rx, ry, rz, streamingDistance?: number);
