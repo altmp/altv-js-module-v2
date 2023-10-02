@@ -89,13 +89,18 @@ class Vehicle extends alt.Vehicle {
         super.driftMode = value;
     }
 
-    // constructor(model | number, x, y, z, rx, ry, rz);
-    // constructor(model | number, pos: shared.IVector3, rot: shared.IVector3);
-    constructor(model, ...args) {
-        const pos = args.length === 2 ? args[1] : { x: args[1], y: args[2], z: args[3] };
-        const rot = args.length === 2 ? args[2] : { x: args[4], y: args[5], z: args[6] };
+    // constructor(model | number, x, y, z, rx, ry, rz, streamingDistance?: number);
+    // constructor(model | number, pos: shared.IVector3, rot: shared.IVector3, streamingDistance?: number);
+    constructor(...args) {
+        // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
+        if (!args.length) return super();
 
-        return super.create(model, pos, rot);
+        const [model, ...rest] = args;
+        const pos = rest.length <= 3 ? rest[0] : { x: rest[0], y: rest[1], z: rest[2] };
+        const rot = rest.length <= 3 ? rest[1] : { x: rest[3], y: rest[4], z: rest[5] };
+        const streamingDistance = rest.length === 3 ? rest[2] : rest[6];
+
+        return alt.Vehicle.create({ model, pos, rot, streamingDistance });
     }
 
     getAppearanceDataBase64() {
