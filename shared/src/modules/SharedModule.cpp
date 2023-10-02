@@ -101,7 +101,7 @@ static void SyncedMetaEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
 extern js::Class baseObjectClass, worldObjectClass, entityClass, resourceClass, bufferClass;
 // TODO (xLuxy): bind colshape classes except colShapeClass
 extern js::Class colShapeClass, colShapeCircleClass, colShapeCuboidClass, colShapeCylinderClass, colShapePolyClass, colShapeRectClass, colShapeSphereClass;
-extern js::Namespace enumsNamespace, sharedEventsNamespace, fileNamespace;
+extern js::Namespace enumsNamespace, sharedEventsNamespace, fileNamespace, profilerNamespace;
 static js::Module sharedModule("@altv/shared", "", { &baseObjectClass, &worldObjectClass, &entityClass, &colShapeClass, &resourceClass, &bufferClass }, [](js::ModuleTemplate& module)
 {
     module.StaticProperty("isDebug", alt::ICore::Instance().IsDebug());
@@ -126,6 +126,7 @@ static js::Module sharedModule("@altv/shared", "", { &baseObjectClass, &worldObj
     module.Namespace("RPC");
     module.Namespace(enumsNamespace);
     module.Namespace(fileNamespace);
+    module.Namespace(profilerNamespace);
     // Blip namespaces
     module.Namespace("PointBlip");
     module.Namespace("AreaBlip");

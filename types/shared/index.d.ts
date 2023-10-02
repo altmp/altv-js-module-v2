@@ -696,6 +696,13 @@ declare module "@altv/shared" {
         export class GenericEventHandler extends EventHandler {}
     }
 
+    export namespace Profiler {
+        /**
+         * Resolves to a JSON string that can be loaded by e.g. Chrome DevTools to investigate the current heap objects.
+         */
+        export function takeHeapSnapshot(): Promise<string>;
+    }
+
     export namespace Enums {
         export enum AmmoSpecialType {
             NONE,
