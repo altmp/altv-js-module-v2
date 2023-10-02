@@ -479,7 +479,7 @@ declare module "@altv/server" {
         playScenario(name: string): void;
         requestCloudID(): Promise<string>;
 
-        sendRPC<E extends keyof altShared.RPC.CustomServerToPlayerRpcEvent>(rpcName: E, ...args: Parameters<altShared.RPC.CustomServerToPlayerRpcEvent[E]>): Promise<unknown>;
+        sendRPC<E extends keyof altShared.RPC.CustomServerToPlayerRpcEvent>(rpcName: E, ...args: Parameters<altShared.RPC.CustomServerToPlayerRpcEvent[E]>): Promise<ReturnType<altShared.RPC.CustomServerToPlayerRpcEvent[E]>>;
 
         readonly meta: PlayerMeta;
         readonly syncedMeta: altShared.PlayerSyncedMeta;
