@@ -1583,7 +1583,7 @@ declare module "@altv/client" {
 
         interface ScriptRPCAnswerEventParameters {
             readonly answerID: number;
-            readonlyanswer: unknown;
+            readonly answer: unknown;
             readonly answerError: string;
         }
 
