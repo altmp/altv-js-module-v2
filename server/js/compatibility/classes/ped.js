@@ -4,6 +4,9 @@
 
 requireBinding("shared/entity.js");
 
+const { Entity } = requireBinding("server/compatibility/classes/entity.js");
+const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+
 class Ped extends alt.Ped {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
@@ -11,12 +14,14 @@ class Ped extends alt.Ped {
 
         const [model, position, rotation, streamingDistance] = args;
 
-        return alt.Ped.create({
+        const instance = alt.Ped.create({
             model,
             pos: position,
             rot: rotation,
             streamingDistance
         });
+
+        return extendAltEntityClass(instance, Entity);
     }
 
     static get count() {

@@ -4,7 +4,16 @@
 
 requireBinding("shared/entity.js");
 
+const { Entity } = requireBinding("server/compatibility/classes/entity.js");
+const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+
 class Player extends alt.Player {
+    constructor() {
+        super();
+
+        extendAltEntityClass(this, Entity);
+    }
+
     static get count() {
         return alt.Player.all.length;
     }

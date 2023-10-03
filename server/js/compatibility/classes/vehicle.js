@@ -4,9 +4,6 @@
 
 requireBinding("shared/entity.js");
 
-/** @type {typeof import("../../../../shared/js/utils.js")} */
-const { assertIsType, assertIsObject } = requireBinding("shared/utils.js");
-
 const { Entity } = requireBinding("server/compatibility/classes/entity.js");
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
