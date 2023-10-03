@@ -2,56 +2,63 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-requireBinding("shared/entity.js");
-
-class Entity extends alt.Entity {
+export class Entity {
     setMeta(key, value) {
-        super.meta[key] = value;
+        this.meta[key] = value;
     }
 
     deleteMeta(key) {
-        delete super.meta[key];
+        delete this.meta[key];
     }
 
     getMeta(key) {
-        return super.meta[key];
+        return this.meta[key];
     }
 
     hasMeta(key) {
-        return key in super.meta;
+        return key in this.meta;
     }
 
     setSyncedMeta(key, value) {
-        super.syncedMeta[key] = value;
+        if (typeof key == "object") {
+            this.setMultipleSyncedMetaData(key);
+        }
+
+        this.syncedMeta[key] = value;
     }
 
     deleteSyncedMeta(key) {
-        delete super.syncedMeta[key];
+        delete this.syncedMeta[key];
     }
 
     getSyncedMeta(key) {
-        return super.syncedMeta[key];
+        return this.syncedMeta[key];
     }
 
     hasSyncedMeta(key) {
-        return key in super.syncedMeta;
+        return key in this.syncedMeta;
     }
 
     setStreamSyncedMeta(key, value) {
-        super.streamSyncedMeta[key] = value;
+        if (typeof key == "object") {
+            this.setMultipleStreamSyncedMetaData(key);
+        }
+
+        this.streamSyncedMeta[key] = value;
     }
 
     deleteStreamSyncedMeta(key) {
-        delete super.streamSyncedMeta[key];
+        delete this.streamSyncedMeta[key];
     }
 
     getStreamSyncedMeta(key) {
-        return super.streamSyncedMeta[key];
+        return this.streamSyncedMeta[key];
     }
 
     hasStreamSyncedMeta(key) {
-        return key in super.streamSyncedMeta;
+        return key in this.streamSyncedMeta;
     }
 }
 
-cppBindings.registerCompatibilityExport("Entity", Entity);
+// NOTE (xLuxy): Do NOT export the Entity class from above, otherwise it will break instanceof
+cppBindings.registerCompatibilityExport("Entity", alt.Entity);
