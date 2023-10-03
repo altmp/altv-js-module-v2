@@ -834,7 +834,7 @@ declare module "@altv/client" {
         readonly headlightColor: number;
         readonly radioStationIndex: number;
         readonly isSirenActive: boolean;
-        readonly lockState: number;
+        readonly lockState: altShared.Enums.VehicleLockState;
         readonly isDaylightOn: boolean;
         readonly isNightlightOn: boolean;
         readonly roofState: number;
@@ -1029,14 +1029,19 @@ declare module "@altv/client" {
         targetTexture: string;
     }
 
-    export interface _WebViewCreateOptions {
+    export interface _WebViewCreateOptionsDrawable {
+        url: string;
+        drawable: number | string;
+        targetTexture: string;
+    }
+
+    export interface _WebViewCreateOptionsOverlay {
+        url: string;
         pos?: altShared.IVector2; // default: { x: 0, y: 0 }
         size?: altShared.IVector2; // default: { x: 0, y: 0 }
         isVisible?: boolean; // default: true
         isOverlay?: boolean; // default: false
     }
-
-    type WebViewCreateOptions = { url: string } & (({ drawable: number | string } & _WebViewTextureCreateOptions) | ({ drawable?: never } & _WebViewCreateOptions));
 
     export abstract class WebView extends BaseObject {
         focused: boolean;
@@ -1076,12 +1081,13 @@ declare module "@altv/client" {
 
         readonly listeners: Readonly<{ [eventName: string]: ReadonlyArray<(...args: unknown[]) => void> }>;
 
-        public onCreate?(opts: WebViewCreateOptions): void;
+        public onCreate?(opts: _WebViewCreateOptionsDrawable | _WebViewCreateOptionsOverlay): void;
         public onDestroy?(): void;
 
         static readonly isGpuAccelerationActive: boolean;
 
-        static create(options: WebViewCreateOptions): WebView;
+        static create(options: _WebViewCreateOptionsDrawable): WebView;
+        static create(options: _WebViewCreateOptionsOverlay): WebView;
     }
 
     /**

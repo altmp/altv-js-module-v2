@@ -2550,6 +2550,17 @@ declare module "@altv/shared" {
             VEHICLE_TRANSFORM_TO_SUBMARINE = 529,
             ANIMATED_FALLBACK = 530
         }
+
+        export enum VehicleLockState {
+            NONE,
+            UNLOCKED,
+            LOCKED,
+            LOCKOUT_PLAYER_ONLY,
+            LOCK_PLAYER_INSIDE,
+            INITIALLY_LOCKED,
+            FORCE_DOORS_SHUT,
+            LOCKED_CAN_BE_DAMAGED
+        }
     }
 }
 

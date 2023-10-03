@@ -563,7 +563,7 @@ declare module "@altv/server" {
         headlightColor: number;
         radioStationIndex: number;
         sirenActive: boolean;
-        lockState: number;
+        lockState: altShared.Enums.VehicleLockState;
         roofState: number;
         lightsMultiplier: number;
         engineHealth: number;
