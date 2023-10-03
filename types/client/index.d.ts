@@ -1767,7 +1767,7 @@ declare module "@altv/client" {
     }
 
     export namespace Gxt {
-        export function add(nameOrHash: number | string): void;
+        export function add(nameOrHash: number | string, value: string): void;
         export function remove(nameOrHash: number | string): void;
         export function get(nameOrHash: number | string): string;
     }
