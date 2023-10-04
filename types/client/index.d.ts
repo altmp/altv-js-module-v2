@@ -1177,6 +1177,42 @@ declare module "@altv/client" {
 
         export function setVirtualEntityGroupFactory(factory: typeof VirtualEntityGroup): void;
         export function getVirtualEntityGroupFactory<T extends VirtualEntityGroup>(): T;
+
+        export function setAudioFactory(factory: typeof Audio): void;
+        export function getAudioFactory<T extends Audio>(): T;
+
+        export function setAudioFilterFactory(factory: typeof AudioFilter): void;
+        export function getAudioFilterFactory<T extends AudioFilter>(): T;
+
+        export function setAudioOutputAttachedFactory(factory: typeof AudioOutputAttached): void;
+        export function getAudioOutputAttachedFactory<T extends AudioOutputAttached>(): T;
+
+        export function setAudioOutputFrontendFactory(factory: typeof AudioOutputFrontend): void;
+        export function getAudioOutputFrontendFactory<T extends AudioOutputFrontend>(): T;
+
+        export function setAudioOutputWorldFactory(factory: typeof AudioOutputWorld): void;
+        export function getAudioOutputWorldFactory<T extends AudioOutputWorld>(): T;
+
+        export function setLocalPedFactory(factory: typeof LocalPed): void;
+        export function getLocalPedFactory<T extends LocalPed>(): T;
+
+        export function setLocalVehicleFactory(factory: typeof LocalVehicle): void;
+        export function getLocalVehicleFactory<T extends LocalVehicle>(): T;
+
+        export function setLocalObjectFactory(factory: typeof LocalObject): void;
+        export function getLocalObjectFactory<T extends LocalObject>(): T;
+
+        export function setRmlDocumentFactory(factory: typeof RmlDocument): void;
+        export function getRmlDocumentFactory<T extends RmlDocument>(): T;
+
+        export function setWebSocketClientFactory(factory: typeof WebSocketClient): void;
+        export function getWebSocketClientFactory<T extends WebSocketClient>(): T;
+
+        export function setWebViewFactory(factory: typeof WebView): void;
+        export function getWebViewFactory<T extends WebView>(): T;
+
+        export function setTextLabelFactory(factory: typeof TextLabel): void;
+        export function getTextLabelFactory<T extends TextLabel>(): T;
     }
 
     export namespace PointBlip {
