@@ -482,10 +482,12 @@ declare module "@altv/client" {
         placeOnGroundProperly(): void;
         activatePhysics(): void;
 
-        static readonly allWorld: ReadonlyArray<LocalObject>;
+        public waitForSpawn(timeout?: number): Promise<void>;
 
         public onCreate?(opts: LocalObjectCreateOptions): void;
         public onDestroy?(): void;
+
+        static readonly allWorld: ReadonlyArray<LocalObject>;
 
         static create(options: LocalObjectCreateOptions): LocalObject;
         static getByID(id: number): LocalObject | null;
@@ -541,13 +543,15 @@ declare module "@altv/client" {
         readonly scriptID: number;
         readonly isStreamedIn: boolean;
 
+        public waitForSpawn(timeout?: number): Promise<void>;
+
         public onCreate?(opts: LocalPedCreateOptions): void;
         public onDestroy?(): void;
 
+        static readonly all: ReadonlyArray<Ped>;
+
         static create(options: LocalPedCreateOptions): LocalPed;
         static getByID(id: number): LocalPed | null;
-
-        static readonly all: ReadonlyArray<Ped>;
     }
 
     export abstract class LocalPlayer extends Player {
@@ -579,6 +583,8 @@ declare module "@altv/client" {
         visible: boolean;
         readonly scriptID: number;
         readonly isStreamedIn: boolean;
+
+        public waitForSpawn(timeout?: number): Promise<void>;
 
         public onCreate?(opts: LocalVehicleCreateOptions): void;
         public onDestroy?(): void;
