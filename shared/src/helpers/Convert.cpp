@@ -147,6 +147,11 @@ alt::MValue js::JSToMValue(v8::Local<v8::Value> val, bool allowFunction)
             }
             return dict;
         }
+        else if(val->IsProxy())
+        {
+            v8::Local<v8::Value> proxyValue = val.As<v8::Proxy>()->GetTarget();
+            return JSToMValue(proxyValue, allowFunction);
+        }
         else
         {
             js::IResource* resource = js::IResource::GetFromContext(ctx);
