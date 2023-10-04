@@ -90,7 +90,7 @@ alt.Events.onEvent(async (ctx) => {
 
     let handlers = eventMap.get(ctx.eventType);
 
-    if ((handlers && ctx.eventType == alt.Enums.EventType.CLIENT_SCRIPT_EVENT) || ctx.eventType == alt.Enums.EventType.SERVER_SCRIPT_EVENT) {
+    if (handlers && (ctx.eventType == alt.Enums.EventType.CLIENT_SCRIPT_EVENT || ctx.eventType == alt.Enums.EventType.SERVER_SCRIPT_EVENT)) {
         handlers = handlers.filter((handler) => handler.eventName == ctx.eventName);
     }
 
