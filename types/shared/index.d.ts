@@ -676,9 +676,13 @@ declare module "@altv/shared" {
         }
         interface CustomWebViewToClientEvent extends WebViewToClientEvent {}
 
-        interface GenericOnEventCallback {
-            readonly [key: string]: unknown;
+        interface GenericOnEventParameters {
+            readonly isCancellable: boolean;
+            readonly type: number;
+            readonly eventType: Enums.EventType | Enums.CustomEventType;
             readonly customEvent: boolean;
+
+            readonly [key: string]: unknown;
         }
 
         export class EventHandler {

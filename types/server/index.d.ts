@@ -1078,7 +1078,7 @@ declare module "@altv/server" {
         export function setWarningThreshold(threshold: number): void;
         export function setSourceLocationFrameSkipCount(skipCount: number): void;
 
-        export function onEvent(callback: altShared.Events.GenericOnEventCallback): altShared.Events.GenericEventHandler;
+        export function onEvent(callback: GenericEventCallback<altShared.Events.GenericOnEventParameters>): altShared.Events.GenericEventHandler;
 
         export abstract class ConnectionInfo {
             readonly name: string;

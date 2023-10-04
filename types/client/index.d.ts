@@ -1370,6 +1370,8 @@ declare module "@altv/client" {
         export function setWarningThreshold(threshold: number): void;
         export function setSourceLocationFrameSkipCount(skipCount: number): void;
 
+        export function onEvent(callback: GenericEventCallback<altShared.Events.GenericOnEventParameters>): altShared.Events.GenericEventHandler;
+
         interface WorldObjectPositionChangeEventParameters {
             object: WorldObject;
             oldPos: altShared.Vector3;
