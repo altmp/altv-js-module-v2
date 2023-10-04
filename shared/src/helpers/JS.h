@@ -3,6 +3,7 @@
 #include <thread>
 
 #include "v8-persistent-handle.h"
+#include "magic_enum/include/magic_enum.hpp"
 
 #include "Convert.h"
 #include "Type.h"
@@ -27,6 +28,15 @@ namespace js
 
         void RunEventLoop();
     }  // namespace internal
+
+    enum class Symbol : uint8_t
+    {
+        TO_MVALUE
+    };
+    static v8::Local<v8::Symbol> GetSymbol(Symbol symbol)
+    {
+        return v8::Symbol::ForApi(v8::Isolate::GetCurrent(), JSValue(magic_enum::enum_name(symbol).data()));
+    }
 
     static void Throw(const std::string& message)
     {
@@ -247,6 +257,16 @@ namespace js
             }
             Throw("Invalid property type at key " + key + ", expected string or number but got " + TypeToString(argType));
             return false;
+        }
+
+        template<typename T>
+        T GetSymbol(Symbol symbol, const T& defaultValue = T())
+        {
+            v8::MaybeLocal<v8::Value> maybeVal = object->Get(context, js::GetSymbol(symbol));
+            v8::Local<v8::Value> val;
+            if(!maybeVal.ToLocal(&val)) return defaultValue;
+            std::optional<T> result = js::CppValue<T>(val);
+            return result.has_value() ? (T)result.value() : defaultValue;
         }
 
         bool Has(const std::string& key) const
