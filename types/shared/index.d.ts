@@ -649,7 +649,7 @@ declare module "@altv/shared" {
     }
 
     export namespace Commands {
-        export type CommandCallback = (args: string[]) => void;
+        export type CommandCallback = (...args: string[]) => void;
 
         export function register(commandName: string, callback: CommandCallback): void;
         export function unregister(commandName: string, callback: CommandCallback): void;
