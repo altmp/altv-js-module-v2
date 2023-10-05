@@ -189,11 +189,11 @@ alt::MValue js::JSToMValue(v8::Local<v8::Value> val, bool allowFunction)
             }
             else
             {
-                v8::Local<v8::Value> toMValue = obj.GetSymbol<v8::Local<v8::Value>>(Symbol::TO_MVALUE);
-                if(!toMValue.IsEmpty() && toMValue->IsFunction())
+                v8::Local<v8::Value> serialize = obj.GetSymbol<v8::Local<v8::Value>>(Symbol::SERIALIZE);
+                if(!serialize.IsEmpty() && serialize->IsFunction())
                 {
-                    js::Function toMValueFunc = toMValue.As<v8::Function>();
-                    std::optional<v8::Local<v8::Value>> resultVal = toMValueFunc.Call<v8::Local<v8::Value>>(obj);
+                    js::Function serializeFunc = serialize.As<v8::Function>();
+                    std::optional<v8::Local<v8::Value>> resultVal = serializeFunc.Call<v8::Local<v8::Value>>(obj);
                     if(resultVal.has_value()) return JSToMValue(resultVal.value());
                 }
 

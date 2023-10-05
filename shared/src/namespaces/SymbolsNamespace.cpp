@@ -8,5 +8,5 @@ void SymbolGetter(js::LazyPropertyContext& ctx)
 
 // clang-format off
 extern js::Namespace symbolsNamespace("Symbols", [](js::NamespaceTemplate& tpl) {
-    tpl.StaticLazyProperty("toMValue", SymbolGetter<js::Symbol::TO_MVALUE>);
+    tpl.StaticLazyProperty("serialize", SymbolGetter<js::Symbol::SERIALIZE>);
 });
