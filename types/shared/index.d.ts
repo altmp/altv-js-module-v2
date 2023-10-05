@@ -2566,6 +2566,10 @@ declare module "@altv/shared" {
             LOCKED_CAN_BE_DAMAGED
         }
     }
+
+    export namespace Symbols {
+        export const serialize: unique symbol;
+    }
 }
 
 declare abstract class Timer {

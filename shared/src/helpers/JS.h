@@ -31,7 +31,7 @@ namespace js
 
     enum class Symbol : uint8_t
     {
-        TO_MVALUE
+        SERIALIZE
     };
     static v8::Local<v8::Symbol> GetSymbol(Symbol symbol)
     {
