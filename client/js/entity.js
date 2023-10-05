@@ -69,6 +69,14 @@ alt.Events.onGameEntityDestroy(({ entity }) => {
     removeEntityFromStreamedIn(entity);
 });
 
+alt.Events.onWorldObjectStreamIn(({ object }) => {
+    addEntityToStreamedIn(object);
+});
+
+alt.Events.onWorldObjectStreamOut(({ object }) => {
+    removeEntityFromStreamedIn(object);
+});
+
 // Register streamedIn getters
 Object.defineProperty(alt.Entity, "streamedIn", {
     get: () => Array.from(entityStreamedInSet)
