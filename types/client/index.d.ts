@@ -256,12 +256,14 @@ declare module "@altv/client" {
         attachTo(entity: Entity): boolean;
         fade(opacity: number, duration: number): void;
 
+        static create(options: BlipCreateOptions): Blip;
+
         public onCreate?(opts: BlipCreateOptions): void;
         public onDestroy?(): void;
 
-        static create(options: BlipCreateOptions): Blip;
         static getByID(id: number): Blip | null;
         static getByRemoteID(id: number): Blip | null;
+        static getByScriptID(id: number): Blip | null;
     }
 
     export abstract class ColShape extends WorldObject {
