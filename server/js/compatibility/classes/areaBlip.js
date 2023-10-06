@@ -6,6 +6,7 @@ requireBinding("shared/entity.js");
 
 const { SharedBlip } = requireBinding("shared/compatibility/classes/sharedBlip.js");
 const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
+const { WorldObject } = requireBinding("server/compatibility/classes/worldObject.js");
 
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
@@ -17,7 +18,7 @@ class AreaBlip {
             global
         });
 
-        return extendAltEntityClass(instance, SharedBlip, BaseObject);
+        return extendAltEntityClass(instance, SharedBlip, WorldObject, BaseObject);
     }
 }
 

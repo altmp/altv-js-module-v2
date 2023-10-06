@@ -44,7 +44,7 @@ declare module "@altv/server" {
     type BlipCreateOptions = SharedBlipCreateOptions &
         (({ blipType: altShared.Enums.BlipType.AREA } & altShared.AreaBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.RADIUS } & altShared.RadiusBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.DESTINATION } & PointBlipCreateOptions));
 
-    export abstract class Blip extends BaseObject {
+    export abstract class Blip extends WorldObject {
         readonly targets: ReadonlyArray<Player>;
 
         readonly scriptID: number;
