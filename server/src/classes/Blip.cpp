@@ -14,5 +14,7 @@ extern js::Class blipClass("Blip", &sharedBlipClass, nullptr, [](js::ClassTempla
     tpl.Method<&alt::IBlip::AddTargetPlayer>("addTarget");
     tpl.Method<&alt::IBlip::RemoveTargetPlayer>("removeTarget");
 
+    tpl.Property<&alt::IBlip::AttachedTo, &alt::IBlip::AttachTo>("attachedTo");
+
     tpl.GetByID<alt::IBaseObject::Type::BLIP>();
 });

@@ -50,7 +50,7 @@ declare module "@altv/server" {
         readonly scriptID: number;
         readonly isStreamedIn: boolean;
         readonly isAttached: boolean;
-        readonly attachedTo?: Entity;
+        attachedTo?: Entity;
 
         global: boolean;
 
