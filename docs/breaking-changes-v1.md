@@ -29,3 +29,15 @@ All enums, which were previously declared as `const enum` in TypeScript are no l
 
 -   `IFireInfo` has been removed
 -   `IVehicleNeon` renamed to `VehicleNeonState`
+-   `ICloth` -> `Clothing`
+-   `IDlcCloth` -> `DlcClothing`
+-   `IProp` -> `Prop`
+-   `IDlcProp` -> `DlcProp`
+-   `IHeadOverlay` -> `Appearance.HeadOverlay`
+-   `IHeadBlendData` -> `HeadBlendData`
+-   `IBoneInfo` -> `BoneInfo`
+-   `IVehicleModel`-> `VehicleModelInfo`
+-   `IPedModel` -> `PedModelInfo`
+-   `IWeaponModel` -> `WeaponModel`
+-   `IAmmoFlags` -> `AmmoData`
+-   `IDecoration` has been removed
