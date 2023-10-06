@@ -18,9 +18,9 @@ declare module "@altv/server" {
     export function hashServerPassword(password: string): number;
     export function stopServer(): void;
     export function toggleWorldProfiler(state: boolean): void;
-    export function getEntitiesInDimension(dimension: number, entityType: altShared.Enums.BaseObjectType): ReadonlyArray<altShared.BaseObject>;
-    export function getEntitiesInRange(pos: altShared.IVector3, range: number, dimension: number, entityType: altShared.Enums.BaseObjectType): ReadonlyArray<altShared.BaseObject>;
-    export function getClosestEntities(pos: altShared.IVector3, range: number, dimension: number, maxCount: number, entityType: altShared.Enums.BaseObjectType): ReadonlyArray<altShared.BaseObject>;
+    export function getEntitiesInDimension(dimension: number, entityTypes: altShared.Enums.BaseObjectFilterType): ReadonlyArray<altShared.BaseObject>;
+    export function getEntitiesInRange(pos: altShared.IVector3, range: number, dimension: number, entityTypes: altShared.Enums.BaseObjectFilterType): ReadonlyArray<altShared.BaseObject>;
+    export function getClosestEntities(pos: altShared.IVector3, range: number, dimension: number, maxCount: number, entityTypes: altShared.Enums.BaseObjectFilterType): ReadonlyArray<altShared.BaseObject>;
 
     export function setVoiceExternalPublic(host: string, port: number): void;
     export function setVoiceExternal(host: string, port: number): void;
