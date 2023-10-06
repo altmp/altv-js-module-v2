@@ -722,6 +722,8 @@ declare module "@altv/server" {
         readonly players: ReadonlyArray<Player>;
         readonly playerCount: number;
 
+        readonly meta: VoiceChannelMeta;
+
         hasPlayer(player: Player): boolean;
         addPlayer(player: Player): void;
         removePlayer(player: Player): void;
@@ -1502,6 +1504,11 @@ declare module "@altv/server" {
      * Extend it by interface merging for use in Checkpoint#meta.
      */
     export interface CheckpointMeta extends ColShapeMeta {}
+
+    /**
+     * Extend it by interface merging for use in VoiceChannel#meta.
+     */
+    export interface VoiceChannelMeta extends BaseObjectMeta {}
 
     /**
      * Extend it by interface merging for use in Entity#meta.

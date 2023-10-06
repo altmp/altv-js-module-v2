@@ -28,7 +28,7 @@ All enums, which were previously declared as `const enum` in TypeScript are no l
 # TypeScript Interfaces
 
 -   `IFireInfo` has been removed
--   `IVehicleNeon` renamed to `VehicleNeonState`
+-   `IVehicleNeon` -> `VehicleNeonState`
 -   `ICloth` -> `Clothing`
 -   `IDlcCloth` -> `DlcClothing`
 -   `IProp` -> `Prop`
@@ -41,3 +41,12 @@ All enums, which were previously declared as `const enum` in TypeScript are no l
 -   `IWeaponModel` -> `WeaponModel`
 -   `IAmmoFlags` -> `AmmoData`
 -   `IDecoration` has been removed
+-   `ICustomBaseObjectMeta` -> `BaseObjectMeta`
+-   `ICustomBlipMeta` -> `BlipMeta`
+-   `ICustomColshapeMeta` -> `ColShapeMeta`
+-   `ICustomCheckpointMeta` -> `CheckpointMeta`
+-   `ICustomVoiceChannelMeta` -> `VoiceChannelMeta`
+-   `ICustomEntityMeta` -> `EntityMeta`
+-   `ICustomPlayerMeta` -> `PlayerMeta`
+-   `ICustomVehicleMeta` -> `VehicleMeta`
+-   `ICustomEmitEvent` -> `Events.CustomServerToPlayerEvent`
