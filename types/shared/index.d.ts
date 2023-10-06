@@ -2565,6 +2565,155 @@ declare module "@altv/shared" {
             FORCE_DOORS_SHUT,
             LOCKED_CAN_BE_DAMAGED
         }
+
+        export enum RadioStation {
+            LOS_SANTOS_ROCK_RADIO,
+            NON_STOP_POP_FM,
+            RADIO_LOS_SANTOS,
+            CHANNEL_X,
+            WEST_COAST_TALK_RADIO,
+            REBEL_RADIO,
+            SOULWAX_FM,
+            EAST_LOS_FM,
+            WEST_COAST_CLASSICS,
+            BLAINE_COUNTY_RADIO,
+            THE_BLUE_ARK,
+            WORLD_WIDE_FM,
+            FLYLO_FM,
+            THE_LOWDOWN,
+            RADIO_MIRROR_PARK,
+            SPACE,
+            VINEWOOD_BOULEVARD_RADIO,
+            SELF_RADIO,
+            THE_LAB,
+            RADIO_OFF = 255
+        }
+
+        export enum VehicleDoor {
+            DRIVER_FRONT,
+            PASSENGER_FRONT,
+            DRIVER_REAR,
+            PASSENGER_REAR,
+            HOOD,
+            TRUNK
+        }
+
+        export enum VehicleDoorState {
+            CLOSED = 0,
+            OPENED_LEVEL_1 = 1,
+            OPENED_LEVEL_2 = 2,
+            OPENED_LEVEL_3 = 3,
+            OPENED_LEVEL_4 = 4,
+            OPENED_LEVEL_5 = 5,
+            OPENED_LEVEL_6 = 6,
+            OPENED_LEVEL_7 = 7,
+            UNKNOWN = 255
+        }
+
+        export enum VehicleModType {
+            SPOILER = 0,
+            FRONT_BUMPER = 1,
+            REAR_BUMPER = 2,
+            SIDE_SKIRT = 3,
+            EXHAUST = 4,
+            FRAME = 5,
+            GRILLE = 6,
+            HOOD = 7,
+            FENDER = 8,
+            RIGHT_FENDER = 9,
+            ROOF = 10,
+            ENGINE = 11,
+            BRAKES = 12,
+            TRANSMISSION = 13,
+            HORN = 14,
+            SUSPENSION = 15,
+            ARMOR = 16,
+            UNK1 = 17,
+            TURBO = 18,
+            UNK2 = 19,
+            TIRE_SMOKE = 20,
+            UNK3 = 21,
+            XENON_LIGHTS = 22,
+            FRONT_WHEELS = 23,
+            BACK_WHEELS = 24,
+            PLATE_HOLDER = 25,
+            VANITY_PLATES = 26,
+            TRIM_DESIGN = 27,
+            ORNAMENTS = 28,
+            DASHBOARD = 29,
+            DIAL = 30,
+            DOOR_SPEAKER = 31,
+            SEATS = 32,
+            STEERING_WHEEL = 33,
+            COLUMN_SHIFTER_LEAVERS = 34,
+            PLAQUES = 35,
+            SPEAKERS = 36,
+            TRUNK = 37,
+            HYDRAULICS = 38,
+            ENGINE_BLOCK = 39,
+            AIR_FILTER = 40,
+            STRUTS = 41,
+            ARCH_COVER = 42,
+            AERIALS = 43,
+            TRIM = 44,
+            TANK = 45,
+            WINDOWS = 46,
+            UNK4 = 47,
+            LIVERY = 48
+        }
+
+        export enum NumberPlateStyle {
+            BLUE_WHITE,
+            YELLOW_BLACK,
+            YELLOW_BLUE,
+            BLUE_WHITE_2,
+            BLUE_WHITE_3,
+            YANKTON
+        }
+
+        export enum BaseObjectFilterType {
+            PLAYER = 1,
+            VEHICLE = 2,
+            PED = 4,
+            OBJECT = 8
+        }
+
+        export enum VehicleBumper {
+            FRONT,
+            REAR
+        }
+
+        export enum VehicleBumperDamage {
+            NOT_DAMAGED,
+            DAMAGED,
+            NONE
+        }
+
+        export enum VehiclePart {
+            FRONT_LEFT,
+            FRONT_RIGHT,
+            MIDDLE_LEFT,
+            MIDDLE_RIGHT,
+            REAR_LEFT,
+            REAR_RIGHT
+        }
+
+        export enum VehiclePartDamage {
+            NOT_DAMAGED,
+            DAMAGED_LEVEL_1,
+            DAMAGED_LEVEL_2,
+            DAMAGED_LEVEL_3
+        }
+
+        export enum VehicleWindowTint {
+            NONE,
+            PURE_BLACK,
+            DARK_SMOKE,
+            LIGHT_SMOKE,
+            STOCK,
+            LIMO,
+            GREEN
+        }
     }
 
     export namespace Symbols {
