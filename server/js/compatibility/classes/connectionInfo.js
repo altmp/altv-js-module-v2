@@ -1,8 +1,8 @@
 /// <reference path="../../../../types/shared/index.d.ts" />
 /// <reference path="../../../../types/server/index.d.ts" />
-import * as alt from "@altv/server";
+// import * as alt from "@altv/server";
 
-requireBinding("shared/entity.js");
+requireBinding("server/factory.js");
 
 class ConnectionInfo extends alt.ConnectionInfo {
     get debug() {
