@@ -1082,7 +1082,7 @@ declare module "@altv/server" {
 
         export abstract class ConnectionInfo {
             readonly name: string;
-            readonly socialId: number;
+            readonly socialID: number;
             readonly socialName: string;
             readonly hwidHash: number;
             readonly hwidExHash: number;
@@ -1093,7 +1093,7 @@ declare module "@altv/server" {
             readonly cdnUrl: string;
             readonly passwordHash: number;
             readonly ip: string;
-            readonly discordUserId: number;
+            readonly discordUserID: number;
 
             readonly isAccepted: boolean;
             text: string;
@@ -1101,6 +1101,9 @@ declare module "@altv/server" {
             requestCloudID(): Promise<string>;
             accept(sendNames?: boolean): void;
             decline(reason: string): void;
+
+            // TODO (xLuxy): Missing
+            // static readonly all: ReadonlyArray<ConnectionInfo>;
 
             static getByID(id: number): ConnectionInfo | undefined;
         }

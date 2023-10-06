@@ -45,7 +45,7 @@ extern js::Class connectionInfoClass("ConnectionInfo", nullptr, nullptr, [](js::
     tpl.BindToType(alt::IBaseObject::Type::CONNECTION_INFO);
 
     tpl.LazyProperty<&alt::IConnectionInfo::GetName>("name");
-    tpl.LazyProperty<&alt::IConnectionInfo::GetSocialId>("socialId");
+    tpl.LazyProperty<&alt::IConnectionInfo::GetSocialId>("socialID");
     tpl.LazyProperty<&alt::IConnectionInfo::GetSocialName>("socialName");
     tpl.LazyProperty<&alt::IConnectionInfo::GetHwIdHash>("hwidHash");
     tpl.LazyProperty<&alt::IConnectionInfo::GetHwIdExHash>("hwidExHash");
@@ -56,7 +56,7 @@ extern js::Class connectionInfoClass("ConnectionInfo", nullptr, nullptr, [](js::
     tpl.LazyProperty<&alt::IConnectionInfo::GetCdnUrl>("cdnUrl");
     tpl.LazyProperty<&alt::IConnectionInfo::GetPasswordHash>("passwordHash");
     tpl.LazyProperty<&alt::IConnectionInfo::GetIp>("ip");
-    tpl.LazyProperty<&alt::IConnectionInfo::GetDiscordUserID>("discordUserId");
+    tpl.LazyProperty<&alt::IConnectionInfo::GetDiscordUserID>("discordUserID");
 
     tpl.Property<&alt::IConnectionInfo::IsAccepted>("isAccepted");
     tpl.Property<&alt::IConnectionInfo::GetText, &alt::IConnectionInfo::SetText>("text");
