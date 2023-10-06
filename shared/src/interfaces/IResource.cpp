@@ -8,7 +8,7 @@ void js::IResource::RequireBindingNamespaceWrapper(js::FunctionContext& ctx)
     if(!ctx.GetArg(0, bindingName)) return;
 
     Binding& binding = Binding::Get(bindingName);
-    if(!ctx.Check(binding.IsValid(), "Invalid binding name")) return;
+    if(!ctx.Check(binding.IsValid(), "Invalid binding name " + bindingName)) return;
     IResource* resource = ctx.GetResource();
     if(!resource) return;
 
