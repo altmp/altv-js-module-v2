@@ -374,7 +374,7 @@ declare module "@altv/shared" {
     }
 
     export interface WeatherCycle {
-        weather: Enums.Weather;
+        weather: Enums.WeatherType;
         multiplier: number;
     }
 
@@ -1660,7 +1660,7 @@ declare module "@altv/shared" {
         }
 
         // When changing, update shared/js/enums/weather.js aswell
-        export enum Weather {
+        export enum WeatherType {
             EXTRA_SUNNY = 0,
             CLEAR = 1,
             CLOUDS = 2,
@@ -2662,7 +2662,7 @@ declare module "@altv/shared" {
             LIVERY
         }
 
-        export enum NumberPlateStyle {
+        export enum VehicleNumberPlateStyle {
             BLUE_WHITE,
             YELLOW_BLACK,
             YELLOW_BLUE,

@@ -22,5 +22,5 @@ import * as alt from "alt-client";
 
 All enums, which were previously declared as `const enum` in TypeScript are no longer const because they now exists in JavaScript. All Enum values are also changed to use the `UPPER_SNAKE_CASE` syntax. All Enums are located inside the `alt.Enums` namespace. In addition, the following enums were renamed:
 
--   `WeatherType` -> `Weather`
 -   `WindowTint` -> `VehicleWindowTint`
+-   `NumberPlateStyle` -> `VehicleNumberPlateStyle`
