@@ -1,0 +1,23 @@
+/// <reference path="../../../../types/shared/index.d.ts" />
+/// <reference path="../../../../types/client/index.d.ts" />
+// import * as alt from "@altv/client";
+
+requireBinding("shared/entity.js");
+
+const { SharedBlip } = requireBinding("shared/compatibility/classes/sharedBlip.js");
+const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
+
+const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+
+class AreaBlip {
+    constructor(x, y, z, width, height) {
+        const instance = alt.AreaBlip.create({
+            pos: { x, y, z },
+            scale: { x: width, y: height }
+        });
+
+        return extendAltEntityClass(instance, SharedBlip, BaseObject);
+    }
+}
+
+cppBindings.registerCompatibilityExport("AreaBlip", AreaBlip);

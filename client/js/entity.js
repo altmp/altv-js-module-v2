@@ -1,4 +1,3 @@
-requireBinding("shared/entity.js");
 requireBinding("client/events/entity.js");
 requireBinding("client/events/worldObject.js");
 

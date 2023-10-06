@@ -2,7 +2,7 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-requireBinding("shared/entity.js");
+requireBinding("shared/factory.js");
 
 class Checkpoint extends alt.Checkpoint {
     constructor(...args) {
