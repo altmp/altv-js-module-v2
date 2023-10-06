@@ -1,5 +1,7 @@
 # Building
 
+After cloning, run `git submodule update --init --recursive` command to pull required dependencies.
+
 This project uses `Xmake` as the build system, as such it is very easy to build and run the individual targets.
 
 To generate and configure the project without building use `xmake config`.
