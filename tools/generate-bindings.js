@@ -61,7 +61,7 @@ const hashesOutputPath = "build/bindings-hashes.json";
     for (const { path, scope: pathScope } of paths) {
         const bindingsPath = resolvePath(path);
         for await (const file of getBindingFiles(bindingsPath)) {
-            const name = pathUtil.relative(bindingsPath, file).replace(/\\/g, "/").toLowerCase();
+            const name = pathUtil.relative(bindingsPath, file).replace(/\\/g, "/");
             const bindingName = `${pathScope}/${name}`;
             // Generate the binding data
             const src = await fs.readFile(file, "utf8");
