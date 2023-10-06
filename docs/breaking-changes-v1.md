@@ -24,3 +24,8 @@ All enums, which were previously declared as `const enum` in TypeScript are no l
 
 -   `WindowTint` -> `VehicleWindowTint`
 -   `NumberPlateStyle` -> `VehicleNumberPlateStyle`
+
+# TypeScript Interfaces
+
+-   `IFireInfo` has been removed
+-   `IVehicleNeon` renamed to `VehicleNeonState`

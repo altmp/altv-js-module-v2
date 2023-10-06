@@ -513,7 +513,7 @@ declare module "@altv/server" {
     }
 
     export abstract class Vehicle extends Entity {
-        readonly neon: altShared.NeonState;
+        readonly neon: altShared.VehicleNeonState;
         readonly driver?: Player;
         readonly isDestroyed: boolean;
         readonly modKitsCount: number;
@@ -1120,7 +1120,7 @@ declare module "@altv/server" {
         interface PlayerConnectEventParameters {}
 
         interface PlayerConnectDeniedEventParameters {
-            reason: string;
+            reason: altShared.Enums.ConnectDeniedReason;
             name: string;
             ip: string;
             passwordHash: number;

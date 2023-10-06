@@ -361,7 +361,7 @@ declare module "@altv/shared" {
         fixedAfterExplosion: boolean;
     }
 
-    export interface NeonState {
+    export interface VehicleNeonState {
         readonly left: boolean;
         readonly right: boolean;
         readonly front: boolean;
