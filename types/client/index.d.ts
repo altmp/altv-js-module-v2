@@ -858,8 +858,9 @@ declare module "@altv/client" {
         readonly bodyAdditionalHealth: number;
         readonly hasArmoredWindows: boolean;
         readonly damageDataBase64: string;
-        readonly isManualEngineControl: boolean;
+        readonly manualEngineControl: boolean;
         readonly scriptDataBase64: string;
+        readonly healthDataBase64: string;
         readonly velocity: altShared.Vector3;
         readonly steeringAngle: number;
         readonly rearWheelVariation: number;

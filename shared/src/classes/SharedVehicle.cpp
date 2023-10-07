@@ -86,8 +86,9 @@ extern js::Class sharedVehicleClass("SharedVehicle", &entityClass, nullptr, [](j
     tpl.Property<&alt::IVehicle::GetBodyAdditionalHealth>("bodyAdditionalHealth");
     tpl.Property<&alt::IVehicle::HasArmoredWindows>("hasArmoredWindows");
     tpl.Property<&alt::IVehicle::GetDamageDataBase64>("damageDataBase64");
-    tpl.Property<&alt::IVehicle::IsManualEngineControl>("isManualEngineControl");
+    tpl.Property<&alt::IVehicle::IsManualEngineControl>("manualEngineControl");
     tpl.Property<&alt::IVehicle::GetScriptDataBase64>("scriptDataBase64");
+    tpl.Property<&alt::IVehicle::GetHealthDataBase64>("healthDataBase64");
     tpl.Property<&alt::IVehicle::GetVelocity>("velocity");
     tpl.Property<&alt::IVehicle::GetSteeringAngle>("steeringAngle");
     tpl.Property<&alt::IVehicle::GetRearWheelVariation>("rearWheelVariation");
