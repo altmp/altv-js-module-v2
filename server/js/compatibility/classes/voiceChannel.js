@@ -4,13 +4,18 @@
 
 requireBinding("shared/entity.js");
 
+const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
+
+const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+
 class VoiceChannel extends alt.VoiceChannel {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
         if (!args.length) return super();
 
         const [spatial, maxDistance] = args;
-        return alt.VoiceChannel.create({ spatial, maxDistance });
+        const instance = alt.VoiceChannel.create({ spatial, maxDistance });
+        return extendAltEntityClass(instance, BaseObject);
     }
 
     isPlayerInChannel(player) {
