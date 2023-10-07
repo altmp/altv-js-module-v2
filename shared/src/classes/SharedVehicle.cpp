@@ -90,6 +90,7 @@ extern js::Class sharedVehicleClass("SharedVehicle", &entityClass, nullptr, [](j
     tpl.Property<&alt::IVehicle::GetScriptDataBase64>("scriptDataBase64");
     tpl.Property<&alt::IVehicle::GetVelocity>("velocity");
     tpl.Property<&alt::IVehicle::GetSteeringAngle>("steeringAngle");
+    tpl.Property<&alt::IVehicle::GetRearWheelVariation>("rearWheelVariation");
 
     tpl.Method<&alt::IVehicle::GetMod>("getMod");
     tpl.Method<&alt::IVehicle::GetModsCount>("getModsCount");

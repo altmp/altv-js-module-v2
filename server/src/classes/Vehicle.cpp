@@ -113,6 +113,7 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Property<&alt::IVehicle::IsTrainCaboose, &alt::IVehicle::SetTrainIsCaboose>("isTrainCaboose");
     tpl.Property<&alt::IVehicle::GetTrainDirection, &alt::IVehicle::SetTrainDirection>("trainDirection");
     tpl.Property<&alt::IVehicle::HasTrainPassengerCarriages, &alt::IVehicle::SetTrainHasPassengerCarriages>("hasTrainPassengerCarriages");
+    tpl.Property<&alt::IVehicle::GetTrainRenderDerailed, &alt::IVehicle::SetTrainRenderDerailed>("trainRenderDerailed");
     tpl.Property<&alt::IVehicle::GetTrainForceDoorsOpen, &alt::IVehicle::SetTrainForceDoorsOpen>("trainForceDoorsOpen");
     tpl.Property<&alt::IVehicle::GetTrainCruiseSpeed, &alt::IVehicle::SetTrainCruiseSpeed>("trainCruiseSpeed");
     tpl.Property<&alt::IVehicle::GetTrainCarriageConfigIndex, &alt::IVehicle::SetTrainCarriageConfigIndex>("trainCarriageConfigIndex");
@@ -137,6 +138,7 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Property<&alt::IVehicle::IsHornActive>("isHornActive");
     tpl.Property<&alt::IVehicle::GetAccelerationLevel>("accelerationLevel");
     tpl.Property<&alt::IVehicle::GetBrakeLevel>("brakeLevel");
+    tpl.Property<&alt::IVehicle::GetRearWheelVariation, &alt::IVehicle::SetRearWheels>("rearWheelVariation");
 
     tpl.Method<&alt::IVehicle::SetFixed>("repair");
     tpl.Method("setMod", &SetMod);
@@ -148,6 +150,7 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Method<&alt::IVehicle::SetWheelOnFire>("setWheelOnFire");
     tpl.Method<&alt::IVehicle::SetWheelHealth>("setWheelHealth");
     tpl.Method<&alt::IVehicle::SetWheelFixed>("setWheelFixed");
+    tpl.Method<&alt::IVehicle::SetWheelHasTire>("setWheelHasTire");
     tpl.Method<&alt::IVehicle::SetPartDamageLevel>("setPartDamageLevel");
     tpl.Method<&alt::IVehicle::SetPartBulletHoles>("setPartBulletHoles");
     tpl.Method<&alt::IVehicle::SetLightDamaged>("setLightDamaged");

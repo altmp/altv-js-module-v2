@@ -538,6 +538,7 @@ declare module "@altv/server" {
         readonly isManualEngineControl: boolean;
         readonly velocity: altShared.Vector3;
         readonly steeringAngle: number;
+        rearWheelVariation: number;
 
         modKit: number;
         primaryColor: number;
@@ -587,6 +588,8 @@ declare module "@altv/server" {
         isTrainCaboose: boolean;
         trainDirection: boolean;
         hasTrainPassengerCarriages: boolean;
+        trainRenderDerailed: boolean;
+        trainForceDoorsOpen: boolean;
         trainCruiseSpeed: number;
         trainCarriageConfigIndex: number;
         trainLinkedToBackward?: Vehicle;
@@ -647,6 +650,7 @@ declare module "@altv/server" {
         setWheelOnFire(wheelId: number, state: boolean): void;
         setWheelHealth(wheelId: number, health: number): void;
         setWheelFixed(wheelId: number): void;
+        setWheelHasTire(wheelId: number, state: boolean): void;
 
         setPartDamageLevel(partId: number, damage: number): void;
         setPartBulletHoles(partId: number, shootsCount: number): void;

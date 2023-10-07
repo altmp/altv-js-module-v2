@@ -861,6 +861,7 @@ declare module "@altv/client" {
         readonly scriptDataBase64: string;
         readonly velocity: altShared.Vector3;
         readonly steeringAngle: number;
+        readonly rearWheelVariation: number;
 
         readonly speed: number;
         readonly gear: number;
