@@ -449,6 +449,7 @@ declare module "@altv/client" {
 
         static getByID(id: number): Object | null;
         static getByRemoteID(id: number): Object | null;
+        static getByScriptID(id: number): Object | null;
     }
 
     export interface LocalObjectCreateOptions {
