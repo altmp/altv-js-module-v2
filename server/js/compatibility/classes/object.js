@@ -2,7 +2,7 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-requireBinding("server/factory.js");
+requireBinding("shared/factory.js");
 
 const { Entity } = requireBinding("server/compatibility/classes/entity.js");
 const { WorldObject } = requireBinding("server/compatibility/classes/worldObject.js");
@@ -10,17 +10,20 @@ const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.j
 
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
-class Ped extends alt.Ped {
+class Object extends alt.Object {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
         if (!args.length) return super();
 
-        const [model, position, rotation, streamingDistance] = args;
+        const [model, pos, rot, alpha, textureVariation, lodDistance, streamingDistance] = args;
 
-        const instance = alt.Ped.create({
+        const instance = alt.Object.create({
             model,
-            pos: position,
-            rot: rotation,
+            pos,
+            rot,
+            alpha,
+            textureVariation,
+            lodDistance,
             streamingDistance
         });
 
@@ -28,9 +31,9 @@ class Ped extends alt.Ped {
     }
 
     static get count() {
-        return alt.Ped.all.length;
+        return alt.Object.all.length;
     }
 }
 
-alt.Factory.setPedFactory(Ped);
-cppBindings.registerCompatibilityExport("Ped", Ped);
+alt.Factory.setObjectFactory(Object);
+cppBindings.registerCompatibilityExport("Object", Object);
