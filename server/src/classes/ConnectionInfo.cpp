@@ -1,33 +1,6 @@
 ﻿#include "Class.h"
 #include "interfaces/IResource.h"
-#include "cpp-sdk/ICore.h"
 #include "interfaces/IAltResource.h"
-
-static void RequestCloudID(js::FunctionContext& ctx)
-{
-    if (!ctx.CheckThis()) return;
-
-    auto* connectionInfo = ctx.GetThisObject<alt::IConnectionInfo>();
-
-    auto promise = new js::Promise;
-    auto* resource = ctx.GetResource<js::IAltResource>();
-
-    connectionInfo->RequestCloudID([=](bool ok, const std::string& result)
-    {
-        resource->PushNextTickCallback(
-            [=]()
-            {
-                if (ok)
-                    promise->Resolve(result);
-                else
-                    promise->Reject(result);
-
-                delete promise;
-            });
-    });
-
-    ctx.Return(promise->Get());
-}
 
 static void Accept(js::FunctionContext& ctx)
 {
@@ -46,6 +19,7 @@ extern js::Class connectionInfoClass("ConnectionInfo", nullptr, nullptr, [](js::
 
     tpl.LazyProperty<&alt::IConnectionInfo::GetName>("name");
     tpl.LazyProperty<&alt::IConnectionInfo::GetSocialId>("socialID");
+    tpl.LazyProperty<&alt::IConnectionInfo::GetCloudID>("cloudID");
     tpl.LazyProperty<&alt::IConnectionInfo::GetSocialName>("socialName");
     tpl.LazyProperty<&alt::IConnectionInfo::GetHwIdHash>("hwidHash");
     tpl.LazyProperty<&alt::IConnectionInfo::GetHwIdExHash>("hwidExHash");
@@ -61,7 +35,6 @@ extern js::Class connectionInfoClass("ConnectionInfo", nullptr, nullptr, [](js::
     tpl.Property<&alt::IConnectionInfo::IsAccepted>("isAccepted");
     tpl.Property<&alt::IConnectionInfo::GetText, &alt::IConnectionInfo::SetText>("text");
 
-    tpl.Method("requestCloudID", RequestCloudID);
     tpl.Method("accept", Accept);
     tpl.Method<&alt::IConnectionInfo::Decline>("decline");
 

@@ -768,32 +768,6 @@ static void GetDecorations(js::FunctionContext& ctx)
     ctx.Return(arr);
 }
 
-static void RequestCloudID(js::FunctionContext& ctx)
-{
-    if(!ctx.CheckThis()) return;
-    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
-    js::IAltResource* resource = ctx.GetResource<js::IAltResource>();
-
-    js::Promise* promise = new js::Promise;
-
-    const auto callback = [=](bool ok, const std::string& resultStr)
-    {
-        std::string result = resultStr;
-        resource->PushNextTickCallback(
-          [=]()
-          {
-              if(ok) promise->Resolve(result);
-              else
-                  promise->Reject(result);
-
-              delete promise;
-          });
-    };
-    player->RequestCloudID(callback);
-
-    ctx.Return(promise->Get());
-}
-
 static void LocalMetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
@@ -847,6 +821,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.LazyProperty<&alt::IPlayer::GetSocialClubName>("socialClubName");
     tpl.LazyProperty<&alt::IPlayer::GetHwidHash>("hwidHash");
     tpl.LazyProperty<&alt::IPlayer::GetHwidExHash>("hwidExHash");
+    tpl.LazyProperty<&alt::IPlayer::GetCloudID>("cloudID");
 
     tpl.Property<&alt::IPlayer::IsConnected>("isConnected");
     tpl.Property<&alt::IPlayer::GetPing>("ping");
@@ -927,7 +902,6 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method<&alt::IPlayer::ClearDecorations>("clearDecorations");
     tpl.Method("getDecorations", GetDecorations);
     tpl.Method<&alt::IPlayer::PlayScenario>("playScenario");
-    tpl.Method("requestCloudID", RequestCloudID);
 
     tpl.DynamicProperty("localMeta", LocalMetaGetter, LocalMetaSetter, LocalMetaDeleter, LocalMetaEnumerator);
 

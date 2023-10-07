@@ -333,6 +333,7 @@ declare module "@altv/server" {
         readonly socialClubName: string;
         readonly hwidHash: number;
         readonly hwidExHash: number;
+        readonly cloudID: string;
 
         readonly isConnected: boolean;
         readonly ping: number;
@@ -478,7 +479,6 @@ declare module "@altv/server" {
         clearDecorations(): void;
         getDecorations(): ReadonlyArray<{ collection: number; overlay: number }>;
         playScenario(name: string): void;
-        requestCloudID(): Promise<string>;
 
         sendRPC<E extends keyof altShared.RPC.CustomServerToPlayerRpcEvent>(rpcName: E, ...args: Parameters<altShared.RPC.CustomServerToPlayerRpcEvent[E]>): Promise<ReturnType<altShared.RPC.CustomServerToPlayerRpcEvent[E]>>;
 
@@ -1089,6 +1089,7 @@ declare module "@altv/server" {
         export abstract class ConnectionInfo {
             readonly name: string;
             readonly socialID: number;
+            readonly cloudID: string;
             readonly socialName: string;
             readonly hwidHash: number;
             readonly hwidExHash: number;
@@ -1104,7 +1105,6 @@ declare module "@altv/server" {
             readonly isAccepted: boolean;
             text: string;
 
-            requestCloudID(): Promise<string>;
             accept(sendNames?: boolean): void;
             decline(reason: string): void;
 
