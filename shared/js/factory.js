@@ -19,6 +19,8 @@ alt.AreaBlip.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.BLIP, (c
 
 alt.RadiusBlip.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.BLIP, (ctx) => (ctx.blipType = alt.Enums.BlipType.RADIUS));
 
+alt.Marker.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.MARKER);
+
 alt.VirtualEntity.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.VIRTUAL_ENTITY);
 
 alt.VirtualEntityGroup.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP);
