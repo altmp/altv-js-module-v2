@@ -10,13 +10,9 @@ static js::FactoryHandler markerFactory(alt::IBaseObject::Type::MARKER, [](js::O
 
     // TODO (xLuxy): This needs testing once server-sided markers are implemented.
     if (args.Has("target"))
-    {
         if (!args.Get("target", target)) return nullptr;
-    }
-    else if (args.Has("pos"))
-    {
+    else
         if (!args.Get("pos", pos)) return nullptr;
-    }
 
     alt::IMarker::MarkerType markerType;
     if (!args.Get("type", markerType)) return nullptr;
