@@ -154,6 +154,10 @@ class Player extends alt.Player {
         return super.localMeta[key];
     }
 
+    emitRpc(name, ...args) {
+        return super.sendRPC(name, ...args);
+    }
+
     hasLocalMeta(key) {
         return key in super.localMeta;
     }
