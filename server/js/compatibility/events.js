@@ -46,9 +46,3 @@ cppBindings.registerCompatibilityExport("emitClientUnreliable", emitClientUnreli
 cppBindings.registerCompatibilityExport("emitAllClients", alt.Events.emitAllPlayers);
 cppBindings.registerCompatibilityExport("emitAllClientsRaw", alt.Events.emitAllPlayersRaw);
 cppBindings.registerCompatibilityExport("emitAllClientsUnreliable", alt.Events.emitAllPlayersUnreliableRaw);
-
-// TODO (xLuxy)
-// export function offClient(eventName: string, listener: (player: Player, ...args: any[]) => void): void;
-// export function offClient(listener: (eventName: string, ...args: any[]) => void): void;
-// export function onClient(listener: (eventName: string, player: Player, ...args: any[]) => void): void;
-// export function onceClient(listener: (eventName: string, player: Player, ...args: any[]) => void): void;
