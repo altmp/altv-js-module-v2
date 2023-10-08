@@ -35,7 +35,7 @@ function on(eventName, callback) {
  * @param {Function} callback
  */
 function onRemote(eventName, callback) {
-    const eventType = alt.Enums.EventType.CLIENT_SCRIPT_EVENT;
+    const eventType = alt.isServer ? alt.Enums.EventType.CLIENT_SCRIPT_EVENT : alt.Enums.EventType.SERVER_SCRIPT_EVENT;
 
     // console.log(`[compatibility] Registering event handler for ${eventName} (${eventType} - ${custom ? "custom" : "generic"})`);
 
@@ -72,7 +72,7 @@ function once(eventName, callback) {
  * @param {Function} callback
  */
 function onceRemote(eventName, callback) {
-    const eventType = alt.Enums.EventType.CLIENT_SCRIPT_EVENT;
+    const eventType = alt.isServer ? alt.Enums.EventType.CLIENT_SCRIPT_EVENT : alt.Enums.EventType.SERVER_SCRIPT_EVENT;
 
     // console.log(`[compatibility] Registering event handler for ${eventName} (${eventType} - ${custom ? "custom" : "generic"})`);
 
@@ -107,7 +107,7 @@ function off(eventName, callback) {
  * @param {Function} callback
  */
 function offRemote(eventName, callback) {
-    const eventType = alt.Enums.EventType.CLIENT_SCRIPT_EVENT;
+    const eventType = alt.isServer ? alt.Enums.EventType.CLIENT_SCRIPT_EVENT : alt.Enums.EventType.SERVER_SCRIPT_EVENT;
 
     const handlers = (eventMap.get(eventType) ?? []).filter((info) => info.callback !== callback && info.eventName !== eventName && info.isRemote);
 
@@ -133,7 +133,7 @@ function getEventListeners(eventName) {
  * @param {string | undefined} eventName
  */
 function getRemoteEventListeners(eventName) {
-    const eventType = alt.Enums.EventType.CLIENT_SCRIPT_EVENT;
+    const eventType = alt.isServer ? alt.Enums.EventType.CLIENT_SCRIPT_EVENT : alt.Enums.EventType.SERVER_SCRIPT_EVENT;
 
     let handlers = (eventMap.get(eventType) ?? []).filter((info) => info.isRemote && (typeof eventName != "string" || info.eventName == eventName));
     if (handlers) handlers = [...handlers];
