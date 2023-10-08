@@ -858,6 +858,7 @@ declare module "@altv/server" {
 
     export namespace VehicleModelInfo {
         export function get(modelHash: number | string): VehicleModelInfo | undefined;
+        export const loadedVehicleModels: number[];
     }
 
     export namespace WeaponModelInfo {

@@ -1,5 +1,10 @@
 #include "Namespace.h"
 
+static void LoadedVehicleModelsGetter(js::FunctionContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetLoadedVehicleModels());
+}
+
 static void DoesExtraExist(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
@@ -82,5 +87,7 @@ static void Get(js::FunctionContext& ctx)
 
 // clang-format off
 extern js::Namespace vehicleModelInfoNamespace("VehicleModelInfo", [](js::NamespaceTemplate& tpl) {
+    tpl.StaticProperty("loadedVehicleModels", LoadedVehicleModelsGetter);
+
     tpl.StaticFunction("get", Get);
 });
