@@ -208,6 +208,14 @@ declare module "@altv/client" {
 
     type BlipCreateOptions = ({ blipType: altShared.Enums.BlipType.AREA } & altShared.AreaBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.RADIUS } & altShared.RadiusBlipCreateOptions) | ({ blipType: altShared.Enums.BlipType.DESTINATION } & PointBlipCreateOptions);
 
+    export interface MarkerCreateOptions {
+        type: altShared.Enums.MarkerType;
+        pos: altShared.IVector3;
+        color?: altShared.IRGBA; // default: {r: 255, g: 255, b: 255, a: 100}
+        useStreaming?: number; // default: false
+        streamingDistance?: number; // default: 0
+    }
+
     export abstract class Blip extends WorldObject {
         readonly scriptID: number;
         readonly isStreamedIn: boolean;
@@ -264,6 +272,30 @@ declare module "@altv/client" {
         static getByID(id: number): Blip | null;
         static getByRemoteID(id: number): Blip | null;
         static getByScriptID(id: number): Blip | null;
+    }
+
+    export abstract class Marker extends WorldObject {
+        readonly isGlobal: boolean;
+        readonly streamingDistance: number;
+
+        color: altShared.RGBA;
+        visible: boolean;
+        markerType: altShared.Enums.MarkerType;
+        scale: altShared.IVector3;
+        rot: altShared.IVector3;
+        direction: altShared.IVector3;
+        faceCamera: boolean;
+        rotating: boolean;
+        bobUpDown: boolean;
+
+        static readonly all: ReadonlyArray<Marker>;
+
+        public onCreate?(opts: MarkerCreateOptions): void;
+        public onDestroy?(): void;
+
+        static getByID(id: number): Marker | null;
+        static getByRemoteID(id: number): Marker | null;
+        static create(opts: MarkerCreateOptions): Marker;
     }
 
     export abstract class ColShape extends WorldObject {
@@ -1164,6 +1196,9 @@ declare module "@altv/client" {
 
         export function setBlipFactory(factory: typeof Blip): void;
         export function getBlipFactory<T extends Blip>(): T;
+
+        export function setMarkerFactory(factory: typeof Marker): void;
+        export function getMarkerFactory<T extends Marker>(): T;
 
         export function setColShapeFactory(factory: typeof ColShape): void;
         export function getColShapeFactory<T extends ColShape>(): T;

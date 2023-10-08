@@ -46,4 +46,5 @@ extern js::Namespace enumsNamespace("Enums", [](js::NamespaceTemplate& tpl) {
     tpl.StaticLazyProperty("AmmoSpecialType", GetEnumObject<alt::AmmoSpecialType>);
     tpl.StaticLazyProperty("KeyState", GetEnumObject<alt::CKeyboardEvent::KeyState>);
     tpl.StaticLazyProperty("VoiceConnectionState", GetEnumObject<alt::CVoiceConnectionEvent::State>);
+    tpl.StaticLazyProperty("MarkerType", GetEnumObject<alt::IMarker::MarkerType>);
 });
