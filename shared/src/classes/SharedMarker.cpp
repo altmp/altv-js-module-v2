@@ -21,6 +21,4 @@ extern js::Class sharedMarkerClass("SharedMarker", &worldObjectClass, nullptr, [
     tpl.Property<&alt::IMarker::IsBobUpDown, &alt::IMarker::SetBobUpDown>("bobUpDown");
 
     tpl.Property<&alt::IMarker::GetStreamingDistance>("streamingDistance");
-
-    tpl.GetByID<alt::IBaseObject::Type::MARKER>();
 });

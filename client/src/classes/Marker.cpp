@@ -8,5 +8,6 @@ extern js::Class markerClass("Marker", &sharedMarkerClass, nullptr, [](js::Class
 
     tpl.Property<&alt::IMarker::IsStreamedIn>("isStreamedIn");
 
+    tpl.GetByID<alt::IBaseObject::Type::MARKER>();
     tpl.GetByRemoteID<alt::IBaseObject::Type::MARKER>();
 });
