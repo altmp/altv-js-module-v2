@@ -14,7 +14,7 @@ static js::FactoryHandler localPedFactory(alt::IBaseObject::Type::LOCAL_PED, [](
 
     float heading = args.Get<float>("heading");
 
-    bool useStreaming = args.Get<bool>("useStreaming", true);
+    bool useStreaming = args.Get<bool>("useStreaming", false);
 
     uint32_t streamingDistance = args.Get<uint32_t>("streamingDistance", 0);
 
