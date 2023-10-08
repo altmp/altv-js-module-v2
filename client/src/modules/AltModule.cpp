@@ -446,7 +446,7 @@ static void IsPointOnScreen(js::FunctionContext& ctx)
 
 // clang-format off
 extern js::Class playerClass, localPlayerClass, vehicleClass, pedClass, objectClass,
-                audioClass, audioFilterClass, blipClass, textLabelClass, checkpointClass, webViewClass, fontClass,
+                audioClass, audioFilterClass, blipClass, markerClass, textLabelClass, checkpointClass, webViewClass, fontClass,
                 localPedClass, localVehicleClass, rmlDocumentClass, rmlElementClass, localObjectClass, webSocketClientClass,
                 mapZoomDataClass, virtualEntityClass, virtualEntityGroupClass, weaponDataClass, handlingClass, handlingDataClass,
                 httpClientClass, audioOutputClass, audioOutputAttachedClass, audioOutputFrontendClass, audioOutputWorldClass, audioCategoryClass;
@@ -454,7 +454,7 @@ extern js::Namespace eventsNamespace, discordNamespace, voiceNamespace, localSto
                     gxtNamespace, cursorNamespace, camNamespace, streamingNamespace, configFlagNamespace;
 static js::Module altModule("@altv/client", "@altv/shared",
     { &playerClass, &localPlayerClass, &vehicleClass, &pedClass, &objectClass,
-    &audioClass, &audioFilterClass, &blipClass, &textLabelClass, &checkpointClass, &webViewClass, &fontClass,
+    &audioClass, &audioFilterClass, &blipClass, &markerClass, &textLabelClass, &checkpointClass, &webViewClass, &fontClass,
     &localPedClass, &localVehicleClass, &rmlDocumentClass, &rmlElementClass, &localObjectClass, &webSocketClientClass,
     &mapZoomDataClass, &virtualEntityClass, &virtualEntityGroupClass, &weaponDataClass, &handlingClass, &handlingDataClass,
     &httpClientClass, &audioOutputClass, &audioOutputAttachedClass, &audioOutputFrontendClass, &audioOutputWorldClass, &audioCategoryClass },
