@@ -6,7 +6,7 @@
 /** @type {typeof import("../../../shared/js/utils.js")} */
 const { assert, assertIsType } = requireBinding("shared/utils.js");
 
-const rpcEvents = new Map();
+const rpcHandlers = new Map();
 
 /**
  *
@@ -16,10 +16,10 @@ const rpcEvents = new Map();
 function onRpc(name, handler) {
     assertIsType(name, "string", "name has to be a string");
     assertIsType(handler, "function", "handler has to be a function");
-    assert(!rpcEvents.has(name), `Handler for rpc '${name}' already registered`);
+    assert(!rpcHandlers.has(name), `Handler for rpc '${name}' already registered`);
 
-    const handler = alt.RPC.register(name, handler);
-    rpcEvents.set(name, handler);
+    const rpcHandler = alt.RPC.register(name, handler);
+    rpcHandlers.set(name, rpcHandler);
 }
 
 /**
@@ -30,11 +30,11 @@ function onRpc(name, handler) {
 function offRpc(name, handler) {
     assertIsType(name, "string", "name has to be a string");
 
-    const rpcHandler = rpcEvents.get(name);
+    const rpcHandler = rpcHandlers.get(name);
 
     if (rpcHandler?.valid && (typeof handler == "function" || handler == undefined)) {
         rpcHandler.destroy();
-        rpcEvents.delete(name);
+        rpcHandlers.delete(name);
     }
 }
 
