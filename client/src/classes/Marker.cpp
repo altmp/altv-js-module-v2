@@ -2,7 +2,7 @@
 
 // clang-format off
 extern js::Class sharedMarkerClass;
-extern js::Class markerClass("Blip", &sharedMarkerClass, nullptr, [](js::ClassTemplate& tpl)
+extern js::Class markerClass("Marker", &sharedMarkerClass, nullptr, [](js::ClassTemplate& tpl)
 {
     tpl.BindToType(alt::IBaseObject::Type::MARKER);
 
