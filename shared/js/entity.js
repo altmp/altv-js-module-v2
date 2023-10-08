@@ -85,11 +85,8 @@ Object.defineProperty(alt.Entity, "all", {
 addAllGetter(alt.Player, [alt.Enums.BaseObjectType.PLAYER, alt.Enums.BaseObjectType.LOCAL_PLAYER]);
 addAllGetter(alt.Vehicle, [alt.Enums.BaseObjectType.VEHICLE, alt.Enums.BaseObjectType.LOCAL_VEHICLE]);
 addAllGetter(alt.Ped, [alt.Enums.BaseObjectType.PED, alt.Enums.BaseObjectType.LOCAL_PED]);
-
-// TODO: alt.Blip.all / alt.Marker.all might not work - needs testing
 addAllGetter(alt.Blip, alt.Enums.BaseObjectType.BLIP);
 addAllGetter(alt.Marker, alt.Enums.BaseObjectType.MARKER);
-
 addAllGetter(alt.Object, [alt.Enums.BaseObjectType.OBJECT, alt.Enums.BaseObjectType.LOCAL_OBJECT]);
 
 addAllGetter(alt.Checkpoint, alt.Enums.BaseObjectType.CHECKPOINT);
