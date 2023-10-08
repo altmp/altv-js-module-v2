@@ -223,6 +223,9 @@ declare module "@altv/client" {
         readonly isAttached: boolean;
         readonly attachedTo?: Entity;
 
+        readonly meta: BlipMeta;
+        readonly syncedMeta: Readonly<altShared.BlipSyncedMeta>;
+
         blipType: altShared.Enums.BlipType;
         scale: altShared.Vector2;
         display: number;
@@ -1149,6 +1152,16 @@ declare module "@altv/client" {
     export interface BaseObjectMeta {
         [key: string]: unknown;
     }
+
+    /**
+     * Extend it by interface merging for use in Blip#meta.
+     */
+    export interface BlipMeta extends BaseObjectMeta {}
+
+    /**
+     * Extend it by interface merging for use in Marker#meta.
+     */
+    export interface MarkerMeta extends BaseObjectMeta {}
 
     /**
      * Extend it by interface merging for use in Entity#meta.
