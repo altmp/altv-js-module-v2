@@ -124,6 +124,9 @@ declare module "@altv/server" {
         readonly target?: Player;
         readonly streamingDistance: number;
 
+        readonly meta: MarkerMeta;
+        readonly syncedMeta: altShared.MarkerSyncedMeta;
+
         color: altShared.RGBA;
         visible: boolean;
         markerType: altShared.Enums.MarkerType;
@@ -1534,6 +1537,11 @@ declare module "@altv/server" {
      * Extend it by interface merging for use in Blip#meta.
      */
     export interface BlipMeta extends BaseObjectMeta {}
+
+    /**
+     * Extend it by interface merging for use in Marker#meta.
+     */
+    export interface MarkerMeta extends BaseObjectMeta {}
 
     /**
      * Extend it by interface merging for use in ColShape#meta.

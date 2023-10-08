@@ -459,6 +459,11 @@ declare module "@altv/shared" {
     export interface BlipSyncedMeta extends BaseObjectSyncedMeta {}
 
     /**
+     * Extend it by interface merging for use in Marker#syncedMeta.
+     */
+    export interface MarkerSyncedMeta extends BaseObjectSyncedMeta {}
+
+    /**
      * Extend it by interface merging for use in ColShape#syncedMeta.
      */
     export interface ColShapeSyncedMeta extends BaseObjectSyncedMeta {}

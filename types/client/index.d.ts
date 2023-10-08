@@ -278,6 +278,9 @@ declare module "@altv/client" {
         readonly isGlobal: boolean;
         readonly streamingDistance: number;
 
+        readonly meta: MarkerMeta;
+        readonly syncedMeta: altShared.MarkerSyncedMeta;
+
         color: altShared.RGBA;
         visible: boolean;
         markerType: altShared.Enums.MarkerType;
