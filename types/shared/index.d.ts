@@ -59,6 +59,8 @@ declare module "@altv/shared" {
         writeFloat(offset: number, value: number): void;
         writeDouble(offset: number, value: number): void;
         writeString(offset: number, value: string): void;
+
+        destroy(): void;
     }
 
     export interface ColShapeSphereCreateOptions {
