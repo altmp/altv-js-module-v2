@@ -190,8 +190,6 @@ declare module "@altv/client" {
     export interface AudioOutputWorldCreateOptions {
         pos: altShared.Vector3;
         categoryHash?: number; // default: 'radio' hashed
-
-        readonly all: ReadonlyArray<AudioOutputWorld>;
     }
 
     export abstract class AudioOutputWorld extends AudioOutput {
