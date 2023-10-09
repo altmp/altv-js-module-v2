@@ -12,20 +12,24 @@ export function extendAltEntityClass(baseInstance, ...classes) {
     for (const class_ of classes) {
         assertIsType(class_, "function", `Expected class object, but got ${typeof class_}`);
 
-        for (const propKey of Object.getOwnPropertyNames(class_.prototype)) {
-            if (propKey === "constructor") continue;
+        let currentClass = class_.prototype;
+        while (currentClass !== Object.prototype) {
+            for (const propKey of Object.getOwnPropertyNames(currentClass)) {
+                if (propKey === "constructor") continue;
 
-            // TODO (xLuxy): We might want to override shared properties?
-            if (baseInstance.hasOwnProperty(propKey)) {
-                const baseClassName = baseInstance.constructor.name;
-                const className = class_.name;
+                if (baseInstance.hasOwnProperty(propKey)) {
+                    const baseClassName = baseInstance.constructor.name;
+                    const className = class_.name;
 
-                alt.log(`~lr~[Compatibility] Property '${propKey}' skipped in '${className}' - already in base class '${baseClassName}'.`);
-                continue;
+                    alt.log(`~lr~[Compatibility] Property '${propKey}' skipped in '${className}' - already in base class '${baseClassName}'.`);
+                    continue;
+                }
+
+                const descriptor = Object.getOwnPropertyDescriptor(currentClass, propKey);
+                if (descriptor) Object.defineProperty(baseInstance, propKey, descriptor);
             }
 
-            const descriptor = Object.getOwnPropertyDescriptor(class_.prototype, propKey);
-            if (descriptor) Object.defineProperty(baseInstance, propKey, descriptor);
+            currentClass = Object.getPrototypeOf(currentClass);
         }
     }
 
