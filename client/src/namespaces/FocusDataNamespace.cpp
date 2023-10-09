@@ -31,6 +31,11 @@ static void FocusOverrideEntitySetter(js::PropertyContext& ctx)
     alt::ICore::Instance().OverrideFocusEntity(entity);
 }
 
+static void FocusOverrideOffsetGetter(js::PropertyContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetFocusOverrideOffset());
+}
+
 static void ClearFocusOverride(js::FunctionContext& ctx)
 {
     alt::ICore::Instance().ClearFocusOverride();
@@ -41,6 +46,7 @@ extern js::Namespace focusDataNamespace("FocusData", [](js::NamespaceTemplate& t
     tpl.StaticProperty("isFocusOverriden", FocusOverridenGetter);
     tpl.StaticProperty("focusOverridePos", FocusOverridePosGetter, FocusOverridePosSetter);
     tpl.StaticProperty("focusOverrideEntity", FocusOverrideEntityGetter, FocusOverrideEntitySetter);
+    tpl.StaticProperty("focusOverrideOffset", FocusOverrideOffsetGetter);
 
     tpl.StaticFunction("clearFocusOverride", ClearFocusOverride);
 });

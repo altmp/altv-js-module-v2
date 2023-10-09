@@ -1868,6 +1868,7 @@ declare module "@altv/client" {
         export const isFocusOverriden: boolean;
         export let focusOverridePos: altShared.Vector3;
         export let focusOverrideEntity: Entity | null;
+        export const focusOverrideOffset: altShared.Vector3;
 
         export function clearFocusOverride(): void;
     }
