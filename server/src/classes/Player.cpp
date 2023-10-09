@@ -826,7 +826,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Property<&alt::IPlayer::IsConnected>("isConnected");
     tpl.Property<&alt::IPlayer::GetPing>("ping");
     tpl.Property<&alt::IPlayer::GetAuthToken>("authToken");
-    tpl.Property<&alt::IPlayer::GetDiscordId>("discordId");
+    tpl.Property<&alt::IPlayer::GetDiscordId>("discordID");
     tpl.Property("model", &ModelGetter, &ModelSetter);
     tpl.Property<&alt::IPlayer::GetArmour, &alt::IPlayer::SetArmour>("armour");
     tpl.Property<&alt::IPlayer::GetMaxArmour, &alt::IPlayer::SetMaxArmour>("maxArmour");

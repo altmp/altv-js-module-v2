@@ -373,7 +373,7 @@ declare module "@altv/server" {
         readonly isConnected: boolean;
         readonly ping: number;
         readonly authToken: string;
-        readonly discordId: number;
+        readonly discordID: number;
 
         get model(): number;
         set model(value: number | string);
@@ -518,6 +518,7 @@ declare module "@altv/server" {
         sendRPC<E extends keyof altShared.RPC.CustomServerToPlayerRpcEvent>(rpcName: E, ...args: Parameters<altShared.RPC.CustomServerToPlayerRpcEvent[E]>): Promise<ReturnType<altShared.RPC.CustomServerToPlayerRpcEvent[E]>>;
 
         readonly meta: PlayerMeta;
+        readonly localMeta: PlayerLocalMeta;
         readonly syncedMeta: altShared.PlayerSyncedMeta;
         readonly streamSyncedMeta: altShared.PlayerStreamSyncedMeta;
 
@@ -1173,7 +1174,7 @@ declare module "@altv/server" {
             branch: string;
             version: string;
             cdnUrl: string;
-            discordId: number;
+            discordID: number;
         }
 
         interface PlayerDisconnectEventParameters {
@@ -1567,6 +1568,11 @@ declare module "@altv/server" {
      * Extend it by interface merging for use in Player#meta.
      */
     export interface PlayerMeta extends EntityMeta {}
+
+    /**
+     * Extend it by interface merging for use in Player#meta.
+     */
+    export interface PlayerLocalMeta extends EntityMeta {}
 
     /**
      * Extend it by interface merging for use in Vehicle#meta.

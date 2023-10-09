@@ -2,7 +2,9 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-requireBinding("shared/entity.js");
+requireBinding("shared/factory.js");
+
+const { SharedPlayer } = requireBinding("shared/compatibility/classes/sharedPlayer.js");
 
 const { Entity } = requireBinding("server/compatibility/classes/entity.js");
 const { WorldObject } = requireBinding("server/compatibility/classes/worldObject.js");
@@ -14,89 +16,95 @@ class Player extends alt.Player {
     constructor() {
         super();
 
-        extendAltEntityClass(this, Entity, WorldObject, BaseObject);
+        extendAltEntityClass(this, SharedPlayer, Entity, WorldObject, BaseObject);
     }
 
-    static get count() {
-        return alt.Player.all.length;
+    emitRpc(name, ...args) {
+        return super.sendRPC(name, ...args);
     }
 
-    get flashlightActive() {
-        return super.isFlashlightActive;
+    hasLocalMeta(key) {
+        return key in super.localMeta;
     }
 
-    get headRot() {
-        return super.headRotation;
+    setLocalMeta(key, value) {
+        super.localMeta[key] = value;
     }
 
-    get socialID() {
-        return super.socialId;
+    getLocalMeta(key) {
+        return super.localMeta[key];
     }
 
-    get discordID() {
-        return super.discordId;
+    deleteLocalMeta(key) {
+        delete super.localMeta[key];
+    }
+
+    getLocalMetaKeys() {
+        return Object.keys(super.localMeta);
+    }
+
+    spawn(...args) {
+        V8_GET_ISOLATE_CONTEXT();
+        V8_CHECK_ARGS_LEN_MIN_MAX(1, 4);
+
+        V8_GET_THIS_BASE_OBJECT(_this, IPlayer);
+
+        let pos = null;
+        let delay = 0;
+
+        if (args.length == 1 || args.length == 2) {
+            // (model: number | string, pos: IVector3) overload
+            if (typeof args[0] == "string" || typeof args[0] == "number") {
+                super.model = args[0];
+                pos = args[1];
+                // (pos: IVector3, delay?: number) overload
+            } else {
+                [pos, delay] = args;
+                delay ??= 0;
+            }
+            // (x: number, y: number, z: number, delay?: number) overload
+        } else if (info.length == 3 || info.length == 4) {
+            pos = { x: args[0], y: args[1], z: args[2] };
+            delay = args[3];
+        }
+
+        super.spawn(pos, delay);
+    }
+
+    isEntityInStreamRange(entity) {
+        return super.isEntityInStreamingRange(entity);
     }
 
     get currentInterior() {
         return super.interiorLocation;
     }
 
-    spawn(...args) {
-        let pos;
-        let delay = 0;
-
-        if (args.length == 1 || args.length == 2) {
-            super.model = args[0];
-            pos = args[1];
-        }
-
-        if (args.length == 1 || args.length == 2) {
-            // (model: number | string, pos: IVector3) overload
-            if (typeof args[0] == "number" || typeof args[0] == "string") {
-                super.model = args[0];
-                pos = args[1];
-            }
-            // (pos: IVector3, delay?: number) overload
-            else {
-                pos = args[0];
-
-                if (args.length == 2) {
-                    delay = args[1];
-                }
-            }
-        }
-        // (x: number, y: number, z: number, delay?: number) overload
-        else if (args.length == 3 || args.length == 4) {
-            const [x, y, z] = args;
-            if (args.length == 4) {
-                delay = args[3];
-                pos = new alt.Vector3(x, y, z);
-            }
-        }
-
-        super.spawn(pos, delay);
-    }
-
-    setDlcClothes(...args) {
-        const [dlc, component, drawable, texture, palette] = args;
-
-        if (args.length == 4) {
-            return super.setDlcClothes(component, drawable, texture, 2, dlc);
-        } else if (args.length == 5) {
-            return super.etDlcClothes(component, drawable, texture, palette, dlc);
-        }
-    }
-
-    setDlcProp(dlc, component, drawable, texture) {
-        return super.setDlcProps(component, drawable, texture, dlc);
-    }
-
     getFaceFeatureScale(index) {
         return super.getFaceFeature(index);
     }
 
-    setHeadBlendPaletteColor(id, red, green, blue) {
-        return super.setHeadBlendPaletteColor(id, new alt.RGBA(red, green, blue));
+    setEyeColor(color) {
+        super.eyeColor = color;
+    }
+
+    getEyeColor() {
+        return super.eyeColor;
+    }
+
+    setHairColor(color) {
+        super.hairColor = color;
+    }
+
+    getHairColor() {
+        return super.hairColor;
+    }
+
+    setHairHighlightColor(color) {
+        super.hairHighlightColor = color;
+    }
+
+    getHairHighlightColor() {
+        return super.hairHighlightColor;
     }
 
     setHeadBlendData(shapeFirstID, shapeSecondID, shapeThirdID, skinFirstID, skinSecondID, skinThirdID, shapeMix, skinMix, thirdMix) {
@@ -115,58 +123,6 @@ class Player extends alt.Player {
 
     getHeadBlendData() {
         return super.headBlendData;
-    }
-
-    setEyeColor(eyeColor) {
-        super.eyeColor = eyeColor;
-    }
-
-    getEyeColor() {
-        return super.eyeColor;
-    }
-
-    setHairColor(hairColor) {
-        super.hairColor = hairColor;
-    }
-
-    getHairColor() {
-        return super.hairColor;
-    }
-
-    setHairHighlightColor(hairHighlightColor) {
-        super.hairHighlightColor = hairHighlightColor;
-    }
-
-    getHairHighlightColor() {
-        return super.hairHighlightColor;
-    }
-
-    getAmmoSpecialType(ammoHash) {
-        return alt.Enums.AmmoSpecialType[super.getAmmoSpecialType(ammoHash)];
-    }
-
-    setLocalMeta(key, value) {
-        super.localMeta[key] = value;
-    }
-
-    deleteLocalMeta(key) {
-        delete super.localMeta[key];
-    }
-
-    getLocalMeta(key) {
-        return super.localMeta[key];
-    }
-
-    emitRpc(name, ...args) {
-        return super.sendRPC(name, ...args);
-    }
-
-    hasLocalMeta(key) {
-        return key in super.localMeta;
-    }
-
-    getLocalMetaKeys() {
-        return Object.keys(super.localMeta);
     }
 }
 

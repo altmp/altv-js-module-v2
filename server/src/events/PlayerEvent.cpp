@@ -21,7 +21,7 @@ static js::Event playerConnectDeniedEvent(alt::CEvent::Type::PLAYER_CONNECT_DENI
     args.Set("branch", e->GetBranch());
     args.Set("version", e->GetMajorVersion());
     args.Set("cdnUrl", e->GetCdnUrl());
-    args.Set("discordId", e->GetDiscordId());
+    args.Set("discordID", e->GetDiscordId());
 });
 
 static js::Event playerDisconnectEvent(alt::CEvent::Type::PLAYER_DISCONNECT, [](const alt::CEvent* ev, js::Event::EventArgs& args)
