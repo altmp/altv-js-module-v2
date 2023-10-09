@@ -292,6 +292,17 @@ static void PlayerDamageModifierSetter(js::PropertyContext& ctx)
 
 extern js::Class weaponDataClass;
 extern js::ClassInstanceCache weaponDataCache(weaponDataClass);
+static void AllGetter(js::PropertyContext& ctx)
+{
+    auto weaponDatas = alt::ICore::Instance().GetAllWeaponData();
+
+    js::Array arr(weaponDatas.size());
+    for (const auto& weaponData: weaponDatas)
+        arr.Push(weaponDataCache.GetOrCreate(ctx.GetResource(), weaponData->GetNameHash()));
+
+    ctx.Return(arr);
+}
+
 static void Get(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(1)) return;
@@ -325,5 +336,7 @@ extern js::Class weaponDataClass("WeaponData", [](js::ClassTemplate tpl)
     tpl.Property("headshotDamageModifier", HeadshotDamageModifierGetter, HeadshotDamageModifierSetter);
     tpl.Property("playerDamageModifier", PlayerDamageModifierGetter, PlayerDamageModifierSetter);
 
+    tpl.StaticProperty("all", AllGetter);
+    
     tpl.StaticFunction("get", Get);
 }, true);

@@ -1042,6 +1042,8 @@ declare module "@altv/client" {
         headshotDamageModifier: number;
         playerDamageModifier: number;
 
+        static readonly all: ReadonlyArray<WeaponData>;
+
         static get(weaponHash: number | string): WeaponData | undefined;
     }
 
