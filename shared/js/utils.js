@@ -54,12 +54,20 @@ export function assertRGBA(val, message = "Expected RGBA") {
     return assert(val && typeof val.r === "number" && typeof val.g === "number" && typeof val.b === "number" && typeof val.a === "number", message);
 }
 
+export function isVector2(val) {
+    return val && typeof val.x === "number" && typeof val.y === "number";
+}
+
 export function assertVector2(val, message = "Expected Vector2") {
-    return assert(val && typeof val.x === "number" && typeof val.y === "number", message);
+    return assert(isVector2(val), message);
+}
+
+export function isVector3(val) {
+    return val && typeof val.x === "number" && typeof val.y === "number" && typeof val.z === "number";
 }
 
 export function assertVector3(val, message = "Expected Vector3") {
-    return assert(val && typeof val.x === "number" && typeof val.y === "number" && typeof val.z === "number", message);
+    return assert(isVector3(val), message);
 }
 
 alt.Utils.AssertionError = AssertionError;
@@ -70,6 +78,9 @@ alt.Utils.assertNotNaN = assertNotNaN;
 alt.Utils.assertRGBA = assertRGBA;
 alt.Utils.assertVector2 = assertVector2;
 alt.Utils.assertVector3 = assertVector3;
+
+alt.Utils.isVector2 = isVector2;
+alt.Utils.isVector3 = isVector3;
 
 export function hash(str) {
     assertIsType(str, "string", "Expected a string as first argument");

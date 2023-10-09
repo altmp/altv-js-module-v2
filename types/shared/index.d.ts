@@ -634,7 +634,10 @@ declare module "@altv/shared" {
         export function assertNotNaN(value: number, message?: string): void;
 
         export function assertRGBA(val: IRGBA, message?: string): void;
+
+        export function isVector2(val: unknown): boolean;
         export function assertVector2(val: IVector2, message?: string): void;
+        export function isVector3(val: unknown): boolean;
         export function assertVector3(val: IVector3, message?: string): void;
 
         export interface InspectOptions {
@@ -2079,6 +2082,23 @@ declare module "@altv/shared" {
             FLYING = "flying_ability",
             SHOOTING = "shooting_ability",
             STEALTH = "stealth_ability"
+        }
+
+        // When changing, update shared/js/enums/vehicleIndicatorLights.js aswell
+        export enum VehicleIndicatorLights {
+            BLINK_LEFT = 1,
+            BLINK_RIGHT = 2,
+            BLINK_PERM_BOTH = 4,
+            STATIC_BOTH = 8,
+            INTERIOR = 64
+        }
+
+        // When changing, update shared/js/enums/webSocketReadyState.js aswell
+        export enum WebSocketReadyState {
+            CONNECTING,
+            OPEN,
+            CLOSING,
+            CLOSED
         }
 
         // When changing, update shared/js/enums/configFlag.js aswell
