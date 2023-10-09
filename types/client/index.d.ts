@@ -85,6 +85,8 @@ declare module "@altv/client" {
         public onCreate?(opts: AudioCreateOptions): void;
         public onDestroy?(): void;
 
+        static readonly all: ReadonlyArray<Audio>;
+
         static create(options: AudioCreateOptions): Audio;
         static getByID(id: number): Audio | null;
     }
@@ -138,6 +140,8 @@ declare module "@altv/client" {
         public onCreate?(opts: AudioFilterCreateOptions): void;
         public onDestroy?(): void;
 
+        static readonly all: ReadonlyArray<AudioFilter>;
+
         static create(options: AudioFilterCreateOptions): AudioFilter;
         static getByID(id: number): AudioFilter | null;
     }
@@ -164,6 +168,8 @@ declare module "@altv/client" {
         public onCreate?(opts: AudioOutputAttachedCreateOptions): void;
         public onDestroy?(): void;
 
+        static readonly all: ReadonlyArray<AudioOutputAttached>;
+
         static create(options: AudioOutputAttachedCreateOptions): AudioOutputAttached;
     }
 
@@ -176,12 +182,16 @@ declare module "@altv/client" {
         public onCreate?(opts: AudioOutputFrontendCreateOptions): void;
         public onDestroy?(): void;
 
+        static readonly all: ReadonlyArray<AudioOutputFrontend>;
+
         static create(options: AudioOutputFrontendCreateOptions): AudioOutputFrontendCreateOptions;
     }
 
     export interface AudioOutputWorldCreateOptions {
         pos: altShared.Vector3;
         categoryHash?: number; // default: 'radio' hashed
+
+        readonly all: ReadonlyArray<AudioOutputWorld>;
     }
 
     export abstract class AudioOutputWorld extends AudioOutput {
@@ -189,6 +199,8 @@ declare module "@altv/client" {
 
         public onCreate?(opts: AudioOutputWorldCreateOptions): void;
         public onDestroy?(): void;
+
+        static readonly all: ReadonlyArray<AudioOutputWorld>;
 
         static create(options: AudioOutputWorldCreateOptions): AudioOutputWorld;
     }
@@ -729,6 +741,8 @@ declare module "@altv/client" {
         public onCreate?(opts: RmlDocumentCreateOptions): void;
         public onDestroy?(): void;
 
+        static readonly all: ReadonlyArray<RmlDocument>;
+
         static create(options: RmlDocumentCreateOptions): RmlDocument;
 
         static getByID(id: string): RmlDocument | null;
@@ -837,6 +851,8 @@ declare module "@altv/client" {
 
         public onCreate?(opts: TextLabelCreateOptions): void;
         public onDestroy?(): void;
+
+        static readonly all: ReadonlyArray<TextLabel>;
 
         static create(opts: TextLabelCreateOptions): TextLabel | null;
 
@@ -1071,6 +1087,8 @@ declare module "@altv/client" {
         public onCreate?(opts: WebSocketClientCreateOptions): void;
         public onDestroy?(): void;
 
+        static readonly all: ReadonlyArray<WebSocketClient>;
+
         static create(options: WebSocketClientCreateOptions): WebSocketClient;
         static getByID(id: number): WebSocketClient | null;
     }
@@ -1135,6 +1153,7 @@ declare module "@altv/client" {
         public onCreate?(opts: _WebViewCreateOptionsDrawable | _WebViewCreateOptionsOverlay): void;
         public onDestroy?(): void;
 
+        static readonly all: ReadonlyArray<WebView>;
         static readonly isGpuAccelerationActive: boolean;
 
         static create(options: _WebViewCreateOptionsDrawable): WebView;

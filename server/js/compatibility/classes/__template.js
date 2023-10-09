@@ -4,6 +4,11 @@
 
 requireBinding("shared/entity.js");
 
+// const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
+// const { WorldObject } = requireBinding("server/compatibility/classes/worldObject.js");
+
+// const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+
 /*
 
 class <REPLACEME> extends alt.<REPLACEME> {

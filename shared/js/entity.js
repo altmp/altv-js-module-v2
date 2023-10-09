@@ -11,7 +11,7 @@ const entityAllSet = new Set(); // Stores a set of all entities
  * @param {unknown} class_
  * @param {number | number[]} types
  */
-function addAllGetter(class_, types) {
+export function addAllGetter(class_, types) {
     if (!class_) return;
     if (!Array.isArray(types)) types = [types];
 

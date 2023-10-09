@@ -1,4 +1,6 @@
-requireBinding("shared/entity.js");
+/** @type {typeof import("../../shared/js/entity.js")} */
+const { addAllGetter } = requireBinding("shared/entity.js");
+
 requireBinding("client/events/entity.js");
 requireBinding("client/events/worldObject.js");
 
@@ -82,6 +84,16 @@ alt.Events.onWorldObjectStreamOut(({ object }) => {
 Object.defineProperty(alt.Entity, "streamedIn", {
     get: () => Array.from(entityStreamedInSet)
 });
+
+addAllGetter(alt.Audio, alt.Enums.BaseObjectType.AUDIO);
+addAllGetter(alt.AudioFilter, alt.Enums.BaseObjectType.AUDIO_FILTER);
+addAllGetter(alt.AudioOutputAttached, alt.Enums.BaseObjectType.AUDIO_OUTPUT_ATTACHED);
+addAllGetter(alt.AudioOutputFrontend, alt.Enums.BaseObjectType.AUDIO_OUTPUT_FRONTEND);
+addAllGetter(alt.AudioOutputWorld, alt.Enums.BaseObjectType.AUDIO_OUTPUT_WORLD);
+addAllGetter(alt.RmlDocument, alt.Enums.BaseObjectType.RML_DOCUMENT);
+addAllGetter(alt.TextLabel, alt.Enums.BaseObjectType.TEXT_LABEL);
+addAllGetter(alt.WebSocketClient, alt.Enums.BaseObjectType.WEBSOCKET_CLIENT);
+addAllGetter(alt.WebView, alt.Enums.BaseObjectType.WEBVIEW);
 
 addStreamedInGetter(alt.Player, alt.Enums.BaseObjectType.PLAYER);
 addStreamedInGetter(alt.Vehicle, [alt.Enums.BaseObjectType.VEHICLE, alt.Enums.BaseObjectType.LOCAL_VEHICLE]);
