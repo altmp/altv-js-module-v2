@@ -367,6 +367,7 @@ declare module "@altv/client" {
         static create(opts: CheckpointCreateOptions): Checkpoint;
         static getByID(id: number): Checkpoint | null;
         static getByRemoteID(id: number): Checkpoint | null;
+        static getByScriptID(scriptId: number): Checkpoint | null;
 
         static readonly all: ReadonlyArray<Checkpoint>;
     }
