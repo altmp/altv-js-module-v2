@@ -1078,6 +1078,17 @@ declare module "@altv/client" {
         pingInterval: number;
         readonly readyState: boolean;
 
+        on<E extends keyof altShared.Events.WebSocketClientEvent>(eventName: E, listener: altShared.Events.WebSocketClientEvent[E]): void;
+        on<E extends string>(eventName: Exclude<E, keyof altShared.Events.WebSocketClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
+
+        once<E extends keyof altShared.Events.WebSocketClientEvent>(eventName: E, listener: altShared.Events.WebSocketClientEvent[E]): void;
+        once<E extends string>(eventName: Exclude<E, keyof altShared.Events.WebSocketClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
+
+        off<E extends keyof altShared.Events.WebSocketClientEvent>(eventName: E, listener: altShared.Events.WebSocketClientEvent[E]): void;
+        off<E extends string>(eventName: Exclude<E, keyof altShared.Events.WebSocketClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
+
+        readonly listeners: Readonly<{ [eventName: string]: ReadonlyArray<(...args: unknown[]) => void> }>;
+
         start(): void;
         stop(): void;
 

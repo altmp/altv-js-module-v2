@@ -680,6 +680,7 @@ declare module "@altv/shared" {
         interface CustomPlayerToServerEvent {}
         interface CustomServerToPlayerEvent {}
         interface CustomClientToWebViewEvent {}
+        interface WebSocketClientEvent {}
 
         interface WebViewToClientEvent {
             load(): void;

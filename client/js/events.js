@@ -22,6 +22,11 @@ alt.Events.onAudioEvent(({ target, name, args }) => {
     onClassEvent(target, name, args);
 });
 
+addEventsToClass(alt.WebSocketClient);
+alt.Events.onWebSocketEvent(({ target, name, args }) => {
+    onClassEvent(target, name, args);
+});
+
 // *** Helpers ***
 function addEventsToClass(class_) {
     if (!class_) return;
