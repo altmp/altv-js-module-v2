@@ -9,6 +9,20 @@ static void HandlingGetter(js::LazyPropertyContext& ctx)
     ctx.Return(handlingClass.Create(ctx.GetContext(), vehicle));
 }
 
+static void GetByScriptID(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    uint32_t scriptId;
+    if(!ctx.GetArg(0, scriptId)) return;
+
+    auto obj = alt::ICore::Instance().GetWorldObjectByScriptID(scriptId);
+    if (obj->GetType() == alt::IBaseObject::Type::VEHICLE || obj->GetType() == alt::IBaseObject::Type::LOCAL_VEHICLE)
+        return ctx.Return(obj);
+
+    ctx.Return(nullptr);
+}
+
 // clang-format off
 extern js::Class sharedVehicleClass;
 extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::ClassTemplate& tpl)
@@ -60,4 +74,5 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
 
     tpl.GetByID<alt::IBaseObject::Type::VEHICLE>();
     tpl.GetByRemoteID<alt::IBaseObject::Type::VEHICLE>();
+    tpl.StaticFunction("getByScriptID", &GetByScriptID);
 });

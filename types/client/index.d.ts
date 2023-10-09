@@ -986,6 +986,7 @@ declare module "@altv/client" {
 
         static getByID(id: number): Vehicle | null;
         static getByRemoteID(id: number): Vehicle | null;
+        static getByScriptID(scriptId: number): Vehicle | null;
     }
 
     export interface TextLabelCreateOptions {
