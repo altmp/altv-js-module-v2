@@ -1,4 +1,6 @@
+requireBinding("client/events/client.js");
 requireBinding("shared/events.js");
+
 /** @type {typeof import("../../shared/js/utils.js")} */
 const { assert } = requireBinding("shared/utils.js");
 

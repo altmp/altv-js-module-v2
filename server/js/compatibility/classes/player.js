@@ -44,11 +44,6 @@ class Player extends alt.Player {
     }
 
     spawn(...args) {
-        V8_GET_ISOLATE_CONTEXT();
-        V8_CHECK_ARGS_LEN_MIN_MAX(1, 4);
-
-        V8_GET_THIS_BASE_OBJECT(_this, IPlayer);
-
         let pos = null;
         let delay = 0;
 
@@ -63,7 +58,7 @@ class Player extends alt.Player {
                 delay ??= 0;
             }
             // (x: number, y: number, z: number, delay?: number) overload
-        } else if (info.length == 3 || info.length == 4) {
+        } else if (args.length == 3 || args.length == 4) {
             pos = { x: args[0], y: args[1], z: args[2] };
             delay = args[3];
         }
