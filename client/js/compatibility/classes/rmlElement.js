@@ -44,4 +44,4 @@ class RmlElement extends alt.RmlElement {
     }
 }
 
-cppBindings.registerCompatibilityExport("RmlElement", RmlElement);
+cppBindings.registerCompatibilityExport("RmlElement", alt.RmlElement);

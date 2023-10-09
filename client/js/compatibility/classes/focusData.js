@@ -2,8 +2,6 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
-requireBinding("shared/entity.js");
-
 /** @type {typeof import("../../../../shared/js/utils.js")} */
 const { isVector3 } = requireBinding("shared/utils.js");
 
