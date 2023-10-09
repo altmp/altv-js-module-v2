@@ -59,7 +59,7 @@ extern js::Class webViewClass("WebView", &baseObjectClass, [](js::ClassTemplate&
     tpl.Property<&alt::IWebView::IsLoaded>("isLoaded");
     tpl.Property<&alt::IWebView::IsReady>("isReady");
     tpl.Property<&alt::IWebView::GetSize, &alt::IWebView::SetSize>("size");
-    tpl.Property<&alt::IWebView::GetPosition, &alt::IWebView::SetPosition>("position");
+    tpl.Property<&alt::IWebView::GetPosition, &alt::IWebView::SetPosition>("pos");
     tpl.Property<&alt::IWebView::GetOutputs>("outputs");
 
     tpl.Method("emit", Emit);
@@ -70,4 +70,6 @@ extern js::Class webViewClass("WebView", &baseObjectClass, [](js::ClassTemplate&
     tpl.Method<&alt::IWebView::RemoveOutput>("removeOutput");
 
     tpl.StaticProperty("isGpuAccelerationActive", GpuAccelerationActiveGetter);
+
+    tpl.GetByID<alt::IBaseObject::Type::WEBVIEW>();
 });

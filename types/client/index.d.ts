@@ -69,6 +69,7 @@ declare module "@altv/client" {
         readonly currentTime: number;
         readonly maxTime: number;
         readonly isPlaying: boolean;
+        readonly listeners: ReadonlyMap<string, ReadonlySet<(...args: unknown[]) => Promise<void> | void>>;
 
         addOutput(output: AudioOutput): void;
         removeOutput(output: AudioOutput): void;
@@ -750,6 +751,8 @@ declare module "@altv/client" {
 
     // @ts-ignore - Suppresses "Class static side incorrectly extends base class static side"
     export abstract class RmlElement extends BaseObject {
+        readonly listeners: ReadonlyMap<string, ReadonlySet<(...args: unknown[]) => Promise<void> | void>>;
+
         readonly relativeOffset: altShared.Vector2;
         readonly absoluteOffset: altShared.Vector2;
         readonly baseline: number;
@@ -1122,8 +1125,10 @@ declare module "@altv/client" {
         readonly isLoaded: boolean;
         readonly isReady: boolean;
 
+        readonly listeners: ReadonlyMap<string, ReadonlySet<(...args: unknown[]) => Promise<void> | void>>;
+
         size: altShared.Vector2;
-        position: altShared.Vector3;
+        pos: altShared.Vector2;
 
         readonly outputs: ReadonlyArray<AudioOutput>;
 
@@ -1159,6 +1164,8 @@ declare module "@altv/client" {
 
         static create(options: _WebViewCreateOptionsDrawable): WebView;
         static create(options: _WebViewCreateOptionsOverlay): WebView;
+
+        static getByID(id: number): WebView | null;
     }
 
     /**
