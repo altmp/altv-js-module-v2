@@ -337,6 +337,6 @@ extern js::Class weaponDataClass("WeaponData", [](js::ClassTemplate tpl)
     tpl.Property("playerDamageModifier", PlayerDamageModifierGetter, PlayerDamageModifierSetter);
 
     tpl.StaticProperty("all", AllGetter);
-    
+
     tpl.StaticFunction("get", Get);
 }, true);
