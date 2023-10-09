@@ -663,6 +663,7 @@ declare module "@altv/client" {
 
         readonly isTalking: boolean;
         readonly micLevel: number;
+        readonly taskData: string;
         spatialVolume: number;
         nonSpatialVolume: number;
         readonly filter: AudioFilter;
