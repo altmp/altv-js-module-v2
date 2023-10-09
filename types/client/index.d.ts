@@ -892,7 +892,7 @@ declare module "@altv/client" {
         readonly livery: number;
         readonly roofLivery: number;
         readonly appearanceDataBase64: string;
-        readonly isEngineOn: boolean;
+        readonly engineOn: boolean;
         readonly isHandbrakeActive: boolean;
         readonly headlightColor: number;
         readonly radioStationIndex: number;

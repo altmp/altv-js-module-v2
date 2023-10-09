@@ -66,7 +66,7 @@ extern js::Class sharedVehicleClass("SharedVehicle", &entityClass, nullptr, [](j
     tpl.Property<&alt::IVehicle::GetLivery>("livery");
     tpl.Property<&alt::IVehicle::GetRoofLivery>("roofLivery");
     tpl.Property<&alt::IVehicle::GetAppearanceDataBase64>("appearanceDataBase64");
-    tpl.Property<&alt::IVehicle::IsEngineOn>("isEngineOn");
+    tpl.Property<&alt::IVehicle::IsEngineOn>("engineOn");
     tpl.Property<&alt::IVehicle::IsHandbrakeActive>("isHandbrakeActive");
     tpl.Property<&alt::IVehicle::GetHeadlightColor>("headlightColor");
     tpl.Property<&alt::IVehicle::GetRadioStationIndex>("radioStationIndex");
