@@ -577,6 +577,7 @@ declare module "@altv/client" {
 
         static getByID(id: number): Ped | null;
         static getByRemoteID(id: number): Ped | null;
+        static getByScriptID(scriptID: number): Ped | LocalPed | null;
     }
 
     export interface LocalPedCreateOptions {
@@ -605,6 +606,7 @@ declare module "@altv/client" {
 
         static create(options: LocalPedCreateOptions): LocalPed;
         static getByID(id: number): LocalPed | null;
+        static getByScriptID(scriptId: number): LocalPed | null;
     }
 
     export abstract class LocalPlayer extends Player {

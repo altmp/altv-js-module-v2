@@ -4,6 +4,8 @@
 
 requireBinding("server/factory.js");
 
+const { SharedPed } = requireBinding("shared/compatibility/classes/sharedPed.js");
+
 const { Entity } = requireBinding("server/compatibility/classes/entity.js");
 const { WorldObject } = requireBinding("server/compatibility/classes/worldObject.js");
 const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
@@ -24,11 +26,7 @@ class Ped extends alt.Ped {
             streamingDistance
         });
 
-        return extendAltEntityClass(instance, Entity, WorldObject, BaseObject);
-    }
-
-    static get count() {
-        return alt.Ped.all.length;
+        return extendAltEntityClass(instance, SharedPed, Entity, WorldObject, BaseObject);
     }
 }
 
