@@ -3,25 +3,10 @@
 // import * as alt from "@altv/server";
 
 export class Entity {
-    setMeta(key, value) {
-        this.meta[key] = value;
-    }
-
-    deleteMeta(key) {
-        delete this.meta[key];
-    }
-
-    getMeta(key) {
-        return this.meta[key];
-    }
-
-    hasMeta(key) {
-        return key in this.meta;
-    }
-
     setSyncedMeta(key, value) {
         if (typeof key == "object") {
             this.setMultipleSyncedMetaData(key);
+            return;
         }
 
         this.syncedMeta[key] = value;
@@ -31,17 +16,10 @@ export class Entity {
         delete this.syncedMeta[key];
     }
 
-    getSyncedMeta(key) {
-        return this.syncedMeta[key];
-    }
-
-    hasSyncedMeta(key) {
-        return key in this.syncedMeta;
-    }
-
     setStreamSyncedMeta(key, value) {
         if (typeof key == "object") {
             this.setMultipleStreamSyncedMetaData(key);
+            return;
         }
 
         this.streamSyncedMeta[key] = value;
