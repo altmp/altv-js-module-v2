@@ -2,7 +2,7 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-requireBinding("shared/entity.js");
+requireBinding("shared/factory.js");
 
 const { WorldObject } = requireBinding("server/compatibility/classes/worldObject.js");
 const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");

@@ -2,7 +2,9 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-export class Entity {
+const { SharedEntity } = requireBinding("shared/compatibility/classes/sharedEntity.js");
+
+export class Entity extends SharedEntity {
     setSyncedMeta(key, value) {
         if (typeof key == "object") {
             this.setMultipleSyncedMetaData(key);
@@ -27,14 +29,6 @@ export class Entity {
 
     deleteStreamSyncedMeta(key) {
         delete this.streamSyncedMeta[key];
-    }
-
-    getStreamSyncedMeta(key) {
-        return this.streamSyncedMeta[key];
-    }
-
-    hasStreamSyncedMeta(key) {
-        return key in this.streamSyncedMeta;
     }
 }
 

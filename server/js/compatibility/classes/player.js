@@ -5,13 +5,16 @@
 requireBinding("shared/entity.js");
 
 const { Entity } = requireBinding("server/compatibility/classes/entity.js");
+const { WorldObject } = requireBinding("server/compatibility/classes/worldObject.js");
+const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
+
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 class Player extends alt.Player {
     constructor() {
         super();
 
-        extendAltEntityClass(this, Entity);
+        extendAltEntityClass(this, Entity, WorldObject, BaseObject);
     }
 
     static get count() {
