@@ -1,10 +1,10 @@
 /// <reference path="../../../../types/shared/index.d.ts" />
-/// <reference path="../../../../types/server/index.d.ts" />
-// import * as alt from "@altv/server";
+/// <reference path="../../../../types/client/index.d.ts" />
+// import * as alt from "@altv/client";
 
 requireBinding("shared/factory.js");
 
-const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
+const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
