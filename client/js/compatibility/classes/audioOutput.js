@@ -2,7 +2,7 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
-// requireBinding("shared/entity.js");
+// requireBinding("client/entity.js");
 
 export class AudioOutput {
     //

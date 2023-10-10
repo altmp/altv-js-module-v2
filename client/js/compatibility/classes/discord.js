@@ -2,7 +2,7 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
-class Discord extends alt.Discord {
+class Discord {
     static get currentUser() {
         return {
             id: alt.Discord.userID,
@@ -10,6 +10,10 @@ class Discord extends alt.Discord {
             discriminator: alt.Discord.discriminator,
             avatar: alt.Discord.avatar
         };
+    }
+
+    static requestOAuth2Token(appId) {
+        return alt.Discord.requestOAuth2Token(appId);
     }
 }
 

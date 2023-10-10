@@ -18,43 +18,6 @@ import * as alt from "alt-client";
 
 ---
 
-# Enums
-
-All enums, which were previously declared as `const enum` in TypeScript are no longer const because they now exists in JavaScript. All Enum values are also changed to use the `UPPER_SNAKE_CASE` syntax. All Enums are located inside the `alt.Enums` namespace. In addition, the following enums were renamed:
-
--   `WindowTint` -> `VehicleWindowTint`
--   `NumberPlateStyle` -> `VehicleNumberPlateStyle`
--   `PermissionState` -> `Permission`
-
-# TypeScript Interfaces
-
--   `IFireInfo` has been removed
--   `IVehicleNeon` -> `VehicleNeonState`
--   `ICloth` -> `Clothing`
--   `IDlcCloth` -> `DlcClothing`
--   `IProp` -> `Prop`
--   `IDlcProp` -> `DlcProp`
--   `IHeadOverlay` -> `Appearance.HeadOverlay`
--   `IHeadBlendData` -> `HeadBlendData`
--   `IBoneInfo` -> `BoneInfo`
--   `IVehicleModel`-> `VehicleModelInfo`
--   `IPedModel` -> `PedModelInfo`
--   `IWeaponModel` -> `WeaponModel`
--   `IAmmoFlags` -> `AmmoData`
--   `IDecoration` has been removed
--   `ICustomBaseObjectMeta` -> `BaseObjectMeta`
--   `ICustomBlipMeta` -> `BlipMeta`
--   `ICustomColshapeMeta` -> `ColShapeMeta`
--   `ICustomCheckpointMeta` -> `CheckpointMeta`
--   `ICustomVoiceChannelMeta` -> `VoiceChannelMeta`
--   `ICustomEntityMeta` -> `EntityMeta`
--   `ICustomPlayerMeta` -> `PlayerMeta`
--   `ICustomVehicleMeta` -> `VehicleMeta`
--   `ICustomEmitEvent` -> `Events.CustomServerToPlayerEvent`
--   `IServerConfig` has been removed
--   `ICustomBaseObjectSyncedMeta` -> `BaseObjectSyncedMeta`
--   `ICustomVirtualEntityStreamSyncedMeta` -> `VirtualEntityStreamSyncedMeta`
-
 # Profiler
 
 The Profiler class in `v1` is now a namespace in `v2` meaning: You can't create a new `Profiler` class instance. Right now, only `takeHeapSnapshot` is available as static method.
