@@ -54,7 +54,6 @@ void CJavaScriptResource::LoadConfig()
 {
     Config::Value::ValuePtr config = resource->GetConfig();
     if(!config->IsDict()) return;
-    if (!config["config"]->IsDict()) return;
 
     Config::Value::ValuePtr jsConfig = config["config"]["js-module-v2"];
     if(!jsConfig->IsDict()) return;
