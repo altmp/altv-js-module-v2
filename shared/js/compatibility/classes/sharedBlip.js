@@ -1,8 +1,4 @@
 export class SharedBlip {
-    static count() {
-        return alt.Blip.all.length;
-    }
-
     toString() {
         return `Blip{ name: ${this.name}, category: ${this.category} }`;
     }

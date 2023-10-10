@@ -19,6 +19,10 @@ class Marker extends alt.Marker {
         const instance = alt.Marker.create({ type, pos, color, useStreaming, streamingDistance });
         return extendAltEntityClass(instance, WorldObject, BaseObject);
     }
+
+    static get count() {
+        return alt.Marker.all.length;
+    }
 }
 
 alt.Factory.setMarkerFactory(Marker);

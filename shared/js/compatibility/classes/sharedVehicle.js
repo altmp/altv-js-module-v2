@@ -1,8 +1,4 @@
 export class SharedVehicle {
-    static count() {
-        return alt.Vehicle.all.length;
-    }
-
     get destroyed() {
         return this.isDestroyed;
     }

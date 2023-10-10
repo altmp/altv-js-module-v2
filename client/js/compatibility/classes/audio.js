@@ -19,7 +19,7 @@ class Audio extends alt.Audio {
         return extendAltEntityClass(instance, BaseObject);
     }
 
-    static count() {
+    static get count() {
         return alt.Audio.all.length;
     }
 

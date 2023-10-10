@@ -123,6 +123,10 @@ class Vehicle extends alt.Vehicle {
     setSearchLightTo(state, spottedEntity) {
         return this.setSearchLight(state, spottedEntity);
     }
+
+    static get count() {
+        return alt.Vehicle.all.length;
+    }
 }
 
 alt.Factory.setVehicleFactory(Vehicle);

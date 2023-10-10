@@ -62,6 +62,10 @@ class Vehicle extends alt.Vehicle {
     set batteryLight(state) {
         super.batteryLightState = state;
     }
+
+    static get count() {
+        return alt.Vehicle.all.length;
+    }
 }
 
 alt.Factory.setVehicleFactory(Vehicle);

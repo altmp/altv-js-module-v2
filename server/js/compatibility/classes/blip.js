@@ -5,7 +5,7 @@
 requireBinding("shared/factory.js");
 
 class Blip extends alt.Blip {
-    static count() {
+    static get count() {
         return alt.Blip.all.length;
     }
 

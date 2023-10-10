@@ -18,6 +18,10 @@ class Player extends alt.Player {
 
         extendAltEntityClass(this, SharedPlayer, Entity, WorldObject, BaseObject);
     }
+
+    static get count() {
+        return alt.Player.all.length;
+    }
 }
 
 alt.Factory.setPlayerFactory(Player);
