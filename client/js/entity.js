@@ -95,7 +95,7 @@ addAllGetter(alt.TextLabel, alt.Enums.BaseObjectType.TEXT_LABEL);
 addAllGetter(alt.WebSocketClient, alt.Enums.BaseObjectType.WEBSOCKET_CLIENT);
 addAllGetter(alt.WebView, alt.Enums.BaseObjectType.WEBVIEW);
 
-addStreamedInGetter(alt.Player, alt.Enums.BaseObjectType.PLAYER);
+addStreamedInGetter(alt.Player, [alt.Enums.BaseObjectType.PLAYER, alt.Enums.BaseObjectType.LOCAL_PLAYER]);
 addStreamedInGetter(alt.Vehicle, [alt.Enums.BaseObjectType.VEHICLE, alt.Enums.BaseObjectType.LOCAL_VEHICLE]);
 addStreamedInGetter(alt.Ped, [alt.Enums.BaseObjectType.PED, alt.Enums.BaseObjectType.LOCAL_PED]);
 addStreamedInGetter(alt.Object, [alt.Enums.BaseObjectType.OBJECT, alt.Enums.BaseObjectType.LOCAL_OBJECT]);
@@ -103,5 +103,5 @@ addStreamedInGetter(alt.VirtualEntity, alt.Enums.BaseObjectType.VIRTUAL_ENTITY);
 
 // Add all streamed-in entities to the streamedIn sets
 for (const entity of alt.Entity.all) {
-    if (entity.scriptID !== 0) addEntityToStreamedIn(entity);
+    if (entity.streamedIn) addEntityToStreamedIn(entity);
 }
