@@ -4,9 +4,9 @@
 
 requireBinding("shared/factory.js");
 
-class ColShape extends alt.ColShape {
+class Colshape extends alt.ColShape {
     //
 }
 
-alt.Factory.setColShapeFactory(ColShape);
-cppBindings.registerCompatibilityExport("ColShape", ColShape);
+alt.Factory.setColShapeFactory(Colshape);
+cppBindings.registerCompatibilityExport("Colshape", Colshape);
