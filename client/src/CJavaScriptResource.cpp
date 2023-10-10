@@ -54,8 +54,9 @@ void CJavaScriptResource::LoadConfig()
 {
     Config::Value::ValuePtr config = resource->GetConfig();
     if(!config->IsDict()) return;
+    if (!config["config"]->IsDict()) return;
 
-    Config::Value::ValuePtr jsConfig = config["js-module-v2"];
+    Config::Value::ValuePtr jsConfig = config["config"]["js-module-v2"];
     if(!jsConfig->IsDict()) return;
 
     bool compatibilityEnabled = jsConfig["compatibilityEnabled"]->AsBool(false);
@@ -77,6 +78,8 @@ bool CJavaScriptResource::Start()
     context.Reset(isolate, _context);
 
     v8::Context::Scope scope(_context);
+
+    LoadConfig();
     IResource::Initialize();
     IResource::InitializeBindings(js::Binding::Scope::CLIENT, js::Module::Get("@altv/client"));
 
