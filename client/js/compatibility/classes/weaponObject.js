@@ -43,8 +43,12 @@ class WeaponObject extends alt.LocalObject {
         return super.removeWeaponComponent(componentType);
     }
 
+    static get all() {
+        return this.all.LocalObject.all.filter((obj) => obj.isWeaponObject);
+    }
+
     static get count() {
-        return this.all.LocalObject.all.filter((obj) => obj.isWeaponObject).length;
+        return alt.LocalObject.all.length;
     }
 
     static getByScriptID(scriptID) {
