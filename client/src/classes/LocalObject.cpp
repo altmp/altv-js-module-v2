@@ -18,6 +18,21 @@ static void GetByScriptID(js::FunctionContext& ctx)
     ctx.Return(nullptr);
 }
 
+static void SetComponentTintIndex(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(2)) return;
+    alt::ILocalObject* weaponObject = ctx.GetThisObject<alt::ILocalObject>();
+
+    uint32_t componentType;
+    if (!ctx.GetArg(0, componentType)) return;
+
+    uint32_t tintIndex;
+    if (!ctx.GetArg(1, tintIndex)) return;
+
+    weaponObject->SetComponentTintIndex(componentType, tintIndex);
+}
+
 static void AttachTo(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
@@ -74,6 +89,13 @@ extern js::Class localObjectClass("LocalObject", &objectClass, nullptr, [](js::C
     tpl.Property<&alt::ILocalObject::UsesStreaming>("useStreaming");
     tpl.Property<&alt::ILocalObject::GetStreamingDistance>("streamingDistance");
     tpl.Property<&alt::ILocalObject::GetVisible, &alt::ILocalObject::SetVisible>("visible");
+
+    // WeaponObject related
+    tpl.Property<&alt::ILocalObject::GetTintIndex, &alt::ILocalObject::SetTintIndex>("weaponTintIndex");
+    tpl.Method("setWeaponComponentTintIndex", SetComponentTintIndex);
+    tpl.Method<&alt::ILocalObject::GetComponentTintIndex>("getWeaponComponentTintIndex");
+    tpl.Method<&alt::ILocalObject::GiveComponent>("giveWeaponComponent");
+    tpl.Method<&alt::ILocalObject::RemoveComponent>("removeWeaponComponent");
 
     tpl.Method<&alt::ILocalObject::ResetAlpha>("resetAlpha");
     tpl.Method("attachTo", AttachTo);

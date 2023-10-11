@@ -528,6 +528,13 @@ declare module "@altv/client" {
         readonly streamingDistance: number;
         visible: boolean;
 
+        // WeaponObject related
+        weaponTintIndex: number;
+        setWeaponComponentTintIndex(componentType: number, tintIndex: number): void;
+        getWeaponComponentTintIndex(componentType: number): number;
+        giveWeaponComponent(componentType: number): void;
+        removeWeaponComponent(componentType: number): void;
+
         resetAlpha(): void;
         attachTo(target: number | Entity, boneIndex: number, pos: altShared.Vector3, rot: altShared.Vector3, useSoftPinning: boolean, collision: boolean, fixedRot: boolean): void;
         detach(dynamic: boolean): void;
