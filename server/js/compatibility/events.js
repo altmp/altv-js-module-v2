@@ -3,9 +3,6 @@
 /// <reference path="../../../types/client/index.d.ts" />
 // import * as alt from "@altv/shared";
 
-/** @type {typeof import("../../../shared/js/compatibility/utils/events.js")} */
-const { getEventTypeFromName, getEventArgumentConverter, isCustomEvent } = requireBinding("shared/compatibility/utils/events.js");
-
 function emitClient(player, eventName, ...args) {
     if (!(player instanceof alt.Player) || !Array.isArray(player)) return;
 

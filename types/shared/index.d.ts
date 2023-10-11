@@ -13,7 +13,7 @@ declare module "@altv/shared" {
     export const sdkVersion: string;
     export const branch: string;
 
-    export const meta: GlobalMeta;
+    export const localMeta: GlobalMeta;
     export const syncedMeta: GlobalSyncedMeta;
 
     export function log(...args: unknown[]): void;
