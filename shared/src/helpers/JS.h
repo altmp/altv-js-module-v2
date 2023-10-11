@@ -259,6 +259,22 @@ namespace js
             return false;
         }
 
+        template<bool InternalizedString = false>
+        uint32_t GetAsHashOptional(const std::string& key, uint32_t defaultValue)
+        {
+            Type argType = GetType(key);
+            if(argType == Type::STRING)
+            {
+                std::string val = Get<std::string, InternalizedString>(key);
+                return alt::ICore::Instance().Hash(val);
+            }
+
+            if(argType == Type::NUMBER)
+                return Get<uint32_t, InternalizedString>(key);
+
+            return defaultValue;
+        }
+
         template<typename T>
         T GetSymbol(Symbol symbol, const T& defaultValue = T())
         {

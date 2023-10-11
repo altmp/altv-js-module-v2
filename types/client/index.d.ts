@@ -551,7 +551,7 @@ declare module "@altv/client" {
         pos: altShared.Vector3;
         rot: altShared.Vector3;
         weapon: number | string;
-        model: number | string;
+        model?: number | string; // default: weapon value
         ammoCount?: number; // default: 100
         createDefaultComponents?: boolean; // default: true
         scale?: number; // default: 1
