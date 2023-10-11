@@ -23,6 +23,7 @@ public:
 
     void Dump()
     {
+        js::Logger::Colored << "~g~" << resource->GetName() << ":" << js::Logger::Endl;
         if(handles.empty())
         {
             js::Logger::Colored("~y~No handles");
@@ -93,4 +94,23 @@ void js::DumpAllSamplesCommand(js::CommandArgs&)
 void js::ResetSamplesCommand(js::CommandArgs&)
 {
     Profiler::ResetSamples();
+}
+
+void js::DumpBuffersCommand(js::CommandArgs&)
+{
+    auto resources = alt::ICore::Instance().GetAllResources();
+    for(alt::IResource* altResource : resources)
+    {
+        if(altResource->GetType() != "jsv2") continue;
+        js::IAltResource* resource = static_cast<js::IAltResource*>(altResource->GetImpl());
+
+        v8::Isolate* isolate = resource->GetIsolate();
+        v8::Locker locker(isolate);
+        v8::HandleScope scope(isolate);
+        v8::Isolate::Scope isolateScope(isolate);
+
+        HandleVisitor visitor(resource);
+        resource->GetIsolate()->VisitWeakHandles(&visitor);
+        visitor.Dump();
+    }
 }

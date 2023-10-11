@@ -75,5 +75,6 @@ void js::IResource::AddOwnedBuffer(Buffer* buffer, v8::Local<v8::Object> obj)
 {
     Persistent<v8::Object> persistent(GetIsolate(), obj);
     persistent.SetWeak(buffer, js::internal::WeakHandleCallback<js::Buffer>, v8::WeakCallbackType::kParameter);
+    persistent.SetWrapperClassId(bufferClass.GetClassId());
     ownedBuffers.insert({ buffer, persistent });
 }

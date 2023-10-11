@@ -19,6 +19,7 @@ EXPORT alt::IScriptRuntime* CreateScriptRuntime(alt::ICore* core)
     core->SubscribeCommand("dumpsample", js::DumpSampleCommand);
     core->SubscribeCommand("dumpallsamples", js::DumpAllSamplesCommand);
     core->SubscribeCommand("resetsamples", js::ResetSamplesCommand);
+    core->SubscribeCommand("dumpbuffers", js::DumpBuffersCommand);
 
     return &runtime;
 }

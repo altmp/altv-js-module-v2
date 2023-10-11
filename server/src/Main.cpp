@@ -40,6 +40,7 @@ EXPORT bool altMain(alt::ICore* core)
     core->SubscribeCommand("dumpsample", js::DumpSampleCommand);
     core->SubscribeCommand("dumpallsamples", js::DumpAllSamplesCommand);
     core->SubscribeCommand("resetsamples", js::ResetSamplesCommand);
+    core->SubscribeCommand("dumpbuffers", js::DumpBuffersCommand);
 
     js::Logger::Colored("Loaded ~g~JS module v2");
 

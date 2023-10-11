@@ -12,4 +12,5 @@ namespace js
     void DumpSampleCommand(CommandArgs&);
     void DumpAllSamplesCommand(CommandArgs&);
     void ResetSamplesCommand(CommandArgs&);
+    void DumpBuffersCommand(CommandArgs&);
 }  // namespace js
