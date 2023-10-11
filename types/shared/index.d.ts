@@ -3,6 +3,9 @@
  */
 
 declare module "@altv/shared" {
+    export const defaultDimension: number;
+    export const globalDimension: number;
+
     export const isClient: boolean;
     export const isServer: boolean;
     export const isDebug: boolean;

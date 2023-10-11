@@ -104,6 +104,9 @@ extern js::Class colShapeClass, colShapeCircleClass, colShapeCuboidClass, colSha
 extern js::Namespace enumsNamespace, sharedEventsNamespace, fileNamespace, profilerNamespace, symbolsNamespace;
 static js::Module sharedModule("@altv/shared", "", { &baseObjectClass, &worldObjectClass, &entityClass, &colShapeClass, &resourceClass, &bufferClass }, [](js::ModuleTemplate& module)
 {
+    module.StaticProperty("defaultDimension", alt::DEFAULT_DIMENSION);
+    module.StaticProperty("globalDimension", alt::GLOBAL_DIMENSION);
+
     module.StaticProperty("isDebug", alt::ICore::Instance().IsDebug());
     module.StaticProperty("version", alt::ICore::Instance().GetVersion());
     module.StaticProperty("sdkVersion", ALT_SDK_VERSION);

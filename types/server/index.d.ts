@@ -8,9 +8,6 @@ declare module "@altv/server" {
     import altShared from "@altv/shared";
 
     export const rootDir: string;
-    export const defaultDimension: number;
-    export const globalDimension: number;
-
     export const syncedMeta: Record<string, unknown>;
     export const serverConfig: Readonly<Record<string, unknown>>;
 

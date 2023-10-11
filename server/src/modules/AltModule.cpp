@@ -164,8 +164,6 @@ static js::Module altModule("@altv/server", "@altv/shared", { &playerClass, &veh
     module.StaticProperty("isClient", false);
     module.StaticProperty("isServer", true);
     module.StaticProperty("rootDir", alt::ICore::Instance().GetRootDirectory());
-    module.StaticProperty("defaultDimension", alt::DEFAULT_DIMENSION);
-    module.StaticProperty("globalDimension", alt::GLOBAL_DIMENSION);
 
     module.StaticDynamicProperty("syncedMeta", SyncedMetaGetter, SyncedMetaSetter, SyncedMetaDeleter, SyncedMetaEnumerator);
 
