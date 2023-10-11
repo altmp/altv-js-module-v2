@@ -5,6 +5,7 @@
 
 #include "Module.h"
 #include "Class.h"
+#include "Namespace.h"
 
 namespace js
 {
@@ -26,6 +27,15 @@ namespace js
             Class::Initialize(isolate);
             Module::Initialize(isolate);
             return true;
+        }
+
+        void OnDispose() override
+        {
+            Class::Cleanup(isolate);
+            Module::Cleanup(isolate);
+            Namespace::Cleanup(isolate);
+
+            isolate = nullptr;
         }
 
         alt::IResource::Impl* CreateImpl(alt::IResource* resource) override

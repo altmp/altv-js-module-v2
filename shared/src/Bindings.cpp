@@ -48,18 +48,13 @@ std::vector<js::Binding*> js::Binding::GetBindingsForScope(Scope scope)
 {
     std::vector<Binding*> bindings;
     for(auto& [_, binding] : __bindings)
-    {
         if(binding.scope == Scope::SHARED || binding.scope == scope) bindings.push_back(&binding);
-    }
     return bindings;
 }
 
 void js::Binding::CleanupForResource(IResource* resource)
 {
-    for(auto& [_, binding] : __bindings)
-    {
-        binding.compiledModuleMap.erase(resource);
-    }
+    for(auto& [_, binding] : __bindings) binding.compiledModuleMap.erase(resource);
 }
 
 void js::Binding::Dump()

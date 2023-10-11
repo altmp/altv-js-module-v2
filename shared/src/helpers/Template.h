@@ -344,10 +344,7 @@ namespace js
                 auto& clsMap = it->second;
                 for(auto& [_, nameMap] : clsMap)
                 {
-                    for(auto& [__, data] : nameMap)
-                    {
-                        delete data;
-                    }
+                    for(auto& [__, data] : nameMap) delete data;
                 }
             }
             dynamicPropertyDataMap.erase(isolate);

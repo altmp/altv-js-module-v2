@@ -42,16 +42,10 @@ void js::Module::Initialize(v8::Isolate* isolate)
 
 void js::Module::Cleanup(v8::Isolate* isolate)
 {
-    for(auto& [name, module] : GetAll())
-    {
-        module->templateMap.erase(isolate);
-    }
+    for(auto& [_, module] : GetAll()) module->templateMap.erase(isolate);
 }
 
 void js::Module::CleanupForResource(IResource* resource)
 {
-    for(auto& [_, mod] : GetAll())
-    {
-        mod->instanceMap.erase(resource);
-    }
+    for(auto& [_, mod] : GetAll()) mod->instanceMap.erase(resource);
 }

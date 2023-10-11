@@ -106,11 +106,14 @@ bool CJavaScriptResource::Stop()
     IResource::Scope scope(this);
     auto nativeScope = GetResource()->PushNativesScope();
 
-    microtaskQueue.reset();
-
     IExceptionHandler::Reset();
     IModuleHandler::Reset();
-    IResource::Reset();
+    IAltResource::Reset();
+
+    microtaskQueue.reset();
+    nativeContext.reset();
+
+    started = false;
 
     return true;
 }

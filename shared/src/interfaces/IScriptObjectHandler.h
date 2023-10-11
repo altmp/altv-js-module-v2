@@ -34,10 +34,7 @@ namespace js
     protected:
         void Reset()
         {
-            for(auto& [type, scriptObject] : objectMap)
-            {
-                ScriptObject::Destroy(scriptObject);
-            }
+            for(auto& [_, scriptObject] : objectMap) ScriptObject::Destroy(scriptObject);
             objectMap.clear();
             customFactoryMap.clear();
         }

@@ -47,9 +47,6 @@ void js::Class::Initialize(v8::Isolate* isolate)
 
 void js::Class::Cleanup(v8::Isolate* isolate)
 {
-    for(auto class_ : GetAll())
-    {
-        class_->templateMap.erase(isolate);
-    }
+    for(auto class_ : GetAll()) class_->templateMap.erase(isolate);
     ClassTemplate::CleanupDynamicPropertyData(isolate);
 }

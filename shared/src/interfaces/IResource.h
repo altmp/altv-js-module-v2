@@ -52,7 +52,6 @@ namespace js
 
             context.Reset();
             bindingExports.clear();
-
             ownedBuffers.clear();
         }
 
@@ -110,7 +109,7 @@ namespace js
         {
             static_assert(std::is_base_of_v<v8::Value, T>, "T must inherit from v8::Value");
             auto it = bindingExports.find(name);
-            if (it == bindingExports.end()) return v8::Local<T>();
+            if(it == bindingExports.end()) return v8::Local<T>();
 
             return it->second.Get(isolate).As<T>();
         }
