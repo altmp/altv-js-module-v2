@@ -19,6 +19,19 @@ static void ModelSetter(js::PropertyContext& ctx)
     vehicle->SetModel(model);
 }
 
+static void GetByScriptID(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    uint32_t scriptId;
+    if(!ctx.GetArg(0, scriptId)) return;
+
+    if (auto obj = alt::ICore::Instance().GetWorldObjectByScriptID(scriptId); obj->GetType() == alt::IBaseObject::Type::LOCAL_VEHICLE)
+        return ctx.Return(obj);
+
+    ctx.Return(nullptr);
+}
+
 // clang-format off
 extern js::Class vehicleClass;
 extern js::Class localVehicleClass("LocalVehicle", &vehicleClass, nullptr, [](js::ClassTemplate& tpl)
@@ -32,4 +45,5 @@ extern js::Class localVehicleClass("LocalVehicle", &vehicleClass, nullptr, [](js
     tpl.Property<&alt::ILocalPed::IsStreamedIn>("isStreamedIn");
 
     tpl.GetByID<alt::IBaseObject::Type::LOCAL_VEHICLE>();
+    tpl.StaticFunction("getByScriptID", &GetByScriptID);
 });

@@ -654,6 +654,7 @@ declare module "@altv/client" {
 
         static create(opts: LocalVehicleCreateOptions): LocalVehicle;
         static getByID(id: number): LocalVehicle | null;
+        static getByScriptID(scriptId: number): LocalVehicle | null;
     }
 
     export abstract class MapZoomData {
