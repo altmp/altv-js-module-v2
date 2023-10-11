@@ -544,6 +544,7 @@ declare module "@altv/client" {
 
         static create(options: LocalObjectCreateOptions): LocalObject;
         static getByID(id: number): LocalObject | null;
+        static getByScriptID(scriptId: number): LocalObject | null;
     }
 
     export interface WeaponObjectCreateOptions {
