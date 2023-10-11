@@ -13,6 +13,8 @@ declare module "@altv/client" {
     export const clientConfig: Readonly<Record<string, unknown>>;
     export const clientPath: string;
 
+    export const localMeta: GlobalLocalMeta;
+
     export function isMenuOpen(): boolean;
     export function isConsoleOpen(): boolean;
     export function isGameFocused(): boolean;
@@ -1191,9 +1193,9 @@ declare module "@altv/client" {
     }
 
     /**
-     * Extend it by interface merging for use in meta.
+     * Extend it by interface merging for use in localMeta.
      */
-    export interface GlobalMeta {
+    export interface GlobalLocalMeta {
         [key: string]: unknown;
     }
 

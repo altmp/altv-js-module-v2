@@ -11,6 +11,8 @@ declare module "@altv/server" {
     export const syncedMeta: Record<string, unknown>;
     export const serverConfig: Readonly<Record<string, unknown>>;
 
+    export const meta: GlobalMeta;
+
     export function setServerPassword(password: string): void;
     export function hashServerPassword(password: string): number;
     export function stopServer(): void;
