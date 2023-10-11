@@ -1,6 +1,16 @@
 #include "Event.h"
 
 // clang-format off
+static js::Event metaChangeEvent(alt::CEvent::Type::META_CHANGE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CMetaChangeEvent*>(ev);
+
+    args.Set("entity", e->GetTarget());
+    args.Set("key", e->GetKey());
+    args.Set("oldValue", e->GetOldVal());
+    args.Set("newValue", e->GetVal());
+});
+
 static js::Event localMetaChangeEvent(alt::CEvent::Type::LOCAL_SYNCED_META_CHANGE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
     auto e = static_cast<const alt::CLocalMetaDataChangeEvent*>(ev);

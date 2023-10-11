@@ -6,6 +6,10 @@
 /** @type {typeof import("../utils/events.js")} */
 const { registerEventHandler } = requireBinding("shared/compatibility/utils/events.js");
 
+registerEventHandler(alt.Enums.EventType.META_CHANGE, "metaChange", ({ entity, key, oldValue, newValue }) => {
+    return [entity, key, newValue, oldValue];
+});
+
 registerEventHandler(alt.Enums.EventType.LOCAL_SYNCED_META_CHANGE, "localMetaChange", ({ player, key, oldValue, newValue }) => {
     return [player, key, newValue, oldValue];
 });

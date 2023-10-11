@@ -1638,6 +1638,7 @@ declare module "@altv/client" {
         export function onWeaponDamage(callback: GenericEventCallback<WeaponDamageEventParameters>): altShared.Events.EventHandler;
 
         // SHARED meta related events
+        export function onMetaChange(callback: GenericEventCallback<MetaChangeEventParameters>): altShared.Events.EventHandler;
         export function onLocalMetaChange(callback: GenericPlayerEventCallback<LocalMetaChangeEventParameters>): altShared.Events.EventHandler;
         export function onSyncedMetaChange(callback: GenericEventCallback<SyncedMetaChangeEventParameters>): altShared.Events.EventHandler;
         export function onStreamSyncedMetaChange(callback: GenericEventCallback<StreamSyncedMetaChangeEventParameters>): altShared.Events.EventHandler;
@@ -1799,6 +1800,13 @@ declare module "@altv/client" {
             entity: WorldObject;
             target: ColShape;
             state: boolean;
+        }
+
+        interface MetaChangeEventParameters {
+            entity: BaseObject;
+            key: string;
+            oldValue: unknown;
+            newValue: unknown;
         }
 
         interface LocalMetaChangeEventParameters {

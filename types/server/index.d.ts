@@ -1052,6 +1052,7 @@ declare module "@altv/server" {
         export function onceWeaponDamage(callback: GenericCancellableEventCallback<WeaponDamageEventParameters>): altShared.Events.EventHandler;
 
         // SHARED meta related events
+        export function onMetaChange<T extends Player>(callback: GenericEventCallback<MetaChangeEventParameters, T>): altShared.Events.EventHandler;
         export function onLocalMetaChange<T extends Player>(callback: GenericPlayerEventCallback<LocalMetaChangeEventParameters, T>): altShared.Events.EventHandler;
         export function onceLocalMetaChange<T extends Player>(callback: GenericPlayerEventCallback<LocalMetaChangeEventParameters, T>): altShared.Events.EventHandler;
         export function onSyncedMetaChange(callback: GenericEventCallback<SyncedMetaChangeEventParameters>): altShared.Events.EventHandler;
@@ -1463,6 +1464,13 @@ declare module "@altv/server" {
             bodyPart: altShared.Enums.BodyPart;
 
             setDamageValue(value: number): void;
+        }
+
+        interface MetaChangeEventParameters {
+            entity: BaseObject;
+            key: string;
+            oldValue: unknown;
+            newValue: unknown;
         }
 
         interface LocalMetaChangeEventParameters {
