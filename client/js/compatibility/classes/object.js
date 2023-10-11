@@ -11,6 +11,12 @@ const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.j
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 class Object extends alt.Object {
+    constructor() {
+        super();
+
+        extendAltEntityClass(this, Entity, WorldObject, BaseObject);
+    }
+
     static get count() {
         return alt.Object.all.length;
     }
