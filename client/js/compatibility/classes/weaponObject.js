@@ -44,11 +44,11 @@ class WeaponObject extends alt.LocalObject {
     }
 
     static get all() {
-        return this.all.LocalObject.all.filter((obj) => obj.isWeaponObject);
+        return alt.LocalObject.all.filter((obj) => obj.isWeaponObject);
     }
 
     static get count() {
-        return alt.LocalObject.all.length;
+        return alt.WeaponObject.all.length;
     }
 
     static getByScriptID(scriptID) {
