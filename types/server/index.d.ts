@@ -11,8 +11,6 @@ declare module "@altv/server" {
     export const syncedMeta: Record<string, unknown>;
     export const serverConfig: Readonly<Record<string, unknown>>;
 
-    export const meta: GlobalMeta;
-
     export function setServerPassword(password: string): void;
     export function hashServerPassword(password: string): number;
     export function stopServer(): void;
@@ -1525,13 +1523,6 @@ declare module "@altv/server" {
         interface ResourceErrorEventParameters {
             resource: Resource;
         }
-    }
-
-    /**
-     * Extend it by interface merging for use in meta.
-     */
-    export interface GlobalMeta {
-        [key: string]: unknown;
     }
 
     /**

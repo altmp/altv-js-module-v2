@@ -13,7 +13,7 @@ declare module "@altv/client" {
     export const clientConfig: Readonly<Record<string, unknown>>;
     export const clientPath: string;
 
-    export const localMeta: GlobalLocalMeta;
+    export const localMeta: Readonly<GlobalLocalMeta>;
 
     export function isMenuOpen(): boolean;
     export function isConsoleOpen(): boolean;
