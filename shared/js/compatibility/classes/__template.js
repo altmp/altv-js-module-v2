@@ -3,7 +3,7 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/shared";
 
-requireBinding("shared/entity.js");
+// requireBinding("shared/entity.js");
 
 /*
 

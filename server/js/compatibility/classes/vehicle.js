@@ -26,12 +26,6 @@ class Vehicle extends alt.Vehicle {
         return extendAltEntityClass(instance, SharedVehicle, Entity, WorldObject, BaseObject);
     }
 
-    // TODO (xLuxy) Missing in v2
-    get passengers() {
-        alt.logWarning("Vehicle::passengers is not implemented yet.");
-        return [];
-    }
-
     setRearWheels(variation) {
         this.rearWheelVariation = variation;
     }
