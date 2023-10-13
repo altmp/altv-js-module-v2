@@ -645,6 +645,24 @@ declare module "@altv/shared" {
         export function isVector3(val: unknown): boolean;
         export function assertVector3(val: IVector3, message?: string): void;
 
+        interface ClosestEntityOptions {
+            pos?: IVector3; // default: localPlayer.pos - required for server!
+            range?: number; // default: infinity
+            streamedInOnly?: boolean; // default: false
+        }
+
+        export function getClosestEntity<T = unknown>(entities: ArrayLike<T>, options: ClosestEntityOptions): [T | null, number];
+        export function getClosestEntityOfType<T = unknown>(type: Enums.BaseObjectType | Array<Enums.BaseObjectType>, options: ClosestEntityOptions): [T | null, number];
+
+        // TODO (xLuxy): Make T resolve to proper type and fallback to unknown
+        export function getClosestPlayer<T = unknown>(options?: ClosestEntityOptions & { localOnly?: boolean }): [T | null, number];
+        export function getClosestPed<T = unknown>(options?: ClosestEntityOptions & { localOnly?: boolean }): [T | null, number];
+        export function getClosestVehicle<T = unknown>(options?: ClosestEntityOptions & { localOnly?: boolean }): [T | null, number];
+        export function getClosestObject<T = unknown>(options?: ClosestEntityOptions & { localOnly?: boolean }): [T | null, number];
+        export function getClosestCheckpoint<T = unknown>(options?: ClosestEntityOptions & { checkpointType?: boolean }): [T | null, number];
+        export function getClosestColShape<T = unknown>(options?: ClosestEntityOptions & { colShapeType?: boolean }): [T | null, number];
+        export function getClosestVirtualEntity<T = unknown>(options?: ClosestEntityOptions): [T | null, number];
+
         export interface InspectOptions {
             showHidden: boolean; // default: false
             depth: number; // default: 2
