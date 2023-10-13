@@ -13,8 +13,7 @@
                 "MODULE_VERSION",
                 "DYNAMIC_BUILD",
                 "WIN32",
-                "NODE_WANT_INTERNALS",
-                "DEBUG_BINDINGS"
+                "NODE_WANT_INTERNALS"
             ],
             "windowsSdkVersion": "10.0.19041.0",
             "cppStandard": "c++20",
@@ -47,8 +46,7 @@
                 "ALT_SERVER",
                 "MODULE_VERSION",
                 "DYNAMIC_BUILD",
-                "NODE_WANT_INTERNALS",
-                "DEBUG_BINDINGS"
+                "NODE_WANT_INTERNALS"
             ],
             "cppStandard": "c++20",
             "includePath": [

@@ -138,37 +138,3 @@ void js::ClassTemplate::Inherit(ClassTemplate& parent)
     // Inherit static methods
     for(auto& [name, method] : parent.staticMethods) StaticFunction(name, method);
 }
-
-#ifdef DEBUG_BINDINGS
-void js::ClassTemplate::DumpRegisteredKeys()
-{
-    std::fstream outFile("v2debug/" + class_->GetName() + ".txt", std::ios::out);
-    if(!outFile.good()) return;
-
-    std::stringstream ss;
-    ss << class_->GetName() << ": (Inherits from " << (class_->GetParentClass() ? class_->GetParentClass()->GetName() : "<none>") << ")\n\n";
-
-    std::unordered_map<std::string, std::vector<std::string>> keysSortedByType;
-    for(auto& [key, type] : registeredKeys)
-    {
-        if(!keysSortedByType.contains(type)) keysSortedByType[type] = std::vector<std::string>{ key };
-        else
-            keysSortedByType[type].push_back(key);
-    }
-
-    for(auto& [type, keys] : keysSortedByType)
-    {
-        ss << type << ":\n";
-        for(auto& key : keys)
-        {
-            ss << "\t" << key << "\n";
-        }
-        ss << "\n";
-    }
-
-    outFile << ss.str();
-    outFile.close();
-
-    registeredKeys.clear();
-}
-#endif
