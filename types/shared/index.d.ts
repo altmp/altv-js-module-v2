@@ -2824,6 +2824,12 @@ declare module "@altv/shared" {
             WRONG_PASSWORD,
             WRONG_CDN_URL
         }
+
+        export enum FileEncoding {
+            UTF8 = "utf-8",
+            UTF16 = "utf-16",
+            BINARY = "binary"
+        }
     }
 
     export namespace Symbols {
