@@ -7,7 +7,7 @@ const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.j
 
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
-class ColshapeCuboid {
+class ColshapeCuboid extends alt.ColShape {
     constructor(...args) {
         const [x, y, z, x2, y2, z2] = args;
         const instance = alt.ColShapeCuboid.create({
