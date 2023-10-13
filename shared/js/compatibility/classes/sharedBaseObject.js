@@ -4,18 +4,6 @@
 // import * as alt from "@altv/server";
 
 export class SharedBaseObject {
-    hasSyncedMeta(key) {
-        return key in this.syncedMeta;
-    }
-
-    getSyncedMeta(key) {
-        return this.syncedMeta[key];
-    }
-
-    getSyncedMetaKeys() {
-        return Object.keys(this.syncedMeta);
-    }
-
     hasMeta(key) {
         return key in this.meta;
     }
@@ -47,5 +35,9 @@ export class SharedBaseObject {
 
     hasSyncedMeta(key) {
         return key in this.syncedMeta;
+    }
+
+    getSyncedMetaKeys() {
+        return Object.keys(this.syncedMeta);
     }
 }
