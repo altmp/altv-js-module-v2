@@ -1,6 +1,3 @@
-// NOTE (xLuxy): Entity.streamedIn getter
-requireBinding(`${alt.isClient ? "client" : "shared"}/entity.js`);
-
 function getClosestEntity(entities, options = {}) {
     if (!Array.isArray(entities) || !entities.length) return [null];
 

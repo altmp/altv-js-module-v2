@@ -32,14 +32,7 @@ js::Class* js::Class::GetByClassId(uint16_t id)
 
 void js::Class::Initialize(v8::Isolate* isolate)
 {
-    for(auto class_ : GetAll())
-    {
-        class_->Register(isolate);
-#ifdef DEBUG_BINDINGS
-        class_->GetTemplate(isolate).DumpRegisteredKeys();
-        Logger::Colored("~g~[BINDINGS] ~w~Dumped class", class_->GetName());
-#endif
-    }
+    for(auto class_ : GetAll()) class_->Register(isolate);
 
     // Only needed while setting up the templates, so we can free the data here
     ClassTemplate::CleanupPropertyGetterMap(isolate);

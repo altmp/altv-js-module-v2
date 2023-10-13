@@ -308,15 +308,6 @@ namespace js
 
         Class* class_;
 
-#ifdef DEBUG_BINDINGS
-        std::unordered_map<std::string, std::string> registeredKeys;
-
-        void RegisterKey(const std::string& type, const std::string& key)
-        {
-            registeredKeys.insert({ key, type });
-        }
-#endif
-
         std::unordered_map<std::string, js::internal::FunctionCallback> staticMethods;
 
         template<class T>
@@ -382,15 +373,8 @@ namespace js
             Get()->PrototypeTemplate()->Set(js::JSValue(name), v8::FunctionTemplate::New(GetIsolate(), Wrapper::MethodHandler<Func>));
         }
 
-#ifdef DEBUG_BINDINGS
-        void DumpRegisteredKeys();
-#endif
-
         void Method(const std::string& name, internal::FunctionCallback callback)
         {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Method", name);
-#endif
             Get()->PrototypeTemplate()->Set(js::JSValue(name), WrapFunction(callback));
         }
 #pragma endregion
@@ -398,27 +382,18 @@ namespace js
         template<auto Getter>
         void Property(const std::string& name)
         {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Property", name);
-#endif
             Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Getter>, nullptr, v8::Local<v8::Value>(), v8::DEFAULT, v8::ReadOnly);
         }
 
         template<auto Getter, auto Setter>
         void Property(const std::string& name)
         {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Property", name);
-#endif
             Get()->PrototypeTemplate()->SetAccessor(js::JSValue(name), Wrapper::PropertyGetterHandler<Getter>, Wrapper::PropertySetterHandler<Setter>);
         }
 
         // If getter is nullptr, tries to get the getter defined by a base class
         void Property(const std::string& name, internal::PropertyCallback getter = nullptr, internal::PropertyCallback setter = nullptr)
         {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("Property", name);
-#endif
             if(getter && !setter)
             {
                 v8::Local<v8::FunctionTemplate> getterTemplate = WrapProperty(getter);
@@ -446,16 +421,10 @@ namespace js
         template<auto Getter>
         void LazyProperty(const std::string& name)
         {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("LazyProperty", name);
-#endif
             Get()->InstanceTemplate()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler<Getter>, v8::Local<v8::Value>(), v8::PropertyAttribute::ReadOnly);
         }
         void LazyProperty(const std::string& name, internal::LazyPropertyCallback callback)
         {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("LazyProperty", name);
-#endif
             Get()->InstanceTemplate()->SetLazyDataProperty(
               js::JSValue(name), Wrapper::LazyPropertyHandler, v8::External::New(GetIsolate(), (void*)callback), v8::PropertyAttribute::ReadOnly);
         }
@@ -467,9 +436,6 @@ namespace js
                              internal::DynamicPropertyDeleter deleter = nullptr,
                              internal::DynamicPropertyEnumerator enumerator = nullptr)
         {
-#ifdef DEBUG_BINDINGS
-            RegisterKey("DynamicProperty", name);
-#endif
             DynamicPropertyData* data = GetDynamicPropertyData(GetIsolate(), class_, name);
             if(!data)
             {
