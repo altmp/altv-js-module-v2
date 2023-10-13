@@ -16,19 +16,19 @@ class WebView extends alt.WebView {
         const url = args[0];
 
         let instance = null;
-        if (args.length() == 4) {
+        if (args.length == 4) {
             const [_, isOverlay, pos, size] = args;
             instance = alt.WebView.create({ url, isOverlay, pos, size });
-        } else if (args.length() == 3 && typeof args[2] == "object") {
+        } else if (args.length == 3 && typeof args[2] == "object") {
             const [_, pos, size] = args;
             instance = alt.WebView.create({ url, pos, size });
-        } else if (args.length() == 3) {
+        } else if (args.length == 3) {
             const [_, drawable, targetTexture] = args;
             instance = alt.WebView.create({ url, drawable, targetTexture });
-        } else if (args.length() == 2 && typeof args[1] == "object") {
+        } else if (args.length == 2 && typeof args[1] == "object") {
             const [_, pos] = args;
             alt.WebView.create({ url, pos });
-        } else if (args.length() == 2) {
+        } else if (args.length == 2) {
             const isOverlay = args[1];
             instance = alt.WebView.create({ url, isOverlay });
         } else {
