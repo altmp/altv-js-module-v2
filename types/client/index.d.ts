@@ -1425,6 +1425,15 @@ declare module "@altv/client" {
         export function register<E extends keyof altShared.RPC.CustomServerToPlayerRpcEvent>(rpcName: E, handler: GenericRpcEventHandler<Parameters<altShared.RPC.CustomServerToPlayerRpcEvent[E]>>): RPCHandler;
     }
 
+    // DO NOT TOUCH THIS - This is only here so client / server can extend Utils namespace using merging
+    export class Utils extends altShared.Utils {
+        protected constructor();
+    }
+
+    export namespace Utils {
+        //
+    }
+
     export namespace Events {
         export let rawEmitEnabled: boolean;
         export function emit<E extends keyof CustomClientEvent>(eventName: E, ...args: Parameters<CustomClientEvent[E]>): void;

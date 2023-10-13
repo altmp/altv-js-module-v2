@@ -9,7 +9,7 @@
 const { assert, assertRGBA, assertVector2, assertVector3 } = requireBinding("shared/utils.js");
 requireBinding("shared/timers.js");
 
-const native = cppBindings.getBuiltinModule("@altv/natives");
+const natives = cppBindings.getBuiltinModule("@altv/natives");
 
 function assertDrawTextArgs(text, font, scale, color, outline, dropShadow, textAlign) {
     assert(typeof text === "string", "Expected a string as first argument");
@@ -25,34 +25,34 @@ function drawText2dThisFrame(text, pos2d = new alt.Vector2(0.5), font = 0, scale
     assertDrawTextArgs(text, font, scale, color, outline, dropShadow, textAlign);
     assertVector2(pos2d, "Expected Vector2 as second argument");
 
-    native.setTextFont(font);
-    native.setTextProportional(false);
-    native.setTextScale(scale, scale);
-    native.setTextColour(color.r, color.g, color.b, color.a);
-    native.setTextEdge(2, 0, 0, 0, 150);
+    natives.setTextFont(font);
+    natives.setTextProportional(false);
+    natives.setTextScale(scale, scale);
+    natives.setTextColour(color.r, color.g, color.b, color.a);
+    natives.setTextEdge(2, 0, 0, 0, 150);
 
     if (outline) {
-        native.setTextOutline();
+        natives.setTextOutline();
     }
 
     if (dropShadow) {
-        native.setTextDropshadow(0, 0, 0, 0, 255);
-        native.setTextDropShadow();
+        natives.setTextDropshadow(0, 0, 0, 0, 255);
+        natives.setTextDropShadow();
     }
 
-    native.setTextJustification(textAlign);
+    natives.setTextJustification(textAlign);
 
     if (textAlign === 2) {
-        native.setTextWrap(0, pos2d.x);
+        natives.setTextWrap(0, pos2d.x);
     }
 
-    native.beginTextCommandDisplayText("CELL_EMAIL_BCON");
+    natives.beginTextCommandDisplayText("CELL_EMAIL_BCON");
     // Split text into pieces of max 99 chars blocks
     text.match(/.{1,99}/g)?.forEach((textBlock) => {
-        native.addTextComponentSubstringPlayerName(textBlock);
+        natives.addTextComponentSubstringPlayerName(textBlock);
     });
 
-    native.endTextCommandDisplayText(pos2d.x, pos2d.y, 0);
+    natives.endTextCommandDisplayText(pos2d.x, pos2d.y, 0);
 }
 
 function drawText2d(text, pos2d, font, scale, color, outline, dropShadow, textAlign) {
@@ -65,29 +65,29 @@ function drawText3dThisFrame(text, pos3d, font = 0, scale = 0.5, color = new alt
     assertDrawTextArgs(text, font, scale, color, outline, dropShadow, textAlign);
     assertVector3(pos3d, "Expected Vector3 as second argument");
 
-    native.setDrawOrigin(pos3d.x, pos3d.y, pos3d.z, false);
-    native.beginTextCommandDisplayText("STRING");
-    native.addTextComponentSubstringPlayerName(text);
-    native.setTextFont(font);
-    native.setTextScale(1, scale);
+    natives.setDrawOrigin(pos3d.x, pos3d.y, pos3d.z, false);
+    natives.beginTextCommandDisplayText("STRING");
+    natives.addTextComponentSubstringPlayerName(text);
+    natives.setTextFont(font);
+    natives.setTextScale(1, scale);
 
-    native.setTextJustification(textAlign);
+    natives.setTextJustification(textAlign);
     if (textAlign === 2) {
-        native.setTextWrap(0.0, pos2d.x);
+        natives.setTextWrap(0.0, pos2d.x);
     } else {
-        native.setTextWrap(0.0, 1.0);
+        natives.setTextWrap(0.0, 1.0);
     }
 
-    native.setTextColour(color.r, color.g, color.b, color.a);
+    natives.setTextColour(color.r, color.g, color.b, color.a);
 
-    if (outline) native.setTextOutline();
+    if (outline) natives.setTextOutline();
     if (dropShadow) {
-        native.setTextDropshadow(0, 0, 0, 0, 255);
-        native.setTextDropShadow();
+        natives.setTextDropshadow(0, 0, 0, 0, 255);
+        natives.setTextDropShadow();
     }
 
-    native.endTextCommandDisplayText(0, 0, 0);
-    native.clearDrawOrigin();
+    natives.endTextCommandDisplayText(0, 0, 0);
+    natives.clearDrawOrigin();
 }
 
 function drawText3d(text, pos3d, font, scale, color, outline, dropShadow, textAlign) {

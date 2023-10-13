@@ -615,6 +615,11 @@ declare module "@altv/shared" {
         export function getByID(id: number): Timer | null;
     }
 
+    // DO NOT TOUCH THIS - This is only here so client / server can extend Utils namespace using merging
+    export class Utils {
+        protected constructor();
+    }
+
     export namespace Utils {
         // boolean = showHidden
         export function inspect(value: unknown, options?: boolean | Partial<InspectOptions>): void;
