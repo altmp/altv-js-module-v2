@@ -20,6 +20,9 @@ function getVoiceConnectionState() {
 }
 
 // properties
+cppBindings.registerCompatibilityExport("defaultDimension", alt.defaultDimension);
+cppBindings.registerCompatibilityExport("globalDimension", alt.globalDimension);
+
 cppBindings.registerCompatibilityExport("resourceName", alt.Resource.current.name);
 cppBindings.registerCompatibilityExport("version", alt.version);
 cppBindings.registerCompatibilityExport("sdkVersion", alt.sdkVersion);
@@ -45,3 +48,11 @@ cppBindings.registerCompatibilityExport("logDebug", () => {});
 
 cppBindings.registerCompatibilityExport("hash", alt.hash);
 cppBindings.registerCompatibilityExport("stringToSHA256", alt.sha256);
+
+cppBindings.registerCompatibilityExport("getNetTime", alt.getNetTime);
+
+// classes
+cppBindings.registerCompatibilityExport("Vector2", alt.Vector2);
+cppBindings.registerCompatibilityExport("Vector3", alt.Vector3);
+cppBindings.registerCompatibilityExport("Quaternion", alt.Quaternion);
+cppBindings.registerCompatibilityExport("RGBA", alt.RGBA);
