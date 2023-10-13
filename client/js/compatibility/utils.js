@@ -5,6 +5,8 @@
 /** @type {typeof import("./../../../shared/js/utils.js")} */
 const { assert, waitFor, assertRGBA, assertVector2, assertVector3 } = requireBinding("shared/utils.js");
 
+const { SharedUtils } = requireBinding("shared/compatibility/utils.js");
+
 requireBinding("shared/timers.js");
 requireBinding("shared/classes/rgba.js");
 requireBinding("shared/classes/vector.js");
@@ -198,7 +200,7 @@ class Marker {
     }
 }
 
-class Utils {
+class Utils extends SharedUtils {
     static async requestModel(model, timeout = 5000) {
         assert(typeof model === "string" || typeof model === "number", "Expected a string or number as first argument");
         assert(typeof timeout === "number", "Expected a number as second argument");
