@@ -24,7 +24,7 @@ function on(eventName, callback) {
     }
 
     const handlers = eventMap.get(eventType) ?? [];
-    handlers.push({ callback, eventName, once: false });
+    handlers.push({ callback, eventName, once: false, custom });
 
     eventMap.set(eventType, handlers);
 }
@@ -61,7 +61,7 @@ function once(eventName, callback) {
     }
 
     const handlers = eventMap.get(eventType) ?? [];
-    handlers.push({ callback, eventName, once: true });
+    handlers.push({ callback, eventName, once: true, custom });
 
     eventMap.set(eventType, handlers);
 }
@@ -95,7 +95,7 @@ function off(eventName, callback) {
         cppBindings.toggleEvent(eventType, false);
     }
 
-    const handlers = (eventMap.get(eventType) ?? []).filter((info) => info.callback !== callback && info.eventName !== eventName);
+    const handlers = (eventMap.get(eventType) ?? []).filter((info) => info.callback !== callback && info.eventName !== eventName && info.custom !== custom);
 
     if (handlers.length == 0) eventMap.delete(eventType);
     else eventMap.set(eventType, handlers);
@@ -147,7 +147,13 @@ alt.Events.onEvent(async (ctx) => {
 
     // alt.log(`[compatibility] Received event ${ctx.eventType} (${ctx.customEvent ? "custom" : "generic"})`);
 
-    let handlers = eventMap.get(ctx.eventType);
+    let handlers = (eventMap.get(ctx.eventType) ?? []).filter((handler) => {
+        if (!ctx.customEvent && typeof ctx.eventName == "string" && ctx.eventName == handler.eventName) {
+            return true;
+        }
+
+        return handler.custom == ctx.customEvent;
+    });
 
     if (handlers && (ctx.eventType == alt.Enums.EventType.CLIENT_SCRIPT_EVENT || ctx.eventType == alt.Enums.EventType.SERVER_SCRIPT_EVENT)) {
         const isRemote = ctx.eventType == alt.Enums.EventType.CLIENT_SCRIPT_EVENT;
