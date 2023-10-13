@@ -571,6 +571,8 @@ declare module "@altv/server" {
         readonly isManualEngineControl: boolean;
         readonly velocity: altShared.Vector3;
         readonly steeringAngle: number;
+        readonly passengers: Readonly<{ [seat: string]: Player }>;
+
         rearWheelVariation: number;
 
         modKit: number;
