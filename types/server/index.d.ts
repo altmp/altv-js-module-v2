@@ -361,7 +361,7 @@ declare module "@altv/server" {
         readonly name: string;
 
         readonly ip: string;
-        readonly socialId: number;
+        readonly socialID: number;
         readonly socialClubName: string;
         readonly hwidHash: number;
         readonly hwidExHash: number;
