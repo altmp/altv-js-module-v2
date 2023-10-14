@@ -1,4 +1,4 @@
-// This file was generated on 14.10.2023, 20:27:15 - DO NOT MODIFY MANUALLY
+// This file was generated on 14.10.2023, 20:34:51 - DO NOT MODIFY MANUALLY
 
 /// <reference types="../client/index.d.ts" />
 
@@ -3280,7 +3280,7 @@ declare module "@altv/natives" {
   /**
    * Returns the name of the script that owns/created the entity or nullptr. Second parameter is unused, can just be a nullptr.
    */
-  export function getEntityScript(entity: Entity | number, script?: unknown): [string, unknown];
+  export function getEntityScript(entity: Entity | number, script?: number): [string, number];
 
   /**
    * result is in meters per second
@@ -3342,7 +3342,7 @@ declare module "@altv/natives" {
    */
   export function getEntityPopulationType(entity: Entity | number): number;
 
-  export function isAnEntity(handle: unknown): boolean;
+  export function isAnEntity(handle: number): boolean;
 
   export function isEntityAPed(entity: Entity | number): boolean;
 
@@ -4045,7 +4045,7 @@ declare module "@altv/natives" {
    */
   export function isShockingEventInSphere(eventType: number, x: number, y: number, z: number, radius: number): boolean;
 
-  export function removeShockingEvent(event: unknown): boolean;
+  export function removeShockingEvent(event: number): boolean;
 
   export function removeAllShockingEvents(p0: boolean): void;
 
@@ -8876,23 +8876,23 @@ declare module "@altv/natives" {
    */
   export function setIsExteriorOnly(entity: Entity | number, toggle: boolean): void;
 
-  export function createItemset(p0: boolean): unknown;
+  export function createItemset(p0: boolean): number;
 
-  export function destroyItemset(itemset: unknown): void;
+  export function destroyItemset(itemset: number): void;
 
-  export function isItemsetValid(itemset: unknown): boolean;
+  export function isItemsetValid(itemset: number): boolean;
 
-  export function addToItemset(item: unknown, itemset: unknown): boolean;
+  export function addToItemset(item: number, itemset: number): boolean;
 
-  export function removeFromItemset(item: unknown, itemset: unknown): void;
+  export function removeFromItemset(item: number, itemset: number): void;
 
-  export function getItemsetSize(itemset: unknown): number;
+  export function getItemsetSize(itemset: number): number;
 
-  export function getIndexedItemInItemset(index: number, itemset: unknown): unknown;
+  export function getIndexedItemInItemset(index: number, itemset: number): number;
 
-  export function isInItemset(item: unknown, itemset: unknown): boolean;
+  export function isInItemset(item: number, itemset: number): boolean;
 
-  export function cleanItemset(itemset: unknown): void;
+  export function cleanItemset(itemset: number): void;
 
   /**
    * This function is hard-coded to always return 0.
@@ -22656,16 +22656,16 @@ declare module "@altv/natives" {
 
   export function taskPedSlideToCoordHdgRate(ped: Ped | Player | number, x: number, y: number, z: number, heading: number, speed: number, headingChangeRate: number): void;
 
-  export function addCoverPoint(x: number, y: number, z: number, direction: number, usage: number, height: number, arc: number, isPriority: boolean): unknown;
+  export function addCoverPoint(x: number, y: number, z: number, direction: number, usage: number, height: number, arc: number, isPriority: boolean): number;
 
-  export function removeCoverPoint(coverpoint: unknown): void;
+  export function removeCoverPoint(coverpoint: number): void;
 
   /**
    * Checks if there is a cover point at position
    */
   export function doesScriptedCoverPointExistAtCoords(x: number, y: number, z: number): boolean;
 
-  export function getScriptedCoverPointCoords(coverpoint: unknown): Vector3;
+  export function getScriptedCoverPointCoords(coverpoint: number): Vector3;
 
   export function addScriptedCoverArea(x: number, y: number, z: number, radius: number): void;
 
@@ -22685,7 +22685,7 @@ declare module "@altv/natives" {
   /**
    * p5 is always -1
    */
-  export function taskSeekCoverToCoverPoint(ped: Ped | Player | number, coverpoint: unknown, x: number, y: number, z: number, time: number, allowPeekingAndFiring: boolean): void;
+  export function taskSeekCoverToCoverPoint(ped: Ped | Player | number, coverpoint: number, x: number, y: number, z: number, time: number, allowPeekingAndFiring: boolean): void;
 
   /**
    * p8 causes the ped to take the shortest route to the cover position. It may have something to do with navmesh or pathfinding mechanics.
