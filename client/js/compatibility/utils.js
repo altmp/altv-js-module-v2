@@ -314,6 +314,11 @@ class Utils extends SharedUtils {
 
     static Keybind = Keybind;
     static Marker = Marker;
+
+    static drawText2dThisFrame = alt.Drawing.drawText2dThisFrame;
+    static drawText2d = alt.Drawing.drawText2d;
+    static drawText3dThisFrame = alt.Drawing.drawText3dThisFrame;
+    static drawText3d = alt.Drawing.drawText3d;
 }
 
 cppBindings.registerCompatibilityExport("Utils", Utils);
