@@ -5,6 +5,7 @@
 
 /** @type {typeof import("./utils/events.js")} */
 const { getEventTypeFromName, getEventArgumentConverter, isCustomEvent } = requireBinding("shared/compatibility/utils/events.js");
+requireBinding("shared/logging.js");
 
 const eventMap = new Map();
 
@@ -17,7 +18,7 @@ function on(eventName, callback) {
     const eventType = getEventTypeFromName(eventName) ?? alt.Enums.EventType.SERVER_SCRIPT_EVENT;
     const custom = isCustomEvent(eventType);
 
-    // console.log(`[compatibility] Registering event handler for ${eventName} (${eventType} - ${custom ? "custom" : "generic"})`);
+    // alt.log(`[compatibility] Registering event handler for ${eventName} (${eventType} - ${custom ? "custom" : "generic"})`);
 
     if (!custom) {
         cppBindings.toggleEvent(eventType, true);
@@ -37,7 +38,7 @@ function on(eventName, callback) {
 function onRemote(eventName, callback) {
     const eventType = alt.isServer ? alt.Enums.EventType.CLIENT_SCRIPT_EVENT : alt.Enums.EventType.SERVER_SCRIPT_EVENT;
 
-    // console.log(`[compatibility] Registering event handler for ${eventName} (${eventType} - ${custom ? "custom" : "generic"})`);
+    // alt.log(`[compatibility] Registering event handler for ${eventName} (${eventType})`);
 
     const handlers = eventMap.get(eventType) ?? [];
     handlers.push({ callback, eventName, once: false, isRemote: true });
@@ -54,7 +55,7 @@ function once(eventName, callback) {
     const eventType = getEventTypeFromName(eventName) ?? alt.Enums.EventType.SERVER_SCRIPT_EVENT;
     const custom = isCustomEvent(eventType);
 
-    // console.log(`[compatibility] Registering event handler for ${eventName} (${eventType} - ${custom ? "custom" : "generic"})`);
+    // alt.log(`[compatibility] Registering event handler for ${eventName} (${eventType} - ${custom ? "custom" : "generic"})`);
 
     if (!custom) {
         cppBindings.toggleEvent(eventType, true);
@@ -74,7 +75,7 @@ function once(eventName, callback) {
 function onceRemote(eventName, callback) {
     const eventType = alt.isServer ? alt.Enums.EventType.CLIENT_SCRIPT_EVENT : alt.Enums.EventType.SERVER_SCRIPT_EVENT;
 
-    // console.log(`[compatibility] Registering event handler for ${eventName} (${eventType} - ${custom ? "custom" : "generic"})`);
+    // alt.log(`[compatibility] Registering event handler for ${eventName} (${eventType} - ${custom ? "custom" : "generic"})`);
 
     const handlers = eventMap.get(eventType) ?? [];
     handlers.push({ callback, eventName, once: true, isRemote: true });
@@ -123,8 +124,6 @@ function getEventListeners(eventName) {
     const eventType = getEventTypeFromName(eventName) ?? alt.Enums.EventType.SERVER_SCRIPT_EVENT;
 
     let handlers = (eventMap.get(eventType) ?? []).filter((info) => !info.isRemote && (typeof eventName != "string" || info.eventName == eventName));
-    if (handlers) handlers = [...handlers];
-
     return handlers ?? [];
 }
 
@@ -136,8 +135,6 @@ function getRemoteEventListeners(eventName) {
     const eventType = alt.isServer ? alt.Enums.EventType.CLIENT_SCRIPT_EVENT : alt.Enums.EventType.SERVER_SCRIPT_EVENT;
 
     let handlers = (eventMap.get(eventType) ?? []).filter((info) => info.isRemote && (typeof eventName != "string" || info.eventName == eventName));
-    if (handlers) handlers = [...handlers];
-
     return handlers ?? [];
 }
 
@@ -147,20 +144,15 @@ alt.Events.onEvent(async (ctx) => {
 
     // alt.log(`[compatibility] Received event ${ctx.eventType} (${ctx.customEvent ? "custom" : "generic"})`);
 
-    let handlers = (eventMap.get(ctx.eventType) ?? []).filter((handler) => {
-        if (!ctx.customEvent && typeof ctx.eventName == "string" && ctx.eventName == handler.eventName) {
-            return true;
-        }
+    let handlers = (eventMap.get(ctx.eventType) ?? []).filter((handler) => !!handler.custom == ctx.customEvent);
 
-        return handler.custom == ctx.customEvent;
-    });
+    if (handlers.length > 0 && (ctx.eventType == alt.Enums.EventType.CLIENT_SCRIPT_EVENT || ctx.eventType == alt.Enums.EventType.SERVER_SCRIPT_EVENT)) {
+        const isRemote = alt.isServer ? ctx.eventType == alt.Enums.EventType.CLIENT_SCRIPT_EVENT : ctx.eventType == alt.Enums.EventType.SERVER_SCRIPT_EVENT;
 
-    if (handlers && (ctx.eventType == alt.Enums.EventType.CLIENT_SCRIPT_EVENT || ctx.eventType == alt.Enums.EventType.SERVER_SCRIPT_EVENT)) {
-        const isRemote = ctx.eventType == alt.Enums.EventType.CLIENT_SCRIPT_EVENT;
         handlers = handlers.filter((handler) => handler.eventName == ctx.eventName && handler.isRemote == isRemote);
     }
 
-    if (!handlers) return;
+    if (!handlers.length) return;
 
     for (const { callback, once } of handlers) {
         let ret = callback(...args);
@@ -170,6 +162,8 @@ alt.Events.onEvent(async (ctx) => {
         if (ret === false && ctx.isCancellable) {
             ctx.cancel();
             return;
+        } else if (typeof ret == "number" && ctx.eventType == alt.Enums.EventType.WEAPON_DAMAGE_EVENT) {
+            ctx.setDamageValue(ret);
         }
 
         if (once) {
