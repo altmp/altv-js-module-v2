@@ -84,7 +84,8 @@ bool CJavaScriptResource::Start()
 
     // Read main file
     alt::IResource* altResource = GetResource();
-    std::string main = altResource->GetMain();
+    alt::IPackage::PathInfo mainPath = alt::ICore::Instance().Resolve(altResource, altResource->GetMain(), "");
+    std::string main = mainPath.prefix + mainPath.fileName;
     if(!js::DoesFileExist(altResource->GetPackage(), main)) return false;
     std::vector<uint8_t> fileBuffer = js::ReadFile(altResource->GetPackage(), main);
     std::string source{ (char*)fileBuffer.data(), fileBuffer.size() };
