@@ -149,7 +149,7 @@ alt.Events.onEvent(async (ctx) => {
     if (handlers.length > 0 && (ctx.eventType == alt.Enums.EventType.CLIENT_SCRIPT_EVENT || ctx.eventType == alt.Enums.EventType.SERVER_SCRIPT_EVENT)) {
         const isRemote = alt.isServer ? ctx.eventType == alt.Enums.EventType.CLIENT_SCRIPT_EVENT : ctx.eventType == alt.Enums.EventType.SERVER_SCRIPT_EVENT;
 
-        handlers = handlers.filter((handler) => handler.eventName == ctx.eventName && handler.isRemote == isRemote);
+        handlers = handlers.filter((handler) => handler.eventName == ctx.eventName && !!handler.isRemote == isRemote);
     }
 
     if (!handlers.length) return;
