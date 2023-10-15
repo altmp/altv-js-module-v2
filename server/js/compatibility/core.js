@@ -11,8 +11,8 @@ function deleteSyncedMeta(key) {
     delete alt.syncedMeta[key];
 }
 
-cppBindings.registerCompatibilityExport("setSyncedMeta", alt.setSyncedMeta);
-cppBindings.registerCompatibilityExport("deleteSyncedMeta", alt.deleteSyncedMeta);
+cppBindings.registerCompatibilityExport("setSyncedMeta", setSyncedMeta);
+cppBindings.registerCompatibilityExport("deleteSyncedMeta", deleteSyncedMeta);
 
 // Resource
 cppBindings.registerCompatibilityExport("startResource", alt.Resource.start);
