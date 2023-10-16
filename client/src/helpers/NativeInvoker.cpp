@@ -141,14 +141,12 @@ void* js::NativeInvoker::GetBufferFromValue(v8::Local<v8::Value> val)
 js::NativeInvoker::NativeInvoker(CJavaScriptResource* resource, alt::INative* native) : resource(resource), native(native), nativeContext(resource->GetNativeContext()) {}
 js::NativeInvoker::~NativeInvoker()
 {
-    for (auto ptr : pointers)
-        free(ptr);
+    for(auto ptr : pointers) free(ptr);
 
-    for (auto ptr: stringValues)
-        free(ptr);
+    for(auto ptr : stringValues) free(ptr);
 }
 
-bool js::NativeInvoker::Invoke(js::FunctionContext& ctx, alt::INative* native)
+bool js::NativeInvoker::Invoke(js::FunctionContext& ctx, alt::INative* native, bool addVoidReturn)
 {
     CJavaScriptResource* resource = ctx.GetResource<CJavaScriptResource>();
     std::shared_ptr<alt::INative::Context> nativeCtx = resource->GetNativeContext();
@@ -172,7 +170,7 @@ bool js::NativeInvoker::Invoke(js::FunctionContext& ctx, alt::INative* native)
         invoker.pointersCount = 0;
 
         // First element is always the return value
-        if(native->GetRetnType() != alt::INative::Type::ARG_VOID) arr.Push(invoker.GetReturnValue());
+        if(addVoidReturn || native->GetRetnType() != alt::INative::Type::ARG_VOID) arr.Push(invoker.GetReturnValue());
 
         // Then push the pointer arguments into the array
         for(auto& arg : args)

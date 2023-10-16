@@ -139,6 +139,6 @@ namespace js
         ~NativeInvoker();
 
     public:
-        static bool Invoke(js::FunctionContext& ctx, alt::INative* native);
+        static bool Invoke(js::FunctionContext& ctx, alt::INative* native, bool addVoidReturn = false);
     };
 }  // namespace js
