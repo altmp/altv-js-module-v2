@@ -83,7 +83,6 @@ declare module "@altv/client" {
         on(eventName: string, func: (...args: unknown[]) => void): void;
         once(eventName: string, func: (...args: unknown[]) => void): void;
         off(eventName: string, func: (...args: unknown[]) => void): void;
-        readonly listeners: Readonly<{ [eventName: string]: ReadonlyArray<(...args: unknown[]) => void> }>;
 
         public onCreate?(opts: AudioCreateOptions): void;
         public onDestroy?(): void;
@@ -389,6 +388,8 @@ declare module "@altv/client" {
         readonly streamSyncedMeta: Readonly<altShared.EntityStreamSyncedMeta>;
 
         static readonly all: ReadonlyArray<Entity>;
+
+        static getByScriptID(scriptId: number): Entity | null;
     }
 
     export abstract class Font extends BaseObject {
@@ -849,7 +850,6 @@ declare module "@altv/client" {
         on(eventName: string, func: (...args: unknown[]) => void): void;
         once(eventName: string, func: (...args: unknown[]) => void): void;
         off(eventName: string, func: (...args: unknown[]) => void): void;
-        readonly listeners: Readonly<{ [eventName: string]: ReadonlyArray<(...args: unknown[]) => void> }>;
 
         static getByID(id: string): RmlElement | null;
     }
@@ -877,7 +877,7 @@ declare module "@altv/client" {
     }
 
     export abstract class Vehicle extends Entity {
-        readonly neon: Readonly<altShared.NeonState>;
+        readonly neon: Readonly<altShared.VehicleNeonState>;
 
         readonly driver?: Player;
         readonly isDestroyed: boolean;
@@ -1100,7 +1100,7 @@ declare module "@altv/client" {
         off<E extends keyof altShared.Events.WebSocketClientEvent>(eventName: E, listener: altShared.Events.WebSocketClientEvent[E]): void;
         off<E extends string>(eventName: Exclude<E, keyof altShared.Events.WebSocketClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
 
-        readonly listeners: Readonly<{ [eventName: string]: ReadonlyArray<(...args: unknown[]) => void> }>;
+        readonly listeners: ReadonlyMap<string, ReadonlySet<(...args: unknown[]) => Promise<void> | void>>;
 
         start(): void;
         stop(): void;
@@ -1177,8 +1177,6 @@ declare module "@altv/client" {
 
         off<E extends keyof altShared.Events.CustomWebViewToClientEvent>(eventName: E, listener: altShared.Events.CustomWebViewToClientEvent[E]): void;
         off<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, listener: Events.CustomEventCallback<unknown[]>): void;
-
-        readonly listeners: Readonly<{ [eventName: string]: ReadonlyArray<(...args: unknown[]) => void> }>;
 
         public onCreate?(opts: _WebViewCreateOptionsDrawable | _WebViewCreateOptionsOverlay): void;
         public onDestroy?(): void;
@@ -1729,11 +1727,6 @@ declare module "@altv/client" {
             vehicle: Vehicle;
             oldSeat: number;
             newSeat: number;
-        }
-
-        export interface onEvent {
-            (callback: altShared.Events.GenericOnEventCallback): void;
-            remove(callback: altShared.Events.GenericOnEventCallback): void;
         }
 
         interface EntityColShapeEnterEventParameters {
