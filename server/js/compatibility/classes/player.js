@@ -20,27 +20,27 @@ class Player extends alt.Player {
     }
 
     emitRpc(name, ...args) {
-        return super.sendRPC(name, ...args);
+        return this.sendRPC(name, ...args);
     }
 
     hasLocalMeta(key) {
-        return key in super.localMeta;
+        return key in this.localMeta;
     }
 
     setLocalMeta(key, value) {
-        super.localMeta[key] = value;
+        this.localMeta[key] = value;
     }
 
     getLocalMeta(key) {
-        return super.localMeta[key];
+        return this.localMeta[key];
     }
 
     deleteLocalMeta(key) {
-        delete super.localMeta[key];
+        delete this.localMeta[key];
     }
 
     getLocalMetaKeys() {
-        return Object.keys(super.localMeta);
+        return Object.keys(this.localMeta);
     }
 
     spawn(...args) {
@@ -50,7 +50,7 @@ class Player extends alt.Player {
         if (args.length == 1 || args.length == 2) {
             // (model: number | string, pos: IVector3) overload
             if (typeof args[0] == "string" || typeof args[0] == "number") {
-                super.model = args[0];
+                this.model = args[0];
                 pos = args[1];
                 // (pos: IVector3, delay?: number) overload
             } else {
@@ -67,43 +67,43 @@ class Player extends alt.Player {
     }
 
     isEntityInStreamRange(entity) {
-        return super.isEntityInStreamingRange(entity);
+        return this.isEntityInStreamingRange(entity);
     }
 
     get currentInterior() {
-        return super.interiorLocation;
+        return this.interiorLocation;
     }
 
     getFaceFeatureScale(index) {
-        return super.getFaceFeature(index);
+        return this.getFaceFeature(index);
     }
 
     setEyeColor(color) {
-        super.eyeColor = color;
+        this.eyeColor = color;
     }
 
     getEyeColor() {
-        return super.eyeColor;
+        return this.eyeColor;
     }
 
     setHairColor(color) {
-        super.hairColor = color;
+        this.hairColor = color;
     }
 
     getHairColor() {
-        return super.hairColor;
+        return this.hairColor;
     }
 
     setHairHighlightColor(color) {
-        super.hairHighlightColor = color;
+        this.hairHighlightColor = color;
     }
 
     getHairHighlightColor() {
-        return super.hairHighlightColor;
+        return this.hairHighlightColor;
     }
 
     setHeadBlendData(shapeFirstID, shapeSecondID, shapeThirdID, skinFirstID, skinSecondID, skinThirdID, shapeMix, skinMix, thirdMix) {
-        super.headBlendData = {
+        this.headBlendData = {
             shapeFirstID,
             shapeSecondID,
             shapeThirdID,
@@ -117,7 +117,7 @@ class Player extends alt.Player {
     }
 
     getHeadBlendData() {
-        return super.headBlendData;
+        return this.headBlendData;
     }
 
     static get count() {
