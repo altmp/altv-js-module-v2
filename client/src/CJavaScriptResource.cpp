@@ -55,7 +55,7 @@ void CJavaScriptResource::LoadConfig()
     Config::Value::ValuePtr config = resource->GetConfig();
     if(!config->IsDict()) return;
 
-    Config::Value::ValuePtr jsConfig = config["config"]["js-module-v2"];
+    Config::Value::ValuePtr jsConfig = config["js-module-v2"];
     if(!jsConfig->IsDict()) return;
 
     bool compatibilityEnabled = jsConfig["compatibilityEnabled"]->AsBool(false);

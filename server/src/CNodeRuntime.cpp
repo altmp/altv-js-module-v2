@@ -33,6 +33,9 @@ bool CNodeRuntime::Initialize()
 
     RegisterMetrics();
 
+    // Send our config key to client
+    alt::ICore::Instance().AddClientConfigKey("js-module-v2");
+
     return true;
 }
 
