@@ -181,6 +181,7 @@ namespace js
 
     public:
         Object() : Value(true), object(v8::Object::New(v8::Isolate::GetCurrent())) {}
+        Object(std::nullptr_t) : Value(false) {}  // Explicit empty object
         Object(v8::Local<v8::Object> _object) : Value(!_object.IsEmpty()), object(_object) {}
         Object(const std::initializer_list<std::pair<std::string, v8::Local<v8::Value>>>& list) : Value(true)
         {
@@ -269,8 +270,7 @@ namespace js
                 return alt::ICore::Instance().Hash(val);
             }
 
-            if(argType == Type::NUMBER)
-                return Get<uint32_t, InternalizedString>(key);
+            if(argType == Type::NUMBER) return Get<uint32_t, InternalizedString>(key);
 
             return defaultValue;
         }
