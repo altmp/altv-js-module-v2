@@ -62,7 +62,7 @@ bool IModuleHandler::IsValidBuiltinModule(js::IResource* resource, const std::st
     js::Module& mod = js::Module::Get(moduleName);
 
     bool compatibilityModeEnabled = resource->IsCompatibilityModeEnabled();
-    if(mod.IsCompatibilityModule() && !compatibilityModeEnabled) return false;
+    if(mod.HasOption(js::Module::Option::COMPATIBILITY_MODULE) && !compatibilityModeEnabled) return false;
 
     return true;
 }

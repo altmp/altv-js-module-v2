@@ -19,15 +19,22 @@ void js::Module::Register(ModuleTemplate& tpl)
 
 v8::Local<v8::Object> js::Module::GetNamespace(IResource* resource)
 {
-    if(customGetNamespaceCb) return customGetNamespaceCb(resource);
-
-    if(!instanceMap.contains(resource))
+    js::Object modNamespace(nullptr);
+    if(customGetNamespaceCb) modNamespace = customGetNamespaceCb(resource);
+    else
     {
-        v8::Local<v8::Object> obj = templateMap.at(resource->GetIsolate()).Get()->NewInstance(resource->GetContext()).ToLocalChecked();
-        instanceMap.insert({ resource, Persistent<v8::Object>(resource->GetIsolate(), obj) });
-        return obj;
+        if(!instanceMap.contains(resource))
+        {
+            v8::Local<v8::Object> obj = templateMap.at(resource->GetIsolate()).Get()->NewInstance(resource->GetContext()).ToLocalChecked();
+            instanceMap.insert({ resource, Persistent<v8::Object>(resource->GetIsolate(), obj) });
+            modNamespace = obj;
+        }
+        else
+            modNamespace = instanceMap.at(resource).Get(resource->GetIsolate());
     }
-    return instanceMap.at(resource).Get(resource->GetIsolate());
+
+    if(HasOption(Option::EXPORT_AS_DEFAULT)) modNamespace.Set("default", modNamespace.Get());
+    return modNamespace.Get();
 }
 
 void js::Module::Initialize(v8::Isolate* isolate)

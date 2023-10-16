@@ -150,7 +150,7 @@ static void GetBuiltinModule(js::FunctionContext& ctx)
         return;
     }
     js::Module& mod = js::Module::Get(name);
-    if(mod.IsCompatibilityModule() && !resource->IsCompatibilityModeEnabled())
+    if(mod.HasOption(js::Module::Option::COMPATIBILITY_MODULE) && !resource->IsCompatibilityModeEnabled())
     {
         ctx.Return(nullptr);
         return;
