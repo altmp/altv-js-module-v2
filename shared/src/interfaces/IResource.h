@@ -2,6 +2,7 @@
 
 #include <array>
 #include <type_traits>
+#include <queue>
 
 #include "v8.h"
 #include "cpp-sdk/SDK.h"
@@ -20,6 +21,9 @@ namespace js
 {
     class IResource : public IScriptObjectHandler, public ICompatibilityHandler
     {
+    public:
+        using NextTickCallback = std::function<void()>;
+
     protected:
         static constexpr int ContextInternalFieldIdx = 1;
 
@@ -27,12 +31,10 @@ namespace js
 
         v8::Isolate* isolate;
         Persistent<v8::Context> context;
-
         std::unordered_map<std::string, Persistent<v8::Value>> bindingExports;
-
         std::unordered_map<Buffer*, Persistent<v8::Object>> ownedBuffers;
-
         bool rawEmitEnabled = false;
+        std::queue<NextTickCallback> nextTickCallbacks;
 
         void Initialize()
         {
@@ -53,9 +55,21 @@ namespace js
             context.Reset();
             bindingExports.clear();
             ownedBuffers.clear();
+            rawEmitEnabled = false;
+            nextTickCallbacks = {};
         }
 
         void InitializeBinding(Binding* binding);
+
+        void ProcessNextTickCallbacks()
+        {
+            while(!nextTickCallbacks.empty())
+            {
+                NextTickCallback& callback = nextTickCallbacks.front();
+                callback();
+                nextTickCallbacks.pop();
+            }
+        }
 
     public:
         class Scope
@@ -195,6 +209,11 @@ namespace js
         void ToggleRawEmit(bool toggle)
         {
             rawEmitEnabled = toggle;
+        }
+
+        void PushNextTickCallback(NextTickCallback&& callback)
+        {
+            nextTickCallbacks.push(std::move(callback));
         }
 
         template<class ResourceType = js::IResource>
