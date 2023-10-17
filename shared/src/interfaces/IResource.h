@@ -14,6 +14,7 @@
 #include "ICompatibilityHandler.h"
 #include "Event.h"
 #include "Logger.h"
+#include "helpers/Hash.h"
 #include "helpers/ClassInstanceCache.h"
 #include "helpers/Buffer.h"
 
@@ -31,7 +32,7 @@ namespace js
 
         v8::Isolate* isolate;
         Persistent<v8::Context> context;
-        std::unordered_map<std::string, Persistent<v8::Value>> bindingExports;
+        std::unordered_map<uint32_t, Persistent<v8::Value>> bindingExports;
         std::unordered_map<Buffer*, Persistent<v8::Object>> ownedBuffers;
         bool rawEmitEnabled = false;
         std::queue<NextTickCallback> nextTickCallbacks;
@@ -112,17 +113,27 @@ namespace js
         void InitializeBindings(Binding::Scope scope, Module& altModule);
         void SetBindingExport(const std::string& name, v8::Local<v8::Value> val)
         {
-            bindingExports.insert({ name, Persistent<v8::Value>(isolate, val) });
+            bindingExports.insert({ js::Hash(name), Persistent<v8::Value>(isolate, val) });
         }
         bool HasBindingExport(const std::string& name)
         {
-            return bindingExports.contains(name);
+            return bindingExports.contains(js::Hash(name));
+        }
+
+        template<typename T = v8::Value, size_t N>
+        v8::Local<T> GetBindingExport(const char (&str)[N])
+        {
+            static_assert(std::is_base_of_v<v8::Value, T>, "T must inherit from v8::Value");
+            auto it = bindingExports.find(js::ConstHash(str));
+            if(it == bindingExports.end()) return v8::Local<T>();
+
+            return it->second.Get(isolate).As<T>();
         }
         template<typename T = v8::Value>
         v8::Local<T> GetBindingExport(const std::string& name)
         {
             static_assert(std::is_base_of_v<v8::Value, T>, "T must inherit from v8::Value");
-            auto it = bindingExports.find(name);
+            auto it = bindingExports.find(js::Hash(name));
             if(it == bindingExports.end()) return v8::Local<T>();
 
             return it->second.Get(isolate).As<T>();
