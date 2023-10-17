@@ -86,6 +86,11 @@ v8::MaybeLocal<v8::Module>
             module = ResolveJSON(context, specifier, GetModulePath(referrer), name);
             type = Module::Type::JSON;
         }
+        else
+        {
+            js::Throw("Invalid import assertion type '" + assertionType + "'");
+            return v8::MaybeLocal<v8::Module>();
+        }
     }
     else if(IsValidBuiltinModule(resource, specifier))
     {
