@@ -156,6 +156,16 @@ static void SetVoiceExternal(js::FunctionContext& ctx)
     alt::ICore::Instance().SetVoiceExternal(ip, port);
 }
 
+static void HasBenefit(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckArgCount(1)) return;
+
+    alt::Benefit benefit;
+    if(!ctx.GetArg(0, benefit)) return;
+
+    ctx.Return(alt::ICore::Instance().HasBenefit(benefit));
+}
+
 // clang-format off
 extern js::Class playerClass, vehicleClass, checkpointClass, pedClass, objectClass, voiceChannelClass, blipClass, virtualEntityClass, virtualEntityGroupClass, markerClass, metricClass, connectionInfoClass;
 extern js::Namespace eventsNamespace, pedModelInfoNamespace, vehicleModelInfoNamespace, weaponModelInfoNamespace, streamingNamespace;
@@ -178,6 +188,8 @@ static js::Module altModule("@altv/server", "@altv/shared", { &playerClass, &veh
     module.StaticFunction("getClosestEntities", GetClosestEntities);
     module.StaticFunction("setVoiceExternalPublic", SetVoiceExternalPublic);
     module.StaticFunction("setVoiceExternal", SetVoiceExternal);
+
+    module.StaticFunction("hasBenefit", HasBenefit);
 
     module.Namespace(eventsNamespace);
     module.Namespace(pedModelInfoNamespace);
