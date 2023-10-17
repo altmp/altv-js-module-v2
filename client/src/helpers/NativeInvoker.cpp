@@ -141,8 +141,6 @@ void* js::NativeInvoker::GetBufferFromValue(v8::Local<v8::Value> val)
 js::NativeInvoker::NativeInvoker(CJavaScriptResource* resource, alt::INative* native) : resource(resource), native(native), nativeContext(resource->GetNativeContext()) {}
 js::NativeInvoker::~NativeInvoker()
 {
-    for(auto ptr : pointers) free(ptr);
-
     for(auto ptr : stringValues) free(ptr);
 }
 
