@@ -9,7 +9,7 @@
 
 static constexpr const char bytecodeMagic[] = { 'A', 'L', 'T', 'B', 'C' };
 static constexpr const char resourceImportPrefix[] = "@resource/";
-static std::unordered_map<int, IModuleHandler::SyntheticModuleExports> syntheticModuleExports;
+static std::unordered_map<int, IModuleHandler::PersistentSyntheticModuleExports> syntheticModuleExports;
 
 v8::MaybeLocal<v8::Value> IModuleHandler::SyntheticModuleEvaluateCallback(v8::Local<v8::Context> context, v8::Local<v8::Module> module)
 {
@@ -17,7 +17,7 @@ v8::MaybeLocal<v8::Value> IModuleHandler::SyntheticModuleEvaluateCallback(v8::Lo
     if(!syntheticModuleExports.contains(identityHash)) return v8::MaybeLocal<v8::Value>();
 
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
-    for(const auto& [key, value] : syntheticModuleExports.at(identityHash)) module->SetSyntheticModuleExport(isolate, js::JSValue(key), value);
+    for(const auto& [key, value] : syntheticModuleExports.at(identityHash)) module->SetSyntheticModuleExport(isolate, js::JSValue(key), value.Get(isolate));
     syntheticModuleExports.erase(identityHash);
 
     v8::Local<v8::Promise::Resolver> promise = v8::Promise::Resolver::New(context).ToLocalChecked();
@@ -194,12 +194,19 @@ v8::Local<v8::Module> IModuleHandler::CompileSyntheticModule(const std::string& 
 {
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
 
+    IModuleHandler::PersistentSyntheticModuleExports persistentExports;
     std::vector<v8::Local<v8::String>> exportKeys;
     exportKeys.reserve(exports.size());
-    for(const auto& [key, value] : exports) exportKeys.push_back(js::JSValue(key));
+    persistentExports.reserve(exports.size());
+    for(const auto& [key, value] : exports)
+    {
+        exportKeys.push_back(js::JSValue(key));
+        persistentExports.insert({ key, js::Persistent<v8::Value>(isolate, value) });
+    }
 
     v8::Local<v8::Module> module = v8::Module::CreateSyntheticModule(isolate, js::JSValue(name), exportKeys, SyntheticModuleEvaluateCallback);
-    syntheticModuleExports.insert({ module->GetIdentityHash(), exports });
+
+    syntheticModuleExports.insert({ module->GetIdentityHash(), persistentExports });
     return module;
 }
 

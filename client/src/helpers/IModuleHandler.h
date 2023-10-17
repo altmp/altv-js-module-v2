@@ -26,6 +26,7 @@ public:
     };
 
     using SyntheticModuleExports = std::unordered_map<std::string, v8::Local<v8::Value>>;
+    using PersistentSyntheticModuleExports = std::unordered_map<std::string, js::Persistent<v8::Value>>;
 
 protected:
     static v8::MaybeLocal<v8::Value> SyntheticModuleEvaluateCallback(v8::Local<v8::Context> context, v8::Local<v8::Module> module);
