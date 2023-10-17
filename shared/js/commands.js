@@ -4,32 +4,28 @@ const { assertIsType } = requireBinding("shared/utils.js");
 requireBinding("shared/events/console.js");
 
 class Command {
-    /** @type {Map<string, Function[]} */
+    /** @type {Map<string, Function} */
     static #commands = new Map();
 
     static register(command, callback) {
         assertIsType(command, "string", "Command name must be a string");
         assertIsType(callback, "function", "Command callback must be a function");
+        assert(!Command.#commands.has(command), `Command '${command}' is already registered`);
 
-        if (Command.#commands.has(command)) Command.#commands.get(command).push(callback);
-        else Command.#commands.set(command, [callback]);
+        Command.#commands.set(command, callback);
     }
 
     static unregister(command, callback) {
         assertIsType(command, "string", "Command name must be a string");
         assertIsType(callback, "function", "Command callback must be a function");
 
-        const callbacks = Command.#commands.get(command);
-        if (!callbacks) return;
-        const index = callbacks.indexOf(callback);
-        if (index === -1) return;
-        callbacks.splice(index, 1);
+        Command.#commands.delete(command);
     }
 
     static onCommand(command, args) {
-        const callbacks = Command.#commands.get(command);
-        if (!callbacks) return;
-        for (const callback of callbacks) callback(...args);
+        const callback = Command.#commands.get(command);
+        if (!callback) return;
+        callback(...args);
     }
 }
 
