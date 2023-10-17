@@ -96,7 +96,7 @@ function off(eventName, callback) {
         cppBindings.toggleEvent(eventType, false);
     }
 
-    const handlers = (eventMap.get(eventType) ?? []).filter((info) => info.callback !== callback && info.eventName !== eventName && info.custom !== custom);
+    const handlers = (eventMap.get(eventType) ?? []).filter((info) => !(info.callback === callback && info.eventName === eventName && info.custom === custom));
 
     if (handlers.length == 0) eventMap.delete(eventType);
     else eventMap.set(eventType, handlers);
