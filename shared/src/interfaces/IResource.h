@@ -124,7 +124,8 @@ namespace js
         v8::Local<T> GetBindingExport(const char (&str)[N])
         {
             static_assert(std::is_base_of_v<v8::Value, T>, "T must inherit from v8::Value");
-            auto it = bindingExports.find(js::ConstHash(str));
+            constexpr auto exportHash = js::ConstHash(str);
+            auto it = bindingExports.find(exportHash);
             if(it == bindingExports.end()) return v8::Local<T>();
 
             return it->second.Get(isolate).As<T>();
