@@ -4,7 +4,7 @@
 
 static void Accept(js::FunctionContext& ctx)
 {
-    if (!ctx.CheckThis()) return;
+    if(!ctx.CheckThis()) return;
 
     auto* connectionInfo = ctx.GetThisObject<alt::IConnectionInfo>();
     bool sendNames = ctx.GetArg(0, true);
@@ -20,6 +20,7 @@ extern js::Class connectionInfoClass("ConnectionInfo", nullptr, nullptr, [](js::
     tpl.LazyProperty<&alt::IConnectionInfo::GetName>("name");
     tpl.LazyProperty<&alt::IConnectionInfo::GetSocialId>("socialID");
     tpl.LazyProperty<&alt::IConnectionInfo::GetCloudID>("cloudID");
+    tpl.LazyProperty<&alt::IConnectionInfo::GetCloudAuthResult>("cloudAuthResult");
     tpl.LazyProperty<&alt::IConnectionInfo::GetSocialName>("socialName");
     tpl.LazyProperty<&alt::IConnectionInfo::GetHwIdHash>("hwidHash");
     tpl.LazyProperty<&alt::IConnectionInfo::GetHwIdExHash>("hwidExHash");

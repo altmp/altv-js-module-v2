@@ -822,6 +822,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.LazyProperty<&alt::IPlayer::GetHwidHash>("hwidHash");
     tpl.LazyProperty<&alt::IPlayer::GetHwidExHash>("hwidExHash");
     tpl.LazyProperty<&alt::IPlayer::GetCloudID>("cloudID");
+    tpl.LazyProperty<&alt::IPlayer::GetCloudAuthResult>("cloudAuthResult");
 
     tpl.Property<&alt::IPlayer::IsConnected>("isConnected");
     tpl.Property<&alt::IPlayer::GetPing>("ping");

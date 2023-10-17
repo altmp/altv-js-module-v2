@@ -3346,6 +3346,13 @@ declare module "@altv/shared" {
             MUTABLE_FORCED_AIM = 457,
             DONT_CHANGE_TARGET_FROM_MELEE = 458
         }
+
+        export enum CloudAuthResult
+        {
+            SUCCESS = 0,
+		    NO_BENEFIT = 1,
+		    VERIFY_FAILED = 2,
+        }
     }
 
     export namespace Symbols {

@@ -366,6 +366,7 @@ declare module "@altv/server" {
         readonly hwidHash: number;
         readonly hwidExHash: number;
         readonly cloudID: string;
+        readonly cloudAuthResult: altShared.Enums.CloudAuthResult;
 
         readonly isConnected: boolean;
         readonly ping: number;
@@ -1130,6 +1131,7 @@ declare module "@altv/server" {
             readonly name: string;
             readonly socialID: number;
             readonly cloudID: string;
+            readonly cloudAuthResult: altShared.Enums.CloudAuthResult;
             readonly socialName: string;
             readonly hwidHash: number;
             readonly hwidExHash: number;
