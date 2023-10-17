@@ -9,16 +9,17 @@
 
 static constexpr const char bytecodeMagic[] = { 'A', 'L', 'T', 'B', 'C' };
 static constexpr const char resourceImportPrefix[] = "@resource/";
-static std::unordered_map<int, IModuleHandler::PersistentSyntheticModuleExports> syntheticModuleExports;
 
 v8::MaybeLocal<v8::Value> IModuleHandler::SyntheticModuleEvaluateCallback(v8::Local<v8::Context> context, v8::Local<v8::Module> module)
 {
+    CJavaScriptResource* resource = js::IResource::GetFromContext<CJavaScriptResource>(context);
+
     int identityHash = module->GetIdentityHash();
-    if(!syntheticModuleExports.contains(identityHash)) return v8::MaybeLocal<v8::Value>();
+    if(!resource->syntheticModuleExports.contains(identityHash)) return v8::MaybeLocal<v8::Value>();
 
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
-    for(const auto& [key, value] : syntheticModuleExports.at(identityHash)) module->SetSyntheticModuleExport(isolate, js::JSValue(key), value.Get(isolate));
-    syntheticModuleExports.erase(identityHash);
+    for(const auto& [key, value] : resource->syntheticModuleExports.at(identityHash)) module->SetSyntheticModuleExport(isolate, js::JSValue(key), value.Get(isolate));
+    resource->syntheticModuleExports.erase(identityHash);
 
     v8::Local<v8::Promise::Resolver> promise = v8::Promise::Resolver::New(context).ToLocalChecked();
     promise->Resolve(context, v8::Undefined(isolate));

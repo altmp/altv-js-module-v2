@@ -70,9 +70,11 @@ protected:
     void Reset()
     {
         modules.clear();
+        syntheticModuleExports.clear();
     }
 
     std::unordered_map<std::string, Module> modules;
+    std::unordered_map<int, PersistentSyntheticModuleExports> syntheticModuleExports;
 
 public:
     v8::MaybeLocal<v8::Module> CompileModule(const std::string& name, const std::string& source);
