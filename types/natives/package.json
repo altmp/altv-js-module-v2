@@ -1,6 +1,6 @@
 {
     "name": "@altv/natives",
-    "version": "0.1",
+    "version": "0.0.1",
     "description": "This package contains the type definitions for the alt:V JS module v2 natives types",
     "types": "index.d.ts",
     "files": [
