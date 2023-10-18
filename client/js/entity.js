@@ -102,6 +102,5 @@ addStreamedInGetter(alt.Object, [alt.Enums.BaseObjectType.OBJECT, alt.Enums.Base
 addStreamedInGetter(alt.VirtualEntity, alt.Enums.BaseObjectType.VIRTUAL_ENTITY);
 
 // Add all streamed-in entities to the streamedIn sets
-for (const entity of alt.Entity.all) {
-    if (entity.streamedIn) addEntityToStreamedIn(entity);
-}
+for (const entity of alt.Entity.all) if (entity.streamedIn) addEntityToStreamedIn(entity);
+for (const virtualEntity of alt.VirtualEntity.all) if (virtualEntity.streamedIn) addEntityToStreamedIn(virtualEntity);

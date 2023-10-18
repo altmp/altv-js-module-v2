@@ -48,11 +48,11 @@ export function addAllGetter(class_, types) {
 }
 
 alt.Events.onBaseObjectCreate(({ object }) => {
-    if (object instanceof alt.Entity) addEntityToAll(object);
+    if (object instanceof alt.Entity || object instanceof alt.VirtualEntity) addEntityToAll(object);
 });
 
 alt.Events.onBaseObjectRemove(({ object }) => {
-    if (object instanceof alt.Entity) removeEntityFromAll(object);
+    if (object instanceof alt.Entity || object instanceof alt.VirtualEntity) removeEntityFromAll(object);
 });
 
 // Needed because base object events are called on next tick, and entities created from scripts
@@ -91,7 +91,10 @@ addAllGetter(alt.Object, [alt.Enums.BaseObjectType.OBJECT, alt.Enums.BaseObjectT
 
 addAllGetter(alt.Checkpoint, alt.Enums.BaseObjectType.CHECKPOINT);
 addAllGetter(alt.ColShape, alt.Enums.BaseObjectType.COLSHAPE);
+addAllGetter(alt.VirtualEntity, alt.Enums.BaseObjectType.VIRTUAL_ENTITY);
 
 // Register all entities that were created before this resource was loaded
 const entities = cppBindings.getAllEntities();
 for (const entity of entities) addEntityToAll(entity);
+const virtualEntities = cppBindings.getAllVirtualEntities();
+for (const virtualEntity of virtualEntities) addEntityToAll(virtualEntity);

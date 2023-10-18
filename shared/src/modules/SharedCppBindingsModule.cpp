@@ -98,14 +98,14 @@ static void GetAllEntities(js::FunctionContext& ctx)
 {
     js::IResource* resource = ctx.GetResource();
     std::vector<alt::IEntity*> entities = alt::ICore::Instance().GetEntities();
-    js::Array entitiesArr;
-    for(auto& object : entities)
-    {
-        js::ScriptObject* scriptObject = resource->GetOrCreateScriptObject(ctx.GetContext(), object);
-        if(!scriptObject) continue;
-        entitiesArr.Push(scriptObject->Get());
-    }
     ctx.Return(entities);
+}
+
+static void GetAllVirtualEntities(js::FunctionContext& ctx)
+{
+    js::IResource* resource = ctx.GetResource();
+    std::vector<alt::IBaseObject*> virtualEntities = alt::ICore::Instance().GetBaseObjects(alt::IBaseObject::Type::VIRTUAL_ENTITY);
+    ctx.Return(virtualEntities);
 }
 
 static void GetCurrentSourceLocation(js::FunctionContext& ctx)
@@ -184,6 +184,7 @@ extern js::Module sharedCppBindingsModule("sharedCppBindings", [](js::ModuleTemp
 
     module.StaticFunction("createEntity", CreateEntity);
     module.StaticFunction("getAllEntities", GetAllEntities);
+    module.StaticFunction("getAllVirtualEntities", GetAllVirtualEntities);
     module.StaticFunction("getCurrentSourceLocation", GetCurrentSourceLocation);
 
     module.StaticFunction("registerExport", RegisterExport);
