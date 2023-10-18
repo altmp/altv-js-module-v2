@@ -2943,7 +2943,6 @@ declare module "@altv/shared" {
             WEATHER_RAIN = "weather_rain",
             VEHICLES_TRAIN = "vehicles_train",
             XF1754C85 = "0xF1754C85",
-            COLLISIONS_VEHICLES_GLASS = "collisions_vehicles_glass",
             VEHICLES_PLANES = "vehicles_planes",
             VEHICLES_PLANES_JET = "vehicles_planes_jet",
             XF4FABC2A = "0xF4FABC2A",
@@ -3347,11 +3346,10 @@ declare module "@altv/shared" {
             DONT_CHANGE_TARGET_FROM_MELEE = 458
         }
 
-        export enum CloudAuthResult
-        {
+        export enum CloudAuthResult {
             SUCCESS = 0,
-		    NO_BENEFIT = 1,
-		    VERIFY_FAILED = 2,
+            NO_BENEFIT = 1,
+            VERIFY_FAILED = 2
         }
     }
 
