@@ -918,6 +918,35 @@ declare module "@altv/server" {
         export function register<E extends keyof altShared.RPC.CustomPlayerToServerRpcEvent, T extends Player>(rpcName: E, handler: CustomPlayerRpcEventHandler<Parameters<altShared.RPC.CustomPlayerToServerRpcEvent[E]>, T>): RPCHandler;
     }
 
+    export abstract class ConnectionInfo {
+        readonly name: string;
+        readonly socialID: number;
+        readonly cloudID: string;
+        readonly cloudAuthResult: altShared.Enums.CloudAuthResult;
+        readonly socialName: string;
+        readonly hwidHash: number;
+        readonly hwidExHash: number;
+        readonly authToken: string;
+        readonly debug: boolean;
+        readonly branch: string;
+        readonly build: number;
+        readonly cdnUrl: string;
+        readonly passwordHash: number;
+        readonly ip: string;
+        readonly discordUserID: number;
+
+        readonly isAccepted: boolean;
+        text: string;
+
+        accept(sendNames?: boolean): void;
+        decline(reason: string): void;
+
+        // TODO (xLuxy): Missing
+        // static readonly all: ReadonlyArray<ConnectionInfo>;
+
+        static getByID(id: number): ConnectionInfo | undefined;
+    }
+
     export namespace Events {
         export let rawEmitEnabled: boolean;
         export function emit<E extends keyof CustomServerEvent>(event: E, ...args: Parameters<CustomServerEvent[E]>): void;
@@ -1126,40 +1155,6 @@ declare module "@altv/server" {
         export function setSourceLocationFrameSkipCount(skipCount: number): void;
 
         export function onEvent(callback: GenericEventCallback<altShared.Events.GenericOnEventParameters>): altShared.Events.GenericEventHandler;
-
-        export abstract class ConnectionInfo {
-            readonly name: string;
-            readonly socialID: number;
-            readonly cloudID: string;
-            readonly cloudAuthResult: altShared.Enums.CloudAuthResult;
-            readonly socialName: string;
-            readonly hwidHash: number;
-            readonly hwidExHash: number;
-            readonly authToken: string;
-            readonly debug: boolean;
-            readonly branch: string;
-            readonly build: number;
-            readonly cdnUrl: string;
-            readonly passwordHash: number;
-            readonly ip: string;
-            readonly discordUserID: number;
-
-            readonly isAccepted: boolean;
-            text: string;
-
-            accept(sendNames?: boolean): void;
-            decline(reason: string): void;
-
-            // TODO (xLuxy): Missing
-            // static readonly all: ReadonlyArray<ConnectionInfo>;
-
-            static getByID(id: number): ConnectionInfo | undefined;
-        }
-
-        interface StreamedInPlayerEntity {
-            entity: Entity;
-            distance: number;
-        }
 
         interface ConnectionQueueEventParameters {
             connectionInfo: ConnectionInfo;
