@@ -50,6 +50,7 @@ namespace js
             ClassInstanceCache::ClearForResource(this);
             IScriptObjectHandler::Reset();
             ICompatibilityHandler::Reset();
+            IBindingExportHandler::Reset();
 
             isolate = nullptr;
 
