@@ -131,6 +131,8 @@ static void RegisterExport(js::FunctionContext& ctx)
     if(!ctx.GetArg(1, value)) return;
 
     js::IResource* resource = ctx.GetResource();
+    if(!ctx.Check(!resource->HasBindingExport(export_), "Binding export already registered")) return;
+
     resource->SetBindingExport(export_, value);
 }
 
