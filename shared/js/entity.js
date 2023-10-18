@@ -6,6 +6,7 @@ requireBinding("shared/events/entity.js");
  */
 const entityAllMap = new Map(); // Stores a map of all entities by type
 const entityAllSet = new Set(); // Stores a set of all entities
+const entityAllStorageMap = new Map(); // Stores a map of what class stores what type in it's .all
 
 /**
  * @param {unknown} class_
@@ -20,6 +21,7 @@ export function addAllGetter(class_, types) {
         const set = new Set();
         entityAllMap.set(type, set);
         sets.push(set);
+        entityAllStorageMap.set(type, class_);
     }
 
     Object.defineProperties(class_, {
@@ -61,19 +63,15 @@ function addEntityToAll(entity) {
     entityAllSet.add(entity);
     const all = entityAllMap.get(entity.type);
     all?.add(entity);
-    // Check if this is an extended class (for factory)
-    const superClass = Object.getPrototypeOf(entity.constructor);
-    if ("__allDirty" in superClass) superClass.__allDirty = true;
-    else entity.constructor.__allDirty = true;
+    const storageClass = entityAllStorageMap.get(entity.type);
+    storageClass.__allDirty = true;
 }
 function removeEntityFromAll(entity) {
     entityAllSet.delete(entity);
     const all = entityAllMap.get(entity.type);
     all?.delete(entity);
-    // Check if this is an extended class (for factory)
-    const superClass = Object.getPrototypeOf(entity.constructor);
-    if ("__allDirty" in superClass) superClass.__allDirty = true;
-    else entity.constructor.__allDirty = true;
+    const storageClass = entityAllStorageMap.get(entity.type);
+    storageClass.__allDirty = true;
 }
 cppBindings.registerExport(cppBindings.BindingExport.ADD_ENTITY_TO_ALL, addEntityToAll);
 
