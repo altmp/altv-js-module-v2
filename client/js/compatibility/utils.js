@@ -7,13 +7,13 @@ const { assert, waitFor, assertRGBA, assertVector2, assertVector3 } = requireBin
 
 const { SharedUtils } = requireBinding("shared/compatibility/utils.js");
 
-requireBinding("shared/timers.js");
 requireBinding("shared/classes/rgba.js");
 requireBinding("shared/classes/vector.js");
 
-requireBinding("client/events.js");
-
 requireBinding("shared/compatibility/timers.js");
+
+requireBinding("client/events.js");
+requireBinding("client/graphics.js");
 
 const natives = cppBindings.getBuiltinModule("@altv/natives");
 

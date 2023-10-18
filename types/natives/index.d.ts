@@ -1,4 +1,4 @@
-// This file was generated on 14.10.2023, 20:34:51 - DO NOT MODIFY MANUALLY
+// This file was generated on 18.10.2023, 18:09:08 - DO NOT MODIFY MANUALLY
 
 /// <reference types="../client/index.d.ts" />
 
@@ -6,7 +6,7 @@
  * @module @altv/natives
  */
 declare module "@altv/natives" {
-  import { Entity, Player, Vector3, Vehicle } from "@altv/client";
+  import { Entity, Player, Ped, Vector3, Vehicle } from "@altv/client";
 
   /**
    * Pauses execution of the current script, please note this behavior is only seen when called from one of the game script files(ysc). In order to wait an asi script use "static void WAIT(DWORD time);" found in main.h
@@ -6843,7 +6843,7 @@ declare module "@altv/natives" {
   /**
    * Finalizes a text command started with BEGIN_TEXT_COMMAND_SET_BLIP_NAME, setting the name of the specified blip.
    */
-  export function endTextCommandSetBlipName(blip: Blip): void;
+  export function endTextCommandSetBlipName(blip: number): void;
 
   export function beginTextCommandAddDirectlyToPreviousBriefs(p0: string): void;
 
@@ -6871,7 +6871,7 @@ declare module "@altv/natives" {
    */
   export function addTextComponentSubstringTextLabelHashKey(gxtEntryHash: number): void;
 
-  export function addTextComponentSubstringBlipName(blip: Blip): void;
+  export function addTextComponentSubstringBlipName(blip: number): void;
 
   export function addTextComponentSubstringPlayerName(text: string): void;
 
@@ -7055,11 +7055,11 @@ declare module "@altv/natives" {
   /**
    * Enable / disable showing route for the Blip-object.
    */
-  export function setBlipRoute(blip: Blip, enabled: boolean): void;
+  export function setBlipRoute(blip: number, enabled: boolean): void;
 
   export function clearAllBlipRoutes(): void;
 
-  export function setBlipRouteColour(blip: Blip, colour: number): void;
+  export function setBlipRouteColour(blip: number, colour: number): void;
 
   export function setForceShowGps(toggle: boolean): void;
 
@@ -7081,7 +7081,7 @@ declare module "@altv/natives" {
    */
   export function setRadarZoom(zoomLevel: number): void;
 
-  export function setRadarZoomToBlip(blip: Blip, zoom: number): void;
+  export function setRadarZoomToBlip(blip: number, zoom: number): void;
 
   export function setRadarZoomToDistance(zoom: number): void;
 
@@ -7226,15 +7226,15 @@ declare module "@altv/natives" {
 
   export function getNumberOfActiveBlips(): number;
 
-  export function getNextBlipInfoId(blipSprite: number): Blip;
+  export function getNextBlipInfoId(blipSprite: number): number;
 
-  export function getFirstBlipInfoId(blipSprite: number): Blip;
+  export function getFirstBlipInfoId(blipSprite: number): number;
 
-  export function getClosestBlipInfoId(blipSprite: number): Blip;
+  export function getClosestBlipInfoId(blipSprite: number): number;
 
-  export function getBlipInfoIdCoord(blip: Blip): Vector3;
+  export function getBlipInfoIdCoord(blip: number): Vector3;
 
-  export function getBlipInfoIdDisplay(blip: Blip): number;
+  export function getBlipInfoIdDisplay(blip: number): number;
 
   /**
    * Returns a value based on what the blip is attached to
@@ -7246,21 +7246,21 @@ declare module "@altv/natives" {
    * 6 - Pickup
    * 7 - Radius
    */
-  export function getBlipInfoIdType(blip: Blip): number;
+  export function getBlipInfoIdType(blip: number): number;
 
-  export function getBlipInfoIdEntityIndex(blip: Blip): Entity | number;
+  export function getBlipInfoIdEntityIndex(blip: number): Entity | number;
 
   /**
    * This function is hard-coded to always return 0.
    */
-  export function getBlipInfoIdPickupIndex(blip: Blip): number;
+  export function getBlipInfoIdPickupIndex(blip: number): number;
 
   /**
    * Returns the Blip handle of given Entity.
    */
-  export function getBlipFromEntity(entity: Entity | number): Blip;
+  export function getBlipFromEntity(entity: Entity | number): number;
 
-  export function addBlipForRadius(posX: number, posY: number, posZ: number, radius: number): Blip;
+  export function addBlipForRadius(posX: number, posY: number, posZ: number, radius: number): number;
 
   /**
    * Adds a rectangular blip for the specified coordinates/area.
@@ -7275,7 +7275,7 @@ declare module "@altv/natives" {
    * 
    * (Native name is _likely_ to actually be ADD_BLIP_FOR_AREA, but due to the usual reasons this can't be confirmed)
    */
-  export function addBlipForArea(x: number, y: number, z: number, width: number, height: number): Blip;
+  export function addBlipForArea(x: number, y: number, z: number, width: number, height: number): number;
 
   /**
    * Returns red ( default ) blip attached to entity.
@@ -7285,22 +7285,22 @@ declare module "@altv/natives" {
    * blip = HUD::ADD_BLIP_FOR_ENTITY(YourPedOrBodyguardName);
    * HUD::SET_BLIP_AS_FRIENDLY(blip, true);
    */
-  export function addBlipForEntity(entity: Entity | number): Blip;
+  export function addBlipForEntity(entity: Entity | number): number;
 
-  export function addBlipForPickup(pickup: number): Blip;
+  export function addBlipForPickup(pickup: number): number;
 
   /**
    * Creates an orange ( default ) Blip-object. Returns a Blip-object which can then be modified.
    */
-  export function addBlipForCoord(x: number, y: number, z: number): Blip;
+  export function addBlipForCoord(x: number, y: number, z: number): number;
 
   export function triggerSonarBlip(posX: number, posY: number, posZ: number, radius: number, p4: number): void;
 
   export function allowSonarBlips(toggle: boolean): void;
 
-  export function setBlipCoords(blip: Blip, posX: number, posY: number, posZ: number): void;
+  export function setBlipCoords(blip: number, posX: number, posY: number, posZ: number): void;
 
-  export function getBlipCoords(blip: Blip): Vector3;
+  export function getBlipCoords(blip: number): Vector3;
 
   /**
    * Sets the displayed sprite for a specific blip..
@@ -7311,13 +7311,13 @@ declare module "@altv/natives" {
    * Blips Images + IDs:
    * https://gtaxscripting.blogspot.com/2016/05/gta-v-blips-id-and-image.html
    */
-  export function setBlipSprite(blip: Blip, spriteId: number): void;
+  export function setBlipSprite(blip: number, spriteId: number): void;
 
   /**
    * Blips Images + IDs:
    * gtaxscripting.blogspot.com/2016/05/gta-v-blips-id-and-image.html
    */
-  export function getBlipSprite(blip: Blip): number;
+  export function getBlipSprite(blip: number): number;
 
   export function setCopBlipSprite(p0: number, p1: number): void;
 
@@ -7326,9 +7326,9 @@ declare module "@altv/natives" {
   /**
    * Doesn't work if the label text of gxtEntry is >= 80.
    */
-  export function setBlipNameFromTextFile(blip: Blip, gxtEntry: string): void;
+  export function setBlipNameFromTextFile(blip: number, gxtEntry: string): void;
 
-  export function setBlipNameToPlayerName(blip: Blip, player: Player | number): void;
+  export function setBlipNameToPlayerName(blip: number, player: Player | number): void;
 
   /**
    * Sets alpha-channel for blip color.
@@ -7340,65 +7340,65 @@ declare module "@altv/natives" {
    * HUD::SET_BLIP_ALPHA(blip , 64);
    * 
    */
-  export function setBlipAlpha(blip: Blip, alpha: number): void;
+  export function setBlipAlpha(blip: number, alpha: number): void;
 
-  export function getBlipAlpha(blip: Blip): number;
+  export function getBlipAlpha(blip: number): number;
 
-  export function setBlipFade(blip: Blip, opacity: number, duration: number): void;
+  export function setBlipFade(blip: number, opacity: number, duration: number): void;
 
   /**
    * Returns -1, 0, +1, depending on if the blip is fading out, doing nothing, or fading in respectively.
    */
-  export function getBlipFadeDirection(blip: Blip): number;
+  export function getBlipFadeDirection(blip: number): number;
 
   /**
    * After some testing, looks like you need to use CEIL() on the rotation (vehicle/ped heading) before using it there.
    */
-  export function setBlipRotation(blip: Blip, rotation: number): void;
+  export function setBlipRotation(blip: number, rotation: number): void;
 
   /**
    * Does not require whole number/integer rotations.
    */
-  export function setBlipRotationWithFloat(blip: Blip, heading: number): void;
+  export function setBlipRotationWithFloat(blip: number, heading: number): void;
 
-  export function getBlipRotation(blip: Blip): number;
+  export function getBlipRotation(blip: number): number;
 
   /**
    * Adds up after viewing multiple R* scripts. I believe that the duration is in miliseconds.
    */
-  export function setBlipFlashTimer(blip: Blip, duration: number): void;
+  export function setBlipFlashTimer(blip: number, duration: number): void;
 
-  export function setBlipFlashInterval(blip: Blip, p1: any): void;
+  export function setBlipFlashInterval(blip: number, p1: any): void;
 
   /**
    * https://gtaforums.com/topic/864881-all-blip-color-ids-pictured/
    */
-  export function setBlipColour(blip: Blip, color: number): void;
+  export function setBlipColour(blip: number, color: number): void;
 
   /**
    * Can be used to give blips any RGB colour with SET_BLIP_COLOUR(blip, 84).
    */
-  export function setBlipSecondaryColour(blip: Blip, r: number, g: number, b: number): void;
+  export function setBlipSecondaryColour(blip: number, r: number, g: number, b: number): void;
 
-  export function getBlipColour(blip: Blip): number;
+  export function getBlipColour(blip: number): number;
 
-  export function getBlipHudColour(blip: Blip): number;
+  export function getBlipHudColour(blip: number): number;
 
-  export function isBlipShortRange(blip: Blip): boolean;
+  export function isBlipShortRange(blip: number): boolean;
 
-  export function isBlipOnMinimap(blip: Blip): boolean;
+  export function isBlipOnMinimap(blip: number): boolean;
 
-  export function doesBlipHaveGpsRoute(blip: Blip): boolean;
+  export function doesBlipHaveGpsRoute(blip: number): boolean;
 
-  export function setBlipHiddenOnLegend(blip: Blip, toggle: boolean): void;
+  export function setBlipHiddenOnLegend(blip: number, toggle: boolean): void;
 
-  export function setBlipHighDetail(blip: Blip, toggle: boolean): void;
+  export function setBlipHighDetail(blip: number, toggle: boolean): void;
 
-  export function setBlipAsMissionCreatorBlip(blip: Blip, toggle: boolean): void;
+  export function setBlipAsMissionCreatorBlip(blip: number, toggle: boolean): void;
 
-  export function isMissionCreatorBlip(blip: Blip): boolean;
+  export function isMissionCreatorBlip(blip: number): boolean;
 
-  export function getNewSelectedMissionCreatorBlip(): Blip;
+  export function getNewSelectedMissionCreatorBlip(): number;
 
   export function isHoveringOverMissionCreatorBlip(): boolean;
 
@@ -7410,28 +7410,28 @@ declare module "@altv/natives" {
 
   export function setBlipMarkerLongDistance(p0: any, p1: any): void;
 
-  export function setBlipFlashes(blip: Blip, toggle: boolean): void;
+  export function setBlipFlashes(blip: number, toggle: boolean): void;
 
-  export function setBlipFlashesAlternate(blip: Blip, toggle: boolean): void;
+  export function setBlipFlashesAlternate(blip: number, toggle: boolean): void;
 
-  export function isBlipFlashing(blip: Blip): boolean;
+  export function isBlipFlashing(blip: number): boolean;
 
   /**
    * Sets whether or not the specified blip should only be displayed when nearby, or on the minimap.
    */
-  export function setBlipAsShortRange(blip: Blip, toggle: boolean): void;
+  export function setBlipAsShortRange(blip: number, toggle: boolean): void;
 
-  export function setBlipScale(blip: Blip, scale: number): void;
+  export function setBlipScale(blip: number, scale: number): void;
 
   /**
    * See https://imgur.com/a/lLkEsMN
    */
-  export function setBlipScale2d(blip: Blip, xScale: number, yScale: number): void;
+  export function setBlipScale2d(blip: number, xScale: number, yScale: number): void;
 
   /**
    * See this topic for more details : gtaforums.com/topic/717612-v-scriptnative-documentation-and-research/page-35?p=1069477935
    */
-  export function setBlipPriority(blip: Blip, priority: number): void;
+  export function setBlipPriority(blip: number, priority: number): void;
 
   /**
    * Display Id behaviours:
@@ -7449,7 +7449,7 @@ declare module "@altv/natives" {
    * 
    * Anything higher than 10 seems to be exactly the same as 10.
    */
-  export function setBlipDisplay(blip: Blip, displayId: number): void;
+  export function setBlipDisplay(blip: number, displayId: number): void;
 
   /**
    * Example: https://i.imgur.com/skY6vAJ.png
@@ -7470,7 +7470,7 @@ declare module "@altv/natives" {
    * 
    * Category needs to be `7` in order for blip names to show on the expanded minimap when using DISPLAY_PLAYER_NAME_TAGS_ON_BLIPS.
    */
-  export function setBlipCategory(blip: Blip, index: number): void;
+  export function setBlipCategory(blip: number, index: number): void;
 
   /**
    * In the C++ SDK, this seems not to work-- the blip isn't removed immediately. I use it for saving cars.
@@ -7500,79 +7500,79 @@ declare module "@altv/natives" {
    * 
    * Remove blip will currently crash your game, just artificially remove the blip by setting the sprite to a id that is 'invisible'.
    */
-  export function removeBlip(blip?: Blip): Blip;
+  export function removeBlip(blip?: number): number;
 
   /**
    * false for enemy
    * true for friendly
    */
-  export function setBlipAsFriendly(blip: Blip, toggle: boolean): void;
+  export function setBlipAsFriendly(blip: number, toggle: boolean): void;
 
-  export function pulseBlip(blip: Blip): void;
+  export function pulseBlip(blip: number): void;
 
-  export function showNumberOnBlip(blip: Blip, number: number): void;
+  export function showNumberOnBlip(blip: number, number: number): void;
 
-  export function hideNumberOnBlip(blip: Blip): void;
+  export function hideNumberOnBlip(blip: number): void;
 
-  export function showHeightOnBlip(blip: Blip, toggle: boolean): void;
+  export function showHeightOnBlip(blip: number, toggle: boolean): void;
 
   /**
    * Adds a green checkmark on top of a blip.
    */
-  export function showTickOnBlip(blip: Blip, toggle: boolean): void;
+  export function showTickOnBlip(blip: number, toggle: boolean): void;
 
   /**
    * Adds a orange checkmark on top of a given blip handle: https://imgur.com/a/aw5OTMF
    * _SHOW_FRIEND_INDICATOR_ON_BLIP* - _SHOW_HEADING_INDICATOR_ON_BLIP*
    */
-  export function showGoldTickOnBlip(blip: Blip, toggle: boolean): void;
+  export function showGoldTickOnBlip(blip: number, toggle: boolean): void;
 
-  export function showForSaleIconOnBlip(blip: Blip, toggle: boolean): void;
+  export function showForSaleIconOnBlip(blip: number, toggle: boolean): void;
 
   /**
    * Adds the GTA: Online player heading indicator to a blip.
    */
-  export function showHeadingIndicatorOnBlip(blip: Blip, toggle: boolean): void;
+  export function showHeadingIndicatorOnBlip(blip: number, toggle: boolean): void;
 
   /**
    * Highlights a blip by a cyan color circle.
    * 
    * Color can be changed with SET_BLIP_SECONDARY_COLOUR
    */
-  export function showOutlineIndicatorOnBlip(blip: Blip, toggle: boolean): void;
+  export function showOutlineIndicatorOnBlip(blip: number, toggle: boolean): void;
 
   /**
    * Highlights a blip by a half cyan circle on the right side of the blip. https://i.imgur.com/FrV9M4e.png
    * .Indicating that that player is a friend (in GTA:O). This color can not be changed.
    * To toggle the left side (crew member indicator) of the half circle around the blip, use: `SHOW_CREW_INDICATOR_ON_BLIP`
    */
-  export function showFriendIndicatorOnBlip(blip: Blip, toggle: boolean): void;
+  export function showFriendIndicatorOnBlip(blip: number, toggle: boolean): void;
 
   /**
    * Enables or disables the blue half circle https://i.imgur.com/iZes9Ec.png around the specified blip on the left side of the blip. This is used to indicate that the player is in your crew in GTA:O. Color is changeable by using `SET_BLIP_SECONDARY_COLOUR`.
    */
-  export function showCrewIndicatorOnBlip(blip: Blip, toggle: boolean): void;
+  export function showCrewIndicatorOnBlip(blip: number, toggle: boolean): void;
 
   /**
    * Must be toggled before being queued for animation
    */
-  export function setBlipExtendedHeightThreshold(blip: Blip, toggle: boolean): void;
+  export function setBlipExtendedHeightThreshold(blip: number, toggle: boolean): void;
 
   export function setBlipShortHeightThreshold(p0: any, p1: any): void;
 
-  export function setBlipUseHeightIndicatorOnEdge(blip: Blip, p1: any): void;
+  export function setBlipUseHeightIndicatorOnEdge(blip: number, p1: any): void;
 
   /**
    * Makes a blip go small when off the minimap.
    */
-  export function setBlipAsMinimalOnEdge(blip: Blip, toggle: boolean): void;
+  export function setBlipAsMinimalOnEdge(blip: number, toggle: boolean): void;
 
   /**
    * Enabling this on a radius blip will make it outline only. See https://cdn.discordapp.com/attachments/553235301632573459/575132227935928330/unknown.png
    */
-  export function setRadiusBlipEdge(blip: Blip, toggle: boolean): void;
+  export function setRadiusBlipEdge(blip: number, toggle: boolean): void;
 
-  export function doesBlipExist(blip: Blip): boolean;
+  export function doesBlipExist(blip: number): boolean;
 
   /**
    * This native removes the current waypoint from the map.
@@ -7594,21 +7594,21 @@ declare module "@altv/natives" {
 
   export function setNewWaypoint(x: number, y: number): void;
 
-  export function setBlipBright(blip: Blip, toggle: boolean): void;
+  export function setBlipBright(blip: number, toggle: boolean): void;
 
   /**
    * As of b2189, the third parameter sets the color of the cone (before b2189 it was ignored). Note that it uses HUD colors, not blip colors.
    */
-  export function setBlipShowCone(blip: Blip, toggle: boolean, hudColorIndex: number): void;
+  export function setBlipShowCone(blip: number, toggle: boolean, hudColorIndex: number): void;
 
   /**
    * Interesting fact: A hash collision for this is RESET_JETPACK_MODEL_SETTINGS
    */
   export function removeCopBlipFromPed(ped: Ped | Player | number): void;
 
-  export function setupFakeConeData(blip: Blip, p1: number, p2: number, p3: number, p4: number, p5: number, p6: number, p7: any, p8: number): void;
+  export function setupFakeConeData(blip: number, p1: number, p2: number, p3: number, p4: number, p5: number, p6: number, p7: any, p8: number): void;
 
-  export function removeFakeConeData(blip: Blip): void;
+  export function removeFakeConeData(blip: number): void;
 
   export function clearFakeConeArray(): void;
 
@@ -7622,7 +7622,7 @@ declare module "@altv/natives" {
 
   export function showAccountPicker(): void;
 
-  export function getMainPlayerBlipId(): Blip;
+  export function getMainPlayerBlipId(): number;
 
   export function setPmWarningscreenActive(p0: boolean): void;
 
@@ -8345,7 +8345,7 @@ declare module "@altv/natives" {
    */
   export function forceSonarBlipsThisFrame(): boolean;
 
-  export function getNorthBlidIndex(): Blip;
+  export function getNorthBlidIndex(): number;
 
   /**
    * Toggles whether or not name labels are shown on the expanded minimap next to player blips, like in GTA:O.
@@ -8679,12 +8679,12 @@ declare module "@altv/natives" {
 
   export function setPedAiBlipSprite(ped: Ped | Player | number, spriteId: number): void;
 
-  export function getAiPedPedBlipIndex(ped: Ped | Player | number): Blip;
+  export function getAiPedPedBlipIndex(ped: Ped | Player | number): number;
 
   /**
    * Returns the current AI BLIP for the specified ped
    */
-  export function getAiPedVehicleBlipIndex(ped: Ped | Player | number): Blip;
+  export function getAiPedVehicleBlipIndex(ped: Ped | Player | number): number;
 
   export function hasDirectorModeBeenLaunchedByCode(): boolean;
 

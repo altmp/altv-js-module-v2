@@ -33,6 +33,22 @@ static js::Event playerStartLeaveVehicle(alt::CEvent::Type::PLAYER_START_LEAVE_V
     args.Set("seat", e->GetSeat());
 });
 
+static js::Event playerEnterVehicle(alt::CEvent::Type::PLAYER_ENTER_VEHICLE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CPlayerEnterVehicleEvent*>(ev);
+    args.Set("player", e->GetPlayer());
+    args.Set("vehicle", e->GetTarget());
+    args.Set("seat", e->GetSeat());
+});
+
+static js::Event playerLeaveVehicle(alt::CEvent::Type::PLAYER_LEAVE_VEHICLE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+{
+    auto e = static_cast<const alt::CPlayerLeaveVehicleEvent*>(ev);
+    args.Set("player", e->GetPlayer());
+    args.Set("vehicle", e->GetTarget());
+    args.Set("seat", e->GetSeat());
+});
+
 static js::Event playerWeaponChangeEvent(alt::CEvent::Type::PLAYER_WEAPON_CHANGE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
     auto e = static_cast<const alt::CPlayerWeaponChangeEvent*>(ev);

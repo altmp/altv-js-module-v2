@@ -5,7 +5,7 @@
  */
 
 declare module "@altv/server" {
-    import altShared from "@altv/shared";
+    import * as altShared from "@altv/shared";
 
     export const rootDir: string;
     export const syncedMeta: Record<string, unknown>;
@@ -1052,7 +1052,7 @@ declare module "@altv/server" {
         export function onceWeaponDamage(callback: GenericCancellableEventCallback<WeaponDamageEventParameters>): altShared.Events.EventHandler;
 
         // SHARED meta related events
-        export function onMetaChange<T extends Player>(callback: GenericEventCallback<MetaChangeEventParameters, T>): altShared.Events.EventHandler;
+        export function onMetaChange(callback: GenericEventCallback<MetaChangeEventParameters>): altShared.Events.EventHandler;
         export function onLocalMetaChange<T extends Player>(callback: GenericPlayerEventCallback<LocalMetaChangeEventParameters, T>): altShared.Events.EventHandler;
         export function onceLocalMetaChange<T extends Player>(callback: GenericPlayerEventCallback<LocalMetaChangeEventParameters, T>): altShared.Events.EventHandler;
         export function onSyncedMetaChange(callback: GenericEventCallback<SyncedMetaChangeEventParameters>): altShared.Events.EventHandler;

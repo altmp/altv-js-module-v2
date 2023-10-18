@@ -6,7 +6,7 @@
 /** @type {typeof import("./../../../shared/js/utils.js")} */
 const { assertIsType } = requireBinding("shared/utils.js");
 
-requireBinding("shared/events/console.js");
+requireBinding("shared/commands.js");
 
 class Timer {
     constructor(callback, ms, once) {
@@ -19,8 +19,6 @@ class Timer {
 }
 
 class ConsoleCommand {
-    static registeredCommands = new Map();
-
     #commandName;
     #callback;
 
@@ -28,39 +26,16 @@ class ConsoleCommand {
         assertIsType(name, "string");
         assertIsType(callback, "function");
 
-        name = name.toLowerCase();
-
         this.#commandName = name;
         this.#callback = callback;
 
-        const handlers = ConsoleCommand.registeredCommands.get(name) ?? [];
-        handlers.push(callback);
-        ConsoleCommand.registeredCommands.set(name, handlers);
-    }
-
-    get callback() {
-        return this.#callback;
+        alt.Commands.register(name, callback);
     }
 
     destroy() {
-        const registeredCommands = (ConsoleCommand.registeredCommands.get(this.#commandName) ?? []).filter((command) => command != this);
-
-        if (registeredCommands.length) ConsoleCommand.registeredCommands.set(this.#commandName, registeredCommands);
-        else Keybind.registeredHandlers.delete(this.keyCode);
+        alt.Commands.unregister(this.#commandName, this.#callback);
     }
 }
-
-alt.Events.onConsoleCommand(({ command, args }) => {
-    command = command.toLowerCase();
-
-    if (!ConsoleCommand.registeredCommands.has(command)) return;
-
-    const handlers = ConsoleCommand.registeredCommands.get(command);
-
-    for (const handler of handlers) {
-        handler?.(...args);
-    }
-});
 
 export class SharedUtils {
     static wait = alt.Utils.wait;

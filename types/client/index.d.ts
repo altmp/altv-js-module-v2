@@ -5,7 +5,7 @@
  */
 
 declare module "@altv/client" {
-    import altShared from "@altv/shared";
+    import * as altShared from "@altv/shared";
 
     export const isStreamerModeEnabled: boolean;
     export const locale: altShared.Enums.Locale;
@@ -1502,6 +1502,10 @@ declare module "@altv/client" {
         export function oncePlayerStartEnterVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartEnterVehicleEventParameters, T>): altShared.Events.EventHandler;
         export function onPlayerStartLeaveVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartLeaveVehicleEventParameters, T>): altShared.Events.EventHandler;
         export function oncePlayerStartLeaveVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartLeaveVehicleEventParameters, T>): altShared.Events.EventHandler;
+        export function onPlayerEnterVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerEnterVehicleEventParameters, T>): altShared.Events.EventHandler;
+        export function oncePlayerEnterVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerEnterVehicleEventParameters, T>): altShared.Events.EventHandler;
+        export function onPlayerLeaveVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerLeaveVehicleEventParameters, T>): altShared.Events.EventHandler;
+        export function oncePlayerLeaveVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerLeaveVehicleEventParameters, T>): altShared.Events.EventHandler;
         export function onVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): altShared.Events.EventHandler;
         export function onceVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): altShared.Events.EventHandler;
 
@@ -1574,8 +1578,8 @@ declare module "@altv/client" {
         }
 
         interface PlayerWeaponChangeEventParameters {
-            vehicle: Vehicle;
-            seat: number;
+            oldWeapon: number;
+            newWeapon: number;
         }
 
         interface PlayerStartEnterVehicleEventParameters {
@@ -1584,8 +1588,18 @@ declare module "@altv/client" {
         }
 
         interface PlayerStartLeaveVehicleEventParameters {
-            oldWeapon: number;
-            newWeapon: number;
+            vehicle: Vehicle;
+            seat: number;
+        }
+
+        interface PlayerEnterVehicleEventParameters {
+            vehicle: Vehicle;
+            seat: number;
+        }
+
+        interface PlayerLeaveVehicleEventParameters {
+            vehicle: Vehicle;
+            seat: number;
         }
 
         interface GameEntityCreateEventParameters {
