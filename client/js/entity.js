@@ -10,27 +10,26 @@ requireBinding("client/events/worldObject.js");
  */
 const entityStreamedInMap = new Map(); // Stores a map of all streamed-in entities by type
 const entityStreamedInSet = new Set(); // Stores a set of all streamed-in entities
+const entityStreamedInStorageMap = new Map(); // Stores a map of what class stores what type in it's .streamedIn
+let cachedEntityStreamedInArray = [];
+let entityStreamedInSetDirty = false;
 
 /**
  * @param {unknown} class_
- * @param {number | number[]} types
+ * @param {number} type
  */
-function addStreamedInGetter(class_, types) {
+function addStreamedInGetter(class_, type) {
     if (!class_) return;
-    if (!Array.isArray(types)) types = [types];
 
-    const sets = [];
-    for (const type of types) {
-        const set = new Set();
-        entityStreamedInMap.set(type, set);
-        sets.push(set);
-    }
+    const set = new Set();
+    entityStreamedInMap.set(type, set);
+    entityStreamedInStorageMap.set(type, class_);
 
     Object.defineProperties(class_, {
         streamedIn: {
             get: () => {
                 if (class_.__streamedInDirty) {
-                    class_.__streamedInCached = sets.flatMap((set) => Array.from(set));
+                    class_.__streamedInCached = Array.from(set);
                     class_.__streamedInDirty = false;
                 }
                 return class_.__streamedInCached;
@@ -51,19 +50,6 @@ function addStreamedInGetter(class_, types) {
     });
 }
 
-function addEntityToStreamedIn(entity) {
-    entityStreamedInSet.add(entity);
-    const streamedIn = entityStreamedInMap.get(entity.type);
-    streamedIn?.add(entity);
-    entity.constructor.__streamedInDirty = true;
-}
-function removeEntityFromStreamedIn(entity) {
-    entityStreamedInSet.delete(entity);
-    const streamedIn = entityStreamedInMap.get(entity.type);
-    streamedIn?.delete(entity);
-    entity.constructor.__streamedInDirty = true;
-}
-
 alt.Events.onGameEntityCreate(({ entity }) => {
     addEntityToStreamedIn(entity);
 });
@@ -80,11 +66,37 @@ alt.Events.onWorldObjectStreamOut(({ object }) => {
     removeEntityFromStreamedIn(object);
 });
 
+function addEntityToStreamedIn(entity) {
+    entityStreamedInSetDirty = true;
+    entityStreamedInSet.add(entity);
+    const all = entityStreamedInMap.get(entity.type);
+    if (all) all.add(entity);
+    const storageClass = entityStreamedInStorageMap.get(entity.type);
+    if (storageClass) storageClass.__streamedInDirty = true;
+}
+function removeEntityFromStreamedIn(entity) {
+    entityStreamedInSetDirty = true;
+    entityStreamedInSet.delete(entity);
+    const all = entityStreamedInMap.get(entity.type);
+    if (all) all.delete(entity);
+    const storageClass = entityStreamedInStorageMap.get(entity.type);
+    if (storageClass) storageClass.__allDirty = true;
+}
+
 // Register streamedIn getters
 Object.defineProperty(alt.Entity, "streamedIn", {
-    get: () => Array.from(entityStreamedInSet)
+    get: () => {
+        if (entityStreamedInSetDirty) {
+            cachedEntityStreamedInArray = Array.from(entityStreamedInSet);
+            entityStreamedInSetDirty = false;
+        }
+        return cachedEntityStreamedInArray;
+    }
 });
 
+addAllGetter(alt.LocalVehicle, alt.Enums.BaseObjectType.LOCAL_VEHICLE);
+addAllGetter(alt.LocalPed, alt.Enums.BaseObjectType.LOCAL_PED);
+addAllGetter(alt.LocalObject, alt.Enums.BaseObjectType.LOCAL_OBJECT);
 addAllGetter(alt.Audio, alt.Enums.BaseObjectType.AUDIO);
 addAllGetter(alt.AudioFilter, alt.Enums.BaseObjectType.AUDIO_FILTER);
 addAllGetter(alt.AudioOutputAttached, alt.Enums.BaseObjectType.AUDIO_OUTPUT_ATTACHED);
@@ -95,12 +107,16 @@ addAllGetter(alt.TextLabel, alt.Enums.BaseObjectType.TEXT_LABEL);
 addAllGetter(alt.WebSocketClient, alt.Enums.BaseObjectType.WEBSOCKET_CLIENT);
 addAllGetter(alt.WebView, alt.Enums.BaseObjectType.WEBVIEW);
 
-addStreamedInGetter(alt.Player, [alt.Enums.BaseObjectType.PLAYER, alt.Enums.BaseObjectType.LOCAL_PLAYER]);
-addStreamedInGetter(alt.Vehicle, [alt.Enums.BaseObjectType.VEHICLE, alt.Enums.BaseObjectType.LOCAL_VEHICLE]);
-addStreamedInGetter(alt.Ped, [alt.Enums.BaseObjectType.PED, alt.Enums.BaseObjectType.LOCAL_PED]);
-addStreamedInGetter(alt.Object, [alt.Enums.BaseObjectType.OBJECT, alt.Enums.BaseObjectType.LOCAL_OBJECT]);
+addStreamedInGetter(alt.Player, alt.Enums.BaseObjectType.PLAYER);
+addStreamedInGetter(alt.Vehicle, alt.Enums.BaseObjectType.VEHICLE);
+addStreamedInGetter(alt.Ped, alt.Enums.BaseObjectType.PED);
+addStreamedInGetter(alt.Object, alt.Enums.BaseObjectType.OBJECT);
 addStreamedInGetter(alt.VirtualEntity, alt.Enums.BaseObjectType.VIRTUAL_ENTITY);
+addStreamedInGetter(alt.LocalVehicle, alt.Enums.BaseObjectType.LOCAL_VEHICLE);
+addStreamedInGetter(alt.LocalPed, alt.Enums.BaseObjectType.LOCAL_PED);
+addStreamedInGetter(alt.LocalObject, alt.Enums.BaseObjectType.LOCAL_OBJECT);
 
 // Add all streamed-in entities to the streamedIn sets
 for (const entity of alt.Entity.all) if (entity.streamedIn) addEntityToStreamedIn(entity);
 for (const virtualEntity of alt.VirtualEntity.all) if (virtualEntity.isStreamedIn) addEntityToStreamedIn(virtualEntity);
+addEntityToStreamedIn(alt.Player.local);

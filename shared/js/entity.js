@@ -7,28 +7,25 @@ requireBinding("shared/events/entity.js");
 const entityAllMap = new Map(); // Stores a map of all entities by type
 const entityAllSet = new Set(); // Stores a set of all entities
 const entityAllStorageMap = new Map(); // Stores a map of what class stores what type in it's .all
+let cachedEntityAllArray = [];
+let entityAllSetDirty = false;
 
 /**
  * @param {unknown} class_
- * @param {number | number[]} types
+ * @param {number} type
  */
-export function addAllGetter(class_, types) {
+export function addAllGetter(class_, type) {
     if (!class_) return;
-    if (!Array.isArray(types)) types = [types];
 
-    const sets = [];
-    for (const type of types) {
-        const set = new Set();
-        entityAllMap.set(type, set);
-        sets.push(set);
-        entityAllStorageMap.set(type, class_);
-    }
+    const set = new Set();
+    entityAllMap.set(type, set);
+    entityAllStorageMap.set(type, class_);
 
     Object.defineProperties(class_, {
         all: {
             get: () => {
                 if (class_.__allDirty) {
-                    class_.__allCached = sets.flatMap((set) => Array.from(set));
+                    class_.__allCached = Array.from(set);
                     class_.__allDirty = false;
                 }
                 return class_.__allCached;
@@ -50,42 +47,47 @@ export function addAllGetter(class_, types) {
 }
 
 alt.Events.onBaseObjectCreate(({ object }) => {
-    if (object instanceof alt.Entity || object instanceof alt.VirtualEntity) addEntityToAll(object);
+    addEntityToAll(object);
 });
 
 alt.Events.onBaseObjectRemove(({ object }) => {
-    if (object instanceof alt.Entity || object instanceof alt.VirtualEntity) removeEntityFromAll(object);
+    removeEntityFromAll(object);
 });
 
-// Needed because base object events are called on next tick, and entities created from scripts
-// should be immediately accessible in .all
 function addEntityToAll(entity) {
+    entityAllSetDirty = true;
     entityAllSet.add(entity);
     const all = entityAllMap.get(entity.type);
-    all?.add(entity);
+    if (all) all.add(entity);
     const storageClass = entityAllStorageMap.get(entity.type);
-    storageClass.__allDirty = true;
+    if (storageClass) storageClass.__allDirty = true;
 }
 function removeEntityFromAll(entity) {
+    entityAllSetDirty = true;
     entityAllSet.delete(entity);
     const all = entityAllMap.get(entity.type);
-    all?.delete(entity);
+    if (all) all.delete(entity);
     const storageClass = entityAllStorageMap.get(entity.type);
-    storageClass.__allDirty = true;
+    if (storageClass) storageClass.__allDirty = true;
 }
-cppBindings.registerExport(cppBindings.BindingExport.ADD_ENTITY_TO_ALL, addEntityToAll);
 
 // Register all getters
 Object.defineProperty(alt.Entity, "all", {
-    get: () => Array.from(entityAllSet)
+    get: () => {
+        if (entityAllSetDirty) {
+            cachedEntityAllArray = Array.from(entityAllSet);
+            entityAllSetDirty = false;
+        }
+        return cachedEntityAllArray;
+    }
 });
 
-addAllGetter(alt.Player, [alt.Enums.BaseObjectType.PLAYER, alt.Enums.BaseObjectType.LOCAL_PLAYER]);
-addAllGetter(alt.Vehicle, [alt.Enums.BaseObjectType.VEHICLE, alt.Enums.BaseObjectType.LOCAL_VEHICLE]);
-addAllGetter(alt.Ped, [alt.Enums.BaseObjectType.PED, alt.Enums.BaseObjectType.LOCAL_PED]);
+addAllGetter(alt.Player, alt.Enums.BaseObjectType.PLAYER);
+addAllGetter(alt.Vehicle, alt.Enums.BaseObjectType.VEHICLE);
+addAllGetter(alt.Ped, alt.Enums.BaseObjectType.PED);
 addAllGetter(alt.Blip, alt.Enums.BaseObjectType.BLIP);
 addAllGetter(alt.Marker, alt.Enums.BaseObjectType.MARKER);
-addAllGetter(alt.Object, [alt.Enums.BaseObjectType.OBJECT, alt.Enums.BaseObjectType.LOCAL_OBJECT]);
+addAllGetter(alt.Object, alt.Enums.BaseObjectType.OBJECT);
 
 addAllGetter(alt.Checkpoint, alt.Enums.BaseObjectType.CHECKPOINT);
 addAllGetter(alt.ColShape, alt.Enums.BaseObjectType.COLSHAPE);
@@ -96,3 +98,7 @@ const entities = cppBindings.getAllEntities();
 for (const entity of entities) addEntityToAll(entity);
 const virtualEntities = cppBindings.getAllVirtualEntities();
 for (const virtualEntity of virtualEntities) addEntityToAll(virtualEntity);
+
+// Needed because base object events are called on next tick, and entities created from scripts
+// should be immediately accessible in .all
+cppBindings.registerExport(cppBindings.BindingExport.ADD_ENTITY_TO_ALL, addEntityToAll);
