@@ -8,7 +8,7 @@ js::Promise js::Event::CallEventBinding(bool custom, int type, EventArgs& args, 
 {
     v8::Isolate* isolate = resource->GetIsolate();
     v8::Local<v8::Context> context = resource->GetContext();
-    js::Function onEvent = resource->GetBindingExport<v8::Function>("events:onEvent");
+    js::Function onEvent = resource->GetBindingExport<v8::Function>(BindingExport::ON_EVENT);
     if(!onEvent.IsValid()) return js::Promise{ v8::Local<v8::Promise>() };
 
     std::optional<v8::Local<v8::Value>> result = onEvent.Call<v8::Local<v8::Value>>(custom, type, args.Get());
@@ -21,8 +21,7 @@ void js::Event::SendEvent(const alt::CEvent* ev, IResource* resource)
     if(!eventHandler) return;
 
     EventArgs eventArgs;
-    if (ev->IsCancellable())
-        eventArgs = cancellableEventContextClass.Create(resource->GetContext(), (void*)ev);
+    if(ev->IsCancellable()) eventArgs = cancellableEventContextClass.Create(resource->GetContext(), (void*)ev);
     else
         eventArgs = eventContextClass.Create(resource->GetContext(), (void*)ev);
 
@@ -67,7 +66,7 @@ static void TypeGetter(js::LazyPropertyContext& ctx)
 static void IsCancellableGetter(js::LazyPropertyContext& ctx)
 {
     if(!ctx.CheckExtraInternalFieldValue()) return;
-    
+
     alt::CEvent* ev = ctx.GetExtraInternalFieldValue<alt::CEvent>();
     ctx.Return(ev->IsCancellable());
 }

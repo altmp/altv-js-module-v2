@@ -192,7 +192,7 @@ export class Vector3 extends Vector {
     static negativeInfinity = new Vector3(-Infinity, -Infinity, -Infinity);
     static positiveInfinity = new Vector3(Infinity, Infinity, Infinity);
 }
-cppBindings.registerExport("classes:vector3", Vector3);
+cppBindings.registerExport(cppBindings.BindingExport.VECTOR3_CLASS, Vector3);
 
 export class Vector2 extends Vector {
     constructor(...args) {
@@ -230,7 +230,7 @@ export class Vector2 extends Vector {
     static negativeInfinity = new Vector2(-Infinity, -Infinity);
     static positiveInfinity = new Vector2(Infinity, Infinity);
 }
-cppBindings.registerExport("classes:vector2", Vector2);
+cppBindings.registerExport(cppBindings.BindingExport.VECTOR2_CLASS, Vector2);
 
 function valueToNumber(val) {
     if (val === Infinity || val === -Infinity) return val;

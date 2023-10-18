@@ -2809,7 +2809,7 @@ const inspectMultiple = (options, ...args) => {
     }
     return str;
 };
-cppBindings.registerExport("logging:inspectMultiple", inspectMultiple);
+cppBindings.registerExport(cppBindings.BindingExport.LOG_INSPECT, inspectMultiple);
 
 /** @type {Map<string, number>} */
 const timeLabelMap = new Map();

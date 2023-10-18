@@ -36,14 +36,33 @@ get the export from the resource and afterwards use it however needed. These ste
 
 To register a binding export for later use, call the `cppBindings.registerExport` function in the binding.
 
-It takes the name of the export as the first argument, and the value as the second argument.
+It takes the enum value of the export as the first argument, and the value as the second argument.
+
+So we have to add an enum value to the `BindingExport` enum, like shown here: (found in `shared/src/IBindingExportHandler.h`)
+```cpp
+enum class BindingExport : uint8_t
+{
+    // Functions
+    ON_EVENT,
+    TICK,
+    // ... and so on
+
+    MY_EXPORT, // Our own enum value added here!
+
+    SIZE,
+};
+```
+
+> NOTE: Generally the order of the enum is not important, but the `SIZE` element has to always be the last!
+
+Then the enum value is available on the `cppBindings.BindingExport` object in our binding, which we can then use to register our export:
 
 Example:
 ```js
 function myExport() {
     // do something
 }
-cppBindings.registerExport("funcs:myExport", myExport);
+cppBindings.registerExport(cppBindings.BindingExport.MY_EXPORT, myExport);
 ```
 
 ### Getting and using a binding export
@@ -56,7 +75,7 @@ This function also optionally has a template argument to get the export in the r
 Example:
 ```cpp
 js::IResource* resource = GetCurrentResource(); // Fictional function, get the current resource pointer via e.g. `ctx.GetResource()`
-v8::Local<v8::Function> myExportedFunction = resource->GetBindingExport<v8::Function>("funcs:myExport");
+v8::Local<v8::Function> myExportedFunction = resource->GetBindingExport<v8::Function>(js::BindingExport::MY_EXPORT);
 if(myExportedFunction.IsEmpty()) return; // Check if the binding exists, accessing an empty local otherwise crashes.
 // Do whatever the export is needed for
 ```
@@ -65,6 +84,6 @@ if(myExportedFunction.IsEmpty()) return; // Check if the binding exists, accessi
 Or if using the [value helpers](helpers.md) is desired instead:
 ```cpp
 js::IResource* resource = GetCurrentResource();
-js::Function myExportedFunction = resource->GetBindingExport<v8::Function>("funcs:myExport"); // Implicit conversion to helper type
+js::Function myExportedFunction = resource->GetBindingExport<v8::Function>(js::BindingExport::MY_EXPORT); // Implicit conversion to helper type
 if(!myExportedFunction.IsValid()) return;
 ```

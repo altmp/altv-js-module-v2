@@ -14,7 +14,7 @@ template<LogType Type>
 static void Log(js::FunctionContext& ctx)
 {
     js::IResource* resource = ctx.GetResource();
-    js::Function inspectFunc(resource->GetBindingExport<v8::Function>("logging:inspectMultiple"));
+    js::Function inspectFunc(resource->GetBindingExport<v8::Function>(js::BindingExport::LOG_INSPECT));
 
     std::vector<v8::Local<v8::Value>> args;
     args.reserve(ctx.GetArgCount() + 1);
@@ -143,11 +143,11 @@ static js::Module sharedModule("@altv/shared", "", { &baseObjectClass, &worldObj
     module.Namespace("ColShapeRectangle");
     module.Namespace("ColShapePolygon");
 
-    module.StaticBindingExport("hash", "utils:hash");
-    module.StaticBindingExport("Vector3", "classes:vector3");
-    module.StaticBindingExport("Vector2", "classes:vector2");
-    module.StaticBindingExport("RGBA", "classes:rgba");
-    module.StaticBindingExport("Quaternion", "classes:quaternion");
+    module.StaticBindingExport("hash", js::BindingExport::HASH);
+    module.StaticBindingExport("Vector3", js::BindingExport::VECTOR3_CLASS);
+    module.StaticBindingExport("Vector2", js::BindingExport::VECTOR2_CLASS);
+    module.StaticBindingExport("RGBA", js::BindingExport::RGBA_CLASS);
+    module.StaticBindingExport("Quaternion", js::BindingExport::QUATERNION_CLASS);
 }, [](js::IResource* resource) {
     #ifdef ALT_SERVER_API
     std::string name = "@altv/server";

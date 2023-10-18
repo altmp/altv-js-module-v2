@@ -207,4 +207,4 @@ function tick() {
         timer.tick();
     }
 }
-cppBindings.registerExport("timers:tick", tick);
+cppBindings.registerExport(cppBindings.BindingExport.TICK, tick);

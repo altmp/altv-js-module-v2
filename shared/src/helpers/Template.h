@@ -10,6 +10,8 @@
 #include "Logger.h"
 #include "Callbacks.h"
 
+#include "interfaces/IBindingExportHandler.h"
+
 template<auto x>
 struct function_traits;
 
@@ -299,7 +301,7 @@ namespace js
             Get()->Set(js::JSValue(name), v8::ObjectTemplate::New(GetIsolate()));
         }
 
-        void StaticBindingExport(const std::string& name, const std::string& exportName);
+        void StaticBindingExport(const std::string& name, BindingExport export_);
     };
 
     class ClassTemplate : public Template<v8::FunctionTemplate>

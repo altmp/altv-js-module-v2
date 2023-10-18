@@ -78,7 +78,7 @@ namespace js
         void OnTick() override
         {
             IResource::ProcessNextTickCallbacks();
-            js::Function onTick = GetBindingExport<v8::Function>("timers:tick");
+            js::Function onTick = GetBindingExport<v8::Function>(BindingExport::TICK);
             if(onTick.IsValid()) onTick.Call();
         }
 

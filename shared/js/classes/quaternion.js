@@ -112,72 +112,31 @@ export class Quaternion {
         const zz = z * z;
         const zw = z * w;
 
-        return [
-            1 - 2 * (yy + zz),
-            2 * (xy - zw),
-            2 * (xz + yw),
-            0,
-            2 * (xy + zw),
-            1 - 2 * (xx + zz),
-            2 * (yz - xw),
-            0,
-            2 * (xz - yw),
-            2 * (yz + xw),
-            1 - 2 * (xx + yy),
-            0,
-            0,
-            0,
-            0,
-            1,
-        ];
+        return [1 - 2 * (yy + zz), 2 * (xy - zw), 2 * (xz + yw), 0, 2 * (xy + zw), 1 - 2 * (xx + zz), 2 * (yz - xw), 0, 2 * (xz - yw), 2 * (yz + xw), 1 - 2 * (xx + yy), 0, 0, 0, 0, 1];
     }
 
     get forward() {
-        return new Vector3(
-            2 * (this.#x * this.#z + this.#w * this.#y),
-            2 * (this.#y * this.#z - this.#w * this.#x),
-            1 - 2 * (this.#x * this.#x + this.#y * this.#y)
-        );
+        return new Vector3(2 * (this.#x * this.#z + this.#w * this.#y), 2 * (this.#y * this.#z - this.#w * this.#x), 1 - 2 * (this.#x * this.#x + this.#y * this.#y));
     }
 
     get right() {
-        return new Vector3(
-            1 - 2 * (this.#y * this.#y + this.#z * this.#z),
-            2 * (this.#x * this.#y + this.#w * this.#z),
-            2 * (this.#x * this.#z - this.#w * this.#y)
-        );
+        return new Vector3(1 - 2 * (this.#y * this.#y + this.#z * this.#z), 2 * (this.#x * this.#y + this.#w * this.#z), 2 * (this.#x * this.#z - this.#w * this.#y));
     }
 
     get up() {
-        return new Vector3(
-            2 * (this.#x * this.#y - this.#w * this.#z),
-            1 - 2 * (this.#x * this.#x + this.#z * this.#z),
-            2 * (this.#y * this.#z + this.#w * this.#x)
-        );
+        return new Vector3(2 * (this.#x * this.#y - this.#w * this.#z), 1 - 2 * (this.#x * this.#x + this.#z * this.#z), 2 * (this.#y * this.#z + this.#w * this.#x));
     }
 
     get left() {
-        return new Vector3(
-            1 - 2 * (this.#y * this.#y + this.#z * this.#z),
-            2 * (this.#x * this.#y - this.#w * this.#z),
-            2 * (this.#x * this.#z + this.#w * this.#y)
-        );
+        return new Vector3(1 - 2 * (this.#y * this.#y + this.#z * this.#z), 2 * (this.#x * this.#y - this.#w * this.#z), 2 * (this.#x * this.#z + this.#w * this.#y));
     }
 
     get back() {
-        return new Vector3(
-            2 * (this.#x * this.#z - this.#w * this.#y),
-            2 * (this.#y * this.#z + this.#w * this.#x),
-            1 - 2 * (this.#x * this.#x + this.#y * this.#y)
-        );
+        return new Vector3(2 * (this.#x * this.#z - this.#w * this.#y), 2 * (this.#y * this.#z + this.#w * this.#x), 1 - 2 * (this.#x * this.#x + this.#y * this.#y));
     }
 
     get down() {
-        return new Vector3(
-            2 * (this.#x * this.#y + this.#w * this.#z),
-            1 - 2 * (this.#x * this.#x + this.#z * this.#z),
-            2 * (this.#y * this.#z - this.#w * this.#x)
-        );
+        return new Vector3(2 * (this.#x * this.#y + this.#w * this.#z), 1 - 2 * (this.#x * this.#x + this.#z * this.#z), 2 * (this.#y * this.#z - this.#w * this.#x));
     }
 
     static fromEuler(x, y, z) {
@@ -188,12 +147,7 @@ export class Quaternion {
         const s2 = Math.sin(y / 2);
         const s3 = Math.sin(z / 2);
 
-        return new Quaternion(
-            s1 * c2 * c3 + c1 * s2 * s3,
-            c1 * s2 * c3 - s1 * c2 * s3,
-            c1 * c2 * s3 + s1 * s2 * c3,
-            c1 * c2 * c3 - s1 * s2 * s3
-        );
+        return new Quaternion(s1 * c2 * c3 + c1 * s2 * s3, c1 * s2 * c3 - s1 * c2 * s3, c1 * c2 * s3 + s1 * s2 * c3, c1 * c2 * c3 - s1 * s2 * s3);
     }
 
     static fromAxisAngle(axis, angle) {
@@ -209,36 +163,16 @@ export class Quaternion {
 
         if (trace > 0) {
             S = Math.sqrt(trace + 1.0) * 2;
-            return new Quaternion(
-                (matrix[6] - matrix[9]) / S,
-                (matrix[8] - matrix[2]) / S,
-                (matrix[1] - matrix[4]) / S,
-                0.25 * S
-            );
+            return new Quaternion((matrix[6] - matrix[9]) / S, (matrix[8] - matrix[2]) / S, (matrix[1] - matrix[4]) / S, 0.25 * S);
         } else if (matrix[0] > matrix[5] && matrix[0] > matrix[10]) {
             S = Math.sqrt(1.0 + matrix[0] - matrix[5] - matrix[10]) * 2;
-            return new Quaternion(
-                0.25 * S,
-                (matrix[1] + matrix[4]) / S,
-                (matrix[8] + matrix[2]) / S,
-                (matrix[6] - matrix[9]) / S
-            );
+            return new Quaternion(0.25 * S, (matrix[1] + matrix[4]) / S, (matrix[8] + matrix[2]) / S, (matrix[6] - matrix[9]) / S);
         } else if (matrix[5] > matrix[10]) {
             S = Math.sqrt(1.0 + matrix[5] - matrix[0] - matrix[10]) * 2;
-            return new Quaternion(
-                (matrix[1] + matrix[4]) / S,
-                0.25 * S,
-                (matrix[6] + matrix[9]) / S,
-                (matrix[8] - matrix[2]) / S
-            );
+            return new Quaternion((matrix[1] + matrix[4]) / S, 0.25 * S, (matrix[6] + matrix[9]) / S, (matrix[8] - matrix[2]) / S);
         } else {
             S = Math.sqrt(1.0 + matrix[10] - matrix[0] - matrix[5]) * 2;
-            return new Quaternion(
-                (matrix[8] + matrix[2]) / S,
-                (matrix[6] + matrix[9]) / S,
-                0.25 * S,
-                (matrix[1] - matrix[4]) / S
-            );
+            return new Quaternion((matrix[8] + matrix[2]) / S, (matrix[6] + matrix[9]) / S, 0.25 * S, (matrix[1] - matrix[4]) / S);
         }
     }
 
@@ -246,4 +180,4 @@ export class Quaternion {
         return new Quaternion(array[0], array[1], array[2], array[3]);
     }
 }
-cppBindings.registerExport("classes:quaternion", Quaternion);
+cppBindings.registerExport(cppBindings.BindingExport.QUATERNION_CLASS, Quaternion);

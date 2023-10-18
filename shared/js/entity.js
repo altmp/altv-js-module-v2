@@ -75,7 +75,7 @@ function removeEntityFromAll(entity) {
     if ("__allDirty" in superClass) superClass.__allDirty = true;
     else entity.constructor.__allDirty = true;
 }
-cppBindings.registerExport("entity:addEntityToAll", addEntityToAll);
+cppBindings.registerExport(cppBindings.BindingExport.ADD_ENTITY_TO_ALL, addEntityToAll);
 
 // Register all getters
 Object.defineProperty(alt.Entity, "all", {

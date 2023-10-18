@@ -87,8 +87,8 @@ static void CreateEntity(js::FunctionContext& ctx)
         }
     }
 
-    js::Function func = resource->GetBindingExport<v8::Function>("entity:addEntityToAll");
-    if(!ctx.Check(func.IsValid(), "INTERNAL ERROR: Failed to get entity:addEntityToAll function")) return;
+    js::Function func = resource->GetBindingExport<v8::Function>(js::BindingExport::ADD_ENTITY_TO_ALL);
+    if(!ctx.Check(func.IsValid(), "INTERNAL ERROR: Failed to get addEntityToAll function")) return;
     func.Call(scriptObject->Get());
 
     ctx.Return(scriptObject->Get());
@@ -124,16 +124,14 @@ static void RegisterExport(js::FunctionContext& ctx)
 {
     if(!ctx.CheckArgCount(2)) return;
 
-    std::string name;
-    if(!ctx.GetArg(0, name)) return;
+    js::BindingExport export_;
+    if(!ctx.GetArg(0, export_)) return;
 
     v8::Local<v8::Value> value;
     if(!ctx.GetArg(1, value)) return;
 
     js::IResource* resource = ctx.GetResource();
-    if(!ctx.Check(!resource->HasBindingExport(name), "Export already registered")) return;
-
-    resource->SetBindingExport(name, value);
+    resource->SetBindingExport(export_, value);
 }
 
 static void GetBuiltinModule(js::FunctionContext& ctx)
@@ -163,6 +161,17 @@ static void ResourceNameGetter(js::LazyPropertyContext& ctx)
     ctx.Return(ctx.GetResource()->GetResource()->GetName());
 }
 
+static void BindingExportGetter(js::LazyPropertyContext& ctx)
+{
+    js::Object obj;
+    auto values = magic_enum::enum_entries<js::BindingExport>();
+    for(auto& [value, key] : values)
+    {
+        obj.Set(key.data(), (int)value);
+    }
+    ctx.Return(obj);
+}
+
 // clang-format off
 // Used to provide C++ functions to the JS bindings
 extern js::Module sharedCppBindingsModule("sharedCppBindings", [](js::ModuleTemplate& module)
@@ -181,4 +190,7 @@ extern js::Module sharedCppBindingsModule("sharedCppBindings", [](js::ModuleTemp
     module.StaticFunction("getBuiltinModule", GetBuiltinModule);
 
     module.StaticLazyProperty("resourceName", ResourceNameGetter);
+
+    // Enum
+    module.StaticLazyProperty("BindingExport", BindingExportGetter);
 });

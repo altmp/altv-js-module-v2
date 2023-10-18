@@ -81,13 +81,13 @@ void js::ModuleTemplate::Namespace(js::Namespace& namespace_)
 static void StaticBindingExportGetter(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
 {
     js::LazyPropertyContext ctx{ info };
-    std::string exportName = js::CppValue(info.Data().As<v8::String>());
-    ctx.Return(ctx.GetResource()->GetBindingExport(exportName));
+    uint8_t export_ = js::CppValue(info.Data().As<v8::Integer>());
+    ctx.Return(ctx.GetResource()->GetBindingExport((js::BindingExport)export_));
 }
 
-void js::ModuleTemplate::StaticBindingExport(const std::string& name, const std::string& exportName)
+void js::ModuleTemplate::StaticBindingExport(const std::string& name, BindingExport export_)
 {
-    Get()->SetLazyDataProperty(JSValue(name), StaticBindingExportGetter, JSValue(exportName));
+    Get()->SetLazyDataProperty(JSValue(name), StaticBindingExportGetter, JSValue((uint8_t)export_));
 }
 
 js::ClassTemplate::DynamicPropertyData* js::ClassTemplate::GetDynamicPropertyData(v8::Isolate* isolate, Class* class_, const std::string& name)

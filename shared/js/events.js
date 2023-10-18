@@ -396,4 +396,4 @@ alt.Events.setSourceLocationFrameSkipCount = Event.setSourceLocationFrameSkipCou
 function onEvent(custom, eventType, eventData) {
     return Event.invoke(eventType, eventData, custom);
 }
-cppBindings.registerExport("events:onEvent", onEvent);
+cppBindings.registerExport(cppBindings.BindingExport.ON_EVENT, onEvent);
