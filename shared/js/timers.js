@@ -84,8 +84,7 @@ class Timer {
 
     tick() {
         const now = Date.now();
-        if (this.interval === 0 || now - this.lastTick > this.interval) {
-            const start = now;
+        if (this.interval === 0 || now - this.lastTick >= this.interval) {
             try {
                 this.callback();
             } catch (e) {
@@ -93,12 +92,13 @@ class Timer {
                 alt.logError(e);
             }
             this.lastTick = Date.now();
-            if (this.once) this.destroy();
 
-            const duration = this.lastTick - start;
+            const duration = this.lastTick - now;
             if (duration > Timer.#_warningThreshold) {
                 alt.logWarning(`[JS] Timer callback in resource '${cppBindings.resourceName}' (${this.location.fileName}:${this.location.lineNumber}) took ${duration}ms to execute (Threshold: ${Timer.#_warningThreshold}ms)`);
             }
+
+            if (this.once) this.destroy();
         }
     }
 }
