@@ -5,7 +5,7 @@
  */
 
 declare module "@altv/server" {
-    import altShared from "@altv/shared";
+    import * as altShared from "@altv/shared";
 
     export const rootDir: string;
     export const syncedMeta: Record<string, unknown>;

@@ -5,7 +5,7 @@
  */
 
 declare module "@altv/client" {
-    import altShared from "@altv/shared";
+    import * as altShared from "@altv/shared";
 
     export const isStreamerModeEnabled: boolean;
     export const locale: altShared.Enums.Locale;
