@@ -1,6 +1,20 @@
 #include "NativeInvoker.h"
 #include "CJavaScriptResource.h"
 
+char* js::NativeInvoker::SaveString(const std::string& str)
+{
+    static char* stringValues[256] = { 0 };
+    static int nextString = 0;
+
+    if(stringValues[nextString]) free(stringValues[nextString]);
+
+    char* _str = _strdup(str.data());
+    stringValues[nextString] = _str;
+    nextString = (nextString + 1) % 256;
+
+    return _str;
+}
+
 bool js::NativeInvoker::PushArgs(js::FunctionContext& ctx, alt::INative* native)
 {
     using Type = alt::INative::Type;
@@ -139,10 +153,7 @@ void* js::NativeInvoker::GetBufferFromValue(v8::Local<v8::Value> val)
 }
 
 js::NativeInvoker::NativeInvoker(CJavaScriptResource* resource, alt::INative* native) : resource(resource), native(native), nativeContext(resource->GetNativeContext()) {}
-js::NativeInvoker::~NativeInvoker()
-{
-    for(auto ptr : stringValues) free(ptr);
-}
+js::NativeInvoker::~NativeInvoker() {}
 
 bool js::NativeInvoker::Invoke(js::FunctionContext& ctx, alt::INative* native, bool addVoidReturn)
 {

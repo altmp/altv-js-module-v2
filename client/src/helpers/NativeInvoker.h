@@ -15,19 +15,10 @@ namespace js
         CJavaScriptResource* resource;
 
         void* pointers[32] = { 0 };
-        char* stringValues[32] = { 0 };
         int pointersCount = 0;
-        int stringsCount = 0;
         int returnsCount = 1;
 
-        char* SaveString(const std::string& str)
-        {
-            char* strVal = (char*)malloc(str.size() + 1);
-            memcpy(strVal, str.c_str(), str.size() + 1);
-            stringValues[stringsCount++] = strVal;
-
-            return strVal;
-        }
+        char* SaveString(const std::string& str);
 
         template<typename T>
         T* SavePointer(T val)
