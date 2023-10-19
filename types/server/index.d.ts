@@ -468,7 +468,7 @@ declare module "@altv/server" {
         setProp(componentId: number, drawable: number, texture: number): boolean;
         getDlcProp(componentId: number): altShared.Appearance.DlcProp;
         setDlcProp(componentId: number, drawable: number, texture: number, dlc: number): boolean;
-        clearProps(componentId: number): void;
+        clearProp(componentId: number): void;
 
         isEntityInStreamingRange(entity: Entity | number): boolean;
         setIntoVehicle(vehicle: Vehicle, seat: number): void;
