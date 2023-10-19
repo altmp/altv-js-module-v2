@@ -1,6 +1,6 @@
 requireBinding("shared/events.js");
 /** @type {typeof import("./utils.js")} */
-const { assertIsType } = requireBinding("shared/utils.js");
+const { assert, assertIsType } = requireBinding("shared/utils.js");
 requireBinding("shared/events/console.js");
 
 class Command {
