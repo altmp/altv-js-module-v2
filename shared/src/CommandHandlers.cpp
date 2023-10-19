@@ -5,6 +5,11 @@
 #include "helpers/Profiler.h"
 #include "cpp-sdk/ICore.h"
 
+#include <filesystem>
+#include <format>
+#include <chrono>
+#include <fstream>
+
 class HandleVisitor : public v8::PersistentHandleVisitor
 {
     js::IResource* resource;
@@ -113,4 +118,43 @@ void js::DumpBuffersCommand(js::CommandArgs&)
         resource->GetIsolate()->VisitWeakHandles(&visitor);
         visitor.Dump();
     }
+}
+
+void js::DumpHeapCommand(js::CommandArgs&)
+{
+    auto resources = alt::ICore::Instance().GetAllResources();
+    IAltResource* resource = nullptr;
+    for(alt::IResource* altResource : resources)
+    {
+        if(altResource->GetType() != "jsv2") continue;
+        resource = static_cast<js::IAltResource*>(altResource->GetImpl());
+    }
+    if(!resource) return;
+
+    v8::Isolate* isolate = resource->GetIsolate();
+    v8::Locker locker(isolate);
+    v8::HandleScope scope(isolate);
+    v8::Isolate::Scope isolateScope(isolate);
+
+    const auto callback = [](const std::string& heapJson)
+    {
+        std::filesystem::path mainDir;
+#ifdef ALT_SERVER_API
+        mainDir = alt::ICore::Instance().GetRootDirectory();
+#else
+        mainDir = alt::ICore::Instance().GetClientPath();
+#endif
+        if(!std::filesystem::exists(mainDir / "heapdumps")) std::filesystem::create_directory(mainDir / "heapdumps");
+
+        const auto now = std::chrono::system_clock::now();
+        // todo: This is UNIX time for some reason, fix it to display local time
+        std::string fileName = std::format("{:%d-%m-%Y_%H-%M-%OS}.heapsnapshot", now);
+        std::ofstream file(mainDir / "heapdumps" / fileName);
+        file.write(heapJson.data(), heapJson.size());
+        file.close();
+        Logger::Info("Wrote heapdump result into heapdumps/" + fileName);
+    };
+    StringOutputStream* stream = StringOutputStream::Create(resource, callback);
+    const v8::HeapSnapshot* snapshot = isolate->GetHeapProfiler()->TakeHeapSnapshot();
+    snapshot->Serialize(stream, v8::HeapSnapshot::kJSON);
 }

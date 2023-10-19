@@ -153,3 +153,13 @@ js::TemporaryGlobalExtension::TemporaryGlobalExtension(v8::Local<v8::Context> _c
 {
     ctx->Global()->Set(ctx, JSValue(_name), WrapFunction(_callback)->GetFunction(ctx).ToLocalChecked());
 }
+
+void js::StringOutputStream::EndOfStream()
+{
+    resource->PushNextTickCallback(
+      [this]()
+      {
+          this->callback(this->stream.str());
+          delete this;
+      });
+}

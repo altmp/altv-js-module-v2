@@ -3,6 +3,7 @@
 #include <thread>
 
 #include "v8-persistent-handle.h"
+#include "v8-profiler.h"
 #include "magic_enum/include/magic_enum.hpp"
 
 #include "Convert.h"
@@ -695,6 +696,33 @@ namespace js
         {
             // We should only do this for "eternal" strings that never get deleted,
             // so don't do anything here
+        }
+    };
+
+    class StringOutputStream : public v8::OutputStream
+    {
+    public:
+        using Callback = std::function<void(const std::string&)>;
+
+    private:
+        std::stringstream stream;
+        Callback callback;
+        js::IResource* resource;
+
+        StringOutputStream(js::IResource* _resource, const Callback& _callback) : resource(_resource), callback(_callback) {}
+
+    public:
+        virtual void EndOfStream() override;
+        virtual WriteResult WriteAsciiChunk(char* data, int size) override
+        {
+            stream << data;
+            return WriteResult::kContinue;
+        }
+
+        // Don't expose the constructor so it can't be stack allocated
+        static StringOutputStream* Create(js::IResource* resource, const Callback& callback)
+        {
+            return new StringOutputStream(resource, callback);
         }
     };
 }  // namespace js
