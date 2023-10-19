@@ -845,6 +845,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Property("sendNames", &SendNamesGetter, &SendNamesSetter);
     tpl.Property("streamedEntities", StreamedEntitiesGetter);
     tpl.Property<&alt::IPlayer::IsNetworkOwnershipDisabled, &alt::IPlayer::SetNetworkOwnershipDisabled>("netOwnershipDisabled");
+    tpl.Property<&alt::IPlayer::GetBloodDamageBase64, &alt::IPlayer::SetBloodDamageBase64>("bloodDamageBase64");
 
     tpl.Method("emit", &Emit);
     tpl.Method("emitUnreliable", &EmitUnreliable);

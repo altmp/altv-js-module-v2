@@ -431,6 +431,7 @@ declare module "@altv/server" {
 
         readonly cloudAuthHash: string;
         netOwnershipDisabled: boolean;
+        bloodDamageBase64: string;
 
         emit<E extends keyof altShared.Events.CustomServerToPlayerEvent>(event: E, ...args: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>): void;
         emit<E extends string>(event: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, ...args: unknown[]): void;
