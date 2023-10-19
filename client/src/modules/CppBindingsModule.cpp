@@ -48,6 +48,12 @@ static void SendRPC(js::FunctionContext& ctx)
     ctx.Return(alt::ICore::Instance().TriggerServerRPCEvent(rpcName, args));
 }
 
+static void GetStreamedInVirtualEntities(js::FunctionContext& ctx)
+{
+    std::vector<alt::IVirtualEntity*> streamedInVirtualEntities = alt::ICore::Instance().GetVirtualEntitiesStreamedIn();
+    ctx.Return(streamedInVirtualEntities);
+}
+
 // clang-format off
 extern js::Module sharedCppBindingsModule;
 // !!! Make sure to keep the name as cppBindings
@@ -55,4 +61,5 @@ extern js::Module cppBindingsModule("cppBindings", "sharedCppBindings", [](js::M
 {
     module.StaticFunction("answerRPC", AnswerRPC);
     module.StaticFunction("sendRPC", SendRPC);
+    module.StaticFunction("getStreamedInVirtualEntities", GetStreamedInVirtualEntities);
 });

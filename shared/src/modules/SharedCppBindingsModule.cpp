@@ -96,14 +96,12 @@ static void CreateEntity(js::FunctionContext& ctx)
 
 static void GetAllEntities(js::FunctionContext& ctx)
 {
-    js::IResource* resource = ctx.GetResource();
     std::vector<alt::IEntity*> entities = alt::ICore::Instance().GetEntities();
     ctx.Return(entities);
 }
 
 static void GetAllVirtualEntities(js::FunctionContext& ctx)
 {
-    js::IResource* resource = ctx.GetResource();
     std::vector<alt::IBaseObject*> virtualEntities = alt::ICore::Instance().GetBaseObjects(alt::IBaseObject::Type::VIRTUAL_ENTITY);
     ctx.Return(virtualEntities);
 }
