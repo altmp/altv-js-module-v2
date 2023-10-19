@@ -80,7 +80,7 @@ function removeEntityFromStreamedIn(entity) {
     const all = entityStreamedInMap.get(entity.type);
     if (all) all.delete(entity);
     const storageClass = entityStreamedInStorageMap.get(entity.type);
-    if (storageClass) storageClass.__allDirty = true;
+    if (storageClass) storageClass.__streamedInDirty = true;
 }
 
 // Register streamedIn getters
