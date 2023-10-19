@@ -92,15 +92,15 @@ namespace js
     {
         switch(type)
         {
-            case Type::UNDEFINED: return "Undefined";
-            case Type::NULL_TYPE: return "Null";
-            case Type::BOOLEAN: return "Boolean";
-            case Type::NUMBER: return "Number";
-            case Type::STRING: return "String";
-            case Type::SYMBOL: return "Symbol";
-            case Type::OBJECT: return "Object";
-            case Type::FUNCTION: return "Function";
-            case Type::ARRAY: return "Array";
+            case Type::UNDEFINED: return "undefined";
+            case Type::NULL_TYPE: return "null";
+            case Type::BOOLEAN: return "boolean";
+            case Type::NUMBER: return "number";
+            case Type::STRING: return "string";
+            case Type::SYMBOL: return "symbol";
+            case Type::OBJECT: return "object";
+            case Type::FUNCTION: return "function";
+            case Type::ARRAY: return "array";
             case Type::ARRAY_BUFFER: return "ArrayBuffer";
             case Type::ARRAY_BUFFER_VIEW: return "ArrayBufferView";
             case Type::SHARED_ARRAY_BUFFER: return "SharedArrayBuffer";
