@@ -81,7 +81,7 @@ namespace js
         template<>
         bool PushArg<char*>(js::FunctionContext& ctx, int index)
         {
-            if(!ctx.CheckArgType(index, { js::Type::STRING, js::Type::NULL_TYPE })) return;
+            if(!ctx.CheckArgType(index, { js::Type::STRING, js::Type::NULL_TYPE })) return false;
             v8::Local<v8::Value> val;
             if(!ctx.GetArg(index, val)) return false;
 
