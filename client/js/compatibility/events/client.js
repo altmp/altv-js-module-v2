@@ -7,7 +7,7 @@ const { registerEventHandler } = requireBinding("shared/compatibility/utils/even
 
 registerEventHandler(
     alt.Enums.CustomEventType.KEY_UP,
-    "keyUp",
+    "keyup",
     ({ key }) => {
         return [key];
     },
@@ -16,7 +16,7 @@ registerEventHandler(
 
 registerEventHandler(
     alt.Enums.CustomEventType.KEY_DOWN,
-    "keyDown",
+    "keydown",
     ({ key }) => {
         return [key];
     },
