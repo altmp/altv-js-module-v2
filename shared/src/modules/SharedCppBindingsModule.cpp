@@ -77,14 +77,6 @@ static void CreateEntity(js::FunctionContext& ctx)
             tryCatch.ReThrow();
             return;
         }
-
-        js::Object scriptObjectObj = scriptObject->Get();
-        if(scriptObjectObj.GetType("onCreate") == js::Type::FUNCTION)
-        {
-            js::Function onCreateFunc = scriptObjectObj.Get<v8::Local<v8::Value>>("onCreate").As<v8::Function>();
-            onCreateFunc.Call(scriptObjectObj, args.Get());
-            if(tryCatch.HasCaught()) tryCatch.ReThrow();
-        }
     }
 
     js::Function func = resource->GetBindingExport<v8::Function>(js::BindingExport::ADD_ENTITY_TO_ALL);

@@ -30,6 +30,13 @@ js::ScriptObject* js::IScriptObjectHandler::GetOrCreateScriptObject(v8::Local<v8
         return nullptr;
     }
 
+    js::Object scriptObjectObj = scriptObject->Get();
+    if(scriptObjectObj.GetType("onCreate") == js::Type::FUNCTION)
+    {
+        js::Function onCreateFunc = scriptObjectObj.Get<v8::Local<v8::Value>>("onCreate").As<v8::Function>();
+        onCreateFunc.Call(scriptObjectObj);
+    }
+
     objectMap.insert({ object, scriptObject });
     return scriptObject;
 }
