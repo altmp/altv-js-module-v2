@@ -10,13 +10,19 @@ const { Entity } = requireBinding("server/compatibility/classes/entity.js");
 const { WorldObject } = requireBinding("server/compatibility/classes/worldObject.js");
 const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
 
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+const { extendAltEntityClass, overrideLazyProperty } = requireBinding("shared/compatibility/utils/classes.js");
 
 class Player extends alt.Player {
     constructor() {
         super();
 
         extendAltEntityClass(this, SharedPlayer, Entity, WorldObject, BaseObject);
+    }
+
+    onCreate() {
+        overrideLazyProperty(this, "socialID", this.socialID.toString());
+        overrideLazyProperty(this, "hwidHash", this.hwidHash.toString());
+        overrideLazyProperty(this, "hwidExHash", this.hwidHash.toString());
     }
 
     emitRpc(name, ...args) {
