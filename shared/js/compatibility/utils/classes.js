@@ -35,3 +35,11 @@ export function extendAltEntityClass(baseInstance, ...classes) {
 
     return baseInstance;
 }
+
+export function overrideLazyProperty(instance, propertyName, value) {
+    Object.defineProperty(instance, propertyName, {
+        get() {
+            return value;
+        }
+    });
+}
