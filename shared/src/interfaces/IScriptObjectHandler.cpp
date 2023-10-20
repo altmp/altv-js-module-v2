@@ -2,12 +2,6 @@
 #include "Class.h"
 #include "Logger.h"
 
-js::IScriptObjectHandler::ObjectIdentifier js::IScriptObjectHandler::GetObjectIdentifier(alt::IBaseObject* object)
-{
-    ObjectIdentifier identifier = (ObjectIdentifier)((ObjectIdentifier)object->GetType() << 32 | object->GetID());
-    return identifier;
-}
-
 js::ScriptObject* js::IScriptObjectHandler::GetOrCreateScriptObject(v8::Local<v8::Context> context, alt::IBaseObject* object)
 {
     js::ScriptObject* existingObject = GetScriptObject(object);
@@ -36,14 +30,13 @@ js::ScriptObject* js::IScriptObjectHandler::GetOrCreateScriptObject(v8::Local<v8
         return nullptr;
     }
 
-    objectMap.insert({ GetObjectIdentifier(object), scriptObject });
+    objectMap.insert({ object, scriptObject });
     return scriptObject;
 }
 
 void js::IScriptObjectHandler::DestroyScriptObject(alt::IBaseObject* object)
 {
-    ObjectIdentifier identifier = GetObjectIdentifier(object);
-    auto it = objectMap.find(identifier);
+    auto it = objectMap.find(object);
     if(it == objectMap.end()) return;
     ScriptObject::Destroy(it->second);
     objectMap.erase(it);
@@ -51,8 +44,7 @@ void js::IScriptObjectHandler::DestroyScriptObject(alt::IBaseObject* object)
 
 js::ScriptObject* js::IScriptObjectHandler::GetScriptObject(alt::IBaseObject* object)
 {
-    ObjectIdentifier identifier = GetObjectIdentifier(object);
-    auto it = objectMap.find(identifier);
+    auto it = objectMap.find(object);
     if(it == objectMap.end()) return nullptr;
     return it->second;
 }

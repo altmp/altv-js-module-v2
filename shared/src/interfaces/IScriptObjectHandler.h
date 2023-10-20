@@ -12,12 +12,8 @@ namespace js
 
     class IScriptObjectHandler
     {
-        using ObjectIdentifier = uint64_t;
-
-        std::unordered_map<ObjectIdentifier, ScriptObject*> objectMap;
+        std::unordered_map<alt::IBaseObject*, ScriptObject*> objectMap;
         std::unordered_map<alt::IBaseObject::Type, Persistent<v8::Function>> customFactoryMap;
-
-        ObjectIdentifier GetObjectIdentifier(alt::IBaseObject* object);
 
         static std::unordered_map<alt::IBaseObject::Type, Class*>& GetClassMap()
         {
