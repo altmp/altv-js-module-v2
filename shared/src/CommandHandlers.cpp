@@ -6,7 +6,6 @@
 #include "cpp-sdk/ICore.h"
 
 #include <filesystem>
-#include <format>
 #include <chrono>
 #include <fstream>
 
@@ -124,12 +123,12 @@ void js::DumpHeapCommand(js::CommandArgs&)
 {
     auto resources = alt::ICore::Instance().GetAllResources();
     IAltResource* resource = nullptr;
-    for(alt::IResource* altResource : resources)
+    for (alt::IResource* altResource : resources)
     {
-        if(altResource->GetType() != "jsv2") continue;
+        if (altResource->GetType() != "jsv2") continue;
         resource = static_cast<js::IAltResource*>(altResource->GetImpl());
     }
-    if(!resource) return;
+    if (!resource) return;
 
     v8::Isolate* isolate = resource->GetIsolate();
     v8::Locker locker(isolate);
@@ -144,16 +143,22 @@ void js::DumpHeapCommand(js::CommandArgs&)
 #else
         mainDir = alt::ICore::Instance().GetClientPath();
 #endif
-        if(!std::filesystem::exists(mainDir / "heapdumps")) std::filesystem::create_directory(mainDir / "heapdumps");
+        if (!std::filesystem::exists(mainDir / "heapdumps")) std::filesystem::create_directory(mainDir / "heapdumps");
 
         const auto now = std::chrono::system_clock::now();
+        time_t time = std::chrono::system_clock::to_time_t(now);
+
         // todo: This is UNIX time for some reason, fix it to display local time
-        std::string fileName = std::format("{:%d-%m-%Y_%H-%M-%OS}.heapsnapshot", now);
+        char timestamp[20];
+        std::strftime(timestamp, sizeof(timestamp), "%d-%m-%Y_%H-%M-%S", std::localtime(&time));
+        std::string fileName = std::string(timestamp) + '_' + std::to_string(now.time_since_epoch().count()) + ".heapsnapshot";
+
         std::ofstream file(mainDir / "heapdumps" / fileName);
         file.write(heapJson.data(), heapJson.size());
         file.close();
         Logger::Info("Wrote heapdump result into heapdumps/" + fileName);
     };
+
     StringOutputStream* stream = StringOutputStream::Create(resource, callback);
     const v8::HeapSnapshot* snapshot = isolate->GetHeapProfiler()->TakeHeapSnapshot();
     snapshot->Serialize(stream, v8::HeapSnapshot::kJSON);
