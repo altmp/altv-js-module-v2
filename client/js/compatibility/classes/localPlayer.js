@@ -4,7 +4,7 @@
 
 const { SharedPlayer } = requireBinding("shared/compatibility/classes/sharedPlayer.js");
 
-const { Player } = requireBinding("client/compatibility/classes/entity.js");
+const { Player } = requireBinding("client/compatibility/classes/player.js");
 const { Entity } = requireBinding("client/compatibility/classes/entity.js");
 const { WorldObject } = requireBinding("client/compatibility/classes/worldObject.js");
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
