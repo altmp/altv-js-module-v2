@@ -40,8 +40,10 @@ void js::IResource::InitializeBinding(js::Binding* binding)
     if(module->GetStatus() != v8::Module::Status::kEvaluated)
     {
         Logger::Error("INTERNAL ERROR: Failed to evaluate binding module", binding->GetName());
-        v8::Local<v8::Value> exception = module->GetException();
-        if(!exception.IsEmpty()) Logger::Error("INTERNAL ERROR:", *v8::String::Utf8Value(isolate, exception));
+        js::Object exceptionObj = module->GetException().As<v8::Object>();
+        js::Logger::Error(exceptionObj.Get<std::string>("message"));
+        std::string stack = exceptionObj.Get<std::string>("stack");
+        if(!stack.empty()) js::Logger::Error(stack);
     }
 }
 
