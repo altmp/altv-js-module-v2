@@ -102,6 +102,9 @@ declare module "@altv/server" {
 
         static getByID(id: number): Blip | null;
         static create(opts: BlipCreateOptions): Blip;
+
+        static setFactory(factory: typeof Blip): void;
+        static getFactory<T extends Blip>(): T;
     }
 
     export namespace PointBlip {
@@ -141,6 +144,9 @@ declare module "@altv/server" {
 
         static getByID(id: number): Marker | null;
         static create(opts: MarkerCreateOptions): Marker;
+
+        static setFactory(factory: typeof Marker): void;
+        static getFactory<T extends Marker>(): T;
     }
 
     export abstract class ColShapeSphere extends ColShape {
@@ -215,6 +221,9 @@ declare module "@altv/server" {
         readonly syncedMeta: altShared.ColShapeSyncedMeta;
 
         static readonly all: ReadonlyArray<ColShape>;
+
+        static setFactory(factory: typeof ColShape): void;
+        static getFactory<T extends ColShape>(): T;
     }
 
     export interface MarkerCreateOptions {
@@ -234,6 +243,7 @@ declare module "@altv/server" {
         streamingDistance: number;
     }
 
+    // @ts-expect-error - Suppresses "Class static side 'typeof Checkpoint' incorrectly extends base class static side 'typeof ColShape'.""
     export abstract class Checkpoint extends ColShape {
         readonly isStreamedIn: boolean;
 
@@ -257,10 +267,13 @@ declare module "@altv/server" {
         public onCreate?(opts: CheckpointCreateOptions): void;
         public onDestroy?(): void;
 
+        static readonly all: ReadonlyArray<Checkpoint>;
+
         static create(opts: CheckpointCreateOptions): Checkpoint;
         static getByID(id: number): Checkpoint | null;
 
-        static readonly all: ReadonlyArray<Checkpoint>;
+        static setFactory(factory: typeof Checkpoint): void;
+        static getFactory<T extends Checkpoint>(): T;
     }
 
     export abstract class Entity extends WorldObject {
@@ -326,9 +339,13 @@ declare module "@altv/server" {
         public onCreate?(opts: ObjectCreateOptions): void;
         public onDestroy?(): void;
 
+        static readonly all: ReadonlyArray<Object>;
+
         static getByID(id: number): Object | null;
         static create(opts: ObjectCreateOptions): Object;
-        static readonly all: ReadonlyArray<Object>;
+
+        static setFactory(factory: typeof Object): void;
+        static getFactory<T extends Object>(): T;
     }
 
     export interface PedCreateOptions {
@@ -355,6 +372,9 @@ declare module "@altv/server" {
         static create(opts: PedCreateOptions): Ped;
 
         static readonly all: ReadonlyArray<Ped>;
+
+        static setFactory(factory: typeof Ped): void;
+        static getFactory<T extends Ped>(): T;
     }
 
     export class Player extends Entity {
@@ -523,6 +543,9 @@ declare module "@altv/server" {
 
         static readonly all: ReadonlyArray<Player>;
         static getByID(id: number): Player | null;
+
+        static setFactory(factory: typeof Player): void;
+        static getFactory<T extends Player>(): T;
     }
 
     export abstract class Resource extends altShared.Resource {
@@ -712,6 +735,9 @@ declare module "@altv/server" {
         static getByID(id: number): Vehicle | null;
         static create(opts: VehicleCreateOptions): Vehicle;
         static all: ReadonlyArray<Vehicle>;
+
+        static setFactory(factory: typeof Vehicle): void;
+        static getFactory<T extends Vehicle>(): T;
     }
 
     export interface VirtualEntityCreateOptions {
@@ -728,6 +754,9 @@ declare module "@altv/server" {
         public onDestroy?(): void;
 
         static create(opts: altShared.VirtualEntityGroupCreateOptions): VirtualEntityGroup;
+
+        static setFactory(factory: typeof VirtualEntityGroup): void;
+        static getFactory<T extends VirtualEntityGroup>(): T;
     }
 
     export abstract class VirtualEntity extends WorldObject {
@@ -746,6 +775,9 @@ declare module "@altv/server" {
         public onDestroy?(): void;
 
         static create(opts: VirtualEntityCreateOptions): VirtualEntity;
+
+        static setFactory(factory: typeof VirtualEntity): void;
+        static getFactory<T extends VirtualEntity>(): T;
     }
 
     export interface VoiceChannelCreateOptions {
@@ -777,41 +809,9 @@ declare module "@altv/server" {
         public onDestroy?(): void;
 
         static create(opts: VoiceChannelCreateOptions): VoiceChannel;
-    }
 
-    export namespace Factory {
-        export function setPlayerFactory(factory: typeof Player): void;
-        export function getPlayerFactory<T extends Player>(): T;
-
-        export function setVehicleFactory(factory: typeof Vehicle): void;
-        export function getVehicleFactory<T extends Vehicle>(): T;
-
-        export function setPedFactory(factory: typeof Ped): void;
-        export function getPedFactory<T extends Ped>(): T;
-
-        export function setBlipFactory(factory: typeof Blip): void;
-        export function getBlipFactory<T extends Blip>(): T;
-
-        export function setMarkerFactory(factory: typeof Marker): void;
-        export function getMarkerFactory<T extends Marker>(): T;
-
-        export function setVoiceChannelFactory(factory: typeof VoiceChannel): void;
-        export function getVoiceChannelFactory<T extends VoiceChannel>(): T;
-
-        export function setColShapeFactory(factory: typeof ColShape): void;
-        export function getColShapeFactory<T extends ColShape>(): T;
-
-        export function setObjectFactory(factory: typeof Object): void;
-        export function getObjectFactory<T extends Object>(): T;
-
-        export function setCheckpointFactory(factory: typeof Checkpoint): void;
-        export function getCheckpointFactory<T extends Checkpoint>(): T;
-
-        export function setVirtualEntityFactory(factory: typeof VirtualEntity): void;
-        export function getVirtualEntityFactory<T extends VirtualEntity>(): T;
-
-        export function setVirtualEntityGroupFactory(factory: typeof VirtualEntityGroup): void;
-        export function getVirtualEntityGroupFactory<T extends VirtualEntityGroup>(): T;
+        static setFactory(factory: typeof VoiceChannel): void;
+        static getFactory<T extends VoiceChannel>(): T;
     }
 
     export abstract class WorldObject extends BaseObject {
