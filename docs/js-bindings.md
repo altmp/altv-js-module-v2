@@ -1,12 +1,12 @@
 # JS bindings
 
-The JS bindings can be found in the `shared/js`, `server/js` and `client/js` folders. These bindings are read and put into the output `shared/src/BindingsMap.cpp` file
+The JS bindings can be found in the `shared/js`, `server/js` and `client/js` folders. These bindings are read and put into the output `build/BindingsMap.cpp` file
 by the `tools/generate-bindings.js` script.
 
 That script is executed before building and reads all the JS bindings and inserts them into a C++ map in the output file. The path, name, JS source and scope
 of the binding is stored and can then be accessed at runtime from C++ by using `Binding::Get`.
 
-When a resource is started, all the bindings are compiled and evaluated in the Context of that resource, and the exports of them are stored.
+When a resource is started, all the bindings are compiled and evaluated in the Context of that resource, and the binding exports of them are stored.
 
 ## Adding a new binding
 
@@ -17,6 +17,12 @@ The access the API there is a global `alt` available in the bindings which can b
 To use logging in a bindings file, make sure that file calls `requireBinding("shared/logging.js")` before, so that alt.log is available.
 
 After the next compilation of the project, the binding will automatically be compiled and evaluated on resource start and show the errors if there are any.
+
+### Compatibility bindings
+
+Bindings that should only be run in v1 compatibility mode should go into the `compatibility` subfolder in their respective scope.
+
+The module automatically checks whether a binding is in this folder and compatibility mode is enabled, and if it is not, the binding is not loaded.
 
 ## Binding names
 
