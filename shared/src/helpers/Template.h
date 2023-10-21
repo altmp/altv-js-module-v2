@@ -12,31 +12,6 @@
 
 #include "interfaces/IBindingExportHandler.h"
 
-template<auto x>
-struct function_traits;
-
-template<class Class, class Return, class... Args, Return (Class::*FuncPtr)(Args...)>
-struct function_traits<FuncPtr>
-{
-    using ClassType = Class;
-    using ReturnType = Return;
-    typedef Return (Class::*FunctionPointerType)(Args...);
-    using Arguments = std::tuple<Args...>;
-
-    static constexpr decltype(FuncPtr) FunctionPtr = FuncPtr;
-};
-
-template<class Class, class Return, class... Args, Return (Class::*FuncPtr)(Args...) const>
-struct function_traits<FuncPtr>
-{
-    using ClassType = Class;
-    using ReturnType = Return;
-    typedef Return (Class::*FunctionPointerType)(Args...);
-    using Arguments = std::tuple<Args...>;
-
-    static constexpr decltype(FuncPtr) FunctionPtr = FuncPtr;
-};
-
 namespace js
 {
     class Namespace;
@@ -46,6 +21,31 @@ namespace js
     {
         template<class T>
         using CleanArg = typename std::remove_cv_t<typename std::remove_reference_t<T>>;
+
+        template<auto x>
+        struct function_traits;
+
+        template<class Class, class Return, class... Args, Return (Class::*FuncPtr)(Args...)>
+        struct function_traits<FuncPtr>
+        {
+            using ClassType = Class;
+            using ReturnType = Return;
+            typedef Return (Class::*FunctionPointerType)(Args...);
+            using Arguments = std::tuple<Args...>;
+
+            static constexpr decltype(FuncPtr) FunctionPtr = FuncPtr;
+        };
+
+        template<class Class, class Return, class... Args, Return (Class::*FuncPtr)(Args...) const>
+        struct function_traits<FuncPtr>
+        {
+            using ClassType = Class;
+            using ReturnType = Return;
+            typedef Return (Class::*FunctionPointerType)(Args...);
+            using Arguments = std::tuple<Args...>;
+
+            static constexpr decltype(FuncPtr) FunctionPtr = FuncPtr;
+        };
 
         static void FunctionHandler(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
