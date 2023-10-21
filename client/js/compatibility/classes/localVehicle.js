@@ -17,7 +17,7 @@ class LocalVehicle extends alt.LocalVehicle {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
         if (!args.length) return super();
 
-        const [model, dimension, pos, rot, useStreaming, streamingDistance] = aegs;
+        const [model, dimension, pos, rot, useStreaming, streamingDistance] = args;
 
         const instance = alt.LocalVehicle.create({ model, dimension, pos, rot, useStreaming, streamingDistance });
         return extendAltEntityClass(instance, SharedVehicle, Entity, WorldObject, BaseObject);
