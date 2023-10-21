@@ -91,6 +91,9 @@ declare module "@altv/client" {
 
         static create(options: AudioCreateOptions): Audio;
         static getByID(id: number): Audio | null;
+
+        static setFactory(factory: typeof Audio): void;
+        static getFactory<T extends Audio>(): T;
     }
 
     export abstract class AudioCategory {
@@ -146,6 +149,9 @@ declare module "@altv/client" {
 
         static create(options: AudioFilterCreateOptions): AudioFilter;
         static getByID(id: number): AudioFilter | null;
+
+        static setFactory(factory: typeof AudioFilter): void;
+        static getFactory<T extends AudioFilter>(): T;
     }
 
     export abstract class AudioOutput extends BaseObject {
@@ -173,6 +179,9 @@ declare module "@altv/client" {
         static readonly all: ReadonlyArray<AudioOutputAttached>;
 
         static create(options: AudioOutputAttachedCreateOptions): AudioOutputAttached;
+
+        static setFactory(factory: typeof AudioOutputAttached): void;
+        static getFactory<T extends AudioOutputAttached>(): T;
     }
 
     export interface AudioOutputFrontendCreateOptions {
@@ -187,6 +196,9 @@ declare module "@altv/client" {
         static readonly all: ReadonlyArray<AudioOutputFrontend>;
 
         static create(options: AudioOutputFrontendCreateOptions): AudioOutputFrontendCreateOptions;
+
+        static setFactory(factory: typeof AudioOutputFrontend): void;
+        static getFactory<T extends AudioOutputFrontend>(): T;
     }
 
     export interface AudioOutputWorldCreateOptions {
@@ -203,6 +215,9 @@ declare module "@altv/client" {
         static readonly all: ReadonlyArray<AudioOutputWorld>;
 
         static create(options: AudioOutputWorldCreateOptions): AudioOutputWorld;
+
+        static setFactory(factory: typeof AudioOutputWorld): void;
+        static getFactory<T extends AudioOutputWorld>(): T;
     }
 
     export class BaseObject extends altShared.BaseObject {
@@ -287,6 +302,9 @@ declare module "@altv/client" {
         static getByID(id: number): Blip | null;
         static getByRemoteID(id: number): Blip | null;
         static getByScriptID(id: number): Blip | null;
+
+        static setFactory(factory: typeof Blip): void;
+        static getFactory<T extends Blip>(): T;
     }
 
     export abstract class Marker extends WorldObject {
@@ -314,6 +332,9 @@ declare module "@altv/client" {
         static getByID(id: number): Marker | null;
         static getByRemoteID(id: number): Marker | null;
         static create(opts: MarkerCreateOptions): Marker;
+
+        static setFactory(factory: typeof Marker): void;
+        static getFactory<T extends Marker>(): T;
     }
 
     export abstract class ColShape extends WorldObject {
@@ -327,11 +348,14 @@ declare module "@altv/client" {
         public onCreate?(opts: altShared.ColShapeCreateOptions): void;
         public onDestroy?(): void;
 
+        static readonly all: ReadonlyArray<ColShape>;
+
         static create(opts: altShared.ColShapeCreateOptions): ColShape;
         static getByID(id: number): ColShape | null;
         static getByRemoteID(id: number): ColShape | null;
 
-        static readonly all: ReadonlyArray<ColShape>;
+        static setFactory(factory: typeof ColShape): void;
+        static getFactory<T extends ColShape>(): T;
     }
 
     export interface CheckpointCreateOptions {
@@ -366,12 +390,15 @@ declare module "@altv/client" {
         public onCreate?(opts: CheckpointCreateOptions): void;
         public onDestroy?(): void;
 
+        static readonly all: ReadonlyArray<Checkpoint>;
+
         static create(opts: CheckpointCreateOptions): Checkpoint;
         static getByID(id: number): Checkpoint | null;
         static getByRemoteID(id: number): Checkpoint | null;
         static getByScriptID(scriptId: number): Checkpoint | null;
 
-        static readonly all: ReadonlyArray<Checkpoint>;
+        static setFactory(factory: typeof Checkpoint): void;
+        static getFactory<T extends Checkpoint>(): T;
     }
 
     export abstract class Entity extends WorldObject {
@@ -503,6 +530,9 @@ declare module "@altv/client" {
         static getByID(id: number): Object | null;
         static getByRemoteID(id: number): Object | null;
         static getByScriptID(id: number): Object | null;
+
+        static setFactory(factory: typeof Object): void;
+        static getFactory<T extends Object>(): T;
     }
 
     export interface LocalObjectCreateOptions {
@@ -555,6 +585,9 @@ declare module "@altv/client" {
         static create(options: LocalObjectCreateOptions): LocalObject;
         static getByID(id: number): LocalObject | null;
         static getByScriptID(scriptId: number): LocalObject | null;
+
+        static setFactory(factory: typeof LocalObject): void;
+        static getFactory<T extends LocalObject>(): T;
     }
 
     export interface WeaponObjectCreateOptions {
@@ -589,6 +622,9 @@ declare module "@altv/client" {
         static getByID(id: number): Ped | null;
         static getByRemoteID(id: number): Ped | null;
         static getByScriptID(scriptID: number): Ped | LocalPed | null;
+
+        static setFactory(factory: typeof Ped): void;
+        static getFactory<T extends Ped>(): T;
     }
 
     export interface LocalPedCreateOptions {
@@ -618,6 +654,9 @@ declare module "@altv/client" {
         static create(options: LocalPedCreateOptions): LocalPed;
         static getByID(id: number): LocalPed | null;
         static getByScriptID(scriptId: number): LocalPed | null;
+
+        static setFactory(factory: typeof LocalPed): void;
+        static getFactory<T extends LocalPed>(): T;
     }
 
     export abstract class LocalPlayer extends Player {
@@ -630,6 +669,9 @@ declare module "@altv/client" {
         getWeaponAmmo(wepaonHash: number | string): number | undefined;
         hasWeapon(wepaonHash: number | string): boolean;
         getWeaponComponents(wepaonHash: number | string): ReadonlyArray<number> | undefined;
+
+        static setFactory(factory: typeof LocalPlayer): void;
+        static getFactory<T extends LocalPlayer>(): T;
     }
 
     export interface LocalVehicleCreateOptions {
@@ -658,6 +700,9 @@ declare module "@altv/client" {
         static create(opts: LocalVehicleCreateOptions): LocalVehicle;
         static getByID(id: number): LocalVehicle | null;
         static getByScriptID(scriptId: number): LocalVehicle | null;
+
+        static setFactory(factory: typeof LocalVehicle): void;
+        static getFactory<T extends LocalVehicle>(): T;
     }
 
     export abstract class MapZoomData {
@@ -723,6 +768,9 @@ declare module "@altv/client" {
         getWeaponTintIndex(weaponHash: number | string): number | undefined;
         hasWeaponComponent(weaponHash: number | string, componentHash: number | string): boolean;
 
+        readonly syncedMeta: Readonly<altShared.PlayerSyncedMeta>;
+        readonly streamSyncedMeta: Readonly<altShared.PlayerStreamSyncedMeta>;
+
         static readonly local: LocalPlayer;
         static readonly all: ReadonlyArray<Player>;
         static readonly streamedIn: ReadonlyArray<Player>;
@@ -730,8 +778,8 @@ declare module "@altv/client" {
         static getByID(id: number): Player | null;
         static getByRemoteID(id: number): Player | null;
 
-        readonly syncedMeta: Readonly<altShared.PlayerSyncedMeta>;
-        readonly streamSyncedMeta: Readonly<altShared.PlayerStreamSyncedMeta>;
+        static setFactory(factory: typeof Player): void;
+        static getFactory<T extends Player>(): T;
     }
 
     export interface RmlDocumentCreateOptions {
@@ -761,6 +809,9 @@ declare module "@altv/client" {
         static create(options: RmlDocumentCreateOptions): RmlDocument;
 
         static getByID(id: string): RmlDocument | null;
+
+        static setFactory(factory: typeof RmlDocument): void;
+        static getFactory<T extends RmlDocument>(): T;
     }
 
     // @ts-ignore - Suppresses "Class static side incorrectly extends base class static side"
@@ -874,6 +925,9 @@ declare module "@altv/client" {
 
         static getByID(id: number): TextLabel | null;
         // static getByRemoteID(id: number): TextLabel | null;
+
+        static setFactory(factory: typeof TextLabel): void;
+        static getFactory<T extends TextLabel>(): T;
     }
 
     export abstract class Vehicle extends Entity {
@@ -1003,6 +1057,9 @@ declare module "@altv/client" {
         static getByID(id: number): Vehicle | null;
         static getByRemoteID(id: number): Vehicle | null;
         static getByScriptID(scriptId: number): Vehicle | null;
+
+        static setFactory(factory: typeof Vehicle): void;
+        static getFactory<T extends Vehicle>(): T;
     }
 
     export interface TextLabelCreateOptions {
@@ -1033,6 +1090,9 @@ declare module "@altv/client" {
         public onDestroy?(): void;
 
         static create(opts: altShared.VirtualEntityGroupCreateOptions): VirtualEntityGroup;
+
+        static setFactory(factory: typeof VirtualEntityGroup): void;
+        static getFactory<T extends VirtualEntityGroup>(): T;
     }
 
     export abstract class VirtualEntity extends WorldObject {
@@ -1054,6 +1114,9 @@ declare module "@altv/client" {
         public onDestroy?(): void;
 
         static create(opts: VirtualEntityCreateOptions): VirtualEntity;
+
+        static setFactory(factory: typeof VirtualEntity): void;
+        static getFactory<T extends VirtualEntity>(): T;
     }
 
     export abstract class WeaponData {
@@ -1119,6 +1182,9 @@ declare module "@altv/client" {
 
         static create(options: WebSocketClientCreateOptions): WebSocketClient;
         static getByID(id: number): WebSocketClient | null;
+
+        static setFactory(factory: typeof WebSocketClient): void;
+        static getFactory<T extends WebSocketClient>(): T;
     }
 
     export interface _WebViewTextureCreateOptions {
@@ -1188,6 +1254,9 @@ declare module "@altv/client" {
         static create(options: _WebViewCreateOptionsOverlay): WebView;
 
         static getByID(id: number): WebView | null;
+
+        static setFactory(factory: typeof WebView): void;
+        static getFactory<T extends WebView>(): T;
     }
 
     /**
@@ -1250,80 +1319,6 @@ declare module "@altv/client" {
     }
 
     export abstract class VoiceChannel extends BaseObject {}
-
-    export namespace Factory {
-        export function setPlayerFactory(factory: typeof Player): void;
-        export function getPlayerFactory<T extends Player>(): T;
-
-        export function setVehicleFactory(factory: typeof Vehicle): void;
-        export function getVehicleFactory<T extends Vehicle>(): T;
-
-        export function setPedFactory(factory: typeof Ped): void;
-        export function getPedFactory<T extends Ped>(): T;
-
-        export function setBlipFactory(factory: typeof Blip): void;
-        export function getBlipFactory<T extends Blip>(): T;
-
-        export function setMarkerFactory(factory: typeof Marker): void;
-        export function getMarkerFactory<T extends Marker>(): T;
-
-        export function setColShapeFactory(factory: typeof ColShape): void;
-        export function getColShapeFactory<T extends ColShape>(): T;
-
-        export function setObjectFactory(factory: typeof Object): void;
-        export function getObjectFactory<T extends Object>(): T;
-
-        export function setCheckpointFactory(factory: typeof Checkpoint): void;
-        export function getCheckpointFactory<T extends Checkpoint>(): T;
-
-        export function setTextLabelFactory(factory: typeof TextLabel): void;
-        export function getTextLabelFactory<T extends TextLabel>(): T;
-
-        export function setVirtualEntityFactory(factory: typeof VirtualEntity): void;
-        export function getVirtualEntityFactory<T extends VirtualEntity>(): T;
-
-        export function setVirtualEntityGroupFactory(factory: typeof VirtualEntityGroup): void;
-        export function getVirtualEntityGroupFactory<T extends VirtualEntityGroup>(): T;
-
-        export function setAudioFactory(factory: typeof Audio): void;
-        export function getAudioFactory<T extends Audio>(): T;
-
-        export function setAudioFilterFactory(factory: typeof AudioFilter): void;
-        export function getAudioFilterFactory<T extends AudioFilter>(): T;
-
-        export function setAudioOutputAttachedFactory(factory: typeof AudioOutputAttached): void;
-        export function getAudioOutputAttachedFactory<T extends AudioOutputAttached>(): T;
-
-        export function setAudioOutputFrontendFactory(factory: typeof AudioOutputFrontend): void;
-        export function getAudioOutputFrontendFactory<T extends AudioOutputFrontend>(): T;
-
-        export function setAudioOutputWorldFactory(factory: typeof AudioOutputWorld): void;
-        export function getAudioOutputWorldFactory<T extends AudioOutputWorld>(): T;
-
-        export function setLocalPlayerFactory(factory: typeof LocalPlayer): void;
-        export function getLocalPlayerFactory<T extends LocalPlayer>(): T;
-
-        export function setLocalPedFactory(factory: typeof LocalPed): void;
-        export function getLocalPedFactory<T extends LocalPed>(): T;
-
-        export function setLocalVehicleFactory(factory: typeof LocalVehicle): void;
-        export function getLocalVehicleFactory<T extends LocalVehicle>(): T;
-
-        export function setLocalObjectFactory(factory: typeof LocalObject): void;
-        export function getLocalObjectFactory<T extends LocalObject>(): T;
-
-        export function setRmlDocumentFactory(factory: typeof RmlDocument): void;
-        export function getRmlDocumentFactory<T extends RmlDocument>(): T;
-
-        export function setWebSocketClientFactory(factory: typeof WebSocketClient): void;
-        export function getWebSocketClientFactory<T extends WebSocketClient>(): T;
-
-        export function setWebViewFactory(factory: typeof WebView): void;
-        export function getWebViewFactory<T extends WebView>(): T;
-
-        export function setTextLabelFactory(factory: typeof TextLabel): void;
-        export function getTextLabelFactory<T extends TextLabel>(): T;
-    }
 
     export namespace PointBlip {
         export function create(opts: PointBlipCreateOptions): Blip;
