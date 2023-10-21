@@ -195,6 +195,31 @@ namespace js
             ctx.Return(entity);
         }
 #endif
+
+        template<typename T>
+        static void EnumObjectGetter(LazyPropertyContext& ctx)
+        {
+            js::Object obj;
+            auto values = magic_enum::template enum_entries<T>();
+            for(auto& [value, key] : values)
+            {
+                obj.Set(key.data(), (int)value);
+            }
+            ctx.Return(obj);
+        }
+
+        template<typename T, T Start, T End>
+        static void EnumObjectWithStartEndGetter(LazyPropertyContext& ctx)
+        {
+            js::Object obj;
+            auto values = magic_enum::template enum_entries<T>();
+            for(int i = (int)Start + 1; i < (int)End; i++)
+            {
+                auto& entry = values[i];
+                obj.Set(entry.second.data(), (int)entry.first);
+            }
+            ctx.Return(obj);
+        }
     }  // namespace Wrapper
 
     static v8::Local<v8::FunctionTemplate> WrapFunction(internal::FunctionCallback cb)
@@ -269,6 +294,17 @@ namespace js
         void StaticLazyProperty(const std::string& name, internal::LazyPropertyCallback callback)
         {
             Get()->SetLazyDataProperty(js::JSValue(name), Wrapper::LazyPropertyHandler, v8::External::New(GetIsolate(), (void*)callback));
+        }
+
+        template<typename Enum>
+        void StaticEnum(const std::string& name)
+        {
+            StaticLazyProperty(name, Wrapper::EnumObjectGetter<Enum>);
+        }
+        template<typename Enum, Enum Start, Enum End>
+        void StaticEnum(const std::string& name)
+        {
+            StaticLazyProperty(name, Wrapper::EnumObjectWithStartEndGetter<Enum, Start, End>);
         }
 
         virtual void StaticFunction(const std::string& name, internal::FunctionCallback callback)

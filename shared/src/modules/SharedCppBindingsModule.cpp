@@ -184,6 +184,5 @@ extern js::Module sharedCppBindingsModule("sharedCppBindings", [](js::ModuleTemp
 
     module.StaticLazyProperty("resourceName", ResourceNameGetter);
 
-    // Enum
-    module.StaticLazyProperty("BindingExport", BindingExportGetter);
+    module.StaticEnum<js::BindingExport>("BindingExport");
 });
