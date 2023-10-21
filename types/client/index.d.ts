@@ -545,6 +545,7 @@ declare module "@altv/client" {
         streamingDistance?: number; // default: 0
     }
 
+    // @ts-expect-error - Suppress "Class static side 'typeof LocalObject' incorrectly extends base class static side 'typeof Object'.""
     export abstract class LocalObject extends Object {
         get model(): number;
         set model(value: number | string);
@@ -636,6 +637,7 @@ declare module "@altv/client" {
         streamingDistance?: number; // default: 0
     }
 
+    // @ts-expect-error  Suppress "Class static side 'typeof LocalPed' incorrectly extends base class static side 'typeof Ped'."
     export abstract class LocalPed extends Ped {
         get model(): number;
         set model(value: number | string);
@@ -659,6 +661,7 @@ declare module "@altv/client" {
         static getFactory<T extends LocalPed>(): T;
     }
 
+    // @ts-expect-error Suppress "Class static side 'typeof LocalPlayer' incorrectly extends base class static side 'typeof Player'."
     export abstract class LocalPlayer extends Player {
         readonly currentAmmo: number;
         stamina: number;
@@ -683,6 +686,7 @@ declare module "@altv/client" {
         streamingDistance?: number; // default: 300
     }
 
+    // @ts-expect-error Supress "Class static side 'typeof LocalVehicle' incorrectly extends base class static side 'typeof Vehicle'.""
     export abstract class LocalVehicle extends Vehicle {
         get model(): number;
         set model(value: number | string);
