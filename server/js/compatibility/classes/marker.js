@@ -25,5 +25,5 @@ class Marker extends alt.Marker {
     }
 }
 
-alt.Factory.setMarkerFactory(Marker);
+alt.Marker.setFactory(Marker);
 cppBindings.registerCompatibilityExport("Marker", Marker);

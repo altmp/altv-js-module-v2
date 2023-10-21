@@ -29,5 +29,5 @@ class ConnectionInfo extends alt.ConnectionInfo {
     }
 }
 
-alt.Factory.setConnectionInfoFactory(ConnectionInfo);
+alt.ConnectionInfo.setFactory(ConnectionInfo);
 cppBindings.registerCompatibilityExport("ConnectionInfo", ConnectionInfo);

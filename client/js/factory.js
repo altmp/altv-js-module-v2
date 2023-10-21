@@ -1,23 +1,23 @@
 /** @type {typeof import("../../shared/js/factory.js")} */
 const { registerFactory, getFactoryCreateFunction } = requireBinding("shared/factory.js");
 
-registerFactory("Audio", alt.Audio, alt.Enums.BaseObjectType.AUDIO);
-registerFactory("AudioFilter", alt.AudioFilter, alt.Enums.BaseObjectType.AUDIO_FILTER);
-registerFactory("AudioOutputAttached", alt.AudioOutputAttached, alt.Enums.BaseObjectType.AUDIO_OUTPUT_ATTACHED);
-registerFactory("AudioOutputFrontend", alt.AudioOutputFrontend, alt.Enums.BaseObjectType.AUDIO_OUTPUT_FRONTEND);
-registerFactory("AudioOutputWorld", alt.AudioOutputWorld, alt.Enums.BaseObjectType.AUDIO_OUTPUT_WORLD);
+registerFactory(alt.Audio, alt.Enums.BaseObjectType.AUDIO);
+registerFactory(alt.AudioFilter, alt.Enums.BaseObjectType.AUDIO_FILTER);
+registerFactory(alt.AudioOutputAttached, alt.Enums.BaseObjectType.AUDIO_OUTPUT_ATTACHED);
+registerFactory(alt.AudioOutputFrontend, alt.Enums.BaseObjectType.AUDIO_OUTPUT_FRONTEND);
+registerFactory(alt.AudioOutputWorld, alt.Enums.BaseObjectType.AUDIO_OUTPUT_WORLD);
 
-registerFactory("LocalPlayer", alt.LocalPlayer, alt.Enums.BaseObjectType.LOCAL_PLAYER);
-registerFactory("LocalPed", alt.LocalPed, alt.Enums.BaseObjectType.LOCAL_PED);
-registerFactory("LocalVehicle", alt.LocalVehicle, alt.Enums.BaseObjectType.LOCAL_VEHICLE);
-registerFactory("LocalObject", alt.LocalObject, alt.Enums.BaseObjectType.LOCAL_OBJECT);
+registerFactory(alt.LocalPlayer, alt.Enums.BaseObjectType.LOCAL_PLAYER);
+registerFactory(alt.LocalPed, alt.Enums.BaseObjectType.LOCAL_PED);
+registerFactory(alt.LocalVehicle, alt.Enums.BaseObjectType.LOCAL_VEHICLE);
+registerFactory(alt.LocalObject, alt.Enums.BaseObjectType.LOCAL_OBJECT);
 
-registerFactory("RmlDocument", alt.RmlDocument, alt.Enums.BaseObjectType.RML_DOCUMENT);
+registerFactory(alt.RmlDocument, alt.Enums.BaseObjectType.RML_DOCUMENT);
 
-registerFactory("WebSocketClient", alt.WebSocketClient, alt.Enums.BaseObjectType.WEBSOCKET_CLIENT);
+registerFactory(alt.WebSocketClient, alt.Enums.BaseObjectType.WEBSOCKET_CLIENT);
 
-registerFactory("WebView", alt.WebView, alt.Enums.BaseObjectType.WEBVIEW);
-registerFactory("TextLabel", alt.TextLabel, alt.Enums.BaseObjectType.TEXT_LABEL);
+registerFactory(alt.WebView, alt.Enums.BaseObjectType.WEBVIEW);
+registerFactory(alt.TextLabel, alt.Enums.BaseObjectType.TEXT_LABEL);
 
 // Factory ctors
 

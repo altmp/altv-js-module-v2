@@ -22,5 +22,5 @@ class AudioFilter extends alt.AudioFilter {
     }
 }
 
-alt.Factory.setAudioFilterFactory(AudioFilter);
+alt.AudioFilter.setFactory(AudioFilter);
 cppBindings.registerCompatibilityExport("AudioFilter", AudioFilter);

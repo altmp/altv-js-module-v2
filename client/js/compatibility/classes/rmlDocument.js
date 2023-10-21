@@ -22,5 +22,5 @@ class RmlDocument extends alt.RmlDocument {
     }
 }
 
-alt.Factory.setRmlDocumentFactory(RmlDocument);
+alt.RmlDocument.setFactory(RmlDocument);
 cppBindings.registerCompatibilityExport("RmlDocument", RmlDocument);

@@ -24,5 +24,5 @@ class LocalVehicle extends alt.LocalVehicle {
     }
 }
 
-alt.Factory.setLocalVehicleFactory(LocalVehicle);
+alt.LocalVehicle.setFactory(LocalVehicle);
 cppBindings.registerCompatibilityExport("LocalVehicle", LocalVehicle);

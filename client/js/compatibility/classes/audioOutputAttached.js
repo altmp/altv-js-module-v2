@@ -25,5 +25,5 @@ class AudioOutputAttached extends alt.AudioOutputAttached {
     }
 }
 
-alt.Factory.setAudioOutputAttachedFactory(AudioOutputAttached);
+alt.AudioOutputAttached.setFactory(AudioOutputAttached);
 cppBindings.registerCompatibilityExport("AudioOutputAttached", AudioOutputAttached);

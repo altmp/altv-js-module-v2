@@ -8,5 +8,5 @@ class Colshape extends alt.ColShape {
     //
 }
 
-alt.Factory.setColShapeFactory(Colshape);
+alt.ColShape.setFactory(Colshape);
 cppBindings.registerCompatibilityExport("Colshape", Colshape);

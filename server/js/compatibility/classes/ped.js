@@ -30,5 +30,5 @@ class Ped extends alt.Ped {
     }
 }
 
-alt.Factory.setPedFactory(Ped);
+alt.Ped.setFactory(Ped);
 cppBindings.registerCompatibilityExport("Ped", Ped);

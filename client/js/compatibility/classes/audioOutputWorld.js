@@ -25,5 +25,5 @@ class AudioOutputWorld extends alt.AudioOutputWorld {
     }
 }
 
-alt.Factory.setAudioOutputWorldFactory(AudioOutputWorld);
+alt.AudioOutputWorld.setFactory(AudioOutputWorld);
 cppBindings.registerCompatibilityExport("AudioOutputWorld", AudioOutputWorld);

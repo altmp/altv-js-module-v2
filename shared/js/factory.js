@@ -1,16 +1,16 @@
 /** @type {typeof import("./utils.js")} */
 const { assert, assertIsObject } = requireBinding("shared/utils.js");
 
-registerFactory("Player", alt.Player, alt.Enums.BaseObjectType.PLAYER);
-registerFactory("Vehicle", alt.Vehicle, alt.Enums.BaseObjectType.VEHICLE);
-registerFactory("Ped", alt.Ped, alt.Enums.BaseObjectType.PED);
-registerFactory("Blip", alt.Blip, alt.Enums.BaseObjectType.BLIP);
-registerFactory("Marker", alt.Marker, alt.Enums.BaseObjectType.MARKER);
-registerFactory("ColShape", alt.ColShape, alt.Enums.BaseObjectType.COLSHAPE);
-registerFactory("Object", alt.Object, alt.Enums.BaseObjectType.OBJECT);
-registerFactory("Checkpoint", alt.Checkpoint, alt.Enums.BaseObjectType.CHECKPOINT);
-registerFactory("VirtualEntity", alt.VirtualEntity, alt.Enums.BaseObjectType.VIRTUAL_ENTITY);
-registerFactory("VirtualEntityGroup", alt.VirtualEntityGroup, alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP);
+registerFactory(alt.Player, alt.Enums.BaseObjectType.PLAYER);
+registerFactory(alt.Vehicle, alt.Enums.BaseObjectType.VEHICLE);
+registerFactory(alt.Ped, alt.Enums.BaseObjectType.PED);
+registerFactory(alt.Blip, alt.Enums.BaseObjectType.BLIP);
+registerFactory(alt.Marker, alt.Enums.BaseObjectType.MARKER);
+registerFactory(alt.ColShape, alt.Enums.BaseObjectType.COLSHAPE);
+registerFactory(alt.Object, alt.Enums.BaseObjectType.OBJECT);
+registerFactory(alt.Checkpoint, alt.Enums.BaseObjectType.CHECKPOINT);
+registerFactory(alt.VirtualEntity, alt.Enums.BaseObjectType.VIRTUAL_ENTITY);
+registerFactory(alt.VirtualEntityGroup, alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP);
 
 // Factory ctors
 alt.PointBlip.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.BLIP, (ctx) => (ctx.blipType = alt.Enums.BlipType.DESTINATION));
@@ -57,9 +57,9 @@ function getEntityFactory(type) {
     };
 }
 
-export function registerFactory(name, altClass, type) {
-    alt.Factory[`set${name}Factory`] = setEntityFactory(altClass, type);
-    alt.Factory[`get${name}Factory`] = getEntityFactory(type);
+export function registerFactory(altClass, type) {
+    altClass.setFactory = setEntityFactory(altClass, type);
+    altClass.getFactory = getEntityFactory(type);
 }
 
 export function getFactoryCreateFunction(type, ctxCb) {

@@ -27,5 +27,5 @@ class VirtualEntity extends alt.VirtualEntity {
     }
 }
 
-alt.Factory.setVirtualEntityFactory(VirtualEntity);
+alt.VirtualEntity.setFactory(VirtualEntity);
 cppBindings.registerCompatibilityExport("VirtualEntity", VirtualEntity);

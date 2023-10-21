@@ -22,5 +22,5 @@ class Object extends alt.Object {
     }
 }
 
-alt.Factory.setObjectFactory(Object);
+alt.Object.setFactory(Object);
 cppBindings.registerCompatibilityExport("Object", Object);

@@ -23,5 +23,5 @@ class VoiceChannel extends alt.VoiceChannel {
     }
 }
 
-alt.Factory.setVoiceChannelFactory(VoiceChannel);
+alt.VoiceChannel.setFactory(VoiceChannel);
 cppBindings.registerCompatibilityExport("VoiceChannel", VoiceChannel);

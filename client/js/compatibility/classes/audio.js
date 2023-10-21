@@ -36,5 +36,5 @@ class Audio extends alt.Audio {
     }
 }
 
-alt.Factory.setAudioFactory(Audio);
+alt.Audio.setFactory(Audio);
 cppBindings.registerCompatibilityExport("Audio", Audio);

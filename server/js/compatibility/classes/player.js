@@ -131,5 +131,5 @@ class Player extends alt.Player {
     }
 }
 
-alt.Factory.setPlayerFactory(Player);
+alt.Player.setFactory(Player);
 cppBindings.registerCompatibilityExport("Player", Player);

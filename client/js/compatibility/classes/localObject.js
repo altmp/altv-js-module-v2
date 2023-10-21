@@ -38,5 +38,5 @@ class LocalObject extends alt.LocalObject {
     }
 }
 
-alt.Factory.setLocalObjectFactory(LocalObject);
+alt.LocalObject.setFactory(LocalObject);
 cppBindings.registerCompatibilityExport("LocalObject", LocalObject);

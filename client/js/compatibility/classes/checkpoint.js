@@ -32,5 +32,5 @@ class Checkpoint extends alt.Checkpoint {
     }
 }
 
-alt.Factory.setCheckpointFactory(Checkpoint);
+alt.Checkpoint.setFactory(Checkpoint);
 cppBindings.registerCompatibilityExport("Checkpoint", Checkpoint);

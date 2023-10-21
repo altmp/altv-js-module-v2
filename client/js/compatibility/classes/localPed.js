@@ -24,5 +24,5 @@ class LocalPed extends alt.LocalPed {
     }
 }
 
-alt.Factory.setLocalPedFactory(LocalPed);
+alt.LocalPed.setFactory(LocalPed);
 cppBindings.registerCompatibilityExport("LocalPed", LocalPed);

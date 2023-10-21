@@ -19,5 +19,5 @@ class LocalPlayer extends alt.LocalPlayer {
     }
 }
 
-alt.Factory.setLocalPlayerFactory(LocalPlayer);
+alt.LocalPlayer.setFactory(LocalPlayer);
 cppBindings.registerCompatibilityExport("LocalPlayer", LocalPlayer);

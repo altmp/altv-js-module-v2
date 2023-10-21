@@ -18,5 +18,5 @@ class WebSocketClient extends alt.WebSocketClient {
     }
 }
 
-alt.Factory.setWebSocketClientFactory(WebSocketClient);
+alt.WebSocketClient.setFactory(WebSocketClient);
 cppBindings.registerCompatibilityExport("WebSocketClient", WebSocketClient);

@@ -25,5 +25,5 @@ class AudioOutputFrontend extends alt.AudioOutputFrontend {
     }
 }
 
-alt.Factory.setAudioOutputFrontendFactory(AudioOutputFrontend);
+alt.AudioOutputFrontend.setFactory(AudioOutputFrontend);
 cppBindings.registerCompatibilityExport("AudioOutputFrontend", AudioOutputFrontend);

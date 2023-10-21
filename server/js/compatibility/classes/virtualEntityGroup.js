@@ -21,5 +21,5 @@ class VirtualEntityGroup extends alt.VirtualEntityGroup {
     }
 }
 
-alt.Factory.setVirtualEntityGroupFactory(VirtualEntityGroup);
+alt.VirtualEntityGroup.setFactory(VirtualEntityGroup);
 cppBindings.registerCompatibilityExport("VirtualEntityGroup", VirtualEntityGroup);

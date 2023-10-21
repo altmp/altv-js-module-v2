@@ -18,7 +18,7 @@ class <REPLACEME> extends alt.<REPLACEME> {
     }
 }
 
-alt.Factory.set<REPLACEME>Factory(<REPLACEME>);
+alt.<REPLACEME>.setFactory(<REPLACEME>);
 cppBindings.registerCompatibilityExport("<REPLACEME>", <REPLACEME>);
 
 */

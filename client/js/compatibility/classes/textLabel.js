@@ -21,5 +21,5 @@ class TextLabel extends alt.TextLabel {
     }
 }
 
-alt.Factory.setTextLabelFactory(TextLabel);
+alt.TextLabel.setFactory(TextLabel);
 cppBindings.registerCompatibilityExport("TextLabel", TextLabel);

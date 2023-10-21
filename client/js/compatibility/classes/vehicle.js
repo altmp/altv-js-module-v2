@@ -68,5 +68,5 @@ class Vehicle extends alt.Vehicle {
     }
 }
 
-alt.Factory.setVehicleFactory(Vehicle);
+alt.Vehicle.setFactory(Vehicle);
 cppBindings.registerCompatibilityExport("Vehicle", Vehicle);
