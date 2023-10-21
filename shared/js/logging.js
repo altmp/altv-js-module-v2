@@ -2831,10 +2831,12 @@ function timeEnd(label) {
     timeLabelMap.delete(label ?? "Timer");
 }
 
-if (!globalThis.console) globalThis.console = {};
-globalThis.console.log = alt.log;
-globalThis.console.warn = alt.logWarning;
-globalThis.console.error = alt.logError;
-globalThis.console.time = time;
-globalThis.console.timeLog = timeLog;
-globalThis.console.timeEnd = timeEnd;
+if (alt.isClient) {
+    if (!globalThis.console) globalThis.console = {};
+    globalThis.console.log = alt.log;
+    globalThis.console.warn = alt.logWarning;
+    globalThis.console.error = alt.logError;
+    globalThis.console.time = time;
+    globalThis.console.timeLog = timeLog;
+    globalThis.console.timeEnd = timeEnd;
+}
