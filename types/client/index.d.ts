@@ -1300,6 +1300,9 @@ declare module "@altv/client" {
         export function setAudioOutputWorldFactory(factory: typeof AudioOutputWorld): void;
         export function getAudioOutputWorldFactory<T extends AudioOutputWorld>(): T;
 
+        export function setLocalPlayerFactory(factory: typeof LocalPlayer): void;
+        export function getLocalPlayerFactory<T extends LocalPlayer>(): T;
+
         export function setLocalPedFactory(factory: typeof LocalPed): void;
         export function getLocalPedFactory<T extends LocalPed>(): T;
 

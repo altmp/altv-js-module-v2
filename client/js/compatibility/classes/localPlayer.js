@@ -11,7 +11,13 @@ const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.j
 
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
-// LocalPlayer is not calling ctor meaning: we don't use a class here
-extendAltEntityClass(alt.Player.local, Player, SharedPlayer, Entity, WorldObject, BaseObject);
+class LocalPlayer extends alt.LocalPlayer {
+    constructor() {
+        super();
 
-cppBindings.registerCompatibilityExport("LocalPlayer", alt.LocalPlayer);
+        extendAltEntityClass(this, Player, SharedPlayer, Entity, WorldObject, BaseObject);
+    }
+}
+
+alt.Factory.setLocalPlayerFactory(LocalPlayer);
+cppBindings.registerCompatibilityExport("LocalPlayer", LocalPlayer);

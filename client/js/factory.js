@@ -7,6 +7,7 @@ registerFactory("AudioOutputAttached", alt.AudioOutputAttached, alt.Enums.BaseOb
 registerFactory("AudioOutputFrontend", alt.AudioOutputFrontend, alt.Enums.BaseObjectType.AUDIO_OUTPUT_FRONTEND);
 registerFactory("AudioOutputWorld", alt.AudioOutputWorld, alt.Enums.BaseObjectType.AUDIO_OUTPUT_WORLD);
 
+registerFactory("LocalPlayer", alt.LocalPlayer, alt.Enums.BaseObjectType.LOCAL_PLAYER);
 registerFactory("LocalPed", alt.LocalPed, alt.Enums.BaseObjectType.LOCAL_PED);
 registerFactory("LocalVehicle", alt.LocalVehicle, alt.Enums.BaseObjectType.LOCAL_VEHICLE);
 registerFactory("LocalObject", alt.LocalObject, alt.Enums.BaseObjectType.LOCAL_OBJECT);
