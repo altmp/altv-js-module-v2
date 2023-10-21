@@ -12,7 +12,7 @@ const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.j
 
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
-class Player extends alt.Player {
+export class Player extends alt.Player {
     constructor() {
         super();
 
