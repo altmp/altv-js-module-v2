@@ -10,5 +10,5 @@ class Blip extends alt.Blip {
     }
 }
 
-alt.Factory.setBlipFactory(Blip);
+alt.Blip.setFactory(Blip);
 cppBindings.registerCompatibilityExport("Blip", alt.Blip);
