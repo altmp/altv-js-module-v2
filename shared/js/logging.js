@@ -2831,9 +2831,17 @@ function timeEnd(label) {
     timeLabelMap.delete(label ?? "Timer");
 }
 
+function logDebug(...args) {
+    if (!alt.isDebug) return;
+    alt.log(...args);
+}
+
+alt.logDebug = logDebug;
+
 if (alt.isClient) {
     if (!globalThis.console) globalThis.console = {};
     globalThis.console.log = alt.log;
+    globalThis.console.debug = alt.logDebug;
     globalThis.console.warn = alt.logWarning;
     globalThis.console.error = alt.logError;
     globalThis.console.time = time;
