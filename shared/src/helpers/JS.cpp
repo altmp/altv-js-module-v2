@@ -156,7 +156,7 @@ js::TemporaryGlobalExtension::TemporaryGlobalExtension(v8::Local<v8::Context> _c
 
 js::Promise::~Promise()
 {
-    resource->RemovePromise(this);
+    if(owned) resource->RemovePromise(this);
 }
 
 void js::StringOutputStream::EndOfStream()

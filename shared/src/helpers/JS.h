@@ -551,12 +551,16 @@ namespace js
         Persistent<v8::Promise> promise;
         Type resultType = Type::INVALID;
         IResource* resource;
+        bool owned;
 
-        Promise(IResource* _resource) : PersistentValue(true), resolver(v8::Isolate::GetCurrent(), v8::Promise::Resolver::New(GetContext()).ToLocalChecked()), resource(_resource) {}
+        Promise(IResource* _resource)
+            : PersistentValue(true), resolver(v8::Isolate::GetCurrent(), v8::Promise::Resolver::New(GetContext()).ToLocalChecked()), resource(_resource), owned(true)
+        {
+        }
 
     public:
-        Promise() : PersistentValue(true), resolver(v8::Isolate::GetCurrent(), v8::Promise::Resolver::New(GetContext()).ToLocalChecked()) {}
-        Promise(v8::Local<v8::Promise> _promise) : PersistentValue(!_promise.IsEmpty()), promise(v8::Isolate::GetCurrent(), _promise) {}
+        Promise() : PersistentValue(true), resolver(v8::Isolate::GetCurrent(), v8::Promise::Resolver::New(GetContext()).ToLocalChecked()), owned(false) {}
+        Promise(v8::Local<v8::Promise> _promise) : PersistentValue(!_promise.IsEmpty()), promise(v8::Isolate::GetCurrent(), _promise), owned(false) {}
         ~Promise();
 
         v8::Local<v8::Promise> Get()

@@ -865,6 +865,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method<&alt::IPlayer::SetClothes>("setClothes");
     tpl.Method("getDlcClothes", &GetDlcClothes);
     tpl.Method<&alt::IPlayer::SetDlcClothes>("setDlcClothes");
+    tpl.Method<&alt::IPlayer::ClearClothes>("clearClothes");
     tpl.Method("getProp", &GetProp);
     tpl.Method<&alt::IPlayer::SetProps>("setProp");
     tpl.Method("getDlcProp", &GetDlcProps);
