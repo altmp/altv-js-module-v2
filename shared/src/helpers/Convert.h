@@ -14,6 +14,8 @@ namespace js
 
     class Object;
     class Array;
+    class Function;
+    class Promise;
 
     namespace internal
     {
@@ -139,7 +141,7 @@ namespace js
     {
         return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), val, v8::NewStringType::kInternalized, N - 1).ToLocalChecked();
     }
-    inline v8::Local<v8::String> CachedString(const std::string& val)
+    inline v8::Local<v8::String> CachedString(std::string_view val)
     {
         return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), val.data(), v8::NewStringType::kInternalized, (int)val.size()).ToLocalChecked();
     }
@@ -155,9 +157,10 @@ namespace js
         if(val == nullptr) return v8::String::Empty(v8::Isolate::GetCurrent());
         return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), val).ToLocalChecked();
     }
-    inline v8::Local<v8::String> JSValue(const std::string& val)
+    inline v8::Local<v8::String> JSValue(std::string_view val)
     {
-        return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), val.c_str(), v8::NewStringType::kNormal, (int)val.size()).ToLocalChecked();
+        if(val.size() == 0) return v8::String::Empty(v8::Isolate::GetCurrent());
+        return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), val.data(), v8::NewStringType::kNormal, (int)val.size()).ToLocalChecked();
     }
     inline v8::Local<v8::String> JSValue(const uint16_t* val)
     {
@@ -328,7 +331,7 @@ namespace js
             v8::MaybeLocal<v8::String> maybeStr = val->ToString(isolate->GetEnteredOrMicrotaskContext());
             if(maybeStr.IsEmpty()) return std::nullopt;
             v8::Local<v8::String> strVal = maybeStr.ToLocalChecked();
-            int len = strVal->Utf8Length();
+            int len = strVal->Utf8Length(isolate);
             std::string str;
             str.reserve(len);
             strVal->WriteUtf8(isolate, str.data());
@@ -374,17 +377,17 @@ namespace js
         }
         else if constexpr(std::is_same_v<T, js::Array>)
         {
-            if(!val->IsArray()) return;
+            if(!val->IsArray()) return std::nullopt;
             return js::Array(val.As<v8::Array>());
         }
         else if constexpr(std::is_same_v<T, js::Function>)
         {
-            if(!val->IsFunction()) return;
+            if(!val->IsFunction()) return std::nullopt;
             return js::Function(val.As<v8::Function>());
         }
         else if constexpr(std::is_same_v<T, js::Promise>)
         {
-            if(!val->IsPromise()) return;
+            if(!val->IsPromise()) return std::nullopt;
             return js::Promise(val.As<v8::Promise>());
         }
         else if constexpr(internal::IsStdVector<T>::value)
