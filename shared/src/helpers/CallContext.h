@@ -23,6 +23,7 @@ namespace js
         bool noThrow = false;
         IResource* resource = nullptr;
         alt::IBaseObject* thisObject = nullptr;
+        IResource* resource = nullptr;
 
         alt::IBaseObject* GetThisObjectUntyped()
         {
@@ -32,6 +33,13 @@ namespace js
             if(!object.has_value()) return nullptr;
             thisObject = object.value();
             return thisObject;
+        }
+
+        IResource* GetResourceCached()
+        {
+            if(resource) return resource;
+            resource = GetCurrentResource(info.GetIsolate());
+            return resource;
         }
 
     public:
@@ -45,7 +53,7 @@ namespace js
         template<class ResourceType = js::IResource>
         ResourceType* GetResource() const
         {
-            return static_cast<ResourceType*>(GetCurrentResource(info.GetIsolate()));
+            return static_cast<ResourceType*>(GetResourceCached());
         }
 
         v8::Local<v8::Context> GetContext() const
