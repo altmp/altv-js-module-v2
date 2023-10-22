@@ -17,6 +17,7 @@ declare module "@altv/shared" {
     export const syncedMeta: GlobalSyncedMeta;
 
     export function log(...args: unknown[]): void;
+    export function logDebug(...args: unknown[]): void;
     export function logWarning(...args: unknown[]): void;
     export function logError(...args: unknown[]): void;
     export function sha256(str: string): string;

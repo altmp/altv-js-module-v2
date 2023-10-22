@@ -3,6 +3,8 @@
 /// <reference path="../../../types/client/index.d.ts" />
 // import * as alt from "@altv/shared";
 
+requireBinding("shared/logging.js");
+
 /**
  *
  * @param {string} resourceName
@@ -44,7 +46,7 @@ cppBindings.registerCompatibilityExport("emitRaw", alt.Events.emitRaw);
 cppBindings.registerCompatibilityExport("log", alt.log);
 cppBindings.registerCompatibilityExport("logError", alt.logError);
 cppBindings.registerCompatibilityExport("logWarning", alt.logWarning);
-cppBindings.registerCompatibilityExport("logDebug", () => {});
+cppBindings.registerCompatibilityExport("logDebug", alt.logDebug);
 
 cppBindings.registerCompatibilityExport("hash", alt.hash);
 cppBindings.registerCompatibilityExport("stringToSHA256", alt.sha256);
