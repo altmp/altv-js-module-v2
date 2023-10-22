@@ -133,19 +133,20 @@ js::IResource* js::PersistentValue::GetResource()
     return resource;
 }
 
-void js::Object::SetMethod(const std::string& key, js::internal::FunctionCallback callback)
+void js::Object::SetMethod(std::string_view key, js::internal::FunctionCallback callback)
 {
     object->Set(context, JSValue(key), WrapFunction(callback)->GetFunction(context).ToLocalChecked());
 }
 
-js::Type js::Object::GetType(const std::string& key)
+js::Type js::Object::GetType(std::string_view key)
 {
-    if(typeCache.contains(key)) return typeCache.at(key);
+    auto it = typeCache.find(key.data());
+    if(it != typeCache.end()) return it->second;
     v8::MaybeLocal<v8::Value> maybeVal = object->Get(context, js::JSValue(key));
     v8::Local<v8::Value> val;
     if(!maybeVal.ToLocal(&val)) return js::Type::INVALID;
     js::Type type = js::GetType(val, GetResource());
-    typeCache.insert({ key, type });
+    typeCache.insert({ std::string(key), type });
     return type;
 }
 

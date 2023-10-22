@@ -199,18 +199,18 @@ namespace js
         }
 
         template<typename T>
-        void Set(const std::string& key, const T& val)
+        void Set(std::string_view key, const T& val)
         {
             using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
             static_assert(IsJSValueConvertible<Type>, "Type is not convertible to JS value");
             object->Set(context, js::JSValue(key), js::JSValue((Type)val));
         }
 
-        void SetMethod(const std::string& key, internal::FunctionCallback func);
+        void SetMethod(std::string_view key, internal::FunctionCallback func);
 
         // Falls back to default value if the value is not found or the type doesn't match
         template<typename T, bool InternalizedString = false>
-        T Get(const std::string& key, const T& defaultValue = T()) const
+        T Get(std::string_view key, const T& defaultValue = T()) const
         {
             v8::MaybeLocal<v8::Value> maybeVal = object->Get(context, InternalizedString ? js::CachedString(key) : js::JSValue(key));
             v8::Local<v8::Value> val;
@@ -221,20 +221,20 @@ namespace js
 
         // Throws an error and returns false if the value is not found or the type doesn't match
         template<bool InternalizedString = false, typename T>
-        bool Get(const std::string& key, T& out, bool throwOnError = true)
+        bool Get(std::string_view key, T& out, bool throwOnError = true)
         {
             using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
             v8::MaybeLocal<v8::Value> maybeVal = object->Get(context, InternalizedString ? js::CachedString(key) : js::JSValue(key));
             v8::Local<v8::Value> val;
             if(!maybeVal.ToLocal(&val))
             {
-                if(throwOnError) Throw("Failed to get property '" + key + "', value not found");
+                if(throwOnError) Throw("Failed to get property '" + std::string(key) + "', value not found");
                 return false;
             }
             std::optional<Type> result = js::CppValue<Type>(val);
             if(!result.has_value())
             {
-                if(throwOnError) Throw("Failed to get property '" + key + "', invalid type");
+                if(throwOnError) Throw("Failed to get property '" + std::string(key) + "', invalid type");
                 return false;
             }
             out = (T)result.value();
@@ -242,7 +242,7 @@ namespace js
         }
 
         template<bool InternalizedString = false>
-        bool GetAsHash(const std::string& key, uint32_t& outValue)
+        bool GetAsHash(std::string_view key, uint32_t& outValue)
         {
             Type argType = GetType(key);
             if(argType == Type::STRING)
@@ -257,12 +257,12 @@ namespace js
                 outValue = val;
                 return true;
             }
-            Throw("Invalid property type at key " + key + ", expected string or number but got " + TypeToString(argType));
+            Throw("Invalid property type at key " + std::string(key) + ", expected string or number but got " + TypeToString(argType));
             return false;
         }
 
         template<bool InternalizedString = false>
-        uint32_t GetAsHashOptional(const std::string& key, uint32_t defaultValue)
+        uint32_t GetAsHashOptional(std::string_view key, uint32_t defaultValue)
         {
             Type argType = GetType(key);
             if(argType == Type::STRING)
@@ -286,7 +286,7 @@ namespace js
             return result.has_value() ? (T)result.value() : defaultValue;
         }
 
-        bool Has(const std::string& key) const
+        bool Has(std::string_view key) const
         {
             return object->HasOwnProperty(context, js::JSValue(key)).FromMaybe(false);
         }
@@ -311,7 +311,7 @@ namespace js
             return keys;
         }
 
-        js::Type GetType(const std::string& key);
+        js::Type GetType(std::string_view key);
 
         template<typename T>
         std::unordered_map<std::string, T> ToMap()
@@ -325,7 +325,7 @@ namespace js
             return map;
         }
 
-        void SetAccessor(const std::string& key, v8::AccessorNameGetterCallback getter, v8::AccessorNameSetterCallback setter = nullptr, void* data = nullptr)
+        void SetAccessor(std::string_view key, v8::AccessorNameGetterCallback getter, v8::AccessorNameSetterCallback setter = nullptr, void* data = nullptr)
         {
             object->SetAccessor(context,
                                 js::JSValue(key),
@@ -337,7 +337,7 @@ namespace js
         }
 
         template<typename T>
-        void SetProperty(const std::string& key, const T& val, bool configurable = true, bool writable = true, bool enumerable = true)
+        void SetProperty(std::string_view key, const T& val, bool configurable = true, bool writable = true, bool enumerable = true)
         {
             static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
             if(configurable && writable && enumerable) object->CreateDataProperty(context, js::JSValue(key), js::JSValue(val));
