@@ -336,7 +336,7 @@ namespace js
         }
         else if constexpr(std::is_same_v<T, bool>)
         {
-            return val->ToBoolean(v8::Isolate::GetCurrent())->Value();
+            return val->BooleanValue(v8::Isolate::GetCurrent());
         }
         else if constexpr(std::is_same_v<T, alt::MValue> || std::is_same_v<T, alt::MValueConst>)
         {
@@ -369,10 +369,12 @@ namespace js
         }
         else if constexpr(std::is_same_v<T, js::Object>)
         {
+            if(!val->IsObject()) return std::nullopt;
             return js::Object(val.As<v8::Object>());
         }
         else if constexpr(std::is_same_v<T, js::Array>)
         {
+            if(!val->IsArray()) return;
             return js::Array(val.As<v8::Array>());
         }
         else if constexpr(internal::IsStdVector<T>::value)
