@@ -107,11 +107,13 @@ The `js::Promise` class wraps `v8::Promise::Resolver` values.
 API overview:
 ```cpp
 // Creates a new promise
-std::shared_ptr<js::Promise> promise = js::Promise::Create();
+js::Promise* promise = resource->CreatePromise();
 
 // Pass the promise to some async operation
-// IMPORTANT: Pass by value, not by reference to keep the shared pointer alive!
-std::function<void()> imaginaryLambda = [promise]() {};
+std::function<void()> imaginaryLambda = [promise]() {
+    // ... do something
+    delete promise;
+};
 
 // Resolve the promise with the given value
 promise->Resolve("success!");
@@ -120,5 +122,5 @@ promise->Resolve("success!");
 promise->Reject("no success :(");
 
 // Gets the underlying v8 value
-v8::Local<v8::Promise::Resolver> v8Promise = promise->Get();
+v8::Local<v8::Promise> v8Promise = promise->Get();
 ```
