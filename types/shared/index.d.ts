@@ -742,7 +742,21 @@ declare module "@altv/shared" {
         export class GenericEventHandler extends EventHandler {}
     }
 
+    export interface IHeapStats {
+        readonly heapSizeLimit: number;
+        readonly totalHeapSize: number;
+        readonly usedHeapSize: number;
+        readonly mallocedMemory: number;
+        readonly peakMallocedMemory: number;
+        readonly nativeContexts: number;
+        readonly detachedContexts: number;
+        readonly totalGlobalHandleSize: number;
+        readonly usedGlobalHandleSize: number;
+    }
+
     export namespace Profiler {
+        export const heapStats: IHeapStats;
+
         /**
          * Resolves to a JSON string that can be loaded by e.g. Chrome DevTools to investigate the current heap objects.
          */
