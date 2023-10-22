@@ -146,9 +146,9 @@ jobs:
             - name: Copy files
               shell: cmd
               run: |
-                  mkdir upload\modules\js-module-v2
-                  copy build\windows\x64\release\js-client-v2.dll upload\modules\js-client-v2
-                  copy build\windows\x64\release\js-client-v2.pdb upload\modules\js-client-v2
+                  mkdir upload\modules
+                  copy build\windows\x64\release\js-client-v2.dll upload\modules
+                  copy build\windows\x64\release\js-client-v2.pdb upload\modules
 
             - name: Upload artifacts
               uses: actions/upload-artifact@v3
