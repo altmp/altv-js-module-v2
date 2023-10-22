@@ -21,9 +21,8 @@ namespace js
         bool errored = false;
         std::string error;
         bool noThrow = false;
-        IResource* resource = nullptr;
+        mutable IResource* resource = nullptr;
         alt::IBaseObject* thisObject = nullptr;
-        IResource* resource = nullptr;
 
         alt::IBaseObject* GetThisObjectUntyped()
         {
@@ -35,7 +34,7 @@ namespace js
             return thisObject;
         }
 
-        IResource* GetResourceCached()
+        IResource* GetResourceCached() const
         {
             if(resource) return resource;
             resource = GetCurrentResource(info.GetIsolate());
