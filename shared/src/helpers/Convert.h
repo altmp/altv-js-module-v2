@@ -377,6 +377,16 @@ namespace js
             if(!val->IsArray()) return;
             return js::Array(val.As<v8::Array>());
         }
+        else if constexpr(std::is_same_v<T, js::Function>)
+        {
+            if(!val->IsFunction()) return;
+            return js::Function(val.As<v8::Function>());
+        }
+        else if constexpr(std::is_same_v<T, js::Promise>)
+        {
+            if(!val->IsPromise()) return;
+            return js::Promise(val.As<v8::Promise>());
+        }
         else if constexpr(internal::IsStdVector<T>::value)
         {
             if(!val->IsArray()) return std::nullopt;
