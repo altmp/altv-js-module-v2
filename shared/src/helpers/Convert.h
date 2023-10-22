@@ -324,7 +324,15 @@ namespace js
         }
         else if constexpr(std::is_same_v<T, std::string>)
         {
-            return *v8::String::Utf8Value(v8::Isolate::GetCurrent(), val->ToString(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext()).ToLocalChecked());
+            v8::Isolate* isolate = v8::Isolate::GetCurrent();
+            v8::MaybeLocal<v8::String> maybeStr = val->ToString(isolate->GetEnteredOrMicrotaskContext());
+            if(maybeStr.IsEmpty()) return std::nullopt;
+            v8::Local<v8::String> strVal = maybeStr.ToLocalChecked();
+            int len = strVal->Utf8Length();
+            std::string str;
+            str.reserve(len);
+            strVal->WriteUtf8(isolate, str.data());
+            return str;
         }
         else if constexpr(std::is_same_v<T, bool>)
         {
