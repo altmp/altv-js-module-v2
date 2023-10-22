@@ -34,7 +34,7 @@ static void GenericRequest(js::FunctionContext& ctx)
         if(!ctx.GetArg(1, body)) return;
     }
 
-    js::Promise* promise = new js::Promise;
+    js::Promise* promise = ctx.GetResource()->CreatePromise();
     if constexpr(HasBody) (client->*Method)(ResponseCallback, url, body, (void*)promise);
     else if constexpr(HasProgressCallback)
         (client->*Method)(ResponseCallback, url, (void*)promise, nullptr);

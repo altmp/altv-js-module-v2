@@ -6,7 +6,7 @@
 static void TakeHeapSnapshot(js::FunctionContext& ctx)
 {
     const v8::HeapSnapshot* snapshot = ctx.GetIsolate()->GetHeapProfiler()->TakeHeapSnapshot();
-    js::Promise* promise = new js::Promise;
+    js::Promise* promise = ctx.GetResource()->CreatePromise();
     js::StringOutputStream* stream = js::StringOutputStream::Create(ctx.GetResource(),
                                                                     [=](const std::string& resultStr)
                                                                     {

@@ -33,7 +33,7 @@ static void RequestOAuth2Token(js::FunctionContext& ctx)
     std::string appId;
     if(!ctx.GetArg(0, appId)) return;
 
-    js::Promise* promise = new js::Promise;
+    js::Promise* promise = ctx.GetResource()->CreatePromise();
     js::IAltResource* resource = ctx.GetResource<js::IAltResource>();
     auto callback = [=](bool success, const std::string& tokenStr)
     {

@@ -541,6 +541,8 @@ namespace js
 
     class Promise : public PersistentValue
     {
+        friend class IResource;
+
     public:
         using V8Type = v8::Promise::Resolver;
 
@@ -548,10 +550,15 @@ namespace js
         Persistent<v8::Promise::Resolver> resolver;
         Persistent<v8::Promise> promise;
         Type resultType = Type::INVALID;
+        IResource* resource;
+
+        Promise(IResource* _resource) : PersistentValue(true), resolver(v8::Isolate::GetCurrent(), v8::Promise::Resolver::New(GetContext()).ToLocalChecked()), resource(_resource) {}
 
     public:
-        Promise() : PersistentValue(true), resolver(v8::Isolate::GetCurrent(), v8::Promise::Resolver::New(GetContext()).ToLocalChecked()) {}
         Promise(v8::Local<v8::Promise> _promise) : PersistentValue(!_promise.IsEmpty()), promise(v8::Isolate::GetCurrent(), _promise) {}
+        ~Promise();
+
+        Promise() = delete;
 
         v8::Local<v8::Promise> Get()
         {
@@ -576,6 +583,11 @@ namespace js
         v8::Promise::PromiseState State()
         {
             return Get()->State();
+        }
+
+        IResource* GetResource()
+        {
+            return resource;
         }
 
         template<typename T>
@@ -647,11 +659,6 @@ namespace js
             static_assert(IsJSValueConvertible<T>, "Type is not convertible to JS value");
             if(!HasResolver()) return;
             GetResolver()->Reject(GetContext(), JSValue(value));
-        }
-
-        static std::shared_ptr<Promise> Create()
-        {
-            return std::make_shared<Promise>();
         }
     };
 

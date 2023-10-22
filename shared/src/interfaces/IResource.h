@@ -37,6 +37,8 @@ namespace js
         bool rawEmitEnabled = false;
         std::queue<NextTickCallback> nextTickCallbacks;
 
+        std::vector<Promise*> promises;
+
         void Initialize()
         {
             context.Get(isolate)->SetAlignedPointerInEmbedderData(ContextInternalFieldIdx, this);
@@ -51,6 +53,9 @@ namespace js
             IScriptObjectHandler::Reset();
             ICompatibilityHandler::Reset();
             IBindingExportHandler::Reset();
+
+            for(Promise* promise : promises) delete promise;
+            promises.clear();
 
             isolate = nullptr;
 
@@ -198,6 +203,18 @@ namespace js
         void PushNextTickCallback(NextTickCallback&& callback)
         {
             nextTickCallbacks.push(std::move(callback));
+        }
+
+        Promise* CreatePromise()
+        {
+            Promise* promise = new Promise(this);
+            promises.push_back(promise);
+            return promise;
+        }
+        void RemovePromise(Promise* promise)
+        {
+            auto it = std::find(promises.begin(), promises.end(), promise);
+            if(it != promises.end()) promises.erase(it);
         }
 
         template<class ResourceType = js::IResource>

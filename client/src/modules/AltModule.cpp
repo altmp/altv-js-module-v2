@@ -205,7 +205,7 @@ static void TakeScreenshot(js::FunctionContext& ctx)
 {
     bool gameOnly = ctx.GetArg<bool>(0, false);
 
-    js::Promise* promise = new js::Promise;
+    js::Promise* promise = ctx.GetResource()->CreatePromise();
     js::IAltResource* resource = ctx.GetResource<js::IAltResource>();
 
     auto callback = [=](const std::string& base64Str)
