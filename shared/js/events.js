@@ -287,14 +287,13 @@ class EventHandler {
         this.#once = once;
     }
 
-    // Don't expose this in the public API
-    unregister() {
+    #unregister() {
         Event.unsubscribe(this.#eventType, this.#custom, this.#handler);
     }
 
     destroy() {
         if (!this.#valid) return;
-        this.unregister();
+        this.#unregister();
         this.#valid = false;
     }
 
@@ -328,7 +327,7 @@ class ScriptEventHandler extends EventHandler {
         this.#local = local;
     }
 
-    unregister() {
+    #unregister() {
         Event.unsubscribeScriptEvent(this.#local, this.#eventName, this.handler);
     }
 
@@ -355,7 +354,7 @@ class GenericEventHandler extends EventHandler {
         super(alt.Enums.EventType.ALL, handler, location, false);
     }
 
-    unregister() {
+    #unregister() {
         Event.unsubscribeGeneric(this.handler);
     }
 }
