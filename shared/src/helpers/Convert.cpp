@@ -68,6 +68,16 @@ v8::Local<v8::Value> js::JSValue(const js::Array& jsArr)
     return jsArr.Get();
 }
 
+v8::Local<v8::Value> js::JSValue(const js::Promise& jsPromise)
+{
+    return jsPromise.Get();
+}
+
+v8::Local<v8::Value> js::JSValue(js::Promise* jsPromise)
+{
+    return jsPromise->Get();
+}
+
 alt::MValue js::JSToMValue(v8::Local<v8::Value> val, bool allowFunction)
 {
     alt::ICore& core = alt::ICore::Instance();

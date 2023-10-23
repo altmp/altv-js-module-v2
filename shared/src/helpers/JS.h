@@ -548,7 +548,7 @@ namespace js
 
     private:
         Persistent<v8::Promise::Resolver> resolver;
-        Persistent<v8::Promise> promise;
+        mutable Persistent<v8::Promise> promise;
         Type resultType = Type::INVALID;
         IResource* resource;
         bool owned;
@@ -563,7 +563,7 @@ namespace js
         Promise(v8::Local<v8::Promise> _promise) : PersistentValue(!_promise.IsEmpty()), promise(v8::Isolate::GetCurrent(), _promise), owned(false) {}
         ~Promise();
 
-        v8::Local<v8::Promise> Get()
+        v8::Local<v8::Promise> Get() const
         {
             if(!HasPromise() && HasResolver()) promise.Reset(v8::Isolate::GetCurrent(), GetResolver()->GetPromise());
             return promise.Get(v8::Isolate::GetCurrent());

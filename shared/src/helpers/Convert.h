@@ -214,6 +214,8 @@ namespace js
     v8::Local<v8::Value> JSValue(alt::Quaternion quaternion);
     v8::Local<v8::Value> JSValue(const js::Object& jsObj);
     v8::Local<v8::Value> JSValue(const js::Array& jsArr);
+    v8::Local<v8::Value> JSValue(const js::Promise& jsPromise);
+    v8::Local<v8::Value> JSValue(js::Promise* jsPromise);
     template<class T>
     inline v8::Local<v8::Array> JSValue(const std::vector<T>& arr)
     {
