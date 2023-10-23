@@ -191,6 +191,7 @@ static js::Module altModule("@altv/server", "@altv/shared", { &playerClass, &veh
 
     module.StaticFunction("hasBenefit", HasBenefit);
 
+    module.Namespace("Security");
     module.Namespace(eventsNamespace);
     module.Namespace(pedModelInfoNamespace);
     module.Namespace(vehicleModelInfoNamespace);

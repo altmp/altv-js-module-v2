@@ -1526,6 +1526,22 @@ declare module "@altv/server" {
         }
     }
 
+    export namespace Security {
+        export namespace EventProtection {
+            let enabled: boolean;
+            let cleanupInterval: number;
+            let maxEventsPerInterval: number;
+            let notifyCallback: ((player: Player, event: string) => void) | null;
+
+            function ignorePlayer(player: Player): void;
+            function unignorePlayer(player: Player): void;
+            function ignoreEvent(event: string): void;
+            function unignoreEvent(event: string): void;
+            function addCustomEventMax(event: string, max: number): void;
+            function removeCustomEventMax(event: string, max: number): void;
+        }
+    }
+
     /**
      * Extend it by interface merging for use in BaseObject#meta.
      */
