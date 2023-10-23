@@ -175,6 +175,11 @@ export class Vector3 extends Vector {
         return this.values[2];
     }
 
+    cross(vectorOrX, y, z) {
+        const vec = vectorOrX instanceof Vector ? vectorOrX : new Vector3(vectorOrX, y, z);
+        return new this.constructor(this.y * vec.z - this.z * vec.y, this.z * vec.x - this.x * vec.z, this.x * vec.y - this.y * vec.x);
+    }
+
     static fromArray(arr) {
         return new Vector3(arr[0], arr[1], arr[2]);
     }
