@@ -37,7 +37,10 @@ class EventProtection {
         const maxSend = EventProtection.#eventMaxOverrides.get(evName) ?? EventProtection.#maxEventsPerInterval;
         if (sendCount > maxSend) {
             if (EventProtection.#notifyCallback) EventProtection.#notifyCallback(player, evName);
-            else player.kick(`Event Protection: Kicked for sending too many events.`);
+            else {
+                alt.logWarning(`Event Protection: Kicking ${player.name} for sending '${evName}' too many times`);
+                player.kick(`Event Protection: Kicked for sending too many events.`);
+            }
         } else sentEvents.set(evName, sendCount + 1);
     }
     static #onConnect(ctx) {
