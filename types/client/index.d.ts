@@ -407,6 +407,7 @@ declare module "@altv/client" {
         get model(): number;
         readonly netOwner?: Player;
         readonly visible: boolean;
+        frozen: boolean;
         readonly isStreamedIn: boolean;
 
         rot: altShared.Vector3;
