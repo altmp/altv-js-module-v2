@@ -1529,7 +1529,9 @@ declare module "@altv/server" {
     export namespace Security {
         export namespace EventProtection {
             let enabled: boolean;
+            /** Default: 5000 */
             let cleanupInterval: number;
+            /** Default: 20 */
             let maxEventsPerInterval: number;
             let notifyCallback: ((player: Player, event: string) => void) | null;
 

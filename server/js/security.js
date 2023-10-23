@@ -15,7 +15,7 @@ class EventProtection {
     static #ignoredPlayers = new Set();
     static #ignoredEvents = new Set();
     static #eventMaxOverrides = new Map();
-    static #maxEventsPerInterval = 10;
+    static #maxEventsPerInterval = 20;
     static #cleanupInterval = 5000;
     static #notifyCallback = null;
 
