@@ -33,7 +33,52 @@ static void TakeHeapSnapshot(js::FunctionContext& ctx)
                                                                         delete promise;
                                                                     });
     snapshot->Serialize(stream, v8::HeapSnapshot::SerializationFormat::kJSON);
-    ctx.Return(promise->Get());
+    ctx.Return(promise);
+}
+
+class MeasureMemoryDelegate : public v8::MeasureMemoryDelegate
+{
+public:
+    using Callback = std::function<void(size_t size, size_t externalBytes)>;
+
+private:
+    js::IResource* resource;
+    Callback callback;
+
+public:
+    MeasureMemoryDelegate(js::IResource* _resource, Callback&& _callback) : resource(_resource), callback(_callback) {}
+
+    bool ShouldMeasure(v8::Local<v8::Context> context) override
+    {
+        return js::IResource::GetFromContext(context) == resource;
+    }
+
+    void MeasurementComplete(const std::vector<std::pair<v8::Local<v8::Context>, size_t>>& context_sizes_in_bytes, size_t unattributed_size_in_bytes) override
+    {
+        size_t size = context_sizes_in_bytes[0].second;
+        resource->PushNextTickCallback([=]() { this->callback(size, unattributed_size_in_bytes); });
+    }
+};
+
+static void GetMemoryProfile(js::FunctionContext& ctx)
+{
+    js::IResource* resource = ctx.GetResource();
+    js::Promise* promise = resource->CreatePromise();
+    // clang-format off
+    std::unique_ptr<MeasureMemoryDelegate> delegate = std::make_unique<MeasureMemoryDelegate>(
+        resource,
+        [promise](size_t size, size_t externalBytes)
+        {
+            js::Object obj;
+            obj.Set("size", size);
+            obj.Set("externalBytes", externalBytes);
+            promise->Resolve(obj);
+            delete promise;
+        });
+    // clang-format on
+    ctx.GetIsolate()->MeasureMemory(std::move(delegate), v8::MeasureMemoryExecution::kDefault);
+
+    ctx.Return(promise);
 }
 
 // clang-format off
@@ -41,4 +86,5 @@ extern js::Namespace profilerNamespace("Profiler", [](js::NamespaceTemplate& tpl
     tpl.StaticProperty("heapStats", HeapStatsGetter);
 
     tpl.StaticFunction("takeHeapSnapshot", TakeHeapSnapshot);
+    tpl.StaticFunction("getMemoryProfile", GetMemoryProfile);
 });

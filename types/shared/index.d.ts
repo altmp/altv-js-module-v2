@@ -755,6 +755,11 @@ declare module "@altv/shared" {
         readonly usedGlobalHandleSize: number;
     }
 
+    export interface IMemoryProfile {
+        readonly size: number;
+        readonly externalBytes: number;
+    }
+
     export namespace Profiler {
         export const heapStats: IHeapStats;
 
@@ -762,6 +767,10 @@ declare module "@altv/shared" {
          * Resolves to a JSON string that can be loaded by e.g. Chrome DevTools to investigate the current heap objects.
          */
         export function takeHeapSnapshot(): Promise<string>;
+        /**
+         * Gets the memory profile for the current executing resource.
+         */
+        export function getMemoryProfile(): Promise<IMemoryProfile>;
     }
 
     export namespace Enums {
