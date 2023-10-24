@@ -51,6 +51,10 @@ namespace js
         {
             return resource;
         }
+        bool IsWorker() const override
+        {
+            return false;
+        }
 
         void OnCreateBaseObject(alt::IBaseObject* object) override
         {

@@ -21,6 +21,7 @@ void js::IResource::InitializeBinding(js::Binding* binding)
 {
     if(binding->IsBootstrapBinding()) return;                                       // Skip bootstrap bindings, those are handled separately
     if(binding->IsCompatibilityBinding() && !IsCompatibilityModeEnabled()) return;  // Don't load compatibility bindings if not enabled
+    if(binding->IsWorkerBinding() && !IsWorker()) return;                           // Don't load worker bindings if not a worker
 
     v8::Local<v8::Module> module = binding->GetCompiledModule(this);
     if(module.IsEmpty())

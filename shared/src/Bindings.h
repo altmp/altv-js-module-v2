@@ -68,6 +68,10 @@ namespace js
         {
             return name.find("compatibility/") != std::string::npos;
         }
+        bool IsWorkerBinding()
+        {
+            return name.find("worker/") != std::string::npos;
+        }
 
         // For debugging
         void Dump();
