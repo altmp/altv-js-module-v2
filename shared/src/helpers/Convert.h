@@ -332,12 +332,12 @@ namespace js
             v8::Isolate* isolate = v8::Isolate::GetCurrent();
             v8::MaybeLocal<v8::String> maybeStr = val->ToString(isolate->GetEnteredOrMicrotaskContext());
             if(maybeStr.IsEmpty()) return std::nullopt;
-            v8::Local<v8::String> strVal = maybeStr.ToLocalChecked();
-            int len = strVal->Utf8Length(isolate);
-            std::string str;
-            str.reserve(len);
-            strVal->WriteUtf8(isolate, str.data());
-            return str;
+            // v8::Local<v8::String> strVal = maybeStr.ToLocalChecked();
+            // int len = strVal->Utf8Length(isolate);
+            // std::string str;
+            // str.reserve(len);
+            // strVal->WriteUtf8(isolate, str.data());
+            return *v8::String::Utf8Value(isolate, maybeStr.ToLocalChecked());
         }
         else if constexpr(std::is_same_v<T, bool>)
         {
