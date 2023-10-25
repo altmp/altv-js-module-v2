@@ -220,6 +220,8 @@ namespace js
             }
             ctx.Return(obj);
         }
+
+        void BoundFunctionHandler(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info);
     }  // namespace Wrapper
 
     static v8::Local<v8::FunctionTemplate> WrapFunction(internal::FunctionCallback cb)
@@ -414,6 +416,11 @@ namespace js
         void Method(const std::string& name, internal::FunctionCallback callback)
         {
             Get()->PrototypeTemplate()->Set(js::JSValue(name), WrapFunction(callback));
+        }
+        // Always has the `this` context of the method set to the parent object (even when destructuring)
+        void BoundMethod(const std::string& name, internal::FunctionCallback callback)
+        {
+            Get()->InstanceTemplate()->SetLazyDataProperty(JSValue(name), Wrapper::BoundFunctionHandler, v8::External::New(v8::Isolate::GetCurrent(), (void*)callback));
         }
 #pragma endregion
 

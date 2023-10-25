@@ -79,8 +79,8 @@ static void Get(js::FunctionContext& ctx)
     modelObj.Set("canAttachCars", info.canAttachCars);
     modelObj.Set("handlingNameHash", info.handlingNameHash);
 
-    modelObj.SetMethod("doesExtraExist", DoesExtraExist);
-    modelObj.SetMethod("isExtraDefault", IsExtraDefault);
+    modelObj.SetBoundMethod("doesExtraExist", DoesExtraExist);
+    modelObj.SetBoundMethod("isExtraDefault", IsExtraDefault);
 
     ctx.Return(modelObj);
 }

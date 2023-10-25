@@ -43,5 +43,5 @@ static js::Event weaponDamageEvent(alt::CEvent::Type::WEAPON_DAMAGE_EVENT, [](co
     args.Set("offset", e->GetShotOffset());
     args.Set("bodyPart", e->GetBodyPart());
 
-    args.SetMethod("setDamageValue", SetDamageValue);
+    args.SetBoundMethod("setDamageValue", SetDamageValue);
 });

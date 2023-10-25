@@ -44,9 +44,9 @@ static js::Event scriptRpcEvent(alt::CEvent::Type::SCRIPT_RPC_EVENT, [](const al
 
     args.Set("answerID", e->GetAnswerID());
 
-    args.SetMethod("willAnswer", WillAnswer);
-    args.SetMethod("answer", Answer);
-    args.SetMethod("answerWithError", AnswerWithError);
+    args.SetBoundMethod("willAnswer", WillAnswer);
+    args.SetBoundMethod("answer", Answer);
+    args.SetBoundMethod("answerWithError", AnswerWithError);
 
     #ifdef ALT_SERVER_API
     args.Set("player", e->GetTarget());

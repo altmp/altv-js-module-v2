@@ -78,6 +78,6 @@ extern js::Class eventContextClass("EventContext", [](js::ClassTemplate& tpl) {
 }, true);
 
 extern class js::Class cancellableEventContextClass("CancellableEventContext", &eventContextClass, [](js::ClassTemplate& tpl) {
-    tpl.Method("cancel", CancelEventCallback);
+    tpl.BoundMethod("cancel", CancelEventCallback);
     tpl.Property("isCancelled", IsCancelledGetter);
 }, true);

@@ -206,7 +206,8 @@ namespace js
             object->Set(context, js::JSValue(key), js::JSValue((Type)val));
         }
 
-        void SetMethod(std::string_view key, internal::FunctionCallback func);
+        void SetMethod(std::string_view key, internal::FunctionCallback callback);
+        void SetBoundMethod(std::string_view key, internal::FunctionCallback callback);
 
         // Falls back to default value if the value is not found or the type doesn't match
         template<typename T, bool InternalizedString = false>

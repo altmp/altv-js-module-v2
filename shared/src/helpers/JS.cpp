@@ -135,7 +135,13 @@ js::IResource* js::PersistentValue::GetResource()
 
 void js::Object::SetMethod(std::string_view key, js::internal::FunctionCallback callback)
 {
-    object->Set(context, JSValue(key), WrapFunction(callback)->GetFunction(context).ToLocalChecked());
+    v8::Local<v8::Function> method = WrapFunction(callback)->GetFunction(context).ToLocalChecked();
+    object->Set(context, JSValue(key), method);
+}
+
+void js::Object::SetBoundMethod(std::string_view key, js::internal::FunctionCallback callback)
+{
+    object->SetLazyDataProperty(context, JSValue(key), Wrapper::BoundFunctionHandler, v8::External::New(v8::Isolate::GetCurrent(), (void*)callback));
 }
 
 js::Type js::Object::GetType(std::string_view key)

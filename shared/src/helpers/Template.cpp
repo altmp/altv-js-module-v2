@@ -68,6 +68,17 @@ void js::Wrapper::DynamicPropertyEnumeratorHandler(const v8::PropertyCallbackInf
     data->enumerator(ctx);
 }
 
+void js::Wrapper::BoundFunctionHandler(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+{
+    internal::FunctionCallback callback = (internal::FunctionCallback)info.Data().As<v8::External>()->Value();
+    v8::Local<v8::Function> method = WrapFunction(callback)->GetFunction(info.GetIsolate()->GetEnteredOrMicrotaskContext()).ToLocalChecked();
+    js::Object methodObj(method.As<v8::Object>());
+    js::Function bindFunc = methodObj.Get<v8::Local<v8::Value>>("bind").As<v8::Function>();
+    v8::Local<v8::Value> boundFunction = bindFunc.Call<v8::Local<v8::Value>>(methodObj, info.This()).value();
+
+    info.GetReturnValue().Set(boundFunction);
+}
+
 void js::ModuleTemplate::Namespace(const std::string& name, js::Namespace& namespace_)
 {
     Get()->Set(JSValue(name), namespace_.Get(GetIsolate()));
