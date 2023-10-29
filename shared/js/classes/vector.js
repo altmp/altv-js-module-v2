@@ -145,6 +145,7 @@ class Vector {
             const arg = args[0];
             if (arg instanceof Vector) values = arg.values;
             else if (Array.isArray(arg)) values = arg;
+            else if (typeof arg === "object") values = Object.values(arg);
             else for (let i = 0; i < this.#size; i++) values.push(arg);
         } else throw new Error("Invalid arguments");
         return values;
