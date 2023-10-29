@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <chrono>
 #include <vector>
+#include <string>
 
 class Profiler
 {
