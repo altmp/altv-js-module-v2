@@ -5,6 +5,7 @@
 
 requireBinding("shared/events/entity.js");
 requireBinding("shared/events/player.js");
+requireBinding("server/events/player.js");
 
 const passengerMap = new Map();
 
