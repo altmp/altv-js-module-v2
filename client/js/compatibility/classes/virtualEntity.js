@@ -25,6 +25,18 @@ class VirtualEntity extends alt.VirtualEntity {
 
         return extendAltEntityClass(instance, WorldObject, BaseObject);
     }
+
+    hasStreamSyncedMeta(key) {
+        return key in this.streamSyncedMeta;
+    }
+
+    getStreamSyncedMeta(key) {
+        return this.streamSyncedMeta[key];
+    }
+
+    getStreamSyncedMetaKeys() {
+        return Object.keys(this.streamSyncedMeta);
+    }
 }
 
 alt.VirtualEntity.setFactory(VirtualEntity);
