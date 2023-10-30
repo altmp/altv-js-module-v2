@@ -917,7 +917,8 @@ declare module "@altv/server" {
     export namespace RPC {
         export type CustomPlayerRpcEventHandler<T extends unknown[], U extends Player = Player> = (player: U, ...args: T) => unknown | Promise<unknown>;
 
-        export function register<E extends keyof altShared.RPC.CustomPlayerToServerRpcEvent, T extends Player>(rpcName: E, handler: CustomPlayerRpcEventHandler<Parameters<altShared.RPC.CustomPlayerToServerRpcEvent[E]>, T>): RPCHandler;
+        export function register<U extends Player = Player, E extends keyof altShared.RPC.CustomPlayerToServerRpcEvent>(rpcName: E, handler: CustomPlayerRpcEventHandler<Parameters<altShared.RPC.CustomPlayerToServerRpcEvent[E]>, U>): RPCHandler;
+        export function register<U extends Player = Player, E extends string>(rpcName: Exclude<E, keyof altShared.RPC.CustomPlayerToServerRpcEvent>, handler: CustomPlayerRpcEventHandler<unknown[], U>): RPCHandler;
     }
 
     export abstract class ConnectionInfo {
