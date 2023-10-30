@@ -308,6 +308,12 @@ declare module "@altv/shared" {
         dot(xyz: IVector3): Vector3;
         dot(xyz: number): Vector3;
 
+        cross(x: number, y: number, z: number): Vector3;
+        cross(other: Vector3): Vector3;
+        cross(xyz: [number, number, number]): Vector3;
+        cross(xyz: IVector3): Vector3;
+        cross(xyz: number): Vector3;
+
         distanceTo(x: number, y: number, z: number): number;
         distanceTo(other: Vector3): number;
         distanceTo(xyz: [number, number, number]): number;
