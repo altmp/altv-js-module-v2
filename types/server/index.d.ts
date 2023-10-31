@@ -536,6 +536,7 @@ declare module "@altv/server" {
         playScenario(name: string): void;
 
         sendRPC<E extends keyof altShared.RPC.CustomServerToPlayerRpcEvent>(rpcName: E, ...args: Parameters<altShared.RPC.CustomServerToPlayerRpcEvent[E]>): Promise<ReturnType<altShared.RPC.CustomServerToPlayerRpcEvent[E]>>;
+        sendRPC<E extends string>(rpcName: Exclude<E, keyof altShared.RPC.CustomServerToPlayerRpcEvent>, ...args: unknown[]): Promise<unknown>;
 
         readonly meta: PlayerMeta;
         readonly localMeta: PlayerLocalMeta;
@@ -915,10 +916,13 @@ declare module "@altv/server" {
     }
 
     export namespace RPC {
-        export type CustomPlayerRpcEventHandler<T extends unknown[], U extends Player = Player> = (player: U, ...args: T) => unknown | Promise<unknown>;
+        export type CustomPlayerRpcEventHandler<T extends unknown[], U extends Player = Player, V = unknown> = (player: U, ...args: T) => Promise<V> | V;
 
-        export function register<U extends Player = Player, E extends keyof altShared.RPC.CustomPlayerToServerRpcEvent>(rpcName: E, handler: CustomPlayerRpcEventHandler<Parameters<altShared.RPC.CustomPlayerToServerRpcEvent[E]>, U>): RPCHandler;
-        export function register<U extends Player = Player, E extends string>(rpcName: Exclude<E, keyof altShared.RPC.CustomPlayerToServerRpcEvent>, handler: CustomPlayerRpcEventHandler<unknown[], U>): RPCHandler;
+        export function register<U extends Player, E extends keyof altShared.RPC.CustomPlayerToServerRpcEvent = keyof altShared.RPC.CustomPlayerToServerRpcEvent>(
+            rpcName: E,
+            handler: CustomPlayerRpcEventHandler<Parameters<altShared.RPC.CustomPlayerToServerRpcEvent[E]>, U, ReturnType<altShared.RPC.CustomPlayerToServerRpcEvent[E]>>
+        ): RPCHandler;
+        export function register<U extends Player, E extends string = string>(rpcName: Exclude<E, keyof altShared.RPC.CustomPlayerToServerRpcEvent>, handler: CustomPlayerRpcEventHandler<unknown[], U>): RPCHandler;
     }
 
     export abstract class ConnectionInfo {

@@ -1420,12 +1420,13 @@ declare module "@altv/client" {
     }
 
     export namespace RPC {
-        export type GenericRpcEventHandler<T extends unknown[]> = (...args: T) => Promise<unknown> | unknown;
+        export type GenericRpcEventHandler<T extends unknown[] = unknown[], U = unknown> = (...args: T) => Promise<U> | U;
 
         export function send<E extends keyof altShared.RPC.CustomPlayerToServerRpcEvent>(rpcName: E, ...args: Parameters<altShared.RPC.CustomPlayerToServerRpcEvent[E]>): Promise<ReturnType<altShared.RPC.CustomPlayerToServerRpcEvent[E]>>;
+        export function send<E extends string>(rpcName: Exclude<E, keyof altShared.RPC.CustomPlayerToServerRpcEvent>, ...args: unknown[]): Promise<unknown>;
 
-        export function register<E extends keyof altShared.RPC.CustomServerToPlayerRpcEvent>(rpcName: E, handler: GenericRpcEventHandler<Parameters<altShared.RPC.CustomServerToPlayerRpcEvent[E]>>): RPCHandler;
-        export function register<E extends string>(rpcName: Exclude<E, keyof altShared.RPC.CustomServerToPlayerRpcEvent>, handler: GenericRpcEventHandler<unknown[]>): RPCHandler;
+        export function register<E extends keyof altShared.RPC.CustomServerToPlayerRpcEvent>(rpcName: E, handler: GenericRpcEventHandler<Parameters<altShared.RPC.CustomServerToPlayerRpcEvent[E]>, ReturnType<altShared.RPC.CustomServerToPlayerRpcEvent[E]>>): RPCHandler;
+        export function register<E extends string>(rpcName: Exclude<E, keyof altShared.RPC.CustomServerToPlayerRpcEvent>, handler: GenericRpcEventHandler): RPCHandler;
     }
 
     // DO NOT TOUCH THIS - This is only here so client / server can extend Utils namespace using merging
