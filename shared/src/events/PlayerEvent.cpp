@@ -21,7 +21,7 @@ static js::Event playerVehicleEnteredEvent(alt::CEvent::Type::PLAYER_ENTER_VEHIC
     args.Set("seat", e->GetSeat());
 });
 
-static js::Event playerVehicleStartEnterEvent(alt::CEvent::Type::PLAYER_ENTERING_VEHICLE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+static js::Event playerStartVehicleEnterEvent(alt::CEvent::Type::PLAYER_ENTERING_VEHICLE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
     auto e = static_cast<const alt::CPlayerEnteringVehicleEvent*>(ev);
 
