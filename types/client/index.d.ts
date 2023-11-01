@@ -1734,11 +1734,6 @@ declare module "@altv/client" {
             seat: number;
         }
 
-        interface PlayerVehicleEnteringEventParameters {
-            vehicle: Vehicle;
-            seat: number;
-        }
-
         interface PlayerVehicleLeftEventParameters {
             vehicle: Vehicle;
             seat: number;
