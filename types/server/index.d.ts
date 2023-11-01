@@ -1031,8 +1031,8 @@ declare module "@altv/server" {
         export function oncePlayerAnimationChange<T extends Player>(callback: GenericPlayerEventCallback<PlayerAnimationChangeEventParameters, T>): altShared.Events.EventHandler;
         export function onPlayerVehicleEntered<T extends Player>(callback: GenericPlayerEventCallback<PlayerVehicleEnteredEventParameters, T>): altShared.Events.EventHandler;
         export function oncePlayerVehicleEntered<T extends Player>(callback: GenericPlayerEventCallback<PlayerVehicleEnteredEventParameters, T>): altShared.Events.EventHandler;
-        export function onPlayerStartVehicleEnter<T extends Player>(callback: GenericPlayerEventCallback<PlayerVehicleEnteringEventParameters, T>): altShared.Events.EventHandler;
-        export function oncePlayerStartVehicleEnter<T extends Player>(callback: GenericPlayerEventCallback<PlayerVehicleEnteringEventParameters, T>): altShared.Events.EventHandler;
+        export function onPlayerStartVehicleEnter<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartVehicleEnterEventParameters, T>): altShared.Events.EventHandler;
+        export function oncePlayerStartVehicleEnter<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartVehicleEnterEventParameters, T>): altShared.Events.EventHandler;
         export function onPlayerVehicleLeft<T extends Player>(callback: GenericPlayerEventCallback<PlayerVehicleLeftEventParameters, T>): altShared.Events.EventHandler;
         export function oncePlayerVehicleLeft<T extends Player>(callback: GenericPlayerEventCallback<PlayerVehicleLeftEventParameters, T>): altShared.Events.EventHandler;
         export function onPlayerVehicleSeatChange<T extends Player>(callback: GenericPlayerEventCallback<PlayerVehicleSeatChangeEventParameters, T>): altShared.Events.EventHandler;
@@ -1361,7 +1361,7 @@ declare module "@altv/server" {
             seat: number;
         }
 
-        interface PlayerVehicleEnteringEventParameters {
+        interface PlayerStartVehicleEnterEventParameters {
             vehicle: Vehicle;
             seat: number;
         }
