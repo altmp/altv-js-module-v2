@@ -1504,17 +1504,18 @@ declare module "@altv/client" {
         export function oncePlayerBulletHit(callback: GenericEventCallback<PlayerBulletHitEventParameters>): altShared.Events.EventHandler;
         export function onPlayerWeaponChange(callback: GenericEventCallback<PlayerWeaponChangeEventParameters>): altShared.Events.EventHandler;
         export function oncePlayerWeaponChange(callback: GenericEventCallback<PlayerWeaponChangeEventParameters>): altShared.Events.EventHandler;
-        export function onPlayerStartEnteredVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartEnterVehicleEventParameters, T>): altShared.Events.EventHandler;
-        export function oncePlayerStartEnteredVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartEnterVehicleEventParameters, T>): altShared.Events.EventHandler;
-        export function onPlayerStartLeaveVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartLeaveVehicleEventParameters, T>): altShared.Events.EventHandler;
-        export function oncePlayerStartLeaveVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartLeaveVehicleEventParameters, T>): altShared.Events.EventHandler;
-        export function onPlayerEnteredVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerEnterVehicleEventParameters, T>): altShared.Events.EventHandler;
-        export function oncePlayerEnteredVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerEnterVehicleEventParameters, T>): altShared.Events.EventHandler;
-        export function onPlayerLeaveVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerLeaveVehicleEventParameters, T>): altShared.Events.EventHandler;
-        export function oncePlayerLeaveVehicle<T extends Player>(callback: GenericPlayerEventCallback<PlayerLeaveVehicleEventParameters, T>): altShared.Events.EventHandler;
+
+        export function onPlayerStartVehicleEnter<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartVehicleEnterEventParameters, T>): altShared.Events.EventHandler;
+        export function oncePlayerStartVehicleEnter <T extends Player>(callback: GenericPlayerEventCallback<PlayerStartVehicleEnterEventParameters, T>): altShared.Events.EventHandler;
+        export function onPlayerStartVehicleLeave<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartVehicleLeaveEventParameters, T>): altShared.Events.EventHandler;
+        export function oncePlayerStartVehicleLeave<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartVehicleLeaveEventParameters, T>): altShared.Events.EventHandler;
+        export function onPlayerVehicleEntered<T extends Player>(callback: GenericPlayerEventCallback<PlayerVehicleEnterEventParameters, T>): altShared.Events.EventHandler;
+        export function oncePlayerVehicleEntered<T extends Player>(callback: GenericPlayerEventCallback<PlayerVehicleEnterEventParameters, T>): altShared.Events.EventHandler;
+        export function onPlayerVehicleLeft<T extends Player>(callback: GenericPlayerEventCallback<PlayerVehicleLeaveEventParameters, T>): altShared.Events.EventHandler;
+        export function oncePlayerVehicleLeft<T extends Player>(callback: GenericPlayerEventCallback<PlayerVehicleLeaveEventParameters, T>): altShared.Events.EventHandler;
+
         export function onVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): altShared.Events.EventHandler;
         export function onceVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): altShared.Events.EventHandler;
-
         export function onPlayerStartTalking<T extends Player>(callback: GenericPlayerEventCallback<{}, T>): altShared.Events.EventHandler;
         export function oncePlayerStartTalking<T extends Player>(callback: GenericPlayerEventCallback<{}, T>): altShared.Events.EventHandler;
         export function onPlayerStopTalking<T extends Player>(callback: GenericPlayerEventCallback<{}, T>): altShared.Events.EventHandler;
@@ -1588,22 +1589,22 @@ declare module "@altv/client" {
             newWeapon: number;
         }
 
-        interface PlayerStartEnterVehicleEventParameters {
+        interface PlayerStartVehicleEnterEventParameters {
             vehicle: Vehicle;
             seat: number;
         }
 
-        interface PlayerStartLeaveVehicleEventParameters {
+        interface PlayerStartVehicleLeaveEventParameters {
             vehicle: Vehicle;
             seat: number;
         }
 
-        interface PlayerEnterVehicleEventParameters {
+        interface PlayerVehicleEnterEventParameters {
             vehicle: Vehicle;
             seat: number;
         }
 
-        interface PlayerLeaveVehicleEventParameters {
+        interface PlayerVehicleLeaveEventParameters {
             vehicle: Vehicle;
             seat: number;
         }
@@ -1728,17 +1729,17 @@ declare module "@altv/client" {
             newAnimName: number;
         }
 
-        interface PlayerEnteredVehicleEventParameters {
+        interface PlayerVehicleEnteredEventParameters {
             vehicle: Vehicle;
             seat: number;
         }
 
-        interface PlayerEnteringVehicleEventParameters {
+        interface PlayerVehicleEnteringEventParameters {
             vehicle: Vehicle;
             seat: number;
         }
 
-        interface PlayerLeftVehicleEventParameters {
+        interface PlayerVehicleLeftEventParameters {
             vehicle: Vehicle;
             seat: number;
         }
