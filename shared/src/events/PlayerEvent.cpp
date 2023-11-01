@@ -12,7 +12,7 @@ static js::Event playerAnimationChangeEvent(alt::CEvent::Type::PLAYER_CHANGE_ANI
     args.Set("newAnimName", e->GetNewAnimationName());
 });
 
-static js::Event playerEnteredVehicleEvent(alt::CEvent::Type::PLAYER_ENTER_VEHICLE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+static js::Event playerVehicleEnteredEvent(alt::CEvent::Type::PLAYER_ENTER_VEHICLE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
     auto e = static_cast<const alt::CPlayerEnterVehicleEvent*>(ev);
 
@@ -21,7 +21,7 @@ static js::Event playerEnteredVehicleEvent(alt::CEvent::Type::PLAYER_ENTER_VEHIC
     args.Set("seat", e->GetSeat());
 });
 
-static js::Event playerVehicleEnteringEvent(alt::CEvent::Type::PLAYER_ENTERING_VEHICLE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+static js::Event playerVehicleStartEnterEvent(alt::CEvent::Type::PLAYER_ENTERING_VEHICLE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
     auto e = static_cast<const alt::CPlayerEnteringVehicleEvent*>(ev);
 
