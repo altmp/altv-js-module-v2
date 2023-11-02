@@ -9,14 +9,14 @@ requireBinding("server/events/player.js");
 
 const passengerMap = new Map();
 
-alt.Events.onPlayerEnteredVehicle(({ player, vehicle, seat }) => {
+alt.Events.onPlayerVehicleEntered(({ player, vehicle, seat }) => {
     const passengers = passengerMap.get(vehicle) ?? new Map();
 
     passengers.set(seat, player);
     passengerMap.set(vehicle, passengers);
 });
 
-alt.Events.onPlayerLeftVehicle(({ vehicle, seat }) => {
+alt.Events.onPlayerVehicleLeft(({ vehicle, seat }) => {
     if (!passengerMap.has(vehicle)) return;
 
     const passengers = passengerMap.get(vehicle);

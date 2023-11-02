@@ -17,7 +17,7 @@ static js::Event playerBulletHitEvent(alt::CEvent::Type::PLAYER_BULLET_HIT_EVENT
     args.Set("pos", e->GetPosition());
 });
 
-static js::Event playerStartEnterVehicle(alt::CEvent::Type::PLAYER_START_ENTER_VEHICLE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+static js::Event playerStartVehicleEnter(alt::CEvent::Type::PLAYER_START_ENTER_VEHICLE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
     auto e = static_cast<const alt::CPlayerStartEnterVehicleEvent*>(ev);
     args.Set("player", e->GetPlayer());
@@ -25,9 +25,9 @@ static js::Event playerStartEnterVehicle(alt::CEvent::Type::PLAYER_START_ENTER_V
     args.Set("seat", e->GetSeat());
 });
 
-static js::Event playerStartLeaveVehicle(alt::CEvent::Type::PLAYER_START_LEAVE_VEHICLE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
+static js::Event playerStartVehicleLeave(alt::CEvent::Type::PLAYER_START_LEAVE_VEHICLE, [](const alt::CEvent* ev, js::Event::EventArgs& args)
 {
-    auto e = static_cast<const alt::CPlayerLeaveVehicleEvent*>(ev);
+    auto e = static_cast<const alt::CPlayerStartLeaveVehicleEvent*>(ev);
     args.Set("player", e->GetPlayer());
     args.Set("vehicle", e->GetTarget());
     args.Set("seat", e->GetSeat());
