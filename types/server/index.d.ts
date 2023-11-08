@@ -381,10 +381,10 @@ declare module "@altv/server" {
         readonly name: string;
 
         readonly ip: string;
-        readonly socialID: number;
+        readonly socialID: number | bigint;
         readonly socialClubName: string;
-        readonly hwidHash: bigint;
-        readonly hwidExHash: bigint;
+        readonly hwidHash: number | bigint;
+        readonly hwidExHash: number | bigint;
         readonly cloudID: string;
         readonly cloudAuthResult: altShared.Enums.CloudAuthResult;
 
@@ -928,12 +928,12 @@ declare module "@altv/server" {
 
     export abstract class ConnectionInfo {
         readonly name: string;
-        readonly socialID: number;
+        readonly socialID: number | bigint;
         readonly cloudID: string;
         readonly cloudAuthResult: altShared.Enums.CloudAuthResult;
         readonly socialName: string;
-        readonly hwidHash: bigint;
-        readonly hwidExHash: bigint;
+        readonly hwidHash: number | bigint;
+        readonly hwidExHash: number | bigint;
         readonly authToken: string;
         readonly debug: boolean;
         readonly branch: string;
