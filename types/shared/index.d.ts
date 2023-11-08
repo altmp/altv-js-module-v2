@@ -612,7 +612,7 @@ declare module "@altv/shared" {
         export let sourceLocationFrameSkipCount: number;
 
         export function setInterval(callback: Function, interval: number, ...args: unknown[]): Interval;
-        export function setTimeout(callback: Function, interval: number, ...args: unknown[]): Timeout;
+        export function setTimeout(callback: Function, timeout: number, ...args: unknown[]): Timeout;
         export function everyTick(callback: Function, ...args: unknown[]): EveryTick;
         export function nextTick(callback: Function, ...args: unknown[]): NextTick;
 

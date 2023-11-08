@@ -110,8 +110,8 @@ class Interval extends Timer {
 }
 
 class Timeout extends Timer {
-    constructor(callback, interval, ...args) {
-        super(alt.Enums.TimerType.TIMEOUT, callback, interval, true, args);
+    constructor(callback, timeout, ...args) {
+        super(alt.Enums.TimerType.TIMEOUT, callback, timeout, true, args);
     }
 }
 
@@ -164,7 +164,7 @@ alt.Timers.NextTick = NextTick;
 alt.Timers.getByID = Timer.getByID;
 
 alt.Timers.setInterval = (callback, interval, ...args) => new Interval(callback, interval, ...args);
-alt.Timers.setTimeout = (callback, interval, ...args) => new Timeout(callback, interval, ...args);
+alt.Timers.setTimeout = (callback, timeout, ...args) => new Timeout(callback, timeout, ...args);
 alt.Timers.everyTick = (callback, ...args) => new EveryTick(callback, ...args);
 alt.Timers.nextTick = (callback, ...args) => new NextTick(callback, ...args);
 
