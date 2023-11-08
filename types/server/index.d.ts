@@ -381,10 +381,10 @@ declare module "@altv/server" {
         readonly name: string;
 
         readonly ip: string;
-        readonly socialID: bigint;
+        readonly socialID: number;
         readonly socialClubName: string;
-        readonly hwidHash: bigint;
-        readonly hwidExHash: bigint;
+        readonly hwidHash: number;
+        readonly hwidExHash: number;
         readonly cloudID: string;
         readonly cloudAuthResult: altShared.Enums.CloudAuthResult;
 
