@@ -1506,7 +1506,7 @@ declare module "@altv/client" {
         export function oncePlayerWeaponChange(callback: GenericEventCallback<PlayerWeaponChangeEventParameters>): altShared.Events.EventHandler;
 
         export function onPlayerStartVehicleEnter<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartVehicleEnterEventParameters, T>): altShared.Events.EventHandler;
-        export function oncePlayerStartVehicleEnter <T extends Player>(callback: GenericPlayerEventCallback<PlayerStartVehicleEnterEventParameters, T>): altShared.Events.EventHandler;
+        export function oncePlayerStartVehicleEnter<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartVehicleEnterEventParameters, T>): altShared.Events.EventHandler;
         export function onPlayerStartVehicleLeave<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartVehicleLeaveEventParameters, T>): altShared.Events.EventHandler;
         export function oncePlayerStartVehicleLeave<T extends Player>(callback: GenericPlayerEventCallback<PlayerStartVehicleLeaveEventParameters, T>): altShared.Events.EventHandler;
         export function onPlayerVehicleEntered<T extends Player>(callback: GenericPlayerEventCallback<PlayerVehicleEnterEventParameters, T>): altShared.Events.EventHandler;
