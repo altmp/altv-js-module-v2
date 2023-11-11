@@ -21,7 +21,8 @@ function getClosestEntity(entities, options = {}) {
 }
 
 function getClosestEntityOfType(type, options = {}) {
-    const { pos = alt.Player.local.pos, range = Infinity, streamedInOnly = false, checkpointType = undefined, colShapeType = undefined } = options;
+    const { pos = alt.Player.local.pos, range = Infinity, checkpointType = undefined, colShapeType = undefined } = options;
+    let { streamedInOnly = false } = options;
     const types = Array.isArray(type) ? type : [type];
 
     // NOTE (xLuxy): streamedIn doesn't exist on server-side
