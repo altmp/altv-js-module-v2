@@ -2145,6 +2145,7 @@ declare module "@altv/shared" {
 
         // When changing, update shared/js/enums/vehicleIndicatorLights.js aswell
         export enum VehicleIndicatorLights {
+            NONE = 0,
             BLINK_LEFT = 1,
             BLINK_RIGHT = 2,
             BLINK_PERM_BOTH = 4,
