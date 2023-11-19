@@ -55,12 +55,7 @@ alt.Events.onBaseObjectRemove(({ object }) => {
 });
 
 export function addEntityToAll(entity) {
-    entityAllSetDirty = true;
-    entityAllSet.add(entity);
-    const all = entityAllMap.get(entity.type);
-    if (all) all.add(entity);
-    const storageClass = entityAllStorageMap.get(entity.type);
-    if (storageClass) storageClass.__allDirty = true;
+    addEntityToAllWithType(entity, entity.type);
 }
 export function removeEntityFromAll(entity) {
     entityAllSetDirty = true;
@@ -68,6 +63,15 @@ export function removeEntityFromAll(entity) {
     const all = entityAllMap.get(entity.type);
     if (all) all.delete(entity);
     const storageClass = entityAllStorageMap.get(entity.type);
+    if (storageClass) storageClass.__allDirty = true;
+}
+
+export function addEntityToAllWithType(entity, type) {
+    entityAllSetDirty = true;
+    entityAllSet.add(entity);
+    const all = entityAllMap.get(type);
+    if (all) all.add(entity);
+    const storageClass = entityAllStorageMap.get(type);
     if (storageClass) storageClass.__allDirty = true;
 }
 

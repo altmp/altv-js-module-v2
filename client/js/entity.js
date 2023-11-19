@@ -1,5 +1,5 @@
 /** @type {typeof import("../../shared/js/entity.js")} */
-const { addAllGetter, addEntityToAll } = requireBinding("shared/entity.js");
+const { addAllGetter, addEntityToAllWithType } = requireBinding("shared/entity.js");
 
 requireBinding("client/events/entity.js");
 requireBinding("client/events/worldObject.js");
@@ -119,4 +119,4 @@ addStreamedInGetter(alt.LocalObject, alt.Enums.BaseObjectType.LOCAL_OBJECT);
 // Add all streamed-in entities to the streamedIn sets
 for (const entity of alt.Entity.all) if (entity.streamedIn) addEntityToStreamedIn(entity);
 for (const virtualEntity of cppBindings.getStreamedInVirtualEntities()) addEntityToStreamedIn(virtualEntity);
-addEntityToAll(alt.Player.local);
+addEntityToAllWithType(alt.Player.local, alt.Enums.BaseObjectType.PLAYER);
