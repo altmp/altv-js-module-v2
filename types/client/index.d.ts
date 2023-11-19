@@ -916,8 +916,8 @@ declare module "@altv/client" {
         readonly target: Entity;
         visible: boolean;
         color: altShared.RGBA;
-        scale: altShared.Vector2;
-        rot: number;
+        scale: number;
+        rot: altShared.Vector3;
         faceCamera: boolean;
         readonly streamingDistance: number;
 
