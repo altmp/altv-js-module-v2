@@ -3382,6 +3382,13 @@ declare module "@altv/shared" {
             NO_BENEFIT = 1,
             VERIFY_FAILED = 2
         }
+
+        export enum TextLabelAlignment {
+            ALIGN_LEFT,
+            ALIGN_RIGHT,
+            ALIGN_CENTER,
+            ALIGN_JUSTIFY
+        }
     }
 
     export namespace Symbols {

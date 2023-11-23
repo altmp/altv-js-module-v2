@@ -16,6 +16,14 @@ extern js::Class textLabelClass("TextLabel", &worldObjectClass, nullptr, [](js::
     tpl.Property<&alt::ITextLabel::GetRotation, &alt::ITextLabel::SetRotation>("rot");
     tpl.Property<&alt::ITextLabel::IsFacingCamera, &alt::ITextLabel::SetFaceCamera>("faceCamera");
 
+    tpl.Property<&alt::ITextLabel::GetOutlineColor, &alt::ITextLabel::SetOutlineColor>("outlineColor");
+    tpl.Property<&alt::ITextLabel::GetOutlineWidth, &alt::ITextLabel::SetOutlineWidth>("outlineWidth");
+    tpl.Property<&alt::ITextLabel::GetFontSize, &alt::ITextLabel::SetFontSize>("fontSize");
+    tpl.Property<&alt::ITextLabel::GetAlign, &alt::ITextLabel::SetAlign>("textAlign");
+
+    tpl.Property<&alt::ITextLabel::GetText, &alt::ITextLabel::SetText>("text");
+    tpl.Property<&alt::ITextLabel::GetFont, &alt::ITextLabel::SetFont>("font");
+
     tpl.Property<&alt::ITextLabel::GetStreamingDistance>("streamingDistance");
 
     tpl.GetByID<alt::IBaseObject::Type::TEXT_LABEL>();

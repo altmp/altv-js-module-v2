@@ -24,4 +24,5 @@ extern js::Namespace enumsNamespace("Enums", [](js::NamespaceTemplate& tpl) {
     tpl.StaticEnum<alt::IMarker::MarkerType>("MarkerType");
     tpl.StaticEnum<alt::CloudAuthResult>("CloudAuthResult");
     tpl.StaticEnum<alt::Benefit>("Benefit");
+    tpl.StaticEnum<alt::ITextLabel::Alignment>("TextLabelAlignment");
 });

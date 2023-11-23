@@ -919,6 +919,14 @@ declare module "@altv/client" {
         scale: number;
         rot: altShared.Vector3;
         faceCamera: boolean;
+
+        outlineColor: altShared.RGBA;
+        outlineWidth: number;
+        fontSize: number;
+        textAlign: altShared.Enums.TextLabelAlignment;
+        text: string;
+        font: string;
+
         readonly streamingDistance: number;
 
         public onCreate?(opts: TextLabelCreateOptions): void;
