@@ -331,12 +331,18 @@ class ScriptEventHandler extends EventHandler {
         Event.unsubscribeScriptEvent(this.#local, this.#eventName, this.handler);
     }
 
+    destroy() {
+        this.#unregister();
+    }
+
     get eventName() {
         return this.#eventName;
     }
+
     get local() {
         return this.#local;
     }
+
     get remote() {
         return !this.#local;
     }
