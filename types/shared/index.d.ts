@@ -244,10 +244,10 @@ declare module "@altv/shared" {
         isInRange(range: number, xy: [number, number]): boolean;
         isInRange(range: number, xy: IVector2): boolean;
 
-        lerp(ratio: number, x: number, y: number, z: number): boolean;
-        lerp(ratio: number, other: Vector2): boolean;
-        lerp(ratio: number, xy: [number, number]): boolean;
-        lerp(ratio: number, xy: IVector2): boolean;
+        lerp(ratio: number, x: number, y: number, z: number): Vector2;
+        lerp(ratio: number, other: Vector2): Vector2;
+        lerp(ratio: number, xy: [number, number]): Vector2;
+        lerp(ratio: number, xy: IVector2): Vector2;
 
         static zero: Vector2;
         static one: Vector2;
@@ -339,10 +339,10 @@ declare module "@altv/shared" {
         isInRange(range: number, xyz: [number, number, number]): boolean;
         isInRange(range: number, xyz: IVector3): boolean;
 
-        lerp(ratio: number, x: number, y: number, z: number): boolean;
-        lerp(ratio: number, other: Vector3): boolean;
-        lerp(ratio: number, xyz: [number, number, number]): boolean;
-        lerp(ratio: number, xyz: IVector3): boolean;
+        lerp(ratio: number, x: number, y: number, z: number): Vector3;
+        lerp(ratio: number, other: Vector3): Vector3;
+        lerp(ratio: number, xyz: [number, number, number]): Vector3;
+        lerp(ratio: number, xyz: IVector3): Vector3;
 
         static zero: Vector3;
         static one: Vector3;
