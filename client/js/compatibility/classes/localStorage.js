@@ -3,31 +3,31 @@
 // import * as alt from "@altv/client";
 
 class LocalStorage {
-    get(key) {
+    static get(key) {
         return alt.LocalStorage.get(key);
     }
 
-    set(key, value) {
+    static set(key, value) {
         alt.LocalStorage.set(key, value);
     }
 
-    delete(key) {
+    static delete(key) {
         alt.LocalStorage.remove(key);
     }
 
-    deleteAll() {
+    static deleteAll() {
         alt.LocalStorage.clear();
     }
 
-    clear() {
+    static clear() {
         alt.LocalStorage.clear();
     }
 
-    save() {
+    static save() {
         alt.LocalStorage.save();
     }
 
-    has(key) {
+    static has(key) {
         return alt.LocalStorage.has(key);
     }
 }
