@@ -444,6 +444,45 @@ static void IsPointOnScreen(js::FunctionContext& ctx)
     ctx.Return(alt::ICore::Instance().IsPointOnScreen(point));
 }
 
+static void GetPoolSize(js::FunctionContext& ctx)
+{
+    if (!ctx.CheckArgCount(1)) return;
+
+    std::string pool;
+    if (!ctx.GetArg(0, pool)) return;
+
+    ctx.Return(alt::ICore::Instance().GetPoolSize(pool));
+}
+
+static void GetPoolCount(js::FunctionContext& ctx)
+{
+    if (!ctx.CheckArgCount(1)) return;
+
+    std::string pool;
+    if (!ctx.GetArg(0, pool)) return;
+
+    ctx.Return(alt::ICore::Instance().GetPoolCount(pool));
+}
+
+static void GetPoolEntities(js::FunctionContext& ctx)
+{
+    if (!ctx.CheckArgCount(1)) return;
+
+    std::string pool;
+    if (!ctx.GetArg(0, pool)) return;
+
+    auto entities = alt::ICore::Instance().GetPoolEntities(pool);
+
+    js::Array arr(entities.size());
+    for (auto entity : entities)
+    {
+        arr.Push(entity);
+    }
+
+    ctx.Return(arr);
+}
+
+
 // clang-format off
 extern js::Class playerClass, localPlayerClass, vehicleClass, pedClass, objectClass,
                 audioClass, audioFilterClass, blipClass, markerClass, textLabelClass, checkpointClass, webViewClass, fontClass,
@@ -507,6 +546,10 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.StaticFunction("setMinimapIsRectangle", SetMinimapIsRectangle);
     module.StaticFunction("getPedBonePos", GetPedBonePos);
     module.StaticFunction("isPointOnScreen", IsPointOnScreen);
+
+    module.StaticFunction("getPoolSize", GetPoolSize);
+    module.StaticFunction("getPoolCount", GetPoolCount);
+    module.StaticFunction("getPoolEntities", GetPoolEntities);
 
     module.Namespace(eventsNamespace);
     module.Namespace(discordNamespace);

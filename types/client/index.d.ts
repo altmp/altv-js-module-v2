@@ -55,6 +55,10 @@ declare module "@altv/client" {
     export function getPedBonePos(scriptId: number, boneId: number): altShared.Vector3;
     export function isPointOnScreen(pos: altShared.IVector3): boolean;
 
+    export function getPoolSize(pool: string): number;
+    export function getPoolCount(pool: string): number;
+    export function getPoolEntities(pool: string): Array<number>;
+
     export interface AudioCreateOptions {
         source: string;
         volume: number;
@@ -127,7 +131,7 @@ declare module "@altv/client" {
         readonly hash: number;
 
         addRotateEffect(rate: number, priority: number): number;
-        addVolumeEffect(volume: number, priority: number): number;
+        addVolumeEffect(volume: number, priority: number, channel?: number): number;
         addPeakeqEffect(band: number, bandwidth: number, q: number, center: number, gain: number, priority: number): number;
         addDampEffect(target: number, quiet: number, rate: number, gain: number, delay: number, priority: number): number;
         addAutowahEffect(dryMix: number, wetMix: number, feedback: number, rate: number, range: number, freq: number, priority: number): number;
