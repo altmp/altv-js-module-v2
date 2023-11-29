@@ -1525,6 +1525,8 @@ declare module "@altv/client" {
         export function oncePlayerVehicleEntered<T extends Player>(callback: GenericPlayerEventCallback<PlayerVehicleEnterEventParameters, T>): altShared.Events.EventHandler;
         export function onPlayerVehicleLeft<T extends Player>(callback: GenericPlayerEventCallback<PlayerVehicleLeaveEventParameters, T>): altShared.Events.EventHandler;
         export function oncePlayerVehicleLeft<T extends Player>(callback: GenericPlayerEventCallback<PlayerVehicleLeaveEventParameters, T>): altShared.Events.EventHandler;
+        export function onPlayerVehicleSeatChange<T extends Player>(callback: GenericPlayerEventCallback<PlayerChangeVehicleSeatEventParameters, T>): altShared.Events.EventHandler;
+        export function oncePlayerVehicleSeatChange<T extends Player>(callback: GenericPlayerEventCallback<PlayerChangeVehicleSeatEventParameters, T>): altShared.Events.EventHandler;
 
         export function onVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): altShared.Events.EventHandler;
         export function onceVoiceConnectionUpdate(callback: GenericEventCallback<VoiceConnectionEventParameters>): altShared.Events.EventHandler;
