@@ -428,8 +428,6 @@ static void GetPedBonePos(js::FunctionContext& ctx)
 
 static void LocalMetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
-    if(!ctx.CheckParent()) return;
-
     alt::MValue val = alt::ICore::Instance().GetLocalMetaData(ctx.GetProperty());
     ctx.Return(val);
 }
