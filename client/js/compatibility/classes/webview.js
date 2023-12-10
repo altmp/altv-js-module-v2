@@ -4,6 +4,9 @@
 
 requireBinding("client/factory.js");
 
+/** @type {typeof import("../../../../shared/js/utils.js")} */
+const { assertIsType } = requireBinding("shared/utils.js");
+
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
@@ -66,8 +69,10 @@ class WebView extends alt.WebView {
         return super.outputs;
     }
 
-    getEventListeners() {
-        return alt.WebView.listeners;
+    getEventListeners(eventName) {
+        assertIsType(eventName, "string", `Expeced eventName to be a string but got ${typeof eventName}`);
+
+        return alt.WebView.listeners[eventName] ?? [];
     }
 }
 

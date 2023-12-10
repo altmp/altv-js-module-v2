@@ -4,6 +4,9 @@
 
 requireBinding("client/factory.js");
 
+/** @type {typeof import("../../../../shared/js/utils.js")} */
+const { assertIsType } = requireBinding("shared/utils.js");
+
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
@@ -23,8 +26,10 @@ class Audio extends alt.Audio {
         return alt.Audio.all.length;
     }
 
-    getEventListeners() {
-        return super.listeners;
+    getEventListeners(eventName) {
+        assertIsType(eventName, "string", `Expected eventName to be a string, got ${typeof eventName}`);
+
+        return super.listeners[eventName] ?? [];
     }
 
     get playing() {

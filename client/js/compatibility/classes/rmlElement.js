@@ -4,6 +4,9 @@
 
 requireBinding("client/entity.js");
 
+/** @type {typeof import("../../../../shared/js/utils.js")} */
+const { assertIsType } = requireBinding("shared/utils.js");
+
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
@@ -15,8 +18,10 @@ class RmlElement extends alt.RmlElement {
         extendAltEntityClass(this, BaseObject);
     }
 
-    getEventListeners() {
-        return super.listeners;
+    getEventListeners(eventName) {
+        assertIsType(eventName, "string", `Expected eventName to be a string, got ${typeof eventName}`);
+
+        return super.listeners[eventName] ?? [];
     }
 
     get rmlId() {
@@ -31,7 +36,7 @@ class RmlElement extends alt.RmlElement {
         return super.classList;
     }
 
-    getPseudoClassList() {
+    getPseudoClassList(eventName) {
         return super.pseudoClassList;
     }
 
