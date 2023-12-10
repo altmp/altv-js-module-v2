@@ -49,13 +49,12 @@ function addEventsToClass(class_) {
         assert(eventName && typeof eventName === "string", `Invalid event name: ${eventName}`);
         assert(listener && typeof listener === "function", `Invalid listener: ${listener}`);
 
-        let eventHandlers = this.__eventHandlers.get(eventName);
-        if (!eventHandlers) {
-            eventHandlers = new Set();
-            this.__eventHandlers.set(eventName, eventHandlers);
-        }
-        eventHandlers.add(listener);
+        let eventHandlers = this.__eventHandlers.get(eventName) ?? [];
+        eventHandlers.push(listener);
+
+        this.__eventHandlers.set(eventName, eventHandlers);
     };
+
     class_.prototype.once = function (eventName, listener) {
         assert(eventName && typeof eventName === "string", `Invalid event name: ${eventName}`);
         assert(listener && typeof listener === "function", `Invalid listener: ${listener}`);
@@ -65,24 +64,27 @@ function addEventsToClass(class_) {
             listener(...args);
         };
 
-        let eventHandlers = this.__eventHandlers.get(eventName);
-        if (!eventHandlers) {
-            eventHandlers = new Set();
-            this.__eventHandlers.set(eventName, eventHandlers);
-        }
-        eventHandlers.add(listener);
+        let eventHandlers = this.__eventHandlers.get(eventName) ?? [];
+        eventHandlers.push(onceListener);
+
+        this.__eventHandlers.set(eventName, eventHandlers);
     };
+
     class_.prototype.off = function (eventName, listener) {
         assert(eventName && typeof eventName === "string", `Invalid event name: ${eventName}`);
-        assert(listener && typeof listener === "function", `Invalid listener: ${listener}`);
 
-        this.__eventHandlers.get(eventName)?.delete(listener);
+        let eventHandlers = this.__eventHandlers.get(eventName);
+        eventHandlers = eventHandlers?.filter((l) => l !== listener);
+
+        if (eventHandlers?.length) this.__eventHandlers.set(eventName, eventHandlers);
+        else this.__eventHandlers.delete(eventName);
     };
 }
 
 function onClassEvent(target, eventName, args, passArgsRaw = false) {
     const listeners = target?.__eventHandlers?.get(eventName);
     if (!listeners) return;
+
     for (const listener of listeners) {
         if (passArgsRaw) listener(args);
         else listener(...args);
