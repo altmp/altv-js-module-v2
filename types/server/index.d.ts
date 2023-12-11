@@ -865,7 +865,7 @@ declare module "@altv/server" {
     export interface WeaponModelInfo {
         hash: number;
         name: string;
-        modelName: string;
+        model: string;
         modelHash: number;
         ammoTypeHash: number;
         ammoType: string;

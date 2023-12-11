@@ -13,7 +13,7 @@ static void Get(js::FunctionContext& ctx)
     js::Object modelObj;
     modelObj.Set("hash", info.hash);
     modelObj.Set("name", info.name);
-    modelObj.Set("modelName", info.modelName);
+    modelObj.Set("model", info.model);
     modelObj.Set("modelHash", info.modelHash);
     modelObj.Set("ammoTypeHash", info.ammoTypeHash);
     modelObj.Set("ammoType", info.ammoType);
