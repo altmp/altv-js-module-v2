@@ -1,4 +1,4 @@
-// This file was generated on 20.12.2023, 02:07:07 - DO NOT MODIFY MANUALLY
+// This file was generated on 20.12.2023, 12:59:01 - DO NOT MODIFY MANUALLY
 
 /// <reference types="@altv/client" />
 
@@ -263,7 +263,7 @@ declare module "@altv/natives" {
    */
   export function interruptConversationAndPause(ped: Ped | Player | number, p1: string, speaker: string): void;
 
-  export function getVariationChosenForScriptedLine(p0: any): [number, any];
+  export function getVariationChosenForScriptedLine(p0?: any): [number, any];
 
   export function setNoDuckingForConversation(p0: boolean): void;
 
@@ -793,7 +793,7 @@ declare module "@altv/natives" {
 
   export function isRadioStationFavourited(radioStation: string): boolean;
 
-  export function getNextAudibleBeat(out1: number, out2: number, out3: number): [boolean, number, number, number];
+  export function getNextAudibleBeat(out1?: number, out2?: number, out3?: number): [boolean, number, number, number];
 
   /**
    * Changes start time of a tracklist (milliseconds)
@@ -2459,12 +2459,12 @@ declare module "@altv/natives" {
    *    int second;
    *  TIME::GET_POSIX_TIME(&year, &month, &day, &hour, &minute, &second);
    */
-  export function getPosixTime(year: number, month: number, day: number, hour: number, minute: number, second: number): [number, number, number, number, number, number];
+  export function getPosixTime(year?: number, month?: number, day?: number, hour?: number, minute?: number, second?: number): [number, number, number, number, number, number];
 
   /**
    * Gets current UTC time
    */
-  export function getUtcTime(year: number, month: number, day: number, hour: number, minute: number, second: number): [number, number, number, number, number, number];
+  export function getUtcTime(year?: number, month?: number, day?: number, hour?: number, minute?: number, second?: number): [number, number, number, number, number, number];
 
   /**
    * Gets local system time as year, month, day, hour, minute and second.
@@ -2478,7 +2478,7 @@ declare module "@altv/natives" {
    * or use std::tm struct
    * TIME::GET_LOCAL_TIME(&year, &month, &day, &hour, &minute, &second);
    */
-  export function getLocalTime(year: number, month: number, day: number, hour: number, minute: number, second: number): [number, number, number, number, number, number];
+  export function getLocalTime(year?: number, month?: number, day?: number, hour?: number, minute?: number, second?: number): [number, number, number, number, number, number];
 
   /**
    * flags: Usually 8
@@ -2718,7 +2718,7 @@ declare module "@altv/natives" {
 
   export function datafileStartSaveToCloud(filename: string, p1: any): boolean;
 
-  export function datafileUpdateSaveToCloud(p0: boolean): [boolean, boolean];
+  export function datafileUpdateSaveToCloud(p0?: boolean): [boolean, boolean];
 
   export function datafileIsSavePending(): boolean;
 
@@ -2778,7 +2778,7 @@ declare module "@altv/natives" {
 
   export function dataarrayAddVector(arrayData: any, valueX: number, valueY: number, valueZ: number): any;
 
-  export function dataarrayAddDict(arrayData: any): [any, any];
+  export function dataarrayAddDict(arrayData?: any): [any, any];
 
   export function dataarrayGetBool(arrayData: any, arrayIndex: number): [boolean, any];
 
@@ -2792,7 +2792,7 @@ declare module "@altv/natives" {
 
   export function dataarrayGetDict(arrayData: any, arrayIndex: number): [any, any];
 
-  export function dataarrayGetCount(arrayData: any): [number, any];
+  export function dataarrayGetCount(arrayData?: any): [number, any];
 
   /**
    * Types:
@@ -3059,7 +3059,7 @@ declare module "@altv/natives" {
    */
   export function getEntityHeightAboveGround(entity: Entity | number): number;
 
-  export function getEntityMatrix(entity: Entity | number, forwardVector: Vector3, rightVector: Vector3, upVector: Vector3, position: Vector3): [Vector3, Vector3, Vector3, Vector3];
+  export function getEntityMatrix(entity: Entity | number, forwardVector?: Vector3, rightVector?: Vector3, upVector?: Vector3, position?: Vector3): [Vector3, Vector3, Vector3, Vector3];
 
   /**
    * Returns the model hash from the entity
@@ -3088,7 +3088,7 @@ declare module "@altv/natives" {
   /**
    * w is the correct parameter name!
    */
-  export function getEntityQuaternion(entity: Entity | number, x: number, y: number, z: number, w: number): [number, number, number, number];
+  export function getEntityQuaternion(entity: Entity | number, x?: number, y?: number, z?: number, w?: number): [number, number, number, number];
 
   /**
    * Displays the current ROLL axis of the entity [-180.0000/180.0000+]
@@ -3116,7 +3116,7 @@ declare module "@altv/natives" {
   /**
    * Returns the name of the script that owns/created the entity or nullptr. Second parameter is unused, can just be a nullptr.
    */
-  export function getEntityScript(entity: Entity | number, script: number): [string, number];
+  export function getEntityScript(entity: Entity | number, script?: number): [string, number];
 
   /**
    * result is in meters per second
@@ -3407,7 +3407,7 @@ declare module "@altv/natives" {
   /**
    * Deletes the specified entity, then sets the handle pointed to by the pointer to NULL.
    */
-  export function deleteEntity(entity: Entity | number): Entity | number;
+  export function deleteEntity(entity?: Entity | number): Entity | number;
 
   /**
    * If `collision` is set to true, both entities won't collide with the other until the distance between them is above 4 meters.
@@ -3474,7 +3474,7 @@ declare module "@altv/natives" {
    * Both v_A and v_B are seemingly used to contain both Vector3's and floats, so I can't say what either really is other than that they are both output parameters. p4 looks more like a *Vector3 though
    * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
    */
-  export function findAnimEventPhase(animDictionary: string, animName: string, p2: string, p3: any, p4: any): [boolean, any, any];
+  export function findAnimEventPhase(animDictionary: string, animName: string, p2: string, p3?: any, p4?: any): [boolean, any, any];
 
   /**
    * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
@@ -3510,22 +3510,22 @@ declare module "@altv/natives" {
    *   *(BYTE *)(addr + 0xDA) = ((origValue & 0xF0) | ePopulationType::POPTYPE_RANDOM_AMBIENT);
    * }
    */
-  export function setEntityAsNoLongerNeeded(entity: Entity | number): Entity | number;
+  export function setEntityAsNoLongerNeeded(entity?: Entity | number): Entity | number;
 
   /**
    * This is an alias of SET_ENTITY_AS_NO_LONGER_NEEDED.
    */
-  export function setPedAsNoLongerNeeded(ped: Ped | Player | number): Ped | Player | number;
+  export function setPedAsNoLongerNeeded(ped?: Ped | Player | number): Ped | Player | number;
 
   /**
    * This is an alias of SET_ENTITY_AS_NO_LONGER_NEEDED.
    */
-  export function setVehicleAsNoLongerNeeded(vehicle: Vehicle | number): Vehicle | number;
+  export function setVehicleAsNoLongerNeeded(vehicle?: Vehicle | number): Vehicle | number;
 
   /**
    * This is an alias of SET_ENTITY_AS_NO_LONGER_NEEDED.
    */
-  export function setObjectAsNoLongerNeeded(object: Object): Object;
+  export function setObjectAsNoLongerNeeded(object?: Object): Object;
 
   export function setEntityCanBeDamaged(entity: Entity | number, toggle: boolean): void;
 
@@ -3618,7 +3618,7 @@ declare module "@altv/natives" {
    */
   export function setEntityProofs(entity: Entity | number, bulletProof: boolean, fireProof: boolean, explosionProof: boolean, collisionProof: boolean, meleeProof: boolean, steamProof: boolean, p7: boolean, waterProof: boolean): void;
 
-  export function getEntityProofs(entity: Entity | number, bulletProof: boolean, fireProof: boolean, explosionProof: boolean, collisionProof: boolean, meleeProof: boolean, steamProof: boolean, p7: boolean, drownProof: boolean): [boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean];
+  export function getEntityProofs(entity: Entity | number, bulletProof?: boolean, fireProof?: boolean, explosionProof?: boolean, collisionProof?: boolean, meleeProof?: boolean, steamProof?: boolean, p7?: boolean, drownProof?: boolean): [boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean];
 
   /**
    * w is the correct parameter name!
@@ -3890,7 +3890,7 @@ declare module "@altv/natives" {
    *     // maybe more, not sure exactly, decompiled scripts are very vague around this part.
    * }
    */
-  export function getTattooShopDlcItemData(characterType: number, decorationIndex: number, outComponent: any): [boolean, any];
+  export function getTattooShopDlcItemData(characterType: number, decorationIndex: number, outComponent?: any): [boolean, any];
 
   /**
    * Returns some sort of index/offset for overlays/decorations.
@@ -3903,9 +3903,9 @@ declare module "@altv/natives" {
    */
   export function getTattooShopDlcItemIndex(overlayHash: number, p1: any, character: number): number;
 
-  export function initShopPedComponent(outComponent: any): any;
+  export function initShopPedComponent(outComponent?: any): any;
 
-  export function initShopPedProp(outProp: any): any;
+  export function initShopPedProp(outProp?: any): any;
 
   export function setupShopPedApparelQuery(p0: number, p1: number, p2: number, p3: number): number;
 
@@ -3923,7 +3923,7 @@ declare module "@altv/natives" {
   /**
    * See https://git.io/JtcRf for example and structs.
    */
-  export function getShopPedQueryComponent(componentId: number, outComponent: any): any;
+  export function getShopPedQueryComponent(componentId: number, outComponent?: any): any;
 
   /**
    * Returns some sort of index/offset for components.
@@ -3934,12 +3934,12 @@ declare module "@altv/natives" {
   /**
    * More info here: https://gist.github.com/root-cause/3b80234367b0c856d60bf5cb4b826f86
    */
-  export function getShopPedComponent(componentHash: number, outComponent: any): any;
+  export function getShopPedComponent(componentHash: number, outComponent?: any): any;
 
   /**
    * See https://git.io/JtcRf for example and structs.
    */
-  export function getShopPedQueryProp(componentId: number, outProp: any): any;
+  export function getShopPedQueryProp(componentId: number, outProp?: any): any;
 
   /**
    * Returns some sort of index/offset for props.
@@ -3950,7 +3950,7 @@ declare module "@altv/natives" {
   /**
    * More info here: https://gist.github.com/root-cause/3b80234367b0c856d60bf5cb4b826f86
    */
-  export function getShopPedProp(componentHash: number, outProp: any): any;
+  export function getShopPedProp(componentHash: number, outProp?: any): any;
 
   export function getHashNameForComponent(entity: Entity | number, componentId: number, drawableVariant: number, textureVariant: number): number;
 
@@ -3964,9 +3964,9 @@ declare module "@altv/natives" {
    */
   export function getShopPedApparelVariantPropCount(propHash: number): number;
 
-  export function getVariantComponent(componentHash: number, variantComponentIndex: number, nameHash: number, enumValue: number, componentType: number): [number, number, number];
+  export function getVariantComponent(componentHash: number, variantComponentIndex: number, nameHash?: number, enumValue?: number, componentType?: number): [number, number, number];
 
-  export function getVariantProp(componentHash: number, variantPropIndex: number, nameHash: number, enumValue: number, anchorPoint: number): [number, number, number];
+  export function getVariantProp(componentHash: number, variantPropIndex: number, nameHash?: number, enumValue?: number, anchorPoint?: number): [number, number, number];
 
   /**
    * Returns number of possible values of the forcedComponentIndex argument of GET_FORCED_COMPONENT.
@@ -3978,9 +3978,9 @@ declare module "@altv/natives" {
    */
   export function getShopPedApparelForcedPropCount(componentHash: number): number;
 
-  export function getForcedComponent(componentHash: number, forcedComponentIndex: number, nameHash: number, enumValue: number, componentType: number): [number, number, number];
+  export function getForcedComponent(componentHash: number, forcedComponentIndex: number, nameHash?: number, enumValue?: number, componentType?: number): [number, number, number];
 
-  export function getForcedProp(componentHash: number, forcedPropIndex: number, nameHash: number, enumValue: number, anchorPoint: number): [number, number, number];
+  export function getForcedProp(componentHash: number, forcedPropIndex: number, nameHash?: number, enumValue?: number, anchorPoint?: number): [number, number, number];
 
   /**
    * Full list of restriction tags by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pedApparelRestrictionTags.json
@@ -4006,21 +4006,21 @@ declare module "@altv/natives" {
    * outfitIndex: from 0 to SETUP_SHOP_PED_OUTFIT_QUERY(characterIndex, false) - 1.
    * See https://git.io/JtcB8 for example and outfit struct.
    */
-  export function getShopPedQueryOutfit(outfitIndex: number, outfit: any): any;
+  export function getShopPedQueryOutfit(outfitIndex: number, outfit?: any): any;
 
-  export function getShopPedOutfit(p0: any, p1: any): any;
+  export function getShopPedOutfit(p0: any, p1?: any): any;
 
   export function getShopPedOutfitLocate(p0: any): number;
 
   /**
    * See https://git.io/JtcBH for example and structs.
    */
-  export function getShopPedOutfitPropVariant(outfitHash: number, variantIndex: number, outPropVariant: any): [boolean, any];
+  export function getShopPedOutfitPropVariant(outfitHash: number, variantIndex: number, outPropVariant?: any): [boolean, any];
 
   /**
    * See https://git.io/JtcBH for example and structs.
    */
-  export function getShopPedOutfitComponentVariant(outfitHash: number, variantIndex: number, outComponentVariant: any): [boolean, any];
+  export function getShopPedOutfitComponentVariant(outfitHash: number, variantIndex: number, outComponentVariant?: any): [boolean, any];
 
   export function getNumDlcVehicles(): number;
 
@@ -4034,7 +4034,7 @@ declare module "@altv/natives" {
    * outData is a struct of 3 8-byte items.
    * The Second item in the struct *(Hash *)(outData + 1) is the vehicle hash.
    */
-  export function getDlcVehicleData(dlcVehicleIndex: number, outData: any): [boolean, any];
+  export function getDlcVehicleData(dlcVehicleIndex: number, outData?: any): [boolean, any];
 
   export function getDlcVehicleFlags(dlcVehicleIndex: number): number;
 
@@ -4072,12 +4072,12 @@ declare module "@altv/natives" {
    * char upperCaseNameLabel[64];
    * };
    */
-  export function getDlcWeaponData(dlcWeaponIndex: number, outData: any): [boolean, any];
+  export function getDlcWeaponData(dlcWeaponIndex: number, outData?: any): [boolean, any];
 
   /**
    * Same as GET_DLC_WEAPON_DATA but only works for DLC weapons that are available in SP.
    */
-  export function getDlcWeaponDataSp(dlcWeaponIndex: number, outData: any): [boolean, any];
+  export function getDlcWeaponDataSp(dlcWeaponIndex: number, outData?: any): [boolean, any];
 
   /**
    * Returns the total number of DLC weapon components.
@@ -4109,12 +4109,12 @@ declare module "@altv/natives" {
    * char descLabel[64];
    * };
    */
-  export function getDlcWeaponComponentData(dlcWeaponIndex: number, dlcWeapCompIndex: number, ComponentDataPtr: any): [boolean, any];
+  export function getDlcWeaponComponentData(dlcWeaponIndex: number, dlcWeapCompIndex: number, ComponentDataPtr?: any): [boolean, any];
 
   /**
    * Same as GET_DLC_WEAPON_COMPONENT_DATA but only works for DLC components that are available in SP.
    */
-  export function getDlcWeaponComponentDataSp(dlcWeaponIndex: number, dlcWeapCompIndex: number, ComponentDataPtr: any): [boolean, any];
+  export function getDlcWeaponComponentDataSp(dlcWeaponIndex: number, dlcWeapCompIndex: number, ComponentDataPtr?: any): [boolean, any];
 
   export function isContentItemLocked(itemHash: number): boolean;
 
@@ -4336,7 +4336,7 @@ declare module "@altv/natives" {
 
   export function loadMissionCreatorPhoto(p0: any, p1: any, p2: any, p3: any): [boolean, any];
 
-  export function getStatusOfLoadMissionCreatorPhoto(p0: any): [number, any];
+  export function getStatusOfLoadMissionCreatorPhoto(p0?: any): [number, any];
 
   export function beginCreateMissionCreatorPhotoPreview(): boolean;
 
@@ -4656,7 +4656,7 @@ declare module "@altv/natives" {
   /**
    * Calculates the effective X/Y fractions when applying the values set by SET_SCRIPT_GFX_ALIGN and SET_SCRIPT_GFX_ALIGN_PARAMS
    */
-  export function getScriptGfxAlignPosition(x: number, y: number, calculatedX: number, calculatedY: number): [number, number];
+  export function getScriptGfxAlignPosition(x: number, y: number, calculatedX?: number, calculatedY?: number): [number, number];
 
   /**
    * Gets the scale of safe zone. if the safe zone size scale is max, it will return 1.0.
@@ -4794,12 +4794,12 @@ declare module "@altv/natives" {
    * int screenresx,screenresy;
    * GET_SCREEN_RESOLUTION(&screenresx,&screenresy);
    */
-  export function getScreenResolution(x: number, y: number): [number, number];
+  export function getScreenResolution(x?: number, y?: number): [number, number];
 
   /**
    * Returns current screen resolution.
    */
-  export function getActualScreenResolution(x: number, y: number): [number, number];
+  export function getActualScreenResolution(x?: number, y?: number): [number, number];
 
   export function getAspectRatio(b: boolean): number;
 
@@ -4868,7 +4868,7 @@ declare module "@altv/natives" {
    * Used to be called _WORLD3D_TO_SCREEN2D
    * I thought we lost you from the scene forever. It does seem however that calling SET_DRAW_ORIGIN then your natives, then ending it. Seems to work better for certain things such as keeping boxes around people for a predator missile e.g.
    */
-  export function getScreenCoordFromWorldCoord(worldX: number, worldY: number, worldZ: number, screenX: number, screenY: number): [boolean, number, number];
+  export function getScreenCoordFromWorldCoord(worldX: number, worldY: number, worldZ: number, screenX?: number, screenY?: number): [boolean, number, number];
 
   /**
    * Returns the texture resolution of the passed texture dict+name.
@@ -5477,7 +5477,7 @@ declare module "@altv/natives" {
    */
   export function addVehicleCrewEmblem(vehicle: Vehicle | number, ped: Ped | Player | number, boneIndex: number, x1: number, x2: number, x3: number, y1: number, y2: number, y3: number, z1: number, z2: number, z3: number, scale: number, p13: any, alpha: number): boolean;
 
-  export function abortVehicleCrewEmblemRequest(p0: number): [boolean, number];
+  export function abortVehicleCrewEmblemRequest(p0?: number): [boolean, number];
 
   export function removeVehicleCrewEmblem(vehicle: Vehicle | number, p1: number): void;
 
@@ -5643,7 +5643,7 @@ declare module "@altv/natives" {
 
   export function hasScaleformContainerMovieLoadedIntoParent(scaleformHandle: number): boolean;
 
-  export function setScaleformMovieAsNoLongerNeeded(scaleformHandle: number): number;
+  export function setScaleformMovieAsNoLongerNeeded(scaleformHandle?: number): number;
 
   export function setScaleformMovieToUseSystemTime(scaleform: number, toggle: boolean): void;
 
@@ -6065,7 +6065,7 @@ declare module "@altv/natives" {
    */
   export function isMouseRolledOverInstructionalButtons(): boolean;
 
-  export function getMouseEvent(scaleformHandle: number, p1: any, p2: any, p3: any): [boolean, any, any, any];
+  export function getMouseEvent(scaleformHandle: number, p1?: any, p2?: any, p3?: any): [boolean, any, any, any];
 
   export function thefeedOnlyShowTooltips(toggle: boolean): void;
 
@@ -6681,7 +6681,7 @@ declare module "@altv/natives" {
    */
   export function updateRadarZoomToBlip(): void;
 
-  export function getHudColour(hudColorIndex: number, r: number, g: number, b: number, a: number): [number, number, number, number];
+  export function getHudColour(hudColorIndex: number, r?: number, g?: number, b?: number, a?: number): [number, number, number, number];
 
   /**
    * Sets the color of HUD_COLOUR_SCRIPT_VARIABLE
@@ -7068,7 +7068,7 @@ declare module "@altv/natives" {
    * HUD::REMOVE_BLIP(&blip);
    * Remove blip will currently crash your game, just artificially remove the blip by setting the sprite to a id that is 'invisible'.
    */
-  export function removeBlip(blip: number): number;
+  export function removeBlip(blip?: number): number;
 
   /**
    * false for enemy
@@ -7620,7 +7620,7 @@ declare module "@altv/natives" {
   /**
    * World to relative screen coords, this world to screen will keep the text on screen. Was named _GET_SCREEN_COORD_FROM_WORLD_COORD, but this conflicts with 0x34E82F05DF2974F5. As that hash actually matches GET_SCREEN_COORD_FROM_WORLD_COORD that one supercedes and this one was renamed to _GET_2D_COORD_FROM_3D_COORD
    */
-  export function getHudScreenPositionFromWorldPosition(worldX: number, worldY: number, worldZ: number, screenX: number, screenY: number): [number, number, number];
+  export function getHudScreenPositionFromWorldPosition(worldX: number, worldY: number, worldZ: number, screenX?: number, screenY?: number): [number, number, number];
 
   /**
    * Shows a menu for reporting UGC content.
@@ -8039,7 +8039,7 @@ declare module "@altv/natives" {
 
   export function pauseMenuGetMouseHoverUniqueId(): number;
 
-  export function pauseMenuGetMouseClickEvent(p0: any, p1: any, p2: any): [boolean, any, any, any];
+  export function pauseMenuGetMouseClickEvent(p0?: any, p1?: any, p2?: any): [boolean, any, any, any];
 
   export function pauseMenuRedrawInstructionalButtons(p0: number): void;
 
@@ -8073,7 +8073,7 @@ declare module "@altv/natives" {
 
   export function setSavegameListUniqueId(p0: any): void;
 
-  export function getMenuTriggerEventDetails(lastItemMenuId: number, selectedItemUniqueId: number): [number, number];
+  export function getMenuTriggerEventDetails(lastItemMenuId?: number, selectedItemUniqueId?: number): [number, number];
 
   /**
    * lastItemMenuId: this is the menuID of the last selected item minus 1000 (lastItem.menuID - 1000)
@@ -8092,11 +8092,11 @@ declare module "@altv/natives" {
    * selectedItemMenuId = -1
    * selectedItemUniqueId updates as normal
    */
-  export function getMenuLayoutChangedEventDetails(lastItemMenuId: number, selectedItemMenuId: number, selectedItemUniqueId: number): [number, number, number];
+  export function getMenuLayoutChangedEventDetails(lastItemMenuId?: number, selectedItemMenuId?: number, selectedItemUniqueId?: number): [number, number, number];
 
-  export function getPmPlayerCrewColor(r: number, g: number, b: number): [boolean, number, number, number];
+  export function getPmPlayerCrewColor(r?: number, g?: number, b?: number): [boolean, number, number, number];
 
-  export function getMenuPedIntStat(p0: any, p1: any): [boolean, any];
+  export function getMenuPedIntStat(p0: any, p1?: any): [boolean, any];
 
   export function getCharacterMenuPedIntStat(p0: any, p1: any, p2: any): [boolean, any];
 
@@ -8104,14 +8104,14 @@ declare module "@altv/natives" {
 
   export function getCharacterMenuPedMaskedIntStat(statHash: number, outValue: any, p2: number, mask: number, p4: boolean): [boolean, any];
 
-  export function getMenuPedFloatStat(statHash: number, outValue: number): [boolean, number];
+  export function getMenuPedFloatStat(statHash: number, outValue?: number): [boolean, number];
 
   export function getCharacterMenuPedFloatStat(statHash: number, outValue: number, p2: boolean): [boolean, number];
 
   /**
    * p0 was always 0xAE2602A3.
    */
-  export function getMenuPedBoolStat(statHash: number, outValue: boolean): [boolean, boolean];
+  export function getMenuPedBoolStat(statHash: number, outValue?: boolean): [boolean, boolean];
 
   export function clearPedInPauseMenu(): void;
 
@@ -8235,7 +8235,7 @@ declare module "@altv/natives" {
 
   export function getInteriorHeading(interior: number): number;
 
-  export function getInteriorLocationAndNamehash(interior: number, position: Vector3, nameHash: number): [Vector3, number];
+  export function getInteriorLocationAndNamehash(interior: number, position?: Vector3, nameHash?: number): [Vector3, number];
 
   /**
    * Returns the group ID of the specified interior.
@@ -8663,7 +8663,7 @@ declare module "@altv/natives" {
 
   export function clearWeatherTypeNowPersistNetwork(milliseconds: number): void;
 
-  export function getCurrWeatherState(weatherType1: number, weatherType2: number, percentWeather2: number): [number, number, number];
+  export function getCurrWeatherState(weatherType1?: number, weatherType2?: number, percentWeather2?: number): [number, number, number];
 
   /**
    * Mixes two weather types. If percentWeather2 is set to 0.0f, then the weather will be entirely of weatherType1, if it is set to 1.0f it will be entirely of weatherType2. If it's set somewhere in between, there will be a mixture of weather behaviors. To test, try this in the RPH console, and change the float to different values between 0 and 1:
@@ -8836,7 +8836,7 @@ declare module "@altv/natives" {
    */
   export function getGroundZFor3dCoord(x: number, y: number, z: number, groundZ: number, ignoreWater: boolean, p5: boolean): [boolean, number];
 
-  export function getGroundZAndNormalFor3dCoord(x: number, y: number, z: number, groundZ: number, normal: Vector3): [boolean, number, Vector3];
+  export function getGroundZAndNormalFor3dCoord(x: number, y: number, z: number, groundZ?: number, normal?: Vector3): [boolean, number, Vector3];
 
   export function getGroundZExcludingObjectsFor3dCoord(x: number, y: number, z: number, groundZ: number, p4: boolean, p5: boolean): [boolean, number];
 
@@ -8875,7 +8875,7 @@ declare module "@altv/natives" {
    */
   export function getClosestPointOnLine(x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, x3: number, y3: number, z3: number, clamp: boolean): Vector3;
 
-  export function getLinePlaneIntersection(p0: number, p1: number, p2: number, p3: number, p4: number, p5: number, p6: number, p7: number, p8: number, p9: number, p10: number, p11: number, p12: number): [boolean, number];
+  export function getLinePlaneIntersection(p0: number, p1: number, p2: number, p3: number, p4: number, p5: number, p6: number, p7: number, p8: number, p9: number, p10: number, p11: number, p12?: number): [boolean, number];
 
   export function getPointAreaOverlap(p0: any, p1: any, p2: any, p3: any, p4: any, p5: any, p6: any, p7: any, p8: any, p9: any, p10: any, p11: any, p12: any, p13: any): boolean;
 
@@ -8907,7 +8907,7 @@ declare module "@altv/natives" {
   /**
    * This native always come right before SET_ENTITY_QUATERNION where its final 4 parameters are SLERP_NEAR_QUATERNION p9 to p12
    */
-  export function slerpNearQuaternion(t: number, x: number, y: number, z: number, w: number, x1: number, y1: number, z1: number, w1: number, outX: number, outY: number, outZ: number, outW: number): [number, number, number, number];
+  export function slerpNearQuaternion(t: number, x: number, y: number, z: number, w: number, x1: number, y1: number, z1: number, w1: number, outX?: number, outY?: number, outZ?: number, outW?: number): [number, number, number, number];
 
   export function isAreaOccupied(p0: number, p1: number, p2: number, p3: number, p4: number, p5: number, p6: boolean, p7: boolean, p8: boolean, p9: boolean, p10: boolean, p11: any, p12: boolean): boolean;
 
@@ -9043,7 +9043,7 @@ declare module "@altv/natives" {
 
   export function overrideSaveHouse(p0: boolean, p1: number, p2: number, p3: number, p4: number, p5: boolean, p6: number, p7: number): boolean;
 
-  export function getSaveHouseDetailsAfterSuccessfulLoad(p0: Vector3, p1: number, fadeInAfterLoad: boolean, p3: boolean): [boolean, Vector3, number, boolean, boolean];
+  export function getSaveHouseDetailsAfterSuccessfulLoad(p0?: Vector3, p1?: number, fadeInAfterLoad?: boolean, p3?: boolean): [boolean, Vector3, number, boolean, boolean];
 
   export function doAutoSave(): void;
 
@@ -9108,7 +9108,7 @@ declare module "@altv/natives" {
    * Calculate (maximum - minimum) to get the size, in which case, Y will be how long the model is.
    * Example from the scripts: MISC::GET_MODEL_DIMENSIONS(ENTITY::GET_ENTITY_MODEL(PLAYER::PLAYER_PED_ID()), &v_1A, &v_17);
    */
-  export function getModelDimensions(modelHash: number, minimum: Vector3, maximum: Vector3): [Vector3, Vector3];
+  export function getModelDimensions(modelHash: number, minimum?: Vector3, maximum?: Vector3): [Vector3, Vector3];
 
   /**
    * Sets a visually fake wanted level on the user interface. Used by Rockstar's scripts to "override" regular wanted levels and make custom ones while the real wanted level and multipliers are still in effect.
@@ -9267,7 +9267,7 @@ declare module "@altv/natives" {
    * Returns false if it's a null or empty string or if the string is too long. outInteger will be set to -999 in that case.
    * If all checks have passed successfully, the return value will be set to whatever strtol(string, 0i64, 10); returns.
    */
-  export function stringToInt(string: string, outInteger: number): [boolean, number];
+  export function stringToInt(string: string, outInteger?: number): [boolean, number];
 
   export function setBitsInRange(value: number, rangeStart: number, rangeEnd: number, p3: number): number;
 
@@ -9500,7 +9500,7 @@ declare module "@altv/natives" {
    * The positions match path finding node positions.
    * When roads diverge, the position may rapidly change between two or more positions. This is due to the engine not being certain of which path the player will take.
    */
-  export function findSpawnPointInDirection(posX: number, posY: number, posZ: number, fwdVecX: number, fwdVecY: number, fwdVecZ: number, distance: number, spawnPoint: Vector3): [boolean, Vector3];
+  export function findSpawnPointInDirection(posX: number, posY: number, posZ: number, fwdVecX: number, fwdVecY: number, fwdVecZ: number, distance: number, spawnPoint?: Vector3): [boolean, Vector3];
 
   export function addPopMultiplierArea(x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, p6: number, p7: number, p8: boolean, p9: boolean): number;
 
@@ -9702,7 +9702,7 @@ declare module "@altv/natives" {
 
   export function scriptRacePlayerHitCheckpoint(player: Player | number, p1: any, p2: any, p3: any): void;
 
-  export function scriptRaceGetPlayerSplitTime(player: Player | number, p1: number, p2: number): [boolean, number, number];
+  export function scriptRaceGetPlayerSplitTime(player: Player | number, p1?: number, p2?: number): [boolean, number, number];
 
   export function startEndUserBenchmark(): void;
 
@@ -9831,7 +9831,7 @@ declare module "@altv/natives" {
 
   export function setMobilePhonePosition(posX: number, posY: number, posZ: number): void;
 
-  export function getMobilePhonePosition(position: Vector3): Vector3;
+  export function getMobilePhonePosition(position?: Vector3): Vector3;
 
   /**
    * If bool Toggle = true so the mobile is hide to screen.
@@ -9882,7 +9882,7 @@ declare module "@altv/natives" {
 
   export function cellCamIsCharVisibleNoFaceCheck(entity: Entity | number): boolean;
 
-  export function getMobilePhoneRenderId(renderId: number): number;
+  export function getMobilePhoneRenderId(renderId?: number): number;
 
   export function networkInitializeCash(wallet: number, bank: number): void;
 
@@ -9897,9 +9897,9 @@ declare module "@altv/natives" {
 
   export function networkClearCharacterWallet(characterSlot: number): void;
 
-  export function networkGivePlayerJobshareCash(amount: number, gamerHandle: any): any;
+  export function networkGivePlayerJobshareCash(amount: number, gamerHandle?: any): any;
 
-  export function networkReceivePlayerJobshareCash(value: number, gamerHandle: any): any;
+  export function networkReceivePlayerJobshareCash(value: number, gamerHandle?: any): any;
 
   export function networkCanShareJobCash(): boolean;
 
@@ -9972,7 +9972,7 @@ declare module "@altv/natives" {
    */
   export function networkDeferCashTransactionsUntilShopSave(): void;
 
-  export function canPayAmountToBoss(p0: number, p1: number, amount: number, p3: number): [boolean, number];
+  export function canPayAmountToBoss(p0: number, p1: number, amount: number, p3?: number): [boolean, number];
 
   export function networkEarnFromPickup(amount: number): void;
 
@@ -10029,9 +10029,9 @@ declare module "@altv/natives" {
   /**
    * Example for p1: "AM_DISTRACT_COPS"
    */
-  export function networkEarnFromAmbientJob(p0: number, p1: string, p2: any): any;
+  export function networkEarnFromAmbientJob(p0: number, p1: string, p2?: any): any;
 
-  export function networkEarnFromJobBonus(p0: any, p1: any, p2: any): [any, any];
+  export function networkEarnFromJobBonus(p0: any, p1?: any, p2?: any): [any, any];
 
   export function networkEarnFromCriminalMastermind(p0: any, p1: any, p2: any): void;
 
@@ -10419,9 +10419,9 @@ declare module "@altv/natives" {
 
   export function networkSpendCasinoMembership(amount: number, p1: boolean, p2: boolean, p3: number): void;
 
-  export function networkSpendBuyCasino(amount: number, p1: boolean, p2: boolean, data: any): any;
+  export function networkSpendBuyCasino(amount: number, p1: boolean, p2: boolean, data?: any): any;
 
-  export function networkSpendUpgradeCasino(amount: number, p1: boolean, p2: boolean, data: any): any;
+  export function networkSpendUpgradeCasino(amount: number, p1: boolean, p2: boolean, data?: any): any;
 
   export function networkSpendCasinoGeneric(amount: number, p1: any, p2: any, p3: any, p4: any): void;
 
@@ -10571,7 +10571,7 @@ declare module "@altv/natives" {
 
   export function networkEarnUpgradeAgency(p0: any, p1: any): void;
 
-  export function networkSpendApartmentUtilities(amount: number, p1: boolean, p2: boolean, data: any): any;
+  export function networkSpendApartmentUtilities(amount: number, p1: boolean, p2: boolean, data?: any): any;
 
   export function networkSpendBusinessPropertyFees(p0: any, p1: any, p2: any, p3: any): void;
 
@@ -10670,12 +10670,12 @@ declare module "@altv/natives" {
    */
   export function networkSpentMissileJammer(amount: number, fromBank: boolean, fromBankAndWallet: boolean, p3: number): void;
 
-  export function networkSpentGeneric(price: number, p1: boolean, p2: boolean, stat: number, spent: number, p5: string, p6: string, data: any): any;
+  export function networkSpentGeneric(price: number, p1: boolean, p2: boolean, stat: number, spent: number, p5: string, p6: string, data?: any): any;
 
   /**
    * _NETWORK_EARN_G*
    */
-  export function networkEarnGeneric(amount: number, earn: number, p2: string, p3: string, data: any): any;
+  export function networkEarnGeneric(amount: number, earn: number, p2: string, p3: string, data?: any): any;
 
   export function networkClearTransactionTelemetryNonce(): void;
 
@@ -10766,19 +10766,19 @@ declare module "@altv/natives" {
 
   export function netGameserverRefreshServerCatalog(): boolean;
 
-  export function netGameserverRetrieveCatalogRefreshStatus(state: number): [boolean, number];
+  export function netGameserverRetrieveCatalogRefreshStatus(state?: number): [boolean, number];
 
   export function netGameserverInitSession(): boolean;
 
-  export function netGameserverRetrieveInitSessionStatus(p0: number): [boolean, number];
+  export function netGameserverRetrieveInitSessionStatus(p0?: number): [boolean, number];
 
   export function netGameserverStartSession(charSlot: number): boolean;
 
   export function netGameserverStartSessionPending(): boolean;
 
-  export function netGameserverRetrieveStartSessionStatus(p0: number): [boolean, number];
+  export function netGameserverRetrieveStartSessionStatus(p0?: number): [boolean, number];
 
-  export function netGameserverRetrieveSessionErrorCode(p0: number): [boolean, number];
+  export function netGameserverRetrieveSessionErrorCode(p0?: number): [boolean, number];
 
   export function netGameserverIsSessionValid(charSlot: number): boolean;
 
@@ -10795,7 +10795,7 @@ declare module "@altv/natives" {
 
   export function netGameserverTransactionInProgress(): boolean;
 
-  export function netGameserverGetSessionStateAndStatus(p0: number, p1: boolean): [boolean, number, boolean];
+  export function netGameserverGetSessionStateAndStatus(p0?: number, p1?: boolean): [boolean, number, boolean];
 
   export function netGameserverBasketStart(transactionId: number, categoryHash: number, actionHash: number, flags: number): [boolean, number];
 
@@ -10807,7 +10807,7 @@ declare module "@altv/natives" {
 
   export function netGameserverBasketIsFull(): boolean;
 
-  export function netGameserverBasketApplyServerData(p0: any, p1: any): [boolean, any];
+  export function netGameserverBasketApplyServerData(p0: any, p1?: any): [boolean, any];
 
   export function netGameserverCheckoutStart(transactionId: number): boolean;
 
@@ -10989,7 +10989,7 @@ declare module "@altv/natives" {
    * 12 - Need to download background script.
    * Returns 1 if the multiplayer is loaded, otherwhise 0.
    */
-  export function networkCanAccessMultiplayer(loadingState: number): [boolean, number];
+  export function networkCanAccessMultiplayer(loadingState?: number): [boolean, number];
 
   export function networkIsMultiplayerDisabled(): boolean;
 
@@ -11097,7 +11097,7 @@ declare module "@altv/natives" {
 
   export function networkClearFollowers(): void;
 
-  export function networkGetGlobalMultiplayerClock(hours: number, minutes: number, seconds: number): [number, number, number];
+  export function networkGetGlobalMultiplayerClock(hours?: number, minutes?: number, seconds?: number): [number, number, number];
 
   export function networkSessionSetGamemode(p0: any): void;
 
@@ -11131,7 +11131,7 @@ declare module "@altv/natives" {
 
   export function networkClearFoundGamers(): void;
 
-  export function networkQueueGamerForStatus(p0: any): [boolean, any];
+  export function networkQueueGamerForStatus(p0?: any): [boolean, any];
 
   export function networkGetGamerStatusFromQueue(): boolean;
 
@@ -11160,7 +11160,7 @@ declare module "@altv/natives" {
 
   export function networkSessionWasInvited(): boolean;
 
-  export function networkSessionGetInviter(gamerHandle: any): any;
+  export function networkSessionGetInviter(gamerHandle?: any): any;
 
   /**
    * Seems to be true while "Getting GTA Online session details" shows up.
@@ -11237,7 +11237,7 @@ declare module "@altv/natives" {
 
   export function networkSessionVoiceLeave(): boolean;
 
-  export function networkSessionVoiceConnectToPlayer(gamerHandle: any): any;
+  export function networkSessionVoiceConnectToPlayer(gamerHandle?: any): any;
 
   export function networkSessionVoiceRespondToRequest(p0: boolean, p1: number): void;
 
@@ -11252,7 +11252,7 @@ declare module "@altv/natives" {
   /**
    * Message is limited to 64 characters.
    */
-  export function networkSendTextMessage(message: string, gamerHandle: any): [boolean, any];
+  export function networkSendTextMessage(message: string, gamerHandle?: any): [boolean, any];
 
   export function networkSetActivitySpectator(toggle: boolean): void;
 
@@ -11264,7 +11264,7 @@ declare module "@altv/natives" {
 
   export function networkGetActivityPlayerNum(p0: boolean): number;
 
-  export function networkIsActivitySpectatorFromHandle(gamerHandle: any): [boolean, any];
+  export function networkIsActivitySpectatorFromHandle(gamerHandle?: any): [boolean, any];
 
   /**
    * p0: Unknown int
@@ -11311,13 +11311,13 @@ declare module "@altv/natives" {
 
   export function networkSetInProgressFinishTime(p0: any): void;
 
-  export function networkSetTransitionCreatorHandle(p0: any): any;
+  export function networkSetTransitionCreatorHandle(p0?: any): any;
 
   export function networkClearTransitionCreatorHandle(): void;
 
   export function networkInviteGamersToTransition(p0: any, p1: any): [boolean, any];
 
-  export function networkSetGamerInvitedToTransition(gamerHandle: any): any;
+  export function networkSetGamerInvitedToTransition(gamerHandle?: any): any;
 
   export function networkLeaveTransition(): boolean;
 
@@ -11357,13 +11357,13 @@ declare module "@altv/natives" {
 
   export function networkSendTransitionGamerInstruction(gamerHandle: any, p1: string, p2: number, p3: number, p4: boolean): [boolean, any];
 
-  export function networkMarkTransitionGamerAsFullyJoined(p0: any): [boolean, any];
+  export function networkMarkTransitionGamerAsFullyJoined(p0?: any): [boolean, any];
 
   export function networkIsTransitionHost(): boolean;
 
-  export function networkIsTransitionHostFromHandle(gamerHandle: any): [boolean, any];
+  export function networkIsTransitionHostFromHandle(gamerHandle?: any): [boolean, any];
 
-  export function networkGetTransitionHost(gamerHandle: any): [boolean, any];
+  export function networkGetTransitionHost(gamerHandle?: any): [boolean, any];
 
   export function networkIsInTransition(): boolean;
 
@@ -11410,9 +11410,9 @@ declare module "@altv/natives" {
    */
   export function networkJoinTransition(player: Player | number): boolean;
 
-  export function networkHasInvitedGamerToTransition(p0: any): [boolean, any];
+  export function networkHasInvitedGamerToTransition(p0?: any): [boolean, any];
 
-  export function networkHasTransitionInviteBeenAcked(p0: any): [boolean, any];
+  export function networkHasTransitionInviteBeenAcked(p0?: any): [boolean, any];
 
   export function networkIsActivitySession(): boolean;
 
@@ -11444,7 +11444,7 @@ declare module "@altv/natives" {
 
   export function networkGetPresenceInviteInviter(p0: number): string;
 
-  export function networkGetPresenceInviteHandle(p0: any, p1: any): [boolean, any];
+  export function networkGetPresenceInviteHandle(p0: any, p1?: any): [boolean, any];
 
   export function networkGetPresenceInviteSessionId(p0: any): number;
 
@@ -11466,7 +11466,7 @@ declare module "@altv/natives" {
 
   export function networkRemoveAndCancelAllInvites(): void;
 
-  export function networkRemoveTransitionInvite(p0: any): any;
+  export function networkRemoveTransitionInvite(p0?: any): any;
 
   export function networkRemoveAllTransitionInvite(): void;
 
@@ -11474,23 +11474,23 @@ declare module "@altv/natives" {
 
   export function networkInviteGamers(p0: any, p1: any, p2: any, p3: any): [boolean, any, any];
 
-  export function networkHasInvitedGamer(p0: any): [boolean, any];
+  export function networkHasInvitedGamer(p0?: any): [boolean, any];
 
-  export function networkHasMadeInviteDecision(gamerHandle: any): [boolean, any];
+  export function networkHasMadeInviteDecision(gamerHandle?: any): [boolean, any];
 
   export function networkGetInviteReplyStatus(p0: any): number;
 
-  export function networkGetCurrentlySelectedGamerHandleFromInviteMenu(p0: any): [boolean, any];
+  export function networkGetCurrentlySelectedGamerHandleFromInviteMenu(p0?: any): [boolean, any];
 
-  export function networkSetCurrentlySelectedGamerHandleFromInviteMenu(p0: any): [boolean, any];
+  export function networkSetCurrentlySelectedGamerHandleFromInviteMenu(p0?: any): [boolean, any];
 
-  export function networkSetInviteOnCallForInviteMenu(p0: any): any;
+  export function networkSetInviteOnCallForInviteMenu(p0?: any): any;
 
-  export function networkCheckDataManagerSucceededForHandle(p0: number, gamerHandle: any): [boolean, any];
+  export function networkCheckDataManagerSucceededForHandle(p0: number, gamerHandle?: any): [boolean, any];
 
-  export function networkCheckDataManagerForHandle(p0: any, gamerHandle: any): [boolean, any];
+  export function networkCheckDataManagerForHandle(p0: any, gamerHandle?: any): [boolean, any];
 
-  export function networkSetInviteFailedMessageForInviteMenu(p0: any, p1: any): [any, any];
+  export function networkSetInviteFailedMessageForInviteMenu(p0?: any, p1?: any): [any, any];
 
   export function filloutPmPlayerList(gamerHandle: any, p1: any, p2: any): [boolean, any];
 
@@ -11498,7 +11498,7 @@ declare module "@altv/natives" {
 
   export function refreshPlayerListStats(p0: number): boolean;
 
-  export function networkSetCurrentDataManagerHandle(p0: any): [boolean, any];
+  export function networkSetCurrentDataManagerHandle(p0?: any): [boolean, any];
 
   /**
    * Hardcoded to return false.
@@ -11519,7 +11519,7 @@ declare module "@altv/natives" {
    * 1) It only becomes true if said person is speaking in that party at the time.
    * 2) It will never, become true unless you are in that party with said person.
    */
-  export function networkIsChattingInPlatformParty(gamerHandle: any): [boolean, any];
+  export function networkIsChattingInPlatformParty(gamerHandle?: any): [boolean, any];
 
   export function networkCanQueueForPreviousSessionJoin(): boolean;
 
@@ -11652,20 +11652,20 @@ declare module "@altv/natives" {
    */
   export function participantIdToInt(): number;
 
-  export function networkGetKillerOfPlayer(player: Player | number, weaponHash: number): [Player | number, number];
+  export function networkGetKillerOfPlayer(player: Player | number, weaponHash?: number): [Player | number, number];
 
-  export function networkGetDestroyerOfNetworkId(netId: number, weaponHash: number): [Player | number, number];
+  export function networkGetDestroyerOfNetworkId(netId: number, weaponHash?: number): [Player | number, number];
 
-  export function networkGetDestroyerOfEntity(entity: Entity | number, weaponHash: number): [Player | number, number];
+  export function networkGetDestroyerOfEntity(entity: Entity | number, weaponHash?: number): [Player | number, number];
 
   /**
    * NETWORK_GET_ASSISTED_DAMAGE_OF_ENTITY that ensures the entity is dead (IS_ENTITY_DEAD)
    */
-  export function networkGetAssistedKillOfEntity(player: Player | number, entity: Entity | number, p2: number): [boolean, number];
+  export function networkGetAssistedKillOfEntity(player: Player | number, entity: Entity | number, p2?: number): [boolean, number];
 
-  export function networkGetAssistedDamageOfEntity(player: Player | number, entity: Entity | number, p2: number): [boolean, number];
+  export function networkGetAssistedDamageOfEntity(player: Player | number, entity: Entity | number, p2?: number): [boolean, number];
 
-  export function networkGetEntityKillerOfPlayer(player: Player | number, weaponHash: number): [Entity | number, number];
+  export function networkGetEntityKillerOfPlayer(player: Player | number, weaponHash?: number): [Entity | number, number];
 
   export function networkSetCurrentPublicContentId(missionId: string): void;
 
@@ -11804,17 +11804,17 @@ declare module "@altv/natives" {
 
   export function networkHashFromPlayerHandle(player: Player | number): number;
 
-  export function networkHashFromGamerHandle(gamerHandle: any): [number, any];
+  export function networkHashFromGamerHandle(gamerHandle?: any): [number, any];
 
   export function networkHandleFromFriend(friendIndex: number, gamerHandle: any, gamerHandleSize: number): any;
 
-  export function networkGamertagFromHandleStart(gamerHandle: any): [boolean, any];
+  export function networkGamertagFromHandleStart(gamerHandle?: any): [boolean, any];
 
   export function networkGamertagFromHandlePending(): boolean;
 
   export function networkGamertagFromHandleSucceeded(): boolean;
 
-  export function networkGetGamertagFromHandle(gamerHandle: any): [string, any];
+  export function networkGetGamertagFromHandle(gamerHandle?: any): [string, any];
 
   /**
    * Hardcoded to return -1.
@@ -11826,17 +11826,17 @@ declare module "@altv/natives" {
    */
   export function networkGetDisplaynamesFromHandles(p0: any, p1: any, p2: any): number;
 
-  export function networkAreHandlesTheSame(gamerHandle1: any, gamerHandle2: any): [boolean, any, any];
+  export function networkAreHandlesTheSame(gamerHandle1?: any, gamerHandle2?: any): [boolean, any, any];
 
   export function networkIsHandleValid(gamerHandle: any, gamerHandleSize: number): [boolean, any];
 
-  export function networkGetPlayerFromGamerHandle(gamerHandle: any): [Player | number, any];
+  export function networkGetPlayerFromGamerHandle(gamerHandle?: any): [Player | number, any];
 
-  export function networkMemberIdFromGamerHandle(gamerHandle: any): [string, any];
+  export function networkMemberIdFromGamerHandle(gamerHandle?: any): [string, any];
 
-  export function networkIsGamerInMySession(gamerHandle: any): [boolean, any];
+  export function networkIsGamerInMySession(gamerHandle?: any): [boolean, any];
 
-  export function networkShowProfileUi(gamerHandle: any): any;
+  export function networkShowProfileUi(gamerHandle?: any): any;
 
   /**
    * Returns the name of a given player. Returns "**Invalid**" if rlGamerInfo of the given player cannot be retrieved or the player doesn't exist.
@@ -11847,7 +11847,7 @@ declare module "@altv/natives" {
    * Returns a string of the player's Rockstar Id. 
    * Takes a 24 char buffer. Returns the buffer or "**Invalid**" if rlGamerInfo of the given player cannot be retrieved or the player doesn't exist.
    */
-  export function networkPlayerGetUserid(player: Player | number, userID: number): [string, number];
+  export function networkPlayerGetUserid(player: Player | number, userID?: number): [string, number];
 
   /**
    * Checks if a specific value (BYTE) in CNetGamePlayer is nonzero.
@@ -11871,7 +11871,7 @@ declare module "@altv/natives" {
    */
   export function networkGetEntityFromObjectId(p0: any): Entity | number;
 
-  export function networkIsInactiveProfile(p0: any): [boolean, any];
+  export function networkIsInactiveProfile(p0?: any): [boolean, any];
 
   export function networkGetMaxFriends(): number;
 
@@ -11883,7 +11883,7 @@ declare module "@altv/natives" {
 
   export function networkIsFriendOnline(name: string): boolean;
 
-  export function networkIsFriendHandleOnline(gamerHandle: any): [boolean, any];
+  export function networkIsFriendHandleOnline(gamerHandle?: any): [boolean, any];
 
   /**
    * In scripts R* calls 'NETWORK_GET_FRIEND_NAME' in this param.
@@ -11892,7 +11892,7 @@ declare module "@altv/natives" {
 
   export function networkIsFriendInMultiplayer(friendName: string): boolean;
 
-  export function networkIsFriend(gamerHandle: any): [boolean, any];
+  export function networkIsFriend(gamerHandle?: any): [boolean, any];
 
   /**
    * This function is hard-coded to always return 0.
@@ -11941,7 +11941,7 @@ declare module "@altv/natives" {
    */
   export function networkSetCommunicationGroupFlags(communicationType: number, communicationGroupFlag: number): void;
 
-  export function networkIsPlayerOnBlocklist(gamerHandle: any): [boolean, any];
+  export function networkIsPlayerOnBlocklist(gamerHandle?: any): [boolean, any];
 
   export function networkSetScriptAutomuted(p0: any): boolean;
 
@@ -11953,35 +11953,35 @@ declare module "@altv/natives" {
 
   export function networkIsPushToTalkActive(): boolean;
 
-  export function networkGamerHasHeadset(gamerHandle: any): [boolean, any];
+  export function networkGamerHasHeadset(gamerHandle?: any): [boolean, any];
 
-  export function networkIsGamerTalking(gamerHandle: any): [boolean, any];
+  export function networkIsGamerTalking(gamerHandle?: any): [boolean, any];
 
-  export function networkPermissionsHasGamerRecord(gamerHandle: any): [boolean, any];
+  export function networkPermissionsHasGamerRecord(gamerHandle?: any): [boolean, any];
 
-  export function networkCanCommunicateWithGamer(gamerHandle: any): [boolean, any];
+  export function networkCanCommunicateWithGamer(gamerHandle?: any): [boolean, any];
 
-  export function networkCanTextChatWithGamer(gamerHandle: any): [boolean, any];
+  export function networkCanTextChatWithGamer(gamerHandle?: any): [boolean, any];
 
-  export function networkIsGamerMutedByMe(gamerHandle: any): [boolean, any];
+  export function networkIsGamerMutedByMe(gamerHandle?: any): [boolean, any];
 
-  export function networkAmIMutedByGamer(gamerHandle: any): [boolean, any];
+  export function networkAmIMutedByGamer(gamerHandle?: any): [boolean, any];
 
-  export function networkIsGamerBlockedByMe(gamerHandle: any): [boolean, any];
+  export function networkIsGamerBlockedByMe(gamerHandle?: any): [boolean, any];
 
-  export function networkAmIBlockedByGamer(gamerHandle: any): [boolean, any];
+  export function networkAmIBlockedByGamer(gamerHandle?: any): [boolean, any];
 
-  export function networkCanViewGamerUserContent(gamerHandle: any): [boolean, any];
+  export function networkCanViewGamerUserContent(gamerHandle?: any): [boolean, any];
 
-  export function networkHasViewGamerUserContentResult(gamerHandle: any): [boolean, any];
+  export function networkHasViewGamerUserContentResult(gamerHandle?: any): [boolean, any];
 
-  export function networkCanPlayMultiplayerWithGamer(gamerHandle: any): [boolean, any];
+  export function networkCanPlayMultiplayerWithGamer(gamerHandle?: any): [boolean, any];
 
-  export function networkCanGamerPlayMultiplayerWithMe(gamerHandle: any): [boolean, any];
+  export function networkCanGamerPlayMultiplayerWithMe(gamerHandle?: any): [boolean, any];
 
-  export function networkCanSendLocalInvite(gamerHandle: any): [boolean, any];
+  export function networkCanSendLocalInvite(gamerHandle?: any): [boolean, any];
 
-  export function networkCanReceiveLocalInvite(gamerHandle: any): [boolean, any];
+  export function networkCanReceiveLocalInvite(gamerHandle?: any): [boolean, any];
 
   /**
    * returns true if someone is screaming or talking in a microphone
@@ -12067,7 +12067,7 @@ declare module "@altv/natives" {
   /**
    * NETWORK_GET_M[A-U]
    */
-  export function networkGetMuteCountForPlayer(p0: Player | number, p1: number, p2: number): [number, number];
+  export function networkGetMuteCountForPlayer(p0: Player | number, p1?: number, p2?: number): [number, number];
 
   export function networkSetSpectatorToNonSpectatorTextChat(toggle: boolean): void;
 
@@ -12121,7 +12121,7 @@ declare module "@altv/natives" {
 
   export function networkClanServiceIsValid(): boolean;
 
-  export function networkClanPlayerIsActive(gamerHandle: any): [boolean, any];
+  export function networkClanPlayerIsActive(gamerHandle?: any): [boolean, any];
 
   /**
    * bufferSize is 35 in the scripts.
@@ -12129,7 +12129,7 @@ declare module "@altv/natives" {
    * the answer is: because p0 an int64_t* / int64_t[35].  and FYI p2 is an int64_t[13]
    * https://pastebin.com/cSZniHak
    */
-  export function networkClanPlayerGetDesc(clanDesc: any, bufferSize: number, gamerHandle: any): [boolean, any, any];
+  export function networkClanPlayerGetDesc(clanDesc: any, bufferSize: number, gamerHandle?: any): [boolean, any, any];
 
   /**
    * bufferSize is 35 in the scripts.
@@ -12145,15 +12145,15 @@ declare module "@altv/natives" {
 
   export function networkClanGetMembershipDesc(memberDesc: any, p1: number): [boolean, any];
 
-  export function networkClanDownloadMembership(gamerHandle: any): [boolean, any];
+  export function networkClanDownloadMembership(gamerHandle?: any): [boolean, any];
 
-  export function networkClanDownloadMembershipPending(p0: any): [boolean, any];
+  export function networkClanDownloadMembershipPending(p0?: any): [boolean, any];
 
   export function networkClanAnyDownloadMembershipPending(): boolean;
 
-  export function networkClanRemoteMembershipsAreInCache(p0: number): [boolean, number];
+  export function networkClanRemoteMembershipsAreInCache(p0?: number): [boolean, number];
 
-  export function networkClanGetMembershipCount(p0: number): [number, number];
+  export function networkClanGetMembershipCount(p0?: number): [number, number];
 
   export function networkClanGetMembershipValid(p0: number, p1: any): [boolean, number];
 
@@ -12175,7 +12175,7 @@ declare module "@altv/natives" {
 
   export function networkClanRequestEmblem(p0: any): boolean;
 
-  export function networkClanIsEmblemReady(p0: any, p1: any): [boolean, any];
+  export function networkClanIsEmblemReady(p0: any, p1?: any): [boolean, any];
 
   export function networkClanReleaseEmblem(p0: any): void;
 
@@ -12189,7 +12189,7 @@ declare module "@altv/natives" {
 
   export function networkGetPrimaryClanDataSuccess(): boolean;
 
-  export function networkGetPrimaryClanDataNew(p0: any, p1: any): [boolean, any, any];
+  export function networkGetPrimaryClanDataNew(p0?: any, p1?: any): [boolean, any, any];
 
   /**
    * Whether or not another player is allowed to take control of the entity
@@ -12338,7 +12338,7 @@ declare module "@altv/natives" {
 
   export function getNumCreatedMissionVehicles(p0: boolean): number;
 
-  export function getReservedMissionEntitiesInArea(x: number, y: number, z: number, p3: any, out1: any, out2: any, out3: any): [any, any, any];
+  export function getReservedMissionEntitiesInArea(x: number, y: number, z: number, p3: any, out1?: any, out2?: any, out3?: any): [any, any, any];
 
   export function getMaxNumNetworkObjects(): number;
 
@@ -12423,7 +12423,7 @@ declare module "@altv/natives" {
    *     int PADDING6;
    * };
    */
-  export function convertPosixTime(posixTime: number, timeStructure: any): any;
+  export function convertPosixTime(posixTime: number, timeStructure?: any): any;
 
   export function networkSetInSpectatorMode(toggle: boolean, playerPed: Ped | Player | number): void;
 
@@ -12533,14 +12533,14 @@ declare module "@altv/natives" {
    */
   export function networkStartRespawnSearchInAngledAreaForPlayer(player: Player | number, x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, width: number, p8: number, p9: number, p10: number, flags: number): boolean;
 
-  export function networkQueryRespawnResults(p0: any): [number, any];
+  export function networkQueryRespawnResults(p0?: any): [number, any];
 
   export function networkCancelRespawnSearch(): void;
 
   /**
    * Based on scripts such as in freemode.c how they call their vars vVar and fVar the 2nd and 3rd param it a Vector3 and Float, but the first is based on get_random_int_in_range..
    */
-  export function networkGetRespawnResult(randomInt: number, coordinates: Vector3, heading: number): [Vector3, number];
+  export function networkGetRespawnResult(randomInt: number, coordinates?: Vector3, heading?: number): [Vector3, number];
 
   export function networkGetRespawnResultFlags(p0: number): number;
 
@@ -12629,9 +12629,9 @@ declare module "@altv/natives" {
 
   export function networkDoesTunableExist(tunableContext: string, tunableName: string): boolean;
 
-  export function networkAccessTunableInt(tunableContext: string, tunableName: string, value: number): [boolean, number];
+  export function networkAccessTunableInt(tunableContext: string, tunableName: string, value?: number): [boolean, number];
 
-  export function networkAccessTunableFloat(tunableContext: string, tunableName: string, value: number): [boolean, number];
+  export function networkAccessTunableFloat(tunableContext: string, tunableName: string, value?: number): [boolean, number];
 
   export function networkAccessTunableBool(tunableContext: string, tunableName: string): boolean;
 
@@ -12639,17 +12639,17 @@ declare module "@altv/natives" {
 
   export function networkAccessTunableModificationDetectionClear(): boolean;
 
-  export function networkAccessTunableIntHash(tunableContext: number, tunableName: number, value: number): [boolean, number];
+  export function networkAccessTunableIntHash(tunableContext: number, tunableName: number, value?: number): [boolean, number];
 
-  export function networkAccessTunableIntModificationDetectionRegistrationHash(contextHash: number, nameHash: number, value: number): [boolean, number];
+  export function networkAccessTunableIntModificationDetectionRegistrationHash(contextHash: number, nameHash: number, value?: number): [boolean, number];
 
-  export function networkAccessTunableFloatHash(tunableContext: number, tunableName: number, value: number): [boolean, number];
+  export function networkAccessTunableFloatHash(tunableContext: number, tunableName: number, value?: number): [boolean, number];
 
-  export function networkAccessTunableFloatModificationDetectionRegistrationHash(contextHash: number, nameHash: number, value: number): [boolean, number];
+  export function networkAccessTunableFloatModificationDetectionRegistrationHash(contextHash: number, nameHash: number, value?: number): [boolean, number];
 
   export function networkAccessTunableBoolHash(tunableContext: number, tunableName: number): boolean;
 
-  export function networkAccessTunableBoolModificationDetectionRegistrationHash(contextHash: number, nameHash: number, value: boolean): [boolean, boolean];
+  export function networkAccessTunableBoolModificationDetectionRegistrationHash(contextHash: number, nameHash: number, value?: boolean): [boolean, boolean];
 
   /**
    * Returns defaultValue if the tunable doesn't exist.
@@ -12824,7 +12824,7 @@ declare module "@altv/natives" {
    */
   export function clearServiceEventArguments(): void;
 
-  export function ugcCopyContent(p0: any, p1: any): [boolean, any, any];
+  export function ugcCopyContent(p0?: any, p1?: any): [boolean, any, any];
 
   export function ugcIsCreating(): boolean;
 
@@ -12848,25 +12848,25 @@ declare module "@altv/natives" {
 
   export function ugcQueryMostRecentlyCreatedContent(offset: number, count: number, contentTypeName: string, p3: number): boolean;
 
-  export function ugcGetBookmarkedContent(p0: any, p1: any, p2: string, p3: any): [boolean, any];
+  export function ugcGetBookmarkedContent(p0: any, p1: any, p2: string, p3?: any): [boolean, any];
 
-  export function ugcGetMyContent(p0: any, p1: any, p2: string, p3: any): [boolean, any];
+  export function ugcGetMyContent(p0: any, p1: any, p2: string, p3?: any): [boolean, any];
 
-  export function ugcGetFriendContent(p0: any, p1: any, p2: string, p3: any): [boolean, any];
+  export function ugcGetFriendContent(p0: any, p1: any, p2: string, p3?: any): [boolean, any];
 
-  export function ugcGetCrewContent(p0: any, p1: any, p2: any, p3: string, p4: any): [boolean, any];
+  export function ugcGetCrewContent(p0: any, p1: any, p2: any, p3: string, p4?: any): [boolean, any];
 
-  export function ugcGetGetByCategory(p0: any, p1: any, p2: any, p3: string, p4: any): [boolean, any];
+  export function ugcGetGetByCategory(p0: any, p1: any, p2: any, p3: string, p4?: any): [boolean, any];
 
   export function ugcGetGetByContentId(contentId: string, contentTypeName: string): boolean;
 
   export function ugcGetGetByContentIds(data: any, dataCount: number, contentTypeName: string): [boolean, any];
 
-  export function ugcGetMostRecentlyCreatedContent(p0: any, p1: any, p2: any, p3: any): [boolean, any, any];
+  export function ugcGetMostRecentlyCreatedContent(p0: any, p1: any, p2?: any, p3?: any): [boolean, any, any];
 
-  export function ugcGetMostRecentlyPlayedContent(p0: any, p1: any, p2: any, p3: any): [boolean, any, any];
+  export function ugcGetMostRecentlyPlayedContent(p0: any, p1: any, p2?: any, p3?: any): [boolean, any, any];
 
-  export function ugcGetTopRatedContent(p0: any, p1: any, p2: any, p3: any): [boolean, any, any];
+  export function ugcGetTopRatedContent(p0: any, p1: any, p2?: any, p3?: any): [boolean, any, any];
 
   export function ugcCancelQuery(): void;
 
@@ -12890,7 +12890,7 @@ declare module "@altv/natives" {
 
   export function ugcGetContentUserId(p0: number): string;
 
-  export function ugcGetContentCreatorGamerHandle(p0: number, p1: any): [boolean, any];
+  export function ugcGetContentCreatorGamerHandle(p0: number, p1?: any): [boolean, any];
 
   export function ugcGetContentCreatedByLocalPlayer(p0: any): boolean;
 
@@ -12916,7 +12916,7 @@ declare module "@altv/natives" {
 
   export function ugcGetContentPath(p0: number, p1: number): string;
 
-  export function ugcGetContentUpdatedDate(p0: any, p1: any): any;
+  export function ugcGetContentUpdatedDate(p0: any, p1?: any): any;
 
   export function ugcGetContentFileVersion(p0: any, p1: any): number;
 
@@ -12978,7 +12978,7 @@ declare module "@altv/natives" {
 
   export function ugcClearModifyResult(): void;
 
-  export function ugcGetCreatorsByUserId(p0: any, p1: any): [boolean, any, any];
+  export function ugcGetCreatorsByUserId(p0?: any, p1?: any): [boolean, any, any];
 
   export function ugcHasQueryCreatorsFinished(): boolean;
 
@@ -13056,7 +13056,7 @@ declare module "@altv/natives" {
    */
   export function networkHasRosPrivilege(index: number): boolean;
 
-  export function networkHasRosPrivilegeEndDate(privilege: number, banType: number, timeData: any): [boolean, number, any];
+  export function networkHasRosPrivilegeEndDate(privilege: number, banType?: number, timeData?: any): [boolean, number, any];
 
   export function networkHasRosPrivilegePlayedLastGen(): boolean;
 
@@ -13077,7 +13077,7 @@ declare module "@altv/natives" {
   /**
    * Always returns -1. Seems to be XB1 specific.
    */
-  export function networkStartUserContentPermissionsCheck(netHandle: any): [number, any];
+  export function networkStartUserContentPermissionsCheck(netHandle?: any): [number, any];
 
   export function networkSkipRadioResetNextClose(): void;
 
@@ -13157,12 +13157,12 @@ declare module "@altv/natives" {
   /**
    * Does nothing (it's a nullsub).
    */
-  export function networkGetSignallingInfo(p0: any): any;
+  export function networkGetSignallingInfo(p0?: any): any;
 
   /**
    * Does nothing (it's a nullsub).
    */
-  export function networkGetNetStatisticsInfo(p0: any): any;
+  export function networkGetNetStatisticsInfo(p0?: any): any;
 
   export function networkGetPlayerAccountId(player: Player | number): number;
 
@@ -13181,7 +13181,7 @@ declare module "@altv/natives" {
   /**
    * Deletes the specified object, then sets the handle pointed to by the pointer to NULL.
    */
-  export function deleteObject(object: Object): Object;
+  export function deleteObject(object?: Object): Object;
 
   export function placeObjectOnGroundProperly(object: Object): boolean;
 
@@ -13243,7 +13243,7 @@ declare module "@altv/natives" {
    * -------------
    * the locked bool is either 0(unlocked)(false) or 1(locked)(true)
    */
-  export function getStateOfClosestDoorOfType(type: number, x: number, y: number, z: number, locked: boolean, heading: number): [boolean, number];
+  export function getStateOfClosestDoorOfType(type: number, x: number, y: number, z: number, locked?: boolean, heading?: number): [boolean, number];
 
   /**
    * Hardcoded not to work in multiplayer environments.
@@ -13351,7 +13351,7 @@ declare module "@altv/natives" {
   /**
    * Search radius: 0.5
    */
-  export function doorSystemFindExistingDoor(x: number, y: number, z: number, modelHash: number, outDoorHash: number): [boolean, number];
+  export function doorSystemFindExistingDoor(x: number, y: number, z: number, modelHash: number, outDoorHash?: number): [boolean, number];
 
   export function isGarageEmpty(garageHash: number, p1: boolean, p2: number): boolean;
 
@@ -14140,7 +14140,7 @@ declare module "@altv/natives" {
    * Density is a value between 0 and 15, indicating how busy the road is.
    * Flags is a bit field.
    */
-  export function getVehicleNodeProperties(x: number, y: number, z: number, density: number, flags: number): [boolean, number, number];
+  export function getVehicleNodeProperties(x: number, y: number, z: number, density?: number, flags?: number): [boolean, number, number];
 
   /**
    * Returns true if the id is non zero.
@@ -14152,7 +14152,7 @@ declare module "@altv/natives" {
    * Note that IS_VEHICLE_NODE_ID_VALID simply checks if nodeId is not zero. It does not actually ensure that the id is valid.
    * Eg. IS_VEHICLE_NODE_ID_VALID(1) will return true, but will crash when calling GET_VEHICLE_NODE_POSITION().
    */
-  export function getVehicleNodePosition(nodeId: number, outPosition: Vector3): Vector3;
+  export function getVehicleNodePosition(nodeId: number, outPosition?: Vector3): Vector3;
 
   /**
    * Returns false for nodes that aren't used for GPS routes.
@@ -14205,9 +14205,9 @@ declare module "@altv/natives" {
    */
   export function setPedPathsBackToOriginal(x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, p6: any): void;
 
-  export function getRandomVehicleNode(x: number, y: number, z: number, radius: number, p4: boolean, p5: boolean, p6: boolean, outPosition: Vector3, nodeId: number): [boolean, Vector3, number];
+  export function getRandomVehicleNode(x: number, y: number, z: number, radius: number, p4: boolean, p5: boolean, p6: boolean, outPosition?: Vector3, nodeId?: number): [boolean, Vector3, number];
 
-  export function getSpawnCoordsForVehicleNode(nodeAddress: number, towardsCoorsX: number, towardsCoorsY: number, towardsCoorsZ: number, centrePoint: Vector3, heading: number): [Vector3, Vector3, number];
+  export function getSpawnCoordsForVehicleNode(nodeAddress: number, towardsCoorsX: number, towardsCoorsY: number, towardsCoorsZ: number, centrePoint?: Vector3, heading?: number): [Vector3, Vector3, number];
 
   /**
    * Determines the name of the street which is the closest to the given coordinates.
@@ -14216,7 +14216,7 @@ declare module "@altv/natives" {
    * crossingRoad - if the coordinates are on an intersection, a hash to the name of the crossing road
    * Note: the names are returned as hashes, the strings can be returned using the function HUD::GET_STREET_NAME_FROM_HASH_KEY.
    */
-  export function getStreetNameAtCoord(x: number, y: number, z: number, streetName: number, crossingRoad: number): [number, number];
+  export function getStreetNameAtCoord(x: number, y: number, z: number, streetName?: number, crossingRoad?: number): [number, number];
 
   /**
    * p3 is 0 in the only game script occurrence (trevor3) but 1 doesn't seem to make a difference
@@ -14233,7 +14233,7 @@ declare module "@altv/natives" {
    * 8 = Route is being recalculated or the navmesh is confusing. This happens randomly during the drive but consistently at {2044.0358, 2996.6116, 44.9717} if you face towards the bar and the route needs you to turn right. In that particular case, it could be a bug with how the turn appears to be 270 deg. CCW instead of "right." Either way, this seems to be the engine saying "I don't know the route right now."
    * return value set to 0 always
    */
-  export function generateDirectionsToCoord(x: number, y: number, z: number, p3: boolean, direction: number, p5: number, distToNxJunction: number): [number, number, number, number];
+  export function generateDirectionsToCoord(x: number, y: number, z: number, p3: boolean, direction?: number, p5?: number, distToNxJunction?: number): [number, number, number, number];
 
   export function setIgnoreNoGpsFlag(toggle: boolean): void;
 
@@ -14253,9 +14253,9 @@ declare module "@altv/natives" {
 
   export function getGpsBlipRouteFound(): boolean;
 
-  export function getRoadBoundaryUsingHeading(x: number, y: number, z: number, heading: number, outPosition: Vector3): [boolean, Vector3];
+  export function getRoadBoundaryUsingHeading(x: number, y: number, z: number, heading: number, outPosition?: Vector3): [boolean, Vector3];
 
-  export function getPositionBySideOfRoad(x: number, y: number, z: number, p3: number, outPosition: Vector3): [boolean, Vector3];
+  export function getPositionBySideOfRoad(x: number, y: number, z: number, p3: number, outPosition?: Vector3): [boolean, Vector3];
 
   /**
    * Gets a value indicating whether the specified position is on a road.
@@ -14348,7 +14348,7 @@ declare module "@altv/natives" {
   /**
    * Deletes the specified ped, then sets the handle pointed to by the pointer to NULL.
    */
-  export function deletePed(ped: Ped | Player | number): Ped | Player | number;
+  export function deletePed(ped?: Ped | Player | number): Ped | Player | number;
 
   export function clonePed(ped: Ped | Player | number, isNetwork: boolean, bScriptHostPed: boolean, copyHeadBlendFlag: boolean): Ped | Player | number;
 
@@ -14478,7 +14478,7 @@ declare module "@altv/natives" {
   /**
    * Judging purely from a quick disassembly, if the ped is in a vehicle, the ped will be deleted immediately. If not, it'll be marked as no longer needed. - very elegant..
    */
-  export function removePedElegantly(ped: Ped | Player | number): Ped | Player | number;
+  export function removePedElegantly(ped?: Ped | Player | number): Ped | Player | number;
 
   /**
    * Same as SET_PED_ARMOUR, but ADDS 'amount' to the armor the Ped already has.
@@ -14667,7 +14667,7 @@ declare module "@altv/natives" {
 
   export function setPedCanBeShotInVehicle(ped: Ped | Player | number, toggle: boolean): void;
 
-  export function getPedLastDamageBone(ped: Ped | Player | number, outBone: number): [boolean, number];
+  export function getPedLastDamageBone(ped: Ped | Player | number, outBone?: number): [boolean, number];
 
   export function clearPedLastDamageBone(ped: Ped | Player | number): void;
 
@@ -14740,7 +14740,7 @@ declare module "@altv/natives" {
 
   export function setPedParachuteTintIndex(ped: Ped | Player | number, tintIndex: number): void;
 
-  export function getPedParachuteTintIndex(ped: Ped | Player | number, outTintIndex: number): number;
+  export function getPedParachuteTintIndex(ped: Ped | Player | number, outTintIndex?: number): number;
 
   export function setPedReserveParachuteTintIndex(ped: Ped | Player | number, p1: any): void;
 
@@ -14944,7 +14944,7 @@ declare module "@altv/natives" {
   /**
    * Can't select void. This function returns nothing. The hash of the created relationship group is output in the second parameter.
    */
-  export function addRelationshipGroup(name: string, groupHash: number): [boolean, number];
+  export function addRelationshipGroup(name: string, groupHash?: number): [boolean, number];
 
   export function removeRelationshipGroup(groupHash: number): void;
 
@@ -14997,7 +14997,7 @@ declare module "@altv/natives" {
 
   export function isPedRespondingToEvent(ped: Ped | Player | number, event: any): boolean;
 
-  export function getPosFromFiredEvent(ped: Ped | Player | number, eventType: number, outData: any): [boolean, any];
+  export function getPosFromFiredEvent(ped: Ped | Player | number, eventType: number, outData?: any): [boolean, any];
 
   /**
    * FIRING_PATTERN_BURST_FIRE = 0xD6FF6D61 ( 1073727030 )
@@ -15064,7 +15064,7 @@ declare module "@altv/natives" {
   /**
    * p1 may be a BOOL representing whether or not the group even exists
    */
-  export function getGroupSize(groupID: number, p1: any, sizeInMembers: number): [any, number];
+  export function getGroupSize(groupID: number, p1?: any, sizeInMembers?: number): [any, number];
 
   export function doesGroupExist(groupId: number): boolean;
 
@@ -15454,7 +15454,7 @@ declare module "@altv/natives" {
    */
   export function getPedPaletteVariation(ped: Ped | Player | number, componentId: number): number;
 
-  export function getMpOutfitDataFromMetadata(p0: any, p1: any): [boolean, any, any];
+  export function getMpOutfitDataFromMetadata(p0?: any, p1?: any): [boolean, any, any];
 
   export function getFmMaleShopPedApparelItemIndex(p0: number): number;
 
@@ -15553,7 +15553,7 @@ declare module "@altv/natives" {
    *     bool isParent;
    * };
    */
-  export function getPedHeadBlendData(ped: Ped | Player | number, headBlendData: any): [boolean, any];
+  export function getPedHeadBlendData(ped: Ped | Player | number, headBlendData?: any): [boolean, any];
 
   /**
    * See SET_PED_HEAD_BLEND_DATA().
@@ -15647,7 +15647,7 @@ declare module "@altv/natives" {
    * This is used with the hair color swatches scaleform.
    * Use `GET_PED_MAKEUP_TINT_COLOR` to get the makeup colors.
    */
-  export function getPedHairTintColor(hairColorIndex: number, outR: number, outG: number, outB: number): [number, number, number];
+  export function getPedHairTintColor(hairColorIndex: number, outR?: number, outG?: number, outB?: number): [number, number, number];
 
   /**
    * Input: Makeup color index, value between 0 and 63 (inclusive).
@@ -15655,7 +15655,7 @@ declare module "@altv/natives" {
    * This is used with the makeup color swatches scaleform.
    * Use `GET_PED_HAIR_TINT_COLOR` to get the hair colors.
    */
-  export function getPedMakeupTintColor(makeupColorIndex: number, outR: number, outG: number, outB: number): [number, number, number];
+  export function getPedMakeupTintColor(makeupColorIndex: number, outR?: number, outG?: number, outB?: number): [number, number, number];
 
   export function isPedHairTintForCreator(colorId: number): boolean;
 
@@ -16876,7 +16876,7 @@ declare module "@altv/natives" {
    *     if (PED::IS_PED_EVASIVE_DIVING(A_0, &num3) != 0)
    *         if (ENTITY::IS_ENTITY_A_VEHICLE(num3) != 0)
    */
-  export function isPedEvasiveDiving(ped: Ped | Player | number, evadingEntity: Entity | number): [boolean, Entity | number];
+  export function isPedEvasiveDiving(ped: Ped | Player | number, evadingEntity?: Entity | number): [boolean, Entity | number];
 
   export function setPedShootsAtCoord(ped: Ped | Player | number, x: number, y: number, z: number, toggle: boolean): void;
 
@@ -17200,9 +17200,9 @@ declare module "@altv/natives" {
 
   export function canPedSeeHatedPed(ped1: Ped | Player | number, ped2: Ped | Player | number): boolean;
 
-  export function canPedShuffleToOrFromTurretSeat(ped: Ped | Player | number, p1: number): [boolean, number];
+  export function canPedShuffleToOrFromTurretSeat(ped: Ped | Player | number, p1?: number): [boolean, number];
 
-  export function canPedShuffleToOrFromExtraSeat(ped: Ped | Player | number, p1: number): [boolean, number];
+  export function canPedShuffleToOrFromExtraSeat(ped: Ped | Player | number, p1?: number): [boolean, number];
 
   /**
    * no bone= -1
@@ -17439,7 +17439,7 @@ declare module "@altv/natives" {
    */
   export function forcePedMotionState(ped: Ped | Player | number, motionStateHash: number, p2: boolean, p3: number, p4: boolean): boolean;
 
-  export function getPedCurrentMoveBlendRatio(ped: Ped | Player | number, speedX: number, speedY: number): [boolean, number, number];
+  export function getPedCurrentMoveBlendRatio(ped: Ped | Player | number, speedX?: number, speedY?: number): [boolean, number, number];
 
   export function setPedMaxMoveBlendRatio(ped: Ped | Player | number, value: number): void;
 
@@ -17495,7 +17495,7 @@ declare module "@altv/natives" {
    *      }
    *  }  
    */
-  export function getPedNearbyVehicles(ped: Ped | Player | number, sizeAndVehs: any): [number, any];
+  export function getPedNearbyVehicles(ped: Ped | Player | number, sizeAndVehs?: any): [number, any];
 
   /**
    * sizeAndPeds - is a pointer to an array. The array is filled with peds found nearby the ped supplied to the first argument.
@@ -17590,9 +17590,9 @@ declare module "@altv/natives" {
 
   export function spawnpointsGetNumSearchResults(): number;
 
-  export function spawnpointsGetSearchResult(randomInt: number, x: number, y: number, z: number): [number, number, number];
+  export function spawnpointsGetSearchResult(randomInt: number, x?: number, y?: number, z?: number): [number, number, number];
 
-  export function spawnpointsGetSearchResultFlags(p0: number, p1: number): number;
+  export function spawnpointsGetSearchResultFlags(p0: number, p1?: number): number;
 
   export function setIkTarget(ped: Ped | Player | number, ikIndex: number, entityLookAt: Entity | number, boneLookAt: number, offsetX: number, offsetY: number, offsetZ: number, p7: any, blendInDuration: number, blendOutDuration: number): void;
 
@@ -17676,13 +17676,13 @@ declare module "@altv/natives" {
    * Rope does NOT interact with anything you attach it to, in some cases it make interact with the world AFTER it breaks (seems to occur if you set the type to -1).
    * Rope will sometimes contract and fall to the ground like you'd expect it to, but since it doesn't interact with the world the effect is just jaring.
    */
-  export function addRope(x: number, y: number, z: number, rotX: number, rotY: number, rotZ: number, length: number, ropeType: number, maxLength: number, minLength: number, windingSpeed: number, p11: boolean, p12: boolean, rigid: boolean, p14: number, breakWhenShot: boolean, unkPtr: any): [number, any];
+  export function addRope(x: number, y: number, z: number, rotX: number, rotY: number, rotZ: number, length: number, ropeType: number, maxLength: number, minLength: number, windingSpeed: number, p11: boolean, p12: boolean, rigid: boolean, p14: number, breakWhenShot: boolean, unkPtr?: any): [number, any];
 
-  export function deleteRope(ropeId: number): number;
+  export function deleteRope(ropeId?: number): number;
 
   export function deleteChildRope(ropeId: number): void;
 
-  export function doesRopeExist(ropeId: number): [boolean, number];
+  export function doesRopeExist(ropeId?: number): [boolean, number];
 
   export function ropeDrawEnabled(ropeId: number, p1: boolean): number;
 
@@ -17702,7 +17702,7 @@ declare module "@altv/natives" {
   /**
    * Attaches entity 1 to entity 2.
    */
-  export function attachEntitiesToRope(ropeId: number, ent1: Entity | number, ent2: Entity | number, ent1_x: number, ent1_y: number, ent1_z: number, ent2_x: number, ent2_y: number, ent2_z: number, length: number, p10: boolean, p11: boolean, p12: any, p13: any): [any, any];
+  export function attachEntitiesToRope(ropeId: number, ent1: Entity | number, ent2: Entity | number, ent1_x: number, ent1_y: number, ent1_z: number, ent2_x: number, ent2_y: number, ent2_z: number, length: number, p10: boolean, p11: boolean, p12?: any, p13?: any): [any, any];
 
   /**
    * The position supplied can be anywhere, and the entity should anchor relative to that point from it's origin.
@@ -17717,7 +17717,7 @@ declare module "@altv/natives" {
 
   export function ropeSetSmoothReelin(ropeId: number, p1: boolean): void;
 
-  export function isRopeAttachedAtBothEnds(ropeId: number): [boolean, number];
+  export function isRopeAttachedAtBothEnds(ropeId?: number): [boolean, number];
 
   export function getRopeLastVertexCoord(ropeId: number): Vector3;
 
@@ -17817,7 +17817,7 @@ declare module "@altv/natives" {
 
   export function changePlayerPed(player: Player | number, ped: Ped | Player | number, p2: boolean, resetDamage: boolean): void;
 
-  export function getPlayerRgbColour(player: Player | number, r: number, g: number, b: number): [number, number, number];
+  export function getPlayerRgbColour(player: Player | number, r?: number, g?: number, b?: number): [number, number, number];
 
   /**
    * Gets the number of players in the current session.
@@ -18085,7 +18085,7 @@ declare module "@altv/natives" {
    * Assigns the handle of locked-on melee target to *entity that you pass it.
    * Returns false if no entity found.
    */
-  export function getPlayerTargetEntity(player: Player | number, entity: Entity | number): [boolean, Entity | number];
+  export function getPlayerTargetEntity(player: Player | number, entity?: Entity | number): [boolean, Entity | number];
 
   /**
    * Gets a value indicating whether the specified player is currently aiming freely.
@@ -18101,7 +18101,7 @@ declare module "@altv/natives" {
    * Returns TRUE if it found an entity in your crosshair within range of your weapon. Assigns the handle of the target to the *entity that you pass it.
    * Returns false if no entity found.
    */
-  export function getEntityPlayerIsFreeAimingAt(player: Player | number, entity: Entity | number): [boolean, Entity | number];
+  export function getEntityPlayerIsFreeAimingAt(player: Player | number, entity?: Entity | number): [boolean, Entity | number];
 
   /**
    * Affects the range of auto aim target.
@@ -18720,7 +18720,7 @@ declare module "@altv/natives" {
    *     Airbone = 12,
    *  Sunrise = 13,
    */
-  export function getPlayerParachuteTintIndex(player: Player | number, tintIndex: number): number;
+  export function getPlayerParachuteTintIndex(player: Player | number, tintIndex?: number): number;
 
   /**
    * Tints:
@@ -18760,7 +18760,7 @@ declare module "@altv/natives" {
    *     Airbone = 12,
    *  Sunrise = 13,
    */
-  export function getPlayerReserveParachuteTintIndex(player: Player | number, index: number): number;
+  export function getPlayerReserveParachuteTintIndex(player: Player | number, index?: number): number;
 
   /**
    * tints 0- 13
@@ -18772,7 +18772,7 @@ declare module "@altv/natives" {
    */
   export function setPlayerParachutePackTintIndex(player: Player | number, tintIndex: number): void;
 
-  export function getPlayerParachutePackTintIndex(player: Player | number, tintIndex: number): number;
+  export function getPlayerParachutePackTintIndex(player: Player | number, tintIndex?: number): number;
 
   export function setPlayerHasReserveParachute(player: Player | number): void;
 
@@ -18782,7 +18782,7 @@ declare module "@altv/natives" {
 
   export function setPlayerParachuteSmokeTrailColor(player: Player | number, r: number, g: number, b: number): void;
 
-  export function getPlayerParachuteSmokeTrailColor(player: Player | number, r: number, g: number, b: number): [number, number, number];
+  export function getPlayerParachuteSmokeTrailColor(player: Player | number, r?: number, g?: number, b?: number): [number, number, number];
 
   /**
    * example:
@@ -19036,7 +19036,7 @@ declare module "@altv/natives" {
 
   export function savemigrationMpNumAccounts(): number;
 
-  export function savemigrationMpGetAccount(p0: number, p1: any): [boolean, any];
+  export function savemigrationMpGetAccount(p0: number, p1?: any): [boolean, any];
 
   export function savemigrationMpRequestStatus(): boolean;
 
@@ -19179,9 +19179,9 @@ declare module "@altv/natives" {
   /**
    * Registers a protected variable that will be checked for modifications by the anticheat
    */
-  export function registerScriptVariable(variable: any): any;
+  export function registerScriptVariable(variable?: any): any;
 
-  export function unregisterScriptVariable(variable: any): any;
+  export function unregisterScriptVariable(variable?: any): any;
 
   export function forceCheckScriptVariables(): void;
 
@@ -19226,14 +19226,14 @@ declare module "@altv/natives" {
    * Returns the result of a shape test: 0 if the handle is invalid, 1 if the shape test is still pending, or 2 if the shape test has completed, and the handle should be invalidated.
    * When used with an asynchronous shape test, this native should be looped until returning 0 or 2, after which the handle is invalidated.
    */
-  export function getShapeTestResult(shapeTestHandle: number, hit: boolean, endCoords: Vector3, surfaceNormal: Vector3, entityHit: Entity | number): [number, boolean, Vector3, Vector3, Entity | number];
+  export function getShapeTestResult(shapeTestHandle: number, hit?: boolean, endCoords?: Vector3, surfaceNormal?: Vector3, entityHit?: Entity | number): [number, boolean, Vector3, Vector3, Entity | number];
 
   /**
    * Returns the result of a shape test, also returning the material of any touched surface.
    * When used with an asynchronous shape test, this native should be looped until returning 0 or 2, after which the handle is invalidated.
    * Unless the return value is 2, the other return values are undefined.
    */
-  export function getShapeTestResultIncludingMaterial(shapeTestHandle: number, hit: boolean, endCoords: Vector3, surfaceNormal: Vector3, materialHash: number, entityHit: Entity | number): [number, boolean, Vector3, Vector3, number, Entity | number];
+  export function getShapeTestResultIncludingMaterial(shapeTestHandle: number, hit?: boolean, endCoords?: Vector3, surfaceNormal?: Vector3, materialHash?: number, entityHit?: Entity | number): [number, boolean, Vector3, Vector3, number, Entity | number];
 
   /**
    * Invalidates the entity handle passed by removing the fwScriptGuid from the entity. This should be used when receiving an ambient entity from shape testing natives, but can also be used for other natives returning an 'irrelevant' entity handle.
@@ -19248,7 +19248,7 @@ declare module "@altv/natives" {
 
   export function scInboxSetMessageAsReadAtIndex(msgIndex: number): boolean;
 
-  export function scInboxMessageGetDataInt(p0: number, context: string, out: number): [boolean, number];
+  export function scInboxMessageGetDataInt(p0: number, context: string, out?: number): [boolean, number];
 
   export function scInboxMessageGetDataBool(p0: number, p1: string): boolean;
 
@@ -19258,13 +19258,13 @@ declare module "@altv/natives" {
 
   export function scInboxMessageGetRawTypeAtIndex(p0: number): string;
 
-  export function scInboxMessagePushGamerT0RecipList(gamerHandle: any): any;
+  export function scInboxMessagePushGamerT0RecipList(gamerHandle?: any): any;
 
-  export function scInboxSendUgcstatupdateToRecipList(data: any): any;
+  export function scInboxSendUgcstatupdateToRecipList(data?: any): any;
 
-  export function scInboxMessageGetUgcdata(p0: number, p1: any): [boolean, any];
+  export function scInboxMessageGetUgcdata(p0: number, p1?: any): [boolean, any];
 
-  export function scInboxGetBountyDataAtIndex(index: number, outData: any): [boolean, any];
+  export function scInboxGetBountyDataAtIndex(index: number, outData?: any): [boolean, any];
 
   export function scEmailRetrieveEmails(offset: number, limit: number): void;
 
@@ -19272,11 +19272,11 @@ declare module "@altv/natives" {
 
   export function scEmailGetNumRetrievedEmails(): number;
 
-  export function scEmailGetEmailAtIndex(p0: number, p1: any): [boolean, any];
+  export function scEmailGetEmailAtIndex(p0: number, p1?: any): [boolean, any];
 
   export function scEmailDeleteEmails(p0: any, p1: any): any;
 
-  export function scEmailMessagePushGamerToRecipList(gamerHandle: any): any;
+  export function scEmailMessagePushGamerToRecipList(gamerHandle?: any): any;
 
   export function scEmailMessageClearRecipList(): void;
 
@@ -19298,23 +19298,23 @@ declare module "@altv/natives" {
 
   export function scPresenceSetActivityRating(p0: any, p1: number): boolean;
 
-  export function scGamerdataGetInt(name: string, value: number): [boolean, number];
+  export function scGamerdataGetInt(name: string, value?: number): [boolean, number];
 
-  export function scGamerdataGetFloat(name: string, value: number): [boolean, number];
+  export function scGamerdataGetFloat(name: string, value?: number): [boolean, number];
 
   export function scGamerdataGetBool(name: string): boolean;
 
   export function scGamerdataGetString(name: string, value: string): boolean;
 
-  export function scGamerdataGetActiveXpBonus(value: number): [boolean, number];
+  export function scGamerdataGetActiveXpBonus(value?: number): [boolean, number];
 
   /**
    * Starts a task to check an entered string for profanity on the ROS/Social Club services.
    * See also: 1753344C770358AE, 82E4A58BABC15AE7.
    */
-  export function scProfanityCheckString(string: string, token: number): [boolean, number];
+  export function scProfanityCheckString(string: string, token?: number): [boolean, number];
 
-  export function scProfanityCheckStringUgc(string: string, token: number): [boolean, number];
+  export function scProfanityCheckStringUgc(string: string, token?: number): [boolean, number];
 
   export function scProfanityGetCheckIsValid(token: number): boolean;
 
@@ -19324,7 +19324,7 @@ declare module "@altv/natives" {
 
   export function scProfanityGetStringStatus(token: number): number;
 
-  export function scLicenseplateCheckString(p0: string, p1: number): [boolean, number];
+  export function scLicenseplateCheckString(p0: string, p1?: number): [boolean, number];
 
   export function scLicenseplateGetCheckIsValid(p0: any): boolean;
 
@@ -19336,15 +19336,15 @@ declare module "@altv/natives" {
 
   export function scLicenseplateGetPlateData(token: number, plateIndex: number): string;
 
-  export function scLicenseplateSetPlateData(oldPlateText: string, newPlateText: string, plateData: any): [boolean, any];
+  export function scLicenseplateSetPlateData(oldPlateText: string, newPlateText: string, plateData?: any): [boolean, any];
 
-  export function scLicenseplateAdd(plateText: string, plateData: any, token: number): [boolean, any, number];
+  export function scLicenseplateAdd(plateText: string, plateData?: any, token?: number): [boolean, any, number];
 
   export function scLicenseplateGetAddIsPending(token: number): boolean;
 
   export function scLicenseplateGetAddStatus(token: number): number;
 
-  export function scLicenseplateIsvalid(plateText: string, token: number): [boolean, number];
+  export function scLicenseplateIsvalid(plateText: string, token?: number): [boolean, number];
 
   export function scLicenseplateGetIsvalidIsPending(token: number): boolean;
 
@@ -19354,9 +19354,9 @@ declare module "@altv/natives" {
 
   export function scCommunityEventGetEventId(): number;
 
-  export function scCommunityEventGetExtraDataInt(p0: string, p1: number): [boolean, number];
+  export function scCommunityEventGetExtraDataInt(p0: string, p1?: number): [boolean, number];
 
-  export function scCommunityEventGetExtraDataFloat(p0: string, p1: number): [boolean, number];
+  export function scCommunityEventGetExtraDataFloat(p0: string, p1?: number): [boolean, number];
 
   export function scCommunityEventGetExtraDataString(p0: string, p1: string): boolean;
 
@@ -19376,9 +19376,9 @@ declare module "@altv/natives" {
 
   export function scCommunityEventIsActiveById(p0: number): boolean;
 
-  export function scCommunityEventGetExtraDataIntById(p0: number, p1: string, p2: number): [boolean, number];
+  export function scCommunityEventGetExtraDataIntById(p0: number, p1: string, p2?: number): [boolean, number];
 
-  export function scCommunityEventGetExtraDataFloatById(p0: number, p1: string, p2: number): [boolean, number];
+  export function scCommunityEventGetExtraDataFloatById(p0: number, p1: string, p2?: number): [boolean, number];
 
   export function scCommunityEventGetExtraDataStringById(p0: number, p1: string, p2: string): boolean;
 
@@ -19392,7 +19392,7 @@ declare module "@altv/natives" {
 
   export function scTransitionNewsHasExtraDataTu(): boolean;
 
-  export function scTransitionNewsGetExtraDataIntTu(p0: string, p1: number): [boolean, number];
+  export function scTransitionNewsGetExtraDataIntTu(p0: string, p1?: number): [boolean, number];
 
   export function scTransitionNewsEnd(): void;
 
@@ -19410,7 +19410,7 @@ declare module "@altv/natives" {
    */
   export function scAccountInfoGetNickname(): string;
 
-  export function scAchievementInfoStatus(p0: number): [boolean, number];
+  export function scAchievementInfoStatus(p0?: number): [boolean, number];
 
   /**
    * Same as HAS_ACHIEVEMENT_BEEN_PASSED
@@ -19624,7 +19624,7 @@ declare module "@altv/natives" {
 
   export function statCommunitySynchIsPending(): boolean;
 
-  export function statCommunityGetHistory(statName: number, p1: number, outValue: number): [boolean, number];
+  export function statCommunityGetHistory(statName: number, p1: number, outValue?: number): [boolean, number];
 
   /**
    * p0 seems to range from 0 to 7
@@ -19731,7 +19731,7 @@ declare module "@altv/natives" {
 
   export function playstatsRaceCheckpoint(p0: Vehicle | number, p1: any, p2: number, p3: number, p4: any): void;
 
-  export function playstatsCreateMatchHistoryId2(playerAccountId: number, posixTime: number): [boolean, number, number];
+  export function playstatsCreateMatchHistoryId2(playerAccountId?: number, posixTime?: number): [boolean, number, number];
 
   export function playstatsMatchStarted(p0: any, p1: any, p2: any): void;
 
@@ -19769,13 +19769,13 @@ declare module "@altv/natives" {
 
   export function playstatsCheatApplied(cheat: string): void;
 
-  export function playstatsJobActivityEnd(p0: any, p1: any, p2: any, p3: any): [any, any, any, any];
+  export function playstatsJobActivityEnd(p0?: any, p1?: any, p2?: any, p3?: any): [any, any, any, any];
 
-  export function playstatsJobBend(p0: any, p1: any, p2: any, p3: any): [any, any, any, any];
+  export function playstatsJobBend(p0?: any, p1?: any, p2?: any, p3?: any): [any, any, any, any];
 
-  export function playstatsJobLtsEnd(p0: any, p1: any, p2: any, p3: any): [any, any, any, any];
+  export function playstatsJobLtsEnd(p0?: any, p1?: any, p2?: any, p3?: any): [any, any, any, any];
 
-  export function playstatsJobLtsRoundEnd(p0: any, p1: any, p2: any, p3: any): [any, any, any, any];
+  export function playstatsJobLtsRoundEnd(p0?: any, p1?: any, p2?: any, p3?: any): [any, any, any, any];
 
   export function playstatsQuickfixTool(element: number, item: string): void;
 
@@ -19785,7 +19785,7 @@ declare module "@altv/natives" {
 
   export function playstatsHeistSaveCheat(hash: number, p1: number): void;
 
-  export function playstatsAppendDirectorMetric(p0: any): any;
+  export function playstatsAppendDirectorMetric(p0?: any): any;
 
   export function playstatsAwardBadSport(id: number): void;
 
@@ -19819,7 +19819,7 @@ declare module "@altv/natives" {
 
   export function playstatsFmEventHuntbeast(p0: any): void;
 
-  export function playstatsPimenuHideOptions(data: any): any;
+  export function playstatsPimenuHideOptions(data?: any): any;
 
   export function leaderboardsGetNumberOfColumns(p0: number, p1: any): number;
 
@@ -19839,37 +19839,37 @@ declare module "@altv/natives" {
 
   export function leaderboards2ReadFriendsByRow(p0: any, p1: any, p2: any, p3: boolean, p4: any, p5: any): [boolean, any, any];
 
-  export function leaderboards2ReadByHandle(p0: any, p1: any): [boolean, any, any];
+  export function leaderboards2ReadByHandle(p0?: any, p1?: any): [boolean, any, any];
 
   export function leaderboards2ReadByRank(p0: any, p1: any, p2: any): [boolean, any];
 
-  export function leaderboards2ReadByRadius(p0: any, p1: any, p2: any): [boolean, any, any];
+  export function leaderboards2ReadByRadius(p0: any, p1: any, p2?: any): [boolean, any, any];
 
   export function leaderboards2ReadByScoreInt(p0: any, p1: any, p2: any): [boolean, any];
 
   export function leaderboards2ReadByScoreFloat(p0: any, p1: number, p2: any): [boolean, any];
 
-  export function leaderboards2ReadRankPrediction(p0: any, p1: any, p2: any): [boolean, any, any, any];
+  export function leaderboards2ReadRankPrediction(p0?: any, p1?: any, p2?: any): [boolean, any, any, any];
 
   export function leaderboards2ReadByPlaform(p0: any, gamerHandleCsv: string, platformName: string): [boolean, any];
 
-  export function leaderboards2ReadGetRowDataStart(p0: any): [boolean, any];
+  export function leaderboards2ReadGetRowDataStart(p0?: any): [boolean, any];
 
   export function leaderboards2ReadGetRowDataEnd(): void;
 
-  export function leaderboards2ReadGetRowDataInfo(p0: any, p1: any): [boolean, any];
+  export function leaderboards2ReadGetRowDataInfo(p0: any, p1?: any): [boolean, any];
 
   export function leaderboards2ReadGetRowDataInt(p0: any, p1: any): number;
 
   export function leaderboards2ReadGetRowDataFloat(p0: any, p1: any): number;
 
-  export function leaderboards2WriteData(p0: any): [boolean, any];
+  export function leaderboards2WriteData(p0?: any): [boolean, any];
 
   export function leaderboardsWriteAddColumn(p0: any, p1: any, p2: number): void;
 
   export function leaderboardsWriteAddColumnLong(p0: any, p1: any, p2: any): void;
 
-  export function leaderboardsCacheDataRow(p0: any): [boolean, any];
+  export function leaderboardsCacheDataRow(p0?: any): [boolean, any];
 
   export function leaderboardsClearCacheData(): void;
 
@@ -19881,7 +19881,7 @@ declare module "@altv/natives" {
 
   export function leaderboardsGetCacheNumberOfRows(p0: any): number;
 
-  export function leaderboardsGetCacheDataRow(p0: any, p1: any, p2: any): [boolean, any];
+  export function leaderboardsGetCacheDataRow(p0: any, p1: any, p2?: any): [boolean, any];
 
   export function presenceEventUpdatestatInt(statHash: number, value: number, p2: number): void;
 
@@ -19928,7 +19928,7 @@ declare module "@altv/natives" {
 
   export function statSetCheatIsActive(): void;
 
-  export function leaderboards2WriteDataForEventType(p0: any, p1: any): [boolean, any, any];
+  export function leaderboards2WriteDataForEventType(p0?: any, p1?: any): [boolean, any, any];
 
   export function forceCloudMpStatsDownloadAndOverwriteLocalSave(): void;
 
@@ -19947,9 +19947,9 @@ declare module "@altv/natives" {
 
   export function statMigrateCheckGetIsPlatformAvailable(p0: number): number;
 
-  export function statMigrateCheckGetPlatformStatus(p0: number, p1: any): [number, any];
+  export function statMigrateCheckGetPlatformStatus(p0: number, p1?: any): [number, any];
 
-  export function statGetSaveMigrationStatus(data: any): [number, any];
+  export function statGetSaveMigrationStatus(data?: any): [number, any];
 
   export function statSaveMigrationCancelPendingOperation(): boolean;
 
@@ -19957,7 +19957,7 @@ declare module "@altv/natives" {
 
   export function statSaveMigrationConsumeContent(contentId: number, srcPlatform: string, srcGamerHandle: string): boolean;
 
-  export function statGetSaveMigrationConsumeContentStatus(p0: number): [number, number];
+  export function statGetSaveMigrationConsumeContentStatus(p0?: number): [number, number];
 
   export function statEnableStatsTracking(): void;
 
@@ -20014,7 +20014,7 @@ declare module "@altv/natives" {
 
   export function statStopRecordStat(): boolean;
 
-  export function statGetRecordedValue(value: number): [boolean, number];
+  export function statGetRecordedValue(value?: number): [boolean, number];
 
   export function statIsRecordingStat(): boolean;
 
@@ -20063,7 +20063,7 @@ declare module "@altv/natives" {
    */
   export function statGetChallengeFlyingDist(): number;
 
-  export function statGetFlyingAltitude(outValue: number): [boolean, number];
+  export function statGetFlyingAltitude(outValue?: number): [boolean, number];
 
   /**
    * Or non-flyable area
@@ -20128,13 +20128,13 @@ declare module "@altv/natives" {
 
   export function playstatsSpentPiCustomLoadout(amount: number): void;
 
-  export function playstatsBuyContrabandMission(data: any): any;
+  export function playstatsBuyContrabandMission(data?: any): any;
 
-  export function playstatsSellContrabandMission(data: any): any;
+  export function playstatsSellContrabandMission(data?: any): any;
 
-  export function playstatsDefendContrabandMission(data: any): any;
+  export function playstatsDefendContrabandMission(data?: any): any;
 
-  export function playstatsRecoverContrabandMission(data: any): any;
+  export function playstatsRecoverContrabandMission(data?: any): any;
 
   export function playstatsHitContrabandDestroyLimit(p0: any): void;
 
@@ -20196,11 +20196,11 @@ declare module "@altv/natives" {
 
   export function playstatsCopyRankIntoNewSlot(p0: any, p1: any, p2: any, p3: any, p4: any, p5: any, p6: any): void;
 
-  export function playstatsDupeDetected(data: any): any;
+  export function playstatsDupeDetected(data?: any): any;
 
   export function playstatsBanAlert(p0: number): void;
 
-  export function playstatsGunrunningMissionEnded(data: any): any;
+  export function playstatsGunrunningMissionEnded(data?: any): any;
 
   export function playstatsGunrunningRnd(p0: any): void;
 
@@ -20214,17 +20214,17 @@ declare module "@altv/natives" {
 
   export function playstatsMinigameUsage(p0: any, p1: any, p2: any): void;
 
-  export function playstatsStoneHatchetEnded(data: any): any;
+  export function playstatsStoneHatchetEnded(data?: any): any;
 
-  export function playstatsSmugglerMissionEnded(data: any): any;
+  export function playstatsSmugglerMissionEnded(data?: any): any;
 
-  export function playstatsFmHeistPrepEnded(data: any): any;
+  export function playstatsFmHeistPrepEnded(data?: any): any;
 
   export function playstatsInstancedHeistEnded(data: any, p1: any, p2: any, p3: any): any;
 
-  export function playstatsDarCheckpoint(data: any): any;
+  export function playstatsDarCheckpoint(data?: any): any;
 
-  export function playstatsEnterSessionPack(data: any): any;
+  export function playstatsEnterSessionPack(data?: any): any;
 
   export function playstatsDroneUsage(p0: number, p1: number, p2: number): void;
 
@@ -20232,7 +20232,7 @@ declare module "@altv/natives" {
 
   export function playstatsArenaWarsSpectator(p0: number, p1: number, p2: number, p3: number, p4: number): void;
 
-  export function playstatsArenaWarsEnded(data: any): any;
+  export function playstatsArenaWarsEnded(data?: any): any;
 
   export function playstatsSwitchPassiveMode(p0: boolean, p1: number, p2: number, p3: number): void;
 
@@ -20268,13 +20268,13 @@ declare module "@altv/natives" {
 
   export function playstatsArcadeLoveMatch(p0: any, p1: any): void;
 
-  export function playstatsFreemodeCasinoMissionEnded(data: any): any;
+  export function playstatsFreemodeCasinoMissionEnded(data?: any): any;
 
   export function playstatsHeist3Drone(p0: any): void;
 
   export function playstatsHeist3Hack(p0: any, p1: any, p2: any, p3: any, p4: any, p5: any): void;
 
-  export function playstatsNpcPhone(p0: any): any;
+  export function playstatsNpcPhone(p0?: any): any;
 
   export function playstatsArcadeCabinet(p0: any): void;
 
@@ -20340,7 +20340,7 @@ declare module "@altv/natives" {
 
   export function playstatsRandomEvent(p0: any): void;
 
-  export function playstatsAlert(data: any): any;
+  export function playstatsAlert(data?: any): any;
 
   export function playstatsAttritionStageEnd(p0: any): void;
 
@@ -20349,7 +20349,7 @@ declare module "@altv/natives" {
   /**
    * Data struct contains various tunables related to test drives at Simeons Showroom or Luxury Showcase.
    */
-  export function playstatsShowroomOverview(data: any): any;
+  export function playstatsShowroomOverview(data?: any): any;
 
   export function loadAllObjectsNow(): void;
 
@@ -21044,7 +21044,7 @@ declare module "@altv/natives" {
    * 2 - ???
    * 3 - Finished Generating 
    */
-  export function getNavmeshRouteDistanceRemaining(ped: Ped | Player | number, distanceRemaining: number, isPathReady: boolean): [number, number, boolean];
+  export function getNavmeshRouteDistanceRemaining(ped: Ped | Player | number, distanceRemaining?: number, isPathReady?: boolean): [number, number, boolean];
 
   /**
    * See GET_NAVMESH_ROUTE_DISTANCE_REMAINING for more details.
@@ -21246,7 +21246,7 @@ declare module "@altv/natives" {
 
   export function taskClearLookAt(ped: Ped | Player | number): void;
 
-  export function openSequenceTask(taskSequenceId: number): number;
+  export function openSequenceTask(taskSequenceId?: number): number;
 
   export function closeSequenceTask(taskSequenceId: number): void;
 
@@ -21254,7 +21254,7 @@ declare module "@altv/natives" {
 
   export function taskPerformSequenceLocally(ped: Ped | Player | number, taskSequenceId: number): void;
 
-  export function clearSequenceTask(taskSequenceId: number): number;
+  export function clearSequenceTask(taskSequenceId?: number): number;
 
   export function setSequenceToRepeat(taskSequenceId: number, repeat: boolean): void;
 
@@ -22140,7 +22140,7 @@ declare module "@altv/natives" {
    */
   export function deletePatrolRoute(patrolRoute: string): void;
 
-  export function getPatrolTaskInfo(ped: Ped | Player | number, timeLeftAtNode: number, nodeId: number): [boolean, number, number];
+  export function getPatrolTaskInfo(ped: Ped | Player | number, timeLeftAtNode?: number, nodeId?: number): [boolean, number, number];
 
   /**
    * After looking at some scripts the second parameter seems to be an id of some kind. Here are some I found from some R* scripts:
@@ -22272,13 +22272,13 @@ declare module "@altv/natives" {
    * Full list of waypoint recordings by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/waypointRecordings.json
    * For a full list of the points, see here: goo.gl/wIH0vn
    */
-  export function waypointRecordingGetNumPoints(name: string, points: number): [boolean, number];
+  export function waypointRecordingGetNumPoints(name: string, points?: number): [boolean, number];
 
   /**
    * Full list of waypoint recordings by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/waypointRecordings.json
    * For a full list of the points, see here: goo.gl/wIH0vn
    */
-  export function waypointRecordingGetCoord(name: string, point: number, coord: Vector3): [boolean, Vector3];
+  export function waypointRecordingGetCoord(name: string, point: number, coord?: Vector3): [boolean, Vector3];
 
   /**
    * Full list of waypoint recordings by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/waypointRecordings.json
@@ -22289,7 +22289,7 @@ declare module "@altv/natives" {
    * Full list of waypoint recordings by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/waypointRecordings.json
    * For a full list of the points, see here: goo.gl/wIH0vn
    */
-  export function waypointRecordingGetClosestWaypoint(name: string, x: number, y: number, z: number, point: number): [boolean, number];
+  export function waypointRecordingGetClosestWaypoint(name: string, x: number, y: number, z: number, point?: number): [boolean, number];
 
   export function taskFollowWaypointRecording(ped: Ped | Player | number, name: string, p2: number, p3: number, p4: number): void;
 
@@ -22520,7 +22520,7 @@ declare module "@altv/natives" {
    * DELETE_VEHICLE(&vehicle);
    * Deletes the specified vehicle, then sets the handle pointed to by the pointer to NULL.
    */
-  export function deleteVehicle(vehicle: Vehicle | number): Vehicle | number;
+  export function deleteVehicle(vehicle?: Vehicle | number): Vehicle | number;
 
   export function setVehicleAllowHomingMissleLockon(vehicle: Vehicle | number, toggle: boolean, p2: boolean): void;
 
@@ -22779,7 +22779,7 @@ declare module "@altv/natives" {
    */
   export function setVehicleCustomPrimaryColour(vehicle: Vehicle | number, r: number, g: number, b: number): void;
 
-  export function getVehicleCustomPrimaryColour(vehicle: Vehicle | number, r: number, g: number, b: number): [number, number, number];
+  export function getVehicleCustomPrimaryColour(vehicle: Vehicle | number, r?: number, g?: number, b?: number): [number, number, number];
 
   export function clearVehicleCustomPrimaryColour(vehicle: Vehicle | number): void;
 
@@ -22790,7 +22790,7 @@ declare module "@altv/natives" {
    */
   export function setVehicleCustomSecondaryColour(vehicle: Vehicle | number, r: number, g: number, b: number): void;
 
-  export function getVehicleCustomSecondaryColour(vehicle: Vehicle | number, r: number, g: number, b: number): [number, number, number];
+  export function getVehicleCustomSecondaryColour(vehicle: Vehicle | number, r?: number, g?: number, b?: number): [number, number, number];
 
   export function clearVehicleCustomSecondaryColour(vehicle: Vehicle | number): void;
 
@@ -22875,7 +22875,7 @@ declare module "@altv/natives" {
 
   export function removeVehicleStuckCheck(vehicle: Vehicle | number): void;
 
-  export function getVehicleColours(vehicle: Vehicle | number, colorPrimary: number, colorSecondary: number): [number, number];
+  export function getVehicleColours(vehicle: Vehicle | number, colorPrimary?: number, colorSecondary?: number): [number, number];
 
   /**
    * Check if a vehicle seat is free.
@@ -22901,7 +22901,7 @@ declare module "@altv/natives" {
 
   export function getLastPedInVehicleSeat(vehicle: Vehicle | number, seatIndex: number): Ped | Player | number;
 
-  export function getVehicleLightsState(vehicle: Vehicle | number, lightsOn: boolean, highbeamsOn: boolean): [boolean, boolean, boolean];
+  export function getVehicleLightsState(vehicle: Vehicle | number, lightsOn?: boolean, highbeamsOn?: boolean): [boolean, boolean, boolean];
 
   /**
    * wheelID used for 4 wheelers seem to be (0, 1, 4, 5)
@@ -23481,7 +23481,7 @@ declare module "@altv/natives" {
 
   export function isMissionTrain(train: Vehicle | number): boolean;
 
-  export function deleteMissionTrain(train: Vehicle | number): Vehicle | number;
+  export function deleteMissionTrain(train?: Vehicle | number): Vehicle | number;
 
   /**
    * p1 is always 0
@@ -23686,7 +23686,7 @@ declare module "@altv/natives" {
    * p0 always true (except in one case)
    * successIndicator: 0 if success, -1 if failed
    */
-  export function getRandomVehicleModelInMemory(p0: boolean, modelHash: number, successIndicator: number): [number, number];
+  export function getRandomVehicleModelInMemory(p0: boolean, modelHash?: number, successIndicator?: number): [number, number];
 
   /**
    * enum VehicleLockStatus = {
@@ -23759,15 +23759,15 @@ declare module "@altv/natives" {
    */
   export function setVehicleExtraColours(vehicle: Vehicle | number, pearlescentColor: number, wheelColor: number): void;
 
-  export function getVehicleExtraColours(vehicle: Vehicle | number, pearlescentColor: number, wheelColor: number): [number, number];
+  export function getVehicleExtraColours(vehicle: Vehicle | number, pearlescentColor?: number, wheelColor?: number): [number, number];
 
   export function setVehicleExtraColour5(vehicle: Vehicle | number, color: number): void;
 
-  export function getVehicleExtraColour5(vehicle: Vehicle | number, color: number): number;
+  export function getVehicleExtraColour5(vehicle: Vehicle | number, color?: number): number;
 
   export function setVehicleExtraColour6(vehicle: Vehicle | number, color: number): void;
 
-  export function getVehicleExtraColour6(vehicle: Vehicle | number, color: number): number;
+  export function getVehicleExtraColour6(vehicle: Vehicle | number, color?: number): number;
 
   export function stopAllGarageActivity(): void;
 
@@ -24274,7 +24274,7 @@ declare module "@altv/natives" {
   /**
    * Gets the trailer of a vehicle and puts it into the trailer parameter.
    */
-  export function getVehicleTrailerVehicle(vehicle: Vehicle | number, trailer: Vehicle | number): [boolean, Vehicle | number];
+  export function getVehicleTrailerVehicle(vehicle: Vehicle | number, trailer?: Vehicle | number): [boolean, Vehicle | number];
 
   export function getVehicleTrailerParentVehicle(trailer: Vehicle | number): Vehicle | number;
 
@@ -24486,9 +24486,9 @@ declare module "@altv/natives" {
    */
   export function setVehicleModColor2(vehicle: Vehicle | number, paintType: number, color: number): void;
 
-  export function getVehicleModColor1(vehicle: Vehicle | number, paintType: number, color: number, pearlescentColor: number): [number, number, number];
+  export function getVehicleModColor1(vehicle: Vehicle | number, paintType?: number, color?: number, pearlescentColor?: number): [number, number, number];
 
-  export function getVehicleModColor2(vehicle: Vehicle | number, paintType: number, color: number): [number, number];
+  export function getVehicleModColor2(vehicle: Vehicle | number, paintType?: number, color?: number): [number, number];
 
   /**
    * Returns a string which is the codename of the vehicle's currently selected primary color
@@ -24631,7 +24631,7 @@ declare module "@altv/natives" {
    */
   export function setVehicleTyreSmokeColor(vehicle: Vehicle | number, r: number, g: number, b: number): void;
 
-  export function getVehicleTyreSmokeColor(vehicle: Vehicle | number, r: number, g: number, b: number): [number, number, number];
+  export function getVehicleTyreSmokeColor(vehicle: Vehicle | number, r?: number, g?: number, b?: number): [number, number, number];
 
   /**
    * enum WindowTints
@@ -24655,7 +24655,7 @@ declare module "@altv/natives" {
   /**
    * What's this for? Primary and Secondary RGB have their own natives and this one doesn't seem specific.
    */
-  export function getVehicleColor(vehicle: Vehicle | number, r: number, g: number, b: number): [number, number, number];
+  export function getVehicleColor(vehicle: Vehicle | number, r?: number, g?: number, b?: number): [number, number, number];
 
   /**
    * Some kind of flags.
@@ -24820,7 +24820,7 @@ declare module "@altv/natives" {
    */
   export function setVehicleShootAtTarget(driver: Ped | Player | number, entity: Entity | number, xTarget: number, yTarget: number, zTarget: number): void;
 
-  export function getVehicleLockOnTarget(vehicle: Vehicle | number, entity: Entity | number): [boolean, Entity | number];
+  export function getVehicleLockOnTarget(vehicle: Vehicle | number, entity?: Entity | number): [boolean, Entity | number];
 
   export function setForceHdVehicle(vehicle: Vehicle | number, toggle: boolean): void;
 
@@ -25130,7 +25130,7 @@ declare module "@altv/natives" {
    */
   export function setVehicleExclusiveDriver(vehicle: Vehicle | number, ped: Ped | Player | number, index: number): void;
 
-  export function isPedExclusiveDriverOfVehicle(ped: Ped | Player | number, vehicle: Vehicle | number, outIndex: number): [boolean, number];
+  export function isPedExclusiveDriverOfVehicle(ped: Ped | Player | number, vehicle: Vehicle | number, outIndex?: number): [boolean, number];
 
   export function disableIndividualPlanePropeller(vehicle: Vehicle | number, propeller: number): void;
 
@@ -25168,7 +25168,7 @@ declare module "@altv/natives" {
    * Gets the color of the neon lights of the specified vehicle.
    * See SET_VEHICLE_NEON_COLOUR (0x8E0A582209A62695) for more information
    */
-  export function getVehicleNeonColour(vehicle: Vehicle | number, r: number, g: number, b: number): [number, number, number];
+  export function getVehicleNeonColour(vehicle: Vehicle | number, r?: number, g?: number, b?: number): [number, number, number];
 
   /**
    * Sets the neon lights of the specified vehicle on/off.
@@ -25214,7 +25214,7 @@ declare module "@altv/natives" {
    * Scripts check if out2.x - out1.x > someshit.x
    * Could be suspension related, as in max suspension height and min suspension height, considering the natives location.
    */
-  export function getVehicleSize(vehicle: Vehicle | number, out1: Vector3, out2: Vector3): [Vector3, Vector3];
+  export function getVehicleSize(vehicle: Vehicle | number, out1?: Vector3, out2?: Vector3): [Vector3, Vector3];
 
   /**
    * Gets the height of the vehicle's suspension.
@@ -25446,7 +25446,7 @@ declare module "@altv/natives" {
 
   export function vehicleSetOverrideSideRatio(p0: any, p1: any): number;
 
-  export function getAllVehicles(vehsStruct: any): [number, any];
+  export function getAllVehicles(vehsStruct?: any): [number, any];
 
   export function setCargobobExtaPickupRange(p0: any, p1: any): void;
 
@@ -25811,18 +25811,18 @@ declare module "@altv/natives" {
 
   export function getVehicleMaxExhaustBoneCount(): number;
 
-  export function getVehicleExhaustBone(vehicle: Vehicle | number, index: number, boneIndex: number, axisX: boolean): [boolean, number, boolean];
+  export function getVehicleExhaustBone(vehicle: Vehicle | number, index: number, boneIndex?: number, axisX?: boolean): [boolean, number, boolean];
 
   /**
    * This function set height to the value of z-axis of the water surface.
    * This function works with sea and lake. However it does not work with shallow rivers (e.g. raton canyon will return -100000.0f)
    * note: seems to return true when you are in water
    */
-  export function getWaterHeight(x: number, y: number, z: number, height: number): [boolean, number];
+  export function getWaterHeight(x: number, y: number, z: number, height?: number): [boolean, number];
 
-  export function getWaterHeightNoWaves(x: number, y: number, z: number, height: number): [boolean, number];
+  export function getWaterHeightNoWaves(x: number, y: number, z: number, height?: number): [boolean, number];
 
-  export function testProbeAgainstWater(x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, result: Vector3): [boolean, Vector3];
+  export function testProbeAgainstWater(x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, result?: Vector3): [boolean, Vector3];
 
   /**
    * enum eScriptWaterTestResult
@@ -25832,12 +25832,12 @@ declare module "@altv/natives" {
    * 	SCRIPT_WATER_TEST_RESULT_BLOCKED,
    * };
    */
-  export function testProbeAgainstAllWater(x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, flags: number, waterHeight: number): [number, number];
+  export function testProbeAgainstAllWater(x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, flags: number, waterHeight?: number): [number, number];
 
   /**
    * See TEST_PROBE_AGAINST_ALL_WATER.
    */
-  export function testVerticalProbeAgainstAllWater(x: number, y: number, z: number, flags: number, waterHeight: number): [number, number];
+  export function testVerticalProbeAgainstAllWater(x: number, y: number, z: number, flags: number, waterHeight?: number): [number, number];
 
   /**
    * Sets the water height for a given position and radius.
@@ -25935,7 +25935,7 @@ declare module "@altv/natives" {
    * If GetVehicleCurrentWeapon(Game.Player.Character) = -821520672 Then ...Do something
    * Note: -821520672 = VEHICLE_WEAPON_PLANE_ROCKET
    */
-  export function getCurrentPedVehicleWeapon(ped: Ped | Player | number, weaponHash: number): [boolean, number];
+  export function getCurrentPedVehicleWeapon(ped: Ped | Player | number, weaponHash?: number): [boolean, number];
 
   export function setPedCycleVehicleWeaponsOnly(ped: Ped | Player | number): void;
 
@@ -26085,7 +26085,7 @@ declare module "@altv/natives" {
   /**
    * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
    */
-  export function getAmmoInClip(ped: Ped | Player | number, weaponHash: number, ammo: number): [boolean, number];
+  export function getAmmoInClip(ped: Ped | Player | number, weaponHash: number, ammo?: number): [boolean, number];
 
   /**
    * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
@@ -26095,12 +26095,12 @@ declare module "@altv/natives" {
   /**
    * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
    */
-  export function getMaxAmmo(ped: Ped | Player | number, weaponHash: number, ammo: number): [boolean, number];
+  export function getMaxAmmo(ped: Ped | Player | number, weaponHash: number, ammo?: number): [boolean, number];
 
   /**
    * Returns the max ammo for an ammo type. Ammo types: https://gist.github.com/root-cause/faf41f59f7a6d818b7db0b839bd147c1
    */
-  export function getMaxAmmoByType(ped: Ped | Player | number, ammoTypeHash: number, ammo: number): [boolean, number];
+  export function getMaxAmmoByType(ped: Ped | Player | number, ammoTypeHash: number, ammo?: number): [boolean, number];
 
   /**
    * Ammo types: https://gist.github.com/root-cause/faf41f59f7a6d818b7db0b839bd147c1
@@ -26138,7 +26138,7 @@ declare module "@altv/natives" {
    * The coord will be put into the Vector3.
    * The return will determine whether there was a coord found or not.
    */
-  export function getPedLastWeaponImpactCoord(ped: Ped | Player | number, coords: Vector3): [boolean, Vector3];
+  export function getPedLastWeaponImpactCoord(ped: Ped | Player | number, coords?: Vector3): [boolean, Vector3];
 
   /**
    * p1/gadgetHash was always 0xFBAB5776 ("GADGET_PARACHUTE").
@@ -26406,9 +26406,9 @@ declare module "@altv/natives" {
    * }
    * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
    */
-  export function getWeaponHudStats(weaponHash: number, outData: any): [boolean, any];
+  export function getWeaponHudStats(weaponHash: number, outData?: any): [boolean, any];
 
-  export function getWeaponComponentHudStats(componentHash: number, outData: any): [boolean, any];
+  export function getWeaponComponentHudStats(componentHash: number, outData?: any): [boolean, any];
 
   /**
    * This native does not return damages of weapons from the melee and explosive group.
@@ -26563,7 +26563,7 @@ declare module "@altv/natives" {
 
   export function setPlayerTargettableForAirDefenceSphere(player: Player | number, zoneId: number, enable: boolean): void;
 
-  export function isAirDefenceSphereInArea(x: number, y: number, z: number, radius: number, outZoneId: number): [boolean, number];
+  export function isAirDefenceSphereInArea(x: number, y: number, z: number, radius: number, outZoneId?: number): [boolean, number];
 
   export function fireAirDefenceSphereWeaponAtPosition(zoneId: number, x: number, y: number, z: number): void;
 
