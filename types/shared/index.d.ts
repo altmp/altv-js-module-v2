@@ -459,43 +459,11 @@ declare module "@altv/shared" {
     }
 
     /**
-     * Extend it by interface merging for use in BaseObject#syncedMeta.
-     */
-    export interface BaseObjectSyncedMeta {
-        [key: string]: unknown;
-    }
-
-    /**
-     * Extend it by interface merging for use in Blip#syncedMeta.
-     */
-    export interface BlipSyncedMeta extends BaseObjectSyncedMeta {}
-
-    /**
-     * Extend it by interface merging for use in Marker#syncedMeta.
-     */
-    export interface MarkerSyncedMeta extends BaseObjectSyncedMeta {}
-
-    /**
-     * Extend it by interface merging for use in ColShape#syncedMeta.
-     */
-    export interface ColShapeSyncedMeta extends BaseObjectSyncedMeta {}
-
-    /**
-     * Extend it by interface merging for use in Checkpoint#syncedMeta.
-     */
-    export interface CheckpointSyncedMeta extends ColShapeSyncedMeta {}
-
-    /**
      * Extend it by interface merging for use in Checkpoint#streamSyncedMeta.
      */
     export interface CheckpointStreamSyncedMeta {
         [key: string]: unknown;
     }
-
-    /**
-     * Extend it by interface merging for use in Entity#syncedMeta.
-     */
-    export interface EntitySyncedMeta extends BaseObjectSyncedMeta {}
 
     /**
      * Extend it by interface merging for use in Entity#streamSyncedMeta.
@@ -505,19 +473,9 @@ declare module "@altv/shared" {
     }
 
     /**
-     * Extend it by interface merging for use in Player#syncedMeta.
-     */
-    export interface PlayerSyncedMeta extends EntitySyncedMeta {}
-
-    /**
      * Extend it by interface merging for use in Player#streamSyncedMeta.
      */
     export interface PlayerStreamSyncedMeta extends EntityStreamSyncedMeta {}
-
-    /**
-     * Extend it by interface merging for use in Vehicle#syncedMeta.
-     */
-    export interface VehicleSyncedMeta extends EntitySyncedMeta {}
 
     /**
      * Extend it by interface merging for use in Vehicle#streamSyncedMeta.
@@ -525,29 +483,14 @@ declare module "@altv/shared" {
     export interface VehicleStreamSyncedMeta extends EntityStreamSyncedMeta {}
 
     /**
-     * Extend it by interface merging for use in Object#syncedMeta.
-     */
-    export interface ObjectSyncedMeta extends EntitySyncedMeta {}
-
-    /**
      * Extend it by interface merging for use in Object#streamSyncedMeta.
      */
     export interface ObjectStreamSyncedMeta extends EntityStreamSyncedMeta {}
 
     /**
-     * Extend it by interface merging for use in VirtualEntity#streamSyncedMeta.
-     */
-    export interface VirtualEntitySyncedMeta extends BaseObjectSyncedMeta {}
-
-    /**
      * Extend it by interface merging for use in VirtualEntity#syncedMeta.
      */
     export interface VirtualEntityStreamSyncedMeta extends BaseObjectSyncedMeta {}
-
-    /**
-     * Extend it by interface merging for use in Ped#syncedMeta.
-     */
-    export interface PedSyncedMeta extends EntitySyncedMeta {}
 
     /**
      * Extend it by interface merging for use in ped stream synced meta (class `Ped` on client & server, e.g. `ped.getStreamSyncedMeta`)
@@ -638,7 +581,6 @@ declare module "@altv/shared" {
 
         // TODO (xLuxy): Shared type fuckery
         export function addLocalMetaListener(key: string, callback: Function): Events.EventHandler;
-        export function addSyncedMetaListener(key: string, callback: Function): Events.EventHandler;
         export function addStreamSyncedMetaListener(key: string, callback: Function): Events.EventHandler;
 
         export abstract class AssertionError extends Error {}

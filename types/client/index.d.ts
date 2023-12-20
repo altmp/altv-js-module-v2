@@ -232,7 +232,6 @@ declare module "@altv/client" {
         static getByRemoteID(type: altShared.Enums.BaseObjectType, id: number): BaseObject | null;
 
         readonly meta: BaseObjectMeta;
-        readonly syncedMeta: Readonly<altShared.BaseObjectSyncedMeta>;
     }
 
     export type PointBlipCreateOptions = { pos: altShared.IVector3; entity?: never } | { entity: Entity; pos?: never };
@@ -255,7 +254,6 @@ declare module "@altv/client" {
         readonly attachedTo?: Entity;
 
         readonly meta: BlipMeta;
-        readonly syncedMeta: Readonly<altShared.BlipSyncedMeta>;
 
         blipType: altShared.Enums.BlipType;
         scale: altShared.Vector2;
@@ -316,7 +314,6 @@ declare module "@altv/client" {
         readonly streamingDistance: number;
 
         readonly meta: MarkerMeta;
-        readonly syncedMeta: altShared.MarkerSyncedMeta;
 
         color: altShared.RGBA;
         visible: boolean;
@@ -416,7 +413,6 @@ declare module "@altv/client" {
 
         rot: altShared.Vector3;
 
-        readonly syncedMeta: Readonly<altShared.EntitySyncedMeta>;
         readonly streamSyncedMeta: Readonly<altShared.EntityStreamSyncedMeta>;
 
         static readonly all: ReadonlyArray<Entity>;
@@ -619,7 +615,6 @@ declare module "@altv/client" {
         readonly currentWeapon: number;
 
         readonly meta: PedMeta;
-        readonly syncedMeta: Readonly<altShared.PedSyncedMeta>;
         readonly streamSyncedMeta: Readonly<altShared.PedStreamSyncedMeta>;
 
         static readonly all: ReadonlyArray<Ped>;
@@ -777,7 +772,6 @@ declare module "@altv/client" {
         getWeaponTintIndex(weaponHash: number | string): number | undefined;
         hasWeaponComponent(weaponHash: number | string, componentHash: number | string): boolean;
 
-        readonly syncedMeta: Readonly<altShared.PlayerSyncedMeta>;
         readonly streamSyncedMeta: Readonly<altShared.PlayerStreamSyncedMeta>;
 
         static readonly local: LocalPlayer;
@@ -1121,7 +1115,6 @@ declare module "@altv/client" {
         visible: boolean;
 
         readonly meta: VirtualEntityMeta;
-        readonly syncedMeta: altShared.VirtualEntitySyncedMeta;
         readonly streamSyncedMeta: altShared.VirtualEntityStreamSyncedMeta;
 
         static readonly all: ReadonlyArray<VirtualEntity>;

@@ -5,17 +5,12 @@
 const { SharedEntity } = requireBinding("shared/compatibility/classes/sharedEntity.js");
 
 export class Entity extends SharedEntity {
-    setSyncedMeta(key, value) {
-        if (typeof key == "object") {
-            this.setMultipleSyncedMetaData(key);
-            return;
-        }
-
-        this.syncedMeta[key] = value;
+    setSyncedMeta(_key, _value) {
+        throw new Error("Not implemented in v2 Module - Use streamSyncedMeta instead");
     }
 
     deleteSyncedMeta(key) {
-        delete this.syncedMeta[key];
+        throw new Error("Not implemented in v2 Module - Use streamSyncedMeta instead");
     }
 
     setStreamSyncedMeta(key, value) {
