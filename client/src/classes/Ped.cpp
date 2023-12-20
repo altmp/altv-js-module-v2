@@ -10,7 +10,7 @@ static void GetByScriptID(js::FunctionContext& ctx)
     if(!ctx.GetArg(0, scriptId)) return;
 
     auto obj = alt::ICore::Instance().GetWorldObjectByScriptID(scriptId);
-    if (obj->GetType() == alt::IBaseObject::Type::PED || obj->GetType() == alt::IBaseObject::Type::LOCAL_PED)
+    if (obj && (obj->GetType() == alt::IBaseObject::Type::PED || obj->GetType() == alt::IBaseObject::Type::LOCAL_PED))
         return ctx.Return(obj);
 
     ctx.Return(nullptr);
