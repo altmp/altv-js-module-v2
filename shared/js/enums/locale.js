@@ -1,5 +1,8 @@
+/** @type {typeof import("../helpers/enums.js")} */
+const { createReverseLookupObject } = requireBinding("shared/helpers/enums.js");
+
 // When changing, update types/shared/index.d.ts aswell
-alt.Enums.Locale = Object.freeze({
+alt.Enums.Locale = createReverseLookupObject({
     ARABIC: "ar",
     BELARUSIAN: "by",
     CZECH: "cz",

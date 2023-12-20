@@ -1,5 +1,8 @@
+/** @type {typeof import("../helpers/enums.js")} */
+const { createReverseLookupObject } = requireBinding("shared/helpers/enums.js");
+
 // When changing, update types/shared/index.d.ts aswell
-alt.Enums.KeyCode = Object.freeze({
+alt.Enums.KeyCode = createReverseLookupObject({
     "KEY0": 48,
     "KEY1": 49,
     "KEY2": 50,

@@ -1,4 +1,7 @@
-alt.Enums.PedConfigFlag = Object.freeze({
+/** @type {typeof import("../helpers/enums.js")} */
+const { createReverseLookupObject } = requireBinding("shared/helpers/enums.js");
+
+alt.Enums.PedConfigFlag = createReverseLookupObject({
     NO_CRITICAL_HITS: 2,
     DROWNS_IN_WATER: 3,
     DISABLE_RETICULE_FIXED_LOCKON: 4,

@@ -1,5 +1,8 @@
+/** @type {typeof import("../helpers/enums.js")} */
+const { createReverseLookupObject } = requireBinding("shared/helpers/enums.js");
+
 // When changing, update types/shared/index.d.ts aswell
-alt.Enums.ConfigFlag = Object.freeze({
+alt.Enums.ConfigFlag = createReverseLookupObject({
     DISABLE_AUTO_WEAPON_SWAP: "DISABLE_AUTO_WEAPON_SWAP",
     DISABLE_PED_PROP_KNOCK_OFF: "DISABLE_PED_PROP_KNOCK_OFF",
     DISABLE_IDLE_CAMERA: "DISABLE_IDLE_CAMERA",

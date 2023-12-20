@@ -1,5 +1,8 @@
+/** @type {typeof import("../helpers/enums.js")} */
+const { createReverseLookupObject } = requireBinding("shared/helpers/enums.js");
+
 // When changing, update types/shared/index.d.ts aswell
-alt.Enums.VehicleDoorState = Object.freeze({
+alt.Enums.VehicleDoorState = createReverseLookupObject({
     CLOSED: 0,
     OPENED_LEVEL_1: 1,
     OPENED_LEVEL_2: 2,

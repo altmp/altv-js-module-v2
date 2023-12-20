@@ -1,5 +1,8 @@
+/** @type {typeof import("../helpers/enums.js")} */
+const { createReverseLookupObject } = requireBinding("shared/helpers/enums.js");
+
 // When changing, update types/shared/index.d.ts aswell
-alt.Enums.BlipSprite = Object.freeze({
+alt.Enums.BlipSprite = createReverseLookupObject({
     HIGHER: 0,
     LOWER: 1,
     POLICE_PED: 2,

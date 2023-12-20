@@ -1,9 +1,12 @@
+/** @type {typeof import("../helpers/enums.js")} */
+const { createReverseLookupObject } = requireBinding("shared/helpers/enums.js");
+
 // WARNING: values can change after a game update
 // if R* adds in the middle!
 // This is up-to-date for b2372
 
 // When changing, update types/client/index.d.ts aswell
-alt.Enums.TaskTypeIndex = Object.freeze({
+alt.Enums.TaskTypeIndex = createReverseLookupObject({
     HANDS_UP: 0,
     CLIMB_LADDER: 1,
     EXIT_VEHICLE: 2,

@@ -1,5 +1,8 @@
+/** @type {typeof import("../helpers/enums.js")} */
+const { createReverseLookupObject } = requireBinding("shared/helpers/enums.js");
+
 // When changing, update types/shared/index.d.ts aswell
-alt.Enums.StatName = Object.freeze({
+alt.Enums.StatName = createReverseLookupObject({
     STAMINA: "stamina",
     STRENGTH: "strength",
     LUNG_CAPACITY: "lung_capacity",

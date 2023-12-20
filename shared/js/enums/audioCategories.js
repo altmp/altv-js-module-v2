@@ -1,4 +1,7 @@
-alt.Enums.AudioCategories = Object.freeze({
+/** @type {typeof import("../helpers/enums.js")} */
+const { createReverseLookupObject } = requireBinding("shared/helpers/enums.js");
+
+alt.Enums.AudioCategories = createReverseLookupObject({
     X44E21C90: "0x44E21C90",
     XBAD598C7: "0xBAD598C7",
     XA4D158B0: "0xA4D158B0",

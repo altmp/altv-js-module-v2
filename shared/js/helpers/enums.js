@@ -10,3 +10,18 @@ export function createNumericEnum(values) {
 
     return Object.freeze(temp);
 }
+
+/**
+ *
+ * @param {Object} obj
+ */
+export function createReverseLookupObject(obj) {
+    const newObj = {};
+
+    for (const key in obj) {
+        newObj[obj[key]] = key;
+        newObj[key] = obj[key];
+    }
+
+    return Object.freeze(newObj);
+}

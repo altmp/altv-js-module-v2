@@ -1,5 +1,8 @@
+/** @type {typeof import("../helpers/enums.js")} */
+const { createReverseLookupObject } = requireBinding("shared/helpers/enums.js");
+
 // When changing, update types/shared/index.d.ts aswell
-alt.Enums.BlipColor = Object.freeze({
+alt.Enums.BlipColor = createReverseLookupObject({
     WHITE: 0,
     RED: 1,
     GREEN: 2,

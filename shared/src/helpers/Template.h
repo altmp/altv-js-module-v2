@@ -204,6 +204,7 @@ namespace js
             for(auto& [value, key] : values)
             {
                 obj.Set(key.data(), (int)value);
+                obj.Set((std::string_view)std::to_string((int)value), key.data());
             }
             ctx.Return(obj);
         }
@@ -217,6 +218,7 @@ namespace js
             {
                 auto& entry = values[i];
                 obj.Set(entry.second.data(), (int)entry.first);
+                obj.Set((std::string_view)std::to_string((int)entry.first), entry.second.data());
             }
             ctx.Return(obj);
         }

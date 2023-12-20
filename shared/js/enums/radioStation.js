@@ -1,4 +1,7 @@
-alt.Enums.RadioStation = Object.freeze({
+/** @type {typeof import("../helpers/enums.js")} */
+const { createReverseLookupObject } = requireBinding("shared/helpers/enums.js");
+
+alt.Enums.RadioStation = createReverseLookupObject({
     LOS_SANTOS_ROCK_RADIO: 0,
     NON_STOP_POP_FM: 1,
     RADIO_LOS_SANTOS: 2,
