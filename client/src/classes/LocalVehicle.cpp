@@ -26,7 +26,8 @@ static void GetByScriptID(js::FunctionContext& ctx)
     uint32_t scriptId;
     if(!ctx.GetArg(0, scriptId)) return;
 
-    if (auto obj = alt::ICore::Instance().GetWorldObjectByScriptID(scriptId); obj->GetType() == alt::IBaseObject::Type::LOCAL_VEHICLE)
+    auto obj = alt::ICore::Instance().GetWorldObjectByScriptID(scriptId);
+    if (obj && obj->GetType() == alt::IBaseObject::Type::LOCAL_VEHICLE)
         return ctx.Return(obj);
 
     ctx.Return(nullptr);
