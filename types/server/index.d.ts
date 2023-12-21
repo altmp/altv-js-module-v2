@@ -24,7 +24,6 @@ declare module "@altv/server" {
 
     export class BaseObject extends altShared.BaseObject {
         readonly meta: BaseObjectMeta;
-        readonly syncedMeta: Readonly<altShared.BaseObjectSyncedMeta>;
 
         static getByID(type: altShared.Enums.BaseObjectType, id: number): BaseObject | null;
     }
@@ -95,7 +94,6 @@ declare module "@altv/server" {
         removeTarget(target: Player): void;
 
         readonly meta: BlipMeta;
-        readonly syncedMeta: altShared.BlipSyncedMeta;
 
         public onCreate?(opts: BlipCreateOptions): void;
         public onDestroy?(): void;
@@ -125,7 +123,6 @@ declare module "@altv/server" {
         readonly streamingDistance: number;
 
         readonly meta: MarkerMeta;
-        readonly syncedMeta: altShared.MarkerSyncedMeta;
 
         color: altShared.RGBA;
         visible: boolean;
@@ -218,7 +215,6 @@ declare module "@altv/server" {
         isPointIn(point: altShared.Vector3): boolean;
 
         readonly meta: ColShapeMeta;
-        readonly syncedMeta: altShared.ColShapeSyncedMeta;
 
         static readonly all: ReadonlyArray<ColShape>;
 
@@ -261,7 +257,6 @@ declare module "@altv/server" {
         isPointIn(point: altShared.Vector3): boolean;
 
         readonly meta: CheckpointMeta;
-        readonly syncedMeta: altShared.CheckpointSyncedMeta;
         readonly streamSyncedMeta: altShared.CheckpointStreamSyncedMeta;
 
         public onCreate?(opts: CheckpointCreateOptions): void;
@@ -290,7 +285,6 @@ declare module "@altv/server" {
         readonly timestamp: number;
 
         readonly meta: EntityMeta;
-        readonly syncedMeta: altShared.EntitySyncedMeta;
         readonly streamSyncedMeta: altShared.EntityStreamSyncedMeta;
 
         setNetOwner(player: Player, disableMigration: boolean): void;
@@ -333,7 +327,6 @@ declare module "@altv/server" {
         placeOnGroundProperly(): void;
 
         readonly meta: ObjectMeta;
-        readonly syncedMeta: altShared.ObjectSyncedMeta;
         readonly streamSyncedMeta: altShared.ObjectStreamSyncedMeta;
 
         public onCreate?(opts: ObjectCreateOptions): void;
@@ -362,7 +355,6 @@ declare module "@altv/server" {
         currentWeapon: number;
 
         readonly meta: PedMeta;
-        readonly syncedMeta: altShared.PedSyncedMeta;
         readonly streamSyncedMeta: altShared.PedStreamSyncedMeta;
 
         public onCreate?(opts: PedCreateOptions): void;
@@ -541,7 +533,6 @@ declare module "@altv/server" {
 
         readonly meta: PlayerMeta;
         readonly localMeta: PlayerLocalMeta;
-        readonly syncedMeta: altShared.PlayerSyncedMeta;
         readonly streamSyncedMeta: altShared.PlayerStreamSyncedMeta;
 
         static readonly all: ReadonlyArray<Player>;
@@ -729,7 +720,6 @@ declare module "@altv/server" {
         setWeaponCapacity(index: number, state: number): void;
 
         readonly meta: VehicleMeta;
-        readonly syncedMeta: altShared.VehicleSyncedMeta;
         readonly streamSyncedMeta: altShared.VehicleStreamSyncedMeta;
 
         public onCreate?(opts: VehicleCreateOptions): void;
@@ -771,7 +761,6 @@ declare module "@altv/server" {
         visible: boolean;
 
         readonly meta: VirtualEntityMeta;
-        readonly syncedMeta: altShared.VirtualEntitySyncedMeta;
         readonly streamSyncedMeta: altShared.VirtualEntityStreamSyncedMeta;
 
         public onCreate?(opts: VirtualEntityCreateOptions): void;
