@@ -81,6 +81,12 @@ bool CNodeResource::Start()
         OnTick();
     }
 
+    if (IsCompatibilityModeEnabled())
+    {
+        auto resourceName = resource->GetName();
+        js::Logger::Colored << "~y~[JS] Compatibility mode is enabled for resource " << resourceName << js::Logger::Endl;
+    }
+
     return true;
 }
 

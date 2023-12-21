@@ -96,6 +96,12 @@ bool CJavaScriptResource::Start()
     alt::MValueDict exportsDict = std::dynamic_pointer_cast<alt::IMValueDict>(js::JSToMValue(mod->GetModuleNamespace()));
     GetResource()->SetExports(exportsDict);
 
+    if (IsCompatibilityModeEnabled())
+    {
+        auto resourceName = resource->GetName();
+        js::Logger::Colored << "~y~[JS] Compatibility mode is enabled for resource " << resourceName << js::Logger::Endl;
+    }
+
     return true;
 }
 
