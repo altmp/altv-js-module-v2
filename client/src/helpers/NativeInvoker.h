@@ -58,7 +58,7 @@ namespace js
             using CleanT = std::remove_pointer_t<T>;
 
             CleanT value;
-            if(!ctx.GetArg(index, value)) return false;
+            if(!ctx.GetArg(index, value, Type::INVALID, isPointer)) return false;
 
             if constexpr(isPointer)
             {
