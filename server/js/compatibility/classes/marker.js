@@ -7,12 +7,16 @@ requireBinding("shared/factory.js");
 const { WorldObject } = requireBinding("server/compatibility/classes/worldObject.js");
 const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
 
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
+const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
 
 class Marker extends alt.Marker {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) return super();
+        if (!args.length) {
+            super();
+            return extendAltEntityClass(this, WorldObject, BaseObject);
+        }
 
         const [type, pos, color] = args;
 
@@ -24,6 +28,8 @@ class Marker extends alt.Marker {
         return alt.Marker.all.length;
     }
 }
+
+copyStaticAltEntityClassProperties(alt.Marker, Marker, WorldObject, BaseObject);
 
 alt.Marker.setFactory(Marker);
 cppBindings.registerCompatibilityExport("Marker", Marker);

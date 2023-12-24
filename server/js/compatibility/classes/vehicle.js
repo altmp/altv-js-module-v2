@@ -10,12 +10,15 @@ const { Entity } = requireBinding("server/compatibility/classes/entity.js");
 const { WorldObject } = requireBinding("server/compatibility/classes/worldObject.js");
 const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
 
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
 
 class Vehicle extends alt.Vehicle {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) return super();
+        if (!args.length) {
+            super();
+            return extendAltEntityClass(this, SharedVehicle, Entity, WorldObject, BaseObject);
+        }
 
         const [model, ...rest] = args;
         const pos = rest.length <= 3 ? rest[0] : { x: rest[0], y: rest[1], z: rest[2] };
@@ -32,10 +35,6 @@ class Vehicle extends alt.Vehicle {
 
     setAppearanceDataBase64(data) {
         this.appearanceDataBase64 = data;
-    }
-
-    set engineOn(state) {
-        this.isEngineOn = state;
     }
 
     set roofClosed(state) {
@@ -122,6 +121,8 @@ class Vehicle extends alt.Vehicle {
         return alt.Vehicle.all.length;
     }
 }
+
+copyStaticAltEntityClassProperties(alt.Vehicle, Vehicle, SharedVehicle, Entity, WorldObject, BaseObject);
 
 alt.Vehicle.setFactory(Vehicle);
 cppBindings.registerCompatibilityExport("Vehicle", Vehicle);

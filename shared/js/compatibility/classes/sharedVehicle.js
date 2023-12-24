@@ -23,10 +23,6 @@ export class SharedVehicle {
         return this.appearanceDataBase64;
     }
 
-    get engineOn() {
-        return this.isEngineOn;
-    }
-
     get handbrakeActive() {
         return this.isHandbrakeActive;
     }

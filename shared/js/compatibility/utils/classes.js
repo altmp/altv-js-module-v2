@@ -4,10 +4,10 @@
 requireBinding("shared/logging.js");
 
 /** @type {typeof import("../../../../shared/js/utils.js")} */
-const { assertIsType } = requireBinding("shared/utils.js");
+const { assertIsType, assertIsObject } = requireBinding("shared/utils.js");
 
 export function extendAltEntityClass(baseInstance, ...classes) {
-    if (baseInstance == null || typeof baseInstance !== "object") return;
+    assertIsObject(baseInstance, `Expected object, but got ${typeof baseInstance}`);
 
     for (const class_ of classes) {
         assertIsType(class_, "function", `Expected class object, but got ${typeof class_}`);
@@ -34,6 +34,42 @@ export function extendAltEntityClass(baseInstance, ...classes) {
     }
 
     return baseInstance;
+}
+
+export function copyStaticAltEntityClassProperties(target, ...classes) {
+    assertIsType(target, "function", `Expected class object, but got ${typeof target}`);
+
+    for (const class_ of classes) {
+        assertIsType(class_, "function", `Expected class object, but got ${typeof class_}`);
+
+        for (const propKey of Object.getOwnPropertyNames(class_)) {
+            if (["prototype", "length", "name", "caller", "arguments"].includes(propKey)) {
+                continue;
+            }
+
+            if (target.hasOwnProperty(propKey)) {
+                const baseClassName = target.constructor.name;
+                const className = class_.name;
+
+                alt.log(`~lr~[Compatibility] Property '${propKey}' skipped in '${className}' - already in base class '${baseClassName}'.`);
+                continue;
+            }
+
+            const descriptor = Object.getOwnPropertyDescriptor(class_, propKey);
+
+            if (!descriptor) continue;
+
+            if (typeof descriptor.get === "function") {
+                Object.defineProperty(target, propKey, {
+                    get: descriptor.get.bind(class_),
+                    enumerable: descriptor.enumerable,
+                    configurable: descriptor.configurable
+                });
+            } else {
+                Object.defineProperty(target, propKey, descriptor);
+            }
+        }
+    }
 }
 
 export function overrideLazyProperty(instance, propertyName, value) {

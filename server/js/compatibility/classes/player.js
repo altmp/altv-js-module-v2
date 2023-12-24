@@ -10,7 +10,8 @@ const { Entity } = requireBinding("server/compatibility/classes/entity.js");
 const { WorldObject } = requireBinding("server/compatibility/classes/worldObject.js");
 const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
 
-const { extendAltEntityClass, overrideLazyProperty } = requireBinding("shared/compatibility/utils/classes.js");
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
+const { extendAltEntityClass, copyStaticAltEntityClassProperties, overrideLazyProperty } = requireBinding("shared/compatibility/utils/classes.js");
 
 class Player extends alt.Player {
     constructor() {
@@ -130,6 +131,8 @@ class Player extends alt.Player {
         return alt.Player.all.length;
     }
 }
+
+copyStaticAltEntityClassProperties(alt.Player, Player, SharedPlayer, Entity, WorldObject, BaseObject);
 
 alt.Player.setFactory(Player);
 cppBindings.registerCompatibilityExport("Player", Player);

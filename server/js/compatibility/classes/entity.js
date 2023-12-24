@@ -2,9 +2,7 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-const { SharedEntity } = requireBinding("shared/compatibility/classes/sharedEntity.js");
-
-export class Entity extends SharedEntity {
+export class Entity {
     setSyncedMeta(_key, _value) {
         throw new Error("Not implemented in v2 Module - Use streamSyncedMeta instead");
     }
