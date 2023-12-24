@@ -577,7 +577,6 @@ declare module "@altv/server" {
         readonly wheelType: number;
         readonly wheelVariation: number;
         readonly isNeonActive: boolean;
-        readonly isEngineOn: boolean;
         readonly isHandbrakeActive: boolean;
         readonly isSirenActive: boolean;
         readonly isDaylightOn: boolean;
