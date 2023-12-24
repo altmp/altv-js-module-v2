@@ -242,7 +242,7 @@ declare module "@altv/client" {
         type: altShared.Enums.MarkerType;
         pos: altShared.IVector3;
         color?: altShared.IRGBA; // default: {r: 255, g: 255, b: 255, a: 100}
-        useStreaming?: number; // default: false
+        useStreaming?: boolean; // default: false
         streamingDistance?: number; // default: 0
     }
 
