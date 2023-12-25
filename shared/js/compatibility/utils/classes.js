@@ -48,7 +48,7 @@ export function copyStaticAltEntityClassProperties(target, ...classes) {
             }
 
             if (target.hasOwnProperty(propKey)) {
-                const baseClassName = target.constructor.name;
+                const baseClassName = target.name;
                 const className = class_.name;
 
                 alt.log(`~lr~[Compatibility] Static property '${propKey}' skipped in '${className}' - already in base class '${baseClassName}'.`);
