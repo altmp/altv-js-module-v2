@@ -21,7 +21,7 @@ class Object extends alt.Object {
 
         const [model, pos, rot, alpha, textureVariation, lodDistance, streamingDistance] = args;
 
-        const instance = alt.Object.create({
+        return alt.Object.create({
             model,
             pos,
             rot,
@@ -30,8 +30,6 @@ class Object extends alt.Object {
             lodDistance,
             streamingDistance
         });
-
-        return extendAltEntityClass(instance, Entity, WorldObject, BaseObject);
     }
 
     static get count() {

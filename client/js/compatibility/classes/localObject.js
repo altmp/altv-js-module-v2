@@ -8,17 +8,20 @@ const { Entity } = requireBinding("client/compatibility/classes/entity.js");
 const { WorldObject } = requireBinding("client/compatibility/classes/worldObject.js");
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
+const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
 
 class LocalObject extends alt.LocalObject {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) return super();
+        if (!args.length) {
+            super();
+            return extendAltEntityClass(this, Entity, WorldObject, BaseObject);
+        }
 
         const [model, pos, rot, noOffset, dynamic, useStreaming, streamingDistance] = args;
 
-        const instance = alt.LocalObject.create({ model, pos, rot, noOffset, dynamic, useStreaming, streamingDistance });
-        return extendAltEntityClass(instance, Entity, WorldObject, BaseObject);
+        return alt.LocalObject.create({ model, pos, rot, noOffset, dynamic, useStreaming, streamingDistance });
     }
 
     toString() {
@@ -37,6 +40,8 @@ class LocalObject extends alt.LocalObject {
         return super.attachTo(...args);
     }
 }
+
+copyStaticAltEntityClassProperties(alt.LocalObject, LocalObject, Entity, WorldObject, BaseObject);
 
 alt.LocalObject.setFactory(LocalObject);
 cppBindings.registerCompatibilityExport("LocalObject", LocalObject);

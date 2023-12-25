@@ -27,8 +27,7 @@ class Checkpoint extends alt.Checkpoint {
         const iconColor = args.length == 8 ? args[6] : args[10];
         const streamingDistance = args.length == 8 ? args[7] : args[11];
 
-        const instance = alt.Checkpoint.create({ type, pos, nextPos, radius, height, color, iconColor, streamingDistance });
-        return extendAltEntityClass(instance, WorldObject, BaseObject);
+        return alt.Checkpoint.create({ type, pos, nextPos, radius, height, color, iconColor, streamingDistance });
     }
 
     static get count() {

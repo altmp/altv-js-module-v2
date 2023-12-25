@@ -9,17 +9,20 @@ const { assertIsType } = requireBinding("shared/utils.js");
 
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
+const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
 
 class Audio extends alt.Audio {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) return super();
+        if (!args.length) {
+            super();
+            return extendAltEntityClass(this, BaseObject);
+        }
 
         const [source, volume, radio, clearCache] = args;
 
-        const instance = alt.Audio.create({ source, volume, radio, clearCache });
-        return extendAltEntityClass(instance, BaseObject);
+        return alt.Audio.create({ source, volume, radio, clearCache });
     }
 
     static get count() {
@@ -40,6 +43,8 @@ class Audio extends alt.Audio {
         return super.outputs;
     }
 }
+
+copyStaticAltEntityClassProperties(alt.Audio, Audio, BaseObject);
 
 alt.Audio.setFactory(Audio);
 cppBindings.registerCompatibilityExport("Audio", Audio);

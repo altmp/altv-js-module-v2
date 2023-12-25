@@ -6,21 +6,26 @@ requireBinding("client/factory.js");
 
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
+const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
 
 class AudioFilter extends alt.AudioFilter {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) return super();
+        if (!args.length) {
+            super();
+            return extendAltEntityClass(this, BaseObject);
+        }
 
-        const instance = alt.AudioFilter.create({ hash: args[0] });
-        return extendAltEntityClass(instance, BaseObject);
+        return alt.AudioFilter.create({ hash: args[0] });
     }
 
     toString() {
         return `AudioFilter{ hash: ${super.hash} }`;
     }
 }
+
+copyStaticAltEntityClassProperties(alt.AudioFilter, AudioFilter, BaseObject);
 
 alt.AudioFilter.setFactory(AudioFilter);
 cppBindings.registerCompatibilityExport("AudioFilter", AudioFilter);

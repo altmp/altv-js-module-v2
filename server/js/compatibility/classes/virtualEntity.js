@@ -20,14 +20,12 @@ class VirtualEntity extends alt.VirtualEntity {
 
         const [group, pos, streamingDistance, data] = args;
 
-        const instance = alt.VirtualEntity.create({
+        return alt.VirtualEntity.create({
             group,
             pos,
             streamingDistance,
             data
         });
-
-        return extendAltEntityClass(instance, WorldObject, BaseObject);
     }
 }
 

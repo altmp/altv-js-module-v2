@@ -9,7 +9,8 @@ const { Entity } = requireBinding("client/compatibility/classes/entity.js");
 const { WorldObject } = requireBinding("client/compatibility/classes/worldObject.js");
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
+const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
 
 class LocalPlayer extends alt.LocalPlayer {
     constructor() {
@@ -18,6 +19,8 @@ class LocalPlayer extends alt.LocalPlayer {
         extendAltEntityClass(this, Player, SharedPlayer, Entity, WorldObject, BaseObject);
     }
 }
+
+copyStaticAltEntityClassProperties(alt.LocalPlayer, Player, SharedPlayer, Entity, WorldObject, BaseObject);
 
 alt.LocalPlayer.setFactory(LocalPlayer);
 cppBindings.registerCompatibilityExport("LocalPlayer", LocalPlayer);

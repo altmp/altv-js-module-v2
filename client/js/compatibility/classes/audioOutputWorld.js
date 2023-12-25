@@ -7,23 +7,28 @@ requireBinding("client/factory.js");
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 const { AudioOutput } = requireBinding("client/compatibility/classes/audioOutput.js");
 
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
+const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
 
 class AudioOutputWorld extends alt.AudioOutputWorld {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) return super();
+        if (!args.length) {
+            super();
+            return extendAltEntityClass(this, AudioOutput, BaseObject);
+        }
 
         const [pos, categoryHash] = args;
 
-        const instance = alt.AudioOutputWorld.create({ pos, categoryHash });
-        return extendAltEntityClass(instance, AudioOutput, BaseObject);
+        return alt.AudioOutputWorld.create({ pos, categoryHash });
     }
 
     static get count() {
         return alt.AudioOutputWorld.all.length;
     }
 }
+
+copyStaticAltEntityClassProperties(alt.AudioOutputWorld, AudioOutputWorld, AudioOutput, BaseObject);
 
 alt.AudioOutputWorld.setFactory(AudioOutputWorld);
 cppBindings.registerCompatibilityExport("AudioOutputWorld", AudioOutputWorld);

@@ -23,14 +23,12 @@ class Ped extends alt.Ped {
 
         const [model, position, rotation, streamingDistance] = args;
 
-        const instance = alt.Ped.create({
+        return alt.Ped.create({
             model,
             pos: position,
             rot: rotation,
             streamingDistance
         });
-
-        return extendAltEntityClass(instance, SharedPed, Entity, WorldObject, BaseObject);
     }
 }
 

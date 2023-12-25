@@ -7,12 +7,16 @@ requireBinding("client/factory.js");
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 const { WorldObject } = requireBinding("client/compatibility/classes/worldObject.js");
 
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
+const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
 
 class Checkpoint extends alt.Checkpoint {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) return super();
+        if (!args.length) {
+            super();
+            return extendAltEntityClass(this, WorldObject, BaseObject);
+        }
 
         const type = args[0];
         const pos = args.length == 8 ? args[1] : { x: args[1], y: args[2], z: args[3] };
@@ -23,14 +27,15 @@ class Checkpoint extends alt.Checkpoint {
         const iconColor = args.length == 8 ? args[6] : args[10];
         const streamingDistance = args.length == 8 ? args[7] : args[11];
 
-        const instance = alt.Checkpoint.create({ type, pos, nextPos, radius, height, color, iconColor, streamingDistance });
-        return extendAltEntityClass(instance, WorldObject, BaseObject);
+        return alt.Checkpoint.create({ type, pos, nextPos, radius, height, color, iconColor, streamingDistance });
     }
 
     static get count() {
         return alt.Checkpoint.all.length;
     }
 }
+
+copyStaticAltEntityClassProperties(alt.Checkpoint, Checkpoint, WorldObject, BaseObject);
 
 alt.Checkpoint.setFactory(Checkpoint);
 cppBindings.registerCompatibilityExport("Checkpoint", Checkpoint);

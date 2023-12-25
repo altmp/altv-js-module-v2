@@ -6,17 +6,20 @@ const { Entity } = requireBinding("client/compatibility/classes/entity.js");
 const { WorldObject } = requireBinding("client/compatibility/classes/worldObject.js");
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
+const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
 
 class WeaponObject extends alt.LocalObject {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) return super();
+        if (!args.length) {
+            super();
+            return extendAltEntityClass(this, Entity, WorldObject, BaseObject);
+        }
 
         const [weapon, pos, rot, model, ammoCount, createDefaultComponents, scale, useStreaming, streamingDistance] = args;
 
-        const instance = alt.WeaponObject.create({ weapon, pos, rot, model, ammoCount, createDefaultComponents, scale, useStreaming, streamingDistance });
-        return extendAltEntityClass(instance, Entity, WorldObject, BaseObject);
+        return alt.WeaponObject.create({ weapon, pos, rot, model, ammoCount, createDefaultComponents, scale, useStreaming, streamingDistance });
     }
 
     get tintIndex() {
@@ -65,5 +68,7 @@ class WeaponObject extends alt.LocalObject {
         return obj;
     }
 }
+
+copyStaticAltEntityClassProperties(alt.WeaponObject, WeaponObject, Entity, WorldObject, BaseObject);
 
 cppBindings.registerCompatibilityExport("WeaponObject", WeaponObject);

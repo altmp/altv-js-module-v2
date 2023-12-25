@@ -7,23 +7,25 @@ requireBinding("client/factory.js");
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 const { WorldObject } = requireBinding("client/compatibility/classes/worldObject.js");
 
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
+const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
 
 class VirtualEntity extends alt.VirtualEntity {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) return super();
+        if (!args.length) {
+            super();
+            return extendAltEntityClass(this, WorldObject, BaseObject);
+        }
 
         const [group, pos, streamingDistance, data] = args;
 
-        const instance = alt.VirtualEntity.create({
+        return alt.VirtualEntity.create({
             group,
             pos,
             streamingDistance,
             data
         });
-
-        return extendAltEntityClass(instance, WorldObject, BaseObject);
     }
 
     hasStreamSyncedMeta(key) {
@@ -38,6 +40,8 @@ class VirtualEntity extends alt.VirtualEntity {
         return Object.keys(this.streamSyncedMeta);
     }
 }
+
+copyStaticAltEntityClassProperties(alt.VirtualEntity, VirtualEntity, WorldObject, BaseObject);
 
 alt.VirtualEntity.setFactory(VirtualEntity);
 cppBindings.registerCompatibilityExport("VirtualEntity", VirtualEntity);

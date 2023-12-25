@@ -6,6 +6,9 @@ const { SharedEntity } = requireBinding("shared/compatibility/classes/sharedEnti
 const { WorldObject } = requireBinding("client/compatibility/classes/worldObject.js");
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
+const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
+
 export class Entity extends alt.Entity {
     constructor() {
         super();
@@ -30,5 +33,7 @@ export class Entity extends alt.Entity {
         return super.scriptID != 0;
     }
 }
+
+copyStaticAltEntityClassProperties(alt.Entity, Entity, SharedEntity, WorldObject, BaseObject);
 
 cppBindings.registerCompatibilityExport("Entity", alt.Entity);

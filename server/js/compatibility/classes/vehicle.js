@@ -10,6 +10,7 @@ const { Entity } = requireBinding("server/compatibility/classes/entity.js");
 const { WorldObject } = requireBinding("server/compatibility/classes/worldObject.js");
 const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
 
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
 const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
 
 class Vehicle extends alt.Vehicle {
@@ -25,8 +26,7 @@ class Vehicle extends alt.Vehicle {
         const rot = rest.length <= 3 ? rest[1] : { x: rest[3], y: rest[4], z: rest[5] };
         const streamingDistance = rest.length === 3 ? rest[2] : rest[6];
 
-        const instance = alt.Vehicle.create({ model, pos, rot, streamingDistance });
-        return extendAltEntityClass(instance, SharedVehicle, Entity, WorldObject, BaseObject);
+        return alt.Vehicle.create({ model, pos, rot, streamingDistance });
     }
 
     setRearWheels(variation) {

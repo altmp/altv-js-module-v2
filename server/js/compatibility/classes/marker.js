@@ -20,8 +20,7 @@ class Marker extends alt.Marker {
 
         const [type, pos, color] = args;
 
-        const instance = alt.Marker.create({ type, pos, color });
-        return extendAltEntityClass(instance, WorldObject, BaseObject);
+        return alt.Marker.create({ type, pos, color });
     }
 
     static get count() {

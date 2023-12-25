@@ -18,8 +18,7 @@ class VoiceChannel extends alt.VoiceChannel {
         }
 
         const [spatial, maxDistance] = args;
-        const instance = alt.VoiceChannel.create({ spatial, maxDistance });
-        return extendAltEntityClass(instance, BaseObject);
+        return alt.VoiceChannel.create({ spatial, maxDistance });
     }
 
     isPlayerInChannel(player) {

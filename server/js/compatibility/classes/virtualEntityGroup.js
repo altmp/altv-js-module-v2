@@ -17,11 +17,9 @@ class VirtualEntityGroup extends alt.VirtualEntityGroup {
             return extendAltEntityClass(this, BaseObject);
         }
 
-        const instance = alt.VirtualEntityGroup.create({
+        return alt.VirtualEntityGroup.create({
             maxEntitiesInStream: args[0]
         });
-
-        return extendAltEntityClass(instance, BaseObject);
     }
 }
 

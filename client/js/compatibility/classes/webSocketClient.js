@@ -9,15 +9,18 @@ const { assertIsType } = requireBinding("shared/utils.js");
 
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
+const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
 
 class WebSocketClient extends alt.WebSocketClient {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) return super();
+        if (!args.length) {
+            super();
+            return extendAltEntityClass(this, BaseObject);
+        }
 
-        const instance = alt.WebSocketClient.create({ url: args[0] });
-        return extendAltEntityClass(instance, BaseObject);
+        return alt.WebSocketClient.create({ url: args[0] });
     }
 
     getEventListeners(eventName) {
@@ -26,6 +29,8 @@ class WebSocketClient extends alt.WebSocketClient {
         return super.listeners[eventName] ?? [];
     }
 }
+
+copyStaticAltEntityClassProperties(alt.WebSocketClient, WebSocketClient, BaseObject);
 
 alt.WebSocketClient.setFactory(WebSocketClient);
 cppBindings.registerCompatibilityExport("WebSocketClient", WebSocketClient);

@@ -12,12 +12,14 @@ const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/clas
 class TextLabel extends alt.TextLabel {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) return super();
+        if (!args.length) {
+            super();
+            return extendAltEntityClass(this, WorldObject, BaseObject);
+        }
 
         const [text, fontName, fontSize, fontScale, pos, rot, color, outlineWidth, outlineColor, useStreaming, streamingDistance] = args;
 
-        const instance = alt.TextLabel.create({ text, fontName, fontSize, fontScale, pos, rot, color, outlineWidth, outlineColor, useStreaming, streamingDistance });
-        return extendAltEntityClass(instance, WorldObject, BaseObject);
+        return alt.TextLabel.create({ text, fontName, fontSize, fontScale, pos, rot, color, outlineWidth, outlineColor, useStreaming, streamingDistance });
     }
 }
 
