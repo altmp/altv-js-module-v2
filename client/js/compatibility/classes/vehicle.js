@@ -21,47 +21,47 @@ class Vehicle extends alt.Vehicle {
     }
 
     toString() {
-        return `Vehicle{ id: ${super.id}, model: ${super.model} }`;
+        return `Vehicle{ id: ${this.id}, model: ${this.model} }`;
     }
 
     get engineLight() {
-        return super.engineLightState;
+        return this.engineLightState;
     }
 
     set engineLight(state) {
-        super.engineLightState = state;
+        this.engineLightState = state;
     }
 
     get absLight() {
-        return super.absLightState;
+        return this.absLightState;
     }
 
     set absLight(state) {
-        super.absLightState = state;
+        this.absLightState = state;
     }
 
     get petrolLight() {
-        return super.petrolLightState;
+        return this.petrolLightState;
     }
 
     set petrolLight(state) {
-        super.petrolLightState = state;
+        this.petrolLightState = state;
     }
 
     get oilLight() {
-        return super.oilLightState;
+        return this.oilLightState;
     }
 
     set oilLight(state) {
-        super.oilLightState = state;
+        this.oilLightState = state;
     }
 
     get batteryLight() {
-        return super.batteryLightState;
+        return this.batteryLightState;
     }
 
     set batteryLight(state) {
-        super.batteryLightState = state;
+        this.batteryLightState = state;
     }
 
     static get count() {
