@@ -717,6 +717,7 @@ declare module "@altv/server" {
         setTimedExplosion(state: boolean, culprit: Player, time: number): void;
         getWeaponCapacity(index: number): number;
         setWeaponCapacity(index: number, state: number): void;
+        setBadge(textureDictionary: number, texture: number, positions: [VehicleBadgePosition, VehicleBadgePosition, VehicleBadgePosition, VehicleBadgePosition]): void;
 
         readonly meta: VehicleMeta;
         readonly streamSyncedMeta: altShared.VehicleStreamSyncedMeta;
@@ -730,6 +731,16 @@ declare module "@altv/server" {
 
         static setFactory(factory: typeof Vehicle): void;
         static getFactory<T extends Vehicle>(): T;
+    }
+
+    export interface VehicleBadgePosition {
+        active?: boolean; // default: false
+        alpha?: number; // default: 255
+        size?: number; // default: 1
+        boneIndex?: number; // default: 0
+        offset?: altShared.Vector3; // default: { x: 0, y: 0, z: 0 }
+        direction?: altShared.Vector3; // default: { x: 0, y: 0, z: 0 }
+        side?: altShared.Vector3; // default: { x: 0, y: 0, z: 0 }
     }
 
     export interface VirtualEntityCreateOptions {

@@ -56,6 +56,39 @@ static void SetMod(js::FunctionContext& ctx)
     ctx.Check(vehicle->SetMod(category, id), "Failed to set mod, invalid mod or modkit not set");
 }
 
+static void SetBadge(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckThis()) return;
+    if(!ctx.CheckArgCount(6)) return;
+    alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
+
+    uint32_t textureDictionary;
+    if (!ctx.GetArg(0, textureDictionary)) return;
+
+    uint32_t texture;
+    if (!ctx.GetArg(1, texture)) return;
+
+    alt::VehicleBadgePosition positions[4];
+
+    for (int i = 0; i < 4; i++)
+    {
+        js::Object dict;
+        if (!ctx.GetArg(i + 2, dict)) return;
+
+        uint8_t alpha = dict.Get("alpha", 255);
+        float size = dict.Get("size", 1.f);
+        int16_t boneIndex = dict.Get("boneIndex", 0);
+        alt::Vector3f offset = dict.Get<alt::Vector3f>("offset", {0, 0, 0});
+        alt::Vector3f direction = dict.Get<alt::Vector3f>("direction", {0, 0, 0});
+        alt::Vector3f side = dict.Get<alt::Vector3f>("side", {0, 0, 0});
+
+        positions[i] = alt::VehicleBadgePosition(alpha, size, boneIndex, offset, direction, side);
+        positions[i].active = dict.Get("active", false);
+    }
+
+    vehicle->SetBadge(textureDictionary, texture, positions);
+}
+
 // clang-format off
 extern js::Class sharedVehicleClass;
 extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::ClassTemplate& tpl)
@@ -163,6 +196,7 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Method<&alt::IVehicle::SetTimedExplosion>("setTimedExplosion");
     tpl.Method<&alt::IVehicle::GetWeaponCapacity>("getWeaponCapacity");
     tpl.Method<&alt::IVehicle::SetWeaponCapacity>("setWeaponCapacity");
+    tpl.Method("setBadge", SetBadge);
 
     tpl.GetByID<alt::IBaseObject::Type::VEHICLE>();
 });
