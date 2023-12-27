@@ -717,7 +717,7 @@ declare module "@altv/server" {
         setTimedExplosion(state: boolean, culprit: Player, time: number): void;
         getWeaponCapacity(index: number): number;
         setWeaponCapacity(index: number, state: number): void;
-        setBadge(textureDictionary: number, texture: number, positions: [VehicleBadgePosition, VehicleBadgePosition, VehicleBadgePosition, VehicleBadgePosition]): void;
+        setBadge(textureDictionary: number, texture: number, pos1?: VehicleBadgePosition, pos2?: VehicleBadgePosition, pos3?: VehicleBadgePosition, pos4?: VehicleBadgePosition): void;
 
         readonly meta: VehicleMeta;
         readonly streamSyncedMeta: altShared.VehicleStreamSyncedMeta;

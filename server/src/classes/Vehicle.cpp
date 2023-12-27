@@ -59,7 +59,7 @@ static void SetMod(js::FunctionContext& ctx)
 static void SetBadge(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(6)) return;
+    if(!ctx.CheckArgCount(2, 6)) return;
     alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
 
     uint32_t textureDictionary;
@@ -72,8 +72,8 @@ static void SetBadge(js::FunctionContext& ctx)
 
     for (int i = 0; i < 4; i++)
     {
-        js::Object dict;
-        if (!ctx.GetArg(i + 2, dict)) return;
+        js::Object dict = ctx.GetArg<js::Object>(i + 2, {});
+        if (!dict.IsValid()) return;
 
         uint8_t alpha = dict.Get("alpha", 255);
         float size = dict.Get("size", 1.f);
