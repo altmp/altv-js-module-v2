@@ -63,10 +63,10 @@ static void SetBadge(js::FunctionContext& ctx)
     alt::IVehicle* vehicle = ctx.GetThisObject<alt::IVehicle>();
 
     uint32_t textureDictionary;
-    if (!ctx.GetArg(0, textureDictionary)) return;
+    if (!ctx.GetArgAsHash(0, textureDictionary)) return;
 
     uint32_t texture;
-    if (!ctx.GetArg(1, texture)) return;
+    if (!ctx.GetArgAsHash(1, texture)) return;
 
     alt::VehicleBadgePosition positions[4];
 
