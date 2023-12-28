@@ -934,7 +934,8 @@ declare module "@altv/server" {
         readonly hwidHash: number | bigint;
         readonly hwidExHash: number | bigint;
         readonly authToken: string;
-        readonly debug: boolean;
+        readonly versionMajor: number;
+        readonly versionMinor: number;
         readonly branch: string;
         readonly build: number;
         readonly cdnUrl: string;
@@ -1174,7 +1175,8 @@ declare module "@altv/server" {
             passwordHash: number;
             isDebug: boolean;
             branch: string;
-            version: string;
+            versionMajor: number;
+            versionMinor: number;
             cdnUrl: string;
             discordID: number;
         }

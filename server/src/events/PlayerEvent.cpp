@@ -19,7 +19,8 @@ static js::Event playerConnectDeniedEvent(alt::CEvent::Type::PLAYER_CONNECT_DENI
     args.Set("passwordHash", e->GetPasswordHash());
     args.Set("isDebug", e->IsDebug());
     args.Set("branch", e->GetBranch());
-    args.Set("version", e->GetMajorVersion());
+    args.Set("versionMajor", e->GetVersionMajor());
+    args.Set("versionMinor", e->GetVersionMinor());
     args.Set("cdnUrl", e->GetCdnUrl());
     args.Set("discordID", e->GetDiscordId());
 });

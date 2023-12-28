@@ -27,7 +27,8 @@ extern js::Class connectionInfoClass("ConnectionInfo", nullptr, nullptr, [](js::
     tpl.LazyProperty<&alt::IConnectionInfo::GetAuthToken>("authToken");
     tpl.LazyProperty<&alt::IConnectionInfo::GetIsDebug>("debug");
     tpl.LazyProperty<&alt::IConnectionInfo::GetBranch>("branch");
-    tpl.LazyProperty<&alt::IConnectionInfo::GetBuild>("build");
+    tpl.LazyProperty<&alt::IConnectionInfo::GetVersionMajor>("versionMajor");
+    tpl.LazyProperty<&alt::IConnectionInfo::GetVersionMinor>("versionMinor");
     tpl.LazyProperty<&alt::IConnectionInfo::GetCdnUrl>("cdnUrl");
     tpl.LazyProperty<&alt::IConnectionInfo::GetPasswordHash>("passwordHash");
     tpl.LazyProperty<&alt::IConnectionInfo::GetIp>("ip");
