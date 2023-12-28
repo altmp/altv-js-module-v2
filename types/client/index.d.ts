@@ -1924,7 +1924,19 @@ declare module "@altv/client" {
             name: string;
         }>;
 
+        export const voicePlayers: Array<number>;
+
         export function toggleInput(enabled: boolean): void;
+
+        export function getPlayerSpatialVolume(remotePlayerId: number): number;
+        export function SetPlayerSpatialVolume(remotePlayerId: number, volume: number): void;
+
+        export function getPlayerNonSpatialVolume(remotePlayerId: number): number;
+        export function setPlayerNonSpatialVolume(remotePlayerId: number, volume: number): void;
+
+        export function addPlayerFilter(remotePlayerId: number, filter: AudioFilter): void;
+        export function removePlayerFilter(remotePlayerId: number, filter: AudioFilter): void;
+        export function getPlayerFilter(remotePlayerId: number): AudioFilter;
     }
 
     export namespace LocalStorage {

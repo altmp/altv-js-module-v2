@@ -98,11 +98,111 @@ static void AvailableInputDevicesGetter(js::PropertyContext& ctx)
     ctx.Return(devicesArr);
 }
 
+static void VoicePlayersGetter(js::PropertyContext& ctx)
+{
+    auto players = alt::ICore::Instance().GetVoicePlayers();
+
+    js::Array playersArr(players.size());
+    for(auto& remoteId : players)
+        playersArr.Push(remoteId);
+
+    ctx.Return(playersArr);
+}
+
 static void ToggleInput(js::FunctionContext& ctx)
 {
     bool enabled;
     if(!ctx.GetArg(0, enabled)) return;
     alt::ICore::Instance().ToggleVoiceInput(enabled);
+}
+
+static void RemoveVoicePlayer(js::FunctionContext& ctx)
+{
+    if (!ctx.CheckArgCount(1)) return;
+
+    uint32_t remoteId;
+    if (!ctx.GetArg(1, remoteId)) return;
+
+    alt::ICore::Instance().RemoveVoicePlayer(remoteId);
+}
+
+static void GetPlayerSpatialVolume(js::FunctionContext& ctx)
+{
+    if (!ctx.CheckArgCount(1)) return;
+
+    uint32_t remoteId;
+    if (!ctx.GetArg(1, remoteId)) return;
+
+    ctx.Return(alt::ICore::Instance().GetVoiceSpatialVolume(remoteId));
+}
+
+static void SetPlayerSpatialVolume(js::FunctionContext& ctx)
+{
+    if (!ctx.CheckArgCount(2)) return;
+
+    uint32_t remoteId;
+    if (!ctx.GetArg(1, remoteId)) return;
+
+    float volume;
+    if (!ctx.GetArg(2, volume)) return;
+
+    alt::ICore::Instance().SetVoiceSpatialVolume(remoteId, volume);
+}
+
+static void GetPlayerNonSpatialVolume(js::FunctionContext& ctx)
+{
+    if (!ctx.CheckArgCount(1)) return;
+
+    uint32_t remoteId;
+    if (!ctx.GetArg(1, remoteId)) return;
+
+    ctx.Return(alt::ICore::Instance().GetVoiceNonSpatialVolume(remoteId));
+}
+
+static void SetPlayerNonSpatialVolume(js::FunctionContext& ctx)
+{
+    if (!ctx.CheckArgCount(2)) return;
+
+    uint32_t remoteId;
+    if (!ctx.GetArg(1, remoteId)) return;
+
+    float volume;
+    if (!ctx.GetArg(2, volume)) return;
+
+    alt::ICore::Instance().SetVoiceNonSpatialVolume(remoteId, volume);
+}
+
+static void AddPlayerFilter(js::FunctionContext& ctx)
+{
+    if (!ctx.CheckArgCount(2)) return;
+
+    uint32_t remoteId;
+    if (!ctx.GetArg(1, remoteId)) return;
+
+    alt::IAudioFilter* filter;
+    if (!ctx.GetArg(2, filter)) return;
+
+    alt::ICore::Instance().AddVoiceFilter(remoteId, filter);
+}
+
+static void RemovePlayerFilter(js::FunctionContext& ctx)
+{
+    if (!ctx.CheckArgCount(1)) return;
+
+    uint32_t remoteId;
+    if (!ctx.GetArg(1, remoteId)) return;
+
+    alt::ICore::Instance().RemoveVoiceFilter(remoteId);
+}
+
+static void GetPlayerFilter(js::FunctionContext& ctx)
+{
+    if (!ctx.CheckArgCount(1)) return;
+
+    uint32_t remoteId;
+    if (!ctx.GetArg(1, remoteId)) return;
+
+    ctx.Return(alt::ICore::Instance().GetVoiceFilter(remoteId));
 }
 
 // clang-format off
@@ -115,6 +215,18 @@ extern js::Namespace voiceNamespace("Voice", [](js::NamespaceTemplate& tpl) {
     tpl.StaticProperty("noiseSuppressionEnabled", NoiseSuppressionEnabledGetter, NoiseSuppressionEnabledSetter);
     tpl.StaticProperty("inputDevice", InputDeviceGetter, InputDeviceSetter);
     tpl.StaticProperty("availableInputDevices", AvailableInputDevicesGetter);
+    tpl.StaticProperty("voicePlayers", VoicePlayersGetter);
 
     tpl.StaticFunction("toggleInput", ToggleInput);
+    tpl.StaticFunction("removeVoicePlayer", RemoveVoicePlayer);
+
+    tpl.StaticFunction("getPlayerSpatialVolume", GetPlayerSpatialVolume);
+    tpl.StaticFunction("setPlayerSpatialVolume", SetPlayerSpatialVolume);
+
+    tpl.StaticFunction("getPlayerNonSpatialVolume", GetPlayerNonSpatialVolume);
+    tpl.StaticFunction("setPlayerNonSpatialVolume", SetPlayerNonSpatialVolume);
+
+    tpl.StaticFunction("addPlayerFilter", AddPlayerFilter);
+    tpl.StaticFunction("removePlayerFilter", RemovePlayerFilter);
+    tpl.StaticFunction("getPlayerFilter", GetPlayerFilter);
 });
