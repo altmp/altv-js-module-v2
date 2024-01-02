@@ -428,13 +428,15 @@ namespace js
             if(!keysOpt.has_value()) return std::nullopt;
             const std::vector<std::string>& keys = keysOpt.value();
 
-            for(std::string& key : keys)
+            for(const std::string& key : keys)
             {
                 auto maybeVal = obj->Get(context, js::JSValue(key));
                 v8::Local<v8::Value> val;
                 if(!maybeVal.ToLocal(&val)) continue;
+
                 std::optional<typename T::value_type::second_type> value = CppValue<typename T::value_type::second_type>(val);
                 if(!value.has_value()) continue;
+
                 map.insert({ key, value.value() });
             }
             return map;
