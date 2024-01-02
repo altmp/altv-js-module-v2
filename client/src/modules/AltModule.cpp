@@ -480,6 +480,15 @@ static void GetPoolEntities(js::FunctionContext& ctx)
     ctx.Return(arr);
 }
 
+static void UpdateClipContext(js::FunctionContext& ctx)
+{
+    if (!ctx.CheckArgCount(1)) return;
+
+    std::unordered_map<std::string, std::string> context;
+    if (!ctx.GetArg(1, context)) return;
+
+    alt::ICore::Instance().UpdateClipContext(context);
+}
 
 // clang-format off
 extern js::Class playerClass, localPlayerClass, vehicleClass, pedClass, objectClass,
@@ -548,6 +557,8 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.StaticFunction("getPoolSize", GetPoolSize);
     module.StaticFunction("getPoolCount", GetPoolCount);
     module.StaticFunction("getPoolEntities", GetPoolEntities);
+
+    module.StaticFunction("updateClipContext", UpdateClipContext);
 
     module.Namespace(eventsNamespace);
     module.Namespace(discordNamespace);

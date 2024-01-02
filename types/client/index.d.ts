@@ -59,6 +59,8 @@ declare module "@altv/client" {
     export function getPoolCount(pool: string): number;
     export function getPoolEntities(pool: string): Array<number>;
 
+    export function updateClipContext(context: Record<string, string>);
+
     export interface AudioCreateOptions {
         source: string;
         volume: number;
