@@ -723,7 +723,7 @@ static void SetAmmoMax100(js::FunctionContext& ctx)
 static void AddDecoration(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(2)) return;
+    if(!ctx.CheckArgCount(2, 3)) return;
     alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
 
     uint32_t collection;
@@ -732,7 +732,9 @@ static void AddDecoration(js::FunctionContext& ctx)
     uint32_t overlay;
     if(!ctx.GetArgAsHash(1, overlay)) return;
 
-    player->AddDecoration(collection, overlay);
+    uint8_t count = ctx.GetArg<uint8_t>(2, 1);
+
+    player->AddDecoration(collection, overlay, count);
 }
 
 static void RemoveDecoration(js::FunctionContext& ctx)

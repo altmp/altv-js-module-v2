@@ -522,7 +522,7 @@ declare module "@altv/server" {
         setAmmoMax50(ammoHash: number | string, ammo: number): void;
         getAmmoMax100(ammoHash: number | string): number | undefined;
         setAmmoMax100(ammoHash: number | string, ammo: number): void;
-        addDecoration(collection: number | string, overlay: number | string): void;
+        addDecoration(collection: number | string, overlay: number | string, count?: number): void;
         removeDecoration(collection: number | string, overlay: number | string): void;
         clearDecorations(): void;
         getDecorations(): ReadonlyArray<{ collection: number; overlay: number; count: number }>;
