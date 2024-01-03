@@ -70,7 +70,7 @@ static void CreateEntity(js::FunctionContext& ctx)
             return;
         }
 
-        scriptObject = resource->GetOrCreateScriptObject(ctx.GetContext(), object);
+        scriptObject = resource->GetScriptObject(object);
         if(!scriptObject)
         {
             if(!tryCatch.HasCaught()) ctx.Throw("Failed to create entity of type " + std::string(magic_enum::enum_name(type)));
@@ -89,6 +89,12 @@ static void CreateEntity(js::FunctionContext& ctx)
 static void GetAllEntities(js::FunctionContext& ctx)
 {
     std::vector<alt::IEntity*> entities = alt::ICore::Instance().GetEntities();
+
+    for (auto& entity : entities)
+    {
+        ctx.GetResource()->GetOrCreateScriptObject(ctx.GetContext(), entity);
+    }
+
     ctx.Return(entities);
 }
 
