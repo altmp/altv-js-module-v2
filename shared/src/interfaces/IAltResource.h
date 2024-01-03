@@ -54,7 +54,18 @@ namespace js
 
         void OnCreateBaseObject(alt::IBaseObject* object) override
         {
-            // IScriptObjectHandler::GetOrCreateScriptObject(GetContext(), object);
+            if(context.IsEmpty()) return;
+            IResource::Scope scope(this);
+
+            auto obj = IScriptObjectHandler::GetOrCreateScriptObject(GetContext(), object);
+
+            if (!obj)
+            {
+                js::Logger::Error << "OnCreateBaseObject: Failed to create script object for type " << magic_enum::enum_name(object->GetType());
+                return;
+            }
+
+            js::Logger::Colored << "~y~[JS Debug] OnCreateBaseObject: " << obj->GetObject()->GetID() << " - type: " << magic_enum::enum_name(obj->GetObject()->GetType()) << js::Logger::Endl;
         }
 
         void OnRemoveBaseObject(alt::IBaseObject* object) override
@@ -62,6 +73,10 @@ namespace js
             if(context.IsEmpty()) return;
             IResource::Scope scope(this);
 
+            auto obj = IScriptObjectHandler::GetScriptObject(object);
+            if (!obj) return;
+
+            js::Logger::Colored << "~y~[JS Debug] OnRemoveBaseObject: " << obj->GetObject()->GetID() << " - type: " << magic_enum::enum_name(obj->GetObject()->GetType()) << js::Logger::Endl;
             IScriptObjectHandler::DestroyScriptObject(object);
         }
 
@@ -70,7 +85,7 @@ namespace js
             if(context.IsEmpty()) return;
             IResource::Scope scope(this);
 
-            if(ev->GetType() == alt::CEvent::Type::RESOURCE_STOP) DestroyResourceObject(static_cast<const alt::CResourceStopEvent*>(ev)->GetResource());
+            if (ev->GetType() == alt::CEvent::Type::RESOURCE_STOP) DestroyResourceObject(static_cast<const alt::CResourceStopEvent*>(ev)->GetResource());
 
             Event::SendEvent(ev, this);
         }
