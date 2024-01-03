@@ -1073,6 +1073,8 @@ declare module "@altv/client" {
 
         static setFactory(factory: typeof Vehicle): void;
         static getFactory<T extends Vehicle>(): T;
+
+        readonly streamSyncedMeta: Readonly<altShared.VehicleStreamSyncedMeta>;
     }
 
     export interface TextLabelCreateOptions {
