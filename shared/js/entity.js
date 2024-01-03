@@ -54,6 +54,12 @@ alt.Events.onBaseObjectRemove(({ object }) => {
     removeEntityFromAll(object);
 });
 
+// TODO (xLuxy): Remove this once ScriptObject stuff is working as intended
+alt.Events.onEvent((ctx) => {
+    const eventName = ctx.customEvent ? alt.Enums.CustomEventType[ctx.eventType] : alt.Enums.EventType[ctx.eventType];
+    alt.log(`~y~[JS Debug] Received event: ${eventName}:`, ctx);
+});
+
 export function addEntityToAll(entity) {
     addEntityToAllWithType(entity, entity.type);
 }
