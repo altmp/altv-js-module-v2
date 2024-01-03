@@ -47,6 +47,7 @@ static void Get(js::FunctionContext& ctx)
 
     js::Object modelObj;
     modelObj.Set("model", model);
+    modelObj.Set("modelHash", info.modelHash);
     modelObj.Set("title", info.title);
     modelObj.Set("modelType", info.modelType);
     modelObj.Set("wheelsCount", info.wheelsCount);

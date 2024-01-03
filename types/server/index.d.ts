@@ -839,6 +839,7 @@ declare module "@altv/server" {
 
     export interface VehicleModelInfo {
         model: number;
+        modelHash: number;
         title: string;
         modelType: altShared.Enums.VehicleModelType;
         wheelsCount: number;
