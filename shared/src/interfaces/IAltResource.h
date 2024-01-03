@@ -54,7 +54,10 @@ namespace js
 
         void OnCreateBaseObject(alt::IBaseObject* object) override
         {
-            // IScriptObjectHandler::GetOrCreateScriptObject(GetContext(), object);
+            if(context.IsEmpty()) return;
+            IResource::Scope scope(this);
+
+            IScriptObjectHandler::GetOrCreateScriptObject(GetContext(), object);
         }
 
         void OnRemoveBaseObject(alt::IBaseObject* object) override
@@ -70,7 +73,7 @@ namespace js
             if(context.IsEmpty()) return;
             IResource::Scope scope(this);
 
-            if(ev->GetType() == alt::CEvent::Type::RESOURCE_STOP) DestroyResourceObject(static_cast<const alt::CResourceStopEvent*>(ev)->GetResource());
+            if (ev->GetType() == alt::CEvent::Type::RESOURCE_STOP) DestroyResourceObject(static_cast<const alt::CResourceStopEvent*>(ev)->GetResource());
 
             Event::SendEvent(ev, this);
         }

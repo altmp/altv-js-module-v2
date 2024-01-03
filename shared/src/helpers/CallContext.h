@@ -242,10 +242,10 @@ namespace js
 
         // If no type to check is specified, it will try to convert the value to the specified type
         template<class T>
-        bool GetArg(int index, T& outValue, Type typeToCheck = Type::INVALID, bool allowNull = false)
+        bool GetArg(int index, T& outValue, Type typeToCheck = Type::INVALID)
         {
             if(errored) return false;
-            if(index >= info.Length() && !allowNull)
+            if(index >= info.Length())
             {
                 Throw("Missing argument at index " + std::to_string(index));
                 return false;
@@ -255,12 +255,6 @@ namespace js
             std::optional<T> result = CppValue<T>(info[index]);
             if(!result.has_value())
             {
-                if (allowNull)
-                {
-                    outValue = T{};
-                    return true;
-                }
-
                 Throw("Invalid argument type at index " + std::to_string(index) + ", expected " + CppTypeToString<T>() + " but got " + TypeToString(GetArgType(index)));
                 return false;
             }

@@ -9,7 +9,7 @@ v8::Local<v8::Value> js::JSValue(alt::IBaseObject* object)
     if(!object) return v8::Null(isolate);
     IResource* resource = GetCurrentResource(isolate);
     if(!resource) return v8::Null(isolate);
-    ScriptObject* scriptObject = resource->GetOrCreateScriptObject(resource->GetContext(), object);
+    ScriptObject* scriptObject = resource->GetScriptObject(object);
     if(!scriptObject) return v8::Null(isolate);
     return scriptObject->Get();
 }
@@ -270,7 +270,7 @@ v8::Local<v8::Value> js::MValueToJS(alt::MValueConst val)
         case alt::IMValue::Type::BASE_OBJECT:
         {
             alt::IBaseObject* ref = std::dynamic_pointer_cast<const alt::IMValueBaseObject>(val)->RawValue();
-            return resource->GetOrCreateScriptObject(ctx, ref)->Get();
+            return resource->GetScriptObject(ref)->Get();
         }
         case alt::IMValue::Type::FUNCTION:
         {

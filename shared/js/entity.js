@@ -57,6 +57,7 @@ alt.Events.onBaseObjectRemove(({ object }) => {
 export function addEntityToAll(entity) {
     addEntityToAllWithType(entity, entity.type);
 }
+
 export function removeEntityFromAll(entity) {
     entityAllSetDirty = true;
     entityAllSet.delete(entity);
