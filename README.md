@@ -54,3 +54,11 @@ Alternatively, you can also download the server module from the official alt:V C
 -   **Windows:** [https://cdn.alt-mp.com/js-module-v2/dev/x64_win32/update.json](https://cdn.alt-mp.com/js-module-v2/dev/x64_win32/update.json)
 
 -   **Linux:** [https://cdn.alt-mp.com/js-module-v2/dev/x64_linux/update.json](https://cdn.alt-mp.com/js-module-v2/dev/x64_linux/update.json)
+
+## v1 Compatibility
+
+Add this to `resource.toml` to use v1 API (`alt-client`, `alt-server`, etc.)
+```toml
+[js-module-v2]
+compatibilityEnabled = true
+```
