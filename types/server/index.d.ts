@@ -525,7 +525,7 @@ declare module "@altv/server" {
         addDecoration(collection: number | string, overlay: number | string): void;
         removeDecoration(collection: number | string, overlay: number | string): void;
         clearDecorations(): void;
-        getDecorations(): ReadonlyArray<{ collection: number; overlay: number }>;
+        getDecorations(): ReadonlyArray<{ collection: number; overlay: number; count: number }>;
         playScenario(name: string): void;
 
         sendRPC<E extends keyof altShared.RPC.CustomServerToPlayerRpcEvent>(rpcName: E, ...args: Parameters<altShared.RPC.CustomServerToPlayerRpcEvent[E]>): Promise<ReturnType<altShared.RPC.CustomServerToPlayerRpcEvent[E]>>;

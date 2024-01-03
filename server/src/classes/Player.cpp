@@ -762,6 +762,7 @@ static void GetDecorations(js::FunctionContext& ctx)
         js::Object obj;
         obj.Set("collection", decoration.collection);
         obj.Set("overlay", decoration.overlay);
+        obj.Set("count", decoration.count);
         arr.Push(obj);
     }
 
