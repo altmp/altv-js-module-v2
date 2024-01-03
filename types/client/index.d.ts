@@ -1002,6 +1002,8 @@ declare module "@altv/client" {
         readonly steeringAngle: number;
         readonly rearWheelVariation: number;
 
+        readonly streamSyncedMeta: Readonly<altShared.VehicleStreamSyncedMeta>;
+
         readonly speed: number;
         readonly gear: number;
         readonly maxGear: number;
