@@ -69,6 +69,6 @@ class WeaponObject extends alt.LocalObject {
     }
 }
 
-copyStaticAltEntityClassProperties(alt.WeaponObject, WeaponObject, Entity, WorldObject, BaseObject);
+copyStaticAltEntityClassProperties(WeaponObject, Entity, WorldObject, BaseObject);
 
 cppBindings.registerCompatibilityExport("WeaponObject", WeaponObject);
