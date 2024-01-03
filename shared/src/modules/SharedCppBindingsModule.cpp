@@ -90,11 +90,6 @@ static void GetAllEntities(js::FunctionContext& ctx)
 {
     std::vector<alt::IEntity*> entities = alt::ICore::Instance().GetEntities();
 
-    for (auto& entity : entities)
-    {
-        ctx.GetResource()->GetOrCreateScriptObject(ctx.GetContext(), entity);
-    }
-
     ctx.Return(entities);
 }
 

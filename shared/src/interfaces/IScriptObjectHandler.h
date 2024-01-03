@@ -62,6 +62,16 @@ namespace js
             return customFactoryMap.contains(type);
         }
 
+        void Initialize(v8::Local<v8::Context> context)
+        {
+            auto entites = alt::ICore::Instance().GetEntities();
+
+            for (auto entity : entites)
+            {
+                GetOrCreateScriptObject(context, entity);
+            }
+        }
+
         static void BindClassToType(alt::IBaseObject::Type type, Class* class_);
     };
 }  // namespace js

@@ -43,6 +43,7 @@ namespace js
         {
             context.Get(isolate)->SetAlignedPointerInEmbedderData(ContextInternalFieldIdx, this);
             ICompatibilityHandler::Initialize();
+            IScriptObjectHandler::Initialize(context.Get(isolate));
         }
 
         virtual void Reset()
