@@ -57,8 +57,7 @@ namespace js
             constexpr bool isPointer = std::is_pointer_v<T>;
             using CleanT = std::remove_pointer_t<T>;
 
-            CleanT value;
-            if(!ctx.GetArg<CleanT>(index, value)) return false;
+            CleanT value = ctx.GetArg<CleanT>(index);
 
             if constexpr(isPointer)
             {
