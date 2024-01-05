@@ -194,7 +194,12 @@ alt::MValue js::JSToMValue(v8::Local<v8::Value> val, bool allowFunction)
             else if(resource->IsBaseObject(v8Obj))
             {
                 ScriptObject* scriptObject = resource->GetScriptObject(obj.Get());
-                if(scriptObject == nullptr) return core.CreateMValueNone();
+                if(scriptObject == nullptr)
+                {
+                    js::Throw("Failed to obtain script object from JS object");
+                    return core.CreateMValueNone();
+                }
+
                 return core.CreateMValueBaseObject(scriptObject->GetObject());
             }
             else
