@@ -196,7 +196,7 @@ alt::MValue js::JSToMValue(v8::Local<v8::Value> val, bool allowFunction)
                 ScriptObject* scriptObject = resource->GetScriptObject(obj.Get());
                 if(scriptObject == nullptr)
                 {
-                    js::Throw("Failed to obtain script object from JS object");
+                    js::Throw("Failed to serialize invalid base object (object is probably destroyed or is not in streaming range)");
                     return core.CreateMValueNone();
                 }
 
