@@ -42,7 +42,7 @@ static void Emit(js::FunctionContext& ctx)
 
         args.push_back(val);
     }
-    alt::ICore::Instance().TriggerLocalEvent(eventName, args);
+    alt::ICore::Instance().TriggerLocalEventOnMain(eventName, args);
 }
 
 // clang-format off
