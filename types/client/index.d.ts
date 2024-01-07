@@ -410,15 +410,15 @@ declare module "@altv/client" {
         get model(): number;
         readonly netOwner?: Player;
         readonly visible: boolean;
-        frozen: boolean;
         readonly isStreamedIn: boolean;
-
-        rot: altShared.Vector3;
-
         readonly streamSyncedMeta: Readonly<altShared.EntityStreamSyncedMeta>;
 
-        static readonly all: ReadonlyArray<Entity>;
+        frozen: boolean;
+        rot: altShared.Vector3;
 
+        getSyncInfo(): Data.ISyncInfo;
+
+        static readonly all: ReadonlyArray<Entity>;
         static getByScriptID(scriptId: number): Entity | null;
     }
 
@@ -1410,6 +1410,22 @@ declare module "@altv/client" {
         public onDestroy?(): void;
 
         static create(opts: altShared.ColShapePolygonCreateOptions): ColShapePolygon;
+    }
+
+    export namespace Data {
+        export interface ISyncInfo {
+            readonly active: boolean;
+            readonly receivedTick: number;
+            readonly fullyReceivedTick: number;
+            readonly sendTick: number;
+            readonly ackedSendTick: number;
+            readonly propertyCount: number;
+            readonly componentCount: number;
+            /**
+             * 2D array of property update ticks grouped by component
+             */
+            readonly propertyUpdateTicks: number[][];
+        }
     }
 
     export namespace Drawing {
