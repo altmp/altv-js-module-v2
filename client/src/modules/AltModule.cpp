@@ -52,6 +52,11 @@ static void SetMsPerGameMinute(js::FunctionContext& ctx)
     alt::ICore::Instance().SetMsPerGameMinute(msPerGameMinute);
 }
 
+static void GetServerTime(js::FunctionContext& ctx)
+{
+    ctx.Return(alt::ICore::Instance().GetServerTime());
+}
+
 static void LicenseHashGetter(js::LazyPropertyContext& ctx)
 {
     ctx.Return(alt::ICore::Instance().GetLicenseHash());
@@ -529,6 +534,7 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.StaticFunction("setGameControlsActive", SetGameControlsActive);
     module.StaticFunction("getMsPerGameMinute", GetMsPerGameMinute);
     module.StaticFunction("setMsPerGameMinute", SetMsPerGameMinute);
+    module.StaticFunction("getServerTime", GetServerTime);
     module.StaticFunction("areRmlControlsActive", AreRmlControlsActive);
     module.StaticFunction("setRmlControlsActive", SetRmlControlsActive);
     module.StaticFunction("getKeyState", GetKeyState);

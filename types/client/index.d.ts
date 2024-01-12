@@ -30,6 +30,7 @@ declare module "@altv/client" {
     export function setGameControlsActive(state: boolean): boolean;
     export function getMsPerGameMinute(): number;
     export function setMsPerGameMinute(ms: number): void;
+    export function getServerTime(): number;
     export function areRmlControlsActive(): boolean;
     export function setRmlControlsActive(state: boolean): void;
     export function getKeyState(key: altShared.Enums.KeyCode): altShared.KeyStateInfo;
