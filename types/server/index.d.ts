@@ -681,7 +681,7 @@ declare module "@altv/server" {
         isWheelOnFire(wheelId: number): boolean;
         getWheelHealth(wheelId: number): number;
 
-        getPartDamageLevel(partId: number): number;
+        getPartDamageLevel(partId: number): alt.Enums.VehiclePartDamage;
         getPartBulletHoles(partId: number): number;
 
         isLightDamaged(lightId: number): boolean;
@@ -705,7 +705,7 @@ declare module "@altv/server" {
         setWheelFixed(wheelId: number): void;
         setWheelHasTire(wheelId: number, state: boolean): void;
 
-        setPartDamageLevel(partId: number, damage: number): void;
+        setPartDamageLevel(partId: number, damage: altShared.Enums.VehiclePartDamage): void;
         setPartBulletHoles(partId: number, shootsCount: number): void;
         setLightDamaged(lightId: number, isDamaged: boolean): void;
         setWindowDamaged(windowId: number, isDamaged: boolean): void;
