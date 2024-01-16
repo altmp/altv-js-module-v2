@@ -344,7 +344,7 @@ declare module "@altv/server" {
     export interface PedCreateOptions {
         model: number | string;
         pos: altShared.IVector3;
-        heading: number;
+        heading?: number; // default: 0
         streamingDistance?: number; // default: 0
     }
 
