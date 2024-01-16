@@ -6,7 +6,7 @@ static js::FactoryHandler localVehicleFactory(alt::IBaseObject::Type::LOCAL_VEHI
     uint32_t model;
     if(!args.GetAsHash("model", model)) return nullptr;
 
-    uint32_t dimension;
+    int32_t dimension;
     if(!args.Get("dimension", dimension)) return nullptr;
 
     alt::Vector3f pos;
@@ -16,7 +16,6 @@ static js::FactoryHandler localVehicleFactory(alt::IBaseObject::Type::LOCAL_VEHI
     if(!args.Get("rot", rot)) return nullptr;
 
     bool useStreaming = args.Get<bool>("useStreaming", true);
-
     uint32_t streamingDistance = args.Get<uint32_t>("streamingDistance", 300);
 
     return alt::ICore::Instance().CreateLocalVehicle(model, dimension, pos, rot, useStreaming, streamingDistance, args.GetResource()->GetResource());

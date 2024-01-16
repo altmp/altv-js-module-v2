@@ -38,11 +38,8 @@ static js::FactoryHandler localObjectFactory(alt::IBaseObject::Type::LOCAL_OBJEC
         if(!args.Get("rot", rot)) return nullptr;
 
         bool noOffset = args.Get<bool>("noOffset", false);
-
         bool dynamic = args.Get<bool>("dynamic", false);
-
         bool useStreaming = args.Get<bool>("useStreaming", false);
-
         uint32_t streamingDistance = args.Get<uint32_t>("streamingDistance", 0);
 
         return alt::ICore::Instance().CreateLocalObject(modelHash, pos, rot, noOffset, dynamic, useStreaming, streamingDistance, args.GetResource()->GetResource());
