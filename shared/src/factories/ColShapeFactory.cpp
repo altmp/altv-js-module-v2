@@ -11,9 +11,9 @@ static js::FactoryHandler colShapeFactory(alt::IBaseObject::Type::COLSHAPE, [](j
         case alt::IColShape::ColShapeType::SPHERE:
         {
             alt::Vector3f pos;
-            float radius;
-
             if(!args.Get("pos", pos)) return nullptr;
+
+            float radius;
             if(!args.Get("radius", radius)) return nullptr;
 
             return alt::ICore::Instance().CreateColShapeSphere(pos, radius);
@@ -22,10 +22,12 @@ static js::FactoryHandler colShapeFactory(alt::IBaseObject::Type::COLSHAPE, [](j
         case alt::IColShape::ColShapeType::CYLINDER:
         {
             alt::Vector3f pos;
-            float radius, height;
-
             if(!args.Get("pos", pos)) return nullptr;
+
+            float radius;
             if(!args.Get("radius", radius)) return nullptr;
+
+            float height;
             if(!args.Get("height", height)) return nullptr;
 
             return alt::ICore::Instance().CreateColShapeCylinder(pos, radius, height);
@@ -34,9 +36,9 @@ static js::FactoryHandler colShapeFactory(alt::IBaseObject::Type::COLSHAPE, [](j
         case alt::IColShape::ColShapeType::CIRCLE:
         {
             alt::Vector2f pos;
-            float radius;
-
             if(!args.Get("pos", pos)) return nullptr;
+
+            float radius;
             if(!args.Get("radius", radius)) return nullptr;
 
             return alt::ICore::Instance().CreateColShapeCircle(alt::Vector3f(pos[0], pos[1], 0), radius);
@@ -45,7 +47,6 @@ static js::FactoryHandler colShapeFactory(alt::IBaseObject::Type::COLSHAPE, [](j
         case alt::IColShape::ColShapeType::CUBOID:
         {
             alt::Vector3f pos1, pos2;
-
             if(!args.Get("pos1", pos1)) return nullptr;
             if(!args.Get("pos2", pos2)) return nullptr;
 

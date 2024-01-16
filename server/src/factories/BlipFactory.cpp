@@ -4,8 +4,10 @@
 static js::FactoryHandler blipFactory(alt::IBaseObject::Type::BLIP, [](js::Object& args) -> alt::IBaseObject* {
     alt::IBlip::BlipType blipType;
     if(!args.Get("blipType", blipType)) return nullptr;
+
     bool global;
     if(!args.Get("global", global)) return nullptr;
+
     std::vector<alt::IPlayer*> targets = args.Get<std::vector<alt::IPlayer*>>("targets");
 
     switch(blipType)

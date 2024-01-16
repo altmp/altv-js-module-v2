@@ -3,24 +3,30 @@
 static void StreamSyncedMetaGetter(js::DynamicPropertyGetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
+
     alt::ICheckpoint* obj = ctx.GetParent<alt::ICheckpoint>();
+
     ctx.Return(obj->GetStreamSyncedMetaData(ctx.GetProperty()));
 }
 
 static void StreamSyncedMetaSetter(js::DynamicPropertySetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
-    alt::ICheckpoint* obj = ctx.GetParent<alt::ICheckpoint>();
-    alt::MValue value;
 
+    alt::ICheckpoint* obj = ctx.GetParent<alt::ICheckpoint>();
+
+    alt::MValue value;
     if(!ctx.GetValue(value)) return;
+
     obj->SetStreamSyncedMetaData(ctx.GetProperty(), value);
 }
 
 static void StreamSyncedMetaDeleter(js::DynamicPropertyDeleterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
+
     alt::ICheckpoint* obj = ctx.GetParent<alt::ICheckpoint>();
+
     if(!obj->HasStreamSyncedMetaData(ctx.GetProperty()))
     {
         ctx.Return(false);
@@ -34,7 +40,9 @@ static void StreamSyncedMetaDeleter(js::DynamicPropertyDeleterContext& ctx)
 static void StreamSyncedMetaEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
 {
     if(!ctx.CheckParent()) return;
+
     alt::ICheckpoint* obj = ctx.GetParent<alt::ICheckpoint>();
+
     ctx.Return(obj->GetStreamSyncedMetaDataKeys());
 }
 
