@@ -1439,7 +1439,7 @@ declare module "@altv/client" {
 
     export abstract class RPCHandler {
         public readonly name: string;
-        public readonly handler: (...args: unknown[]) => Promise<unknown> | unknown;
+        public readonly handler: (...args: unknown[]) => Promise<any> | any;
         public readonly valid: boolean;
 
         public destroy(): void;
@@ -1449,7 +1449,7 @@ declare module "@altv/client" {
         export type GenericRpcEventHandler<T extends unknown[] = unknown[], U = unknown> = (...args: T) => Promise<U> | U;
 
         export function send<E extends keyof altShared.RPC.CustomPlayerToServerRpcEvent>(rpcName: E, ...args: Parameters<altShared.RPC.CustomPlayerToServerRpcEvent[E]>): Promise<ReturnType<altShared.RPC.CustomPlayerToServerRpcEvent[E]>>;
-        export function send<E extends string>(rpcName: Exclude<E, keyof altShared.RPC.CustomPlayerToServerRpcEvent>, ...args: unknown[]): Promise<unknown>;
+        export function send<E extends string>(rpcName: Exclude<E, keyof altShared.RPC.CustomPlayerToServerRpcEvent>, ...args: unknown[]): Promise<any>;
 
         export function register<E extends keyof altShared.RPC.CustomServerToPlayerRpcEvent>(rpcName: E, handler: GenericRpcEventHandler<Parameters<altShared.RPC.CustomServerToPlayerRpcEvent[E]>, ReturnType<altShared.RPC.CustomServerToPlayerRpcEvent[E]>>): RPCHandler;
         export function register<E extends string>(rpcName: Exclude<E, keyof altShared.RPC.CustomServerToPlayerRpcEvent>, handler: GenericRpcEventHandler): RPCHandler;
@@ -1734,21 +1734,21 @@ declare module "@altv/client" {
 
         // Custom events
         export function on<E extends keyof CustomClientEvent>(eventName: E, callback: CustomEventCallback<Parameters<CustomClientEvent[E]>>): altShared.Events.ScriptEventHandler;
-        export function on<E extends string>(eventName: Exclude<E, keyof CustomClientEvent>, callback: CustomEventCallback<unknown[]>): altShared.Events.ScriptEventHandler;
+        export function on<E extends string>(eventName: Exclude<E, keyof CustomClientEvent>, callback: CustomEventCallback<any[]>): altShared.Events.ScriptEventHandler;
         export function once<E extends keyof CustomClientEvent>(eventName: E, callback: CustomEventCallback<Parameters<CustomClientEvent[E]>>): altShared.Events.ScriptEventHandler;
-        export function once<E extends string>(eventName: Exclude<E, keyof CustomClientEvent>, callback: CustomEventCallback<unknown[]>): altShared.Events.ScriptEventHandler;
+        export function once<E extends string>(eventName: Exclude<E, keyof CustomClientEvent>, callback: CustomEventCallback<any[]>): altShared.Events.ScriptEventHandler;
 
         export function onServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): altShared.Events.ScriptEventHandler;
-        export function onServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, callback: CustomEventCallback<unknown[]>): altShared.Events.ScriptEventHandler;
+        export function onServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, callback: CustomEventCallback<any[]>): altShared.Events.ScriptEventHandler;
         export function onceServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): altShared.Events.ScriptEventHandler;
-        export function onceServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, callback: CustomEventCallback<unknown[]>): altShared.Events.ScriptEventHandler;
+        export function onceServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, callback: CustomEventCallback<any[]>): altShared.Events.ScriptEventHandler;
 
         export function onRemote<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): altShared.Events.ScriptEventHandler;
         export function onRemote<E extends keyof altShared.Events.CustomRemoteEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomRemoteEvent[E]>>): altShared.Events.ScriptEventHandler;
-        export function onRemote<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent | keyof altShared.Events.CustomRemoteEvent>, callback: CustomEventCallback<unknown[]>): altShared.Events.ScriptEventHandler;
+        export function onRemote<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent | keyof altShared.Events.CustomRemoteEvent>, callback: CustomEventCallback<any[]>): altShared.Events.ScriptEventHandler;
         export function onceRemote<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomServerToPlayerEvent[E]>>): altShared.Events.ScriptEventHandler;
         export function onceRemote<E extends keyof altShared.Events.CustomRemoteEvent>(eventName: E, callback: CustomEventCallback<Parameters<altShared.Events.CustomRemoteEvent[E]>>): altShared.Events.ScriptEventHandler;
-        export function onceRemote<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent | keyof altShared.Events.CustomRemoteEvent>, callback: CustomEventCallback<unknown[]>): altShared.Events.ScriptEventHandler;
+        export function onceRemote<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent | keyof altShared.Events.CustomRemoteEvent>, callback: CustomEventCallback<any[]>): altShared.Events.ScriptEventHandler;
 
         interface PlayerAnimationChangeEventParameters {
             oldAnimDict: number;

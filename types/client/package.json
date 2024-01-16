@@ -1,6 +1,6 @@
 {
     "name": "@altv/client",
-    "version": "0.0.21",
+    "version": "0.0.22",
     "description": "This package contains the type definitions for the alt:V JS module v2 client types",
     "types": "index.d.ts",
     "files": [
