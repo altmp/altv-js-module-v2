@@ -323,7 +323,7 @@ class Utils extends SharedUtils {
 
 cppBindings.registerCompatibilityExport("Utils", Utils);
 
-alt.Events.onKeyBoardEvent(({ key, state }) => {
+alt.Events.onKeyboardEvent(({ key, state }) => {
     if (!Keybind.registeredHandlers.has(key)) return;
 
     const boundKeys = Keybind.registeredHandlers.get(key);

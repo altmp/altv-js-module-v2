@@ -1490,8 +1490,8 @@ declare module "@altv/client" {
         export function onScriptRPCAnswer(callback: GenericEventCallback<ScriptRPCAnswerEventParameters>): altShared.Events.EventHandler;
         export function onceScriptRPCAnswer(callback: GenericEventCallback<ScriptRPCAnswerEventParameters>): altShared.Events.EventHandler;
 
-        export function onKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): altShared.Events.EventHandler;
-        export function onceKeyBoardEvent(callback: GenericEventCallback<KeyBoardEventParameters>): altShared.Events.EventHandler;
+        export function onKeyboardEvent(callback: GenericEventCallback<KeyboardEventParameters>): altShared.Events.EventHandler;
+        export function onceKeyboardEvent(callback: GenericEventCallback<KeyboardEventParameters>): altShared.Events.EventHandler;
         export function onKeyUp(callback: GenericEventCallback<KeyUpDownEventParameters>): altShared.Events.EventHandler;
         export function onceKeyUp(callback: GenericEventCallback<KeyUpDownEventParameters>): altShared.Events.EventHandler;
         export function onKeyDown(callback: GenericEventCallback<KeyUpDownEventParameters>): altShared.Events.EventHandler;
@@ -1660,7 +1660,7 @@ declare module "@altv/client" {
             key: altShared.Enums.KeyCode;
         }
 
-        interface KeyBoardEventParameters {
+        interface KeyboardEventParameters {
             key: altShared.Enums.KeyCode;
             state: altShared.Enums.KeyState;
         }

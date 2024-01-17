@@ -2,7 +2,7 @@ const { Event } = requireBinding("shared/events.js");
 
 Event.register(alt.Enums.EventType.CONNECTION_COMPLETE, "ConnectionComplete");
 Event.register(alt.Enums.EventType.DISCONNECT_EVENT, "Disconnect");
-Event.register(alt.Enums.EventType.KEYBOARD_EVENT, "KeyBoardEvent");
+Event.register(alt.Enums.EventType.KEYBOARD_EVENT, "KeyboardEvent");
 Event.register(alt.Enums.EventType.WEB_VIEW_EVENT, "WebViewEvent");
 Event.register(alt.Enums.EventType.WEB_SOCKET_CLIENT_EVENT, "WebSocketEvent");
 Event.register(alt.Enums.EventType.AUDIO_EVENT, "AudioEvent");
@@ -15,7 +15,7 @@ Event.register(alt.Enums.EventType.WINDOW_RESOLUTION_CHANGE, "WindowResolutionCh
 Event.register(alt.Enums.CustomEventType.KEY_UP, "KeyUp", true);
 Event.register(alt.Enums.CustomEventType.KEY_DOWN, "KeyDown", true);
 
-alt.Events.onKeyBoardEvent(({ state, key }) => {
+alt.Events.onKeyboardEvent(({ state, key }) => {
     if (state === alt.Enums.KeyState.UP) Event.invoke(alt.Enums.CustomEventType.KEY_UP, { key: key }, true);
     else if (state === alt.Enums.KeyState.DOWN) Event.invoke(alt.Enums.CustomEventType.KEY_DOWN, { key: key }, true);
 });
