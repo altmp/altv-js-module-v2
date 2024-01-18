@@ -8,5 +8,13 @@ static js::FactoryHandler voiceChannelFactory(alt::IBaseObject::Type::VOICE_CHAN
 
     float maxDistance = args.Get<float>("maxDistance");
 
+    // Check if voice chat is enabled
+    const auto config = alt::ICore::Instance().GetServerConfig()->Get("voice");
+    if (config->IsNone())
+    {
+        js::Throw("Failed to create voice channel, make sure external voice chat is enabled.");
+        return nullptr;
+    }
+
     return alt::ICore::Instance().CreateVoiceChannel(spatial, maxDistance);
 });
