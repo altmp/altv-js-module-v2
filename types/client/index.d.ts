@@ -1333,7 +1333,7 @@ declare module "@altv/client" {
         pos: altShared.Vector3;
     }
 
-    export abstract class VoiceChannel extends BaseObject {}
+    // export abstract class VoiceChannel extends BaseObject {}
 
     export namespace PointBlip {
         export function create(opts: PointBlipCreateOptions): Blip;

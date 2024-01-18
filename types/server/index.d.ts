@@ -785,9 +785,6 @@ declare module "@altv/server" {
     export interface VoiceChannelCreateOptions {
         spatial: boolean;
         maxDistance?: number;
-
-        priority: number;
-        filter: number;
     }
 
     export abstract class VoiceChannel extends BaseObject {
@@ -809,6 +806,8 @@ declare module "@altv/server" {
 
         public onCreate?(opts: VoiceChannelCreateOptions): void;
         public onDestroy?(): void;
+
+        static readonly all: ReadonlyArray<VoiceChannel>;
 
         static create(opts: VoiceChannelCreateOptions): VoiceChannel;
 
