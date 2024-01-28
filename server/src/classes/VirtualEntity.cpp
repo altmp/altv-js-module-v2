@@ -57,4 +57,6 @@ extern js::Class virtualEntityClass("VirtualEntity", &sharedVirtualEntityClass, 
     tpl.DynamicProperty("streamSyncedMeta", nullptr, StreamSyncedMetaSetter, StreamSyncedMetaDeleter, nullptr);
 
     tpl.Method("setMultipleStreamSyncedMetaData", SetMultipleStreamSyncedMetaData);
+
+    tpl.GetByID<alt::IBaseObject::Type::VIRTUAL_ENTITY>();
 });

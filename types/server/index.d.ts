@@ -681,7 +681,7 @@ declare module "@altv/server" {
         isWheelOnFire(wheelId: number): boolean;
         getWheelHealth(wheelId: number): number;
 
-        getPartDamageLevel(partId: altShared.Enums.VehiclePart): alt.Enums.VehiclePartDamage;
+        getPartDamageLevel(partId: altShared.Enums.VehiclePart): altShared.Enums.VehiclePartDamage;
         getPartBulletHoles(partId: number): number;
 
         isLightDamaged(lightId: number): boolean;
@@ -776,6 +776,7 @@ declare module "@altv/server" {
         public onCreate?(opts: VirtualEntityCreateOptions): void;
         public onDestroy?(): void;
 
+        static getByID(id: number): VirtualEntity | null;
         static create(opts: VirtualEntityCreateOptions): VirtualEntity;
 
         static setFactory(factory: typeof VirtualEntity): void;
