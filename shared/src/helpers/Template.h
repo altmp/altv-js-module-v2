@@ -131,6 +131,8 @@ namespace js
             if(!ctx.CheckThis()) return;
 
             Class* obj = ctx.GetThisObject<Class>();
+            if (!obj) return;
+            
             ctx.Return((obj->*Getter)());
         }
         template<auto Setter>
