@@ -12,7 +12,7 @@ static void ChildrenGetter(js::PropertyContext& ctx)
     {
         const auto children = element->GetChild(i);
         // TODO(xLuxy): alt:V currently doesn't create BaseObject for RmlElements
-        ctx.GetResource()->GetOrCreateScriptObject(ctx.GetContext(), element);
+        ctx.GetResource()->GetOrCreateScriptObject(ctx.GetContext(), children);
 
         arr.Set(i, children);
     }

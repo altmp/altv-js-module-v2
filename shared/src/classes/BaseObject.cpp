@@ -4,21 +4,9 @@
 
 static void ValidGetter(js::PropertyContext& ctx)
 {
+    if(!ctx.CheckThis()) return;
+
     ctx.Return(ctx.GetThisObject<alt::IBaseObject>() != nullptr);
-}
-
-// NOTE(xLuxy): This is a workaround for alt:V not calling BaseObject for RmlElements
-static void RemoveRmlChildrens(alt::IRmlElement* element, js::IResource* resource)
-{
-    for (size_t i = 0; i < element->GetChildCount(); i++)
-    {
-        const auto children = element->GetChild(i);
-
-        resource->DestroyScriptObject(children);
-        RemoveRmlChildrens(children, resource);
-    }
-
-    alt::ICore::Instance().DestroyBaseObject(element);
 }
 
 static void Destroy(js::FunctionContext& ctx)
@@ -26,14 +14,6 @@ static void Destroy(js::FunctionContext& ctx)
     if(!ctx.CheckThis()) return;
 
     alt::IBaseObject* obj = ctx.GetThisObject<alt::IBaseObject>();
-
-    // TODO(xLuxy): alt:V currently doesn't create BaseObject for RmlElements
-    if (obj->GetType() == alt::IBaseObject::Type::RML_ELEMENT || obj->GetType() == alt::IBaseObject::Type::RML_DOCUMENT)
-    {
-        RemoveRmlChildrens(ctx.GetThisObject<alt::IRmlElement>(), ctx.GetResource());
-        ctx.GetResource()->DestroyScriptObject(obj);
-    }
-
     alt::ICore::Instance().DestroyBaseObject(obj);
 }
 

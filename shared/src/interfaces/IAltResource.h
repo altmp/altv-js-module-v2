@@ -60,10 +60,34 @@ namespace js
             IScriptObjectHandler::GetOrCreateScriptObject(GetContext(), object);
         }
 
+#if ALT_CLIENT_API
+        // NOTE(xLuxy): This is a workaround for alt:V not calling BaseObject for RmlElements
+        static void RemoveRmlChildrens(alt::IRmlElement* element, IResource* resource)
+        {
+            for (size_t i = 0; i < element->GetChildCount(); i++)
+            {
+                const auto children = element->GetChild(i);
+
+                RemoveRmlChildrens(children, resource);
+                resource->DestroyScriptObject(children);
+
+                alt::ICore::Instance().DestroyBaseObject(children);
+            }
+        }
+#endif
+
         void OnRemoveBaseObject(alt::IBaseObject* object) override
         {
             if(context.IsEmpty()) return;
             IResource::Scope scope(this);
+
+#if ALT_CLIENT_API
+            // TODO(xLuxy): alt:V currently doesn't create BaseObject for RmlElements
+            if (object->GetType() == alt::IBaseObject::Type::RML_DOCUMENT)
+            {
+                RemoveRmlChildrens(dynamic_cast<alt::IRmlElement*>(object), GetCurrentResource());
+            }
+#endif
 
             IScriptObjectHandler::DestroyScriptObject(object);
         }
