@@ -97,8 +97,8 @@ jobs:
 
             - name: Copy files
               run: |
-                  mkdir upload
-                  cp build/linux/x86_64/release/libjs-module-v2.so upload
+                  mkdir -p upload/modules
+                  cp build/linux/x86_64/release/libjs-module-v2.so upload/modules
                   cp server/deps/nodejs/lib/libnodev2.so upload
                   echo ${{ steps.version.outputs.SDK_COMMIT }} >> upload/sdk.version
 
@@ -218,7 +218,7 @@ jobs:
               run: |
                   zip -r js-module-v2-windows-server dist-server-windows
                   zip -r js-module-v2-windows-client dist-client-windows
-                  zip -r -j js-module-v2-linux dist-server-linux
+                  zip -r js-module-v2-linux dist-server-linux
                   zip -r js-module-v2-typings dist-typings
 
             - name: Create Release
