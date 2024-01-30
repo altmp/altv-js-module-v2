@@ -1,4 +1,5 @@
 #include "Class.h"
+#include "interfaces/IResource.h"
 
 static void Show(js::FunctionContext& ctx)
 {
@@ -25,6 +26,9 @@ static void CreateElement(js::FunctionContext& ctx)
     alt::IRmlElement* element = document->CreateElement(tag);
     if(!ctx.Check(element != nullptr, "Failed to create element")) return;
 
+    // TODO(xLuxy): alt:V currently doesn't create BaseObject for RmlElements
+    ctx.GetResource()->GetOrCreateScriptObject(ctx.GetContext(), element);
+
     ctx.Return(element);
 }
 
@@ -39,6 +43,9 @@ static void CreateTextNode(js::FunctionContext& ctx)
 
     alt::IRmlElement* node = document->CreateTextNode(text);
     if(!ctx.Check(node != nullptr, "Failed to create text node")) return;
+
+    // TODO(xLuxy): alt:V currently doesn't create BaseObject for RmlElements
+    ctx.GetResource()->GetOrCreateScriptObject(ctx.GetContext(), node);
 
     ctx.Return(node);
 }
