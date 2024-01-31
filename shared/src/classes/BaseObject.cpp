@@ -4,8 +4,6 @@
 
 static void ValidGetter(js::PropertyContext& ctx)
 {
-    if(!ctx.CheckThis()) return;
-
     ctx.Return(ctx.GetThisObject<alt::IBaseObject>() != nullptr);
 }
 
