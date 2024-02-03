@@ -22,16 +22,13 @@ namespace js
         std::string error;
         bool noThrow = false;
         mutable IResource* resource = nullptr;
-        alt::IBaseObject* thisObject = nullptr;
 
         alt::IBaseObject* GetThisObjectUntyped()
         {
             if(errored) return nullptr;
-            if(thisObject) return thisObject;
             std::optional<alt::IBaseObject*> object = CppValue<alt::IBaseObject*>(info.This());
             if(!object.has_value()) return nullptr;
-            thisObject = object.value();
-            return thisObject;
+            return object.value();
         }
 
         IResource* GetResourceCached() const
