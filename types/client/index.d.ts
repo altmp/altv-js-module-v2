@@ -1130,6 +1130,9 @@ declare module "@altv/client" {
 
         static create(opts: VirtualEntityCreateOptions): VirtualEntity;
 
+        static getByID(id: number): VirtualEntity | null;
+        static getByRemoteID(id: number): VirtualEntity | null;
+
         static setFactory(factory: typeof VirtualEntity): void;
         static getFactory<T extends VirtualEntity>(): T;
     }
