@@ -13,7 +13,7 @@ declare module "@altv/client" {
     export const clientConfig: Readonly<Record<string, unknown>>;
     export const clientPath: string;
 
-    export const localMeta: Readonly<GlobalLocalMeta>;
+    export const localMeta: Readonly<GlobalLocalMeta & { [key: string]: unknown }>;
 
     export function isMenuOpen(): boolean;
     export function isConsoleOpen(): boolean;
@@ -234,7 +234,7 @@ declare module "@altv/client" {
         static getByID(type: altShared.Enums.BaseObjectType, id: number): BaseObject | null;
         static getByRemoteID(type: altShared.Enums.BaseObjectType, id: number): BaseObject | null;
 
-        readonly meta: BaseObjectMeta;
+        readonly meta: BaseObjectMeta & { [key: string]: unknown };
     }
 
     export type PointBlipCreateOptions = { pos: altShared.IVector3; entity?: never } | { entity: Entity; pos?: never };
@@ -256,7 +256,7 @@ declare module "@altv/client" {
         readonly isAttached: boolean;
         readonly attachedTo?: Entity;
 
-        readonly meta: BlipMeta;
+        readonly meta: BlipMeta & { [key: string]: unknown };
 
         blipType: altShared.Enums.BlipType;
         scale: altShared.Vector2;
@@ -316,7 +316,7 @@ declare module "@altv/client" {
         readonly isGlobal: boolean;
         readonly streamingDistance: number;
 
-        readonly meta: MarkerMeta;
+        readonly meta: MarkerMeta & { [key: string]: unknown };
 
         color: altShared.RGBA;
         visible: boolean;
@@ -412,7 +412,7 @@ declare module "@altv/client" {
         readonly netOwner?: Player;
         readonly visible: boolean;
         readonly isStreamedIn: boolean;
-        readonly streamSyncedMeta: Readonly<altShared.EntityStreamSyncedMeta>;
+        readonly streamSyncedMeta: Readonly<altShared.EntityStreamSyncedMeta & { [key: string]: unknown }>;
 
         frozen: boolean;
         rot: altShared.Vector3;
@@ -617,8 +617,8 @@ declare module "@altv/client" {
         readonly armour: number;
         readonly currentWeapon: number;
 
-        readonly meta: PedMeta;
-        readonly streamSyncedMeta: Readonly<altShared.PedStreamSyncedMeta>;
+        readonly meta: PedMeta & { [key: string]: unknown };
+        readonly streamSyncedMeta: Readonly<altShared.PedStreamSyncedMeta & { [key: string]: unknown }>;
 
         static readonly all: ReadonlyArray<Ped>;
         static readonly streamedIn: ReadonlyArray<Ped>;
@@ -775,7 +775,7 @@ declare module "@altv/client" {
         getWeaponTintIndex(weaponHash: number | string): number | undefined;
         hasWeaponComponent(weaponHash: number | string, componentHash: number | string): boolean;
 
-        readonly streamSyncedMeta: Readonly<altShared.PlayerStreamSyncedMeta>;
+        readonly streamSyncedMeta: Readonly<altShared.PlayerStreamSyncedMeta & { [key: string]: unknown }>;
 
         static readonly local: LocalPlayer;
         static readonly all: ReadonlyArray<Player>;
@@ -1003,7 +1003,7 @@ declare module "@altv/client" {
         readonly steeringAngle: number;
         readonly rearWheelVariation: number;
 
-        readonly streamSyncedMeta: Readonly<altShared.VehicleStreamSyncedMeta>;
+        readonly streamSyncedMeta: Readonly<altShared.VehicleStreamSyncedMeta & { [key: string]: unknown }>;
 
         readonly speed: number;
         readonly gear: number;
@@ -1119,8 +1119,8 @@ declare module "@altv/client" {
 
         visible: boolean;
 
-        readonly meta: VirtualEntityMeta;
-        readonly streamSyncedMeta: altShared.VirtualEntityStreamSyncedMeta;
+        readonly meta: VirtualEntityMeta & { [key: string]: unknown };
+        readonly streamSyncedMeta: Readonly<altShared.VirtualEntityStreamSyncedMeta & { [key: string]: unknown }>;
 
         static readonly all: ReadonlyArray<VirtualEntity>;
         static readonly streamedIn: ReadonlyArray<VirtualEntity>;
@@ -1280,16 +1280,12 @@ declare module "@altv/client" {
     /**
      * Extend it by interface merging for use in localMeta.
      */
-    export interface GlobalLocalMeta {
-        [key: string]: unknown;
-    }
+    export interface GlobalLocalMeta {}
 
     /**
      * Extend it by interface merging for use in BaseObject#meta.
      */
-    export interface BaseObjectMeta {
-        [key: string]: unknown;
-    }
+    export interface BaseObjectMeta {}
 
     /**
      * Extend it by interface merging for use in Blip#meta.

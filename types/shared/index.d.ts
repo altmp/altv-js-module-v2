@@ -13,8 +13,8 @@ declare module "@altv/shared" {
     export const sdkVersion: string;
     export const branch: string;
 
-    export const meta: GlobalMeta;
-    export const syncedMeta: GlobalSyncedMeta;
+    export const meta: GlobalMeta & { [key: string]: unknown };
+    export const syncedMeta: GlobalSyncedMeta & { [key: string]: unknown };
 
     export function log(...args: unknown[]): void;
     export function logDebug(...args: unknown[]): void;
@@ -447,30 +447,27 @@ declare module "@altv/shared" {
     /**
      * Extend it by interface merging for use in meta.
      */
-    export interface GlobalMeta {
-        [key: string]: unknown;
-    }
+    export interface GlobalMeta {}
 
     /**
      * Extend it by interface merging for use in {@link syncedMeta alt.syncedMeta}.
      */
-    export interface GlobalSyncedMeta {
-        [key: string]: unknown;
-    }
+    export interface GlobalSyncedMeta {}
 
     /**
      * Extend it by interface merging for use in Checkpoint#streamSyncedMeta.
      */
-    export interface CheckpointStreamSyncedMeta {
-        [key: string]: unknown;
-    }
+    export interface CheckpointStreamSyncedMeta {}
 
     /**
      * Extend it by interface merging for use in Entity#streamSyncedMeta.
      */
-    export interface EntityStreamSyncedMeta {
-        [key: string]: unknown;
-    }
+    export interface EntityStreamSyncedMeta extends BaseObjectStreamSyncedMeta {}
+
+    /**
+     * Extend it by interface merging for use in BaseObject#streamSyncedMeta.
+     */
+    export interface BaseObjectStreamSyncedMeta {}
 
     /**
      * Extend it by interface merging for use in Player#streamSyncedMeta.
@@ -490,7 +487,7 @@ declare module "@altv/shared" {
     /**
      * Extend it by interface merging for use in VirtualEntity#syncedMeta.
      */
-    export interface VirtualEntityStreamSyncedMeta extends BaseObjectSyncedMeta {}
+    export interface VirtualEntityStreamSyncedMeta extends BaseObjectStreamSyncedMeta {}
 
     /**
      * Extend it by interface merging for use in ped stream synced meta (class `Ped` on client & server, e.g. `ped.getStreamSyncedMeta`)

@@ -8,7 +8,7 @@ declare module "@altv/server" {
     import * as altShared from "@altv/shared";
 
     export const rootDir: string;
-    export const syncedMeta: Record<string, unknown>;
+    export const syncedMeta: altShared.GlobalSyncedMeta & { [key: string]: unknown };
     export const serverConfig: Readonly<Record<string, unknown>>;
 
     export function setServerPassword(password: string): void;
@@ -23,7 +23,7 @@ declare module "@altv/server" {
     export function setVoiceExternal(host: string, port: number): void;
 
     export class BaseObject extends altShared.BaseObject {
-        readonly meta: BaseObjectMeta;
+        meta: BaseObjectMeta & { [key: string]: unknown };
 
         static getByID(type: altShared.Enums.BaseObjectType, id: number): BaseObject | null;
     }
@@ -93,7 +93,7 @@ declare module "@altv/server" {
         addTarget(target: Player): void;
         removeTarget(target: Player): void;
 
-        readonly meta: BlipMeta;
+        meta: BlipMeta & { [key: string]: unknown };
 
         public onCreate?(opts: BlipCreateOptions): void;
         public onDestroy?(): void;
@@ -122,7 +122,7 @@ declare module "@altv/server" {
         readonly target?: Player;
         readonly streamingDistance: number;
 
-        readonly meta: MarkerMeta;
+        meta: MarkerMeta & { [key: string]: unknown };
 
         color: altShared.RGBA;
         visible: boolean;
@@ -214,7 +214,7 @@ declare module "@altv/server" {
         isEntityIdIn(id: number): boolean;
         isPointIn(point: altShared.Vector3): boolean;
 
-        readonly meta: ColShapeMeta;
+        meta: ColShapeMeta & { [key: string]: unknown };
 
         static readonly all: ReadonlyArray<ColShape>;
 
@@ -256,8 +256,8 @@ declare module "@altv/server" {
         isEntityIdIn(id: number): boolean;
         isPointIn(point: altShared.Vector3): boolean;
 
-        readonly meta: CheckpointMeta;
-        readonly streamSyncedMeta: altShared.CheckpointStreamSyncedMeta;
+        meta: CheckpointMeta & { [key: string]: unknown };
+        streamSyncedMeta: altShared.CheckpointStreamSyncedMeta & { [key: string]: unknown };
 
         public onCreate?(opts: CheckpointCreateOptions): void;
         public onDestroy?(): void;
@@ -284,8 +284,8 @@ declare module "@altv/server" {
         streamingDistance: number;
         readonly timestamp: number;
 
-        readonly meta: EntityMeta;
-        readonly streamSyncedMeta: altShared.EntityStreamSyncedMeta;
+        meta: EntityMeta & { [key: string]: unknown };
+        streamSyncedMeta: altShared.EntityStreamSyncedMeta & { [key: string]: unknown };
 
         setNetOwner(player: Player, disableMigration: boolean): void;
         resetNetOwner(disableMigration: boolean): void;
@@ -326,8 +326,8 @@ declare module "@altv/server" {
         activatePhysics(): void;
         placeOnGroundProperly(): void;
 
-        readonly meta: ObjectMeta;
-        readonly streamSyncedMeta: altShared.ObjectStreamSyncedMeta;
+        meta: ObjectMeta & { [key: string]: unknown };
+        streamSyncedMeta: altShared.ObjectStreamSyncedMeta & { [key: string]: unknown };
 
         public onCreate?(opts: ObjectCreateOptions): void;
         public onDestroy?(): void;
@@ -354,8 +354,8 @@ declare module "@altv/server" {
         armour: number;
         currentWeapon: number;
 
-        readonly meta: PedMeta;
-        readonly streamSyncedMeta: altShared.PedStreamSyncedMeta;
+        meta: PedMeta & { [key: string]: unknown };
+        streamSyncedMeta: altShared.PedStreamSyncedMeta & { [key: string]: unknown };
 
         public onCreate?(opts: PedCreateOptions): void;
         public onDestroy?(): void;
@@ -531,9 +531,9 @@ declare module "@altv/server" {
         sendRPC<E extends keyof altShared.RPC.CustomServerToPlayerRpcEvent>(rpcName: E, ...args: Parameters<altShared.RPC.CustomServerToPlayerRpcEvent[E]>): Promise<ReturnType<altShared.RPC.CustomServerToPlayerRpcEvent[E]>>;
         sendRPC<E extends string>(rpcName: Exclude<E, keyof altShared.RPC.CustomServerToPlayerRpcEvent>, ...args: unknown[]): Promise<any>;
 
-        readonly meta: PlayerMeta;
-        readonly localMeta: PlayerLocalMeta;
-        readonly streamSyncedMeta: altShared.PlayerStreamSyncedMeta;
+        meta: PlayerMeta & { [key: string]: unknown };
+        localMeta: PlayerLocalMeta & { [key: string]: unknown };
+        streamSyncedMeta: altShared.PlayerStreamSyncedMeta & { [key: string]: unknown };
 
         static readonly all: ReadonlyArray<Player>;
         static getByID(id: number): Player | null;
@@ -719,8 +719,8 @@ declare module "@altv/server" {
         setWeaponCapacity(index: number, state: number): void;
         setBadge(textureDictionary: string | number, texture: string | number, pos: VehicleBadgePosition, pos2?: VehicleBadgePosition, pos3?: VehicleBadgePosition, pos4?: VehicleBadgePosition): void;
 
-        readonly meta: VehicleMeta;
-        readonly streamSyncedMeta: altShared.VehicleStreamSyncedMeta;
+        meta: VehicleMeta & { [key: string]: unknown };
+        streamSyncedMeta: altShared.VehicleStreamSyncedMeta & { [key: string]: unknown };
 
         public onCreate?(opts: VehicleCreateOptions): void;
         public onDestroy?(): void;
@@ -770,8 +770,8 @@ declare module "@altv/server" {
 
         visible: boolean;
 
-        readonly meta: VirtualEntityMeta;
-        readonly streamSyncedMeta: altShared.VirtualEntityStreamSyncedMeta;
+        meta: VirtualEntityMeta & { [key: string]: unknown };
+        streamSyncedMeta: altShared.VirtualEntityStreamSyncedMeta & { [key: string]: unknown };
 
         public onCreate?(opts: VirtualEntityCreateOptions): void;
         public onDestroy?(): void;
@@ -795,7 +795,7 @@ declare module "@altv/server" {
         readonly players: ReadonlyArray<Player>;
         readonly playerCount: number;
 
-        readonly meta: VoiceChannelMeta;
+        meta: VoiceChannelMeta & { [key: string]: unknown };
 
         hasPlayer(player: Player): boolean;
         addPlayer(player: Player): void;
@@ -1553,9 +1553,7 @@ declare module "@altv/server" {
     /**
      * Extend it by interface merging for use in BaseObject#meta.
      */
-    export interface BaseObjectMeta {
-        [key: string]: unknown;
-    }
+    export interface BaseObjectMeta {}
 
     /**
      * Extend it by interface merging for use in Blip#meta.
