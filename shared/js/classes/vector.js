@@ -1,33 +1,5 @@
 // clang-format off
 
-// WIP
-class VectorCache {
-    #size = 0;
-    #cache = new Map();
-    #ctor = null;
-
-    constructor(size, ctor) {
-        this.#size = size;
-        this.#ctor = ctor;
-    }
-
-    insert(values) {
-        const map = this.#cache;
-        for (let i = 0; i < this.#size; i++) {
-            if (!map.has(values[i])) map.set(values[i], new Map());
-            map = map.get(values[i]);
-            if (i === this.#size - 1) map.set(values[i], new this.#ctor(...values));
-        }
-    }
-    get(values) {
-        const map = this.#cache;
-        for (let i = 0; i < this.#size; i++) {
-            if (!map.has(values[i])) return null;
-            map = map.get(values[i]);
-            if (i === this.#size - 1) return map.get(values[i]);
-        }
-    }
-}
 export class Vector3 {
     constructor(...args) {
         [this.x, this.y, this.z] = this.#getArgValues(...args);
