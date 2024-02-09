@@ -13,8 +13,8 @@ declare module "@altv/shared" {
     export const sdkVersion: string;
     export const branch: string;
 
-    export const meta: GlobalMeta & { [key: string]: unknown };
-    export const syncedMeta: GlobalSyncedMeta & { [key: string]: unknown };
+    export const meta: GlobalMeta & Record<string, unknown>;
+    export const syncedMeta: GlobalSyncedMeta & Record<string, unknown>;
 
     export function log(...args: unknown[]): void;
     export function logDebug(...args: unknown[]): void;
@@ -104,13 +104,13 @@ declare module "@altv/shared" {
     type ColShapeCreateOptions = {
         colShapeType: Enums.ColShapeType;
     } & (
-        | ({ colShapeType: Enums.ColShapeType.SPHERE } & ColShapeSphereCreateOptions)
-        | ({ colShapeType: Enums.ColShapeType.CYLINDER } & ColShapeCylinderCreateOptions)
-        | ({ colShapeType: Enums.ColShapeType.CIRCLE } & ColShapeCircleCreateOptions)
-        | ({ colShapeType: Enums.ColShapeType.CUBOID } & ColShapeCuboidCreateOptions)
-        | ({ colShapeType: Enums.ColShapeType.RECT } & ColShapeRectangleCreateOptions)
-        | ({ colShapeType: Enums.ColShapeType.POLYGON } & ColShapePolygonCreateOptions)
-    );
+            | ({ colShapeType: Enums.ColShapeType.SPHERE } & ColShapeSphereCreateOptions)
+            | ({ colShapeType: Enums.ColShapeType.CYLINDER } & ColShapeCylinderCreateOptions)
+            | ({ colShapeType: Enums.ColShapeType.CIRCLE } & ColShapeCircleCreateOptions)
+            | ({ colShapeType: Enums.ColShapeType.CUBOID } & ColShapeCuboidCreateOptions)
+            | ({ colShapeType: Enums.ColShapeType.RECT } & ColShapeRectangleCreateOptions)
+            | ({ colShapeType: Enums.ColShapeType.POLYGON } & ColShapePolygonCreateOptions)
+        );
 
     export abstract class Resource {
         readonly type: string;

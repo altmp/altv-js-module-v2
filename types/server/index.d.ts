@@ -8,7 +8,7 @@ declare module "@altv/server" {
     import * as altShared from "@altv/shared";
 
     export const rootDir: string;
-    export const syncedMeta: altShared.GlobalSyncedMeta & { [key: string]: unknown };
+    export const syncedMeta: altShared.GlobalSyncedMeta & Record<string, unknown>;
     export const serverConfig: Readonly<Record<string, unknown>>;
 
     export function setServerPassword(password: string): void;
@@ -23,7 +23,7 @@ declare module "@altv/server" {
     export function setVoiceExternal(host: string, port: number): void;
 
     export class BaseObject extends altShared.BaseObject {
-        meta: BaseObjectMeta & { [key: string]: unknown };
+        meta: BaseObjectMeta & Record<string, unknown>;
 
         static getByID(type: altShared.Enums.BaseObjectType, id: number): BaseObject | null;
     }
@@ -93,7 +93,7 @@ declare module "@altv/server" {
         addTarget(target: Player): void;
         removeTarget(target: Player): void;
 
-        meta: BlipMeta & { [key: string]: unknown };
+        meta: BlipMeta & Record<string, unknown>;
 
         public onCreate?(opts: BlipCreateOptions): void;
         public onDestroy?(): void;
@@ -122,7 +122,7 @@ declare module "@altv/server" {
         readonly target?: Player;
         readonly streamingDistance: number;
 
-        meta: MarkerMeta & { [key: string]: unknown };
+        meta: MarkerMeta & Record<string, unknown>;
 
         color: altShared.RGBA;
         visible: boolean;
@@ -214,7 +214,7 @@ declare module "@altv/server" {
         isEntityIdIn(id: number): boolean;
         isPointIn(point: altShared.Vector3): boolean;
 
-        meta: ColShapeMeta & { [key: string]: unknown };
+        meta: ColShapeMeta & Record<string, unknown>;
 
         static readonly all: ReadonlyArray<ColShape>;
 
@@ -256,8 +256,8 @@ declare module "@altv/server" {
         isEntityIdIn(id: number): boolean;
         isPointIn(point: altShared.Vector3): boolean;
 
-        meta: CheckpointMeta & { [key: string]: unknown };
-        streamSyncedMeta: altShared.CheckpointStreamSyncedMeta & { [key: string]: unknown };
+        meta: CheckpointMeta & Record<string, unknown>;
+        streamSyncedMeta: altShared.CheckpointStreamSyncedMeta & Record<string, unknown>;
 
         public onCreate?(opts: CheckpointCreateOptions): void;
         public onDestroy?(): void;
@@ -284,8 +284,8 @@ declare module "@altv/server" {
         streamingDistance: number;
         readonly timestamp: number;
 
-        meta: EntityMeta & { [key: string]: unknown };
-        streamSyncedMeta: altShared.EntityStreamSyncedMeta & { [key: string]: unknown };
+        meta: EntityMeta & Record<string, unknown>;
+        streamSyncedMeta: altShared.EntityStreamSyncedMeta & Record<string, unknown>;
 
         setNetOwner(player: Player, disableMigration: boolean): void;
         resetNetOwner(disableMigration: boolean): void;
@@ -326,8 +326,8 @@ declare module "@altv/server" {
         activatePhysics(): void;
         placeOnGroundProperly(): void;
 
-        meta: ObjectMeta & { [key: string]: unknown };
-        streamSyncedMeta: altShared.ObjectStreamSyncedMeta & { [key: string]: unknown };
+        meta: ObjectMeta & Record<string, unknown>;
+        streamSyncedMeta: altShared.ObjectStreamSyncedMeta & Record<string, unknown>;
 
         public onCreate?(opts: ObjectCreateOptions): void;
         public onDestroy?(): void;
@@ -354,8 +354,8 @@ declare module "@altv/server" {
         armour: number;
         currentWeapon: number;
 
-        meta: PedMeta & { [key: string]: unknown };
-        streamSyncedMeta: altShared.PedStreamSyncedMeta & { [key: string]: unknown };
+        meta: PedMeta & Record<string, unknown>;
+        streamSyncedMeta: altShared.PedStreamSyncedMeta & Record<string, unknown>;
 
         public onCreate?(opts: PedCreateOptions): void;
         public onDestroy?(): void;
@@ -531,9 +531,9 @@ declare module "@altv/server" {
         sendRPC<E extends keyof altShared.RPC.CustomServerToPlayerRpcEvent>(rpcName: E, ...args: Parameters<altShared.RPC.CustomServerToPlayerRpcEvent[E]>): Promise<ReturnType<altShared.RPC.CustomServerToPlayerRpcEvent[E]>>;
         sendRPC<E extends string>(rpcName: Exclude<E, keyof altShared.RPC.CustomServerToPlayerRpcEvent>, ...args: unknown[]): Promise<any>;
 
-        meta: PlayerMeta & { [key: string]: unknown };
-        localMeta: PlayerLocalMeta & { [key: string]: unknown };
-        streamSyncedMeta: altShared.PlayerStreamSyncedMeta & { [key: string]: unknown };
+        meta: PlayerMeta & Record<string, unknown>;
+        localMeta: PlayerLocalMeta & Record<string, unknown>;
+        streamSyncedMeta: altShared.PlayerStreamSyncedMeta & Record<string, unknown>;
 
         static readonly all: ReadonlyArray<Player>;
         static getByID(id: number): Player | null;
@@ -719,8 +719,8 @@ declare module "@altv/server" {
         setWeaponCapacity(index: number, state: number): void;
         setBadge(textureDictionary: string | number, texture: string | number, pos: VehicleBadgePosition, pos2?: VehicleBadgePosition, pos3?: VehicleBadgePosition, pos4?: VehicleBadgePosition): void;
 
-        meta: VehicleMeta & { [key: string]: unknown };
-        streamSyncedMeta: altShared.VehicleStreamSyncedMeta & { [key: string]: unknown };
+        meta: VehicleMeta & Record<string, unknown>;
+        streamSyncedMeta: altShared.VehicleStreamSyncedMeta & Record<string, unknown>;
 
         public onCreate?(opts: VehicleCreateOptions): void;
         public onDestroy?(): void;
@@ -770,8 +770,8 @@ declare module "@altv/server" {
 
         visible: boolean;
 
-        meta: VirtualEntityMeta & { [key: string]: unknown };
-        streamSyncedMeta: altShared.VirtualEntityStreamSyncedMeta & { [key: string]: unknown };
+        meta: VirtualEntityMeta & Record<string, unknown>;
+        streamSyncedMeta: altShared.VirtualEntityStreamSyncedMeta & Record<string, unknown>;
 
         public onCreate?(opts: VirtualEntityCreateOptions): void;
         public onDestroy?(): void;
@@ -795,7 +795,7 @@ declare module "@altv/server" {
         readonly players: ReadonlyArray<Player>;
         readonly playerCount: number;
 
-        meta: VoiceChannelMeta & { [key: string]: unknown };
+        meta: VoiceChannelMeta & Record<string, unknown>;
 
         hasPlayer(player: Player): boolean;
         addPlayer(player: Player): void;
