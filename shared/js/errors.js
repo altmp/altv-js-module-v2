@@ -4,7 +4,7 @@ Error.showInternals = false;
 
 function isValidFrame(frame) {
     const showInternals = Error.showInternals || alt.isDebug;
-    return !(!showInternals && frame.getFileName().startsWith("internal:"));
+    return !(!showInternals && frame.getFileName()?.startsWith("internal:"));
 }
 
 /**
