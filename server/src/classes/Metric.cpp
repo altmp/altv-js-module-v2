@@ -38,7 +38,7 @@ static void ValueSetter(js::PropertyContext& ctx)
     if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::Metric* metric = ctx.GetExtraInternalFieldValue<alt::Metric>();
 
-    uint64_t value;
+    uint32_t value;
     if(!ctx.GetValue(value)) return;
 
     metric->SetValue(value);
@@ -57,6 +57,26 @@ static void Begin(js::FunctionContext& ctx)
     alt::Metric* metric = ctx.GetExtraInternalFieldValue<alt::Metric>();
 
     metric->Begin();
+}
+
+static void Add(js::FunctionContext& ctx)
+{
+    if (!ctx.CheckArgCount(1)) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
+    alt::Metric* metric = ctx.GetExtraInternalFieldValue<alt::Metric>();
+
+    uint32_t value;
+    if(!ctx.GetArg(0, value)) return;
+
+    metric->Add(value);
+}
+
+static void Inc(js::FunctionContext& ctx)
+{
+    if(!ctx.CheckExtraInternalFieldValue()) return;
+    alt::Metric* metric = ctx.GetExtraInternalFieldValue<alt::Metric>();
+
+    metric->Inc();
 }
 
 static void End(js::FunctionContext& ctx)
@@ -86,6 +106,9 @@ extern js::Class metricClass("Metric", nullptr, Constructor, [](js::ClassTemplat
 
     tpl.Property("value", ValueGetter, ValueSetter);
     tpl.Property("valid", ValidGetter);
+
+    tpl.Method("add", Add);
+    tpl.Method("inc", Inc);
 
     tpl.Method("begin", Begin);
     tpl.Method("end", End);

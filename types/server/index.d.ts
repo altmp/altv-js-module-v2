@@ -303,6 +303,9 @@ declare module "@altv/server" {
 
         constructor(name: string, type?: altShared.Enums.MetricType);
 
+        add(value: number): void;
+        inc(): void;
+
         begin(): void;
         end(): void;
         destroy(): void;
