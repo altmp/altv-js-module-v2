@@ -8,17 +8,12 @@ const { SharedBlip } = requireBinding("shared/compatibility/classes/sharedBlip.j
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 const { WorldObject } = requireBinding("client/compatibility/classes/worldObject.js");
 
-/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
-
 class AreaBlip {
     constructor(x, y, z, width, height) {
-        const instance = alt.AreaBlip.create({
+        return alt.AreaBlip.create({
             pos: { x, y, z },
             scale: { x: width, y: height }
         });
-
-        return extendAltEntityClass(instance, SharedBlip, WorldObject, BaseObject);
     }
 }
 

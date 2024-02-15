@@ -7,11 +7,9 @@ const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.j
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 class Font extends alt.Font {
-    constructor() {
-        super();
-
-        extendAltEntityClass(this, BaseObject);
-    }
+    //
 }
+
+extendAltEntityClass(Font, BaseObject);
 
 cppBindings.registerCompatibilityExport("Font", Font);

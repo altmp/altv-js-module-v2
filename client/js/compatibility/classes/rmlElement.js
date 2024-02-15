@@ -12,12 +12,6 @@ const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.j
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 class RmlElement extends alt.RmlElement {
-    constructor(...args) {
-        super(...args);
-
-        extendAltEntityClass(this, BaseObject);
-    }
-
     getEventListeners(eventName) {
         assertIsType(eventName, "string", `Expected eventName to be a string, got ${typeof eventName}`);
 
@@ -49,4 +43,6 @@ class RmlElement extends alt.RmlElement {
     }
 }
 
-cppBindings.registerCompatibilityExport("RmlElement", alt.RmlElement);
+extendAltEntityClass(RmlElement, BaseObject);
+
+cppBindings.registerCompatibilityExport("RmlElement", RmlElement);

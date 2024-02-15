@@ -9,21 +9,15 @@ const { WorldObject } = requireBinding("client/compatibility/classes/worldObject
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
+const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 class Blip extends alt.Blip {
-    constructor() {
-        super();
-
-        return extendAltEntityClass(this, SharedBlip, WorldObject, BaseObject);
-    }
-
     static get count() {
         return alt.Blip.all.length;
     }
 }
 
-copyStaticAltEntityClassProperties(alt.Blip, SharedBlip, WorldObject, BaseObject);
+extendAltEntityClass(Blip, SharedBlip, WorldObject, BaseObject);
 
 alt.Blip.setFactory(Blip);
 cppBindings.registerCompatibilityExport("Blip", alt.Blip);

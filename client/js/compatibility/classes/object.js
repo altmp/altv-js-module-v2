@@ -9,21 +9,16 @@ const { WorldObject } = requireBinding("client/compatibility/classes/worldObject
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
+const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 class Object extends alt.Object {
-    constructor() {
-        super();
-
-        extendAltEntityClass(this, Entity, WorldObject, BaseObject);
-    }
-
     static get count() {
         return alt.Object.all.length;
     }
 }
 
-copyStaticAltEntityClassProperties(alt.Object, Object, Entity, WorldObject, BaseObject);
+extendAltEntityClass(Object, Entity, WorldObject, BaseObject);
 
 alt.Object.setFactory(Object);
+
 cppBindings.registerCompatibilityExport("Object", Object);

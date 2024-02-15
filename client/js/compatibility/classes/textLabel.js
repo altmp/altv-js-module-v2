@@ -12,10 +12,7 @@ const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/clas
 class TextLabel extends alt.TextLabel {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) {
-            super();
-            return extendAltEntityClass(this, WorldObject, BaseObject);
-        }
+        if (!args.length) return super();
 
         const [text, fontName, fontSize, fontScale, pos, rot, color, outlineWidth, outlineColor, useStreaming, streamingDistance] = args;
 
@@ -23,5 +20,8 @@ class TextLabel extends alt.TextLabel {
     }
 }
 
+extendAltEntityClass(TextLabel, WorldObject, BaseObject);
+
 alt.TextLabel.setFactory(TextLabel);
+
 cppBindings.registerCompatibilityExport("TextLabel", TextLabel);

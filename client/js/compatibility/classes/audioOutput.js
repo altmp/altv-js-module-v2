@@ -4,8 +4,8 @@
 
 // requireBinding("client/entity.js");
 
-export class AudioOutput {
+export class AudioOutput extends alt.AudioOutput {
     //
 }
 
-cppBindings.registerCompatibilityExport("AudioOutput", alt.AudioOutput);
+cppBindings.registerCompatibilityExport("AudioOutput", AudioOutput);

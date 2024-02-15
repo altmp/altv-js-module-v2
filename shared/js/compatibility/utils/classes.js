@@ -1,75 +1,81 @@
 /// <reference path="../../../../types/shared/index.d.ts" />
+
 // import * as alt from "@altv/shared";
 
 requireBinding("shared/logging.js");
 
 /** @type {typeof import("../../../../shared/js/utils.js")} */
-const { assertIsType, assertIsObject } = requireBinding("shared/utils.js");
+const { assertIsType } = requireBinding("shared/utils.js");
 
-export function extendAltEntityClass(baseInstance, ...classes) {
-    assertIsObject(baseInstance, `Expected object, but got ${typeof baseInstance}`);
+const blacklistedNonStaticProperties = ["constructor"];
+const blacklistedStaticProperties = ["prototype", "length", "name", "caller", "arguments"];
 
-    for (const class_ of classes) {
-        assertIsType(class_, "function", `Expected class object, but got ${typeof class_}`);
+function applyNonStaticProperties(baseClass, cls) {
+    alt.log("applyNonStaticProperties", baseClass);
 
-        let currentClass = class_.prototype;
-        while (currentClass !== Object.prototype) {
-            for (const propKey of Object.getOwnPropertyNames(currentClass)) {
-                if (propKey === "constructor") continue;
-
-                if (baseInstance.hasOwnProperty(propKey)) {
-                    const baseClassName = baseInstance.constructor.name;
-                    const className = class_.name;
-
-                    alt.log(`~lr~[Compatibility] Property '${propKey}' skipped in '${className}' - already in base class '${baseClassName}'.`);
-                    continue;
-                }
-
-                const descriptor = Object.getOwnPropertyDescriptor(currentClass, propKey);
-                if (descriptor) Object.defineProperty(baseInstance, propKey, descriptor);
+    let prot = cls.prototype;
+    while (prot != Object.prototype) {
+        for (const prop of Object.getOwnPropertyNames(prot)) {
+            if (blacklistedNonStaticProperties.includes(prop) || baseClass[prop] || baseClass.prototype[prop]) {
+                alt.log(`applyNonStaticProperties: Skipping property ${prop} (${prot.constructor.name})`);
+                continue;
             }
 
-            currentClass = Object.getPrototypeOf(currentClass);
+            alt.log("applyNonStaticProperties", prop, prot);
+
+            const property = Object.getOwnPropertyDescriptor(prot, prop);
+            if (property) {
+                Object.defineProperty(baseClass.prototype, prop, property);
+            }
+        }
+
+        prot = Object.getPrototypeOf(prot);
+    }
+}
+
+function applyStaticProperties(baseClass, cls) {
+    alt.log("applyStaticProperties", baseClass, cls, Object.getOwnPropertyNames(cls));
+    for (const propKey of Object.getOwnPropertyNames(cls)) {
+        alt.log("applyStaticProperties 1", propKey);
+        if (blacklistedStaticProperties.includes(propKey)) {
+            alt.log("applyStaticProperties 2", propKey);
+            continue;
+        }
+        if (baseClass[propKey] || baseClass.prototype[propKey]) {
+            alt.log(`applyStaticProperties: Skipping property ${propKey} (${cls.name})`);
+            continue;
+        }
+
+        const descriptor = Object.getOwnPropertyDescriptor(cls, propKey);
+        if (!descriptor) continue;
+
+        alt.log("applyStaticProperties", propKey, cls, cls[propKey], descriptor);
+
+        if (typeof descriptor.get === "function") {
+            Object.defineProperty(baseClass, propKey, {
+                get: descriptor.get.bind(cls),
+                enumerable: descriptor.enumerable,
+                configurable: descriptor.configurable
+            });
+        } else {
+            Object.defineProperty(baseClass, propKey, descriptor);
         }
     }
+}
 
-    return baseInstance;
+export function extendAltEntityClass(baseClass, ...classes) {
+    assertIsType(baseClass, "function", `Expected class object, but got ${typeof baseClass}`);
+
+    for (const cls of classes) {
+        applyNonStaticProperties(baseClass, cls);
+        applyStaticProperties(baseClass, cls);
+    }
+
+    return baseClass;
 }
 
 export function copyStaticAltEntityClassProperties(target, ...classes) {
-    assertIsType(target, "function", `Expected class object, but got ${typeof target}`);
-
-    for (const class_ of classes) {
-        assertIsType(class_, "function", `Expected class object, but got ${typeof class_}`);
-
-        for (const propKey of Object.getOwnPropertyNames(class_)) {
-            if (["prototype", "length", "name", "caller", "arguments"].includes(propKey)) {
-                continue;
-            }
-
-            if (target.hasOwnProperty(propKey)) {
-                const baseClassName = target.name;
-                const className = class_.name;
-
-                alt.log(`~lr~[Compatibility] Static property '${propKey}' skipped in '${className}' - already in base class '${baseClassName}'.`);
-                continue;
-            }
-
-            const descriptor = Object.getOwnPropertyDescriptor(class_, propKey);
-
-            if (!descriptor) continue;
-
-            if (typeof descriptor.get === "function") {
-                Object.defineProperty(target, propKey, {
-                    get: descriptor.get.bind(class_),
-                    enumerable: descriptor.enumerable,
-                    configurable: descriptor.configurable
-                });
-            } else {
-                Object.defineProperty(target, propKey, descriptor);
-            }
-        }
-    }
+    //
 }
 
 export function overrideLazyProperty(instance, propertyName, value) {

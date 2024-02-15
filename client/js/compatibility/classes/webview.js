@@ -10,15 +10,12 @@ const { assertIsType } = requireBinding("shared/utils.js");
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
+const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 class WebView extends alt.WebView {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) {
-            super();
-            return extendAltEntityClass(this, BaseObject);
-        }
+        if (!args.length) return super();
 
         const url = args[0];
 
@@ -80,7 +77,8 @@ class WebView extends alt.WebView {
     }
 }
 
-copyStaticAltEntityClassProperties(alt.WebView, WebView, BaseObject);
+extendAltEntityClass(WebView, BaseObject);
 
 alt.WebView.setFactory(WebView);
+
 cppBindings.registerCompatibilityExport("WebView", WebView);

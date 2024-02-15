@@ -8,16 +8,12 @@ const { SharedBlip } = requireBinding("shared/compatibility/classes/sharedBlip.j
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 const { WorldObject } = requireBinding("client/compatibility/classes/worldObject.js");
 
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
-
 class RadiusBlip {
     constructor(x, y, z, radius) {
-        const instance = alt.RadiusBlip.create({
+        return alt.RadiusBlip.create({
             pos: { x, y, z },
             radius
         });
-
-        return extendAltEntityClass(instance, SharedBlip, WorldObject, BaseObject);
     }
 }
 

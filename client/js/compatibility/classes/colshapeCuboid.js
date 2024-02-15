@@ -5,18 +5,14 @@
 const { WorldObject } = requireBinding("client/compatibility/classes/worldObject.js");
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 
-/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
-
 class ColshapeCuboid extends alt.ColShape {
     constructor(...args) {
         const [x, y, z, x2, y2, z2] = args;
-        const instance = alt.ColShapeCuboid.create({
+
+        return alt.ColShapeCuboid.create({
             pos1: { x, y, z },
             pos2: { x: x2, y: y2, z: z2 }
         });
-
-        return extendAltEntityClass(instance, WorldObject, BaseObject);
     }
 }
 

@@ -11,10 +11,7 @@ const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/clas
 class RmlDocument extends alt.RmlDocument {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) {
-            super();
-            return extendAltEntityClass(this, BaseObject);
-        }
+        if (!args.length) return super();
 
         const [url] = args;
 
@@ -22,5 +19,8 @@ class RmlDocument extends alt.RmlDocument {
     }
 }
 
+extendAltEntityClass(RmlDocument, BaseObject);
+
 alt.RmlDocument.setFactory(RmlDocument);
+
 cppBindings.registerCompatibilityExport("RmlDocument", RmlDocument);

@@ -8,5 +8,4 @@ export class WorldObject extends SharedWorldObject {
     //
 }
 
-// NOTE (xLuxy): Do NOT export the Entity class from above, otherwise it will break instanceof
 cppBindings.registerCompatibilityExport("WorldObject", alt.WorldObject);

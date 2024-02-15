@@ -11,15 +11,12 @@ const { WorldObject } = requireBinding("client/compatibility/classes/worldObject
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
+const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 class LocalPed extends alt.LocalPed {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) {
-            super();
-            return extendAltEntityClass(this, SharedPed, Entity, WorldObject, BaseObject);
-        }
+        if (!args.length) return super();
 
         const [model, dimension, pos, heading, useStreaming, streamingDistance] = args;
 
@@ -27,7 +24,8 @@ class LocalPed extends alt.LocalPed {
     }
 }
 
-copyStaticAltEntityClassProperties(alt.LocalPed, LocalPed, SharedPed, Entity, WorldObject, BaseObject);
+extendAltEntityClass(LocalPed, SharedPed, Entity, WorldObject, BaseObject);
 
 alt.LocalPed.setFactory(LocalPed);
+
 cppBindings.registerCompatibilityExport("LocalPed", LocalPed);

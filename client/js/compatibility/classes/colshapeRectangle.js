@@ -5,18 +5,14 @@
 const { WorldObject } = requireBinding("client/compatibility/classes/worldObject.js");
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 
-/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
-
 class ColshapeRectangle extends alt.ColShape {
     constructor(...args) {
         const [x, y, x2, y2] = args;
-        const instance = alt.ColShapeRectangle.create({
+
+        return alt.ColShapeRectangle.create({
             pos1: { x, y },
             pos2: { x: x2, y: y2 }
         });
-
-        return extendAltEntityClass(instance, WorldObject, BaseObject);
     }
 }
 

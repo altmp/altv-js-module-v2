@@ -11,15 +11,9 @@ const { WorldObject } = requireBinding("client/compatibility/classes/worldObject
 const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
 
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
+const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 class Vehicle extends alt.Vehicle {
-    constructor() {
-        super();
-
-        extendAltEntityClass(this, SharedVehicle, Entity, WorldObject, BaseObject);
-    }
-
     toString() {
         return `Vehicle{ id: ${this.id}, model: ${this.model} }`;
     }
@@ -69,7 +63,7 @@ class Vehicle extends alt.Vehicle {
     }
 }
 
-copyStaticAltEntityClassProperties(alt.Vehicle, Vehicle, SharedVehicle, Entity, WorldObject, BaseObject);
+extendAltEntityClass(Vehicle, SharedVehicle, Entity, WorldObject, BaseObject);
 
 alt.Vehicle.setFactory(Vehicle);
 cppBindings.registerCompatibilityExport("Vehicle", Vehicle);
