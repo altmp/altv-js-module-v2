@@ -21,7 +21,7 @@ extern js::Class connectionInfoClass("ConnectionInfo", nullptr, nullptr, [](js::
     tpl.LazyProperty<&alt::IConnectionInfo::GetSocialId>("socialID");
     tpl.LazyProperty<&alt::IConnectionInfo::GetCloudID>("cloudID");
     tpl.LazyProperty<&alt::IConnectionInfo::GetCloudAuthResult>("cloudAuthResult");
-    tpl.LazyProperty<&alt::IConnectionInfo::GetSocialName>("socialName");
+    tpl.LazyProperty<&alt::IConnectionInfo::GetSocialName>("socialClubName");
     tpl.LazyProperty<&alt::IConnectionInfo::GetHwIdHash>("hwidHash");
     tpl.LazyProperty<&alt::IConnectionInfo::GetHwIdExHash>("hwidExHash");
     tpl.LazyProperty<&alt::IConnectionInfo::GetAuthToken>("authToken");

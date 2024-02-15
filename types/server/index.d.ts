@@ -934,7 +934,7 @@ declare module "@altv/server" {
         readonly socialID: bigint;
         readonly cloudID: string;
         readonly cloudAuthResult: altShared.Enums.CloudAuthResult;
-        readonly socialName: string;
+        readonly socialClubName: string;
         readonly hwidHash: bigint;
         readonly hwidExHash: bigint;
         readonly authToken: string;
