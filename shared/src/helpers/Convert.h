@@ -311,12 +311,26 @@ namespace js
         else if constexpr(std::is_same_v<T, int64_t> || std::is_same_v<T, uint64_t>)
         {
             constexpr bool isSigned = std::is_same_v<T, int64_t>;
-            v8::Local<v8::BigInt> bigInt;
-            v8::MaybeLocal<v8::BigInt> maybeBigInt = val->ToBigInt(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext());
-            if(!maybeBigInt.ToLocal(&bigInt)) return std::nullopt;
-            if constexpr(isSigned) return bigInt->Int64Value();
-            else
-                return bigInt->Uint64Value();
+
+            if (val->IsBigInt())
+            {
+                v8::Local<v8::BigInt> bigInt;
+                v8::MaybeLocal<v8::BigInt> maybeBigInt = val->ToBigInt(v8::Isolate::GetCurrent()->GetEnteredOrMicrotaskContext());
+                if(!maybeBigInt.ToLocal(&bigInt)) return std::nullopt;
+
+                if constexpr(isSigned)
+                    return bigInt->Int64Value();
+                else
+                    return bigInt->Uint64Value();
+            }
+
+            using Type = std::conditional_t<isSigned, int32_t, uint32_t>;
+            const auto _val = CppValue<Type>(val);
+
+            if (_val.has_value())
+            {
+                return static_cast<T>(_val.value());
+            }
         }
         else if constexpr(std::is_integral_v<T> || std::is_floating_point_v<T> || std::is_enum_v<T>)
         {

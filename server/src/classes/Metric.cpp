@@ -38,7 +38,7 @@ static void ValueSetter(js::PropertyContext& ctx)
     if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::Metric* metric = ctx.GetExtraInternalFieldValue<alt::Metric>();
 
-    uint32_t value;
+    uint64_t value;
     if(!ctx.GetValue(value)) return;
 
     metric->SetValue(value);
@@ -65,7 +65,7 @@ static void Add(js::FunctionContext& ctx)
     if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::Metric* metric = ctx.GetExtraInternalFieldValue<alt::Metric>();
 
-    uint32_t value;
+    uint64_t value;
     if(!ctx.GetArg(0, value)) return;
 
     metric->Add(value);
