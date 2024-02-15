@@ -16,6 +16,8 @@ js::ScriptObject* js::IScriptObjectHandler::GetOrCreateScriptObject(v8::Local<v8
         return nullptr;
     }
 
+    Logger::Info("Creating script object for type", (int)object->GetType(), "Custom factory:", HasCustomFactory(object->GetType()) ? "true" : "false");
+
     if(HasCustomFactory(object->GetType()))
     {
         v8::Local<v8::Function> factory = GetCustomFactory(object->GetType());

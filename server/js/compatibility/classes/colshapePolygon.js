@@ -9,16 +9,18 @@ const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/clas
 
 class ColshapePolygon extends alt.ColShape {
     constructor(...args) {
+        if (!args.length) return super();
+
         const [minZ, maxZ, points] = args;
 
-        const instance = alt.ColShapePolygon.create({
+        return alt.ColShapePolygon.create({
             minZ,
             maxZ,
             points
         });
-
-        return extendAltEntityClass(instance, WorldObject, BaseObject);
     }
 }
+
+extendAltEntityClass(ColshapePolygon, WorldObject, BaseObject);
 
 cppBindings.registerCompatibilityExport("ColshapePolygon", ColshapePolygon);

@@ -11,15 +11,19 @@ const { WorldObject } = requireBinding("server/compatibility/classes/worldObject
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 class AreaBlip {
-    constructor(x, y, z, width, height, global) {
-        const instance = alt.AreaBlip.create({
+    constructor(...args) {
+        if (!args.length) return this;
+
+        const [x, y, z, width, height, global] = args;
+
+        return alt.AreaBlip.create({
             pos: { x, y, z },
             scale: { x: width, y: height },
             global
         });
-
-        return extendAltEntityClass(instance, SharedBlip, WorldObject, BaseObject);
     }
 }
+
+extendAltEntityClass(AreaBlip, SharedBlip, WorldObject, BaseObject);
 
 cppBindings.registerCompatibilityExport("AreaBlip", AreaBlip);

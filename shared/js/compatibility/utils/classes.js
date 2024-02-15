@@ -74,10 +74,6 @@ export function extendAltEntityClass(baseClass, ...classes) {
     return baseClass;
 }
 
-export function copyStaticAltEntityClassProperties(target, ...classes) {
-    //
-}
-
 export function overrideLazyProperty(instance, propertyName, value) {
     Object.defineProperty(instance, propertyName, {
         get() {

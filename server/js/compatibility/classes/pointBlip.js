@@ -12,6 +12,8 @@ const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/clas
 
 class PointBlip {
     constructor(...args) {
+        if (!args.length) return this;
+
         let instance;
         if (args.length === 4) {
             const [x, y, z, global] = args;
@@ -24,8 +26,10 @@ class PointBlip {
             else instance = alt.PointBlip.create({ pos: arg, global });
         }
 
-        return extendAltEntityClass(instance, SharedBlip, WorldObject, BaseObject);
+        return instance;
     }
 }
+
+extendAltEntityClass(PointBlip, SharedBlip, WorldObject, BaseObject);
 
 cppBindings.registerCompatibilityExport("PointBlip", PointBlip);

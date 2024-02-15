@@ -11,15 +11,19 @@ const { WorldObject } = requireBinding("server/compatibility/classes/worldObject
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 class RadiusBlip {
-    constructor(x, y, z, radius, global) {
-        const instance = alt.RadiusBlip.create({
+    constructor(...args) {
+        if (!args.length) return this;
+
+        const [x, y, z, radius, global] = args;
+
+        return alt.RadiusBlip.create({
             pos: { x, y, z },
             radius,
             global
         });
-
-        return extendAltEntityClass(instance, SharedBlip, WorldObject, BaseObject);
     }
 }
+
+extendAltEntityClass(RadiusBlip, SharedBlip, WorldObject, BaseObject);
 
 cppBindings.registerCompatibilityExport("RadiusBlip", RadiusBlip);
