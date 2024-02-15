@@ -298,12 +298,12 @@ declare module "@altv/server" {
 
     export class Metric {
         readonly name: string;
-        value: number;
+        value: bigint;
         readonly valid: boolean;
 
         constructor(name: string, type?: altShared.Enums.MetricType);
 
-        add(value: number): void;
+        add(value: bigint | number): void;
         inc(): void;
 
         begin(): void;
@@ -376,10 +376,10 @@ declare module "@altv/server" {
         readonly name: string;
 
         readonly ip: string;
-        readonly socialID: number | bigint;
+        readonly socialID: bigint;
         readonly socialClubName: string;
-        readonly hwidHash: number | bigint;
-        readonly hwidExHash: number | bigint;
+        readonly hwidHash: bigint;
+        readonly hwidExHash: bigint;
         readonly cloudID: string;
         readonly cloudAuthResult: altShared.Enums.CloudAuthResult;
 
@@ -931,12 +931,12 @@ declare module "@altv/server" {
 
     export abstract class ConnectionInfo {
         readonly name: string;
-        readonly socialID: number | bigint;
+        readonly socialID: bigint;
         readonly cloudID: string;
         readonly cloudAuthResult: altShared.Enums.CloudAuthResult;
         readonly socialName: string;
-        readonly hwidHash: number | bigint;
-        readonly hwidExHash: number | bigint;
+        readonly hwidHash: bigint;
+        readonly hwidExHash: bigint;
         readonly authToken: string;
         readonly versionMajor: number;
         readonly versionMinor: number;

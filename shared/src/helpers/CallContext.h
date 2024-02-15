@@ -158,8 +158,18 @@ namespace js
             using Type = std::conditional_t<std::is_enum_v<T>, int, T>;
 
             if(errored) return;
-            // Use fast primitive setters if possible
-            if constexpr(std::is_same_v<Type, bool> || std::is_same_v<Type, double> || std::is_same_v<Type, float> || std::is_same_v<Type, int32_t> || std::is_same_v<Type, uint32_t>)
+
+            // Convert 64-bit integers to BigInt
+            if constexpr(std::is_same_v<Type, int64_t> || std::is_same_v<Type, uint64_t>)
+            {
+                bool constexpr isUnsigned = std::is_same_v<Type, uint64_t>;
+                if constexpr(isUnsigned)
+                    info.GetReturnValue().Set(v8::BigInt::NewFromUnsigned(info.GetIsolate(), value));
+                else
+                    info.GetReturnValue().Set(v8::BigInt::New(info.GetIsolate(), value));
+            }
+            // Then try to convert the value to primitive types
+            else if constexpr(std::is_same_v<Type, bool> || std::is_same_v<Type, double> || std::is_same_v<Type, float> || std::is_same_v<Type, int32_t> || std::is_same_v<Type, uint32_t>)
                 info.GetReturnValue().Set((Type)value);
             else if constexpr(std::is_same_v<Type, std::nullptr_t>)
                 info.GetReturnValue().SetNull();
