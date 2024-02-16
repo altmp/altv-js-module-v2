@@ -17,4 +17,4 @@ class Ped {
 
 extendAltEntityClass(alt.Ped, Ped, SharedPed);
 
-cppBindings.registerCompatibilityExport("Ped", Ped);
+cppBindings.registerCompatibilityExport("Ped", alt.Ped);

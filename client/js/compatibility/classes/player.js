@@ -15,4 +15,4 @@ class Player {
 
 extendAltEntityClass(alt.Player, Player, SharedPlayer);
 
-cppBindings.registerCompatibilityExport("Player", Player);
+cppBindings.registerCompatibilityExport("Player", alt.Player);
