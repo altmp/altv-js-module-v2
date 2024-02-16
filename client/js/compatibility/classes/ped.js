@@ -9,14 +9,12 @@ const { SharedPed } = requireBinding("shared/compatibility/classes/sharedPed.js"
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
-class Ped extends alt.Ped {
+class Ped {
     get streamedIn() {
         return this.isStreamedIn;
     }
 }
 
-extendAltEntityClass(Ped, SharedPed);
+extendAltEntityClass(alt.Ped, Ped, SharedPed);
 
-alt.Ped.setFactory(Ped);
-
-cppBindings.registerCompatibilityExport("Ped", Ped);
+cppBindings.registerCompatibilityExport("Ped", alt.Ped);

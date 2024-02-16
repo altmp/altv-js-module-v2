@@ -7,12 +7,12 @@ const { SharedPlayer } = requireBinding("shared/compatibility/classes/sharedPlay
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
-class Player extends alt.Player {
+class Player {
     static get count() {
         return alt.Player.all.length;
     }
 }
 
-extendAltEntityClass(Player, SharedPlayer);
+extendAltEntityClass(alt.Player, Player, SharedPlayer);
 
-cppBindings.registerCompatibilityExport("Player", Player);
+cppBindings.registerCompatibilityExport("Player", alt.Player);
