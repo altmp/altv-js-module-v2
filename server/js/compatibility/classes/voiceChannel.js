@@ -14,7 +14,7 @@ class VoiceChannel extends alt.VoiceChannel {
     }
 
     isPlayerInChannel(player) {
-        return super.hasPlayer(player);
+        return this.hasPlayer(player);
     }
 }
 

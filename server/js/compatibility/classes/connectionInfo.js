@@ -4,26 +4,26 @@
 
 class ConnectionInfo extends alt.ConnectionInfo {
     get debug() {
-        return super.isDebug;
+        return this.isDebug;
     }
 
     get socialClubName() {
-        return super.socialName;
+        return this.socialName;
     }
 
     // NOTE (xLuxy): In v1, value was returned as string for some reason
     get passwordHash() {
-        return super.passwordHash.toString();
+        return this.passwordHash.toString();
     }
 
     // NOTE (xLuxy): In v1, value was returned as string for some reason
     get hwidHash() {
-        return super.hwidHash.toString();
+        return this.hwidHash.toString();
     }
 
     // NOTE (xLuxy): In v1, value was returned as string for some reason
     get hwidExHash() {
-        return super.hwidExHash.toString();
+        return this.hwidExHash.toString();
     }
 }
 

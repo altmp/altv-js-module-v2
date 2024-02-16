@@ -7,7 +7,7 @@
 
 class Resource extends alt.Resource {
     get valid() {
-        return !!alt.Resource.get(super.name);
+        return !!alt.Resource.get(this.name);
     }
 
     static getByName(name) {

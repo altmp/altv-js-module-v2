@@ -19,51 +19,51 @@ class MemoryBuffer extends alt.Buffer {
     }
 
     free() {
-        super.destroy();
+        this.destroy();
     }
 
     ubyte(size) {
-        return super.readUInt8(size);
+        return this.readUInt8(size);
     }
 
     ushort(size) {
-        return super.readUInt16(size);
+        return this.readUInt16(size);
     }
 
     uint(size) {
-        return super.readUInt32(size);
+        return this.readUInt32(size);
     }
 
     ulong(size) {
-        return super.readUInt64(size);
+        return this.readUInt64(size);
     }
 
     byte(size) {
-        return super.readInt8(size);
+        return this.readInt8(size);
     }
 
     short(size) {
-        return super.readInt16(size);
+        return this.readInt16(size);
     }
 
     int(size) {
-        return super.readInt32(size);
+        return this.readInt32(size);
     }
 
     long(size) {
-        return super.readInt64(size);
+        return this.readInt64(size);
     }
 
     float(size) {
-        return super.readFloat(size);
+        return this.readFloat(size);
     }
 
     double(size) {
-        return super.readDouble(size);
+        return this.readDouble(size);
     }
 
     string(size) {
-        return super.readString(size);
+        return this.readString(size);
     }
 }
 

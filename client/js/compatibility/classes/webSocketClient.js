@@ -18,7 +18,7 @@ class WebSocketClient extends alt.WebSocketClient {
     getEventListeners(eventName) {
         assertIsType(eventName, "string", `Expected eventName to be a string, got ${typeof eventName}`);
 
-        return super.listeners[eventName] ?? [];
+        return this.listeners[eventName] ?? [];
     }
 }
 

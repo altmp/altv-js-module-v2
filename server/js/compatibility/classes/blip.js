@@ -14,7 +14,7 @@ class Blip extends alt.Blip {
     }
 
     set isGlobal(value) {
-        super.global = value;
+        this.global = value;
     }
 }
 

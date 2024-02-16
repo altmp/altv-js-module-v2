@@ -15,7 +15,7 @@ class LocalObject extends alt.LocalObject {
     }
 
     toString() {
-        return `Object{ model: ${super.model}, scriptID: ${super.scriptID} }`;
+        return `Object{ model: ${this.model}, scriptID: ${this.scriptID} }`;
     }
 
     static get count() {
@@ -23,11 +23,11 @@ class LocalObject extends alt.LocalObject {
     }
 
     get dynamic() {
-        return super.isDynamic;
+        return this.isDynamic;
     }
 
     attachToEntity(...args) {
-        return super.attachTo(...args);
+        return this.attachTo(...args);
     }
 }
 

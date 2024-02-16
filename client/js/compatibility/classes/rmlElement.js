@@ -9,31 +9,31 @@ class RmlElement extends alt.RmlElement {
     getEventListeners(eventName) {
         assertIsType(eventName, "string", `Expected eventName to be a string, got ${typeof eventName}`);
 
-        return super.listeners[eventName] ?? [];
+        return this.listeners[eventName] ?? [];
     }
 
     get rmlId() {
-        return super.rmlID;
+        return this.rmlID;
     }
 
     set rmlId(value) {
-        super.rmlID = value;
+        this.rmlID = value;
     }
 
     getClassList() {
-        return super.classList;
+        return this.classList;
     }
 
     getPseudoClassList(eventName) {
-        return super.pseudoClassList;
+        return this.pseudoClassList;
     }
 
     getAttributes() {
-        return super.attributes;
+        return this.attributes;
     }
 
     closest() {
-        return super.getClosest();
+        return this.getClosest();
     }
 }
 

@@ -42,27 +42,27 @@ class WebView extends alt.WebView {
     }
 
     toString() {
-        return `WebView{ url: ${super.url} }`;
+        return `WebView{ url: ${this.url} }`;
     }
 
     get isVisible() {
-        return super.visible;
+        return this.visible;
     }
 
     set isVisible(state) {
-        super.visible = state;
+        this.visible = state;
     }
 
     focus() {
-        super.focused = true;
+        this.focused = true;
     }
 
     unfocus() {
-        super.focused = false;
+        this.focused = false;
     }
 
     getOutputs() {
-        return super.outputs;
+        return this.outputs;
     }
 
     getEventListeners(eventName) {

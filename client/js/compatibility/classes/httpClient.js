@@ -4,11 +4,11 @@
 
 class HttpClient extends alt.HttpClient {
     setExtraHeader(key, value) {
-        super.extraHeaders[key] = value;
+        this.extraHeaders[key] = value;
     }
 
     getExtraHeaders() {
-        return super.extraHeaders;
+        return this.extraHeaders;
     }
 }
 

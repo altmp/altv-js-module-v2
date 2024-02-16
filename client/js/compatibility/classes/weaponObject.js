@@ -13,27 +13,27 @@ class WeaponObject extends alt.LocalObject {
     }
 
     get tintIndex() {
-        return super.weaponTintIndex;
+        return this.weaponTintIndex;
     }
 
     set tintIndex(value) {
-        super.weaponTintIndex = value;
+        this.weaponTintIndex = value;
     }
 
     setComponentTintIndex(componentType, value) {
-        super.getWeaponComponentTintIndex(componentType, value);
+        this.getWeaponComponentTintIndex(componentType, value);
     }
 
     getComponentTintIndex(componentType) {
-        return super.getWeaponComponentTintIndex(componentType);
+        return this.getWeaponComponentTintIndex(componentType);
     }
 
     giveComponent(componentType) {
-        return super.giveWeaponComponent(componentType);
+        return this.giveWeaponComponent(componentType);
     }
 
     removeComponent(componentType) {
-        return super.removeWeaponComponent(componentType);
+        return this.removeWeaponComponent(componentType);
     }
 
     static get all() {

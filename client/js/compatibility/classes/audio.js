@@ -24,15 +24,15 @@ class Audio extends alt.Audio {
     getEventListeners(eventName) {
         assertIsType(eventName, "string", `Expected eventName to be a string, got ${typeof eventName}`);
 
-        return super.listeners[eventName] ?? [];
+        return this.listeners[eventName] ?? [];
     }
 
     get playing() {
-        return super.isPlaying;
+        return this.isPlaying;
     }
 
     getOutputs() {
-        return super.outputs;
+        return this.outputs;
     }
 }
 
