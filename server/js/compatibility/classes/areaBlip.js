@@ -4,10 +4,6 @@
 
 requireBinding("shared/entity.js");
 
-const { SharedBlip } = requireBinding("shared/compatibility/classes/sharedBlip.js");
-const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
-const { WorldObject } = requireBinding("server/compatibility/classes/worldObject.js");
-
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 class AreaBlip {
@@ -24,6 +20,6 @@ class AreaBlip {
     }
 }
 
-extendAltEntityClass(AreaBlip, SharedBlip, WorldObject, BaseObject);
+extendAltEntityClass(AreaBlip);
 
 cppBindings.registerCompatibilityExport("AreaBlip", AreaBlip);

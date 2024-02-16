@@ -2,14 +2,6 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-requireBinding("shared/factory.js");
-
-const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
-const { WorldObject } = requireBinding("server/compatibility/classes/worldObject.js");
-
-/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
-
 class Checkpoint extends alt.Checkpoint {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
@@ -32,7 +24,4 @@ class Checkpoint extends alt.Checkpoint {
     }
 }
 
-extendAltEntityClass(Checkpoint, WorldObject, BaseObject);
-
-alt.Checkpoint.setFactory(Checkpoint);
 cppBindings.registerCompatibilityExport("Checkpoint", Checkpoint);

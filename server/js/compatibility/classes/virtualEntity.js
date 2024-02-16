@@ -2,11 +2,6 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-requireBinding("shared/factory.js");
-
-const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
-const { WorldObject } = requireBinding("server/compatibility/classes/worldObject.js");
-
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
@@ -26,7 +21,4 @@ class VirtualEntity extends alt.VirtualEntity {
     }
 }
 
-extendAltEntityClass(VirtualEntity, WorldObject, BaseObject);
-
-alt.VirtualEntity.setFactory(VirtualEntity);
 cppBindings.registerCompatibilityExport("VirtualEntity", VirtualEntity);

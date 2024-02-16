@@ -2,15 +2,8 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
-requireBinding("client/factory.js");
-
 /** @type {typeof import("../../../../shared/js/utils.js")} */
 const { assertIsType } = requireBinding("shared/utils.js");
-
-const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
-
-/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 class WebSocketClient extends alt.WebSocketClient {
     constructor(...args) {
@@ -26,9 +19,5 @@ class WebSocketClient extends alt.WebSocketClient {
         return super.listeners[eventName] ?? [];
     }
 }
-
-extendAltEntityClass(WebSocketClient, BaseObject);
-
-alt.WebSocketClient.setFactory(WebSocketClient);
 
 cppBindings.registerCompatibilityExport("WebSocketClient", WebSocketClient);

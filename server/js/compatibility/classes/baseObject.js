@@ -4,8 +4,8 @@
 
 const { SharedBaseObject } = requireBinding("shared/compatibility/classes/sharedBaseObject.js");
 
-export class BaseObject extends SharedBaseObject {
-    //
-}
+const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+
+extendAltEntityClass(alt.BaseObject, SharedBaseObject);
 
 cppBindings.registerCompatibilityExport("BaseObject", alt.BaseObject);

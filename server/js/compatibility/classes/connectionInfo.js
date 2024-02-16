@@ -2,8 +2,6 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-requireBinding("server/factory.js");
-
 class ConnectionInfo extends alt.ConnectionInfo {
     get debug() {
         return super.isDebug;
@@ -29,5 +27,4 @@ class ConnectionInfo extends alt.ConnectionInfo {
     }
 }
 
-alt.ConnectionInfo.setFactory(ConnectionInfo);
 cppBindings.registerCompatibilityExport("ConnectionInfo", ConnectionInfo);

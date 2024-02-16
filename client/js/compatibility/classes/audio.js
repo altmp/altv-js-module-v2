@@ -7,11 +7,6 @@ requireBinding("client/factory.js");
 /** @type {typeof import("../../../../shared/js/utils.js")} */
 const { assertIsType } = requireBinding("shared/utils.js");
 
-const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
-
-/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
-
 class Audio extends alt.Audio {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
@@ -41,7 +36,4 @@ class Audio extends alt.Audio {
     }
 }
 
-extendAltEntityClass(Audio, BaseObject);
-
-alt.Audio.setFactory(Audio);
 cppBindings.registerCompatibilityExport("Audio", Audio);

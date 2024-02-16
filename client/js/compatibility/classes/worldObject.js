@@ -3,9 +3,8 @@
 // import * as alt from "@altv/client";
 
 const { SharedWorldObject } = requireBinding("shared/compatibility/classes/sharedWorldObject.js");
+const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
-export class WorldObject extends SharedWorldObject {
-    //
-}
+extendAltEntityClass(alt.WorldObject, SharedWorldObject);
 
 cppBindings.registerCompatibilityExport("WorldObject", alt.WorldObject);

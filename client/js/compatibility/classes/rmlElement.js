@@ -2,14 +2,8 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
-requireBinding("client/entity.js");
-
 /** @type {typeof import("../../../../shared/js/utils.js")} */
 const { assertIsType } = requireBinding("shared/utils.js");
-
-const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
-
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 class RmlElement extends alt.RmlElement {
     getEventListeners(eventName) {
@@ -42,7 +36,5 @@ class RmlElement extends alt.RmlElement {
         return super.getClosest();
     }
 }
-
-extendAltEntityClass(RmlElement, BaseObject);
 
 cppBindings.registerCompatibilityExport("RmlElement", RmlElement);

@@ -2,11 +2,6 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-const { WorldObject } = requireBinding("server/compatibility/classes/worldObject.js");
-const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
-
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
-
 class ColshapeCylinder extends alt.ColShape {
     constructor(...args) {
         if (!args.length) return super();
@@ -20,7 +15,5 @@ class ColshapeCylinder extends alt.ColShape {
         });
     }
 }
-
-extendAltEntityClass(ColshapeCylinder, WorldObject, BaseObject);
 
 cppBindings.registerCompatibilityExport("ColshapeCylinder", ColshapeCylinder);

@@ -6,18 +6,15 @@ requireBinding("shared/factory.js");
 
 const { SharedPlayer } = requireBinding("shared/compatibility/classes/sharedPlayer.js");
 
-const { Entity } = requireBinding("server/compatibility/classes/entity.js");
-const { WorldObject } = requireBinding("server/compatibility/classes/worldObject.js");
-const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
-
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
 const { extendAltEntityClass, overrideLazyProperty } = requireBinding("shared/compatibility/utils/classes.js");
 
 class Player extends alt.Player {
     onCreate() {
-        overrideLazyProperty(this, "socialID", this.socialID.toString());
-        overrideLazyProperty(this, "hwidHash", this.hwidHash.toString());
-        overrideLazyProperty(this, "hwidExHash", this.hwidHash.toString());
+        // @TODO(xLuxy): This needs to be fixed
+        // overrideLazyProperty(this, "socialID", this.socialID.toString());
+        // overrideLazyProperty(this, "hwidHash", this.hwidHash.toString());
+        // overrideLazyProperty(this, "hwidExHash", this.hwidHash.toString());
     }
 
     emitRpc(name, ...args) {
@@ -126,7 +123,6 @@ class Player extends alt.Player {
     }
 }
 
-extendAltEntityClass(Player, SharedPlayer, Entity, WorldObject, BaseObject);
+extendAltEntityClass(alt.Player, Player, SharedPlayer);
 
-alt.Player.setFactory(Player);
 cppBindings.registerCompatibilityExport("Player", Player);

@@ -2,7 +2,10 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-export class Entity {
+const { SharedEntity } = requireBinding("shared/compatibility/classes/sharedEntity.js");
+const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+
+class Entity extends alt.Entity {
     setSyncedMeta(_key, _value) {
         throw new Error("Not implemented in v2 Module - Use streamSyncedMeta instead");
     }
@@ -25,5 +28,6 @@ export class Entity {
     }
 }
 
-// NOTE (xLuxy): Do NOT export the Entity class from above, otherwise it will break instanceof
-cppBindings.registerCompatibilityExport("Entity", alt.Entity);
+extendAltEntityClass(Entity, SharedEntity);
+
+cppBindings.registerCompatibilityExport("Entity", Entity);

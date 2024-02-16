@@ -2,7 +2,9 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-requireBinding("shared/factory.js");
+const { SharedBlip } = requireBinding("shared/compatibility/classes/sharedBlip.js");
+
+const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 class Blip extends alt.Blip {
     static get count() {
@@ -14,5 +16,6 @@ class Blip extends alt.Blip {
     }
 }
 
-alt.Blip.setFactory(Blip);
-cppBindings.registerCompatibilityExport("Blip", alt.Blip);
+extendAltEntityClass(Blip, SharedBlip);
+
+cppBindings.registerCompatibilityExport("Blip", Blip);
