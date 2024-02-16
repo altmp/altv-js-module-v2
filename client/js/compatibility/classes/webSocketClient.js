@@ -5,6 +5,8 @@
 /** @type {typeof import("../../../../shared/js/utils.js")} */
 const { assertIsType } = requireBinding("shared/utils.js");
 
+requireBinding("client/factory.js");
+
 class WebSocketClient extends alt.WebSocketClient {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
@@ -19,5 +21,7 @@ class WebSocketClient extends alt.WebSocketClient {
         return super.listeners[eventName] ?? [];
     }
 }
+
+alt.WebSocketClient.setFactory(WebSocketClient);
 
 cppBindings.registerCompatibilityExport("WebSocketClient", WebSocketClient);

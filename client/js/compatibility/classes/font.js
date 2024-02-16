@@ -2,8 +2,4 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
-class Font extends alt.Font {
-    //
-}
-
-cppBindings.registerCompatibilityExport("Font", Font);
+cppBindings.registerCompatibilityExport("Font", alt.Font);

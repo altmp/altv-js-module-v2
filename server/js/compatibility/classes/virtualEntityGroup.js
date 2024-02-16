@@ -2,6 +2,8 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
+requireBinding("shared/factory.js");
+
 class VirtualEntityGroup extends alt.VirtualEntityGroup {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
@@ -12,5 +14,7 @@ class VirtualEntityGroup extends alt.VirtualEntityGroup {
         });
     }
 }
+
+alt.VirtualEntityGroup.setFactory(VirtualEntityGroup);
 
 cppBindings.registerCompatibilityExport("VirtualEntityGroup", VirtualEntityGroup);

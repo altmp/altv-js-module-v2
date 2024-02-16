@@ -4,6 +4,8 @@
 
 const { SharedBlip } = requireBinding("shared/compatibility/classes/sharedBlip.js");
 
+requireBinding("shared/factory.js");
+
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 class Blip extends alt.Blip {
@@ -17,5 +19,7 @@ class Blip extends alt.Blip {
 }
 
 extendAltEntityClass(Blip, SharedBlip);
+
+alt.Blip.setFactory(Blip);
 
 cppBindings.registerCompatibilityExport("Blip", Blip);

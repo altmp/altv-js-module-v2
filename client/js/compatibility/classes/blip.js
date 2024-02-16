@@ -2,6 +2,8 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
+requireBinding("shared/factory.js");
+
 const { SharedBlip } = requireBinding("shared/compatibility/classes/sharedBlip.js");
 
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
@@ -14,5 +16,7 @@ class Blip extends alt.Blip {
 }
 
 extendAltEntityClass(Blip, SharedBlip);
+
+alt.Blip.setFactory(Blip);
 
 cppBindings.registerCompatibilityExport("Blip", Blip);

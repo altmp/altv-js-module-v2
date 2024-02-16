@@ -72,4 +72,6 @@ class WebView extends alt.WebView {
     }
 }
 
+alt.WebView.setFactory(WebView);
+
 cppBindings.registerCompatibilityExport("WebView", WebView);

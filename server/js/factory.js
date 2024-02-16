@@ -6,9 +6,7 @@ registerFactory(alt.ConnectionInfo, alt.Enums.BaseObjectType.CONNECTION_INFO);
 
 // Factory ctors
 alt.Vehicle.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.VEHICLE);
-
 alt.Ped.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.PED);
-
 alt.Object.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.OBJECT);
 
 alt.VoiceChannel.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.VOICE_CHANNEL);

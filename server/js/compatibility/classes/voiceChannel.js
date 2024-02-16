@@ -2,7 +2,7 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-requireBinding("shared/entity.js");
+requireBinding("server/factory.js");
 
 class VoiceChannel extends alt.VoiceChannel {
     constructor(...args) {
@@ -17,5 +17,7 @@ class VoiceChannel extends alt.VoiceChannel {
         return super.hasPlayer(player);
     }
 }
+
+alt.VoiceChannel.setFactory(VoiceChannel);
 
 cppBindings.registerCompatibilityExport("VoiceChannel", VoiceChannel);

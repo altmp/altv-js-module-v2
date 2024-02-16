@@ -2,6 +2,8 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
+requireBinding("client/factory.js");
+
 class LocalObject extends alt.LocalObject {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
@@ -28,5 +30,7 @@ class LocalObject extends alt.LocalObject {
         return super.attachTo(...args);
     }
 }
+
+alt.LocalObject.setFactory(LocalObject);
 
 cppBindings.registerCompatibilityExport("LocalObject", LocalObject);

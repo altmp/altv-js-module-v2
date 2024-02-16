@@ -5,7 +5,7 @@
 const { SharedEntity } = requireBinding("shared/compatibility/classes/sharedEntity.js");
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
-class Entity extends alt.Entity {
+class Entity {
     setSyncedMeta(_key, _value) {
         throw new Error("Not implemented in v2 Module - Use streamSyncedMeta instead");
     }
@@ -28,6 +28,6 @@ class Entity extends alt.Entity {
     }
 }
 
-extendAltEntityClass(Entity, SharedEntity);
+extendAltEntityClass(alt.Entity, Entity, SharedEntity);
 
-cppBindings.registerCompatibilityExport("Entity", Entity);
+cppBindings.registerCompatibilityExport("Entity", alt.Entity);

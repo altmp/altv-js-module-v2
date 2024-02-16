@@ -2,6 +2,8 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
+requireBinding("client/factory.js");
+
 class LocalPed extends alt.LocalPed {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
@@ -12,5 +14,7 @@ class LocalPed extends alt.LocalPed {
         return alt.LocalPed.create({ model, dimension, pos, heading, useStreaming, streamingDistance });
     }
 }
+
+alt.LocalPed.setFactory(LocalPed);
 
 cppBindings.registerCompatibilityExport("LocalPed", LocalPed);

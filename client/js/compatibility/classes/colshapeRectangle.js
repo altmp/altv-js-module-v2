@@ -2,11 +2,10 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
-const { WorldObject } = requireBinding("client/compatibility/classes/worldObject.js");
-const { BaseObject } = requireBinding("client/compatibility/classes/baseObject.js");
-
 class ColshapeRectangle extends alt.ColShape {
     constructor(...args) {
+        if (!args.length) return super();
+
         const [x, y, x2, y2] = args;
 
         return alt.ColShapeRectangle.create({

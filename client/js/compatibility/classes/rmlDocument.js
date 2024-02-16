@@ -2,6 +2,8 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
+requireBinding("client/factory.js");
+
 class RmlDocument extends alt.RmlDocument {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
@@ -12,5 +14,7 @@ class RmlDocument extends alt.RmlDocument {
         return alt.RmlDocument.create({ url });
     }
 }
+
+alt.RmlDocument.setFactory(RmlDocument);
 
 cppBindings.registerCompatibilityExport("RmlDocument", RmlDocument);

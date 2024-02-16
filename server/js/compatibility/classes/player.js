@@ -2,14 +2,12 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-requireBinding("shared/factory.js");
-
 const { SharedPlayer } = requireBinding("shared/compatibility/classes/sharedPlayer.js");
 
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
 const { extendAltEntityClass, overrideLazyProperty } = requireBinding("shared/compatibility/utils/classes.js");
 
-class Player extends alt.Player {
+class Player {
     onCreate() {
         // @TODO(xLuxy): This needs to be fixed
         // overrideLazyProperty(this, "socialID", this.socialID.toString());
@@ -125,4 +123,4 @@ class Player extends alt.Player {
 
 extendAltEntityClass(alt.Player, Player, SharedPlayer);
 
-cppBindings.registerCompatibilityExport("Player", Player);
+cppBindings.registerCompatibilityExport("Player", alt.Player);

@@ -2,6 +2,8 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
+requireBinding("client/factory.js");
+
 class AudioOutputWorld extends alt.AudioOutputWorld {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
@@ -16,5 +18,7 @@ class AudioOutputWorld extends alt.AudioOutputWorld {
         return alt.AudioOutputWorld.all.length;
     }
 }
+
+alt.AudioOutputWorld.setFactory(AudioOutputWorld);
 
 cppBindings.registerCompatibilityExport("AudioOutputWorld", AudioOutputWorld);

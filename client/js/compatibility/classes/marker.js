@@ -2,6 +2,8 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
+requireBinding("shared/factory.js");
+
 class Marker extends alt.Marker {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
@@ -16,5 +18,7 @@ class Marker extends alt.Marker {
         return alt.Marker.all.length;
     }
 }
+
+alt.Marker.setFactory(Marker);
 
 cppBindings.registerCompatibilityExport("Marker", Marker);

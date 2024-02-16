@@ -2,7 +2,7 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-requireBinding("shared/entity.js");
+requireBinding("server/factory.js");
 
 const { SharedVehicle } = requireBinding("shared/compatibility/classes/sharedVehicle.js");
 
@@ -116,5 +116,7 @@ class Vehicle extends alt.Vehicle {
 }
 
 extendAltEntityClass(Vehicle, SharedVehicle);
+
+alt.Vehicle.setFactory(Vehicle);
 
 cppBindings.registerCompatibilityExport("Vehicle", Vehicle);

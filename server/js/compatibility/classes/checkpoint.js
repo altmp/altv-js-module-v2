@@ -2,6 +2,8 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
+requireBinding("shared/factory.js");
+
 class Checkpoint extends alt.Checkpoint {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
@@ -23,5 +25,7 @@ class Checkpoint extends alt.Checkpoint {
         return alt.Checkpoint.all.length;
     }
 }
+
+alt.Checkpoint.setFactory(Checkpoint);
 
 cppBindings.registerCompatibilityExport("Checkpoint", Checkpoint);

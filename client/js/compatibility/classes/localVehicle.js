@@ -2,12 +2,7 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
-// requireBinding("client/factory.js");
-
-const { SharedVehicle } = requireBinding("shared/compatibility/classes/sharedVehicle.js");
-
-/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+requireBinding("client/factory.js");
 
 class LocalVehicle extends alt.LocalVehicle {
     constructor(...args) {
@@ -20,6 +15,6 @@ class LocalVehicle extends alt.LocalVehicle {
     }
 }
 
-extendAltEntityClass(LocalVehicle, SharedVehicle);
+alt.LocalVehicle.setFactory(LocalVehicle);
 
 cppBindings.registerCompatibilityExport("LocalVehicle", LocalVehicle);

@@ -7,13 +7,12 @@ const { SharedEntity } = requireBinding("shared/compatibility/classes/sharedEnti
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
-// NOTE(xLuxy): This class is extended by other classes
-class Entity extends alt.Entity {
+class Entity {
     get isSpawned() {
         return this.scriptID != 0;
     }
 }
 
-extendAltEntityClass(Entity, SharedEntity);
+extendAltEntityClass(alt.Entity, Entity, SharedEntity);
 
-cppBindings.registerCompatibilityExport("Entity", Entity);
+cppBindings.registerCompatibilityExport("Entity", alt.Entity);

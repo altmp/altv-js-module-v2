@@ -2,8 +2,7 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
-/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+requireBinding("shared/factory.js");
 
 class Checkpoint extends alt.Checkpoint {
     constructor(...args) {
@@ -26,5 +25,7 @@ class Checkpoint extends alt.Checkpoint {
         return alt.Checkpoint.all.length;
     }
 }
+
+alt.Checkpoint.setFactory(Checkpoint);
 
 cppBindings.registerCompatibilityExport("Checkpoint", Checkpoint);

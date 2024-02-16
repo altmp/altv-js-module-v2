@@ -2,6 +2,8 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
+requireBinding("client/factory.js");
+
 class AudioFilter extends alt.AudioFilter {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
@@ -14,5 +16,7 @@ class AudioFilter extends alt.AudioFilter {
         return `AudioFilter{ hash: ${this.hash} }`;
     }
 }
+
+alt.AudioFilter.setFactory(AudioFilter);
 
 cppBindings.registerCompatibilityExport("AudioFilter", AudioFilter);
