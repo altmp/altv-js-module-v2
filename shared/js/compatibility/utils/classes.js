@@ -11,8 +11,6 @@ const blacklistedNonStaticProperties = ["constructor"];
 const blacklistedStaticProperties = ["prototype", "length", "name", "caller", "arguments"];
 
 function applyNonStaticProperties(baseClass, cls) {
-    alt.log("applyNonStaticProperties", baseClass);
-
     let prot = cls.prototype;
     while (prot != Object.prototype) {
         for (const prop of Object.getOwnPropertyNames(prot)) {
@@ -20,8 +18,6 @@ function applyNonStaticProperties(baseClass, cls) {
                 alt.log(`applyNonStaticProperties: Skipping property ${prop} (${prot.constructor.name})`);
                 continue;
             }
-
-            alt.log("applyNonStaticProperties", prop, prot);
 
             const property = Object.getOwnPropertyDescriptor(prot, prop);
             if (property) {
@@ -34,7 +30,6 @@ function applyNonStaticProperties(baseClass, cls) {
 }
 
 function applyStaticProperties(baseClass, cls) {
-    alt.log("applyStaticProperties", baseClass, cls, Object.getOwnPropertyNames(cls));
     for (const propKey of Object.getOwnPropertyNames(cls)) {
         alt.log("applyStaticProperties 1", propKey);
         if (blacklistedStaticProperties.includes(propKey)) {
@@ -48,8 +43,6 @@ function applyStaticProperties(baseClass, cls) {
 
         const descriptor = Object.getOwnPropertyDescriptor(cls, propKey);
         if (!descriptor) continue;
-
-        alt.log("applyStaticProperties", propKey, cls, propKey in cls, descriptor);
 
         if (typeof descriptor.get === "function") {
             Object.defineProperty(baseClass, propKey, {
