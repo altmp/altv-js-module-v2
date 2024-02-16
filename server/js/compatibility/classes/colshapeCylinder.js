@@ -9,15 +9,18 @@ const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/clas
 
 class ColshapeCylinder extends alt.ColShape {
     constructor(...args) {
+        if (!args.length) return super();
+
         const [x, y, z, radius, height] = args;
-        const instance = alt.ColShapeCylinder.create({
+
+        return alt.ColShapeCylinder.create({
             pos: { x, y, z },
             radius,
             height
         });
-
-        return extendAltEntityClass(instance, WorldObject, BaseObject);
     }
 }
+
+extendAltEntityClass(ColshapeCylinder, WorldObject, BaseObject);
 
 cppBindings.registerCompatibilityExport("ColshapeCylinder", ColshapeCylinder);

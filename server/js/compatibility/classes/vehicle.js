@@ -11,15 +11,12 @@ const { WorldObject } = requireBinding("server/compatibility/classes/worldObject
 const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
 
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
+const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 class Vehicle extends alt.Vehicle {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) {
-            super();
-            return extendAltEntityClass(this, SharedVehicle, Entity, WorldObject, BaseObject);
-        }
+        if (!args.length) return super();
 
         const [model, ...rest] = args;
         const pos = rest.length <= 3 ? rest[0] : { x: rest[0], y: rest[1], z: rest[2] };
@@ -122,7 +119,7 @@ class Vehicle extends alt.Vehicle {
     }
 }
 
-copyStaticAltEntityClassProperties(alt.Vehicle, Vehicle, SharedVehicle, Entity, WorldObject, BaseObject);
+extendAltEntityClass(Vehicle, SharedVehicle, Entity, WorldObject, BaseObject);
 
 alt.Vehicle.setFactory(Vehicle);
 cppBindings.registerCompatibilityExport("Vehicle", Vehicle);

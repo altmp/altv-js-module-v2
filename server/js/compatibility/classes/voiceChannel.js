@@ -7,15 +7,12 @@ requireBinding("shared/entity.js");
 const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
 
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass, copyStaticAltEntityClassProperties } = requireBinding("shared/compatibility/utils/classes.js");
+const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 class VoiceChannel extends alt.VoiceChannel {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) {
-            super();
-            return extendAltEntityClass(this, BaseObject);
-        }
+        if (!args.length) return super();
 
         const [spatial, maxDistance] = args;
         return alt.VoiceChannel.create({ spatial, maxDistance });
@@ -26,7 +23,7 @@ class VoiceChannel extends alt.VoiceChannel {
     }
 }
 
-copyStaticAltEntityClassProperties(alt.VoiceChannel, VoiceChannel, BaseObject);
+extendAltEntityClass(VoiceChannel, BaseObject);
 
 alt.VoiceChannel.setFactory(VoiceChannel);
 cppBindings.registerCompatibilityExport("VoiceChannel", VoiceChannel);

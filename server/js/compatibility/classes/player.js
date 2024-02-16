@@ -11,15 +11,9 @@ const { WorldObject } = requireBinding("server/compatibility/classes/worldObject
 const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
 
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass, copyStaticAltEntityClassProperties, overrideLazyProperty } = requireBinding("shared/compatibility/utils/classes.js");
+const { extendAltEntityClass, overrideLazyProperty } = requireBinding("shared/compatibility/utils/classes.js");
 
 class Player extends alt.Player {
-    constructor() {
-        super();
-
-        extendAltEntityClass(this, SharedPlayer, Entity, WorldObject, BaseObject);
-    }
-
     onCreate() {
         overrideLazyProperty(this, "socialID", this.socialID.toString());
         overrideLazyProperty(this, "hwidHash", this.hwidHash.toString());
@@ -132,7 +126,7 @@ class Player extends alt.Player {
     }
 }
 
-copyStaticAltEntityClassProperties(alt.Player, Player, SharedPlayer, Entity, WorldObject, BaseObject);
+extendAltEntityClass(Player, SharedPlayer, Entity, WorldObject, BaseObject);
 
 alt.Player.setFactory(Player);
 cppBindings.registerCompatibilityExport("Player", Player);
