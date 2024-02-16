@@ -9,7 +9,7 @@ const { SharedVehicle } = requireBinding("shared/compatibility/classes/sharedVeh
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
 const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
-class Vehicle extends alt.Vehicle {
+class Vehicle {
     toString() {
         return `Vehicle{ id: ${this.id}, model: ${this.model} }`;
     }
@@ -59,8 +59,6 @@ class Vehicle extends alt.Vehicle {
     }
 }
 
-extendAltEntityClass(Vehicle, SharedVehicle);
+extendAltEntityClass(alt.Vehicle, Vehicle, SharedVehicle);
 
-alt.Vehicle.setFactory(Vehicle);
-
-cppBindings.registerCompatibilityExport("Vehicle", Vehicle);
+cppBindings.registerCompatibilityExport("Vehicle", alt.Vehicle);
