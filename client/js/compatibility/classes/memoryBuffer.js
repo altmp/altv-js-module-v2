@@ -2,14 +2,13 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
+const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+
 requireBinding("shared/logging.js");
 
 class MemoryBuffer extends alt.Buffer {
-    constructor(...args) {
-        // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
-        if (!args.length) return super();
-
-        return new alt.Buffer(args[0]);
+    constructor(size) {
+        return new alt.Buffer(size);
     }
 
     // NOTE (xLuxy): Don't think this will ever be used by a normal user, so won't botter adding it to v2
@@ -66,5 +65,7 @@ class MemoryBuffer extends alt.Buffer {
         return this.readString(size);
     }
 }
+
+extendAltEntityClass(alt.Buffer, MemoryBuffer);
 
 cppBindings.registerCompatibilityExport("MemoryBuffer", MemoryBuffer);
