@@ -14,5 +14,5 @@ class VectorExtension {
 extendClassWithProperties(alt.Vector2, null, VectorExtension);
 extendClassWithProperties(alt.Vector3, null, VectorExtension);
 
-cppBindings.registerCompatibilityExport("Vector3", alt.Vector3);
 cppBindings.registerCompatibilityExport("Vector2", alt.Vector2);
+cppBindings.registerCompatibilityExport("Vector3", alt.Vector3);

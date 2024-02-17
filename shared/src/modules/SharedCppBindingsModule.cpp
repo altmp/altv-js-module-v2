@@ -97,12 +97,23 @@ static void GetAllEntities(js::FunctionContext& ctx)
 {
     std::vector<alt::IEntity*> entities = alt::ICore::Instance().GetEntities();
 
+    for (auto& entity : entities)
+    {
+        ctx.GetResource()->GetOrCreateScriptObject(ctx.GetContext(), entity);
+    }
+
     ctx.Return(entities);
 }
 
 static void GetAllVirtualEntities(js::FunctionContext& ctx)
 {
     std::vector<alt::IBaseObject*> virtualEntities = alt::ICore::Instance().GetBaseObjects(alt::IBaseObject::Type::VIRTUAL_ENTITY);
+
+    for (auto& entity : virtualEntities)
+    {
+        ctx.GetResource()->GetOrCreateScriptObject(ctx.GetContext(), entity);
+    }
+
     ctx.Return(virtualEntities);
 }
 
