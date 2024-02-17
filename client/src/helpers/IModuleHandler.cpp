@@ -106,7 +106,10 @@ v8::MaybeLocal<v8::Module>
     else
     {
         bool isBytecode = false;
-        module = ResolveFile(context, specifier, GetModulePath(referrer), name, isBytecode);
+        js::Logger::Info("ResolveFile:", specifier, "modulePath:", GetModulePath(referrer));
+        auto [resolvedName, resolvedModule] = ResolveFile(context, specifier, GetModulePath(referrer), name, isBytecode);
+        name = resolvedName;
+        module = resolvedModule;
         type = isBytecode ? Module::Type::Bytecode : Module::Type::File;
     }
 
@@ -151,18 +154,18 @@ static inline std::pair<std::string, std::vector<uint8_t>> ReadFile(v8::Local<v8
     return { name, js::ReadFile(path.pkg, fileName) };
 }
 
-v8::MaybeLocal<v8::Module> IModuleHandler::ResolveFile(v8::Local<v8::Context> context, const std::string& specifier, const std::string& referrer, std::string& name, bool& isBytecode)
+std::pair<std::string, v8::MaybeLocal<v8::Module>> IModuleHandler::ResolveFile(v8::Local<v8::Context> context, const std::string& specifier, const std::string& referrer, std::string& name, bool& isBytecode)
 {
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
 
     auto [resolvedName, buffer] = ReadFile(context, specifier, referrer);
-    if(resolvedName.empty()) return v8::MaybeLocal<v8::Module>{};
-    if(modules.contains(resolvedName)) return modules.at(resolvedName).module.Get(isolate);
+    if(resolvedName.empty()) return { resolvedName, v8::MaybeLocal<v8::Module>{} };
+    if(modules.contains(resolvedName)) return { resolvedName, modules.at(resolvedName).module.Get(isolate) };
 
     name = resolvedName;
     isBytecode = IsBytecodeBuffer(buffer);
-    if(isBytecode) return CompileBytecode(name, buffer);
-    return CompileModule(name, std::string{ (char*)buffer.data(), buffer.size() });
+    if(isBytecode) return { resolvedName, CompileBytecode(name, buffer) };
+    return { resolvedName, CompileModule(name, std::string{ (char*)buffer.data(), buffer.size() }) };
 }
 
 v8::MaybeLocal<v8::Module> IModuleHandler::ResolveJSON(v8::Local<v8::Context> context, const std::string& specifier, const std::string& referrer, std::string& name)
