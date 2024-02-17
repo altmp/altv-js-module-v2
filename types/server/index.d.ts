@@ -51,7 +51,7 @@ declare module "@altv/server" {
         global: boolean;
 
         blipType: altShared.Enums.BlipType;
-        scale: altShared.Vector2;
+        scaleXY: altShared.Vector2;
         display: number;
         sprite: number;
         color: number;
