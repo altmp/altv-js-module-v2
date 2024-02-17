@@ -1,18 +1,18 @@
 /// <reference path="../../../types/shared/index.d.ts" />
 
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
+const { extendClassWithProperties } = requireBinding("shared/compatibility/utils/classes.js");
+
 requireBinding("shared/classes/vector.js");
 
-class Vector3 extends alt.Vector3 {
+class VectorExtension {
     normalize() {
         return this.normalized;
     }
 }
 
-class Vector2 extends alt.Vector2 {
-    normalize() {
-        return this.normalized;
-    }
-}
+extendClassWithProperties(alt.Vector2, null, VectorExtension);
+extendClassWithProperties(alt.Vector3, null, VectorExtension);
 
-cppBindings.registerCompatibilityExport("Vector3", Vector3);
-cppBindings.registerCompatibilityExport("Vector2", Vector2);
+cppBindings.registerCompatibilityExport("Vector3", alt.Vector3);
+cppBindings.registerCompatibilityExport("Vector2", alt.Vector2);
