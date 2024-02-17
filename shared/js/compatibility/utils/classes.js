@@ -7,7 +7,7 @@ requireBinding("shared/logging.js");
 const { assertIsType } = requireBinding("shared/utils.js");
 
 const defaultOptions = {
-    verbose: true,
+    verbose: false,
 
     blacklist: {
         nonStatic: ["constructor"],
