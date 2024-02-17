@@ -8,14 +8,14 @@ const { extendClassWithProperties, overrideLazyProperty } = requireBinding("shar
 class ConnectionInfo {
     onCreate() {
         overrideLazyProperty(this, "socialID", this.socialID.toString());
-        overrideLazyProperty(this, "passwordHash", this.passwordHash.toString());
+        overrideLazyProperty(this, "discordUserID", this.discordUserID.toString());
 
         overrideLazyProperty(this, "hwidHash", this.hwidHash.toString());
         overrideLazyProperty(this, "hwidExHash", this.hwidExHash.toString());
     }
 
-    get debug() {
-        return this.isDebug;
+    get isDebug() {
+        return this.debug;
     }
 }
 
