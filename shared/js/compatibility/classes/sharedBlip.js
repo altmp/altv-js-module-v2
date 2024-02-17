@@ -8,11 +8,19 @@ export class SharedBlip {
     }
 
     get size() {
-        return this.scale;
+        return this.scaleXY;
     }
 
     set size(value) {
-        this.scale = value;
+        this.scaleXY = value;
+    }
+
+    get scale() {
+        return this.scaleXY.x;
+    }
+
+    set scale(value) {
+        this.scaleXY = { x: value, y: value };
     }
 
     get asMissionCreator() {

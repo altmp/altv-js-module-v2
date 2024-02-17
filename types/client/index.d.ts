@@ -259,7 +259,7 @@ declare module "@altv/client" {
         readonly meta: BlipMeta & Record<string, unknown>;
 
         blipType: altShared.Enums.BlipType;
-        scale: altShared.Vector2;
+        scaleXY: altShared.Vector2;
         display: number;
         sprite: number;
         color: number;

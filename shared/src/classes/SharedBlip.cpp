@@ -9,7 +9,7 @@ extern js::Class sharedBlipClass("SharedBlip", &worldObjectClass, nullptr, [](js
     tpl.Property<&alt::IBlip::IsAttached>("isAttached");
     tpl.Property<&alt::IBlip::AttachedTo>("attachedTo");
     tpl.Property<&alt::IBlip::GetBlipType, &alt::IBlip::SetBlipType>("blipType");
-    tpl.Property<&alt::IBlip::GetScaleXY, &alt::IBlip::SetScaleXY>("scale");
+    tpl.Property<&alt::IBlip::GetScaleXY, &alt::IBlip::SetScaleXY>("scaleXY");
     tpl.Property<&alt::IBlip::GetDisplay, &alt::IBlip::SetDisplay>("display");
     tpl.Property<&alt::IBlip::GetSprite, &alt::IBlip::SetSprite>("sprite");
     tpl.Property<&alt::IBlip::GetColor, &alt::IBlip::SetColor>("color");
