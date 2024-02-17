@@ -2,29 +2,23 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-class ConnectionInfo extends alt.ConnectionInfo {
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
+const { extendClassWithProperties, overrideLazyProperty } = requireBinding("shared/compatibility/utils/classes.js");
+
+class ConnectionInfo {
+    onCreate() {
+        overrideLazyProperty(this, "socialID", this.socialID.toString());
+        overrideLazyProperty(this, "passwordHash", this.passwordHash.toString());
+
+        overrideLazyProperty(this, "hwidHash", this.hwidHash.toString());
+        overrideLazyProperty(this, "hwidExHash", this.hwidExHash.toString());
+    }
+
     get debug() {
         return this.isDebug;
     }
-
-    get socialClubName() {
-        return this.socialName;
-    }
-
-    // NOTE (xLuxy): In v1, value was returned as string for some reason
-    get passwordHash() {
-        return this.passwordHash.toString();
-    }
-
-    // NOTE (xLuxy): In v1, value was returned as string for some reason
-    get hwidHash() {
-        return this.hwidHash.toString();
-    }
-
-    // NOTE (xLuxy): In v1, value was returned as string for some reason
-    get hwidExHash() {
-        return this.hwidExHash.toString();
-    }
 }
 
-cppBindings.registerCompatibilityExport("ConnectionInfo", ConnectionInfo);
+extendClassWithProperties(alt.ConnectionInfo, null, ConnectionInfo);
+
+cppBindings.registerCompatibilityExport("ConnectionInfo", alt.ConnectionInfo);

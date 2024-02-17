@@ -2,12 +2,10 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
+// const { extendClassWithProperties } = requireBinding("shared/compatibility/utils/classes.js");
+
 // requireBinding("shared/entity.js");
-
-// const { BaseObject } = requireBinding("server/compatibility/classes/baseObject.js");
-// const { WorldObject } = requireBinding("server/compatibility/classes/worldObject.js");
-
-// const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
 
 /*
 

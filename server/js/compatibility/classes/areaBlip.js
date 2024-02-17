@@ -4,8 +4,6 @@
 
 requireBinding("shared/entity.js");
 
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
-
 class AreaBlip {
     constructor(...args) {
         if (!args.length) return this;
@@ -19,7 +17,5 @@ class AreaBlip {
         });
     }
 }
-
-extendAltEntityClass(AreaBlip);
 
 cppBindings.registerCompatibilityExport("AreaBlip", AreaBlip);

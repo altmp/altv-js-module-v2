@@ -3,7 +3,7 @@
 // import * as alt from "@altv/client";
 
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+const { extendClassWithProperties } = requireBinding("shared/compatibility/utils/classes.js");
 
 class _Object {
     static get count() {
@@ -11,6 +11,6 @@ class _Object {
     }
 }
 
-extendAltEntityClass(alt.Object, _Object);
+extendClassWithProperties(alt.Object, null, _Object);
 
 cppBindings.registerCompatibilityExport("Object", alt.Object);

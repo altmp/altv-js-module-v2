@@ -2,12 +2,12 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
-requireBinding("shared/factory.js");
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
+const { extendClassWithProperties } = requireBinding("shared/compatibility/utils/classes.js");
 
 const { SharedBlip } = requireBinding("shared/compatibility/classes/sharedBlip.js");
 
-/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+requireBinding("shared/factory.js");
 
 class Blip extends alt.Blip {
     static get count() {
@@ -15,7 +15,7 @@ class Blip extends alt.Blip {
     }
 }
 
-extendAltEntityClass(Blip, SharedBlip);
+extendClassWithProperties(Blip, null, SharedBlip);
 
 alt.Blip.setFactory(Blip);
 

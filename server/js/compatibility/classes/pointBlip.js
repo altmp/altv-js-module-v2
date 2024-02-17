@@ -4,10 +4,6 @@
 
 requireBinding("shared/entity.js");
 
-const { SharedBlip } = requireBinding("shared/compatibility/classes/sharedBlip.js");
-
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
-
 class PointBlip {
     constructor(...args) {
         if (!args.length) return this;
@@ -27,7 +23,5 @@ class PointBlip {
         return instance;
     }
 }
-
-extendAltEntityClass(PointBlip, SharedBlip);
 
 cppBindings.registerCompatibilityExport("PointBlip", PointBlip);

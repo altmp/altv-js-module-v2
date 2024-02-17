@@ -2,17 +2,20 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
+const { extendClassWithProperties, overrideLazyProperty } = requireBinding("shared/compatibility/utils/classes.js");
+
 const { SharedPlayer } = requireBinding("shared/compatibility/classes/sharedPlayer.js");
 
-/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass, overrideLazyProperty } = requireBinding("shared/compatibility/utils/classes.js");
+// NOTE(xLuxy): Store the original spawn method to call it later since we can't call it directly using super
+//              and we need to override it
+const originalSpawnMethod = alt.Player.prototype.spawn;
 
 class Player {
     onCreate() {
-        // @TODO(xLuxy): This needs to be fixed
-        // overrideLazyProperty(this, "socialID", this.socialID.toString());
-        // overrideLazyProperty(this, "hwidHash", this.hwidHash.toString());
-        // overrideLazyProperty(this, "hwidExHash", this.hwidHash.toString());
+        overrideLazyProperty(this, "socialID", this.socialID.toString());
+        overrideLazyProperty(this, "hwidHash", this.hwidHash.toString());
+        overrideLazyProperty(this, "hwidExHash", this.hwidHash.toString());
     }
 
     emitRpc(name, ...args) {
@@ -59,7 +62,7 @@ class Player {
             delay = args[3];
         }
 
-        super.spawn(pos, delay);
+        originalSpawnMethod.call(this, pos, delay);
     }
 
     isEntityInStreamRange(entity) {
@@ -121,6 +124,15 @@ class Player {
     }
 }
 
-extendAltEntityClass(alt.Player, Player, SharedPlayer);
+extendClassWithProperties(
+    alt.Player,
+    {
+        whitelist: {
+            nonStatic: ["spawn"]
+        }
+    },
+    Player,
+    SharedPlayer
+);
 
 cppBindings.registerCompatibilityExport("Player", alt.Player);

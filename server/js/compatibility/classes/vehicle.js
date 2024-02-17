@@ -2,12 +2,12 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
-requireBinding("server/factory.js");
+/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
+const { extendClassWithProperties } = requireBinding("shared/compatibility/utils/classes.js");
 
 const { SharedVehicle } = requireBinding("shared/compatibility/classes/sharedVehicle.js");
 
-/** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
+requireBinding("server/factory.js");
 
 class Vehicle extends alt.Vehicle {
     constructor(...args) {
@@ -115,7 +115,7 @@ class Vehicle extends alt.Vehicle {
     }
 }
 
-extendAltEntityClass(Vehicle, SharedVehicle);
+extendClassWithProperties(Vehicle, null, SharedVehicle);
 
 alt.Vehicle.setFactory(Vehicle);
 

@@ -6,8 +6,6 @@ requireBinding("shared/entity.js");
 
 const { SharedBlip } = requireBinding("shared/compatibility/classes/sharedBlip.js");
 
-const { extendAltEntityClass } = requireBinding("shared/compatibility/utils/classes.js");
-
 class RadiusBlip {
     constructor(...args) {
         if (!args.length) return this;
@@ -21,7 +19,5 @@ class RadiusBlip {
         });
     }
 }
-
-extendAltEntityClass(RadiusBlip, SharedBlip);
 
 cppBindings.registerCompatibilityExport("RadiusBlip", RadiusBlip);
