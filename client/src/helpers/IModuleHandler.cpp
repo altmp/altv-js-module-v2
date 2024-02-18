@@ -84,7 +84,9 @@ v8::MaybeLocal<v8::Module>
         std::string assertionType = assertions.at("type");
         if(assertionType == "json")
         {
-            module = ResolveJSON(context, specifier, GetModulePath(referrer), name);
+            auto [resolvedName, resolvedModule] = ResolveJSON(context, specifier, GetModulePath(referrer), name);
+            name = resolvedName;
+            module = resolvedModule;
             type = Module::Type::JSON;
         }
         else
@@ -168,21 +170,21 @@ std::pair<std::string, v8::MaybeLocal<v8::Module>> IModuleHandler::ResolveFile(v
     return { resolvedName, CompileModule(name, std::string{ (char*)buffer.data(), buffer.size() }) };
 }
 
-v8::MaybeLocal<v8::Module> IModuleHandler::ResolveJSON(v8::Local<v8::Context> context, const std::string& specifier, const std::string& referrer, std::string& name)
+std::pair<std::string, v8::MaybeLocal<v8::Module>> IModuleHandler::ResolveJSON(v8::Local<v8::Context> context, const std::string& specifier, const std::string& referrer, std::string& name)
 {
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
 
     auto [resolvedName, buffer] = ReadFile(context, specifier, referrer);
-    if(modules.contains(resolvedName)) return modules.at(resolvedName).module.Get(isolate);
+    if(modules.contains(resolvedName)) return { resolvedName, modules.at(resolvedName).module.Get(isolate) };
 
     std::string source{ (char*)buffer.data(), buffer.size() };
     v8::MaybeLocal<v8::Value> maybeValue = v8::JSON::Parse(context, js::JSValue(source));
     if(maybeValue.IsEmpty())
     {
         js::Logger::Error("Failed to parse JSON module: " + specifier);
-        return v8::MaybeLocal<v8::Module>();
+        return { resolvedName, v8::MaybeLocal<v8::Module>() };
     }
-    return CompileSyntheticModule(name, { { "default", maybeValue.ToLocalChecked() } });
+    return { resolvedName, CompileSyntheticModule(name, { { "default", maybeValue.ToLocalChecked() } }) };
 }
 
 v8::MaybeLocal<v8::Module> IModuleHandler::CompileModule(const std::string& name, const std::string& source)

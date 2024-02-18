@@ -142,8 +142,6 @@ alt.Events.onEvent(async (ctx) => {
     const converter = getEventArgumentConverter(ctx.eventType, ctx.customEvent);
     const args = converter?.(ctx) ?? ctx.args;
 
-    // alt.log(`[compatibility] Received event ${ctx.eventType} (${ctx.customEvent ? "custom" : "generic"})`);
-
     let handlers = (eventMap.get(ctx.eventType) ?? []).filter((handler) => !!handler.custom == ctx.customEvent);
 
     if (handlers.length > 0 && (ctx.eventType == alt.Enums.EventType.CLIENT_SCRIPT_EVENT || ctx.eventType == alt.Enums.EventType.SERVER_SCRIPT_EVENT)) {
@@ -153,6 +151,8 @@ alt.Events.onEvent(async (ctx) => {
     }
 
     if (!handlers.length) return;
+
+    const handlersToRemove = [];
 
     for (const { callback, once } of handlers) {
         let ret = callback(...args);
@@ -167,10 +167,14 @@ alt.Events.onEvent(async (ctx) => {
         }
 
         if (once) {
-            handlers.splice(handlers.indexOf(callback), 1);
-            eventMap.set(ctx.eventType, handlers);
+            handlersToRemove.push(callback);
         }
     }
+
+    eventMap.set(
+        ctx.eventType,
+        (eventMap.get(ctx.eventType) ?? []).filter((info) => !handlersToRemove.includes(info.callback))
+    );
 });
 
 cppBindings.registerCompatibilityExport("on", on);
