@@ -33,6 +33,7 @@ cppBindings.registerCompatibilityExport("debug", alt.isDebug);
 
 cppBindings.registerCompatibilityExport("isClient", alt.isClient);
 cppBindings.registerCompatibilityExport("isServer", alt.isServer);
+cppBindings.registerCompatibilityExport("rootDir", alt.rootDir);
 
 // methods
 cppBindings.registerCompatibilityExport("hasResource", hasResource);
