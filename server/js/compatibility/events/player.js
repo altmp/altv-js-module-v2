@@ -17,16 +17,16 @@ registerEventHandler(alt.Enums.EventType.PLAYER_DISCONNECT, "playerDisconnect", 
     return [player, reason];
 });
 
-registerEventHandler(alt.Enums.EventType.PLAYER_DAMAGE, "playerDamage", ({ target, attacker, healthDamage, armourDamage, weaponHash }) => {
-    return [target, attacker, healthDamage, armourDamage, weaponHash];
+registerEventHandler(alt.Enums.EventType.PLAYER_DAMAGE, "playerDamage", ({ player, attacker, healthDamage, armourDamage, weaponHash }) => {
+    return [player, attacker, healthDamage, armourDamage, weaponHash];
 });
 
-registerEventHandler(alt.Enums.EventType.PLAYER_DEATH, "playerDeath", ({ target, killer, weaponHash }) => {
-    return [target, killer, weaponHash];
+registerEventHandler(alt.Enums.EventType.PLAYER_DEATH, "playerDeath", ({ player, killer, weaponHash }) => {
+    return [player, killer, weaponHash];
 });
 
-registerEventHandler(alt.Enums.EventType.PLAYER_HEAL, "playerHeal", ({ target, oldHealth, newHealth, oldArmour, newArmour }) => {
-    return [target, oldHealth, newHealth, oldArmour, newArmour];
+registerEventHandler(alt.Enums.EventType.PLAYER_HEAL, "playerHeal", ({ player, oldHealth, newHealth, oldArmour, newArmour }) => {
+    return [player, oldHealth, newHealth, oldArmour, newArmour];
 });
 
 registerEventHandler(alt.Enums.EventType.PLAYER_REQUEST_CONTROL, "playerRequestControl", ({ player, target }) => {
