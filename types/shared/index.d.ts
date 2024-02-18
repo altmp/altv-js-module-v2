@@ -156,7 +156,12 @@ declare module "@altv/shared" {
         toArray(): [number, number, number, number | undefined];
         toInt(): number;
 
-        static readonly zero: RGBA;
+        static readonly red: RGBA;
+        static readonly green: RGBA;
+        static readonly blue: RGBA;
+        static readonly black: RGBA;
+        static readonly white: RGBA;
+        static readonly clear: RGBA;
 
         static fromInt(color: number): RGBA;
     }
