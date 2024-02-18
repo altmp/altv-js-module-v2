@@ -50,6 +50,11 @@ export class RGBA {
         return new RGBA(r, g, b, a);
     }
 
-    static zero = new RGBA(0, 0, 0, 0);
+    static red = new RGBA(255, 0, 0, 255);
+    static green = new RGBA(0, 255, 0, 255);
+    static blue = new RGBA(0, 0, 255, 255);
+    static black = new RGBA(0, 0, 0, 255);
+    static white = new RGBA(255, 255, 255, 255);
+    static clear = new RGBA(0, 0, 0, 0);
 }
 cppBindings.registerExport(cppBindings.BindingExport.RGBA_CLASS, RGBA);
