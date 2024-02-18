@@ -760,7 +760,7 @@ declare module "@altv/server" {
         group: VirtualEntityGroup;
         pos: altShared.IVector3;
         streamingDistance: number;
-        data?: Record<string, unknown>;
+        data?: altShared.VirtualEntityStreamSyncedMeta & Record<string, unknown>;
     }
 
     export abstract class VirtualEntityGroup extends BaseObject {
