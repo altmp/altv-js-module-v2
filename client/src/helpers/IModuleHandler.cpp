@@ -108,7 +108,6 @@ v8::MaybeLocal<v8::Module>
     else
     {
         bool isBytecode = false;
-        js::Logger::Info("ResolveFile:", specifier, "modulePath:", GetModulePath(referrer));
         auto [resolvedName, resolvedModule] = ResolveFile(context, specifier, GetModulePath(referrer), name, isBytecode);
         name = resolvedName;
         module = resolvedModule;
