@@ -69,6 +69,30 @@ static void AttachTo(js::FunctionContext& ctx)
     }
 }
 
+static void SyncedMetaSetter(js::DynamicPropertySetterContext& ctx)
+{
+    if(!ctx.CheckParent()) return;
+    alt::IEntity* obj = ctx.GetParent<alt::IEntity>();
+    alt::MValue value;
+
+    if(!ctx.GetValue(value)) return;
+    obj->SetSyncedMetaData(ctx.GetProperty(), value);
+}
+
+static void SyncedMetaDeleter(js::DynamicPropertyDeleterContext& ctx)
+{
+    if(!ctx.CheckParent()) return;
+    alt::IEntity* obj = ctx.GetParent<alt::IEntity>();
+    if(!obj->HasSyncedMetaData(ctx.GetProperty()))
+    {
+        ctx.Return(false);
+        return;
+    }
+
+    obj->DeleteSyncedMetaData(ctx.GetProperty());
+    ctx.Return(true);
+}
+
 static void StreamSyncedMetaSetter(js::DynamicPropertySetterContext& ctx)
 {
     if(!ctx.CheckParent()) return;
@@ -152,6 +176,7 @@ extern js::Class entityClass("Entity", &sharedEntityClass, nullptr, [](js::Class
     tpl.Property<&alt::IEntity::GetStreamingDistance, &alt::IEntity::SetStreamingDistance>("streamingDistance");
     tpl.Property<&alt::IEntity::GetTimestamp>("timestamp");
 
+    tpl.DynamicProperty("syncedMeta", nullptr, SyncedMetaSetter, SyncedMetaDeleter, nullptr);
     tpl.DynamicProperty("streamSyncedMeta", nullptr, StreamSyncedMetaSetter, StreamSyncedMetaDeleter, nullptr);
 
     tpl.Method("setMultipleSyncedMetaData", SetMultipleSyncedMetaData);

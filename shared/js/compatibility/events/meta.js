@@ -14,6 +14,10 @@ registerEventHandler(alt.Enums.EventType.LOCAL_SYNCED_META_CHANGE, "localMetaCha
     return [player, key, newValue, oldValue];
 });
 
+registerEventHandler(alt.Enums.EventType.SYNCED_META_CHANGE, "syncedMetaChange", ({ entity, key, oldValue, newValue }) => {
+    return [entity, key, newValue, oldValue];
+});
+
 registerEventHandler(alt.Enums.EventType.STREAM_SYNCED_META_CHANGE, "streamSyncedMetaChange", ({ entity, key, oldValue, newValue }) => {
     return [entity, key, newValue, oldValue];
 });

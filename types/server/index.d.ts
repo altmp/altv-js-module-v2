@@ -24,6 +24,7 @@ declare module "@altv/server" {
 
     export class BaseObject extends altShared.BaseObject {
         meta: BaseObjectMeta & Record<string, unknown>;
+        syncedMeta: altShared.BaseObjectSyncedMeta & Record<string, unknown>;
 
         static getByID(type: altShared.Enums.BaseObjectType, id: number): BaseObject | null;
     }
@@ -94,6 +95,7 @@ declare module "@altv/server" {
         removeTarget(target: Player): void;
 
         meta: BlipMeta & Record<string, unknown>;
+        syncedMeta: altShared.BlipSyncedMeta & Record<string, unknown>;
 
         public onCreate?(opts: BlipCreateOptions): void;
         public onDestroy?(): void;
@@ -123,6 +125,7 @@ declare module "@altv/server" {
         readonly streamingDistance: number;
 
         meta: MarkerMeta & Record<string, unknown>;
+        syncedMeta: altShared.MarkerSyncedMeta & Record<string, unknown>;
 
         color: altShared.RGBA;
         visible: boolean;
@@ -215,6 +218,7 @@ declare module "@altv/server" {
         isPointIn(point: altShared.Vector3): boolean;
 
         meta: ColShapeMeta & Record<string, unknown>;
+        syncedMeta: altShared.ColShapeSyncedMeta & Record<string, unknown>;
 
         static readonly all: ReadonlyArray<ColShape>;
 
@@ -257,6 +261,7 @@ declare module "@altv/server" {
         isPointIn(point: altShared.Vector3): boolean;
 
         meta: CheckpointMeta & Record<string, unknown>;
+        syncedMeta: altShared.CheckpointSyncedMeta & Record<string, unknown>;
         streamSyncedMeta: altShared.CheckpointStreamSyncedMeta & Record<string, unknown>;
 
         public onCreate?(opts: CheckpointCreateOptions): void;
@@ -285,6 +290,7 @@ declare module "@altv/server" {
         readonly timestamp: number;
 
         meta: EntityMeta & Record<string, unknown>;
+        syncedMeta: altShared.EntitySyncedMeta & Record<string, unknown>;
         streamSyncedMeta: altShared.EntityStreamSyncedMeta & Record<string, unknown>;
 
         setNetOwner(player: Player, disableMigration: boolean): void;
@@ -330,6 +336,7 @@ declare module "@altv/server" {
         placeOnGroundProperly(): void;
 
         meta: ObjectMeta & Record<string, unknown>;
+        syncedMeta: altShared.ObjectSyncedMeta & Record<string, unknown>;
         streamSyncedMeta: altShared.ObjectStreamSyncedMeta & Record<string, unknown>;
 
         public onCreate?(opts: ObjectCreateOptions): void;
@@ -358,6 +365,7 @@ declare module "@altv/server" {
         currentWeapon: number;
 
         meta: PedMeta & Record<string, unknown>;
+        syncedMeta: altShared.PedSyncedMeta & Record<string, unknown>;
         streamSyncedMeta: altShared.PedStreamSyncedMeta & Record<string, unknown>;
 
         public onCreate?(opts: PedCreateOptions): void;
@@ -536,6 +544,7 @@ declare module "@altv/server" {
 
         meta: PlayerMeta & Record<string, unknown>;
         localMeta: PlayerLocalMeta & Record<string, unknown>;
+        syncedMeta: altShared.PlayerSyncedMeta & Record<string, unknown>;
         streamSyncedMeta: altShared.PlayerStreamSyncedMeta & Record<string, unknown>;
 
         static readonly all: ReadonlyArray<Player>;
@@ -723,6 +732,7 @@ declare module "@altv/server" {
         setBadge(textureDictionary: string | number, texture: string | number, pos: VehicleBadgePosition, pos2?: VehicleBadgePosition, pos3?: VehicleBadgePosition, pos4?: VehicleBadgePosition): void;
 
         meta: VehicleMeta & Record<string, unknown>;
+        syncedMeta: altShared.VehicleSyncedMeta & Record<string, unknown>;
         streamSyncedMeta: altShared.VehicleStreamSyncedMeta & Record<string, unknown>;
 
         public onCreate?(opts: VehicleCreateOptions): void;
@@ -774,6 +784,7 @@ declare module "@altv/server" {
         visible: boolean;
 
         meta: VirtualEntityMeta & Record<string, unknown>;
+        syncedMeta: altShared.VirtualEntitySyncedMeta & Record<string, unknown>;
         streamSyncedMeta: altShared.VirtualEntityStreamSyncedMeta & Record<string, unknown>;
 
         public onCreate?(opts: VirtualEntityCreateOptions): void;
@@ -1096,6 +1107,8 @@ declare module "@altv/server" {
         export function onMetaChange(callback: GenericEventCallback<MetaChangeEventParameters>): altShared.Events.EventHandler;
         export function onLocalMetaChange<T extends Player>(callback: GenericPlayerEventCallback<LocalMetaChangeEventParameters, T>): altShared.Events.EventHandler;
         export function onceLocalMetaChange<T extends Player>(callback: GenericPlayerEventCallback<LocalMetaChangeEventParameters, T>): altShared.Events.EventHandler;
+        export function onSyncedMetaChange(callback: GenericEventCallback<SyncedMetaChangeEventParameters>): altShared.Events.EventHandler;
+        export function onceSyncedMetaChange(callback: GenericEventCallback<SyncedMetaChangeEventParameters>): altShared.Events.EventHandler;
         export function onStreamSyncedMetaChange(callback: GenericEventCallback<StreamSyncedMetaChangeEventParameters>): altShared.Events.EventHandler;
         export function onceStreamSyncedMetaChange(callback: GenericEventCallback<StreamSyncedMetaChangeEventParameters>): altShared.Events.EventHandler;
         export function onGlobalMetaChange(callback: GenericEventCallback<GlobalMetaChangeEventParameters>): altShared.Events.EventHandler;

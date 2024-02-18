@@ -29,15 +29,15 @@ export class SharedBaseObject {
         return Object.keys(this.meta);
     }
 
-    getSyncedMeta(_key) {
-        throw new Error("Not implemented in v2 Module - Use streamSyncedMeta instead");
+    getSyncedMeta(key) {
+        return this.syncedMeta[key];
     }
 
-    hasSyncedMeta(_key) {
-        throw new Error("Not implemented in v2 Module - Use streamSyncedMeta instead");
+    hasSyncedMeta(key) {
+        return key in this.syncedMeta;
     }
 
     getSyncedMetaKeys() {
-        throw new Error("Not implemented in v2 Module - Use streamSyncedMeta instead");
+        return Object.keys(this.syncedMeta);
     }
 }

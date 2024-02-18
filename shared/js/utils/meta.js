@@ -13,6 +13,18 @@ function addLocalMetaListener(key, handler) {
     return alt.Events.onLocalMetaChange(wrapper);
 }
 
+function addSyncedMetaListener(key, handler) {
+    assertIsType(key, "string", "key must be a string");
+    assertIsType(handler, "function", "handler must be a function");
+
+    const wrapper = (ctx) => {
+        if (ctx.key !== key) return;
+        handler(ctx);
+    };
+
+    return alt.Events.onSyncedMetaChange(wrapper);
+}
+
 function addStreamSyncedMetaListener(key, handler) {
     assertIsType(key, "string", "key must be a string");
     assertIsType(handler, "function", "handler must be a function");
@@ -26,4 +38,5 @@ function addStreamSyncedMetaListener(key, handler) {
 }
 
 alt.Utils.addLocalMetaListener = addLocalMetaListener;
+alt.Utils.addSyncedMetaListener = addSyncedMetaListener;
 alt.Utils.addStreamSyncedMetaListener = addStreamSyncedMetaListener;

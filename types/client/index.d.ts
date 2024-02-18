@@ -235,6 +235,7 @@ declare module "@altv/client" {
         static getByRemoteID(type: altShared.Enums.BaseObjectType, id: number): BaseObject | null;
 
         readonly meta: BaseObjectMeta & Record<string, unknown>;
+        readonly syncedMeta: Readonly<altShared.BaseObjectSyncedMeta & Record<string, unknown>>;
     }
 
     export type PointBlipCreateOptions = { pos: altShared.IVector3; entity?: never } | { entity: Entity; pos?: never };
@@ -257,6 +258,7 @@ declare module "@altv/client" {
         readonly attachedTo?: Entity;
 
         readonly meta: BlipMeta & Record<string, unknown>;
+        readonly syncedMeta: Readonly<altShared.BlipSyncedMeta> & Readohly<string, unknown>;
 
         blipType: altShared.Enums.BlipType;
         scaleXY: altShared.Vector2;
@@ -412,6 +414,8 @@ declare module "@altv/client" {
         readonly netOwner?: Player;
         readonly visible: boolean;
         readonly isStreamedIn: boolean;
+
+        readonly syncedMeta: Readonly<altShared.EntitySyncedMeta & Record<string, unknown>>;
         readonly streamSyncedMeta: Readonly<altShared.EntityStreamSyncedMeta & Record<string, unknown>>;
 
         frozen: boolean;
@@ -618,6 +622,7 @@ declare module "@altv/client" {
         readonly currentWeapon: number;
 
         readonly meta: PedMeta & Record<string, unknown>;
+        readonly syncedMeta: Readonly<altShared.PedSyncedMeta & Record<string, unknown>>;
         readonly streamSyncedMeta: Readonly<altShared.PedStreamSyncedMeta & Record<string, unknown>>;
 
         static readonly all: ReadonlyArray<Ped>;
@@ -775,6 +780,7 @@ declare module "@altv/client" {
         getWeaponTintIndex(weaponHash: number | string): number | undefined;
         hasWeaponComponent(weaponHash: number | string, componentHash: number | string): boolean;
 
+        readonly syncedMeta: Readonly<altShared.PlayerSyncedMeta & Record<string, unknown>>;
         readonly streamSyncedMeta: Readonly<altShared.PlayerStreamSyncedMeta & Record<string, unknown>>;
 
         static readonly local: LocalPlayer;
@@ -1120,6 +1126,7 @@ declare module "@altv/client" {
         visible: boolean;
 
         readonly meta: VirtualEntityMeta & Record<string, unknown>;
+        readonly syncedMeta: altShared.VirtualEntitySyncedMeta & Record<string, unknown>;
         readonly streamSyncedMeta: Readonly<altShared.VirtualEntityStreamSyncedMeta & Record<string, unknown>>;
 
         static readonly all: ReadonlyArray<VirtualEntity>;
