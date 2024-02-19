@@ -19,4 +19,4 @@ static js::Module nativesModule("@altv/natives", [](js::ModuleTemplate& module)
     std::vector<alt::INative*> natives = alt::ICore::Instance().GetAllNatives();
     for(alt::INative* native : natives)
         module.StaticFunction(native->GetName(), v8::FunctionTemplate::New(module.GetIsolate(), CallNative, v8::External::New(module.GetIsolate(), native)));
-});
+}, nullptr, js::Module::Option::EXPORT_AS_DEFAULT);
