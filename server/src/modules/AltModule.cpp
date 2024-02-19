@@ -197,4 +197,4 @@ static js::Module altModule("@altv/server", "@altv/shared", { &playerClass, &veh
     module.Namespace(vehicleModelInfoNamespace);
     module.Namespace(weaponModelInfoNamespace);
     module.Namespace(streamingNamespace);
-});
+}, nullptr, js::Module::Option::EXPORT_AS_DEFAULT);
