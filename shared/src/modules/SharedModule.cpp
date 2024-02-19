@@ -154,4 +154,4 @@ static js::Module sharedModule("@altv/shared", "", { &baseObjectClass, &worldObj
     std::string name = "@altv/client";
     #endif
     return js::Module::Get(name).GetNamespace(resource);
-});
+}, js::Module::Option::EXPORT_AS_DEFAULT);
