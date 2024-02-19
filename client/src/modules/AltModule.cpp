@@ -581,4 +581,4 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.Namespace("Drawing");
 
     module.StaticDynamicProperty("localMeta", LocalMetaGetter);
-});
+}, nullptr, js::Module::Option::EXPORT_AS_DEFAULT);
