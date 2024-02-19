@@ -1480,7 +1480,7 @@ declare module "@altv/server" {
             target: Entity;
             weaponHash: number;
             damage: number;
-            offset: number;
+            offset: altShared.Vector3;
             bodyPart: altShared.Enums.BodyPart;
 
             setDamageValue(value: number): void;
