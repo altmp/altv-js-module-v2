@@ -10,15 +10,13 @@ class Checkpoint extends alt.Checkpoint {
         if (!args.length) return super();
 
         const type = args[0];
-        const pos = args.length == 8 ? args[1] : { x: args[1], y: args[2], z: args[3] };
-        const nextPos = args.length == 8 ? args[2] : { x: args[4], y: args[5], z: args[6] };
-        const radius = args.length == 8 ? args[3] : args[7];
-        const height = args.length == 8 ? args[4] : args[8];
-        const color = args.length == 8 ? args[5] : args[9];
-        const iconColor = args.length == 8 ? args[6] : args[10];
-        const streamingDistance = args.length == 8 ? args[7] : args[11];
+        const pos = args.length == 6 ? args[1] : { x: args[1], y: args[2], z: args[3] };
+        const radius = args.length == 6 ? args[2] : args[4];
+        const height = args.length == 6 ? args[3] : args[5];
+        const color = args.length == 6 ? args[4] : { r: args[6], g: args[7], b: args[8], a: args[9] };
+        const streamingDistance = args.length == 6 ? args[5] : args[10];
 
-        return alt.Checkpoint.create({ type, pos, nextPos, radius, height, color, iconColor, streamingDistance });
+        return alt.Checkpoint.create({ type, pos, radius, height, color, streamingDistance });
     }
 
     static get count() {
