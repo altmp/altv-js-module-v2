@@ -92,25 +92,36 @@ bool CNodeResource::Start()
 
 bool CNodeResource::Stop()
 {
+    js::Logger::Colored << "~y~[JS] Stopping resource " << resource->GetName() << js::Logger::Endl;
     IResource::Scope scope(this);
 
+    js::Logger::Colored << "~y~[JS] Emitting process exit event" << js::Logger::Endl;
     node::EmitAsyncDestroy(isolate, asyncContext);
+    js::Logger::Colored << "~y~[JS] Resetting asyncResource" << js::Logger::Endl;
     asyncResource.Reset();
 
+    js::Logger::Colored << "~y~[JS] Emitting process exit event" << js::Logger::Endl;
     node::EmitProcessBeforeExit(env);
     node::EmitProcessExit(env);
 
+    js::Logger::Colored << "~y~[JS] Stopping environment" << js::Logger::Endl;
     node::Stop(env);
 
+    js::Logger::Colored << "~y~[JS] Freeing environment" << js::Logger::Endl;
     node::FreeEnvironment(env);
+    js::Logger::Colored << "~y~[JS] Freeing isolate data" << js::Logger::Endl;
     node::FreeIsolateData(nodeData);
 
+    js::Logger::Colored << "~y~[JS] Closing uv loop" << js::Logger::Endl;
     uv_loop_close(uvLoop);
     delete uvLoop;
 
+    js::Logger::Colored << "~y~[JS] Resetting resource" << js::Logger::Endl;
     IResource::Reset();
+    js::Logger::Colored << "~y~[JS] Cleaning up metrics" << js::Logger::Endl;
     IMetricHandler::CleanupMetrics();
 
+    js::Logger::Colored << "~y~[JS] Resource stopped" << js::Logger::Endl;
     return true;
 }
 

@@ -39,7 +39,7 @@ function applyNonStaticProperties(baseClass, cls, options) {
                 }
 
                 ["get", "set", "value", "writeable"].forEach((key) => {
-                    if (key in newDescriptor && !mergedDescriptor[key]) {
+                    if (key in newDescriptor && (!mergedDescriptor[key] || isWhitelisted)) {
                         if (options.verbose) {
                             alt.log(`~ly~[JS] ~lr~Merged ${key} for ${prop} from ${prot.constructor.name} to ${baseClass.name}`);
                         }
