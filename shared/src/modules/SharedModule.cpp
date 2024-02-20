@@ -107,7 +107,7 @@ static js::Module sharedModule("@altv/shared", "", { &baseObjectClass, &worldObj
     module.StaticProperty("defaultDimension", alt::DEFAULT_DIMENSION);
     module.StaticProperty("globalDimension", alt::GLOBAL_DIMENSION);
 
-    module.StaticProperty("isDebug", alt::ICore::Instance().IsDebug());
+    module.StaticProperty("debug", alt::ICore::Instance().IsDebug());
     module.StaticProperty("version", alt::ICore::Instance().GetVersion());
     module.StaticProperty("sdkVersion", ALT_SDK_VERSION);
     module.StaticProperty("branch", alt::ICore::Instance().GetBranch());

@@ -4,7 +4,7 @@
 // clang-format off
 static js::FactoryHandler localObjectFactory(alt::IBaseObject::Type::LOCAL_OBJECT, [](js::Object& args) -> alt::IBaseObject* {
     bool isWeaponObject;
-    if(!args.Get("isWeaponObject", isWeaponObject)) return nullptr;
+    if(!args.Get("weaponObject", isWeaponObject)) return nullptr;
 
     if(isWeaponObject)
     {

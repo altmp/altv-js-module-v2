@@ -827,7 +827,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.LazyProperty<&alt::IPlayer::GetCloudID>("cloudID");
     tpl.LazyProperty<&alt::IPlayer::GetCloudAuthResult>("cloudAuthResult");
 
-    tpl.Property<&alt::IPlayer::IsConnected>("isConnected");
+    tpl.Property<&alt::IPlayer::IsConnected>("connected");
     tpl.Property<&alt::IPlayer::GetPing>("ping");
     tpl.Property<&alt::IPlayer::GetAuthToken>("authToken");
     tpl.Property<&alt::IPlayer::GetDiscordId>("discordID");
@@ -874,7 +874,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method("getDlcProp", &GetDlcProps);
     tpl.Method<&alt::IPlayer::SetDlcProps>("setDlcProp");
     tpl.Method<&alt::IPlayer::ClearProps>("clearProp");
-    tpl.Method("isEntityInStreamingRange", &IsEntityInStreamingRange);
+    tpl.Method("entityInStreamingRange", &IsEntityInStreamingRange);
     tpl.Method<&alt::IPlayer::SetIntoVehicle>("setIntoVehicle");
     tpl.Method<&alt::IPlayer::PlayAmbientSpeech>("playAmbientSpeech");
     tpl.Method<&alt::IPlayer::SetHeadOverlay>("setHeadOverlay");

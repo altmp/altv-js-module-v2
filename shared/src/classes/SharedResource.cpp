@@ -148,7 +148,7 @@ extern js::Class sharedResourceClass("SharedResource", [](js::ClassTemplate& tpl
     tpl.Property("exports", ExportsGetter);
     tpl.Property("dependencies", DependenciesGetter);
     tpl.Property("dependants", DependantsGetter);
-    tpl.Property("isStarted", IsStartedGetter);
+    tpl.Property("started", IsStartedGetter);
     tpl.Property("config", ConfigGetter);
 
     tpl.Property("requiredPermissions", RequiredPermissionsGetter);

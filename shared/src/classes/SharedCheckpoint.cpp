@@ -13,7 +13,7 @@ extern js::Class sharedCheckpointClass("Checkpoint", &colShapeClass, nullptr, []
     tpl.Property<&alt::ICheckpoint::GetStreamingDistance>("streamingDistance");
     tpl.Property<&alt::ICheckpoint::IsVisible, &alt::ICheckpoint::SetVisible>("visible");
 
-    tpl.Method<&alt::ICheckpoint::IsEntityIn>("isEntityIn");
-    tpl.Method<&alt::ICheckpoint::IsEntityIdIn>("isEntityIdIn");
-    tpl.Method<&alt::ICheckpoint::IsPointIn>("isPointIn");
+    tpl.Method<&alt::ICheckpoint::IsEntityIn>("entityIn");
+    tpl.Method<&alt::ICheckpoint::IsEntityIdIn>("entityIdIn");
+    tpl.Method<&alt::ICheckpoint::IsPointIn>("pointIn");
 });

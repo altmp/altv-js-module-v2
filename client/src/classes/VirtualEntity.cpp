@@ -7,7 +7,7 @@ extern js::Class virtualEntityClass("VirtualEntity", &sharedVirtualEntityClass, 
 {
     tpl.BindToType(alt::IBaseObject::Type::VIRTUAL_ENTITY);
 
-    tpl.Property<&alt::IVirtualEntity::IsStreamedIn>("isStreamedIn");
+    tpl.Property<&alt::IVirtualEntity::IsStreamedIn>("streamedIn");
 
     tpl.GetByID<alt::IBaseObject::Type::VIRTUAL_ENTITY>();
     tpl.GetByRemoteID<alt::IBaseObject::Type::VIRTUAL_ENTITY>();

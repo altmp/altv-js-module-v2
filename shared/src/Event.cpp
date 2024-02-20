@@ -74,10 +74,10 @@ static void IsCancellableGetter(js::LazyPropertyContext& ctx)
 // clang-format off
 extern js::Class eventContextClass("EventContext", [](js::ClassTemplate& tpl) {
     tpl.LazyProperty("type", TypeGetter);
-    tpl.LazyProperty("isCancellable", IsCancellableGetter);
+    tpl.LazyProperty("cancellable", IsCancellableGetter);
 }, true);
 
 extern class js::Class cancellableEventContextClass("CancellableEventContext", &eventContextClass, [](js::ClassTemplate& tpl) {
     tpl.BoundMethod("cancel", CancelEventCallback);
-    tpl.Property("isCancelled", IsCancelledGetter);
+    tpl.Property("cancelled", IsCancelledGetter);
 }, true);

@@ -11,7 +11,7 @@ extern js::Class audioClass("Audio", [](js::ClassTemplate& tpl)
     tpl.Property<&alt::IAudio::GetOutputs>("outputs");
     tpl.Property<&alt::IAudio::GetCurrentTime>("currentTime");
     tpl.Property<&alt::IAudio::GetMaxTime>("maxTime");
-    tpl.Property<&alt::IAudio::IsPlaying>("isPlaying");
+    tpl.Property<&alt::IAudio::IsPlaying>("playing");
 
     tpl.Method<&alt::IAudio::AddOutput>("addOutput");
     tpl.Method<&alt::IAudio::RemoveOutput>("removeOutput");

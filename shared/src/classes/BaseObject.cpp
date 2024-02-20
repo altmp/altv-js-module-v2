@@ -129,7 +129,7 @@ extern js::Class baseObjectClass("BaseObject", [](js::ClassTemplate& tpl)
 
 #ifdef ALT_CLIENT_API
     tpl.LazyProperty<&alt::IBaseObject::GetRemoteID>("remoteID");
-    tpl.LazyProperty<&alt::IBaseObject::IsRemote>("isRemote");
+    tpl.LazyProperty<&alt::IBaseObject::IsRemote>("remote");
 #endif
 
     tpl.Method("destroy", Destroy);

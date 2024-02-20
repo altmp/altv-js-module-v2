@@ -20,8 +20,8 @@ static js::FactoryHandler webViewFactory(alt::IBaseObject::Type::WEBVIEW, [](js:
     {
         alt::Vector2i pos = args.Get<alt::Vector2i>("pos", {0, 0});
         alt::Vector2i size = args.Get<alt::Vector2i>("size", {0, 0});
-        bool isVisible = args.Get("isVisible", true);
-        bool isOverlay = args.Get("isOverlay", false);
+        bool isVisible = args.Get("visible", true);
+        bool isOverlay = args.Get("overlay", false);
 
         return alt::ICore::Instance().CreateWebView(url, pos, size, isVisible, isOverlay, args.GetResource()->GetResource());
     }

@@ -17,7 +17,7 @@ static js::Event playerConnectDeniedEvent(alt::CEvent::Type::PLAYER_CONNECT_DENI
     args.Set("name", e->GetName());
     args.Set("ip", e->GetIp());
     args.Set("passwordHash", e->GetPasswordHash());
-    args.Set("isDebug", e->IsDebug());
+    args.Set("debug", e->IsDebug());
     args.Set("branch", e->GetBranch());
     args.Set("versionMajor", e->GetVersionMajor());
     args.Set("versionMinor", e->GetVersionMinor());
