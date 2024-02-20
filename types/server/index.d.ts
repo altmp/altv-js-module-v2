@@ -1149,10 +1149,17 @@ declare module "@altv/server" {
         export function onceRemoteScriptEvent<T = any[], U extends Player = Player>(callback: GenericPlayerEventCallback<PlayerScriptEventParameters<T>, U>): altShared.Events.EventHandler;
 
         // SHARED resource events
-        export function onResourceStart(callback: GenericEventCallback<ResourceStartEventParameters>): altShared.Events.EventHandler;
-        export function onceResourceStart(callback: GenericEventCallback<ResourceStartEventParameters>): altShared.Events.EventHandler;
-        export function onResourceStop(callback: GenericEventCallback<ResourceStopEventParameters>): altShared.Events.EventHandler;
-        export function onceResourceStop(callback: GenericEventCallback<ResourceStopEventParameters>): altShared.Events.EventHandler;
+        export function onAnyResourceStart(callback: GenericEventCallback<ResourceStartEventParameters>): altShared.Events.EventHandler;
+        export function onceAnyResourceStart(callback: GenericEventCallback<ResourceStartEventParameters>): altShared.Events.EventHandler;
+        export function onAnyResourceStop(callback: GenericEventCallback<ResourceStopEventParameters>): altShared.Events.EventHandler;
+        export function onceAnyResourceStop(callback: GenericEventCallback<ResourceStopEventParameters>): altShared.Events.EventHandler;
+
+        export function onResourceStart(callback: GenericEventCallback): altShared.Events.EventHandler;
+        export function onceResourceStart(callback: GenericEventCallback): altShared.Events.EventHandler;
+        export function onResourceStop(callback: GenericEventCallback): altShared.Events.EventHandler;
+        export function onceResourceStop(callback: GenericEventCallback): altShared.Events.EventHandler;
+
+        // TODO: it also needs AnyResourceError?
         export function onResourceError(callback: GenericEventCallback<ResourceErrorEventParameters>): altShared.Events.EventHandler;
         export function onceResourceError(callback: GenericEventCallback<ResourceErrorEventParameters>): altShared.Events.EventHandler;
 

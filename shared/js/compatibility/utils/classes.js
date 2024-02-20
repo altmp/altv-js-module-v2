@@ -32,13 +32,9 @@ function applyNonStaticProperties(baseClass, cls, options) {
             const canBeMerged = !isBlacklisted || isWhitelisted;
 
             if (canBeMerged && newDescriptor) {
-                let mergedDescriptor = {};
+                let mergedDescriptor = baseDescriptor ? { ...baseDescriptor } : {};
 
-                if (baseDescriptor) {
-                    mergedDescriptor = { ...baseDescriptor };
-                }
-
-                ["get", "set", "value", "writeable"].forEach((key) => {
+                ["get", "set", "value"].forEach((key) => {
                     if (key in newDescriptor && (!mergedDescriptor[key] || isWhitelisted)) {
                         if (options.verbose) {
                             alt.log(`~ly~[JS] ~lr~Merged ${key} for ${prop} from ${prot.constructor.name} to ${baseClass.name}`);
@@ -46,6 +42,9 @@ function applyNonStaticProperties(baseClass, cls, options) {
                         mergedDescriptor[key] = newDescriptor[key];
                     }
                 });
+
+                // Make data descriptors writable if they are not already.
+                if (!!mergedDescriptor.value) mergedDescriptor.writable = true;
 
                 Object.defineProperty(baseClass.prototype, prop, mergedDescriptor);
 
