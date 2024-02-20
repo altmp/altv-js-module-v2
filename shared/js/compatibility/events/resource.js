@@ -17,3 +17,21 @@ registerEventHandler(alt.Enums.EventType.RESOURCE_STOP, "anyResourceStop", ({ re
 registerEventHandler(alt.Enums.EventType.RESOURCE_ERROR, "anyResourceError", ({ resource }) => {
     return [resource.name];
 });
+
+registerEventHandler(
+    alt.Enums.CustomEventType.RESOURCE_START,
+    "resourceStart",
+    () => {
+        return [];
+    },
+    true
+);
+
+registerEventHandler(
+    alt.Enums.CustomEventType.RESOURCE_STOP,
+    "resourceStop",
+    () => {
+        return [];
+    },
+    true
+);
