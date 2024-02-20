@@ -71,7 +71,7 @@ function getSyncedMetaKeys() {
  * @returns boolean
  */
 function hasSyncedMeta(key) {
-    return alt.syncedMeta[key] === undefined;
+    return alt.syncedMeta[key] !== undefined;
 }
 
 cppBindings.registerCompatibilityExport("deleteMeta", deleteMeta);

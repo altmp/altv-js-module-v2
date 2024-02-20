@@ -20,7 +20,7 @@ class VirtualEntity extends alt.VirtualEntity {
     }
 
     hasStreamSyncedMeta(key) {
-        return this.streamSyncedMeta[key] === undefined;
+        return this.streamSyncedMeta[key] !== undefined;
     }
 
     getStreamSyncedMeta(key) {

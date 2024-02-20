@@ -23,7 +23,7 @@ class Player {
     }
 
     hasLocalMeta(key) {
-        return this.localMeta[key] === undefined;
+        return this.localMeta[key] !== undefined;
     }
 
     setLocalMeta(key, value) {

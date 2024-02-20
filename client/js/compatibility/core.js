@@ -59,7 +59,7 @@ function loadModelAsync(model) {
 }
 
 function hasLocalMeta(key) {
-    return alt.localMeta[key] === undefined;
+    return alt.localMeta[key] !== undefined;
 }
 
 function getLocalMeta(key) {
