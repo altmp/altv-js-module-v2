@@ -45,8 +45,8 @@ declare module "@altv/server" {
         readonly targets: ReadonlyArray<Player>;
 
         readonly scriptID: number;
-        readonly isStreamedIn: boolean;
-        readonly isAttached: boolean;
+        readonly streamedIn: boolean;
+        readonly attached: boolean;
         attachedTo?: Entity;
 
         global: boolean;
@@ -120,7 +120,7 @@ declare module "@altv/server" {
     }
 
     export abstract class Marker extends WorldObject {
-        readonly isGlobal: boolean;
+        readonly global: boolean;
         readonly target?: Player;
         readonly streamingDistance: number;
 
@@ -245,7 +245,7 @@ declare module "@altv/server" {
 
     // @ts-expect-error - Suppresses "Class static side 'typeof Checkpoint' incorrectly extends base class static side 'typeof ColShape'.""
     export abstract class Checkpoint extends ColShape {
-        readonly isStreamedIn: boolean;
+        readonly streamedIn: boolean;
 
         checkpointType: number;
         radius: number;
@@ -391,7 +391,7 @@ declare module "@altv/server" {
         readonly cloudID: string;
         readonly cloudAuthResult: altShared.Enums.CloudAuthResult;
 
-        readonly isConnected: boolean;
+        readonly connected: boolean;
         readonly ping: number;
         readonly authToken: string;
         readonly discordID: number;
@@ -410,33 +410,33 @@ declare module "@altv/server" {
         readonly currentWeaponTintIndex: number;
         get currentWeapon(): number;
         set currentWeapon(value: number | string);
-        readonly isDead: boolean;
-        readonly isJumping: boolean;
-        readonly isInRagdoll: boolean;
-        readonly isAiming: boolean;
-        readonly isShooting: boolean;
-        readonly isReloading: boolean;
-        readonly isEnteringVehicle: boolean;
-        readonly isLeavingVehicle: boolean;
-        readonly isOnLadder: boolean;
-        readonly isInMelee: boolean;
-        readonly isInCover: boolean;
-        readonly isParachuting: boolean;
+        readonly dead: boolean;
+        readonly jumping: boolean;
+        readonly inRagdoll: boolean;
+        readonly aiming: boolean;
+        readonly shooting: boolean;
+        readonly reloading: boolean;
+        readonly enteringVehicle: boolean;
+        readonly leavingVehicle: boolean;
+        readonly onLadder: boolean;
+        readonly inMelee: boolean;
+        readonly inCover: boolean;
+        readonly parachuting: boolean;
         readonly moveSpeed: number;
         readonly aimPos: altShared.Vector3;
         readonly headRotation: altShared.Vector3;
-        readonly isInVehicle: boolean;
+        readonly inVehicle: boolean;
         readonly vehicle?: Vehicle;
         readonly seat: number;
         readonly entityAimingAt: Entity;
         readonly entityAimOffset: altShared.Vector3;
-        readonly isFlashlightActive: boolean;
-        readonly isSuperJumpEnabled: boolean;
-        readonly isCrouching: boolean;
-        readonly isStealthy: boolean;
+        readonly flashlightActive: boolean;
+        readonly superJumpEnabled: boolean;
+        readonly crouching: boolean;
+        readonly stealthy: boolean;
         readonly currentAnimationDict: number;
         readonly currentAnimationName: number;
-        readonly isSpawned: boolean;
+        readonly spawned: boolean;
         readonly forwardSpeed: number;
         readonly strafeSpeed: number;
 
@@ -579,26 +579,26 @@ declare module "@altv/server" {
     export abstract class Vehicle extends Entity {
         readonly neon: altShared.VehicleNeonState;
         readonly driver?: Player;
-        readonly isDestroyed: boolean;
+        readonly destroyed: boolean;
         readonly modKitsCount: number;
-        readonly IsPrimaryColorRGB: boolean;
+        readonly primaryColorRGB: boolean;
         readonly primaryColorRGB: altShared.RGBA;
-        readonly isSecondaryColorRGB: boolean;
+        readonly secondaryColorRGB: boolean;
         readonly secondaryColorRGB: altShared.RGBA;
-        readonly isTireSmokeColorCustom: boolean;
+        readonly tireSmokeColorCustom: boolean;
         readonly wheelType: number;
         readonly wheelVariation: number;
-        readonly isNeonActive: boolean;
-        readonly isHandbrakeActive: boolean;
-        readonly isSirenActive: boolean;
-        readonly isDaylightOn: boolean;
-        readonly isNightlightOn: boolean;
-        readonly isFlamethrowerActive: boolean;
+        readonly neonActive: boolean;
+        readonly handbrakeActive: boolean;
+        readonly sirenActive: boolean;
+        readonly daylightOn: boolean;
+        readonly nightlightOn: boolean;
+        readonly flamethrowerActive: boolean;
         readonly gameStateBase64: string;
         readonly wheelsCount: number;
         readonly repairsCount: number;
         readonly hasArmoredWindows: boolean;
-        readonly isManualEngineControl: boolean;
+        readonly manualEngineControl: boolean;
         readonly velocity: altShared.Vector3;
         readonly steeringAngle: number;
         readonly passengers: Readonly<{ [seat: string]: Player }>;
@@ -678,7 +678,7 @@ declare module "@altv/server" {
         hybridExtraState: number;
 
         quaternion: altShared.Quaternion;
-        readonly isHornActive: boolean;
+        readonly hornActive: boolean;
         readonly accelerationLevel: number;
         readonly brakeLevel: number;
 
@@ -776,7 +776,7 @@ declare module "@altv/server" {
     }
 
     export abstract class VirtualEntity extends WorldObject {
-        readonly isStreamedIn: boolean;
+        readonly streamedIn: boolean;
 
         readonly group: VirtualEntityGroup;
         readonly streamingDistance: number;
@@ -803,7 +803,7 @@ declare module "@altv/server" {
     }
 
     export abstract class VoiceChannel extends BaseObject {
-        readonly isSpatial: boolean;
+        readonly spatial: boolean;
         readonly maxDistance: number;
 
         readonly players: ReadonlyArray<Player>;
@@ -958,7 +958,7 @@ declare module "@altv/server" {
         readonly ip: string;
         readonly discordUserID: number;
 
-        readonly isAccepted: boolean;
+        readonly accepted: boolean;
         text: string;
 
         accept(sendNames?: boolean): void;
@@ -1335,7 +1335,7 @@ declare module "@altv/server" {
 
         export type EventContext = {
             readonly type: altShared.Enums.EventType;
-            readonly isCancellable: boolean;
+            readonly cancellable: boolean;
         };
 
         export type PlayerEventContext<T extends Player> = EventContext & {
@@ -1344,7 +1344,7 @@ declare module "@altv/server" {
 
         export type CancellableEventContext = {
             cancel(): void;
-            readonly isCancelled: boolean;
+            readonly cancelled: boolean;
         };
 
         export type CustomEventCallback<T extends unknown[]> = (...params: T) => void | Promise<void>;
