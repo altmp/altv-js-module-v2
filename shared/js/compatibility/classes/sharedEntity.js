@@ -1,6 +1,6 @@
 export class SharedEntity {
     hasStreamSyncedMeta(key) {
-        return key in this.streamSyncedMeta;
+        return this.streamSyncedMeta[key] === undefined;
     }
 
     getStreamSyncedMeta(key) {
