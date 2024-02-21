@@ -1,6 +1,9 @@
 /** @type {typeof import("./utils.js")} */
 const { assert, assertIsType } = requireBinding("shared/utils.js");
 
+/** @type {typeof import("./events.js")} */
+const { Event } = requireBinding("shared/events.js");
+
 /** @type {Map<number, Timer>} */
 const timers = new Map();
 
@@ -90,6 +93,8 @@ class Timer {
             } catch (e) {
                 alt.logError(`[JS] Exception caught while invoking timer callback`);
                 alt.logError(e);
+
+                Event.invoke(alt.Enums.CustomEventType.ERROR, { error: e, location: this.location, stack: e.stack }, true);
             }
             this.lastTick = Date.now();
 

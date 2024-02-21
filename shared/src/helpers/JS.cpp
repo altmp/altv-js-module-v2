@@ -116,8 +116,15 @@ void js::TryCatch::PrintError(bool skipLocation)
     if(!stack.empty()) Logger::Error("[JS]", stack);
 
     js::Event::EventArgs args;
-    args.Set("error", exceptionStr);
+    args.Set("error", exception);
     args.Set("stack", stack);
+
+    js::Object location;
+    location.Set("fileName", file);
+    location.Set("lineNumber", line);
+
+    args.Set("location", location);
+
     js::Event::SendEvent(js::EventType::ERROR, args, resource);
 }
 

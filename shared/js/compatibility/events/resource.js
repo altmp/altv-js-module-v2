@@ -19,6 +19,17 @@ registerEventHandler(alt.Enums.EventType.RESOURCE_ERROR, "anyResourceError", ({ 
 });
 
 registerEventHandler(
+    alt.Enums.CustomEventType.ERROR,
+    "resourceError",
+    ({ error, location, stack }) => {
+        const { fileName, lineNumber } = location;
+
+        return [error, fileName, lineNumber, stack];
+    },
+    true
+);
+
+registerEventHandler(
     alt.Enums.CustomEventType.RESOURCE_START,
     "resourceStart",
     () => {
