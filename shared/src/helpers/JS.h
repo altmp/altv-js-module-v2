@@ -639,12 +639,18 @@ namespace js
             while(true)
             {
                 v8::Promise::PromiseState state = promise->State();
+
                 switch(state)
                 {
                     case v8::Promise::PromiseState::kPending: internal::RunEventLoop(); break;
                     case v8::Promise::PromiseState::kFulfilled: return true;
                     case v8::Promise::PromiseState::kRejected: return false;
+
+                    // NOTE (xLuxy): I have no idea why state can be 3 or what it means - it's undocumented
+                    //               state is probably state - 1?
+                    case 3: return false;
                 }
+
                 std::this_thread::sleep_for(std::chrono::milliseconds(1));
             }
         }
