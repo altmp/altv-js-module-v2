@@ -5,7 +5,7 @@
 
 export class SharedBaseObject {
     hasMeta(key) {
-        return key in this.meta;
+        return this.meta[key] !== undefined;
     }
 
     getMeta(key) {
@@ -34,7 +34,7 @@ export class SharedBaseObject {
     }
 
     hasSyncedMeta(key) {
-        return key in this.syncedMeta;
+        return this.syncedMeta[key] !== undefined;
     }
 
     getSyncedMetaKeys() {
