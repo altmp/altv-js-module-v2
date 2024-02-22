@@ -21,6 +21,9 @@ const cppBindings = __cppBindings;
         const pathStr = url.pathToFileURL(_path).toString();
         _exports = await esmLoader.import(pathStr, "", {});
     } catch (e) {
+        if ((e?.message ?? "").includes("No such module was linked: alt")) {
+            alt.logError("Did you forget to enable v1 compatibility?");
+        }
         alt.logError(e);
     }
 
