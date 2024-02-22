@@ -249,14 +249,14 @@ export class Event {
      * @param {Record<string, unknown>} ctx
      * @param {boolean} custom
      */
-    static invoke(eventType, ctx, custom) {
+    static async invoke(eventType, ctx, custom) {
         Event.#invokeGeneric(eventType, ctx, custom);
         if (eventType === alt.Enums.EventType.CLIENT_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isClient);
         else if (eventType === alt.Enums.EventType.SERVER_SCRIPT_EVENT) Event.#handleScriptEvent(ctx, alt.isServer);
 
         const map = custom ? Event.#customHandlers : Event.#handlers;
         const handlers = map.get(eventType);
-        if (!handlers) return;
+        if (!handlers) return Promise.resolve();
         for (const eventHandler of handlers) {
             const { handler, location, onlyOnce } = eventHandler;
 
@@ -274,6 +274,8 @@ export class Event {
                 Event.invoke(alt.Enums.CustomEventType.ERROR, { error: e, location, stack: e.stack }, true);
             }
         }
+
+        return Promise.resolve();
     }
 }
 
