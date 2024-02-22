@@ -31,13 +31,3 @@ alt.Events.onColShapeEvent(({ entity, colShape, state }) => {
 
     Event.invoke(eventType, data, true);
 });
-
-alt.Events.onAnyResourceStart(({ resource }) => {
-    if (resource.name !== alt.Resource.current.name) return;
-    Event.invoke(alt.Enums.CustomEventType.RESOURCE_START, {}, true);
-});
-
-alt.Events.onAnyResourceStop(({ resource }) => {
-    if (resource.name !== alt.Resource.current.name) return;
-    Event.invoke(alt.Enums.CustomEventType.RESOURCE_STOP, {}, true);
-});

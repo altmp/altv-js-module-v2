@@ -30,9 +30,7 @@ void js::Event::SendEvent(const alt::CEvent* ev, IResource* resource)
     js::Promise promise = CallEventBinding(false, (int)ev->GetType(), eventArgs, resource);
     eventArgs.Get()->SetAlignedPointerInInternalField(1, nullptr);
 
-    if (!promise.IsValid()) return;
-
-    if (ev->GetType() == alt::CEvent::Type::RESOURCE_STOP && static_cast<const alt::CResourceStopEvent*>(ev)->GetResource() == resource->GetResource())
+    if (promise.IsValid())
     {
         promise.Await();
     }
@@ -41,7 +39,11 @@ void js::Event::SendEvent(const alt::CEvent* ev, IResource* resource)
 void js::Event::SendEvent(EventType type, EventArgs& args, IResource* resource)
 {
     js::Promise promise = CallEventBinding(true, (int)type, args, resource);
-    if(!promise.IsValid()) return;
+
+    if(promise.IsValid())
+    {
+        promise.Await();
+    }
 }
 
 // Class

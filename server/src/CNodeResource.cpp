@@ -81,6 +81,9 @@ bool CNodeResource::Start()
         OnTick();
     }
 
+    js::Event::EventArgs eventArgs;
+    js::Event::SendEvent(js::EventType::RESOURCE_START, eventArgs, this);
+
     if (IsCompatibilityModeEnabled())
     {
         auto resourceName = resource->GetName();
@@ -93,6 +96,10 @@ bool CNodeResource::Start()
 bool CNodeResource::Stop()
 {
     IResource::Scope scope(this);
+
+    js::Event::EventArgs eventArgs;
+    js::Event::SendEvent(js::EventType::RESOURCE_STOP, eventArgs, this);
+
     node::EmitAsyncDestroy(isolate, asyncContext);
     asyncResource.Reset();
 
