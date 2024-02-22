@@ -640,6 +640,8 @@ namespace js
             {
                 v8::Promise::PromiseState state = promise->State();
 
+                js::Logger::Warn << "Awaiting promise state: " << (int)state << js::Logger::Endl;
+
                 switch(state)
                 {
                     case v8::Promise::PromiseState::kPending: internal::RunEventLoop(); break;
