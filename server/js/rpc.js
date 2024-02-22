@@ -1,3 +1,7 @@
+/// <reference path="../../types/shared/index.d.ts" />
+/// <reference path="../../types/server/index.d.ts" />
+// import * as alt from "@altv/server";
+
 /** @type {typeof import("./utils.js")} */
 const { assert, assertIsType } = requireBinding("shared/utils.js");
 /** @type {typeof import("../../shared/js/rpc.js")} */
@@ -25,4 +29,10 @@ alt.Events.onScriptRPCAnswer((ctx) => {
     const map = pendingRpcMap.get(ctx.player);
     if (!map) return;
     answerRpc(ctx, map);
+
+    if (!map.size) pendingRpcMap.delete(ctx.player);
+});
+
+alt.Events.onPlayerDisconnect(({ player }) => {
+    pendingRpcMap.delete(player);
 });
