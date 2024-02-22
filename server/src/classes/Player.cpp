@@ -343,11 +343,11 @@ static void Kick(js::FunctionContext& ctx)
 {
     if (!ctx.CheckThis()) return;
     if (!ctx.CheckArgCount(0, 1)) return;
-    if (!ctx.CheckArgType(0, { js::Type::STRING, js::Type::UNDEFINED, js::Type::NULL_TYPE })) return;
+    if (!ctx.CheckArgType(0, { js::Type::STRING, js::Type::UNDEFINED, js::Type::NULL_TYPE, js::Type::INVALID })) return;
 
     alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
 
-    if (ctx.GetArgType(0) == js::Type::STRING)
+    if (ctx.GetArgCount() == 1 && ctx.GetArgType(0) == js::Type::STRING)
     {
         const auto reason = ctx.GetArg<std::string>(0, "");
         player->Kick(reason);
