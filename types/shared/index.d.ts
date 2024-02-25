@@ -121,7 +121,7 @@ declare module "@altv/shared" {
         readonly exports: Readonly<Record<string, unknown>>;
         readonly dependencies: ReadonlyArray<string>;
         readonly dependants: ReadonlyArray<string>;
-        readonly started: boolean;
+        readonly isStarted: boolean;
 
         readonly config: Readonly<Record<string, unknown>>;
 
@@ -721,7 +721,7 @@ declare module "@altv/shared" {
         interface CustomWebViewToClientEvent extends WebViewToClientEvent {}
 
         interface GenericOnEventParameters {
-            readonly cancellable: boolean;
+            readonly isCancellable: boolean;
             readonly type: number;
             readonly eventType: Enums.EventType | Enums.CustomEventType;
             readonly customEvent: boolean;

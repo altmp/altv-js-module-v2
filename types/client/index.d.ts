@@ -77,7 +77,7 @@ declare module "@altv/client" {
         readonly outputs: ReadonlyArray<AudioOutput>;
         readonly currentTime: number;
         readonly maxTime: number;
-        readonly playing: boolean;
+        readonly isPlaying: boolean;
         readonly listeners: ReadonlyMap<string, Array<(...args: unknown[]) => Promise<void> | void>>;
 
         addOutput(output: AudioOutput): void;
@@ -228,7 +228,7 @@ declare module "@altv/client" {
     }
 
     export class BaseObject extends altShared.BaseObject {
-        readonly remote: boolean;
+        readonly isRemote: boolean;
         readonly remoteID: number;
 
         static getByID(type: altShared.Enums.BaseObjectType, id: number): BaseObject | null;
@@ -252,9 +252,9 @@ declare module "@altv/client" {
 
     export abstract class Blip extends WorldObject {
         readonly scriptID: number;
-        readonly streamedIn: boolean;
+        readonly isStreamedIn: boolean;
         readonly global: boolean;
-        readonly attached: boolean;
+        readonly isAttached: boolean;
         readonly attachedTo?: Entity;
 
         readonly meta: BlipMeta & Record<string, unknown>;
@@ -315,7 +315,7 @@ declare module "@altv/client" {
     }
 
     export abstract class Marker extends WorldObject {
-        readonly global: boolean;
+        readonly isGlobal: boolean;
         readonly streamingDistance: number;
 
         readonly meta: MarkerMeta & Record<string, unknown>;
@@ -377,7 +377,7 @@ declare module "@altv/client" {
 
     export abstract class Checkpoint extends ColShape {
         readonly scriptID: number;
-        readonly streamedIn: boolean;
+        readonly isStreamedIn: boolean;
 
         checkpointType: number;
         radius: number;
@@ -413,7 +413,7 @@ declare module "@altv/client" {
         get model(): number;
         readonly netOwner?: Player;
         readonly visible: boolean;
-        readonly streamedIn: boolean;
+        readonly isStreamedIn: boolean;
 
         readonly syncedMeta: Readonly<altShared.EntitySyncedMeta & Record<string, unknown>>;
         readonly streamSyncedMeta: Readonly<altShared.EntityStreamSyncedMeta & Record<string, unknown>>;
@@ -432,7 +432,7 @@ declare module "@altv/client" {
     }
 
     export abstract class Handling extends HandlingData {
-        readonly modified: boolean;
+        readonly isModified: boolean;
 
         reset(): void;
     }
@@ -558,14 +558,14 @@ declare module "@altv/client" {
         get model(): number;
         set model(value: number | string);
         alpha: number;
-        readonly dynamic: boolean;
+        readonly isDynamic: boolean;
         lodDistance: number;
         hasGravity: number;
-        readonly collisionEnabled: boolean;
+        readonly isCollisionEnabled: boolean;
         positionFrozen: boolean;
         textureVariation: number;
-        readonly worldObject: boolean;
-        readonly weaponObject: boolean;
+        readonly isWorldObject: boolean;
+        readonly isWeaponObject: boolean;
         readonly useStreaming: boolean;
         readonly streamingDistance: number;
         visible: boolean;
@@ -652,7 +652,7 @@ declare module "@altv/client" {
         readonly streamingDistance: number;
         visible: boolean;
         readonly scriptID: number;
-        readonly streamedIn: boolean;
+        readonly isStreamedIn: boolean;
 
         public waitForSpawn(timeout?: number): Promise<void>;
 
@@ -702,7 +702,7 @@ declare module "@altv/client" {
         readonly streamingDistance: number;
         visible: boolean;
         readonly scriptID: number;
-        readonly streamedIn: boolean;
+        readonly isStreamedIn: boolean;
 
         public waitForSpawn(timeout?: number): Promise<void>;
 
@@ -733,7 +733,7 @@ declare module "@altv/client" {
     export abstract class Player extends Entity {
         readonly name: string;
 
-        readonly talking: boolean;
+        readonly isTalking: boolean;
         readonly micLevel: number;
         readonly taskData: string;
         spatialVolume: number;
@@ -745,35 +745,35 @@ declare module "@altv/client" {
         readonly currentWeaponComponents: ReadonlyArray<number>;
         readonly currentWeaponTintIndex: number;
         get currentWeapon(): number;
-        readonly dead: boolean;
-        readonly jumping: boolean;
-        readonly inRagdoll: boolean;
-        readonly aiming: boolean;
-        readonly shooting: boolean;
-        readonly reloading: boolean;
-        readonly enteringVehicle: boolean;
-        readonly leavingVehicle: boolean;
-        readonly onLadder: boolean;
-        readonly inMelee: boolean;
-        readonly inCover: boolean;
-        readonly parachuting: boolean;
+        readonly isDead: boolean;
+        readonly isJumping: boolean;
+        readonly isInRagdoll: boolean;
+        readonly isAiming: boolean;
+        readonly isShooting: boolean;
+        readonly isReloading: boolean;
+        readonly isEnteringVehicle: boolean;
+        readonly isLeavingVehicle: boolean;
+        readonly isOnLadder: boolean;
+        readonly isInMelee: boolean;
+        readonly isInCover: boolean;
+        readonly isParachuting: boolean;
         readonly armour: number;
         readonly maxArmour: number;
         readonly moveSpeed: number;
         readonly aimPos: altShared.Vector3;
         readonly headRotation: altShared.Vector3;
-        readonly inVehicle: boolean;
+        readonly isInVehicle: boolean;
         readonly vehicle?: Vehicle;
         readonly seat: number;
         readonly entityAimingAt: Entity;
         readonly entityAimOffset: altShared.Vector3;
-        readonly flashlightActive: boolean;
-        readonly superJumpEnabled: boolean;
-        readonly crouching: boolean;
-        readonly stealthy: boolean;
+        readonly isFlashlightActive: boolean;
+        readonly isSuperJumpEnabled: boolean;
+        readonly isCrouching: boolean;
+        readonly isStealthy: boolean;
         readonly currentAnimationDict: number;
         readonly currentAnimationName: number;
-        readonly spawned: boolean;
+        readonly isSpawned: boolean;
         readonly forwardSpeed: number;
         readonly strafeSpeed: number;
 
@@ -801,8 +801,8 @@ declare module "@altv/client" {
     export abstract class RmlDocument extends RmlElement {
         title: string;
         readonly sourceUrl: string;
-        readonly visible: boolean;
-        readonly modal: boolean;
+        readonly isVisible: boolean;
+        readonly isModal: boolean;
 
         readonly body: RmlElement;
 
@@ -839,7 +839,7 @@ declare module "@altv/client" {
         readonly focusedElement?: RmlElement;
         readonly tagName: string;
         rmlID: string;
-        readonly owned: boolean;
+        readonly isOwned: boolean;
         readonly absoluteLeft: number;
         readonly absoluteTop: number;
         readonly clientLeft: number;
@@ -854,7 +854,7 @@ declare module "@altv/client" {
         scrollTop: number;
         readonly scrollWidth: number;
         readonly scrollHeight: number;
-        readonly visible: boolean;
+        readonly isVisible: boolean;
 
         readonly parent?: RmlElement;
         readonly nextSibling?: RmlElement;
@@ -918,8 +918,8 @@ declare module "@altv/client" {
     }
 
     export abstract class TextLabel extends WorldObject {
-        readonly streamedIn: boolean;
-        readonly global: boolean;
+        readonly isStreamedIn: boolean;
+        readonly isGlobal: boolean;
         readonly target: Entity;
         visible: boolean;
         color: altShared.RGBA;
@@ -954,20 +954,20 @@ declare module "@altv/client" {
         readonly neon: Readonly<altShared.VehicleNeonState>;
 
         readonly driver?: Player;
-        readonly destroyed: boolean;
+        readonly isDestroyed: boolean;
         readonly modKitsCount: number;
         readonly modKit: number;
-        readonly primaryColorRGB: boolean;
+        readonly IsPrimaryColorRGB: boolean;
         readonly primaryColor: number;
         readonly primaryColorRGB: altShared.RGBA;
-        readonly secondaryColorRGB: boolean;
+        readonly isSecondaryColorRGB: boolean;
         readonly secondaryColor: number;
         readonly secondaryColorRGB: altShared.RGBA;
         readonly pearlColor: number;
         readonly wheelColor: number;
         readonly interiorColor: number;
         readonly dashboardColor: number;
-        readonly tireSmokeColorCustom: boolean;
+        readonly isTireSmokeColorCustom: boolean;
         readonly tireSmokeColor: altShared.RGBA;
         readonly wheelType: number;
         readonly wheelVariation: number;
@@ -977,21 +977,21 @@ declare module "@altv/client" {
         readonly numberplateText: string;
         readonly windowTint: number;
         readonly dirtLevel: number;
-        readonly neonActive: boolean;
+        readonly isNeonActive: boolean;
         readonly neonColor: altShared.RGBA;
         readonly livery: number;
         readonly roofLivery: number;
         readonly appearanceDataBase64: string;
         readonly engineOn: boolean;
-        readonly handbrakeActive: boolean;
+        readonly isHandbrakeActive: boolean;
         readonly headlightColor: number;
         readonly radioStationIndex: number;
-        readonly sirenActive: boolean;
+        readonly isSirenActive: boolean;
         readonly lockState: altShared.Enums.VehicleLockState;
-        readonly daylightOn: boolean;
-        readonly nightlightOn: boolean;
+        readonly isDaylightOn: boolean;
+        readonly isNightlightOn: boolean;
         readonly roofState: number;
-        readonly flamethrowerActive: boolean;
+        readonly isFlamethrowerActive: boolean;
         readonly lightsMultiplier: number;
         readonly gameStateBase64: string;
         readonly engineHealth: number;
@@ -1017,11 +1017,11 @@ declare module "@altv/client" {
         readonly rpm: number;
         readonly speedVector: altShared.Vector3;
         readonly handling: Handling;
-        readonly handlingModified: boolean;
+        readonly isHandlingModified: boolean;
         indicatorLights: number;
         seatCount: number;
         readonly occupiedSeatsCount: number;
-        readonly taxiLightOn: boolean;
+        readonly isTaxiLightOn: boolean;
         engineTemperature: number;
         fuelLevel: number;
         oilLevel: number;
@@ -1118,7 +1118,7 @@ declare module "@altv/client" {
     }
 
     export abstract class VirtualEntity extends WorldObject {
-        readonly streamedIn: boolean;
+        readonly isStreamedIn: boolean;
 
         readonly group: VirtualEntityGroup;
         readonly streamingDistance: number;
@@ -1236,9 +1236,9 @@ declare module "@altv/client" {
         url: string;
         visible: boolean;
 
-        readonly overlay: boolean;
-        readonly loaded: boolean;
-        readonly ready: boolean;
+        readonly isOverlay: boolean;
+        readonly isLoaded: boolean;
+        readonly isReady: boolean;
 
         readonly listeners: ReadonlyMap<string, Array<(...args: unknown[]) => Promise<void> | void>>;
 
@@ -1273,7 +1273,7 @@ declare module "@altv/client" {
         public onDestroy?(): void;
 
         static readonly all: ReadonlyArray<WebView>;
-        static readonly gpuAccelerationActive: boolean;
+        static readonly isGpuAccelerationActive: boolean;
 
         static create(options: _WebViewCreateOptionsDrawable): WebView;
         static create(options: _WebViewCreateOptionsOverlay): WebView;
