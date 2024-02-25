@@ -78,15 +78,15 @@ extern js::Class localObjectClass("LocalObject", &objectClass, nullptr, [](js::C
 
     tpl.Property<&alt::ILocalObject::GetModel, &alt::ILocalObject::SetModel>("model");
     tpl.Property<&alt::ILocalObject::GetAlpha, &alt::ILocalObject::SetAlpha>("alpha");
-    tpl.Property<&alt::ILocalObject::IsDynamic>("dynamic");
+    tpl.Property<&alt::ILocalObject::IsDynamic>("isDynamic");
     tpl.Property<&alt::ILocalObject::GetLodDistance, &alt::ILocalObject::SetLodDistance>("lodDistance");
     tpl.Property<&alt::ILocalObject::HasGravity, &alt::ILocalObject::ToggleGravity>("hasGravity");
-    tpl.Property<&alt::ILocalObject::IsCollisionEnabled>("collisionEnabled");
+    tpl.Property<&alt::ILocalObject::IsCollisionEnabled>("isCollisionEnabled");
     tpl.Property<&alt::ILocalObject::IsPositionFrozen, &alt::ILocalObject::SetPositionFrozen>("positionFrozen");
     tpl.Property<&alt::ILocalObject::GetTextureVariation, &alt::ILocalObject::SetTextureVariation>("textureVariation");
-    tpl.Property<&alt::ILocalObject::IsWorldObject>("worldObject");
-    tpl.Property<&alt::ILocalObject::IsWeaponObject>("weaponObject");
-    tpl.Property<&alt::ILocalObject::IsStreamedIn>("streamedIn");
+    tpl.Property<&alt::ILocalObject::IsWorldObject>("isWorldObject");
+    tpl.Property<&alt::ILocalObject::IsWeaponObject>("isWeaponObject");
+    tpl.Property<&alt::ILocalObject::IsStreamedIn>("isStreamedIn");
     tpl.Property<&alt::ILocalObject::UsesStreaming>("useStreaming");
     tpl.Property<&alt::ILocalObject::GetStreamingDistance>("streamingDistance");
     tpl.Property<&alt::ILocalObject::GetVisible, &alt::ILocalObject::SetVisible>("visible");

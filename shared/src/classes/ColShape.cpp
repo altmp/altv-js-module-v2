@@ -123,9 +123,9 @@ extern js::Class colShapeClass("ColShape", &worldObjectClass, nullptr, [](js::Cl
     tpl.LazyProperty("maxZ", MaxZGetter);
     tpl.LazyProperty("points", PointsGetter);
 
-    tpl.Method<&alt::IColShape::IsEntityIn>("entityIn");
-    tpl.Method<&alt::IColShape::IsEntityIdIn>("entityIdIn");
-    tpl.Method<&alt::IColShape::IsPointIn>("pointIn");
+    tpl.Method<&alt::IColShape::IsEntityIn>("isEntityIn");
+    tpl.Method<&alt::IColShape::IsEntityIdIn>("isEntityIdIn");
+    tpl.Method<&alt::IColShape::IsPointIn>("isPointIn");
 
     tpl.GetByID<alt::IBaseObject::Type::COLSHAPE>();
 

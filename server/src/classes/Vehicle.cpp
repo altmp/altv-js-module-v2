@@ -137,13 +137,13 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Property<&alt::IVehicle::GetAttachedTo>("attachedTo");
     tpl.Property<&alt::IVehicle::IsDriftMode, &alt::IVehicle::SetDriftMode>("driftMode");
 
-    tpl.Property<&alt::IVehicle::IsTrainMissionTrain, &alt::IVehicle::SetTrainMissionTrain>("missionTrain");
+    tpl.Property<&alt::IVehicle::IsTrainMissionTrain, &alt::IVehicle::SetTrainMissionTrain>("isMissionTrain");
     tpl.Property<&alt::IVehicle::GetTrainTrackId, &alt::IVehicle::SetTrainTrackId>("trainTrackId");
     tpl.Property<&alt::IVehicle::GetTrainEngineId, &alt::IVehicle::SetTrainEngineId>("trainEngine");
     tpl.Property<&alt::IVehicle::GetTrainConfigIndex, &alt::IVehicle::SetTrainConfigIndex>("trainConfigIndex");
     tpl.Property<&alt::IVehicle::GetTrainDistanceFromEngine, &alt::IVehicle::SetTrainDistanceFromEngine>("trainDistanceFromEngine");
     tpl.Property<&alt::IVehicle::IsTrainEngine, &alt::IVehicle::SetTrainIsEngine>("hasTrainEngine");
-    tpl.Property<&alt::IVehicle::IsTrainCaboose, &alt::IVehicle::SetTrainIsCaboose>("trainCaboose");
+    tpl.Property<&alt::IVehicle::IsTrainCaboose, &alt::IVehicle::SetTrainIsCaboose>("isTrainCaboose");
     tpl.Property<&alt::IVehicle::GetTrainDirection, &alt::IVehicle::SetTrainDirection>("trainDirection");
     tpl.Property<&alt::IVehicle::HasTrainPassengerCarriages, &alt::IVehicle::SetTrainHasPassengerCarriages>("hasTrainPassengerCarriages");
     tpl.Property<&alt::IVehicle::GetTrainRenderDerailed, &alt::IVehicle::SetTrainRenderDerailed>("trainRenderDerailed");
@@ -168,7 +168,7 @@ extern js::Class vehicleClass("Vehicle", &sharedVehicleClass, nullptr, [](js::Cl
     tpl.Property<&alt::IVehicle::GetHybridExtraActive, &alt::IVehicle::SetHybridExtraActive>("hybridExtraActive");
     tpl.Property<&alt::IVehicle::GetHybridExtraState, &alt::IVehicle::SetHybridExtraState>("hybridExtraState");
     tpl.Property<&alt::IVehicle::GetQuaternion, &alt::IVehicle::SetQuaternion>("quaternion");
-    tpl.Property<&alt::IVehicle::IsHornActive>("hornActive");
+    tpl.Property<&alt::IVehicle::IsHornActive>("isHornActive");
     tpl.Property<&alt::IVehicle::GetAccelerationLevel>("accelerationLevel");
     tpl.Property<&alt::IVehicle::GetBrakeLevel>("brakeLevel");
     tpl.Property<&alt::IVehicle::GetRearWheelVariation, &alt::IVehicle::SetRearWheels>("rearWheelVariation");

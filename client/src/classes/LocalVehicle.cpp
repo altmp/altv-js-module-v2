@@ -43,7 +43,7 @@ extern js::Class localVehicleClass("LocalVehicle", &vehicleClass, nullptr, [](js
     tpl.Property<&alt::ILocalPed::GetStreamingDistance>("streamingDistance");
     tpl.Property<&alt::ILocalPed::IsVisible, &alt::ILocalPed::SetVisible>("visible");
     tpl.Property<&alt::ILocalPed::GetScriptID>("scriptID");
-    tpl.Property<&alt::ILocalPed::IsStreamedIn>("streamedIn");
+    tpl.Property<&alt::ILocalPed::IsStreamedIn>("isStreamedIn");
 
     tpl.GetByID<alt::IBaseObject::Type::LOCAL_VEHICLE>();
     tpl.StaticFunction("getByScriptID", &GetByScriptID);

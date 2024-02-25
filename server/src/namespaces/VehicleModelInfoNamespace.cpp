@@ -81,7 +81,7 @@ static void Get(js::FunctionContext& ctx)
     modelObj.Set("handlingNameHash", info.handlingNameHash);
 
     modelObj.SetBoundMethod("doesExtraExist", DoesExtraExist);
-    modelObj.SetBoundMethod("extraDefault", IsExtraDefault);
+    modelObj.SetBoundMethod("isExtraDefault", IsExtraDefault);
 
     ctx.Return(modelObj);
 }

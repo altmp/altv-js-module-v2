@@ -52,8 +52,8 @@ extern js::Class rmlDocumentClass("RmlDocument", &rmlElementClass, nullptr, [](j
 
     tpl.Property<&alt::IRmlDocument::GetTitle, &alt::IRmlDocument::SetTitle>("title");
     tpl.Property<&alt::IRmlDocument::GetSourceUrl>("sourceUrl");
-    tpl.Property<&alt::IRmlDocument::IsVisible>("visible");
-    tpl.Property<&alt::IRmlDocument::IsModal>("modal");
+    tpl.Property<&alt::IRmlDocument::IsVisible>("isVisible");
+    tpl.Property<&alt::IRmlDocument::IsModal>("isModal");
     tpl.Property<&alt::IRmlDocument::GetBody>("body");
 
     tpl.Method("show", Show);

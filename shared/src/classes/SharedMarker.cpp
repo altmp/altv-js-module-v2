@@ -5,7 +5,7 @@
 extern js::Class worldObjectClass;
 extern js::Class sharedMarkerClass("SharedMarker", &worldObjectClass, nullptr, [](js::ClassTemplate& tpl)
 {
-    tpl.Property<&alt::IMarker::IsGlobal>("global");
+    tpl.Property<&alt::IMarker::IsGlobal>("isGlobal");
     tpl.Property<&alt::IMarker::GetTarget>("target");
 
     tpl.Property<&alt::IMarker::GetColor, &alt::IMarker::SetColor>("color");

@@ -142,8 +142,8 @@ static void GetKeyState(js::FunctionContext& ctx)
 
     alt::KeyState state = alt::ICore::Instance().GetKeyState(keyCode);
     js::Object obj;
-    obj.Set("down", state.IsDown());
-    obj.Set("toggled", state.IsToggled());
+    obj.Set("isDown", state.IsDown());
+    obj.Set("isToggled", state.IsToggled());
 
     ctx.Return(obj);
 }
@@ -510,18 +510,18 @@ static js::Module altModule("@altv/client", "@altv/shared",
     &mapZoomDataClass, &virtualEntityClass, &virtualEntityGroupClass, &weaponDataClass, &handlingClass, &handlingDataClass,
     &httpClientClass, &audioOutputClass, &audioOutputAttachedClass, &audioOutputFrontendClass, &audioOutputWorldClass, &audioCategoryClass },
 [](js::ModuleTemplate& module) {
-    module.StaticProperty("client", true);
-    module.StaticProperty("server", false);
+    module.StaticProperty("isClient", true);
+    module.StaticProperty("isServer", false);
 
-    module.StaticLazyProperty("streamerModeEnabled", IsStreamerModeEnabledGetter);
+    module.StaticLazyProperty("isStreamerModeEnabled", IsStreamerModeEnabledGetter);
     module.StaticLazyProperty("locale", LocaleGetter);
     module.StaticLazyProperty("licenseHash", LicenseHashGetter);
     module.StaticLazyProperty("clientConfig", ClientConfigGetter);
     module.StaticLazyProperty("clientPath", ClientPathGetter);
 
-    module.StaticFunction("menuOpen", IsMenuOpen);
-    module.StaticFunction("consoleOpen", IsConsoleOpen);
-    module.StaticFunction("gameFocused", IsGameFocused);
+    module.StaticFunction("isMenuOpen", IsMenuOpen);
+    module.StaticFunction("isConsoleOpen", IsConsoleOpen);
+    module.StaticFunction("isGameFocused", IsGameFocused);
     module.StaticFunction("getFps", GetFps);
     module.StaticFunction("getPing", GetPing);
     module.StaticFunction("getTotalPacketsSent", GetTotalPacketsSent);
@@ -529,7 +529,7 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.StaticFunction("getServerIp", GetServerIp);
     module.StaticFunction("getServerPort", GetServerPort);
     module.StaticFunction("getScreenResolution", GetScreenResolution);
-    module.StaticFunction("fullscreen", IsFullscreen);
+    module.StaticFunction("isFullscreen", IsFullscreen);
     module.StaticFunction("areGameControlsActive", AreGameControlsActive);
     module.StaticFunction("setGameControlsActive", SetGameControlsActive);
     module.StaticFunction("getMsPerGameMinute", GetMsPerGameMinute);
@@ -558,7 +558,7 @@ static js::Module altModule("@altv/client", "@altv/shared",
     module.StaticFunction("resetMinimapComponentPosition", ResetMinimapComponentPosition);
     module.StaticFunction("setMinimapIsRectangle", SetMinimapIsRectangle);
     module.StaticFunction("getPedBonePos", GetPedBonePos);
-    module.StaticFunction("pointOnScreen", IsPointOnScreen);
+    module.StaticFunction("isPointOnScreen", IsPointOnScreen);
 
     module.StaticFunction("getPoolSize", GetPoolSize);
     module.StaticFunction("getPoolCount", GetPoolCount);

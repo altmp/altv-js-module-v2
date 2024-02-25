@@ -43,7 +43,7 @@ static void ClearFocusOverride(js::FunctionContext& ctx)
 
 // clang-format off
 extern js::Namespace focusDataNamespace("FocusData", [](js::NamespaceTemplate& tpl) {
-    tpl.StaticProperty("focusOverriden", FocusOverridenGetter);
+    tpl.StaticProperty("isFocusOverriden", FocusOverridenGetter);
     tpl.StaticProperty("focusOverridePos", FocusOverridePosGetter, FocusOverridePosSetter);
     tpl.StaticProperty("focusOverrideEntity", FocusOverrideEntityGetter, FocusOverrideEntitySetter);
     tpl.StaticProperty("focusOverrideOffset", FocusOverrideOffsetGetter);

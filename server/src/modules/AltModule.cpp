@@ -171,8 +171,8 @@ extern js::Class playerClass, vehicleClass, checkpointClass, pedClass, objectCla
 extern js::Namespace eventsNamespace, pedModelInfoNamespace, vehicleModelInfoNamespace, weaponModelInfoNamespace, streamingNamespace;
 static js::Module altModule("@altv/server", "@altv/shared", { &playerClass, &vehicleClass, &checkpointClass, &pedClass, &objectClass, &voiceChannelClass, &blipClass, &virtualEntityClass, &virtualEntityGroupClass, &markerClass, &metricClass, &connectionInfoClass }, [](js::ModuleTemplate& module)
 {
-    module.StaticProperty("client", false);
-    module.StaticProperty("server", true);
+    module.StaticProperty("isClient", false);
+    module.StaticProperty("isServer", true);
     module.StaticProperty("rootDir", alt::ICore::Instance().GetRootDirectory());
 
     module.StaticDynamicProperty("syncedMeta", SyncedMetaGetter, SyncedMetaSetter, SyncedMetaDeleter, SyncedMetaEnumerator);

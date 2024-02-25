@@ -6,7 +6,7 @@ extern js::Class worldObjectClass;
 extern js::Class sharedBlipClass("SharedBlip", &worldObjectClass, nullptr, [](js::ClassTemplate& tpl)
 {
     tpl.Property<&alt::IBlip::IsGlobal>("global");
-    tpl.Property<&alt::IBlip::IsAttached>("attached");
+    tpl.Property<&alt::IBlip::IsAttached>("isAttached");
     tpl.Property<&alt::IBlip::AttachedTo>("attachedTo");
     tpl.Property<&alt::IBlip::GetBlipType, &alt::IBlip::SetBlipType>("blipType");
     tpl.Property<&alt::IBlip::GetScaleXY, &alt::IBlip::SetScaleXY>("scaleXY");

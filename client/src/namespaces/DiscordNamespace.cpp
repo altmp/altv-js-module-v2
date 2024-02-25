@@ -54,7 +54,7 @@ static void RequestOAuth2Token(js::FunctionContext& ctx)
 
 // clang-format off
 extern js::Namespace discordNamespace("Discord", [](js::NamespaceTemplate& tpl) {
-    tpl.StaticProperty("ready", IsReadyGetter);
+    tpl.StaticProperty("isReady", IsReadyGetter);
     tpl.StaticProperty("userID", UserIDGetter);
     tpl.StaticProperty("userName", UserNameGetter);
     tpl.StaticProperty("discriminator", DiscriminatorGetter);
