@@ -7,7 +7,7 @@ extern js::Class voiceChannelClass("VoiceChannel", &baseObjectClass, nullptr, []
 {
     tpl.BindToType(alt::IBaseObject::Type::VOICE_CHANNEL);
 
-    tpl.LazyProperty<&alt::IVoiceChannel::IsSpatial>("isSpatial");
+    tpl.LazyProperty<&alt::IVoiceChannel::IsSpatial>("spatial");
     tpl.LazyProperty<&alt::IVoiceChannel::GetMaxDistance>("maxDistance");
 
     tpl.Property<&alt::IVoiceChannel::GetPriority, &alt::IVoiceChannel::SetPriority>("priority");
@@ -19,7 +19,7 @@ extern js::Class voiceChannelClass("VoiceChannel", &baseObjectClass, nullptr, []
     tpl.Method<&alt::IVoiceChannel::HasPlayer>("hasPlayer");
     tpl.Method<&alt::IVoiceChannel::AddPlayer>("addPlayer");
     tpl.Method<&alt::IVoiceChannel::RemovePlayer>("removePlayer");
-    tpl.Method<&alt::IVoiceChannel::IsPlayerMuted>("isPlayerMuted");
+    tpl.Method<&alt::IVoiceChannel::IsPlayerMuted>("playerMuted");
     tpl.Method<&alt::IVoiceChannel::MutePlayer>("mutePlayer");
     tpl.Method<&alt::IVoiceChannel::UnmutePlayer>("unmutePlayer");
 

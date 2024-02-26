@@ -827,7 +827,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.LazyProperty<&alt::IPlayer::GetCloudID>("cloudID");
     tpl.LazyProperty<&alt::IPlayer::GetCloudAuthResult>("cloudAuthResult");
 
-    tpl.Property<&alt::IPlayer::IsConnected>("isConnected");
+    tpl.Property<&alt::IPlayer::IsConnected>("connected");
     tpl.Property<&alt::IPlayer::GetPing>("ping");
     tpl.Property<&alt::IPlayer::GetAuthToken>("authToken");
     tpl.Property<&alt::IPlayer::GetDiscordId>("discordID");

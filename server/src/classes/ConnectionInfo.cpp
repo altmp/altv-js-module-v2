@@ -34,7 +34,7 @@ extern js::Class connectionInfoClass("ConnectionInfo", nullptr, nullptr, [](js::
     tpl.LazyProperty<&alt::IConnectionInfo::GetIp>("ip");
     tpl.LazyProperty<&alt::IConnectionInfo::GetDiscordUserID>("discordUserID");
 
-    tpl.Property<&alt::IConnectionInfo::IsAccepted>("isAccepted");
+    tpl.Property<&alt::IConnectionInfo::IsAccepted>("accepted");
     tpl.Property<&alt::IConnectionInfo::GetText, &alt::IConnectionInfo::SetText>("text");
 
     tpl.Method("accept", Accept);
