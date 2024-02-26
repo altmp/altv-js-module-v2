@@ -35,7 +35,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
 {
     tpl.BindToType(alt::IBaseObject::Type::PLAYER);
 
-    tpl.Property<&alt::IPlayer::IsTalking>("isTalking");
+    tpl.Property<&alt::IPlayer::IsTalking>("talking");
     tpl.Property<&alt::IPlayer::GetMicLevel>("micLevel");
     tpl.Property<&alt::IPlayer::GetTaskData>("taskData");
     tpl.Property<&alt::IPlayer::GetSpatialVolume, &alt::IPlayer::SetSpatialVolume>("spatialVolume");

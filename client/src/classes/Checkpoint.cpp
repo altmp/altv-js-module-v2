@@ -17,7 +17,7 @@ extern js::Class checkpointClass("Checkpoint", &sharedCheckpointClass, nullptr, 
     tpl.BindToType(alt::IBaseObject::Type::CHECKPOINT);
 
     tpl.Property<&alt::ICheckpoint::GetGameID>("scriptID");
-    tpl.Property<&alt::ICheckpoint::IsStreamedIn>("isStreamedIn");
+    tpl.Property<&alt::ICheckpoint::IsStreamedIn>("streamedIn");
 
     tpl.GetByID<alt::IBaseObject::Type::CHECKPOINT>();
     tpl.GetByRemoteID<alt::IBaseObject::Type::CHECKPOINT>();

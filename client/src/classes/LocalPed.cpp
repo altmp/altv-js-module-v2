@@ -43,7 +43,7 @@ extern js::Class localPedClass("LocalPed", &pedClass, nullptr, [](js::ClassTempl
     tpl.Property<&alt::ILocalPed::GetStreamingDistance>("streamingDistance");
     tpl.Property<&alt::ILocalPed::IsVisible, &alt::ILocalPed::SetVisible>("visible");
     tpl.Property<&alt::ILocalPed::GetScriptID>("scriptID");
-    tpl.Property<&alt::ILocalPed::IsStreamedIn>("isStreamedIn");
+    tpl.Property<&alt::ILocalPed::IsStreamedIn>("streamedIn");
 
     tpl.GetByID<alt::IBaseObject::Type::LOCAL_PED>();
     tpl.StaticFunction("getByScriptID", &GetByScriptID);
