@@ -640,8 +640,6 @@ namespace js
             v8::Promise::PromiseState state;
             while((state = promise->State()) == v8::Promise::PromiseState::kPending)
             {
-                js::Logger::Warn << "Awaiting promise state: " << (int)state << js::Logger::Endl;
-
                 internal::RunEventLoop();
                 std::this_thread::sleep_for(std::chrono::milliseconds(1));
             }
