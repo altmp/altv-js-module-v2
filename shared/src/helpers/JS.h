@@ -636,25 +636,17 @@ namespace js
         bool Await()
         {
             v8::Local<v8::Promise> promise = Get();
-            while(true)
-            {
-                v8::Promise::PromiseState state = promise->State();
 
+            v8::Promise::PromiseState state;
+            while((state = promise->State()) == v8::Promise::PromiseState::kPending)
+            {
                 js::Logger::Warn << "Awaiting promise state: " << (int)state << js::Logger::Endl;
 
-                switch(state)
-                {
-                    case v8::Promise::PromiseState::kPending: internal::RunEventLoop(); break;
-                    case v8::Promise::PromiseState::kFulfilled: return true;
-                    case v8::Promise::PromiseState::kRejected: return false;
-
-                    // NOTE (xLuxy): I have no idea why state can be 3 or what it means - it's undocumented
-                    //               state is probably state - 1?
-                    case 3: return false;
-                }
-
+                internal::RunEventLoop();
                 std::this_thread::sleep_for(std::chrono::milliseconds(1));
             }
+
+            return state == v8::Promise::PromiseState::kFulfilled;
         }
 
         template<typename T>
