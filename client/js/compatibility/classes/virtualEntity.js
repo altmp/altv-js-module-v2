@@ -30,6 +30,10 @@ class VirtualEntity extends alt.VirtualEntity {
     getStreamSyncedMetaKeys() {
         return Object.keys(this.streamSyncedMeta);
     }
+
+    get isStreamedIn() {
+        return this.streamedIn;
+    }
 }
 
 alt.VirtualEntity.setFactory(VirtualEntity);

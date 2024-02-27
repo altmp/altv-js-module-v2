@@ -13,6 +13,14 @@ class RmlDocument extends alt.RmlDocument {
 
         return alt.RmlDocument.create({ url });
     }
+
+    get isVisible() {
+        return this.visible;
+    }
+
+    get isModal() {
+        return this.modal;
+    }
 }
 
 alt.RmlDocument.setFactory(RmlDocument);

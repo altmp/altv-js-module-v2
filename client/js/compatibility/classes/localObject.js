@@ -22,8 +22,20 @@ class LocalObject extends alt.LocalObject {
         return alt.LocalObject.all.length;
     }
 
-    get dynamic() {
-        return this.isDynamic;
+    get isCollisionEnabled() {
+        return this.collisionEnabled;
+    }
+
+    get isStreamedIn() {
+        return this.streamedIn;
+    }
+
+    get isWorldObject() {
+        return this.worldObject;
+    }
+
+    get isWeaponObject() {
+        return this.weaponObject;
     }
 
     attachToEntity(...args) {

@@ -17,6 +17,10 @@ class Marker extends alt.Marker {
     static get count() {
         return alt.Marker.all.length;
     }
+
+    get isStreamedIn() {
+        return this.streamedIn;
+    }
 }
 
 alt.Marker.setFactory(Marker);

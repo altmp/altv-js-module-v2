@@ -16,8 +16,8 @@ class WebView extends alt.WebView {
 
         let instance = null;
         if (args.length == 4) {
-            const [_, isOverlay, pos, size] = args;
-            instance = alt.WebView.create({ url, isOverlay, pos, size });
+            const [_, overlay, pos, size] = args;
+            instance = alt.WebView.create({ url, overlay, pos, size });
         } else if (args.length == 3 && typeof args[2] == "object") {
             const [_, pos, size] = args;
             instance = alt.WebView.create({ url, pos, size });
@@ -45,14 +45,6 @@ class WebView extends alt.WebView {
         return `WebView{ url: ${this.url} }`;
     }
 
-    get isVisible() {
-        return this.visible;
-    }
-
-    set isVisible(state) {
-        this.visible = state;
-    }
-
     focus() {
         this.focused = true;
     }
@@ -69,6 +61,22 @@ class WebView extends alt.WebView {
         assertIsType(eventName, "string", `Expeced eventName to be a string but got ${typeof eventName}`);
 
         return alt.WebView.listeners[eventName] ?? [];
+    }
+
+    get isOverlay() {
+        return this.overlay;
+    }
+
+    get isLoaded() {
+        return this.loaded;
+    }
+
+    get isReady() {
+        return this.ready;
+    }
+
+    get isGpuAccelerationActive() {
+        return this.gpuAcceleration;
     }
 }
 

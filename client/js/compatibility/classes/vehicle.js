@@ -57,6 +57,14 @@ class Vehicle {
     static get count() {
         return alt.Vehicle.all.length;
     }
+
+    get isHandlingModified() {
+        return this.handlingModified;
+    }
+
+    get isTaxiLightOn() {
+        return this.taxiLightOn;
+    }
 }
 
 extendClassWithProperties(alt.Vehicle, null, Vehicle, SharedVehicle);

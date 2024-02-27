@@ -11,6 +11,10 @@ class Player {
     static get count() {
         return alt.Player.all.length;
     }
+
+    get isTalking() {
+        return this.talking;
+    }
 }
 
 extendClassWithProperties(alt.Player, null, Player, SharedPlayer);
