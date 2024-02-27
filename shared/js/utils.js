@@ -38,8 +38,12 @@ export function assert(condition, message) {
     if (!condition) throw new alt.Utils.AssertionError(message ?? "Assertion failed");
 }
 
+export function isObject(value) {
+    return value !== null && typeof value === "object";
+}
+
 export function assertIsObject(value, message) {
-    assert(value !== null && typeof value === "object", message);
+    assert(isObject(value), message);
 }
 
 export function assertIsType(value, type, message) {

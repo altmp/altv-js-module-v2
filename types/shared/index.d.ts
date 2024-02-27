@@ -2092,6 +2092,8 @@ declare module "@altv/shared" {
             ERROR,
             KEY_UP,
             KEY_DOWN,
+            RESOURCE_START,
+            RESOURCE_STOP,
 
             SIZE
         }

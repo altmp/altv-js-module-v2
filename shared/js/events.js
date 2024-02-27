@@ -107,6 +107,8 @@ export class Event {
             } catch (e) {
                 alt.logError(`[JS] Exception caught while invoking script event '${name}' handler`);
                 alt.logError(e);
+
+                Event.invoke(alt.Enums.CustomEventType.ERROR, { error: e, location, stack: e.stack }, true);
             }
         }
     }
@@ -203,6 +205,8 @@ export class Event {
             } catch (e) {
                 alt.logError(`[JS] Exception caught while invoking generic event handler`);
                 alt.logError(e);
+
+                Event.invoke(alt.Enums.CustomEventType.ERROR, { error: e, location, stack: e.stack }, true);
             }
         }
     }
@@ -266,6 +270,8 @@ export class Event {
             } catch (e) {
                 alt.logError(`[JS] Exception caught while invoking event handler`);
                 alt.logError(e);
+
+                Event.invoke(alt.Enums.CustomEventType.ERROR, { error: e, location, stack: e.stack }, true);
             }
         }
     }

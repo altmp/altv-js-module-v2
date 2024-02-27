@@ -3,9 +3,12 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/server";
 
+/** @type {typeof import("./../../../../shared/js/utils.js")} */
+const { isObject } = requireBinding("shared/utils.js");
+
 export class SharedBaseObject {
     hasMeta(key) {
-        return key in this.meta;
+        return this.meta[key] !== undefined;
     }
 
     getMeta(key) {
@@ -13,7 +16,7 @@ export class SharedBaseObject {
     }
 
     setMeta(key, value) {
-        if (typeof key == "object") {
+        if (isObject(key)) {
             this.setMultipleMetaData(key);
             return;
         }
@@ -34,7 +37,7 @@ export class SharedBaseObject {
     }
 
     hasSyncedMeta(key) {
-        return key in this.syncedMeta;
+        return this.syncedMeta[key] !== undefined;
     }
 
     getSyncedMetaKeys() {

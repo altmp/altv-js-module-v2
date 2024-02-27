@@ -236,6 +236,7 @@ namespace js
 
         Type GetArgType(int index)
         {
+            if (index < 0 || index >= argTypes.size()) return Type::INVALID;
             if(argTypes[index] != Type::INVALID) return argTypes[index];
             Type argType = GetType(info[index], GetResource());
             argTypes[index] = argType;

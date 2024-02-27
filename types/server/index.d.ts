@@ -1538,8 +1538,9 @@ declare module "@altv/server" {
         }
 
         interface ErrorEventParameters {
-            error: string;
+            error: Error;
             stack: string;
+            location: altShared.SourceLocation;
         }
 
         interface ResourceStartEventParameters {

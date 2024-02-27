@@ -5,7 +5,7 @@
 requireBinding("client/factory.js");
 
 /** @type {typeof import("../../../../shared/js/utils.js")} */
-const { assertIsType } = requireBinding("shared/utils.js");
+const { assertIsType, isObject } = requireBinding("shared/utils.js");
 
 class WebView extends alt.WebView {
     constructor(...args) {
@@ -18,13 +18,13 @@ class WebView extends alt.WebView {
         if (args.length == 4) {
             const [_, overlay, pos, size] = args;
             instance = alt.WebView.create({ url, overlay, pos, size });
-        } else if (args.length == 3 && typeof args[2] == "object") {
+        } else if (args.length == 3 && isObject(args[2])) {
             const [_, pos, size] = args;
             instance = alt.WebView.create({ url, pos, size });
         } else if (args.length == 3) {
             const [_, drawable, targetTexture] = args;
             instance = alt.WebView.create({ url, drawable, targetTexture });
-        } else if (args.length == 2 && typeof args[1] == "object") {
+        } else if (args.length == 2 && isObject(args[1])) {
             const [_, pos] = args;
             alt.WebView.create({ url, pos });
         } else if (args.length == 2) {

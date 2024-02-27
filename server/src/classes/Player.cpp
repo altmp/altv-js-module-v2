@@ -339,6 +339,24 @@ static void RemoveAllWeapons(js::FunctionContext& ctx)
     player->RemoveAllWeapons(removeAmmo);
 }
 
+static void Kick(js::FunctionContext& ctx)
+{
+    if (!ctx.CheckThis()) return;
+    if (!ctx.CheckArgCount(0, 1)) return;
+    if (!ctx.CheckArgType(0, { js::Type::STRING, js::Type::UNDEFINED, js::Type::NULL_TYPE, js::Type::INVALID })) return;
+
+    alt::IPlayer* player = ctx.GetThisObject<alt::IPlayer>();
+
+    if (ctx.GetArgCount() == 1 && ctx.GetArgType(0) == js::Type::STRING)
+    {
+        const auto reason = ctx.GetArg<std::string>(0, "");
+        player->Kick(reason);
+        return;
+    }
+
+    player->Kick();
+}
+
 static void GetClothes(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
@@ -863,7 +881,7 @@ extern js::Class playerClass("Player", &sharedPlayerClass, nullptr, [](js::Class
     tpl.Method("removeAllWeapons", RemoveAllWeapons);
     tpl.Method<&alt::IPlayer::SetDateTime>("setDateTime");
     tpl.Method<&alt::IPlayer::SetWeather>("setWeather");
-    tpl.Method<&alt::IPlayer::Kick>("kick");
+    tpl.Method("kick", Kick);
     tpl.Method("getClothes", &GetClothes);
     tpl.Method<&alt::IPlayer::SetClothes>("setClothes");
     tpl.Method("getDlcClothes", &GetDlcClothes);

@@ -5,11 +5,14 @@
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
 const { extendClassWithProperties } = requireBinding("shared/compatibility/utils/classes.js");
 
+/** @type {typeof import("./../../../../shared/js/utils.js")} */
+const { isObject } = requireBinding("shared/utils.js");
+
 const { SharedEntity } = requireBinding("shared/compatibility/classes/sharedEntity.js");
 
 class Entity {
     setSyncedMeta(key, value) {
-        if (typeof key == "object") {
+        if (isObject(key)) {
             this.setMultipleSyncedMetaData(key);
             return;
         }
@@ -22,7 +25,7 @@ class Entity {
     }
 
     setStreamSyncedMeta(key, value) {
-        if (typeof key == "object") {
+        if (isObject(key)) {
             this.setMultipleStreamSyncedMetaData(key);
             return;
         }
