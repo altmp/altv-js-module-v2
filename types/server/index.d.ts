@@ -22,6 +22,8 @@ declare module "@altv/server" {
     export function setVoiceExternalPublic(host: string, port: number): void;
     export function setVoiceExternal(host: string, port: number): void;
 
+    export function hasBenefit(benefit: altShared.Enums.Benefit): boolean;
+
     export class BaseObject extends altShared.BaseObject {
         meta: BaseObjectMeta & Record<string, unknown>;
         syncedMeta: altShared.BaseObjectSyncedMeta & Record<string, unknown>;

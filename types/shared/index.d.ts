@@ -2098,6 +2098,11 @@ declare module "@altv/shared" {
             SIZE
         }
 
+        export enum Benefit {
+            NONE,
+            CLOUD_AUTH
+        }
+
         export enum MetricType {
             METRIC_TYPE_GAUGE,
             METRIC_TYPE_COUNTER,

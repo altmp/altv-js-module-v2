@@ -17,6 +17,7 @@ extern js::Namespace enumsNamespace("Enums", [](js::NamespaceTemplate& tpl) {
     tpl.StaticEnum<alt::CWeaponDamageEvent::BodyPart>("BodyPart");
     tpl.StaticEnum<alt::CEvent::Type, alt::CEvent::Type::NONE, alt::CEvent::Type::ALL>("EventType");
     tpl.StaticEnum<js::EventType, js::EventType::NONE, js::EventType::SIZE>("CustomEventType");
+    tpl.StaticEnum<alt::Benefit>("Benefit");
     tpl.StaticEnum<alt::Metric::Type>("MetricType");
     tpl.StaticEnum<alt::AmmoSpecialType>("AmmoSpecialType");
     tpl.StaticEnum<alt::CKeyboardEvent::KeyState>("KeyState");
