@@ -139,7 +139,7 @@ namespace js
         if constexpr(std::is_same_v<T, nullptr_t>) return Type::NULL_TYPE;
         if constexpr(std::is_same_v<T, bool>) return Type::BOOLEAN;
         if constexpr((std::is_integral_v<T> || std::is_floating_point_v<T>) && sizeof(T) < 8) return Type::NUMBER;
-        if constexpr((std::is_integral_v<T> || std::is_floating_point_v<T>) && sizeof(T) > 8) return Type::BIG_INT;
+        if constexpr((std::is_integral_v<T> || std::is_floating_point_v<T>) && sizeof(T) >= 8) return Type::BIG_INT;
         if constexpr(std::is_same_v<T, std::string>) return Type::STRING;
         if constexpr(std::is_same_v<T, alt::Vector3f> || std::is_same_v<T, alt::Position> || std::is_same_v<T, alt::Rotation>) return Type::VECTOR3;
         if constexpr(std::is_same_v<T, alt::Vector2f>) return Type::VECTOR2;
