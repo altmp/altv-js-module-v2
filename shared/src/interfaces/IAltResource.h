@@ -57,9 +57,6 @@ namespace js
             if(context.IsEmpty()) return;
             IResource::Scope scope(this);
 
-            const auto objType = object->GetType();
-            js::Logger::Warn << "OnCreateBaseObject: " << magic_enum::enum_name(objType) << js::Logger::Endl;
-
             IScriptObjectHandler::GetOrCreateScriptObject(GetContext(), object);
         }
 
@@ -67,9 +64,6 @@ namespace js
         {
             if(context.IsEmpty()) return;
             IResource::Scope scope(this);
-
-            const auto objType = object->GetType();
-            js::Logger::Warn << "OnRemoveBaseObject: " << magic_enum::enum_name(objType) << js::Logger::Endl;
 
             IScriptObjectHandler::DestroyScriptObject(object);
         }
