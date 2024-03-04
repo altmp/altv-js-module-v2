@@ -2,12 +2,17 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
+/** @type {typeof import("../../../../shared/js/utils.js")} */
+const { assert } = requireBinding("shared/utils.js");
+
 requireBinding("shared/factory.js");
 
 class VirtualEntity extends alt.VirtualEntity {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
         if (!args.length) return super();
+
+        assert(args.length == 3 || args.length == 4, "3 or 4 arguments expected");
 
         const [group, pos, streamingDistance, data] = args;
 

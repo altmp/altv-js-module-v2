@@ -2,9 +2,14 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
+/** @type {typeof import("../../../../shared/js/utils.js")} */
+const { assert } = requireBinding("shared/utils.js");
+
 class ColshapeCuboid extends alt.ColShape {
     constructor(...args) {
         if (!args.length) return super();
+
+        assert(args.length === 6, "6 arguments expected");
 
         const [x, y, z, x2, y2, z2] = args;
 

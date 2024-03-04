@@ -5,6 +5,9 @@
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
 const { extendClassWithProperties } = requireBinding("shared/compatibility/utils/classes.js");
 
+/** @type {typeof import("../../../../shared/js/utils.js")} */
+const { assert, assertIsOneOfType } = requireBinding("shared/utils.js");
+
 const { SharedVehicle } = requireBinding("shared/compatibility/classes/sharedVehicle.js");
 
 requireBinding("server/factory.js");
@@ -13,6 +16,9 @@ class Vehicle extends alt.Vehicle {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
         if (!args.length) return super();
+
+        assert(args.length >= 3 && args.length <= 8, "Minimum 3, maximum 8 arguments expected");
+        assertIsOneOfType(args[0], ["string", "number"], "string or number expected");
 
         const [model, ...rest] = args;
         const pos = rest.length <= 3 ? rest[0] : { x: rest[0], y: rest[1], z: rest[2] };

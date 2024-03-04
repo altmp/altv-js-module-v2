@@ -2,12 +2,17 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
+/** @type {typeof import("../../../../shared/js/utils.js")} */
+const { assert } = requireBinding("shared/utils.js");
+
 requireBinding("client/factory.js");
 
 class LocalObject extends alt.LocalObject {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
         if (!args.length) return super();
+
+        assert(args.length >= 3 && args.length <= 7, "Minimum 3, maximum 7 arguments expected");
 
         const [model, pos, rot, noOffset, dynamic, useStreaming, streamingDistance] = args;
 

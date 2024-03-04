@@ -50,6 +50,13 @@ export function assertIsType(value, type, message) {
     assert(typeof value === type, message);
 }
 
+export function assertIsOneOfType(value, types, message) {
+    assert(
+        types.some((type) => typeof value === type),
+        message
+    );
+}
+
 export function assertNotNaN(val, message = "Expected number") {
     assert(!isNaN(val), message);
 }

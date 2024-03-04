@@ -12,6 +12,8 @@ class WebSocketClient extends alt.WebSocketClient {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
         if (!args.length) return super();
 
+        assert(args.length == 1, "1 arguments expected");
+
         return alt.WebSocketClient.create({ url: args[0] });
     }
 

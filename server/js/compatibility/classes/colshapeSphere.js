@@ -2,9 +2,14 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
+/** @type {typeof import("../../../../shared/js/utils.js")} */
+const { assert } = requireBinding("shared/utils.js");
+
 class ColshapeSphere extends alt.ColShape {
     constructor(...args) {
         if (!args.length) return super();
+
+        assert(args.length === 4, "4 arguments expected");
 
         const [x, y, z, radius] = args;
 

@@ -2,9 +2,12 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
+/** @type {typeof import("../../../../shared/js/utils.js")} */
+const { assertIsOneOfType } = requireBinding("shared/utils.js");
+
 class WeaponData {
     constructor(weaponHash) {
-        if (!weaponHash) return;
+        assertIsOneOfType(weaponHash, ["string", "number"], "1 arguments expected");
 
         return alt.WeaponData.get(weaponHash);
     }

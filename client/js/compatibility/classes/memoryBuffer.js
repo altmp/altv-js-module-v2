@@ -5,10 +5,16 @@
 /** @type {typeof import("../../../../shared/js/compatibility/utils/classes.js")} */
 const { extendClassWithProperties } = requireBinding("shared/compatibility/utils/classes.js");
 
+/** @type {typeof import("../../../../shared/js/utils.js")} */
+const { assert, assertIsType } = requireBinding("shared/utils.js");
+
 requireBinding("shared/logging.js");
 
 class MemoryBuffer extends alt.Buffer {
     constructor(size) {
+        assertIsType(size, "number", "1 arguments expected");
+        assert(size <= 1024, "You can't allocate > 1KB");
+
         return new alt.Buffer(size);
     }
 

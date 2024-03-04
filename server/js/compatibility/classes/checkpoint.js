@@ -2,12 +2,17 @@
 /// <reference path="../../../../types/server/index.d.ts" />
 // import * as alt from "@altv/server";
 
+/** @type {typeof import("../../../../shared/js/utils.js")} */
+const { assert } = requireBinding("shared/utils.js");
+
 requireBinding("shared/factory.js");
 
 class Checkpoint extends alt.Checkpoint {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
         if (!args.length) return super();
+
+        assert(args.length == 6 || args.length == 11, "6 or 11 arguments expected");
 
         const type = args[0];
         const pos = args.length == 6 ? args[1] : { x: args[1], y: args[2], z: args[3] };

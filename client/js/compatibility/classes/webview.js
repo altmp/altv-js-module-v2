@@ -5,7 +5,7 @@
 requireBinding("client/factory.js");
 
 /** @type {typeof import("../../../../shared/js/utils.js")} */
-const { assertIsType, isObject } = requireBinding("shared/utils.js");
+const { assert, assertIsType, isObject } = requireBinding("shared/utils.js");
 
 class WebView extends alt.WebView {
     constructor(...args) {
@@ -13,6 +13,8 @@ class WebView extends alt.WebView {
         if (!args.length) return super();
 
         const url = args[0];
+
+        assert(args.length >= 1 && args.length <= 4, "Minimum 1, maximum 4 arguments expected");
 
         let instance = null;
         if (args.length == 4) {
@@ -69,6 +71,10 @@ class WebView extends alt.WebView {
         assertIsType(eventName, "string", `Expeced eventName to be a string but got ${typeof eventName}`);
 
         return alt.WebView.listeners[eventName] ?? [];
+    }
+
+    toString() {
+        return `WebView{ url: "${this.url}" }`;
     }
 }
 

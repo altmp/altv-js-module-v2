@@ -2,10 +2,15 @@
 /// <reference path="../../../../types/client/index.d.ts" />
 // import * as alt from "@altv/client";
 
+/** @type {typeof import("../../../../shared/js/utils.js")} */
+const { assert } = requireBinding("shared/utils.js");
+
 class WeaponObject extends alt.LocalObject {
     constructor(...args) {
         // NOTE (xLuxy): This prevents the infinite loop caused by alt.*.create
         if (!args.length) return super();
+
+        assert(args.length >= 3 && args.length <= 9, "Minimum 3, maximum 9 arguments expected");
 
         const [weapon, pos, rot, model, ammoCount, createDefaultComponents, scale, useStreaming, streamingDistance] = args;
 
