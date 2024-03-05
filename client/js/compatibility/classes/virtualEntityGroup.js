@@ -5,6 +5,8 @@
 /** @type {typeof import("../../../../shared/js/utils.js")} */
 const { assert } = requireBinding("shared/utils.js");
 
+const { SharedBaseObject } = requireBinding("shared/compatibility/classes/sharedBaseObject.js");
+
 requireBinding("shared/factory.js");
 
 class VirtualEntityGroup extends alt.VirtualEntityGroup {
@@ -19,6 +21,8 @@ class VirtualEntityGroup extends alt.VirtualEntityGroup {
         });
     }
 }
+
+extendClassWithProperties(VirtualEntityGroup, null, SharedBaseObject);
 
 alt.VirtualEntityGroup.setFactory(VirtualEntityGroup);
 
