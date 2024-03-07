@@ -768,6 +768,8 @@ declare module "@altv/server" {
     export abstract class VirtualEntityGroup extends BaseObject {
         readonly maxEntitiesInStream: number;
 
+        static readonly all: ReadonlyArray<VirtualEntityGroup>;
+
         public onCreate?(opts: altShared.VirtualEntityGroupCreateOptions): void;
         public onDestroy?(): void;
 
@@ -775,6 +777,8 @@ declare module "@altv/server" {
 
         static setFactory(factory: typeof VirtualEntityGroup): void;
         static getFactory<T extends VirtualEntityGroup>(): T;
+
+        static getByID(id: number): VirtualEntityGroup | null;
     }
 
     export abstract class VirtualEntity extends WorldObject {
