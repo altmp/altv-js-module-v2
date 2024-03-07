@@ -447,7 +447,7 @@ declare module "@altv/client" {
         unkFloat2: number;
         unkFloat4: number;
         unkFloat5: number;
-        centreOfMassOffset: number;
+        centreOfMassOffset: altShared.Vector3;
         inertiaMultiplier: number;
         percentSubmerged: number;
         percentSubmergedRatio: number;
