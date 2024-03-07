@@ -258,7 +258,7 @@ declare module "@altv/client" {
         readonly attachedTo?: Entity;
 
         readonly meta: BlipMeta & Record<string, unknown>;
-        readonly syncedMeta: Readonly<altShared.BlipSyncedMeta> & Readohly<string, unknown>;
+        readonly syncedMeta: Readonly<altShared.BlipSyncedMeta & Record<string, unknown>>;
 
         blipType: altShared.Enums.BlipType;
         scaleXY: altShared.Vector2;
@@ -447,8 +447,8 @@ declare module "@altv/client" {
         unkFloat2: number;
         unkFloat4: number;
         unkFloat5: number;
-        centreOfMassOffset: number;
-        inertiaMultiplier: number;
+        centreOfMassOffset: altShared.Vector3;
+        inertiaMultiplier: altShared.Vector3;
         percentSubmerged: number;
         percentSubmergedRatio: number;
         driveBiasFront: number;
