@@ -1,38 +1,38 @@
 {
-  "name": "@altv/webview",
-  "version": "0.0.4",
-  "description": "This package contains the type definitions for the alt:V JS module v2 WebView types",
-  "types": "index.d.ts",
-  "files": [
-    "index.d.ts"
-  ],
-  "scripts": {
-    "test": "tsc",
-    "preversion": "yarn run test",
-    "release": "yarn version --no-git-tag-version"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/altmp/altv-js-module-v2.git"
-  },
-  "peerDependencies": {
-    "@altv/shared": "^0.0.0"
-  },
-  "keywords": [
-    "altmp",
-    "altv",
-    "node",
-    "v8",
-    "js-module",
-    "js-module-v2",
-    "gta",
-    "gta5",
-    "gtav"
-  ],
-  "author": "altMP Team",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/altmp/altv-js-module-v2/issues"
-  },
-  "homepage": "https://github.com/altmp/altv-js-module-v2/tree/dev/types/webview"
+    "name": "@altv/webview",
+    "version": "0.0.6",
+    "description": "This package contains the type definitions for the alt:V JS module v2 WebView types",
+    "types": "index.d.ts",
+    "files": [
+        "index.d.ts"
+    ],
+    "scripts": {
+        "test": "tsc",
+        "preversion": "yarn run test",
+        "release": "yarn version --no-git-tag-version"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/altmp/altv-js-module-v2.git"
+    },
+    "peerDependencies": {
+        "@altv/shared": "~0.0.1"
+    },
+    "keywords": [
+        "altmp",
+        "altv",
+        "node",
+        "v8",
+        "js-module",
+        "js-module-v2",
+        "gta",
+        "gta5",
+        "gtav"
+    ],
+    "author": "altMP Team",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/altmp/altv-js-module-v2/issues"
+    },
+    "homepage": "https://github.com/altmp/altv-js-module-v2/tree/dev/types/webview"
 }
