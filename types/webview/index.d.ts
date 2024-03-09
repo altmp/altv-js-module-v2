@@ -16,8 +16,8 @@ interface Alt {
      * @param eventName Name of the event.
      * @param listener Listener that should be removed.
      */
-    off<E extends keyof import("@altv/shared").Events.CustomWebViewToClientEvent>(eventName: E, listener: import("@altv/shared").Events.CustomWebViewToClientEvent[E]): void;
-    off<E extends string>(eventName: Exclude<E, keyof import("@altv/shared").Events.CustomWebViewToClientEvent>, listener: (...args: unknown[]) => void): void;
+    off<E extends keyof import("@altv/shared").Events.CustomClientToWebViewEvent>(eventName: E, listener: import("@altv/shared").Events.CustomClientToWebViewEvent[E]): void;
+    off<E extends string>(eventName: Exclude<E, keyof import("@altv/shared").Events.CustomClientToWebViewEvent>, listener: (...args: unknown[]) => void): void;
 
     /**
      * Subscribes to client event handler with specified listener.
