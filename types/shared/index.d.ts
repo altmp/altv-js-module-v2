@@ -699,9 +699,12 @@ declare module "@altv/shared" {
     }
 
     export namespace File {
-        export function exists(path: string): boolean;
-        export function read(path: string): string;
+        export function exists(fileName: string): boolean;
+        export function read(fileName: string, encoding?: FileEncoding): string;
     }
+
+    export enum FileEncoding {}
+    //
 
     export namespace RPC {
         interface CustomPlayerToServerRpcEvent {}
@@ -3400,6 +3403,12 @@ declare module "@altv/shared" {
 
     export namespace Symbols {
         export const serialize: unique symbol;
+    }
+
+    export enum FileEncoding {
+        Utf8 = "utf-8",
+        Utf16 = "utf-16",
+        Binary = "binary"
     }
 }
 
