@@ -22,7 +22,8 @@ template<auto Method, bool HasBody, bool HasProgressCallback = false>
 static void GenericRequest(js::FunctionContext& ctx)
 {
     if(!ctx.CheckThis()) return;
-    if(!ctx.CheckArgCount(1)) return;
+    if(!ctx.CheckArgCount(1, 2)) return;
+
     alt::IHttpClient* client = ctx.GetThisObject<alt::IHttpClient>();
 
     std::string url;
