@@ -80,7 +80,8 @@ static void ExtraHeadersEnumerator(js::DynamicPropertyEnumeratorContext& ctx)
 }
 
 // clang-format off
-extern js::Class httpClientClass("HttpClient", [](js::ClassTemplate& tpl)
+extern js::Class baseObjectClass;
+extern js::Class httpClientClass("HttpClient", &baseObjectClass, [](js::ClassTemplate& tpl)
 {
     tpl.BindToType(alt::IBaseObject::Type::HTTP_CLIENT);
 

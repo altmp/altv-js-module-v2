@@ -511,7 +511,7 @@ declare module "@altv/client" {
 
     export type HttpResponse = { statusCode: number; headers: Readonly<Record<string, string>>; body: string };
 
-    export abstract class HttpClient {
+    export abstract class HttpClient extends BaseObject {
         get(url: string): Promise<HttpResponse>;
         head(url: string): Promise<HttpResponse>;
         post(url: string, body: string): Promise<HttpResponse>;
@@ -523,6 +523,9 @@ declare module "@altv/client" {
         patch(url: string, body: string): Promise<HttpResponse>;
 
         readonly extraHeaders: Record<string, string>;
+
+        public onCreate?(): void;
+        public onDestroy?(): void;
 
         static create(): HttpClient;
 
