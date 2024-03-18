@@ -13,6 +13,7 @@ registerFactory(alt.LocalObject, alt.Enums.BaseObjectType.LOCAL_OBJECT);
 
 registerFactory(alt.RmlDocument, alt.Enums.BaseObjectType.RML_DOCUMENT);
 
+registerFactory(alt.HttpClient, alt.Enums.BaseObjectType.HTTP_CLIENT);
 registerFactory(alt.WebSocketClient, alt.Enums.BaseObjectType.WEBSOCKET_CLIENT);
 
 registerFactory(alt.WebView, alt.Enums.BaseObjectType.WEBVIEW);

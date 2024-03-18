@@ -524,6 +524,8 @@ declare module "@altv/client" {
 
         readonly extraHeaders: Record<string, string>;
 
+        static create(): HttpClient;
+
         static getByID(id: number): HttpClient | null;
     }
 

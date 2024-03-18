@@ -104,6 +104,7 @@ addAllGetter(alt.AudioOutputFrontend, alt.Enums.BaseObjectType.AUDIO_OUTPUT_FRON
 addAllGetter(alt.AudioOutputWorld, alt.Enums.BaseObjectType.AUDIO_OUTPUT_WORLD);
 addAllGetter(alt.RmlDocument, alt.Enums.BaseObjectType.RML_DOCUMENT);
 addAllGetter(alt.TextLabel, alt.Enums.BaseObjectType.TEXT_LABEL);
+addAllGetter(alt.HttpClient, alt.Enums.BaseObjectType.HTTP_CLIENT);
 addAllGetter(alt.WebSocketClient, alt.Enums.BaseObjectType.WEBSOCKET_CLIENT);
 addAllGetter(alt.WebView, alt.Enums.BaseObjectType.WEBVIEW);
 
