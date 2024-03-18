@@ -29,10 +29,11 @@ alt.AudioOutputWorld.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.
 
 alt.LocalPed.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.LOCAL_PED);
 alt.LocalVehicle.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.LOCAL_VEHICLE);
-alt.LocalObject.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.LOCAL_OBJECT, (ctx) => (ctx.isWeaponObject = false));
+alt.LocalObject.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.LOCAL_OBJECT, (ctx) => ({ ...ctx, isWeaponObject: false }));
 
 alt.RmlDocument.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.RML_DOCUMENT);
 
+alt.HttpClient.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.HTTP_CLIENT, (_ctx) => ({}));
 alt.WebSocketClient.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.WEBSOCKET_CLIENT);
 
 alt.WebView.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.WEBVIEW);

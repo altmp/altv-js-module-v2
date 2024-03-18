@@ -13,9 +13,9 @@ registerFactory(alt.VirtualEntity, alt.Enums.BaseObjectType.VIRTUAL_ENTITY);
 registerFactory(alt.VirtualEntityGroup, alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP);
 
 // Factory ctors
-alt.PointBlip.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.BLIP, (ctx) => (ctx.blipType = alt.Enums.BlipType.DESTINATION));
-alt.AreaBlip.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.BLIP, (ctx) => (ctx.blipType = alt.Enums.BlipType.AREA));
-alt.RadiusBlip.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.BLIP, (ctx) => (ctx.blipType = alt.Enums.BlipType.RADIUS));
+alt.PointBlip.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.BLIP, (ctx) => ({ ...ctx, blipType: alt.Enums.BlipType.DESTINATION }));
+alt.AreaBlip.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.BLIP, (ctx) => ({ ...ctx, blipType: alt.Enums.BlipType.AREA }));
+alt.RadiusBlip.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.BLIP, (ctx) => ({ ...ctx, blipType: alt.Enums.BlipType.RADIUS }));
 
 alt.Marker.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.MARKER);
 
@@ -23,12 +23,12 @@ alt.VirtualEntity.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.VIR
 alt.VirtualEntityGroup.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.VIRTUAL_ENTITY_GROUP);
 
 alt.ColShape.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE);
-alt.ColShapeSphere.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => (ctx.colShapeType = alt.Enums.ColShapeType.SPHERE));
-alt.ColShapeCylinder.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => (ctx.colShapeType = alt.Enums.ColShapeType.CYLINDER));
-alt.ColShapeCircle.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => (ctx.colShapeType = alt.Enums.ColShapeType.CIRCLE));
-alt.ColShapeCuboid.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => (ctx.colShapeType = alt.Enums.ColShapeType.CUBOID));
-alt.ColShapeRectangle.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => (ctx.colShapeType = alt.Enums.ColShapeType.RECTANGLE));
-alt.ColShapePolygon.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => (ctx.colShapeType = alt.Enums.ColShapeType.POLYGON));
+alt.ColShapeSphere.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => ({ ...ctx, colShapeType: alt.Enums.ColShapeType.SPHERE }));
+alt.ColShapeCylinder.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => ({ ...ctx, colShapeType: alt.Enums.ColShapeType.CYLINDER }));
+alt.ColShapeCircle.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => ({ ...ctx, colShapeType: alt.Enums.ColShapeType.CIRCLE }));
+alt.ColShapeCuboid.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => ({ ...ctx, colShapeType: alt.Enums.ColShapeType.CUBOID }));
+alt.ColShapeRectangle.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => ({ ...ctx, colShapeType: alt.Enums.ColShapeType.RECTANGLE }));
+alt.ColShapePolygon.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.COLSHAPE, (ctx) => ({ ...ctx, colShapeType: alt.Enums.ColShapeType.POLYGON }));
 
 alt.Checkpoint.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.CHECKPOINT);
 
@@ -55,8 +55,9 @@ export function registerFactory(altClass, type) {
 
 export function getFactoryCreateFunction(type, ctxCb) {
     return (ctx) => {
+        if (ctxCb) ctx = ctxCb(ctx);
         assertIsObject(ctx, "Invalid args");
-        if (ctxCb) ctxCb(ctx);
+
         return cppBindings.createEntity(type, ctx);
     };
 }
