@@ -118,6 +118,6 @@ addStreamedInGetter(alt.LocalPed, alt.Enums.BaseObjectType.LOCAL_PED);
 addStreamedInGetter(alt.LocalObject, alt.Enums.BaseObjectType.LOCAL_OBJECT);
 
 // Add all streamed-in entities to the streamedIn sets
-for (const entity of alt.Entity.all) if (entity.streamedIn) addEntityToStreamedIn(entity);
+for (const entity of alt.Entity.all) if (entity.isStreamedIn) addEntityToStreamedIn(entity);
 for (const virtualEntity of cppBindings.getStreamedInVirtualEntities()) addEntityToStreamedIn(virtualEntity);
 addEntityToAllWithType(alt.Player.local, alt.Enums.BaseObjectType.PLAYER);
