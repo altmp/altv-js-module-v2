@@ -310,7 +310,7 @@ static void DriveInertiaSetter(js::PropertyContext& ctx)
 
 static void ClutchChangeRateScaleUpShiftGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetClutchChangeRateScaleUpShift());
@@ -318,11 +318,11 @@ static void ClutchChangeRateScaleUpShiftGetter(js::PropertyContext& ctx)
 
 static void ClutchChangeRateScaleUpShiftSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetClutchChangeRateScaleUpShift(value);
@@ -330,7 +330,7 @@ static void ClutchChangeRateScaleUpShiftSetter(js::PropertyContext& ctx)
 
 static void ClutchChangeRateScaleDownShiftGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetClutchChangeRateScaleDownShift());
@@ -338,20 +338,19 @@ static void ClutchChangeRateScaleDownShiftGetter(js::PropertyContext& ctx)
 
 static void ClutchChangeRateScaleDownShiftSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetClutchChangeRateScaleDownShift(value);
 }
 
-
 static void InitialDriveForceGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetInitialDriveForce());
@@ -359,11 +358,11 @@ static void InitialDriveForceGetter(js::PropertyContext& ctx)
 
 static void InitialDriveForceSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetInitialDriveForce(value);
@@ -371,7 +370,7 @@ static void InitialDriveForceSetter(js::PropertyContext& ctx)
 
 static void DriveMaxFlatVelGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetDriveMaxFlatVel());
@@ -379,11 +378,11 @@ static void DriveMaxFlatVelGetter(js::PropertyContext& ctx)
 
 static void DriveMaxFlatVelSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetDriveMaxFlatVel(value);
@@ -391,7 +390,7 @@ static void DriveMaxFlatVelSetter(js::PropertyContext& ctx)
 
 static void InitialDriveMaxFlatVelGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetInitialDriveMaxFlatVel());
@@ -399,11 +398,11 @@ static void InitialDriveMaxFlatVelGetter(js::PropertyContext& ctx)
 
 static void InitialDriveMaxFlatVelSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetInitialDriveMaxFlatVel(value);
@@ -411,7 +410,7 @@ static void InitialDriveMaxFlatVelSetter(js::PropertyContext& ctx)
 
 static void BrakeForceGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetBrakeForce());
@@ -419,11 +418,11 @@ static void BrakeForceGetter(js::PropertyContext& ctx)
 
 static void BrakeForceSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetBrakeForce(value);
@@ -431,7 +430,7 @@ static void BrakeForceSetter(js::PropertyContext& ctx)
 
 static void BrakeBiasFrontGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetBrakeBiasFront());
@@ -439,11 +438,11 @@ static void BrakeBiasFrontGetter(js::PropertyContext& ctx)
 
 static void BrakeBiasFrontSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetBrakeBiasFront(value);
@@ -451,7 +450,7 @@ static void BrakeBiasFrontSetter(js::PropertyContext& ctx)
 
 static void BrakeBiasRearGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetBrakeBiasRear());
@@ -459,11 +458,11 @@ static void BrakeBiasRearGetter(js::PropertyContext& ctx)
 
 static void BrakeBiasRearSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetBrakeBiasRear(value);
@@ -471,7 +470,7 @@ static void BrakeBiasRearSetter(js::PropertyContext& ctx)
 
 static void HandBrakeForceGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetHandBrakeForce());
@@ -479,11 +478,11 @@ static void HandBrakeForceGetter(js::PropertyContext& ctx)
 
 static void HandBrakeForceSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetHandBrakeForce(value);
@@ -491,7 +490,7 @@ static void HandBrakeForceSetter(js::PropertyContext& ctx)
 
 static void SteeringLockGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetSteeringLock());
@@ -499,11 +498,11 @@ static void SteeringLockGetter(js::PropertyContext& ctx)
 
 static void SteeringLockSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetSteeringLock(value);
@@ -511,7 +510,7 @@ static void SteeringLockSetter(js::PropertyContext& ctx)
 
 static void SteeringLockRatioGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetSteeringLockRatio());
@@ -519,11 +518,11 @@ static void SteeringLockRatioGetter(js::PropertyContext& ctx)
 
 static void SteeringLockRatioSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetSteeringLockRatio(value);
@@ -531,7 +530,7 @@ static void SteeringLockRatioSetter(js::PropertyContext& ctx)
 
 static void TractionCurveMaxGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetTractionCurveMax());
@@ -539,11 +538,11 @@ static void TractionCurveMaxGetter(js::PropertyContext& ctx)
 
 static void TractionCurveMaxSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetTractionCurveMax(value);
@@ -551,7 +550,7 @@ static void TractionCurveMaxSetter(js::PropertyContext& ctx)
 
 static void TractionCurveMaxRatioGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetTractionCurveMaxRatio());
@@ -559,11 +558,11 @@ static void TractionCurveMaxRatioGetter(js::PropertyContext& ctx)
 
 static void TractionCurveMaxRatioSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetTractionCurveMaxRatio(value);
@@ -571,7 +570,7 @@ static void TractionCurveMaxRatioSetter(js::PropertyContext& ctx)
 
 static void TractionCurveMinGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetTractionCurveMin());
@@ -579,11 +578,11 @@ static void TractionCurveMinGetter(js::PropertyContext& ctx)
 
 static void TractionCurveMinSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetTractionCurveMin(value);
@@ -591,7 +590,7 @@ static void TractionCurveMinSetter(js::PropertyContext& ctx)
 
 static void TractionCurveMinRatioGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetTractionCurveMinRatio());
@@ -599,11 +598,11 @@ static void TractionCurveMinRatioGetter(js::PropertyContext& ctx)
 
 static void TractionCurveMinRatioSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetTractionCurveMinRatio(value);
@@ -611,7 +610,7 @@ static void TractionCurveMinRatioSetter(js::PropertyContext& ctx)
 
 static void TractionCurveLateralGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetTractionCurveLateral());
@@ -619,11 +618,11 @@ static void TractionCurveLateralGetter(js::PropertyContext& ctx)
 
 static void TractionCurveLateralSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetTractionCurveLateral(value);
@@ -631,7 +630,7 @@ static void TractionCurveLateralSetter(js::PropertyContext& ctx)
 
 static void TractionCurveLateralRatioGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetTractionCurveLateralRatio());
@@ -639,11 +638,11 @@ static void TractionCurveLateralRatioGetter(js::PropertyContext& ctx)
 
 static void TractionCurveLateralRatioSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetTractionCurveLateralRatio(value);
@@ -651,7 +650,7 @@ static void TractionCurveLateralRatioSetter(js::PropertyContext& ctx)
 
 static void TractionSpringDeltaMaxGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetTractionSpringDeltaMax());
@@ -659,11 +658,11 @@ static void TractionSpringDeltaMaxGetter(js::PropertyContext& ctx)
 
 static void TractionSpringDeltaMaxSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetTractionSpringDeltaMax(value);
@@ -671,7 +670,7 @@ static void TractionSpringDeltaMaxSetter(js::PropertyContext& ctx)
 
 static void TractionSpringDeltaMaxRatioGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetTractionSpringDeltaMaxRatio());
@@ -679,11 +678,11 @@ static void TractionSpringDeltaMaxRatioGetter(js::PropertyContext& ctx)
 
 static void TractionSpringDeltaMaxRatioSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetTractionSpringDeltaMaxRatio(value);
@@ -691,7 +690,7 @@ static void TractionSpringDeltaMaxRatioSetter(js::PropertyContext& ctx)
 
 static void LowSpeedTractionLossMultGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetLowSpeedTractionLossMult());
@@ -699,11 +698,11 @@ static void LowSpeedTractionLossMultGetter(js::PropertyContext& ctx)
 
 static void LowSpeedTractionLossMultSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetLowSpeedTractionLossMult(value);
@@ -711,7 +710,7 @@ static void LowSpeedTractionLossMultSetter(js::PropertyContext& ctx)
 
 static void CamberStiffnessGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetCamberStiffness());
@@ -719,11 +718,11 @@ static void CamberStiffnessGetter(js::PropertyContext& ctx)
 
 static void CamberStiffnessSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetCamberStiffness(value);
@@ -731,7 +730,7 @@ static void CamberStiffnessSetter(js::PropertyContext& ctx)
 
 static void TractionBiasFrontGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetTractionBiasFront());
@@ -739,11 +738,11 @@ static void TractionBiasFrontGetter(js::PropertyContext& ctx)
 
 static void TractionBiasFrontSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetTractionBiasFront(value);
@@ -751,7 +750,7 @@ static void TractionBiasFrontSetter(js::PropertyContext& ctx)
 
 static void TractionBiasRearGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetTractionBiasRear());
@@ -759,11 +758,11 @@ static void TractionBiasRearGetter(js::PropertyContext& ctx)
 
 static void TractionBiasRearSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetTractionBiasRear(value);
@@ -771,7 +770,7 @@ static void TractionBiasRearSetter(js::PropertyContext& ctx)
 
 static void TractionLossMultGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetTractionLossMult());
@@ -779,11 +778,11 @@ static void TractionLossMultGetter(js::PropertyContext& ctx)
 
 static void TractionLossMultSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetTractionLossMult(value);
@@ -791,7 +790,7 @@ static void TractionLossMultSetter(js::PropertyContext& ctx)
 
 static void SuspensionForceGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetSuspensionForce());
@@ -799,11 +798,11 @@ static void SuspensionForceGetter(js::PropertyContext& ctx)
 
 static void SuspensionForceSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetSuspensionForce(value);
@@ -811,7 +810,7 @@ static void SuspensionForceSetter(js::PropertyContext& ctx)
 
 static void SuspensionCompDampGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetSuspensionCompDamp());
@@ -819,11 +818,11 @@ static void SuspensionCompDampGetter(js::PropertyContext& ctx)
 
 static void SuspensionCompDampSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetSuspensionCompDamp(value);
@@ -831,7 +830,7 @@ static void SuspensionCompDampSetter(js::PropertyContext& ctx)
 
 static void SuspensionReboundDampGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetSuspensionReboundDamp());
@@ -839,11 +838,11 @@ static void SuspensionReboundDampGetter(js::PropertyContext& ctx)
 
 static void SuspensionReboundDampSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetSuspensionReboundDamp(value);
@@ -851,7 +850,7 @@ static void SuspensionReboundDampSetter(js::PropertyContext& ctx)
 
 static void SuspensionUpperLimitGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetSuspensionUpperLimit());
@@ -859,11 +858,11 @@ static void SuspensionUpperLimitGetter(js::PropertyContext& ctx)
 
 static void SuspensionUpperLimitSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetSuspensionUpperLimit(value);
@@ -871,7 +870,7 @@ static void SuspensionUpperLimitSetter(js::PropertyContext& ctx)
 
 static void SuspensionLowerLimitGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetSuspensionLowerLimit());
@@ -879,11 +878,11 @@ static void SuspensionLowerLimitGetter(js::PropertyContext& ctx)
 
 static void SuspensionLowerLimitSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetSuspensionLowerLimit(value);
@@ -891,7 +890,7 @@ static void SuspensionLowerLimitSetter(js::PropertyContext& ctx)
 
 static void SuspensionRaiseGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetSuspensionRaise());
@@ -899,11 +898,11 @@ static void SuspensionRaiseGetter(js::PropertyContext& ctx)
 
 static void SuspensionRaiseSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetSuspensionRaise(value);
@@ -911,7 +910,7 @@ static void SuspensionRaiseSetter(js::PropertyContext& ctx)
 
 static void SuspensionBiasFrontGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetSuspensionBiasFront());
@@ -919,11 +918,11 @@ static void SuspensionBiasFrontGetter(js::PropertyContext& ctx)
 
 static void SuspensionBiasFrontSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetSuspensionBiasFront(value);
@@ -931,7 +930,7 @@ static void SuspensionBiasFrontSetter(js::PropertyContext& ctx)
 
 static void SuspensionBiasRearGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetSuspensionBiasRear());
@@ -939,11 +938,11 @@ static void SuspensionBiasRearGetter(js::PropertyContext& ctx)
 
 static void SuspensionBiasRearSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetSuspensionBiasRear(value);
@@ -951,7 +950,7 @@ static void SuspensionBiasRearSetter(js::PropertyContext& ctx)
 
 static void AntiRollBarForceGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetAntiRollBarForce());
@@ -959,11 +958,11 @@ static void AntiRollBarForceGetter(js::PropertyContext& ctx)
 
 static void AntiRollBarForceSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetAntiRollBarForce(value);
@@ -971,7 +970,7 @@ static void AntiRollBarForceSetter(js::PropertyContext& ctx)
 
 static void AntiRollBarBiasFrontGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetAntiRollBarBiasFront());
@@ -979,11 +978,11 @@ static void AntiRollBarBiasFrontGetter(js::PropertyContext& ctx)
 
 static void AntiRollBarBiasFrontSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetAntiRollBarBiasFront(value);
@@ -991,7 +990,7 @@ static void AntiRollBarBiasFrontSetter(js::PropertyContext& ctx)
 
 static void AntiRollBarBiasRearGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetAntiRollBarBiasRear());
@@ -999,11 +998,11 @@ static void AntiRollBarBiasRearGetter(js::PropertyContext& ctx)
 
 static void AntiRollBarBiasRearSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetAntiRollBarBiasRear(value);
@@ -1011,7 +1010,7 @@ static void AntiRollBarBiasRearSetter(js::PropertyContext& ctx)
 
 static void RollCentreHeightFrontGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetRollCentreHeightFront());
@@ -1019,11 +1018,11 @@ static void RollCentreHeightFrontGetter(js::PropertyContext& ctx)
 
 static void RollCentreHeightFrontSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetRollCentreHeightFront(value);
@@ -1031,7 +1030,7 @@ static void RollCentreHeightFrontSetter(js::PropertyContext& ctx)
 
 static void RollCentreHeightRearGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetRollCentreHeightRear());
@@ -1039,11 +1038,11 @@ static void RollCentreHeightRearGetter(js::PropertyContext& ctx)
 
 static void RollCentreHeightRearSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetRollCentreHeightRear(value);
@@ -1051,7 +1050,7 @@ static void RollCentreHeightRearSetter(js::PropertyContext& ctx)
 
 static void CollisionDamageMultGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetCollisionDamageMult());
@@ -1059,11 +1058,11 @@ static void CollisionDamageMultGetter(js::PropertyContext& ctx)
 
 static void CollisionDamageMultSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetCollisionDamageMult(value);
@@ -1071,7 +1070,7 @@ static void CollisionDamageMultSetter(js::PropertyContext& ctx)
 
 static void WeaponDamageMultGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetWeaponDamageMult());
@@ -1079,11 +1078,11 @@ static void WeaponDamageMultGetter(js::PropertyContext& ctx)
 
 static void WeaponDamageMultSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetWeaponDamageMult(value);
@@ -1091,7 +1090,7 @@ static void WeaponDamageMultSetter(js::PropertyContext& ctx)
 
 static void DeformationDamageMultGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetDeformationDamageMult());
@@ -1099,11 +1098,11 @@ static void DeformationDamageMultGetter(js::PropertyContext& ctx)
 
 static void DeformationDamageMultSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetDeformationDamageMult(value);
@@ -1111,7 +1110,7 @@ static void DeformationDamageMultSetter(js::PropertyContext& ctx)
 
 static void EngineDamageMultGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetEngineDamageMult());
@@ -1119,11 +1118,11 @@ static void EngineDamageMultGetter(js::PropertyContext& ctx)
 
 static void EngineDamageMultSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetEngineDamageMult(value);
@@ -1131,7 +1130,7 @@ static void EngineDamageMultSetter(js::PropertyContext& ctx)
 
 static void PetrolTankVolumeGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetPetrolTankVolume());
@@ -1139,11 +1138,11 @@ static void PetrolTankVolumeGetter(js::PropertyContext& ctx)
 
 static void PetrolTankVolumeSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetPetrolTankVolume(value);
@@ -1151,7 +1150,7 @@ static void PetrolTankVolumeSetter(js::PropertyContext& ctx)
 
 static void OilVolumeGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetOilVolume());
@@ -1159,11 +1158,11 @@ static void OilVolumeGetter(js::PropertyContext& ctx)
 
 static void OilVolumeSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetOilVolume(value);
@@ -1171,7 +1170,7 @@ static void OilVolumeSetter(js::PropertyContext& ctx)
 
 static void SeatOffsetDistXGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetSeatOffsetDistX());
@@ -1179,11 +1178,11 @@ static void SeatOffsetDistXGetter(js::PropertyContext& ctx)
 
 static void SeatOffsetDistXSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetSeatOffsetDistX(value);
@@ -1191,7 +1190,7 @@ static void SeatOffsetDistXSetter(js::PropertyContext& ctx)
 
 static void SeatOffsetDistYGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetSeatOffsetDistY());
@@ -1199,11 +1198,11 @@ static void SeatOffsetDistYGetter(js::PropertyContext& ctx)
 
 static void SeatOffsetDistYSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetSeatOffsetDistY(value);
@@ -1211,7 +1210,7 @@ static void SeatOffsetDistYSetter(js::PropertyContext& ctx)
 
 static void SeatOffsetDistZGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetSeatOffsetDistZ());
@@ -1219,11 +1218,11 @@ static void SeatOffsetDistZGetter(js::PropertyContext& ctx)
 
 static void SeatOffsetDistZSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     float value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetSeatOffsetDistZ(value);
@@ -1231,7 +1230,7 @@ static void SeatOffsetDistZSetter(js::PropertyContext& ctx)
 
 static void MonetaryValueGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetMonetaryValue());
@@ -1239,11 +1238,11 @@ static void MonetaryValueGetter(js::PropertyContext& ctx)
 
 static void MonetaryValueSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     uint32_t value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetMonetaryValue(value);
@@ -1251,7 +1250,7 @@ static void MonetaryValueSetter(js::PropertyContext& ctx)
 
 static void ModelFlagsGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetModelFlags());
@@ -1259,11 +1258,11 @@ static void ModelFlagsGetter(js::PropertyContext& ctx)
 
 static void ModelFlagsSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     uint32_t value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetModelFlags(value);
@@ -1271,7 +1270,7 @@ static void ModelFlagsSetter(js::PropertyContext& ctx)
 
 static void HandlingFlagsGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetHandlingFlags());
@@ -1279,11 +1278,11 @@ static void HandlingFlagsGetter(js::PropertyContext& ctx)
 
 static void HandlingFlagsSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     uint32_t value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetHandlingFlags(value);
@@ -1291,7 +1290,7 @@ static void HandlingFlagsSetter(js::PropertyContext& ctx)
 
 static void DamageFlagsGetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->GetHandling()->GetDamageFlags());
@@ -1299,11 +1298,11 @@ static void DamageFlagsGetter(js::PropertyContext& ctx)
 
 static void DamageFlagsSetter(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     uint32_t value;
-    if (!ctx.GetValue(value)) return;
+    if(!ctx.GetValue(value)) return;
 
     vehicle->ReplaceHandling();
     vehicle->GetHandling()->SetDamageFlags(value);
@@ -1311,7 +1310,7 @@ static void DamageFlagsSetter(js::PropertyContext& ctx)
 
 static void IsModified(js::PropertyContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     ctx.Return(vehicle->IsHandlingModified());
@@ -1319,7 +1318,7 @@ static void IsModified(js::PropertyContext& ctx)
 
 static void Reset(js::FunctionContext& ctx)
 {
-    if (!ctx.CheckExtraInternalFieldValue()) return;
+    if(!ctx.CheckExtraInternalFieldValue()) return;
     alt::IVehicle* vehicle = ctx.GetExtraInternalFieldValue<alt::IVehicle>();
 
     vehicle->ResetHandling();
