@@ -54,6 +54,14 @@ class Vehicle {
         this.batteryLightState = state;
     }
 
+    get isHandlingModified() {
+        return this.handlingModified;
+    }
+
+    get isTaxiLightOn() {
+        return this.taxiLightOn;
+    }
+
     static get count() {
         return alt.Vehicle.all.length;
     }

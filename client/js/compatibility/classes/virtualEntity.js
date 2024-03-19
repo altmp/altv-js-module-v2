@@ -29,6 +29,10 @@ class VirtualEntity extends alt.VirtualEntity {
         });
     }
 
+    get isStreamedIn() {
+        return this.streamedIn;
+    }
+
     hasStreamSyncedMeta(key) {
         return this.streamSyncedMeta[key] !== undefined;
     }

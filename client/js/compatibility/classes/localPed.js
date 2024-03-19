@@ -18,6 +18,10 @@ class LocalPed extends alt.LocalPed {
 
         return alt.LocalPed.create({ model, dimension, pos, heading, useStreaming, streamingDistance });
     }
+
+    get isStreamedIn() {
+        return this.streamedIn;
+    }
 }
 
 alt.LocalPed.setFactory(LocalPed);

@@ -8,6 +8,10 @@ const { extendClassWithProperties } = requireBinding("shared/compatibility/utils
 const { SharedPlayer } = requireBinding("shared/compatibility/classes/sharedPlayer.js");
 
 class Player {
+    get isTalking() {
+        return this.talking;
+    }
+
     static get count() {
         return alt.Player.all.length;
     }

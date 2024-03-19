@@ -20,6 +20,14 @@ class RmlElement extends alt.RmlElement {
         this.rmlID = value;
     }
 
+    get isOwned() {
+        return this.owned;
+    }
+
+    get isVisible() {
+        return this.visible;
+    }
+
     getClassList() {
         return this.classList;
     }

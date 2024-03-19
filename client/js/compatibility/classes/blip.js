@@ -13,6 +13,10 @@ class Blip extends alt.Blip {
     static get count() {
         return alt.Blip.all.length;
     }
+
+    get isStreamedIn() {
+        return this.streamedIn;
+    }
 }
 
 extendClassWithProperties(Blip, null, SharedBlip);

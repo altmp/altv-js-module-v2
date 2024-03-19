@@ -29,6 +29,10 @@ class Checkpoint extends alt.Checkpoint {
     static get count() {
         return alt.Checkpoint.all.length;
     }
+
+    get isStreamedIn() {
+        return this.streamedIn;
+    }
 }
 
 alt.Checkpoint.setFactory(Checkpoint);
