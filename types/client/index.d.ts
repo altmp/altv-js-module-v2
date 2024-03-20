@@ -65,7 +65,7 @@ declare module "@altv/client" {
     export interface AudioCreateOptions {
         source: string;
         volume: number;
-        radio?: boolean; // default: false
+        isRadio?: boolean; // default: false
         clearCache?: boolean; // default: true
     }
 
@@ -77,6 +77,7 @@ declare module "@altv/client" {
         readonly outputs: ReadonlyArray<AudioOutput>;
         readonly currentTime: number;
         readonly maxTime: number;
+        readonly isPlaying: boolean;
         readonly listeners: ReadonlyMap<string, Array<(...args: unknown[]) => Promise<void> | void>>;
 
         addOutput(output: AudioOutput): void;
@@ -251,7 +252,7 @@ declare module "@altv/client" {
 
     export abstract class Blip extends WorldObject {
         readonly scriptID: number;
-        readonly streamedIn: boolean;
+        readonly isStreamedIn: boolean;
         readonly global: boolean;
         readonly isAttached: boolean;
         readonly attachedTo?: Entity;
@@ -316,7 +317,6 @@ declare module "@altv/client" {
     export abstract class Marker extends WorldObject {
         readonly isGlobal: boolean;
         readonly streamingDistance: number;
-        readonly streamedIn: boolean;
 
         readonly meta: MarkerMeta & Record<string, unknown>;
 
@@ -377,7 +377,7 @@ declare module "@altv/client" {
 
     export abstract class Checkpoint extends ColShape {
         readonly scriptID: number;
-        readonly streamedIn: boolean;
+        readonly isStreamedIn: boolean;
 
         checkpointType: number;
         radius: number;
@@ -563,14 +563,14 @@ declare module "@altv/client" {
         get model(): number;
         set model(value: number | string);
         alpha: number;
-        readonly dynamic: boolean;
+        readonly isDynamic: boolean;
         lodDistance: number;
         hasGravity: number;
-        readonly collisionEnabled: boolean;
+        readonly isCollisionEnabled: boolean;
         positionFrozen: boolean;
         textureVariation: number;
-        readonly worldObject: boolean;
-        readonly weaponObject: boolean;
+        readonly isWorldObject: boolean;
+        readonly isWeaponObject: boolean;
         readonly useStreaming: boolean;
         readonly streamingDistance: number;
         visible: boolean;
@@ -657,7 +657,7 @@ declare module "@altv/client" {
         readonly streamingDistance: number;
         visible: boolean;
         readonly scriptID: number;
-        readonly streamedIn: boolean;
+        readonly isStreamedIn: boolean;
 
         public waitForSpawn(timeout?: number): Promise<void>;
 
@@ -707,7 +707,7 @@ declare module "@altv/client" {
         readonly streamingDistance: number;
         visible: boolean;
         readonly scriptID: number;
-        readonly streamedIn: boolean;
+        readonly isStreamedIn: boolean;
 
         public waitForSpawn(timeout?: number): Promise<void>;
 
@@ -738,7 +738,7 @@ declare module "@altv/client" {
     export abstract class Player extends Entity {
         readonly name: string;
 
-        readonly talking: boolean;
+        readonly isTalking: boolean;
         readonly micLevel: number;
         readonly taskData: string;
         spatialVolume: number;
@@ -806,8 +806,8 @@ declare module "@altv/client" {
     export abstract class RmlDocument extends RmlElement {
         title: string;
         readonly sourceUrl: string;
-        readonly visible: boolean;
-        readonly modal: boolean;
+        readonly isVisible: boolean;
+        readonly isModal: boolean;
 
         readonly body: RmlElement;
 
@@ -844,7 +844,7 @@ declare module "@altv/client" {
         readonly focusedElement?: RmlElement;
         readonly tagName: string;
         rmlID: string;
-        readonly owned: boolean;
+        readonly isOwned: boolean;
         readonly absoluteLeft: number;
         readonly absoluteTop: number;
         readonly clientLeft: number;
@@ -859,7 +859,7 @@ declare module "@altv/client" {
         scrollTop: number;
         readonly scrollWidth: number;
         readonly scrollHeight: number;
-        readonly visible: boolean;
+        readonly isVisible: boolean;
 
         readonly parent?: RmlElement;
         readonly nextSibling?: RmlElement;
@@ -923,8 +923,8 @@ declare module "@altv/client" {
     }
 
     export abstract class TextLabel extends WorldObject {
-        readonly streamedIn: boolean;
-        readonly global: boolean;
+        readonly isStreamedIn: boolean;
+        readonly isGlobal: boolean;
         readonly target: Entity;
         visible: boolean;
         color: altShared.RGBA;
@@ -1022,11 +1022,11 @@ declare module "@altv/client" {
         readonly rpm: number;
         readonly speedVector: altShared.Vector3;
         readonly handling: Handling;
-        readonly handlingModified: boolean;
+        readonly isHandlingModified: boolean;
         indicatorLights: number;
         seatCount: number;
         readonly occupiedSeatsCount: number;
-        readonly taxiLightOn: boolean;
+        readonly isTaxiLightOn: boolean;
         engineTemperature: number;
         fuelLevel: number;
         oilLevel: number;
@@ -1123,7 +1123,7 @@ declare module "@altv/client" {
     }
 
     export abstract class VirtualEntity extends WorldObject {
-        readonly streamedIn: boolean;
+        readonly isStreamedIn: boolean;
 
         readonly group: VirtualEntityGroup;
         readonly streamingDistance: number;
@@ -1278,7 +1278,7 @@ declare module "@altv/client" {
         public onDestroy?(): void;
 
         static readonly all: ReadonlyArray<WebView>;
-        static readonly gpuAccelerationActive: boolean;
+        static readonly isGpuAccelerationActive: boolean;
 
         static create(options: _WebViewCreateOptionsDrawable): WebView;
         static create(options: _WebViewCreateOptionsOverlay): WebView;
