@@ -6,9 +6,9 @@ extern js::Class textLabelClass("TextLabel", &worldObjectClass, nullptr, [](js::
 {
     tpl.BindToType(alt::IBaseObject::Type::TEXT_LABEL);
 
-    tpl.Property<&alt::ITextLabel::IsStreamedIn>("streamedIn");
+    tpl.Property<&alt::ITextLabel::IsStreamedIn>("isStreamedIn");
 
-    tpl.Property<&alt::ITextLabel::IsGlobal>("global");
+    tpl.Property<&alt::ITextLabel::IsGlobal>("isGlobal");
     tpl.Property<&alt::ITextLabel::GetTarget>("target");
     tpl.Property<&alt::ITextLabel::IsVisible, &alt::ITextLabel::SetVisible>("visible");
     tpl.Property<&alt::ITextLabel::GetColor, &alt::ITextLabel::SetColor>("color");

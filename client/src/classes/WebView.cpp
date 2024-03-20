@@ -69,7 +69,7 @@ extern js::Class webViewClass("WebView", &baseObjectClass, [](js::ClassTemplate&
     tpl.Method<&alt::IWebView::AddOutput>("addOutput");
     tpl.Method<&alt::IWebView::RemoveOutput>("removeOutput");
 
-    tpl.StaticProperty("gpuAccelerationActive", GpuAccelerationActiveGetter);
+    tpl.StaticProperty("isGpuAccelerationActive", GpuAccelerationActiveGetter);
 
     tpl.GetByID<alt::IBaseObject::Type::WEBVIEW>();
 });
