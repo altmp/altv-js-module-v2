@@ -18,10 +18,6 @@ class LocalVehicle extends alt.LocalVehicle {
 
         return alt.LocalVehicle.create({ model, dimension, pos, rot, useStreaming, streamingDistance });
     }
-
-    get isStreamedIn() {
-        return this.streamedIn;
-    }
 }
 
 alt.LocalVehicle.setFactory(LocalVehicle);

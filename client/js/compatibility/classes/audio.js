@@ -29,6 +29,10 @@ class Audio extends alt.Audio {
         return this.listeners[eventName] ?? [];
     }
 
+    get playing() {
+        return this.isPlaying;
+    }
+
     getOutputs() {
         return this.outputs;
     }

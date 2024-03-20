@@ -19,10 +19,6 @@ class Marker extends alt.Marker {
         return alt.Marker.create({ type, pos, color, useStreaming, streamingDistance });
     }
 
-    get isStreamedIn() {
-        return this.streamedIn;
-    }
-
     static get count() {
         return alt.Marker.all.length;
     }
