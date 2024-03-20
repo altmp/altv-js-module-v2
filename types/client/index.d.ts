@@ -1232,8 +1232,8 @@ declare module "@altv/client" {
         url: string;
         pos?: altShared.IVector2; // default: { x: 0, y: 0 }
         size?: altShared.IVector2; // default: { x: 0, y: 0 }
-        isVisible?: boolean; // default: true
-        isOverlay?: boolean; // default: false
+        visible?: boolean; // default: true
+        overlay?: boolean; // default: false
     }
 
     export abstract class WebView extends BaseObject {
