@@ -64,7 +64,7 @@ extern js::Class rmlElementClass("RmlElement", &baseObjectClass, nullptr, [](js:
     tpl.Property<&alt::IRmlElement::GetFocusedElement>("focusedElement");
     tpl.Property<&alt::IRmlElement::GetTagName>("tagName");
     tpl.Property<&alt::IRmlElement::GetRmlID, &alt::IRmlElement::SetRmlID>("rmlID");
-    tpl.Property<&alt::IRmlElement::IsOwned>("owned");
+    tpl.Property<&alt::IRmlElement::IsOwned>("isOwned");
     tpl.Property<&alt::IRmlElement::GetAbsoluteLeft>("absoluteLeft");
     tpl.Property<&alt::IRmlElement::GetAbsoluteTop>("absoluteTop");
     tpl.Property<&alt::IRmlElement::GetClientLeft>("clientLeft");
@@ -79,7 +79,7 @@ extern js::Class rmlElementClass("RmlElement", &baseObjectClass, nullptr, [](js:
     tpl.Property<&alt::IRmlElement::GetScrollTop, &alt::IRmlElement::SetScrollTop>("scrollTop");
     tpl.Property<&alt::IRmlElement::GetScrollWidth>("scrollWidth");
     tpl.Property<&alt::IRmlElement::GetScrollHeight>("scrollHeight");
-    tpl.Property<&alt::IRmlElement::IsVisible>("visible");
+    tpl.Property<&alt::IRmlElement::IsVisible>("isVisible");
     tpl.Property<&alt::IRmlElement::GetParent>("parent");
     tpl.Property<&alt::IRmlElement::GetNextSibling>("nextSibling");
     tpl.Property<&alt::IRmlElement::GetPreviousSibling>("previousSibling");

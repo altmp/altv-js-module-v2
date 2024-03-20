@@ -55,9 +55,9 @@ extern js::Class webViewClass("WebView", &baseObjectClass, [](js::ClassTemplate&
     tpl.Property("focused", FocusedGetter, FocusedSetter);
     tpl.Property<&alt::IWebView::GetUrl, &alt::IWebView::SetUrl>("url");
     tpl.Property<&alt::IWebView::IsVisible, &alt::IWebView::SetVisible>("visible");
-    tpl.Property<&alt::IWebView::IsOverlay>("overlay");
-    tpl.Property<&alt::IWebView::IsLoaded>("loaded");
-    tpl.Property<&alt::IWebView::IsReady>("ready");
+    tpl.Property<&alt::IWebView::IsOverlay>("isOverlay");
+    tpl.Property<&alt::IWebView::IsLoaded>("isLoaded");
+    tpl.Property<&alt::IWebView::IsReady>("isReady");
     tpl.Property<&alt::IWebView::GetSize, &alt::IWebView::SetSize>("size");
     tpl.Property<&alt::IWebView::GetPosition, &alt::IWebView::SetPosition>("pos");
     tpl.Property<&alt::IWebView::GetOutputs>("outputs");

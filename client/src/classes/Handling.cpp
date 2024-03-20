@@ -1393,7 +1393,7 @@ extern js::Class handlingClass("Handling", [](js::ClassTemplate& tpl)
     tpl.Property("modelFlags", ModelFlagsGetter, ModelFlagsSetter);
     tpl.Property("handlingFlags", HandlingFlagsGetter, HandlingFlagsSetter);
     tpl.Property("damageFlags", DamageFlagsGetter, DamageFlagsSetter);
-    tpl.Property("modified", IsModified);
+    tpl.Property("isModified", IsModified);
 
     tpl.Method("reset", Reset);
 }, true);
