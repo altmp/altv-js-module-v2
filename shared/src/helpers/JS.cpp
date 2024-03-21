@@ -67,8 +67,16 @@ js::StackTrace js::StackTrace::GetCurrent(v8::Isolate* isolate, IResource* resou
     for(int i = framesToSkip; i < stackTrace->GetFrameCount(); i++)
     {
         v8::Local<v8::StackFrame> frame = stackTrace->GetFrame(isolate, i);
+
+        auto scriptName = frame->GetScriptName();
+
+        if(scriptName.IsEmpty()) {
+            continue;
+        }
+
         Frame frameData;
-        frameData.file = PrettifyFilePath(resource, CppValue(frame->GetScriptName()));
+
+        frameData.file = PrettifyFilePath(resource, CppValue(scriptName));
         frameData.line = frame->GetLineNumber();
         if(frame->GetFunctionName().IsEmpty()) frameData.function = "[anonymous]";
         else
