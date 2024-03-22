@@ -17,7 +17,7 @@ static js::FactoryHandler localObjectFactory(alt::IBaseObject::Type::LOCAL_OBJEC
         uint32_t weaponHash;
         if(!args.GetAsHash("weapon", weaponHash)) return nullptr;
 
-        uint32_t modelHash = args.GetAsHashOptional("model", weaponHash);
+        uint32_t modelHash = args.GetAsHashOptional("model", 0);
         float ammoCount = args.Get<float>("ammoCount", 100);
         bool createDefaultComponents = args.Get<bool>("createDefaultComponents", true);
         float scale = args.Get<float>("scale", 1);
