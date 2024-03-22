@@ -35,8 +35,13 @@ js::SourceLocation js::SourceLocation::GetCurrent(IResource* resource, int frame
     {
         v8::Local<v8::StackFrame> frame = stackTrace->GetFrame(isolate, i);
         if(!frame->IsUserJavaScript()) continue;
-        std::string scriptName = CppValue(frame->GetScriptName());
+
+        auto localScriptName = frame->GetScriptName();
+        if(localScriptName.IsEmpty()) continue;
+
+        std::string scriptName = CppValue(localScriptName);
         if(scriptName.empty() || scriptName.starts_with("internal:")) continue;
+
         return SourceLocation{ PrettifyFilePath(resource, scriptName), frame->GetLineNumber() };
     }
     return SourceLocation{};
@@ -67,16 +72,16 @@ js::StackTrace js::StackTrace::GetCurrent(v8::Isolate* isolate, IResource* resou
     for(int i = framesToSkip; i < stackTrace->GetFrameCount(); i++)
     {
         v8::Local<v8::StackFrame> frame = stackTrace->GetFrame(isolate, i);
+        if(!frame->IsUserJavaScript()) continue;
 
-        auto scriptName = frame->GetScriptName();
+        auto localScriptName = frame->GetScriptName();
+        if(localScriptName.IsEmpty()) continue;
 
-        if(scriptName.IsEmpty()) {
-            continue;
-        }
+        std::string scriptName = CppValue(localScriptName);
 
         Frame frameData;
 
-        frameData.file = PrettifyFilePath(resource, CppValue(scriptName));
+        frameData.file = PrettifyFilePath(resource, scriptName);
         frameData.line = frame->GetLineNumber();
         if(frame->GetFunctionName().IsEmpty()) frameData.function = "[anonymous]";
         else
