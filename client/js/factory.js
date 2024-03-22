@@ -30,6 +30,7 @@ alt.AudioOutputWorld.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.
 alt.LocalPed.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.LOCAL_PED);
 alt.LocalVehicle.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.LOCAL_VEHICLE);
 alt.LocalObject.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.LOCAL_OBJECT, (ctx) => ({ ...ctx, isWeaponObject: false }));
+alt.WeaponObject.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.LOCAL_OBJECT, (ctx) => ({ ...ctx, isWeaponObject: true }));
 
 alt.RmlDocument.create = getFactoryCreateFunction(alt.Enums.BaseObjectType.RML_DOCUMENT);
 
