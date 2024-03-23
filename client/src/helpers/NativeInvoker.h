@@ -5,6 +5,22 @@
 #include "magic_enum/include/magic_enum.hpp"
 
 class CJavaScriptResource;
+class Benchmark;
+
+class Benchmark
+{
+public:
+    std::string name;
+    std::chrono::time_point<std::chrono::high_resolution_clock> start = std::chrono::high_resolution_clock::now();
+
+    explicit Benchmark(const std::string& _name) : name(_name) {}
+
+    ~Benchmark()
+    {
+        const auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count();
+        js::Logger::Warn << "[JS] Benchmark " << name << " took " << static_cast<std::chrono::milliseconds::rep>(elapsedTime) << "ms" << js::Logger::Endl;
+    }
+};
 
 namespace js
 {
@@ -54,20 +70,23 @@ namespace js
         template<typename T>
         bool PushArg(js::FunctionContext& ctx, int index)
         {
-            constexpr bool isPointer = std::is_pointer_v<T>;
-            using CleanT = std::remove_pointer_t<T>;
-
-            CleanT value = ctx.GetArg<CleanT>(index);
-
-            if constexpr(isPointer)
             {
-                returnsCount += 1;
-                T ptr = SavePointer(value);
-                nativeContext->Push(ptr);
+                Benchmark bench("PushArg<T>");
+                constexpr bool isPointer = std::is_pointer_v<T>;
+                using CleanT = std::remove_pointer_t<T>;
+
+                CleanT value = ctx.GetArg<CleanT>(index);
+
+                if constexpr(isPointer)
+                {
+                    returnsCount += 1;
+                    T ptr = SavePointer(value);
+                    nativeContext->Push(ptr);
+                }
+                else
+                    nativeContext->Push(value);
+                return true;
             }
-            else
-                nativeContext->Push(value);
-            return true;
         }
         template<>
         bool PushArg<alt::INative::Vector3*>(js::FunctionContext& ctx, int index)

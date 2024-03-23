@@ -17,85 +17,92 @@ char* js::NativeInvoker::SaveString(const std::string& str)
 
 bool js::NativeInvoker::PushArgs(js::FunctionContext& ctx, alt::INative* native)
 {
-    using Type = alt::INative::Type;
-
-    std::vector<alt::INative::Type> nativeArgs = native->GetArgTypes();
-
-    for(size_t i = 0; i < nativeArgs.size(); i++)
     {
-        switch(nativeArgs[i])
+        Benchmark bench("NativeInvoker::PushArgs(" + native->GetName() + ")");
+
+        using Type = alt::INative::Type;
+
+        std::vector<alt::INative::Type> nativeArgs = native->GetArgTypes();
+
+        for(size_t i = 0; i < nativeArgs.size(); i++)
         {
-            case Type::ARG_BOOL:
             {
-                if(!PushArg<bool>(ctx, i)) return false;
-                break;
-            }
-            case Type::ARG_BOOL_PTR:
-            {
-                if(!PushArg<bool*>(ctx, i)) return false;
-                break;
-            }
-            case Type::ARG_INT32:
-            {
-                if(!PushArg<int32_t>(ctx, i)) return false;
-                break;
-            }
-            case Type::ARG_INT32_PTR:
-            {
-                if(!PushArg<int32_t*>(ctx, i)) return false;
-                break;
-            }
-            case Type::ARG_UINT32:
-            {
-                if(!PushArg<uint32_t>(ctx, i)) return false;
-                break;
-            }
-            case Type::ARG_UINT32_PTR:
-            {
-                if(!PushArg<uint32_t*>(ctx, i)) return false;
-                break;
-            }
-            case Type::ARG_FLOAT:
-            {
-                if(!PushArg<float>(ctx, i)) return false;
-                break;
-            }
-            case Type::ARG_FLOAT_PTR:
-            {
-                if(!PushArg<float*>(ctx, i)) return false;
-                break;
-            }
-            /*
-            case Type::ARG_VECTOR3:
-            {
-                if(!PushArg<alt::INative::Vector3>(ctx, i)) return false;
-                break;
-            }
-            */
-            case Type::ARG_STRUCT:
-            {
-                if(!PushArg<void*>(ctx, i)) return false;
-                break;
-            }
-            case Type::ARG_VECTOR3_PTR:
-            {
-                if(!PushArg<alt::INative::Vector3*>(ctx, i)) return false;
-                break;
-            }
-            case Type::ARG_STRING:
-            {
-                if(!PushArg<char*>(ctx, i)) return false;
-                break;
-            }
-            default:
-            {
-                Logger::Warn("[JS] Unknown native argument type", magic_enum::enum_name(nativeArgs[i]), "for native", native->GetName(), "at index", i);
-                break;
+                Benchmark bench("NativeInvoker::PushArgs::" + native->GetName() + "::" + std::string(magic_enum::enum_name(nativeArgs[i])));
+                switch(nativeArgs[i])
+                {
+                case Type::ARG_BOOL:
+                    {
+                        if(!PushArg<bool>(ctx, i)) return false;
+                        break;
+                    }
+                case Type::ARG_BOOL_PTR:
+                    {
+                        if(!PushArg<bool*>(ctx, i)) return false;
+                        break;
+                    }
+                case Type::ARG_INT32:
+                    {
+                        if(!PushArg<int32_t>(ctx, i)) return false;
+                        break;
+                    }
+                case Type::ARG_INT32_PTR:
+                    {
+                        if(!PushArg<int32_t*>(ctx, i)) return false;
+                        break;
+                    }
+                case Type::ARG_UINT32:
+                    {
+                        if(!PushArg<uint32_t>(ctx, i)) return false;
+                        break;
+                    }
+                case Type::ARG_UINT32_PTR:
+                    {
+                        if(!PushArg<uint32_t*>(ctx, i)) return false;
+                        break;
+                    }
+                case Type::ARG_FLOAT:
+                    {
+                        if(!PushArg<float>(ctx, i)) return false;
+                        break;
+                    }
+                case Type::ARG_FLOAT_PTR:
+                    {
+                        if(!PushArg<float*>(ctx, i)) return false;
+                        break;
+                    }
+                    /*
+                    case Type::ARG_VECTOR3:
+                    {
+                        if(!PushArg<alt::INative::Vector3>(ctx, i)) return false;
+                        break;
+                    }
+                    */
+                case Type::ARG_STRUCT:
+                    {
+                        if(!PushArg<void*>(ctx, i)) return false;
+                        break;
+                    }
+                case Type::ARG_VECTOR3_PTR:
+                    {
+                        if(!PushArg<alt::INative::Vector3*>(ctx, i)) return false;
+                        break;
+                    }
+                case Type::ARG_STRING:
+                    {
+                        if(!PushArg<char*>(ctx, i)) return false;
+                        break;
+                    }
+                default:
+                    {
+                        Logger::Warn("[JS] Unknown native argument type", magic_enum::enum_name(nativeArgs[i]), "for native", native->GetName(), "at index", i);
+                        break;
+                    }
+                }
             }
         }
-    }
 
-    return true;
+        return true;
+    }
 }
 
 v8::Local<v8::Value> js::NativeInvoker::GetPointerReturnValue(alt::INative::Type type)
@@ -157,6 +164,8 @@ js::NativeInvoker::~NativeInvoker() {}
 
 bool js::NativeInvoker::Invoke(js::FunctionContext& ctx, alt::INative* native, bool addVoidReturn)
 {
+    Benchmark benchmark("NativeInvoker::Invoke(" + native->GetName() + ")");
+
     CJavaScriptResource* resource = ctx.GetResource<CJavaScriptResource>();
     std::shared_ptr<alt::INative::Context> nativeCtx = resource->GetNativeContext();
     NativeInvoker invoker{ resource, native };
