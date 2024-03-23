@@ -9,7 +9,7 @@ static js::FactoryHandler audioFactory(alt::IBaseObject::Type::AUDIO, [](js::Obj
     float volume;
     if(!args.Get("volume", volume)) return nullptr;
 
-    bool isRadio = args.Get<bool>("isRadio", false);
+    bool isRadio = args.Get<bool>("radio", false);
     bool clearCache = args.Get<bool>("clearCache", true);
 
     js::IResource* resource = args.GetResource();

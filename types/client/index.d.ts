@@ -65,7 +65,7 @@ declare module "@altv/client" {
     export interface AudioCreateOptions {
         source: string;
         volume: number;
-        isRadio?: boolean; // default: false
+        radio?: boolean; // default: false
         clearCache?: boolean; // default: true
     }
 
