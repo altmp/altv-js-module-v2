@@ -235,6 +235,12 @@ v8::Local<v8::Value> js::MValueToJS(alt::MValueConst val)
     v8::Local<v8::Context> ctx = isolate->GetEnteredOrMicrotaskContext();
     js::IResource* resource = js::IResource::GetFromContext(ctx);
 
+    if (!val)
+    {
+        js::Throw("js::MValueToJS: val is nullptr - please forward to module maintainer");
+        return v8::Undefined(isolate);
+    }
+
     switch(val->GetType())
     {
         case alt::IMValue::Type::NONE: return v8::Undefined(isolate);
